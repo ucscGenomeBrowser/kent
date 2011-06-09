@@ -19,7 +19,7 @@ group expression
 subGroup1 view Views TranscriptGencV3=Gene_model RawSignal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878<BR>&nbsp;(Tier_1) H1hESC=H1-hESC<BR>&nbsp;(Tier_1) K562=K562<BR>&nbsp;(Tier_1) HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) HepG2=HepG2<BR>&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BE2C=BE2C BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
 subGroup3 rnaExtract RnaExtract pAP=longPolyA shortPolyA=shortPolyA
-subGroup4 treatment Treatment  BPA14h=BPA_4hr_100nM DEX100nM=DEX_1hr_100nM DEX5nM=DEX_1hr_5nM DEX1nM=DEX_1hr_1nM DEX500pM=DEX_1hr_500pM DEX100pM=DEX_1hr_100pM DMSO4hr=DMSO_4hr_0.02pct ESTRADIa4h=ESTRADIOL_4hr_10nM ETOH02=ETOH_1hr_0.02pct GEN4h=GENISTEIN_4hr_100nM None=None
+subGroup4 treatment Treatment  BPA14h=BPA_4hr_100nM DEX100nM=DEX_1hr_100nM DEX5nM=DEX_1hr_5nM DEX1nM=DEX_1hr_1nM DEX500pM=DEX_1hr_500pM DEX100pM=DEX_1hr_100pM DM002p4h=DMSO_4hr_0.02pct ESTRADIa4h=ESTRADIOL_4hr_10nM ETOH02=ETOH_1hr_0.02pct GEN4h=GENISTEIN_4hr_100nM None=None
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
 sortOrder cellType=+ treatment=+ rep=+ view=-
 dimensionZchecked rep1
@@ -196,14 +196,15 @@ html wgEncodeHaibRnaSeq.new
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep2
+        track wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D DMSO 2
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=DM002p4h rep=rep2
         type bam
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
+        # was wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep2 wong Wed Jun  8 17:37:23 2011
 
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
@@ -232,14 +233,15 @@ html wgEncodeHaibRnaSeq.new
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep1
+        track wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D DMSO 1
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=DM002p4h rep=rep1
         type bam
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
+        # was wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep1 wong Wed Jun  8 17:37:23 2011
 
         track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
@@ -277,23 +279,25 @@ html wgEncodeHaibRnaSeq.new
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep2
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 DMSO 2
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=DM002p4h rep=rep2
         type bam
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
+        # was wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep2 wong Wed Jun  8 17:37:22 2011
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep1
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 DMSO 1
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=DM002p4h rep=rep1
         type bam
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
+        # was wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep1 wong Wed Jun  8 17:37:22 2011
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments on
@@ -560,7 +564,7 @@ html wgEncodeHaibRnaSeq.new
         parent wgEncodeHaibRnaSeqViewGencV3 off
         shortLabel T-47D DMSO 2
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DM002p4h rep=rep2
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
@@ -596,7 +600,7 @@ html wgEncodeHaibRnaSeq.new
         parent wgEncodeHaibRnaSeqViewGencV3 off
         shortLabel T-47D BPA 1
         longLabel T-47D BPA 4 hr 100 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DM002p4h rep=rep1
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
@@ -641,7 +645,7 @@ html wgEncodeHaibRnaSeq.new
         parent wgEncodeHaibRnaSeqViewGencV3 off
         shortLabel ECC-1 DMSO 2
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DM002p4h rep=rep2
         type genePred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
@@ -650,7 +654,7 @@ html wgEncodeHaibRnaSeq.new
         parent wgEncodeHaibRnaSeqViewGencV3 off
         shortLabel ECC-1 DMSO 1
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DM002p4h rep=rep1
         type genePred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
@@ -952,14 +956,15 @@ html wgEncodeHaibRnaSeq.new
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep2
+        track wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D DMSO 2
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=DM002p4h rep=rep2
         type bigWig 0.098354 737.018005
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
+        # was wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep2 wong Wed Jun  8 17:37:23 2011
 
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
@@ -988,14 +993,15 @@ html wgEncodeHaibRnaSeq.new
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep1
+        track wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D DMSO 1
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=DM002p4h rep=rep1
         type bigWig 0.138023 880.583984
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
+        # was wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep1 wong Wed Jun  8 17:37:23 2011
 
         track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
@@ -1033,23 +1039,25 @@ html wgEncodeHaibRnaSeq.new
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep2
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 DMSO 2
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=DM002p4h rep=rep2
         type bigWig 0.176215 817.461975
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
+        # was wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep2 wong Wed Jun  8 17:37:22 2011
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep1
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 DMSO 1
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=DM002p4h rep=rep1
         type bigWig 0.264957 963.716003
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
+        # was wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep1 wong Wed Jun  8 17:37:22 2011
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1
         parent wgEncodeHaibRnaSeqViewSignal on

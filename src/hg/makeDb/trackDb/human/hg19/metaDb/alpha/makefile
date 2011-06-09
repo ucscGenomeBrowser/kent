@@ -31,6 +31,7 @@ wgEncodeUncBsuProt.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwDnase.ra \
+wgEncodeUw5C.ra \
 wgEncodeCaltechRnaSeq.ra \
 wgEncodeCshlLongRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \

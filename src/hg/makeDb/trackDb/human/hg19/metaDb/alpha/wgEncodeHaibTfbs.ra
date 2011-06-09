@@ -2684,7 +2684,7 @@ tableName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02RawRep2
 treatment EtOH_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dm002p1hAlnRep1
 objType file
 antibody Input
 cell ECC-1
@@ -2696,8 +2696,8 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001587
 expId 1587
-fileIndex wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1.bam.bai
-fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1ControlV0416102Dm002p1hAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsEcc1ControlV0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1882
@@ -2709,7 +2709,7 @@ subId 2428
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dm002p1hRawDataRep1
 objType file
 antibody Input
 cell ECC-1
@@ -2722,7 +2722,7 @@ dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEH001587
 expId 1587
-fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsEcc1ControlV0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1882
@@ -2734,7 +2734,7 @@ subId 3754
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dm002p1hRawRep1
 objType table
 antibody Input
 cell ECC-1
@@ -2746,7 +2746,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001587
 expId 1587
-fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsEcc1ControlV0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1882
@@ -2755,11 +2755,11 @@ protocol v041610.2
 replicate 1
 setType input
 subId 3027
-tableName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsEcc1ControlV0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hAlnRep1
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -2772,7 +2772,7 @@ dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEH001537
 expId 1537
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep1.bam
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1034
@@ -2784,7 +2784,7 @@ subId 3754
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hAlnRep2
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -2796,8 +2796,8 @@ dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 dccAccession wgEncodeEH001537
 expId 1537
-fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep2.bam.bai
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1092
@@ -2810,7 +2810,7 @@ subId 1216
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawDataRep1
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -2822,7 +2822,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001537
 expId 1537
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1034
@@ -2834,7 +2834,7 @@ subId 3019
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawDataRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawDataRep2
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -2846,7 +2846,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001537
 expId 1537
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1092
@@ -2858,7 +2858,7 @@ subId 3019
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawRep1
 objType table
 antibody ERalpha_a
 cell ECC-1
@@ -2871,7 +2871,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001537
 expId 1537
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1034
@@ -2880,11 +2880,11 @@ protocol v041610.2
 replicate 1
 setType input
 subId 3752
-tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawRep2
 objType table
 antibody ERalpha_a
 cell ECC-1
@@ -2897,7 +2897,7 @@ dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEH001537
 expId 1537
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep2.bigWig
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1092
@@ -2906,7 +2906,7 @@ protocol v041610.2
 replicate 2
 setType input
 subId 3754
-tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep2
+tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hRawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
@@ -3312,7 +3312,7 @@ tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Gen1hRawRep2
 treatment Genistein_100nM
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hAlnRep1
 objType file
 antibody FOXA1_(SC-6553)
 cell ECC-1
@@ -3324,7 +3324,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001586
 expId 1586
-fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2AlnRep1.bam
+fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1880
@@ -3336,7 +3336,7 @@ subId 2428
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hAlnRep2
 objType file
 antibody FOXA1_(SC-6553)
 cell ECC-1
@@ -3348,7 +3348,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001586
 expId 1586
-fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2AlnRep2.bam
+fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2080
@@ -3360,7 +3360,7 @@ subId 2428
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2PkRep1
+metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hPkRep1
 objType table
 antibody FOXA1_(SC-6553)
 cell ECC-1
@@ -3372,7 +3372,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001586
 expId 1586
-fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1880
@@ -3382,11 +3382,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 2428
-tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2PkRep1
+tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hPkRep1
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2PkRep2
+metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hPkRep2
 objType table
 antibody FOXA1_(SC-6553)
 cell ECC-1
@@ -3398,7 +3398,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001586
 expId 1586
-fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2080
@@ -3408,11 +3408,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 2428
-tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2PkRep2
+tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hPkRep2
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawDataRep1
 objType file
 antibody FOXA1_(SC-6553)
 cell ECC-1
@@ -3424,7 +3424,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001586
 expId 1586
-fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1880
@@ -3436,7 +3436,7 @@ subId 3814
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawDataRep2
+metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawDataRep2
 objType file
 antibody FOXA1_(SC-6553)
 cell ECC-1
@@ -3448,7 +3448,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001586
 expId 1586
-fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2080
@@ -3460,7 +3460,7 @@ subId 3814
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawRep1
 objType table
 antibody FOXA1_(SC-6553)
 cell ECC-1
@@ -3472,7 +3472,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001586
 expId 1586
-fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1880
@@ -3481,11 +3481,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep2
+metaObject wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawRep2
 objType table
 antibody FOXA1_(SC-6553)
 cell ECC-1
@@ -3497,7 +3497,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001586
 expId 1586
-fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep2.bigWig
+fileName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2080
@@ -3506,7 +3506,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep2
+tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
@@ -3865,7 +3865,7 @@ tableName wgEncodeHaibTfbsEcc1GrV0416102Etoh02RawRep2
 treatment EtOH_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hAlnRep1
 objType file
 antibody Pol2
 cell ECC-1
@@ -3877,7 +3877,7 @@ dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 dccAccession wgEncodeEH001572
 expId 1572
-fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2AlnRep1.bam
+fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1176
@@ -3889,7 +3889,7 @@ subId 2429
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hAlnRep2
 objType file
 antibody Pol2
 cell ECC-1
@@ -3901,7 +3901,7 @@ dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 dccAccession wgEncodeEH001572
 expId 1572
-fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2AlnRep2.bam
+fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2085
@@ -3913,7 +3913,7 @@ subId 2429
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep1
+metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hPkRep1
 objType table
 antibody Pol2
 cell ECC-1
@@ -3925,7 +3925,7 @@ dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 dccAccession wgEncodeEH001572
 expId 1572
-fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1176
@@ -3935,11 +3935,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 2429
-tableName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep1
+tableName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hPkRep1
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep2
+metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hPkRep2
 objType table
 antibody Pol2
 cell ECC-1
@@ -3951,7 +3951,7 @@ dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 dccAccession wgEncodeEH001572
 expId 1572
-fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2085
@@ -3961,11 +3961,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 2429
-tableName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep2
+tableName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hPkRep2
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawDataRep1
 objType file
 antibody Pol2
 cell ECC-1
@@ -3977,7 +3977,7 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001572
 expId 1572
-fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1176
@@ -3989,7 +3989,7 @@ subId 3013
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawDataRep2
+metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawDataRep2
 objType file
 antibody Pol2
 cell ECC-1
@@ -4001,7 +4001,7 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001572
 expId 1572
-fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2085
@@ -4013,7 +4013,7 @@ subId 3015
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawRep1
 objType table
 antibody Pol2
 cell ECC-1
@@ -4025,7 +4025,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001572
 expId 1572
-fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1176
@@ -4034,11 +4034,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep2
+metaObject wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawRep2
 objType table
 antibody Pol2
 cell ECC-1
@@ -4050,7 +4050,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001572
 expId 1572
-fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep2.bigWig
+fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2085
@@ -4059,7 +4059,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep2
+tableName wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hRawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
@@ -27531,55 +27531,6 @@ tableName wgEncodeHaibTfbsHepg2Zbtb33V0416101RawRep2
 treatment None
 view RawSignal
 
-#metaObject wgEncodeHaibTfbsHuvecControlPcr1xRawDataRep1
-#objType file
-#antibody Control
-#cell HUVEC
-#composite wgEncodeHaibTfbs
-#controlId SL1106
-#dataType ChipSeq
-#dataVersion post ENCODE Jan 2011 Freeze
-#dateSubmitted 2011-05-23
-#dateUnrestricted 2012-02-23
-#dccAccession wgEncodeEH001675
-#expId 1675
-#fileName wgEncodeHaibTfbsHuvecControlPcr1xRawDataRep1.fastq.gz
-#grant Myers
-#lab HudsonAlpha
-#labExpId SL1106
-#project wgEncode
-#protocol PCR1x
-#replicate 1
-#setType input
-#subId 4160
-#treatment None
-#view RawData
-
-#metaObject wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
-#objType table
-#antibody Control
-#cell HUVEC
-#composite wgEncodeHaibTfbs
-#controlId SL1106
-#dataType ChipSeq
-#dataVersion post ENCODE Jan 2011 Freeze
-#dateSubmitted 2011-05-23
-#dateUnrestricted 2012-02-23
-#dccAccession wgEncodeEH001675
-#expId 1675
-#fileName wgEncodeHaibTfbsHuvecControlPcr1xRawRep1.bigWig
-#grant Myers
-#lab HudsonAlpha
-#labExpId SL1106
-#project wgEncode
-#protocol PCR1x
-#replicate 1
-#setType input
-#subId 4160
-#tableName wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
-#treatment None
-#view RawSignal
-
 metaObject wgEncodeHaibTfbsK562Atf3V0416101AlnRep1
 objType file
 antibody ATF3
@@ -37570,7 +37521,7 @@ tableName wgEncodeHaibTfbsSknshraYy1sc281V0416102RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsT47dControlV0416102Dm002p1hAlnRep1
 objType file
 antibody Input
 cell T-47D
@@ -37583,7 +37534,7 @@ dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEH001631
 expId 1631
-fileName wgEncodeHaibTfbsT47dControlV0416102Dmso2AlnRep1.bam
+fileName wgEncodeHaibTfbsT47dControlV0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1881
@@ -37595,7 +37546,7 @@ subId 3754
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsT47dControlV0416102Dm002p1hRawDataRep1
 objType file
 antibody Input
 cell T-47D
@@ -37607,7 +37558,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001631
 expId 1631
-fileName wgEncodeHaibTfbsT47dControlV0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsT47dControlV0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1881
@@ -37619,7 +37570,7 @@ subId 3108
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsT47dControlV0416102Dm002p1hRawRep1
 objType table
 antibody Input
 cell T-47D
@@ -37632,7 +37583,7 @@ dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEH001631
 expId 1631
-fileName wgEncodeHaibTfbsT47dControlV0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsT47dControlV0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1881
@@ -37641,11 +37592,11 @@ protocol v041610.2
 replicate 1
 setType input
 subId 3754
-tableName wgEncodeHaibTfbsT47dControlV0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsT47dControlV0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hAlnRep1
 objType file
 antibody CTCF_(SC-5916)
 cell T-47D
@@ -37657,7 +37608,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001656
 expId 1656
-fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2AlnRep1.bam
+fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2634
@@ -37669,7 +37620,7 @@ subId 3108
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hAlnRep2
 objType file
 antibody CTCF_(SC-5916)
 cell T-47D
@@ -37681,7 +37632,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001656
 expId 1656
-fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2AlnRep2.bam
+fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3014
@@ -37693,7 +37644,7 @@ subId 3108
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep1
+metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hPkRep1
 objType table
 antibody CTCF_(SC-5916)
 cell T-47D
@@ -37705,7 +37656,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001656
 expId 1656
-fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2634
@@ -37715,11 +37666,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 3108
-tableName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep1
+tableName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hPkRep1
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep2
+metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hPkRep2
 objType table
 antibody CTCF_(SC-5916)
 cell T-47D
@@ -37731,7 +37682,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001656
 expId 1656
-fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3014
@@ -37741,11 +37692,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 3108
-tableName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep2
+tableName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hPkRep2
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawDataRep1
 objType file
 antibody CTCF_(SC-5916)
 cell T-47D
@@ -37757,7 +37708,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001656
 expId 1656
-fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2634
@@ -37769,7 +37720,7 @@ subId 3108
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawDataRep2
+metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawDataRep2
 objType file
 antibody CTCF_(SC-5916)
 cell T-47D
@@ -37781,7 +37732,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001656
 expId 1656
-fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3014
@@ -37793,7 +37744,7 @@ subId 3108
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawRep1
 objType table
 antibody CTCF_(SC-5916)
 cell T-47D
@@ -37805,7 +37756,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001656
 expId 1656
-fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2634
@@ -37814,11 +37765,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3108
-tableName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep2
+metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawRep2
 objType table
 antibody CTCF_(SC-5916)
 cell T-47D
@@ -37830,7 +37781,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001656
 expId 1656
-fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep2.bigWig
+fileName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL3014
@@ -37839,7 +37790,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3108
-tableName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep2
+tableName wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dm002p1hRawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
@@ -37953,7 +37904,7 @@ tableName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep2
 treatment Genistein_100nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep1
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -37965,8 +37916,8 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001601
 expId 1601
-fileIndex wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep1.bam.bai
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep1.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1216
@@ -37979,7 +37930,7 @@ subId 3123
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep2
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -37991,8 +37942,8 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001601
 expId 1601
-fileIndex wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep2.bam.bai
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep2.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1490
@@ -38005,7 +37956,7 @@ subId 3123
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawDataRep1
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -38017,7 +37968,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001601
 expId 1601
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1216
@@ -38029,7 +37980,7 @@ subId 3019
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawDataRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawDataRep2
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -38041,7 +37992,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001601
 expId 1601
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1490
@@ -38053,7 +38004,7 @@ subId 3019
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawRep1
 objType table
 antibody ERalpha_a
 cell T-47D
@@ -38066,7 +38017,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001601
 expId 1601
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1216
@@ -38075,11 +38026,11 @@ protocol v041610.2
 replicate 1
 setType input
 subId 3752
-tableName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawRep2
 objType table
 antibody ERalpha_a
 cell T-47D
@@ -38092,7 +38043,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001601
 expId 1601
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep2.bigWig
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1490
@@ -38101,7 +38052,7 @@ protocol v041610.2
 replicate 2
 setType input
 subId 3752
-tableName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep2
+tableName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hRawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
@@ -38401,7 +38352,7 @@ tableName wgEncodeHaibTfbsT47dEralphaaV0416102Gen1hRawRep2
 treatment Genistein_100nM
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hAlnRep1
 objType file
 antibody FOXA1_(SC-6553)
 cell T-47D
@@ -38413,7 +38364,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001588
 expId 1588
-fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2AlnRep1.bam
+fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1878
@@ -38425,7 +38376,7 @@ subId 2427
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hAlnRep2
 objType file
 antibody FOXA1_(SC-6553)
 cell T-47D
@@ -38437,7 +38388,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001588
 expId 1588
-fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2AlnRep2.bam
+fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2081
@@ -38449,7 +38400,7 @@ subId 2427
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2PkRep1
+metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep1
 objType table
 antibody FOXA1_(SC-6553)
 cell T-47D
@@ -38461,7 +38412,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001588
 expId 1588
-fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1878
@@ -38471,11 +38422,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 2427
-tableName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2PkRep1
+tableName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep1
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2PkRep2
+metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep2
 objType table
 antibody FOXA1_(SC-6553)
 cell T-47D
@@ -38487,7 +38438,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001588
 expId 1588
-fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2081
@@ -38497,11 +38448,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 2427
-tableName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2PkRep2
+tableName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep2
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawDataRep1
 objType file
 antibody FOXA1_(SC-6553)
 cell T-47D
@@ -38513,7 +38464,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001588
 expId 1588
-fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1878
@@ -38525,7 +38476,7 @@ subId 3814
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawDataRep2
+metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawDataRep2
 objType file
 antibody FOXA1_(SC-6553)
 cell T-47D
@@ -38537,7 +38488,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001588
 expId 1588
-fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2081
@@ -38549,7 +38500,7 @@ subId 3814
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawRep1
 objType table
 antibody FOXA1_(SC-6553)
 cell T-47D
@@ -38561,7 +38512,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001588
 expId 1588
-fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1878
@@ -38570,11 +38521,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawRep2
+metaObject wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawRep2
 objType table
 antibody FOXA1_(SC-6553)
 cell T-47D
@@ -38586,7 +38537,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001588
 expId 1588
-fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawRep2.bigWig
+fileName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2081
@@ -38595,11 +38546,11 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawRep2
+tableName wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hAlnRep1
 objType file
 antibody GATA3_(SC-268)
 cell T-47D
@@ -38611,7 +38562,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001639
 expId 1639
-fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2AlnRep1.bam
+fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2636
@@ -38623,7 +38574,7 @@ subId 3220
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hAlnRep2
 objType file
 antibody GATA3_(SC-268)
 cell T-47D
@@ -38635,7 +38586,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001639
 expId 1639
-fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2AlnRep2.bam
+fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3013
@@ -38647,7 +38598,7 @@ subId 3220
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep1
+metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hPkRep1
 objType table
 antibody GATA3_(SC-268)
 cell T-47D
@@ -38659,7 +38610,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001639
 expId 1639
-fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2636
@@ -38669,11 +38620,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 3220
-tableName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep1
+tableName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hPkRep1
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep2
+metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hPkRep2
 objType table
 antibody GATA3_(SC-268)
 cell T-47D
@@ -38685,7 +38636,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001639
 expId 1639
-fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3013
@@ -38695,11 +38646,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 3220
-tableName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep2
+tableName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hPkRep2
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawDataRep1
 objType file
 antibody GATA3_(SC-268)
 cell T-47D
@@ -38711,7 +38662,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001639
 expId 1639
-fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2636
@@ -38723,7 +38674,7 @@ subId 3220
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawDataRep2
+metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawDataRep2
 objType file
 antibody GATA3_(SC-268)
 cell T-47D
@@ -38735,7 +38686,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001639
 expId 1639
-fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3013
@@ -38747,7 +38698,7 @@ subId 3220
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawRep1
 objType table
 antibody GATA3_(SC-268)
 cell T-47D
@@ -38759,7 +38710,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001639
 expId 1639
-fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2636
@@ -38768,11 +38719,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3220
-tableName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep2
+metaObject wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawRep2
 objType table
 antibody GATA3_(SC-268)
 cell T-47D
@@ -38784,7 +38735,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001639
 expId 1639
-fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep2.bigWig
+fileName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL3013
@@ -38793,11 +38744,11 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3220
-tableName wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep2
+tableName wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dP300V0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsT47dP300V0416102Dm002p1hAlnRep1
 objType file
 antibody p300
 cell T-47D
@@ -38809,7 +38760,7 @@ dateSubmitted 2010-12-11
 dateUnrestricted 2011-09-11
 dccAccession wgEncodeEH001602
 expId 1602
-fileName wgEncodeHaibTfbsT47dP300V0416102Dmso2AlnRep1.bam
+fileName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2633
@@ -38821,7 +38772,7 @@ subId 3083
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dP300V0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsT47dP300V0416102Dm002p1hAlnRep2
 objType file
 antibody p300
 cell T-47D
@@ -38834,7 +38785,7 @@ dateSubmitted 2010-12-11
 dateUnrestricted 2011-09-11
 dccAccession wgEncodeEH001602
 expId 1602
-fileName wgEncodeHaibTfbsT47dP300V0416102Dmso2AlnRep2.bam
+fileName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3015
@@ -38846,7 +38797,7 @@ subId 3503
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep1
+metaObject wgEncodeHaibTfbsT47dP300V0416102Dm002p1hPkRep1
 objType table
 antibody p300
 cell T-47D
@@ -38858,7 +38809,7 @@ dateSubmitted 2010-12-11
 dateUnrestricted 2011-09-11
 dccAccession wgEncodeEH001602
 expId 1602
-fileName wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2633
@@ -38868,11 +38819,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 3083
-tableName wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep1
+tableName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hPkRep1
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep2
+metaObject wgEncodeHaibTfbsT47dP300V0416102Dm002p1hPkRep2
 objType table
 antibody p300
 cell T-47D
@@ -38884,7 +38835,7 @@ dateSubmitted 2010-12-11
 dateUnrestricted 2011-09-11
 dccAccession wgEncodeEH001602
 expId 1602
-fileName wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3015
@@ -38894,11 +38845,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 3083
-tableName wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep2
+tableName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hPkRep2
 treatment DMSO_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dP300V0416102Dmso2RawDataRep1
+metaObject wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawDataRep1
 objType file
 antibody p300
 cell T-47D
@@ -38910,7 +38861,7 @@ dateSubmitted 2010-12-11
 dateUnrestricted 2011-09-11
 dccAccession wgEncodeEH001602
 expId 1602
-fileName wgEncodeHaibTfbsT47dP300V0416102Dmso2RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2633
@@ -38922,7 +38873,7 @@ subId 3083
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dP300V0416102Dmso2RawDataRep2
+metaObject wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawDataRep2
 objType file
 antibody p300
 cell T-47D
@@ -38934,7 +38885,7 @@ dateSubmitted 2010-12-11
 dateUnrestricted 2011-09-11
 dccAccession wgEncodeEH001602
 expId 1602
-fileName wgEncodeHaibTfbsT47dP300V0416102Dmso2RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3015
@@ -38946,7 +38897,7 @@ subId 3083
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep1
+metaObject wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawRep1
 objType table
 antibody p300
 cell T-47D
@@ -38958,7 +38909,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001602
 expId 1602
-fileName wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep1.bigWig
+fileName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2633
@@ -38967,11 +38918,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3028
-tableName wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep1
+tableName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep2
+metaObject wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawRep2
 objType table
 antibody p300
 cell T-47D
@@ -38983,7 +38934,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001602
 expId 1602
-fileName wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep2.bigWig
+fileName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL3015
@@ -38992,7 +38943,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3029
-tableName wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep2
+tableName wgEncodeHaibTfbsT47dP300V0416102Dm002p1hRawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
@@ -39687,4 +39638,4 @@ tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 285208591
+# MAGIC: -1981450348

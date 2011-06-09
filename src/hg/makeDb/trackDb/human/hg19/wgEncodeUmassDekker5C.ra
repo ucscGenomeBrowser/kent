@@ -1,0 +1,11 @@
+# University of Washington 5C
+#  Currently downloads only, there is an empty table for now
+
+track wgEncodeUmassDekker5C
+type downloadsOnly
+#type bed
+shortLabel UMass 5C Interactions
+longLabel Chromatin Interactions by 5C from ENCODE/Dekker Univ. Mass.
+group regulation
+fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+wgEncode 1

@@ -71,6 +71,13 @@ file ddf
 type string
 required no
 
+# This specifies sex of a tissue
+# Used by Mouse and Human labs
+field sex
+file ddf
+type string
+required no
+
 #The spikeInPool associated for the bam file.
 field spikeInPool
 file ddf
