@@ -8048,42 +8048,32 @@ tag DEX500pM
 description 1 h with 500 pM DEX (Myers)
 type treatment
 
-#We need to change the DMSO's to be consistent. The proposal is to have both the
-#concentration and the time in both the tags and terms
-#I.E. DMSO_0.02pct > DMSO_0.02pct_1h
-#     DMSO2 > DM02p1h
-# -Matt
-
-#term DMSO_0.02pct_1h
-#tag DM02p1h
-#description 1 h with 0.02% DMSO (Myers) 
-#type treatment
-#
-#term DMSO_2.0pct_5d
-#tag DM2p5d
-#description 5 d with 2% DMSO (Weissman)
-#type treatment
-
-
 
 term DMSO_0.02pct
 tag DMSO2
-description 1 h with 0.02% DMSO (Myers)
+#tag DM002p1h
+description 1 h with 0.02% DMSO (Myers) 
 type treatment
+
 
 term DMSO_0.02pct_24hr
 tag DMSO224h
+#tag DM002p24h
 description 24 h with 0.02% DMSO (Myers)
 type treatment
 
+
 term DMSO_2.0pct
 tag DMSO20
+#tag DM2p5d
 description 5 d with 2% DMSO (Weissman)
 type treatment
 
 term DMSO_4hr
+#term DMSO_0.02pct_4hr  would like to change
 tag DMSO4hr
-description 4 hr with DMSO (Myers)
+#tag DM002p4h
+description 4 hr with 0.02% DMSO (Myers)
 type treatment
 
 term DIFF_7d
