@@ -1441,7 +1441,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 POL2 DMSO 2
         longLabel ECC-1 POL2 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
         type broadPeak
         # subId=2429 dateSubmitted=2010-09-27
         # was wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep2 wong Wed Jun  8 17:14:19 2011
@@ -1450,7 +1450,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 POL2 DMSO 1
         longLabel ECC-1 POL2 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
         type broadPeak
         # subId=2429 dateSubmitted=2010-09-27
         # was wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep1 wong Wed Jun  8 17:14:19 2011
@@ -1713,7 +1713,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D FOX1 DMSO 2
         longLabel T-47D FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type broadPeak
         # subId=2427 dateSubmitted=2010-11-15
         # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2PkRep2 cricket Tue Apr 19 10:32:43 2011
@@ -1723,7 +1723,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D FOX1 DMSO 1
         longLabel T-47D FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type broadPeak
         # subId=2427 dateSubmitted=2010-11-15
         # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2PkRep1 cricket Tue Apr 19 10:32:43 2011
@@ -1733,7 +1733,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 FOX1 DMSO 2
         longLabel ECC-1 FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
         type broadPeak
         # subId=2428 dateSubmitted=2010-11-15
         # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2PkRep2 cricket Tue Apr 19 10:32:40 2011
@@ -1743,7 +1743,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 FOX1 DMSO 1
         longLabel ECC-1 FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
         type broadPeak
         # subId=2428 dateSubmitted=2010-11-15
         # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2PkRep1 cricket Tue Apr 19 10:32:40 2011
@@ -1810,7 +1810,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D P300 DMSO 2
         longLabel T-47D P300 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=P300 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=Peaks factor=P300 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type broadPeak
         # subId=3083 dateSubmitted=2010-12-11
         # was wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep2 wong Wed Jun  8 17:14:27 2011
@@ -1819,7 +1819,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D P300 DMSO 1
         longLabel T-47D P300 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=P300 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=Peaks factor=P300 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type broadPeak
         # subId=3083 dateSubmitted=2010-12-11
         # was wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep1 wong Wed Jun  8 17:14:27 2011
@@ -2216,7 +2216,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D GAT3 DMSO 2
         longLabel T-47D GATA3 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type broadPeak
         # subId=3220 dateSubmitted=2011-01-11
         # was wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep2 wong Wed Jun  8 17:14:25 2011
@@ -2225,7 +2225,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D GAT3 DMSO 1
         longLabel T-47D GATA3 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type broadPeak
         # subId=3220 dateSubmitted=2011-01-11
         # was wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep1 wong Wed Jun  8 17:14:25 2011
@@ -2398,7 +2398,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D CTCF DMSO 2
         longLabel T-47D CTCF DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=Peaks factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type broadPeak
         # subId=3108 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep2 wong Wed Jun  8 17:14:21 2011
@@ -2407,7 +2407,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D CTCF DMSO 1
         longLabel T-47D CTCF DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=Peaks factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type broadPeak
         # subId=3108 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep1 wong Wed Jun  8 17:14:21 2011
@@ -3302,7 +3302,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D FOX1 DMSO 1
         longLabel T-47D FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.292482 169.054993
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2RawRep1 cricket Tue Apr 19 10:32:44 2011
@@ -3312,7 +3312,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 FOX1 DMSO 1
         longLabel ECC-1 FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.214719 212.035004
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep1 cricket Tue Apr 19 10:32:41 2011
@@ -3322,7 +3322,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 FOX1 DMSO 2
         longLabel ECC-1 FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
         type bigWig 0.221521 202.138000
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep2 cricket Tue Apr 19 10:32:41 2011
@@ -3332,7 +3332,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D FOX1 DMSO 2
         longLabel T-47D FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type bigWig 0.201189 168.798004
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2RawRep2 cricket Tue Apr 19 10:32:44 2011
@@ -3495,7 +3495,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 POL2 DMSO 1
         longLabel ECC-1 POL2 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=POL2 cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.296027 345.240997
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep1 wong Wed Jun  8 17:14:20 2011
@@ -3513,7 +3513,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 POL2 DMSO 2
         longLabel ECC-1 POL2 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=POL2 cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=RawSignal factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
         type bigWig 0.202408 426.877991
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep2 wong Wed Jun  8 17:14:20 2011
@@ -3988,7 +3988,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 Cont DMSO 1
         longLabel ECC-1 Control DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zControl cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=zControl cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.153951 189.591003
         # subId=3027 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawRep1 wong Wed Jun  8 17:14:16 2011
@@ -4186,7 +4186,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D P300 DMSO 1
         longLabel T-47D P300 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=P300 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=P300 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.245330 208.897995
         # subId=3028 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep1 wong Wed Jun  8 17:14:27 2011
@@ -4364,7 +4364,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D P300 DMSO 2
         longLabel T-47D P300 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=P300 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=RawSignal factor=P300 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type bigWig 0.203288 265.697998
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep2 wong Wed Jun  8 17:14:28 2011
@@ -5253,7 +5253,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D GAT3 DMSO 2
         longLabel T-47D GATA3 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type bigWig 0.163613 185.701004
         # subId=3220 dateSubmitted=2011-01-11
         # was wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep2 wong Wed Jun  8 17:14:26 2011
@@ -5262,7 +5262,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D GAT3 DMSO 1
         longLabel T-47D GATA3 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.173697 208.783005
         # subId=3220 dateSubmitted=2011-01-11
         # was wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep1 wong Wed Jun  8 17:14:26 2011
@@ -5703,7 +5703,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D CTCF DMSO 2
         longLabel T-47D CTCF DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=RawSignal factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type bigWig 0.176584 285.800995
         # subId=3108 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep2 wong Wed Jun  8 17:14:22 2011
@@ -5712,7 +5712,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D CTCF DMSO 1
         longLabel T-47D CTCF DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.171263 247.860001
         # subId=3108 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep1 wong Wed Jun  8 17:14:22 2011
@@ -6283,7 +6283,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 ERaa DMSO 2
         longLabel ECC-1 ERaa DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
         type bigWig 0.409478 197.470993
         # subId=3754 dateSubmitted=2011-03-07
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep2 wong Wed Jun  8 17:14:17 2011
@@ -6319,7 +6319,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D Cont DMSO 1
         longLabel T-47D Control DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zControl cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=zControl cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.163367 242.354996
         # subId=3754 dateSubmitted=2011-03-07
         # was wgEncodeHaibTfbsT47dControlV0416102Dmso2RawRep1 wong Wed Jun  8 17:14:20 2011
@@ -6394,7 +6394,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 ERaa DMSO 1
         longLabel ECC-1 ERaa DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.304396 152.350006
         # subId=3752 dateSubmitted=2011-03-22
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep1 wong Wed Jun  8 17:14:17 2011
@@ -6403,7 +6403,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D ERaa DMSO 1
         longLabel T-47D ERaa DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep1
+        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
         type bigWig 0.210769 149.223999
         # subId=3752 dateSubmitted=2011-03-22
         # was wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep1 wong Wed Jun  8 17:14:23 2011
@@ -6412,7 +6412,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D ERaa DMSO 2
         longLabel T-47D ERaa DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatmentDM002p1h rep=rep2
+        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
         type bigWig 0.301206 286.973999
         # subId=3752 dateSubmitted=2011-03-22
         # was wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep2 wong Wed Jun  8 17:14:23 2011
