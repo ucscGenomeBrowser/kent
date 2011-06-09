@@ -1,7 +1,7 @@
 term 3134
 tag 3134
 type Cell Line
-organism Mouse
+organism mouse
 tissue Mammary
 description Mammary
 age immortalized
@@ -14,7 +14,7 @@ color 153,38,0
 sex M
 protocol UW(Stam):3134_Stam_protocol.pdf
 
-term Mouse
+term mouse
 tag mouse
 type organism
 description Mouse

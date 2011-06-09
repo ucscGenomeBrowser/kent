@@ -7,7 +7,7 @@ targetDescription Sequence-specific DNA-binding protein that interacts with indu
 vendorName Santa Cruz Biotech
 vendorId sc-8975
 orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
-lab Farnham
+lab Farnham, Bernstein
 targetId GeneCard:TFAP2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
 validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
@@ -21,5 +21,16 @@ labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
+organism human
+
+term Broad
+tag Broad
+type lab
+label Bernstein - Broad Institute
+description Bernstein - Broad Institute
+labInst Broad Institute
+labPi Bernstein
+labPiFull Bradley Bernstein
+grantPi Bernstein
 organism human
 
