@@ -85,8 +85,10 @@ probability test results in a p-value <code>&lt; 0.01</code>
 <DT><B>DNase</B>, OC Code = 2:</DT>
 <DD><ul style="list-style-type:none;">
 <li><b><span style='color: #009900;'>Green</span></b> (low significance):
-Regions identified by DNaseI HS as peaks (DNase peak calling p-value <code>&lt; 0.05</code>)
-and not identified by FAIRE as peaks (FAIRE peak calling p-value <code>&lt;  0.1</code>),
+Regions identified by DNaseI HS as peaks (DNase peak calling p-value <code>&lt; 0.05</code>
+(<code>-log<sub>10</sub>(p-value) &gt; 1.3</code>))
+and not identified by FAIRE as peaks (FAIRE peak calling p-value <code>&lt;  0.1</code>
+(<code>-log<sub>10</sub>(p-value) &gt; 1.0</code>)),
 and with a Fisher's combined DNaseI HS and FAIRE p-value <code>&gt;= 0.01</code>
 (<code>-log<sub>10</sub>(p-value) &lt;= 2</code>).</li>
 <li><b><span style='color: #0000FF;'>Blue</b></span> (high significance):
@@ -96,8 +98,10 @@ see Open Chromatin above.</li></DD>
 <DT><B>FAIRE</B>, OC Code = 3:</DT>
 <DD><ul style="list-style-type:none;">
 <li><b><span style='color: #990000;'>Dark Red</span></b> (low significance):
-Regions identified by FAIRE as peaks (FAIRE peak calling <code>&lt;  0.1</code>) and not
-identified by DNaseI HS as peaks (DNase peak calling <code>&lt; 0.05</code>), and with a
+Regions identified by FAIRE as peaks (FAIRE peak calling p-value <code>&lt;  0.1</code>
+(<code>-log<sub>10</sub>(p-value) &gt; 1.0</code>))
+identified by DNaseI HS as peaks (DNase peak calling p-value <code>&lt; 0.05</code>
+(<code>-log<sub>10</sub>(p-value) &gt; 1.3</code>)), and with a
 Fisher's combined DNaseI HS and FAIRE p-value <code>&gt;= 0.01</code>
 (<code>-log<sub>10</sub>(p-value) &lt;= 2</code>).</li>
 <li><b><span style='color: #0000FF;'>Blue</b></span> (high significance):
@@ -108,7 +112,8 @@ see Open Chromatin above.</li></DD>
 <DD><ul style="list-style-type:none;">
 <li><b><span style='color: #FF00FF;'>Pink</span></b>:
 Regions identified by ChIP-seq as peaks (at least one of the peak calling p-values for
-the three ChIP experiment is <code>&lt; 0.05</code>) indicating binding sites for one
+the three ChIP experiment is <code>&lt; 0.05 </code>(<code>-log<sub>10</sub>(p-value) &gt; 1.3</code>))
+indicating binding sites for one
 or more of RNA Pol II, CTCF, and c-Myc described here and not identified by DNaseI HS
 or FAIRE as peaks. Peaks for ChIP-seq have p-values <code>&lt; 0.05</code>
 (<code>-log<sub>10</sub>(p-value) &gt; 1.3</code>). For RNA Pol II, only sites that
