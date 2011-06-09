@@ -27531,55 +27531,6 @@ tableName wgEncodeHaibTfbsHepg2Zbtb33V0416101RawRep2
 treatment None
 view RawSignal
 
-#metaObject wgEncodeHaibTfbsHuvecControlPcr1xRawDataRep1
-#objType file
-#antibody Control
-#cell HUVEC
-#composite wgEncodeHaibTfbs
-#controlId SL1106
-#dataType ChipSeq
-#dataVersion post ENCODE Jan 2011 Freeze
-#dateSubmitted 2011-05-23
-#dateUnrestricted 2012-02-23
-#dccAccession wgEncodeEH001675
-#expId 1675
-#fileName wgEncodeHaibTfbsHuvecControlPcr1xRawDataRep1.fastq.gz
-#grant Myers
-#lab HudsonAlpha
-#labExpId SL1106
-#project wgEncode
-#protocol PCR1x
-#replicate 1
-#setType input
-#subId 4160
-#treatment None
-#view RawData
-
-#metaObject wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
-#objType table
-#antibody Control
-#cell HUVEC
-#composite wgEncodeHaibTfbs
-#controlId SL1106
-#dataType ChipSeq
-#dataVersion post ENCODE Jan 2011 Freeze
-#dateSubmitted 2011-05-23
-#dateUnrestricted 2012-02-23
-#dccAccession wgEncodeEH001675
-#expId 1675
-#fileName wgEncodeHaibTfbsHuvecControlPcr1xRawRep1.bigWig
-#grant Myers
-#lab HudsonAlpha
-#labExpId SL1106
-#project wgEncode
-#protocol PCR1x
-#replicate 1
-#setType input
-#subId 4160
-#tableName wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
-#treatment None
-#view RawSignal
-
 metaObject wgEncodeHaibTfbsK562Atf3V0416101AlnRep1
 objType file
 antibody ATF3
