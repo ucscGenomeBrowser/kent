@@ -57,7 +57,7 @@ subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 
 dimensions dimensionX=cellType dimensionY=age dimensionA=rep
 dimensionAchecked rep1
 sortOrder cellType=+ strain=+ age=+ sex=+ rep=+ view=+
-fileSortOrder cell=Cell_Line strain=Strain sex=Sex age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line strain=Strain sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex
 dragAndDrop subTracksi
 noInherit on
