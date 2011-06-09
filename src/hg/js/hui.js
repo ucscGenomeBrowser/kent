@@ -646,6 +646,7 @@ function subtrackCfgHideAll(table)
     });
     // Hide all "..." metadata displayed
     $("div[id $= '_meta']:visible").toggle();
+    $("img[src$='../images/upBlue.png']").attr('src','../images/downBlue.png');
 }
 
 var popUpTrackName;
@@ -727,7 +728,7 @@ function subtrackCfgShow(tableName)
 // Config controls not matching name will be hidden
     var divit = $("#div_"+tableName+"_cfg");
     if($(divit).css('display') == 'none')
-        $("#div_"+tableName+"_meta").hide();
+        metadataShowHide(tableName,"","");
     // Could have all inputs commented out, then uncommented when clicked:
     // But would need to:
     // 1) be able to find composite view level input

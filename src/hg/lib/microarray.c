@@ -1046,7 +1046,9 @@ if (setting)
 	if (sameWord(cur->name, setting))
 	    return cur;
     }
-return groupings->defaultCombine;
+if (groupings->defaultCombine)
+    return groupings->defaultCombine;
+return groupings->allArrays;
 }
 
 /* int maSubsetOffsetFromCart(struct microarrayGroups *groupings, struct cart *cart, char *trackName) */
