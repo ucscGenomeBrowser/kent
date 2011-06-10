@@ -56,7 +56,7 @@ struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct 
 /* Look up through self and parents, looking for someone responsible for handling
  * where the downloads are. */
 {
-if (!sameWord(tdb->type,"downloadsOnly") && !sameString(tdb->table, tdb->track) && trackHash)
+if (!tdbIsDownloadsOnly(tdb) && !sameString(tdb->table, tdb->track) && trackHash)
     {
     tdb = hashFindVal(trackHash, tdb->table);
     if (tdb == NULL)
@@ -276,7 +276,8 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash)
 /* Show downlaods, schema and metadata links where appropriate */
 {
-boolean schemaLink = (isCustomTrack(tdb->table) == FALSE)
+boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
+                  && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
 boolean metadataLink = (!tdbIsComposite(tdb)
                   && metadataForTable(db, tdb, NULL) != NULL);
