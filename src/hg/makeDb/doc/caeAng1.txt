@@ -1,7 +1,10 @@
 # for emacs: -*- mode: sh; -*-
 
 # Caenorhabditis angaria
-#	Washington University School of Medicine GSC and Sanger Institute
+#	Submitted (15-OCT-2010) Division of Biology, California Institute
+#	of Technology, 1200 E. California Blvd., Pasadena, CA 91125, USA 
+
+#	Division of Biology, California Institute of Technology(PS1010) ps10rel4 (GCA_000165025.1)
 #
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEHI01
 
@@ -313,3 +316,15 @@ caeAng1.perChromTables = no
     #	17607671 bases of 75258781 (23.396%) in intersection
 
 #########################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caeAng1
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caeAng1 \
+	 > downloads.log 2>&1
+    #	real    0m40.587s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################

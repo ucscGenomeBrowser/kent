@@ -245,3 +245,15 @@ caeRem4.perChromTables = no
     #	46320954 bases of 138406203 (33.467%) in intersection
 
 ############################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caeRem4
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caeRem4 \
+	 > downloads.log 2>&1
+    #	real    1m15.214s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################
