@@ -9854,8 +9854,16 @@ if (url != NULL && url[0] != 0)
     if (!sameWord(dbSnpId, "-"))
     	{
     	printf("<B>dbSNP:</B> \n");
-    	printf("<A HREF=\"%s%s\" target=_blank>",
+    	if (sameWord(database, "hg18"))
+	    {
+	    printf("<A HREF=\"%s%s\" >",
+	       "../cgi-bin/hgc?g=snp130&i=", dbSnpId);
+	    }
+	else
+	    {
+    	    printf("<A HREF=\"%s%s\" >",
 	       "../cgi-bin/hgc?g=snp132&i=", dbSnpId);
+	    }
     	printf("%s</A></B>", dbSnpId);
 	fflush(stdout);
 	}
