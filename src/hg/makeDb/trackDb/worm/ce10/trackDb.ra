@@ -41,7 +41,7 @@ priority 103.29
         type wigMaf 0.0 1.0
         speciesCodonDefault hg19
         speciesGroups Caenorhabditis
-        sGroup_Caenorhabditis cb4 caeSp91 caeRem4 caeSp111 caePb3 caeSp71 caeJap4 caeAng1
+        sGroup_Caenorhabditis caeSp91 caeRem4 caePb3 caeSp71 cb4 caeSp111 caeJap4 caeAng1
         itemFirstCharCase noChange
         treeImage phylo/ce10_9way.png
         priority 5
