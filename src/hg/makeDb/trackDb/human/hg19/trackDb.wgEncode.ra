@@ -24,8 +24,7 @@ include wgEncodeSydhNsome.ra alpha
 include wgEncodeGisRnaPet.ra alpha
 
 # GIS DNA PET (wrangler: cricket)
-include wgEncodeGisDnaPet.ra beta,public
-include wgEncodeGisDnaPet.new.ra alpha
+include wgEncodeGisDnaPet.ra
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
 include wgEncodeHaibGenotype.ra alpha
