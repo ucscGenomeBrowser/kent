@@ -3,7 +3,7 @@ objType composite
 composite wgEncodeSydhHist
 expVars lab,dataType,cell,antibody,treatment
 
-metaObject wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1
+metaObject wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1
 objType file
 age immortalized
 antibody H3K4me3
@@ -12,22 +12,23 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam
+fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1.bam
 grant Snyder
-lab Yale-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1194
+subId 4315
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2
+metaObject wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep2
 objType file
 age immortalized
 antibody H3K4me3
@@ -36,18 +37,19 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam
+fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep2.bam
 grant Snyder
-lab Yale-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1194
+subId 4315
 treatment None
 view Alignments
 
@@ -149,7 +151,7 @@ tableName wgEncodeSydhHistCh12H3k4me3IggyaleSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistCh12InputIggyaleAln
+metaObject wgEncodeSydhHistCh12InputIggyaleAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -158,17 +160,19 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-12
-dateUnrestricted 2011-02-12
-fileName wgEncodeSydhHistCh12InputIggyaleAln.bam
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistCh12InputIggyaleAlnRep1.bam
 grant Snyder
-lab Yale-m
+lab Stanford
 project wgEncode
+replicate 1
 setType input
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1195
+subId 4316
 treatment None
 view Alignments
 
@@ -366,7 +370,7 @@ tableName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleSig
 treatment DMSO_2.0pct
 view Signal
 
-metaObject wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1
+metaObject wgEncodeSydhHistMelH3k04me3IggyaleAlnRep1
 objType file
 age immortalized
 antibody H3K4me3
@@ -375,22 +379,23 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1.tagAlign.gz
+fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1166
+subId 4316
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2
+metaObject wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2
 objType file
 age immortalized
 antibody H3K4me3
@@ -399,18 +404,19 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2.tagAlign.gz
+fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1166
+subId 4316
 treatment None
 view Alignments
 
@@ -512,7 +518,7 @@ tableName wgEncodeSydhHistMelH3k4me3IggyaleSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistMelInputIggyaleAln
+metaObject wgEncodeSydhHistMelInputIggyaleAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -521,17 +527,19 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
-fileName wgEncodeSydhHistMelInputIggyaleAln.tagAlign.gz
+fileName wgEncodeSydhHistMelInputIggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1168
+subId 4316
 treatment None
 view Alignments
 
@@ -583,4 +591,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -1766382751
+# MAGIC: -884221489

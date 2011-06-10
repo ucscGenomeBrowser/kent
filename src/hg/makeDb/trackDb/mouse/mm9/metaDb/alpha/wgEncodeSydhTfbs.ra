@@ -304,18 +304,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1157
+subId 4168
 treatment None
 view Alignments
 
@@ -328,18 +329,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1157
+subId 4168
 treatment None
 view Alignments
 
@@ -450,18 +452,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1159
+subId 4168
 treatment None
 view Alignments
 
@@ -474,18 +477,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1159
+subId 4168
 treatment None
 view Alignments
 
@@ -742,18 +746,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1153
+subId 4168
 treatment None
 view Alignments
 
@@ -766,18 +771,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1153
+subId 4168
 treatment None
 view Alignments
 
@@ -879,7 +885,7 @@ tableName wgEncodeSydhTfbsCh12E2f4IggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsCh12InputIggmusAln
+metaObject wgEncodeSydhTfbsCh12InputIggmusAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -888,17 +894,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12InputIggmusAln.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12InputIggmusAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
+replicate 1
 setType input
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1154
+subId 4168
 treatment None
 view Alignments
 
@@ -1021,6 +1029,30 @@ tableName wgEncodeSydhTfbsCh12InputIggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsCh12InputIggyaleAlnRep1
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-09
+dateUnrestricted 2012-03-09
+fileName wgEncodeSydhTfbsCh12InputIggyaleAlnRep1.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4168
+treatment None
+view Alignments
+
 metaObject wgEncodeSydhTfbsCh12JundIggrabAlnRep1
 objType file
 age immortalized
@@ -1030,18 +1062,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-10
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1126
+subId 4317
 treatment None
 view Alignments
 
@@ -1054,18 +1087,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-10
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1126
+subId 4317
 treatment None
 view Alignments
 
@@ -1760,18 +1794,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1155
+subId 4168
 treatment None
 view Alignments
 
@@ -1784,18 +1819,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1155
+subId 4168
 treatment None
 view Alignments
 
@@ -2344,18 +2380,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1156
+subId 4168
 treatment None
 view Alignments
 
@@ -2368,18 +2405,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1156
+subId 4168
 treatment None
 view Alignments
 
@@ -2932,18 +2970,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1163
+subId 4169
 treatment None
 view Alignments
 
@@ -2956,18 +2995,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1163
+subId 4169
 treatment None
 view Alignments
 
@@ -3371,18 +3411,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1193
+subId 4169
 treatment None
 view Alignments
 
@@ -3395,18 +3436,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1193
+subId 4169
 treatment None
 view Alignments
 
@@ -3517,18 +3559,19 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelGata1IggratAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsMelGata1IggratAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1165
+subId 4314
 treatment None
 view Alignments
 
@@ -3541,18 +3584,19 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelGata1IggratAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsMelGata1IggratAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1165
+subId 4314
 treatment None
 view Alignments
 
@@ -3798,7 +3842,7 @@ tableName wgEncodeSydhTfbsMelInputDmso20StdSig
 treatment DMSO_2.0pct
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggmusAln
+metaObject wgEncodeSydhTfbsMelInputIggmusAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -3807,17 +3851,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggmusAln.tagAlign.gz
+fileName wgEncodeSydhTfbsMelInputIggmusAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1162
+subId 4169
 treatment None
 view Alignments
 
@@ -3869,7 +3915,7 @@ tableName wgEncodeSydhTfbsMelInputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggrabAln
+metaObject wgEncodeSydhTfbsMelInputIggrabAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -3878,17 +3924,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggrabAln.tagAlign.gz
+fileName wgEncodeSydhTfbsMelInputIggrabAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1164
+subId 4169
 treatment None
 view Alignments
 
@@ -3940,7 +3988,7 @@ tableName wgEncodeSydhTfbsMelInputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggratAln
+metaObject wgEncodeSydhTfbsMelInputIggratAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -3949,17 +3997,19 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggratAln.tagAlign.gz
+fileName wgEncodeSydhTfbsMelInputIggratAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1167
+subId 4169
 treatment None
 view Alignments
 
@@ -4011,7 +4061,7 @@ tableName wgEncodeSydhTfbsMelInputIggratSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggyaleAln
+metaObject wgEncodeSydhTfbsMelInputIggyaleAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -4020,17 +4070,19 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
-fileName wgEncodeSydhTfbsMelInputIggyaleAln.tagAlign.gz
+fileName wgEncodeSydhTfbsMelInputIggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1168
+subId 4169
 treatment None
 view Alignments
 
@@ -4139,18 +4191,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1192
+subId 4169
 treatment None
 view Alignments
 
@@ -4163,18 +4216,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1192
+subId 4169
 treatment None
 view Alignments
 
@@ -5169,18 +5223,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1161
+subId 4169
 treatment None
 view Alignments
 
@@ -5193,18 +5248,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1161
+subId 4169
 treatment None
 view Alignments
 
@@ -5908,18 +5964,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep1.tagAlign.gz
+fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1160
+subId 4169
 treatment None
 view Alignments
 
@@ -5932,18 +5989,19 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep2.tagAlign.gz
+fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1160
+subId 4169
 treatment None
 view Alignments
 
@@ -6195,4 +6253,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 892874617
+# MAGIC: -164025803
