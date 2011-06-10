@@ -2372,14 +2372,47 @@ function handleTrackUi(response, status)
     }
 }
 
+function afterImgTblReload()
+{
+// Reload various UI widgets after updating imgTbl map.
+    parseMap(null, true);
+    $("map[name!=ideoMap]").each( function(t) { parseMap($(this, false));});
+    initImgTblButtons();
+    loadImgAreaSelect(false);
+    // Do NOT reload context menu (otherwise we get the "context menu sticks" problem).
+    // loadContextMenu($('#tr_' + id));
+    if(trackImgTbl.tableDnDUpdate)
+        trackImgTbl.tableDnDUpdate();
+    reloadFloatingItem();
+}
+
+function updateTrackImgForId(html, id)
+{
+// update row in imgTbl for given id.
+// return true if we successfully pull slice for id and update it in imgTrack.
+    var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
+    var reg = new RegExp(str);
+    var a = reg.exec(html);
+    if(a && a[1]) {
+        $('#tr_' + id).html(a[1]);
+        // NOTE: Want to examine the png? Uncomment:
+        //var img = $('#tr_' + id).find("img[id^='img_data_']").attr('src');
+        //warn("Just parsed image:<BR>"+img);
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function handleUpdateTrackMap(response, status)
 {
 // Handle ajax response with an updated trackMap image (gif or png) and map.
 //
 // this.cmd can be used to figure out which menu item triggered this.
-//
-// e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
+// this.id == appropriate track if we are retrieving just a single track.
+
     // Parse out new ideoGram url (if available)
+    // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
     var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
     if(a && a[1]) {
         b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
@@ -2387,67 +2420,72 @@ function handleUpdateTrackMap(response, status)
             $('#chrom').attr('src', b[1]);
         }
     }
+    // update local trackDbJson to reflect possible side-effects of ajax request.
     var re = /<\!-- trackDbJson -->\n<script>var trackDbJson = ([\S\s]+)<\/script>\n<\!-- trackDbJson -->/m;
     a = re.exec(response);
     if(a && a[1]) {
         var json = eval("(" + a[1] + ")");
-        if(json && json[this.id]) {
-            var visibility = visibilityStrsOrder[json[this.id].visibility];
-            var limitedVis;
-            if(json[this.id].limitedVis)
-                limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
-            if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
-                alert("There are too many items to display the track in " + this.newVisibility + " mode.");
-            var rec = trackDbJson[this.id];
-            rec.limitedVis = json[this.id].limitedVis;
-            updateVisibility(this.id, visibility);
+        if(json) {
+            if(this.id != null) {
+                if(json[this.id]) {
+                    var visibility = visibilityStrsOrder[json[this.id].visibility];
+                    var limitedVis;
+                    if(json[this.id].limitedVis)
+                        limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
+                    if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
+                        alert("There are too many items to display the track in " + this.newVisibility + " mode.");
+                    var rec = trackDbJson[this.id];
+                    rec.limitedVis = json[this.id].limitedVis;
+                    updateVisibility(this.id, visibility);
+                 } else {
+                    showWarning("Invalid trackDbJson received from the server");
+                 }
+            } else {
+                 trackDbJson = json;
+            }
         } else {
             showWarning("Invalid trackDbJson received from the server");
         }
     } else {
         showWarning("trackDbJson is missing from the response");
     }
+    if(this.loadingId) {
+        hideLoadingImage(this.loadingId);
+    }
     if(imageV2 && this.id && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
           // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
           var id = this.id;
-          if(this.loadingId) {
-	          hideLoadingImage(this.loadingId);
-          }
-          var rec = trackDbJson[id];
-          var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
-          var reg = new RegExp(str);
-          a = reg.exec(response);
-          if(a && a[1]) {
-//               $('#tr_' + id).html();
-//               $('#tr_' + id).empty();
-               $('#tr_' + id).html(a[1]);
-               // XXXX move following to a shared method
-               parseMap(null, true);
-               $("map[name!=ideoMap]").each( function(t) { parseMap($(this, false));});
-               initImgTblButtons();
-               loadImgAreaSelect(false);
-               // Do NOT reload context menu (otherwise we get the "context menu sticks" problem).
-               // loadContextMenu($('#tr_' + id));
-               if(trackImgTbl.tableDnDUpdate)
-                   trackImgTbl.tableDnDUpdate();
-               reloadFloatingItem();
-               // NOTE: Want to examine the png? Uncomment:
-               //var img = $('#tr_' + id).find("img[id^='img_data_']").attr('src');
-               //warn("Just parsed image:<BR>"+img);
+          if(updateTrackImgForId(response, id)) {
+               afterImgTblReload();
           } else {
-               showWarning("Couldn't parse out new image for id: " + id);
-               //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
+              showWarning("Couldn't parse out new image for id: " + id);
+              //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
           }
     } else {
         if(imageV2) {
-            a= /<TABLE id=\'imgTbl\'[^>]*>([\S\s]+?)<\/TABLE>/.exec(response);
-            if(a[1]) {
-                // This doesn't work (much weirdness ensues).
-                $('#imgTbl').html(a[1]);
-            } else {
-                showWarning("Couldn't parse out new image");
+            // We update row's one at a time (updating the whole imgTable at one time doesn't work in IE).
+            for (id in trackDbJson) {
+                if(!updateTrackImgForId(response, id)) {
+                    showWarning("Couldn't parse out new image for id: " + id);
+                    //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
+                }
             }
+            // parse out and reset position info.
+            a = /<INPUT [^>]*NAME=["']position['"] VALUE=['"]([^'"]+)/.exec(response);
+            if(a != null && a[1] != null) {
+                var o = parsePosition(a[1]);
+                setPosition(a[1], commify(o.end - o.start + 1));
+                $("#hgt\\.winStart").val(o.start - 1);
+                $("#hgt\\.winEnd").val(o.end);
+            } else {
+                showWarning("Couldn't parse out new position info");
+            }
+            a = /<input [^>]*id=["']hgt\.newWinWidth['"][^>]*value=['"]([^'"]+)/.exec(response);
+            if(a != null && a[1] != null) {
+                $("#hgt\\.newWinWidth").val(a[1]);
+            }
+            afterImgTblReload();
         } else {
             a= /<IMG([^>]+SRC[^>]+id='trackMap[^>]*)>/.exec(response);
             // Deal with a is null
@@ -2633,5 +2671,29 @@ function handleZoomCodon(response, status)
             document.TrackHeaderForm.submit();
     } else {
         alert(json.error);
+    }
+}
+
+function navigateButtonClick(ele)
+{
+// code to update just the imgTbl in response to navigation buttons (zoom-out etc.).
+// currently experimental code (live only in larrym's tree).
+    if(mapIsUpdateable) {
+        jQuery('body').css('cursor', '');
+        $.ajax({
+                   type: "GET",
+                   url: "../cgi-bin/hgTracks",
+                   data: ele.name + "=" + ele.value + "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid(),
+                   dataType: "html",
+                   trueSuccess: handleUpdateTrackMap,
+                   success: catchErrorOrDispatch,
+                   error: errorHandler,
+                   cmd: 'wholeImage',
+                   loadingId: showLoadingImage("imgTbl"),
+                   cache: false
+               });
+        return false;
+    } else {
+        return true;
     }
 }

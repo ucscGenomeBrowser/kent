@@ -2968,15 +2968,24 @@ noInherit on
 		origAssembly hg19
 		# subId=2466 dateSubmitted=2010-09-29
 
-		track wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel NHEK nucl pA+ A 4
-		longLabel NHEK nucleus polyA+ Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep2
-		type bam
-		origAssembly hg19
-		color 179,0,134
-		# subId=2468 dateSubmitted=2010-09-29
+#		track wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4
+#		parent wgEncodeCshlLongRnaSeqViewAlignments off
+#		shortLabel NHEK nucl pA+ A 4
+#		longLabel NHEK nucleus polyA+ Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
+#		subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep2
+#		type bam
+#		origAssembly hg19
+#		color 179,0,134
+#		# subId=2468 dateSubmitted=2010-09-29
+
+        track wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel NHEK nucleus longPolyA Aln 4
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 4 (longPolyA in NHEK nucleus)
+        subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep4
+        type bam
+        color 179,0,134
+        # subId=4053 dateSubmitted=2011-06-08
 
 #		track wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
 #		parent wgEncodeCshlLongRnaSeqViewAlignments off
@@ -3012,15 +3021,24 @@ noInherit on
         type bam
         # subId=4054 dateSubmitted=2011-05-06
 
-		track wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel NHEK cell pA+ A 5
-		longLabel NHEK whole cell polyA+ Long RNA-seq Alignments Rep 5 from ENCODE/CSHL
-		subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=pAP rep=rep5
-		type bam
-		origAssembly hg19
-		color 179,0,134
-		# subId=2467 dateSubmitted=2010-09-29
+#		track wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
+#		parent wgEncodeCshlLongRnaSeqViewAlignments off
+#		shortLabel NHEK cell pA+ A 5
+#		longLabel NHEK whole cell polyA+ Long RNA-seq Alignments Rep 5 from ENCODE/CSHL
+#		subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=pAP rep=rep5
+#		type bam
+#		origAssembly hg19
+#		color 179,0,134
+#		# subId=2467 dateSubmitted=2010-09-29
+
+        track wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel NHEK cell longPolyA Aln 5
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 5 (longPolyA in NHEK cell)
+        subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=pAP rep=rep5
+        type bam
+        color 179,0,134
+        # subId=4055 dateSubmitted=2011-06-09
 
 		track wgEncodeCshlLongRnaSeqBjCellPapAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off

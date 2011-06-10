@@ -9854,8 +9854,16 @@ if (url != NULL && url[0] != 0)
     if (!sameWord(dbSnpId, "-"))
     	{
     	printf("<B>dbSNP:</B> \n");
-    	printf("<A HREF=\"%s%s\" target=_blank>",
+    	if (sameWord(database, "hg18"))
+	    {
+	    printf("<A HREF=\"%s%s\" >",
+	       "../cgi-bin/hgc?g=snp130&i=", dbSnpId);
+	    }
+	else
+	    {
+    	    printf("<A HREF=\"%s%s\" >",
 	       "../cgi-bin/hgc?g=snp132&i=", dbSnpId);
+	    }
     	printf("%s</A></B>", dbSnpId);
 	fflush(stdout);
 	}
@@ -17140,7 +17148,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Publication:</B> %s <em>et al.</em> "
 	   "<A HREF=\"", gc->author);
     printEntrezPubMedUidAbstractUrl(stdout, gc->pubMedID);
-    printf("\" TARGET=_BLANK>%s</A>. <em>%s.</em> %s<BR>\n", gc->title, gc->journal, gc->pubDate);
+    printf("\" TARGET=_BLANK>%s</A>%s <em>%s.</em> %s<BR>\n",
+	   gc->title, (endsWith(gc->title, ".") ? "" : "."), gc->journal, gc->pubDate);
     printf("<B>Disease or trait:</B> %s<BR>\n", subNrNs(gc->trait));
     printf("<B>Initial sample size:</B> %s<BR>\n", subNrNs(gc->initSample));
     printf("<B>Replication sample size:</B> %s<BR>\n", subNrNs(gc->replSample));

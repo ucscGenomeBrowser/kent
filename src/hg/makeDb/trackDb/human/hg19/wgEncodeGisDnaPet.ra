@@ -6,6 +6,7 @@ group varRep
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup2 fragSize Frag_Size 0-1k=1k 1-5k=5k 2-10k=10k 3-f20k=20k
 dimensions dimensionX=cellType dimensionY=fragSize
+fileSortOrder cell=Cell_Line fragSize=Frag_Size view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ fragSize=+ 
 controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
 dragAndDrop subTracks
