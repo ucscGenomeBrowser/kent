@@ -33,8 +33,7 @@ include wgEncodeHaibGenotype.ra alpha
 include wgEncodeBuOrchid.ra
 
 # Affy Rna Chip (wrangler: cricket)
-include wgEncodeAffyRnaChip.ra beta,public
-include wgEncodeAffyRnaChip.new.ra alpha
+include wgEncodeAffyRnaChip.ra
 
 # Chromatin Interactions ------
 
