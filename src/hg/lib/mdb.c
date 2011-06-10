@@ -3107,7 +3107,7 @@ if(setting == NULL)
     return NULL;
 struct mdbObj *mdbObj;
 AllocVar(mdbObj);
-mdbObj->obj     = cloneString(tdb->table);
+mdbObj->obj     = cloneString(tdb->table?tdb->table:tdb->track);
 AllocVar(mdbObj->vars);
 mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
 mdbObj->vars->val = cloneString(MDB_OBJ_TYPE_TABLE);
