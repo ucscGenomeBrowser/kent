@@ -360,12 +360,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqA549CellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9005
 labProtocolId 021WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -383,12 +385,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqA549CellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9006
 labProtocolId 022WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -504,6 +508,7 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3602
@@ -526,10 +531,11 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3602
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapFastqRd1Rep1
 objType file
@@ -639,6 +645,7 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3602
@@ -660,6 +667,7 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3602
@@ -681,6 +689,7 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3602
@@ -791,11 +800,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqA549CellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 021WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -810,11 +821,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqA549CellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 022WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -831,12 +844,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqA549CellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8963
 labProtocolId 021WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -854,12 +869,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqA549CellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8964
 labProtocolId 022WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -883,6 +900,7 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3602
@@ -904,6 +922,7 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3602
@@ -1266,12 +1285,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9001
 labProtocolId 017WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -1289,12 +1310,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9002
 labProtocolId 018WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -1701,11 +1724,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 017WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1720,11 +1745,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 018WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1741,12 +1768,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8965
 labProtocolId 017WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1764,12 +1793,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8966
 labProtocolId 018WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2178,12 +2209,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqBjCellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9007
 labProtocolId 037WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -2201,12 +2234,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqBjCellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9008
 labProtocolId 038WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -2613,11 +2648,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqBjCellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 037WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2632,11 +2669,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqBjCellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 038WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2653,12 +2692,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqBjCellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8969
 labProtocolId 037WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2676,12 +2717,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqBjCellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8970
 labProtocolId 038WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3088,11 +3131,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 003WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -3107,11 +3152,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 004WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -3128,12 +3175,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8661
 labProtocolId 003WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -3151,12 +3200,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8662
 labProtocolId 004WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -3272,6 +3323,7 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3612
@@ -3294,10 +3346,11 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3612
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd1Rep1
 objType file
@@ -3407,6 +3460,7 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3612
@@ -3428,6 +3482,7 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3612
@@ -3449,6 +3504,7 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3612
@@ -3559,11 +3615,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 003WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3578,11 +3636,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 004WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3599,12 +3659,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16629
 labProtocolId 003WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3622,12 +3684,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16630
 labProtocolId 004WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3651,6 +3715,7 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3612
@@ -3672,6 +3737,7 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3612
@@ -4231,11 +4297,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 003C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -4250,11 +4318,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 004C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -4271,12 +4341,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18547
 labProtocolId 003C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -4294,12 +4366,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18548
 labProtocolId 004C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -4706,11 +4780,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 003C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4725,11 +4801,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 004C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4746,12 +4824,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8467
 labProtocolId 003C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4769,12 +4849,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8468
 labProtocolId 004C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5181,11 +5263,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 003N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -5200,11 +5284,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 004N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -5221,12 +5307,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9197
 labProtocolId 003N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -5244,12 +5332,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9198
 labProtocolId 004N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -5656,11 +5746,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 003N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5675,11 +5767,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 004N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5696,12 +5790,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8532
 labProtocolId 003N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5719,12 +5815,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8533
 labProtocolId 004N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -6131,11 +6229,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 005WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -6150,11 +6250,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 006WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -6171,12 +6273,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8663
 labProtocolId 005WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -6194,12 +6298,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8664
 labProtocolId 006WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -6606,11 +6712,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 005WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -6625,11 +6733,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 006WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -6646,12 +6756,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8461
 labProtocolId 005WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -6669,12 +6781,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8462
 labProtocolId 006WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -6968,11 +7082,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 006C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -6989,12 +7105,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18549
 labProtocolId 006C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -7290,11 +7408,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 006C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -7311,12 +7431,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8536
 labProtocolId 006C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -7612,11 +7734,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 006N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -7633,12 +7757,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9199
 labProtocolId 006N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -7934,11 +8060,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 006N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -7955,12 +8083,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8558
 labProtocolId 006N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8369,11 +8499,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 011WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -8388,11 +8520,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 012WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -8409,12 +8543,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8790
 labProtocolId 011WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -8432,12 +8568,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8791
 labProtocolId 012WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -8844,11 +8982,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 011WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -8863,11 +9003,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 012WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8884,12 +9026,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16633
 labProtocolId 011WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -8907,12 +9051,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16634
 labProtocolId 012WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -9206,11 +9352,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 011C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -9225,11 +9373,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 012C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -9246,12 +9396,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18551
 labProtocolId 012C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -9660,11 +9812,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 011C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -9679,11 +9833,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 012C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -9700,12 +9856,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8469
 labProtocolId 011C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -9723,12 +9881,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8470
 labProtocolId 012C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -10135,11 +10295,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 011N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -10154,11 +10316,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 012N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -10175,12 +10339,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9200
 labProtocolId 011N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -10198,12 +10364,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9201
 labProtocolId 012N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -10610,11 +10778,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 011N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -10629,11 +10799,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 012N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -10650,12 +10822,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8559
 labProtocolId 011N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -10673,12 +10847,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8560
 labProtocolId 012N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -11085,11 +11261,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 013WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -11104,11 +11282,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 014WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -11125,12 +11305,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8792
 labProtocolId 013WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -11148,12 +11330,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8793
 labProtocolId 014WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -11560,11 +11744,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 013WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -11579,11 +11765,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 014WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -11600,12 +11788,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16635
 labProtocolId 013WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -11623,12 +11813,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16636
 labProtocolId 014WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -11932,6 +12124,7 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3635
@@ -11954,10 +12147,11 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3635
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamGeneDeNovo
 objType file
@@ -11975,6 +12169,7 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3635
@@ -11996,6 +12191,7 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3635
@@ -12017,6 +12213,7 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3635
@@ -12031,11 +12228,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 013C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -12050,11 +12249,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 014C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -12071,12 +12272,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18552
 labProtocolId 013C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -12094,12 +12297,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18553
 labProtocolId 014C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -12123,6 +12328,7 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3635
@@ -12144,6 +12350,7 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3635
@@ -12505,11 +12712,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 013C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -12524,11 +12733,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 014C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -12545,12 +12756,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8471
 labProtocolId 013C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -12568,12 +12781,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8472
 labProtocolId 014C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -12980,11 +13195,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 013N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -12999,11 +13216,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 014N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -13020,12 +13239,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9202
 labProtocolId 013N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -13043,12 +13264,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9203
 labProtocolId 014N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -13455,11 +13678,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 013N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -13474,11 +13699,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 014N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -13495,12 +13722,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8534
 labProtocolId 013N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -13518,12 +13747,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8535
 labProtocolId 014N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -13817,11 +14048,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHmecCellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 036WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -13838,12 +14071,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHmecCellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8831
 labProtocolId 036WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -14139,11 +14374,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHmecCellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 036WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -14160,12 +14397,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHmecCellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8695
 labProtocolId 036WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -14574,11 +14813,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 023WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -14593,11 +14834,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 024WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -14614,12 +14857,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8826
 labProtocolId 023WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -14637,12 +14882,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8827
 labProtocolId 024WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -15050,11 +15297,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 023WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -15069,11 +15318,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 024WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -15090,12 +15341,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8710
 labProtocolId 023WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -15113,12 +15366,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8711
 labProtocolId 024WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -15525,11 +15780,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 009WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -15544,11 +15801,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 010WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -15565,12 +15824,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8788
 labProtocolId 009WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -15588,12 +15849,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8789
 labProtocolId 010WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -16000,11 +16263,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 009WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -16019,11 +16284,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 010WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -16040,12 +16307,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8463
 labProtocolId 009WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -16063,12 +16332,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8464
 labProtocolId 010WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -16357,11 +16628,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 029C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longNonPolyA
@@ -16376,11 +16649,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 030C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longNonPolyA
@@ -16397,12 +16672,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18556
 labProtocolId 029C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longNonPolyA
@@ -16809,11 +17086,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 029C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -16828,11 +17107,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 030C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -16849,12 +17130,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8688
 labProtocolId 029C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -16872,12 +17155,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8689
 labProtocolId 030C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -17284,11 +17569,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 029N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longNonPolyA
@@ -17303,11 +17590,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 030N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longNonPolyA
@@ -17324,12 +17613,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9206
 labProtocolId 029N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longNonPolyA
@@ -17347,12 +17638,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9207
 labProtocolId 030N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longNonPolyA
@@ -17759,11 +18052,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 029N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -17778,11 +18073,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 030N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -17799,12 +18096,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8690
 labProtocolId 029N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -17822,12 +18121,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8691
 labProtocolId 030N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -18234,11 +18535,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562CellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 001WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -18253,11 +18556,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562CellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 002WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -18274,12 +18579,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562CellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8659
 labProtocolId 001WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -18297,12 +18604,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562CellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8660
 labProtocolId 002WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -18418,6 +18727,7 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3649
@@ -18440,10 +18750,11 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3649
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapFastqRd1Rep1
 objType file
@@ -18553,6 +18864,7 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3649
@@ -18574,6 +18886,7 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3649
@@ -18595,6 +18908,7 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3649
@@ -18705,11 +19019,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562CellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 001WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -18724,11 +19040,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562CellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 002WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -18745,12 +19063,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562CellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16627
 labProtocolId 001WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -18768,12 +19088,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562CellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16628
 labProtocolId 002WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -18797,6 +19119,7 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3649
@@ -18818,6 +19141,7 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3649
@@ -19378,12 +19702,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9185
 labProtocolId 025CHt
 localization chromatin
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract total
@@ -19401,12 +19727,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9186
 labProtocolId 026CHt
 localization chromatin
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract total
@@ -19733,6 +20061,7 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3642
@@ -19755,10 +20084,11 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3642
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPamGeneDeNovo
 objType file
@@ -19776,6 +20106,7 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3642
@@ -19797,6 +20128,7 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3642
@@ -19818,6 +20150,7 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3642
@@ -19832,11 +20165,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562CytosolPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 001C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -19851,11 +20186,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562CytosolPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 002C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -19872,12 +20209,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562CytosolPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18545
 labProtocolId 001C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -19895,12 +20234,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562CytosolPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18546
 labProtocolId 002C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -19924,6 +20265,7 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3642
@@ -19945,6 +20287,7 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3642
@@ -20305,11 +20648,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 001C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -20324,11 +20669,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 002C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -20345,12 +20692,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8465
 labProtocolId 001C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -20368,12 +20717,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8466
 labProtocolId 002C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -20782,12 +21133,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9187
 labProtocolId 025NLt
 localization nucleolus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract total
@@ -20805,12 +21158,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9188
 labProtocolId 026NLt
 localization nucleolus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract total
@@ -21219,12 +21574,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9189
 labProtocolId 025NPt
 localization nucleoplasm
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract total
@@ -21242,12 +21599,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9190
 labProtocolId 026NPt
 localization nucleoplasm
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract total
@@ -21654,11 +22013,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 001N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -21673,11 +22034,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 002N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -21694,12 +22057,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9195
 labProtocolId 001N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -21717,12 +22082,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9196
 labProtocolId 002N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -22129,11 +22496,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 001N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -22148,11 +22517,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 002N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -22169,12 +22540,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8556
 labProtocolId 001N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -22192,12 +22565,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8557
 labProtocolId 002N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -22604,11 +22979,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 015WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -22623,11 +23000,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 016WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -22644,12 +23023,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-07
 dateUnrestricted 2012-02-07
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8824
 labProtocolId 015WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -22667,12 +23048,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8825
 labProtocolId 016WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -23079,11 +23462,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 015WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -23098,11 +23483,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 016WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -23119,12 +23506,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8686
 labProtocolId 015WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -23142,12 +23531,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8687
 labProtocolId 016WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -23677,11 +24068,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 007WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -23696,11 +24089,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 008WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -23720,6 +24115,7 @@ grant Gingeras
 lab CSHL
 labProtocolId 035WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 5
 rnaExtract longNonPolyA
@@ -23736,12 +24132,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8665
 labProtocolId 007WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -23759,12 +24157,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekCellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8666
 labProtocolId 008WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -23788,6 +24188,7 @@ lab CSHL
 labExpId LID8830
 labProtocolId 035WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 5
 rnaExtract longNonPolyA
@@ -23895,9 +24296,9 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-29
-dateUnrestricted 2011-06-29
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-09
+dateUnrestricted 2012-03-08
 dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam
 grant Gingeras
@@ -23909,7 +24310,9 @@ origAssembly hg19
 project wgEncode
 replicate 5
 rnaExtract longPolyA
-subId 2467
+sex U
+spikeInPool 14
+subId 4055
 tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 view Alignments
 
@@ -24319,11 +24722,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 007WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -24338,11 +24743,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 008WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -24362,6 +24769,7 @@ grant Gingeras
 lab CSHL
 labProtocolId 035WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 5
 rnaExtract longPolyA
@@ -24378,12 +24786,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16631
 labProtocolId 007WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -24401,12 +24811,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekCellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID16632
 labProtocolId 008WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -24430,6 +24842,7 @@ lab CSHL
 labExpId LID8694
 labProtocolId 035WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 5
 rnaExtract longPolyA
@@ -24725,11 +25138,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 028C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longNonPolyA
@@ -24746,12 +25161,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID18554
 labProtocolId 027C-
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longNonPolyA
@@ -25160,11 +25577,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 027C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -25179,11 +25598,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 028C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -25200,12 +25621,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8795
 labProtocolId 027C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -25223,12 +25646,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8796
 labProtocolId 028C+
 localization cytosol
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -25635,11 +26060,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 027N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longNonPolyA
@@ -25654,11 +26081,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 028N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longNonPolyA
@@ -25675,12 +26104,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9204
 labProtocolId 027N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longNonPolyA
@@ -25698,12 +26129,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9205
 labProtocolId 028N-
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longNonPolyA
@@ -25785,9 +26218,9 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-29
-dateUnrestricted 2011-06-29
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-08
+dateUnrestricted 2012-03-08
 dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4.bam
 grant Gingeras
@@ -25799,7 +26232,9 @@ origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
-subId 2468
+sex U
+spikeInPool 14
+subId 4053
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4
 view Alignments
 
@@ -26110,11 +26545,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 027N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -26129,11 +26566,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 028N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -26150,12 +26589,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8797
 labProtocolId 027N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -26173,12 +26614,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8798
 labProtocolId 028N+
 localization nucleus
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -26585,11 +27028,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 033WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -26604,11 +27049,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 034WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -26625,12 +27072,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8828
 labProtocolId 033WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -26648,12 +27097,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8829
 labProtocolId 034WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -27062,11 +27513,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 033WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -27081,11 +27534,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 034WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -27102,12 +27557,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8692
 labProtocolId 033WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -27125,12 +27582,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8701
 labProtocolId 034WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -27539,12 +27998,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9003
 labProtocolId 019WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -27562,12 +28023,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID9011
 labProtocolId 020WC-
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -27974,11 +28437,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 019WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -27993,11 +28458,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labProtocolId 020WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -28014,12 +28481,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 1
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8967
 labProtocolId 019WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -28037,12 +28506,14 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
+dccRep 2
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID8968
 labProtocolId 020WC+
 localization cell
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -28094,4 +28565,4 @@ rnaExtract longPolyA
 subId 3663
 view TranscriptGencV3c
 
-# MAGIC: -1670129133
+# MAGIC: -1400609232

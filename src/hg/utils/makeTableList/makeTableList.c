@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "hdb.h"
+#include "hgConfig.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +23,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-static void makeTableListConn(struct sqlConnection *conn)
+static void makeTableListConn(char *tableListName, struct sqlConnection *conn)
 {
 // recreate tableList in given db
 // written so that tableList always exists (i.e. we use a temporary file and rename (which is hopefully atomic))
@@ -49,21 +50,21 @@ sqlUpdate(conn, buf);
 safef(buf, sizeof(buf), "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s", tmp, tmpTable);
 sqlUpdate(conn, buf);
 
-if(sqlTableExists(conn, "tableList"))
+if(sqlTableExists(conn, tableListName))
     {
-    safef(buf, sizeof(buf), "RENAME TABLE tableList to tableListOld, %s TO tableList", tmpTable);
+    safef(buf, sizeof(buf), "RENAME TABLE tableList to tableListOld, %s TO %s", tmpTable, tableListName);
     sqlUpdate(conn, buf);
     sqlUpdate(conn, "DROP TABLE tableListOld");
     }
 else
     {
-    safef(buf, sizeof(buf), "RENAME TABLE %s TO tableList", tmpTable);
+    safef(buf, sizeof(buf), "RENAME TABLE %s TO %s", tmpTable, tableListName);
     sqlUpdate(conn, buf);
     }
 unlink(tmp);
 }
 
-void makeTableList(char *argv[], int argc, boolean all)
+void makeTableList(char *argv[], int argc, boolean all, char *tableListName)
 /* makeTableList - create/recreate tableList. */
 {
 struct sqlResult *sr;
@@ -93,7 +94,7 @@ for (; dbs != NULL; dbs = dbs->next)
         {
         struct sqlConnection *conn = sqlConnect(dbs->name);
         verbose(2, "db: %s\n", dbs->name);
-        makeTableListConn(conn);
+        makeTableListConn(tableListName, conn);
         sqlDisconnect(&conn);
         }
     }
@@ -106,6 +107,7 @@ optionInit(&argc, argv, options);
 boolean all = optionExists("all");
 if (argc < 2 && !all)
     usage();
-makeTableList(argv, argc, all);
+char *tableListName = cfgOptionDefault("showTableCache", "tableList");
+makeTableList(argv, argc, all, tableListName);
 return 0;
 }

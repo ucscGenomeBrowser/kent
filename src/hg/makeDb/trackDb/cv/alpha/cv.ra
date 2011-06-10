@@ -8207,15 +8207,17 @@ description grown in serum free media (Crawford)
 type treatment
 
 term 4OHTAM_1uM_36hr
-tag OHTAM1
+# Changed tag from OHTAM1: 6/9/11
+tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
 
-term TAM_1uM_36hr
-tag TAM
-description 36 h with 1 uM 4-hydroxytamoxifen (Myers)
-type treatment
-#This should be retired.  It was registered with the wrong molecule.  For now i am changing the description.  But i am also registereing a replacement. 6/6/11
+# Commented out 6/9/11.  Preparing to remove.
+#term TAM_1uM_36hr
+#tag TAM
+#description 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+#type treatment
+##This should be retired.  It was registered with the wrong molecule.  For now i am changing the description.  But i am also registereing a replacement. 6/6/11
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
@@ -8570,12 +8572,6 @@ tag TRANSGENCV3C
 type view
 label Transcript Gencode V3c
 description Transcript Gencode V3c
-
-term ExonGencV3c
-tag EXONGENCV3C
-type view
-label Exons Gencode V3c
-description Provisional Exons Gencode V3c
 
 term Transfrags
 tag TRANSFRAGS
