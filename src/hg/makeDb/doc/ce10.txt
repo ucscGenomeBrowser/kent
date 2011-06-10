@@ -707,6 +707,16 @@ TMPDIR=/scratch/tmp
 # ce10    caeJap4 1.384165
 # ce10    caeAng1 1.413224
 
+    # Note:  these distances after the 4d estimation performed later:
+# ce10    caeSp91 1.069728
+# ce10    caeSp71 1.165071
+# ce10    cb4     1.453875
+# ce10    caeAng1 1.738486
+# ce10    caeRem4 1.764415
+# ce10    caePb3  1.825652
+# ce10    caeSp111        1.841661
+# ce10    caeJap4 1.857981
+
 #	If you can fill in all the numbers in this table, you are ready for
 #	the multiple alignment procedure
 #
@@ -1427,5 +1437,76 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	<< happy emacs
 
     display histo.png &
+
+############################################################################
+# Constructing Downloads (DONE - 2011-06-09 - Hiram)
+    cd /hive/data/genomes/ce10
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 ce10 \
+	 > downloads.log 2>&1
+    #	real    1m51.359s
+    cd goldenPath
+    mkdir multiz9way phastCons9way phyloP9way
+    cd multiz9way
+    ln -s ../../bed/multiz9way/4d/tree_4d.9way.nh ce10.9way.nh
+    ln -s ../../bed/multiz9way/9way.commonNames.downloads.nh \
+	9way.commonNames.nh
+    /cluster/bin/phast/tree_doctor --rename \
+"ce10->CX_elegans; cb4->CX_briggsae; caeSp91->CX_spX_9; caeRem4->CX_remanei; caeSp111->CX_spX_11; caePb3->CX_brenneri; caeSp71->CX_spX_7; caeJap4->CX_japonica; caeAng1->CX_angaria" ce10.9way.nh | sed -e "s/X/./g" > ce10.commonNames.9way.nh
+
+    cat ce10.commonNames.9way.nh
+# (((C._elegans:0.953381,(((C._briggsae:0.415347,C._sp._9:0.031200):0.083027,C._remanei:0.808914):0.001055,(C._sp._11:0.432572,C._brenneri:0.416563):0.454643):0.001065):0.018543,(C._sp._7:0.170677,C._japonica:0.863587):0.022469):0.383281,C._angaria:0.383281);
+
+    cd ../phyloP9way
+    ln -s \
+../../bed/multiz9way/consPhyloP/all/downloads/ce10.phyloP9way.wigFix.gz .
+    ln -s ../../bed/multiz9way/consPhyloP/all/phyloP9way.bw ce10.phyloP9way.bw
+
+    ln -s ../../bed/multiz9way/consPhyloP/run.phyloP/all.mod ./nematode.mod
+
+    cd ../phastCons9way
+    ln -s ../../bed/multiz9way/cons/all/downloads/ce10.phastCons9way.wigFix.gz .
+    ln -s ../../bed/multiz9way/cons/all/phastCons9way.bw ce10.phastCons9way.bw
+    ln -s ../../bed/multiz9way/cons/all/all.mod ./nematode.mod
+
+    cd ../multiz9way
+    cp -p ../../bed/multiz9way/anno/maf/*.maf .
+    gzip *.maf
+
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    nice -n +19 featureBits -verbose=2 ce10 \
+        ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ce10 multiz9way stdin stdout \
+	    -orgs=../../bed/multiz9way/species.list \
+        | gzip -c > ensGene.upstream${S}.maf.gz
+    echo "done ensGene.upstream${S}.maf.gz"
+done
+
+    md5sum *.gz *.nh > md5sum.txt
+
+    # use a README from a recent multiz like this, this one is from panTro3
+    cp -p /hive/data/genomes/panTro3/bed/multiz12way/downloads/README.txt  .
+    # edit this README.txt to fixup for this alignment
+
+    cd ../phastCons9way
+    cp -p /hive/data/genomes/panTro3/bed/multiz12way/cons/README.txt .
+    # edit this README.txt to fixup for this alignment
+
+    cd ../phyloP9way
+    cp /hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/README.txt .
+    # edit this README.txt to fixup for this alignment
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/multiz9way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/multiz9way
+    ln -s /hive/data/genomes/ce10/goldenPath/multiz9way/* .
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phastCons9way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phastCons9way
+    ln -s /hive/data/genomes/ce10/goldenPath/phastCons9way/* .
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phyloP9way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phyloP9way
+    ln -s /hive/data/genomes/ce10/goldenPath/phyloP9way/* .
 
 ############################################################################

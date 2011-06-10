@@ -228,8 +228,8 @@ if (group != NULL && sameString(group->name, "all"))
     group = NULL;
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (sameString(name, track->table) &&
-       (group == NULL || sameString(group->name, track->grp)))
+    if (track->table != NULL && sameString(name, track->table)
+    &&  (group == NULL || sameString(group->name, track->grp)))
        return track;
     }
 return NULL;
@@ -325,9 +325,8 @@ if (trackDupe != NULL && trackDupe[0] != 0)
             hashAdd(uniqHash, wig->table, NULL);
             }
         }
-    if (track->subtracks) // was tdbIsComposite(track)) but missed Jim's new
-                          // regulation track which isn't quite a composite
-        {
+    if (tdbIsContainer(track)) // was tdbIsComposite(track)) but missed Jim's new
+        {                      // regulation track which isn't quite a composite
         struct slName *subList = NULL;
         struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(track->subtracks);
         slSort(&tdbRefList, trackDbRefCmp);
@@ -335,9 +334,12 @@ if (trackDupe != NULL && trackDupe[0] != 0)
         for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
             {
             struct trackDb *subTdb = tdbRef->val;
-            name = slNameNew(subTdb->table);
-            slAddTail(&subList, name);
-            hashAdd(uniqHash, subTdb->table, NULL);
+            if (!tdbIsDownloadsOnly(subTdb) && subTdb->table != NULL)
+                {
+                name = slNameNew(subTdb->table);
+                slAddTail(&subList, name);
+                hashAdd(uniqHash, subTdb->table, NULL);
+                }
             }
         pList = slCat(pList, subList);
         }
@@ -351,7 +353,7 @@ struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner)
 {
 struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
-char *trackTable = track->table;
+char *trackTable = track->table ? track->table : track->track;
 
 hashAdd(uniqHash, trackTable, NULL);
 if (useJoiner)
@@ -530,7 +532,7 @@ struct slName *getDbListForGenome()
 struct hash *hash = sqlHashOfDatabases();
 struct slName *dbList = NULL;
 addIfExists(hash, &dbList, database);
-/* currently filtering these out for hgGenome 
+/* currently filtering these out for hgGenome
 addIfExists(hash, &dbList, "swissProt");
 addIfExists(hash, &dbList, "proteins");
 addIfExists(hash, &dbList, "uniProt");
@@ -606,7 +608,7 @@ else
         {
         if (allTracks || sameString(selGroup->name, track->grp))
             {
-            hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", track->table,
+            hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", (track->table?track->table:track->track),
                 (track == selTrack ? " SELECTED" : ""),
                 track->shortLabel);
             }
@@ -633,7 +635,7 @@ else if (track && tdbIsComposite(track))
     struct trackDb *subTdb;
     for (subTdb=track->subtracks; subTdb != NULL; subTdb = subTdb->next)
         {
-        if (sameWord(subTdb->table, table))
+        if (subTdb->table && sameWord(subTdb->table, table))
             {
             tdb = subTdb;
             break;
@@ -697,7 +699,7 @@ return acHash;
 }
 
 static boolean accessControlDenied(struct hash *acHash, char *table)
-/* Return TRUE if table access is restricted to some host(s) other than 
+/* Return TRUE if table access is restricted to some host(s) other than
  * the one we're running on. */
 {
 static char *currentHost = NULL;
@@ -861,7 +863,7 @@ for (name = nameList; name != NULL; name = name->next)
 hPrintf("</SELECT>\n");
 return selTable;
 }
-                  
+
 
 
 void importPage(struct sqlConnection *conn)
@@ -968,7 +970,7 @@ cartMakeIntVar(cart, hggMaxGapToFill, 25000000, 8);
 hPrintf(" bases.<BR>");
 hPrintf(" ");
 
-char *convertType = 
+char *convertType =
    cartUsualString(cart, hggBedConvertType, hggBedDepth);
 
 jsTrackingVar(hggBedConvertTypeJs, convertType);
@@ -1012,7 +1014,7 @@ hPrintf("</FORM>\n");
     {
     static char *saveVars[] = {
 	hggImport,
-	hggGroup, hggTrack, hggTable, 
+	hggGroup, hggTrack, hggTable,
 	hggBedConvertType
 	};
     jsCreateHiddenForm(cart, getScriptName(), saveVars, ArraySize(saveVars));
@@ -1020,7 +1022,7 @@ hPrintf("</FORM>\n");
 
 /* Put up section that describes table types allowed. */
 webNewSection("Import table types");
-hPrintf("%s", 
+hPrintf("%s",
 "<P>All tables that have positional information can be imported. "
 "This includes BED, PSL, wiggle, MAF, bedGraph and other standard types. "
 "You can also use data in custom tracks.  The chromGraph custom tracks "
@@ -1079,7 +1081,7 @@ if (val[0] != 0)
     hashAdd(hash, trackVar, val);
 }
 
-void updateCustomTracksImport(struct customTrack *upList) 
+void updateCustomTracksImport(struct customTrack *upList)
 /* Update custom tracks file with current upload data */
 {
 struct customTrack *oldList = customTracksParseCart(database, cart, NULL, NULL);
@@ -1103,7 +1105,7 @@ addIfNonempty(settings, hggLabelVals, "linesAt");
 struct customTrack *trackList = chromGraphParser(database, cpp,
 	cartUsualString(cart, hggFormatType, cgfFormatTab),
 	cartUsualString(cart, hggMarkerType, cgfMarkerGenomic),
-	cartUsualString(cart, hggColumnLabels, cgfColLabelGuess), 
+	cartUsualString(cart, hggColumnLabels, cgfColLabelGuess),
 	nullIfAllSpace(cartUsualString(cart, hggDataSetName, NULL)),
 	nullIfAllSpace(cartUsualString(cart, hggDataSetDescription, NULL)),
 	settings, TRUE);
@@ -1131,7 +1133,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 
     if (!bedList)
 	continue;
-    
+
     chromSize = hChromSize(database, chrom);
     tree = rangeTreeNew();
     for(bed=bedList;bed;bed=bed->next)
@@ -1139,7 +1141,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	rangeTreeAdd(tree, bed->chromStart, bed->chromEnd);
 	}
     lmCleanup(&lm);
-    
+
     struct range *range=NULL, *rangeList = rangeTreeList(tree);
     int lastEnd = -1;
     for(range=rangeList;range;range=range->next)
@@ -1152,7 +1154,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 		dyStringPrintf(dy,"%s\t%d\t%f\n", chrom, lastEnd, 0.0);
 		}
 	    if ((range->start-1) >= 0)
-		dyStringPrintf(dy,"%s\t%d\t%f\n", chrom, range->start-1, 0.0); 
+		dyStringPrintf(dy,"%s\t%d\t%f\n", chrom, range->start-1, 0.0);
 	    dyStringPrintf(dy,"%s\t%d\t%f\n", chrom, range->start, 1.0);
 	    }
 	lastEnd = range->end;
@@ -1165,7 +1167,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	}
     rbTreeFree(&tree);
     }
-    
+
 return dyStringCannibalize(&dy);
 
 }
@@ -1191,16 +1193,16 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     chrom = chr->fullName;
     bedList = getBeds(chrom, lm, &fields);
 
-    hPrintf(" "); fflush(stdout);  // browser keep-alive 
+    hPrintf(" "); fflush(stdout);  // browser keep-alive
 
     if (!bedList)
 	continue;
-    
+
     chromSize = hChromSize(database, chrom);
 
     //debug
     //hPrintf("chrom %s size=%d numFeatures=%d<br>\n", chrom, chromSize, slCount(bedList)); fflush(stdout);
-    
+
     numWindows = ((chromSize+windowSize-1)/windowSize);
 
     if (numWindows>0)
@@ -1226,7 +1228,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	int midPoint = i*windowSize+(windowSize/2);
 	if (midPoint < chromSize)
 	    {
-	    dyStringPrintf(dy,"%s\t%d\t%f\n", 
+	    dyStringPrintf(dy,"%s\t%d\t%f\n",
 		chrom, i*windowSize+(windowSize/2), depth[i] > 0.0 ? 1.0 : 0.0);
 	    }
 	}
@@ -1258,11 +1260,11 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     chrom = chr->fullName;
     bedList = getBeds(chrom, lm, &fields);
 
-    hPrintf(" "); fflush(stdout);  // browser keep-alive 
+    hPrintf(" "); fflush(stdout);  // browser keep-alive
 
     if (!bedList)
 	continue;
-    
+
     chromSize = hChromSize(database, chrom);
 
     numWindows = ((chromSize+windowSize-1)/windowSize);
@@ -1298,7 +1300,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	int midPoint = i*windowSize+(windowSize/2);
 	if (midPoint < chromSize)
 	    {
-	    dyStringPrintf(dy,"%s\t%d\t%f\n", 
+	    dyStringPrintf(dy,"%s\t%d\t%f\n",
 		chrom, i*windowSize+(windowSize/2), depth[i]);
 	    }
 	}
@@ -1329,11 +1331,11 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     struct wiggleDataStream *wds = wigChromRawStats(chrom);
     struct wiggleStats *stats=NULL, *statsList = wds->stats;
 
-    hPrintf(" "); fflush(stdout);  // browser keep-alive 
+    hPrintf(" "); fflush(stdout);  // browser keep-alive
 
     if (!wds->stats)
 	continue;
-    
+
     chromSize = hChromSize(database, chrom);
 
     numWindows = ((chromSize+windowSize-1)/windowSize);
@@ -1353,11 +1355,11 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 
 
 	//debug
-	//hPrintf("stats-> count=%d start=%d end=%d (end-start)=%d mean=%f <br>\n", 
+	//hPrintf("stats-> count=%d start=%d end=%d (end-start)=%d mean=%f <br>\n",
 	  //  stats->count, stats->chromStart, stats->chromEnd, stats->chromEnd - stats->chromStart, stats->mean);
 
 	totalValues += stats->count;
-	int i; 
+	int i;
 	int start = stats->chromStart;
 	int end = stats->chromEnd;
 	double sumData = (stats->span * stats->mean * stats->count) / (stats->chromEnd - stats->chromStart);  // fixing this line
@@ -1373,7 +1375,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	}
 
     //debug
-    //hPrintf("chrom %s size=%d span=%d numValues=%d total values=%d<br>\n", 
+    //hPrintf("chrom %s size=%d span=%d numValues=%d total values=%d<br>\n",
 	//chrom, chromSize, statsList->span, statsList->count, totalValues);
 
     wiggleDataStreamFree(&wds);
@@ -1388,7 +1390,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	    int midPoint = i*windowSize+(windowSize/2);
 	    if (midPoint < chromSize)
 		{
-		dyStringPrintf(dy,"%s\t%d\t%f\n", 
+		dyStringPrintf(dy,"%s\t%d\t%f\n",
 		    chrom, i*windowSize+(windowSize/2), depth[i]);
 		}
 	    }
@@ -1430,7 +1432,7 @@ if (strchr(curTable, '.') == NULL)  /* In same database */
     isPositional = htiIsPositional(hti);
     }
 
-if (!curTrack || !sameString(curTrack->table, curTable))
+if (!curTrack || !sameOk(curTrack->table, curTable))
     {
     struct trackDb *tdb = hTrackDbForTrack(database, curTable);
     curTrack = tdb;
@@ -1445,16 +1447,16 @@ if (isCt)
     }
 
 //debug
-//hPrintf("isCt=%d isWig=%d isPositional=%d isMaf=%d isBedGr=%d<br>\n", 
+//hPrintf("isCt=%d isWig=%d isPositional=%d isMaf=%d isBedGr=%d<br>\n",
     //isCt, isWig, isPositional, isMaf, isBedGr);
 
 struct sqlConnection *conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 if (isPositional && !isWig && !isMaf && !isBedGr && !isChromGraphCt)
     {  /* simple positional */
-    char *convertType = 
+    char *convertType =
     cartUsualString(cart, hggBedConvertType, hggBedDepth);
     char *rawText = NULL;
-    
+
     if (sameString(convertType,hggBedCoverage))
 	rawText = makeCoverageCgFromBed();
     else
@@ -1481,7 +1483,7 @@ else if (isPositional && !isWig && !isMaf && isBedGr && !isChromGraphCt)
 else if (isPositional && !isWig && isMaf && !isBedGr && !isChromGraphCt)
     {  /* maf */
     char *rawText = NULL;
-    
+
     rawText = makeDepthCgFromBed(isMaf);
 
     struct errCatch *errCatch = errCatchNew();
@@ -1493,7 +1495,7 @@ else if (isPositional && !isWig && isMaf && !isBedGr && !isChromGraphCt)
 else if (isPositional && isWig && !isMaf && !isBedGr && !isChromGraphCt)
     { /* wiggle */
     char *rawText = NULL;
-    
+
     rawText = makeAverageCgFromWiggle();
 
     struct errCatch *errCatch = errCatchNew();
