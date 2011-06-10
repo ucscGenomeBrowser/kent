@@ -24,6 +24,7 @@ wgEncodeBuOrchid.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeReg.ra \
 wgEncodeUchicagoTfbs.ra \
+wgEncodeOpenChromSynth.ra \
 
 include ../../../../makefile.metaDb
 
