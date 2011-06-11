@@ -3,8 +3,9 @@
 <!--#insert file="omimDescriptionText.html"-->
 
 <P>
-This track shows the <B>cytogenetic locations</B> of all entries in the Online Mendelian
-Inheritance in Man (<A HREF="http://www.omim.org/" TARGET=_blank>OMIM</A>) database.
+This track shows the <B>cytogenetic locations</B> of phenotype entries in the Online Mendelian
+Inheritance in Man (<A HREF="http://www.omim.org/" TARGET=_blank>OMIM</A>) database for which
+the gene is unknown.
 </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -40,8 +41,6 @@ This track was constructed as follows:
 <UL>
 <LI>The data file <TT>genemap.txt</TT> from OMIM was loaded into the MySQL table
 <TT>omimGeneMap</TT>.
-<LI>The data file <TT>mim2gene.txt</TT> from OMIM was loaded into the MySQL table
-<TT>mim2gene</TT>.
 <LI>The cytogenetic location data (from the location column in <TT>omimGeneMap</TT>) were
 parsed and converted into genomic start and end positions based on the <TT>cytoBand</TT> table.
 These genomic positions, together with the corresponding OMIM IDs, were loaded into the
