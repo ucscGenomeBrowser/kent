@@ -314,3 +314,15 @@ caeSp111.perChromTables = no
     #	36237719 bases of 76497192 (47.371%) in intersection
 
 ############################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caeSp111
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caeSp111 \
+	 > downloads.log 2>&1
+    #	real    0m44.465s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################

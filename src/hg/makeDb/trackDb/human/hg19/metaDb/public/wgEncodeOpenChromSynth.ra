@@ -1,0 +1,146 @@
+metaObject wgEncodeOpenChromSynth
+objType composite
+composite wgEncodeOpenChromSynth
+expVars lab,dataType,cell,composite
+
+metaObject wgEncodeOpenChromSynthGm12878Pk
+objType table
+cell GM12878
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001323
+expId 1323
+fileName wgEncodeOpenChromSynthGm12878Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 3273
+tableName wgEncodeOpenChromSynthGm12878Pk
+view Peaks
+
+metaObject wgEncodeOpenChromSynthH1hescPk
+objType table
+cell H1-hESC
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001324
+expId 1324
+fileName wgEncodeOpenChromSynthH1hescPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 3273
+tableName wgEncodeOpenChromSynthH1hescPk
+view Peaks
+
+metaObject wgEncodeOpenChromSynthHelas3Pk
+objType table
+cell HeLa-S3
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001326
+expId 1326
+fileName wgEncodeOpenChromSynthHelas3Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 3273
+tableName wgEncodeOpenChromSynthHelas3Pk
+view Peaks
+
+metaObject wgEncodeOpenChromSynthHepg2Pk
+objType table
+cell HepG2
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001327
+expId 1327
+fileName wgEncodeOpenChromSynthHepg2Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 3273
+tableName wgEncodeOpenChromSynthHepg2Pk
+view Peaks
+
+metaObject wgEncodeOpenChromSynthHuvecPk
+objType table
+cell HUVEC
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001325
+expId 1325
+fileName wgEncodeOpenChromSynthHuvecPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 3273
+tableName wgEncodeOpenChromSynthHuvecPk
+view Peaks
+
+metaObject wgEncodeOpenChromSynthK562Pk
+objType table
+cell K562
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001328
+expId 1328
+fileName wgEncodeOpenChromSynthK562Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 3273
+tableName wgEncodeOpenChromSynthK562Pk
+view Peaks
+
+metaObject wgEncodeOpenChromSynthNhekPk
+objType table
+cell NHEK
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001329
+expId 1329
+fileName wgEncodeOpenChromSynthNhekPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 3273
+tableName wgEncodeOpenChromSynthNhekPk
+view Peaks
+
+# MAGIC: 1484753089
