@@ -324,3 +324,15 @@ caePb3.perChromTables = no
     #	55006703 bases of 170093652 (32.339%) in intersection
 
 ############################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caePb3
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caePb3 \
+	 > downloads.log 2>&1
+    #	real    1m31.489s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################

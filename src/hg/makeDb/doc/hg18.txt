@@ -31492,6 +31492,9 @@ hgLoadSqlTab -warn hg18 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omim
 perl ./script1.pl --gene-map-file=genemap.txt >omimPhenotype.tab
 hgLoadSqlTab -warn hg18 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
 
+hgsql hg18 -e 'update omimPhenotype set phenotypeClass = -1 where phenotypeClass=0'
+hgsql hg18 -e 'update omimPhenotype set phenotypeId = -1 where phenotypeId=0'
+
 doOmimGene2 hg18 j.tmp
 cat j.tmp |sort -u > omimGene2.tab
 
@@ -31551,6 +31554,33 @@ hgLoadBed hg18 omimLocation omimLocation.bed
 
 hgsql hg18 -N -e \
 'delete from omimLocation where name  in (select name from omimGene2) '
+
+# Per OMIM request, delete all the gray entries in omimLocation table.
+
+mkdir cleanUpOmimLocation
+cd cleanUpOmimLocation
+
+hgsql hg18 -N -e \
+'select distinct name from omimLocation' |sort -u >j.all
+
+hgsql hg18 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=1' >j.1
+hgsql hg18 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=2' >j.2
+hgsql hg18 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=3' >j.3
+hgsql hg18 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=4' >j.4
+
+cat j.1 j.2 j.3 j.4 |sort -u >j.1234
+
+diff j.all j.1234 |grep "<" |sed -e 's/</do1/' >doall
+
+cat << '_EOF_' > do1
+hgsql hg18 -e "delete from omimLocation where name='${1}'"
+'_EOF_'
+
+./doall
 
 ##############################################################
 
