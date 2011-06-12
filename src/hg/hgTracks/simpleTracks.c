@@ -10855,8 +10855,8 @@ boolean isOmimOtherClass(char *omimId)
 
    The Other class is defined as:
 
-	2. does not have class 1 or 2 or 3, or 4; some may have class '-1'.
-	3. for an entry of omimId that the omimPhenotype table does not even have a row with omimId
+	1. does not have class 1 or 2 or 3, or 4; some may have class '-1'.
+	2. for an entry of omimId that the omimPhenotype table does not even have a row with omimId
 */
 {
 boolean result;
@@ -11039,15 +11039,6 @@ class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
 class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
-
-/* last try of Brooke's suggestion, the class 1 and 2 are too bright */
-/*
-class1Clr = hvGfxFindColorIx(hvg, 125,225,115);
-class2Clr = hvGfxFindColorIx(hvg, 35,155,10);
-class3Clr = hvGfxFindColorIx(hvg, 10,60,0);
-class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
-classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
-*/
 
 safef(query, sizeof(query),
       "select omimId, phenotypeClass from omimPhenotype where omimId=%s order by phenotypeClass desc", el->name);
