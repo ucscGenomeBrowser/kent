@@ -314,4 +314,17 @@ caeSp91.perChromTables = no
 
     cat fb.caeSp91.chainCe10Link.txt
     #	67679550 bases of 186540270 (36.281%) in intersection
+
+############################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caeSp91
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caeSp91 \
+	 > downloads.log 2>&1
+    #	real    1m40.329s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
 ############################################################################
