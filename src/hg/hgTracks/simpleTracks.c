@@ -11206,15 +11206,6 @@ class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
 
-/* last try of Brooke's suggestion, the class 1 and 2 are too bright */
-/*
-class1Clr = hvGfxFindColorIx(hvg, 125,225,115);
-class2Clr = hvGfxFindColorIx(hvg, 35,155,10);
-class3Clr = hvGfxFindColorIx(hvg, 10,60,0);
-class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
-classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
-*/
-
 struct sqlConnection *conn = hAllocConn(database);
 
 safef(query, sizeof(query),
