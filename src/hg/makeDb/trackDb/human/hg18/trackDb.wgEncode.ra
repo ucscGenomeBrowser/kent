@@ -307,8 +307,7 @@ wgEncode 1
 include wgEncodeRikenCage.ra
 
 # Duke Affy Exon (wrangler: braney, Cricket, Jeff)
-include wgEncodeDukeAffyExon.ra beta,public
-include wgEncodeDukeAffyExon.new.ra alpha
+include wgEncodeDukeAffyExon.ra
 
 # U. Washington Affy Exon (wrangler: Andy, Brian)
 
