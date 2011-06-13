@@ -171,6 +171,8 @@ use vars qw/
 my ($db, $build, $buildAssembly, $orgDir);
 # Conditionally required config parameters:
 my ($refAssemblyLabel, $liftUp, $ignoreDbSnpContigs);
+# Optional config param:
+my ($snpBase);
 # Other globals:
 my ($buildDir, $commonName, $assemblyLabelFile, $endNotes);
 # These dbSNP table/file names vary by build and assembly but
@@ -264,6 +266,8 @@ sub checkConfig {
   $refAssemblyLabel = &optionalVar('refAssemblyLabel', $config);
   $liftUp = &optionalVar('liftUp', $config);
   $ignoreDbSnpContigs = &optionalVar('ignoreDbSnpContigs', $config);
+  # Optional var:
+  $snpBase = &optionalVar('snpBase', $config);
   # Make sure no unrecognized variables were given.
   &checkConfigEmpty($config, $CONFIG, $base);
 } # checkConfig
@@ -373,6 +377,7 @@ sub translateSql {
     s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g;
     s/nvarchar/varchar/g;  s/set quoted/--set quoted/g;
     s/(image|varchar\s+\(\d+\))/BLOB/g;  s/tinyint/tinyint unsigned/g;
+    s/ bit / tinyint unsigned /g;
     print $SQLOUT $_;
     $tableCount++;
   }
@@ -587,7 +592,6 @@ sub loadDbSnp {
 
   &checkSequenceNames($runDir, $grepOutLabels, $grepOutContigs);
 
-  my $snpBase = "snp$build";
   my $tmpDb = $db . $snpBase;
   my $dataDir = "$runDir/data";
   # mysql warnings about datetime values that end with non-integer
@@ -701,7 +705,6 @@ _EOF_
 
 sub addToDbSnp {
   my $runDir = "$buildDir/$commonName";
-  my $snpBase = "snp$build";
   my $tmpDb = $db . $snpBase;
   my $whatItDoes =
 "It pre-processes functional annotations into a new table $tmpDb.ucscFunc,
@@ -883,7 +886,6 @@ _EOF_
 
 sub bigJoin {
   my $runDir = "$buildDir/$commonName";
-  my $snpBase = "snp$build";
   my $tmpDb = $db . $snpBase;
   my $catOrGrepOutMito = ($db eq 'hg19') ? "grep -vw ^NC_012920" : "cat";
   my $whatItDoes =
@@ -989,7 +991,6 @@ _EOF_
 
 sub translate {
   my $runDir = "$buildDir/$commonName";
-  my $snpBase = "snp$build";
   my $tmpDb = $db . $snpBase;
   my $whatItDoes =
 "It runs snpNcbiToUcsc to make final $snpBase.* files for loading,
@@ -1050,7 +1051,6 @@ _EOF_
 # * step: load [dbHost]
 
 sub loadTables {
-  my $snpBase = "snp$build";
   my $runDir = "$buildDir/$commonName";
   my $whatItDoes = "It loads the $snpBase* tables into $db.";
   my $bossScript = new HgRemoteScript("$runDir/load.csh",
@@ -1124,6 +1124,7 @@ $ContigLoc = "b${build}_SNPContigLoc_$buildAssembly";
 $ContigLocusId = "b${build}_SNPContigLocusId_$buildAssembly";
 $MapInfo = "b${build}_SNPMapInfo_$buildAssembly";
 $endNotes = "";
+$snpBase = "snp$build" if (! $snpBase);
 
 $stepper->execute();
 
