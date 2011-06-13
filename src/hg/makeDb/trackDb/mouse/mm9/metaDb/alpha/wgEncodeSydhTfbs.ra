@@ -505,7 +505,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPe
+fileName wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -4086,29 +4086,6 @@ subId 4169
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelInputIggyaleRawData
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-04-26
-dateUnrestricted 2011-01-26
-fileName wgEncodeSydhTfbsMelInputIggyaleRawData.fastq.gz
-grant Snyder
-lab Stanford-m
-project wgEncode
-setType input
-sex M
-strain Unknown
-subId 1168
-treatment None
-view RawData
-
 metaObject wgEncodeSydhTfbsMelInputStdAlnRep1
 objType file
 age immortalized
@@ -4784,7 +4761,7 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelNelfeIggrabRep1.bam
+fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
 parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep1
@@ -6253,4 +6230,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -164025803
+# MAGIC: -1607712990
