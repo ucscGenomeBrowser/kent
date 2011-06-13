@@ -206,7 +206,7 @@ char *functionStrings[] = {
 /* 40 */ NULL,
 /* 41 */ "nonsense",
 /* 42 */ "missense",
-/* 43 */ NULL,
+/* 43 */ "stop-loss",
 /* 44 */ "frameshift",
 /* 45 */ "cds-indel",
 /*46*/NULL,/*47*/NULL,/*48*/NULL,/*49*/NULL,
