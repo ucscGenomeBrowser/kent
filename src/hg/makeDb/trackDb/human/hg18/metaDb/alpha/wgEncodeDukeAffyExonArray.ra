@@ -326,44 +326,6 @@ subId 829
 tableName wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec
 treatment None
 
-metaObject wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr
-objType table
-cell LHSR
-composite wgEncodeDukeAffyExonArray
-dataType AffyExonArray
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-16
-dateUnrestricted 2010-09-16
-expId 231
-fileName wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr.broadPeak.gz
-grant Crawford
-lab Duke
-labVersion 1.0
-project wgEncode
-replicate 1
-subId 829
-tableName wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr
-treatment None
-
-metaObject wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro
-objType table
-cell LHSR
-composite wgEncodeDukeAffyExonArray
-dataType AffyExonArray
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-16
-dateUnrestricted 2010-09-16
-expId 232
-fileName wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro.broadPeak.gz
-grant Crawford
-lab Duke
-labVersion 1.0
-project wgEncode
-replicate 1
-subId 829
-tableName wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro
-treatment androgen
-
 metaObject wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap
 objType table
 cell LNCaP
@@ -839,44 +801,6 @@ subId 829
 tableName wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec
 treatment None
 
-metaObject wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr
-objType table
-cell LHSR
-composite wgEncodeDukeAffyExonArray
-dataType AffyExonArray
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-16
-dateUnrestricted 2010-09-16
-expId 231
-fileName wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr.broadPeak.gz
-grant Crawford
-lab Duke
-labVersion 1.0
-project wgEncode
-replicate 2
-subId 829
-tableName wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr
-treatment None
-
-metaObject wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro
-objType table
-cell LHSR
-composite wgEncodeDukeAffyExonArray
-dataType AffyExonArray
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-16
-dateUnrestricted 2010-09-16
-expId 232
-fileName wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro.broadPeak.gz
-grant Crawford
-lab Duke
-labVersion 1.0
-project wgEncode
-replicate 2
-subId 829
-tableName wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro
-treatment androgen
-
 metaObject wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap
 objType table
 cell LNCaP
@@ -1105,4 +1029,4 @@ subId 829
 tableName wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2
 treatment None
 
-# MAGIC: 256814352
+# MAGIC: 924425328

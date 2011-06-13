@@ -24,8 +24,7 @@ include wgEncodeSydhNsome.ra alpha
 include wgEncodeGisRnaPet.ra alpha
 
 # GIS DNA PET (wrangler: cricket)
-include wgEncodeGisDnaPet.ra beta,public
-include wgEncodeGisDnaPet.new.ra alpha
+include wgEncodeGisDnaPet.ra
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
 include wgEncodeHaibGenotype.ra alpha
@@ -34,8 +33,7 @@ include wgEncodeHaibGenotype.ra alpha
 include wgEncodeBuOrchid.ra
 
 # Affy Rna Chip (wrangler: cricket)
-include wgEncodeAffyRnaChip.ra beta,public
-include wgEncodeAffyRnaChip.new.ra alpha
+include wgEncodeAffyRnaChip.ra
 
 # Chromatin Interactions ------
 
@@ -43,7 +41,7 @@ include wgEncodeAffyRnaChip.new.ra alpha
 include wgEncodeGisChiaPet.ra alpha
 
 # UMass-Dekker 5C (wrangler: kate)
-#include wgEncodeUmassDekker5C.ra alpha
+include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
 include wgEncodeUw5C.ra alpha
@@ -95,8 +93,7 @@ include wgEncodeCshlShortRnaSeq.ra beta,public
 include wgEncodeCshlShortRnaSeq.new.ra alpha
 
 # GIS RNA Seq (wrangler: cricket)
-include wgEncodeGisRnaSeq.ra beta,public
-include wgEncodeGisRnaSeq.new.ra alpha
+include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
 include wgEncodeCaltechRnaSeq.ra beta,public
