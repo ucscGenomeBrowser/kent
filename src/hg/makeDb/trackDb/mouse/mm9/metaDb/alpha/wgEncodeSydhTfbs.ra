@@ -958,7 +958,7 @@ tableName wgEncodeSydhTfbsCh12InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsCh12InputIggrabAln
+metaObject wgEncodeSydhTfbsCh12InputIggrabAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -967,17 +967,19 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-13
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12InputIggrabAln.tagAlign.gz
+fileName wgEncodeSydhTfbsCh12InputIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
+replicate 1
 setType input
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1125
+subId 4318
 treatment None
 view Alignments
 
@@ -6181,4 +6183,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 1460691908
+# MAGIC: 2133659805
