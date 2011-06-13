@@ -4061,31 +4061,6 @@ tableName wgEncodeSydhTfbsMelInputIggratSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggyaleAlnRep1
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-06-09
-dateSubmitted 2010-04-26
-dateUnrestricted 2011-01-26
-fileName wgEncodeSydhTfbsMelInputIggyaleAlnRep1.bam
-grant Snyder
-lab Stanford
-project wgEncode
-replicate 1
-setType input
-sex M
-strain Unknown
-subId 4169
-treatment None
-view Alignments
-
 metaObject wgEncodeSydhTfbsMelInputStdAlnRep1
 objType file
 age immortalized
@@ -6230,4 +6205,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -1607712990
+# MAGIC: 1137784101
