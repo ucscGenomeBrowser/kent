@@ -724,6 +724,27 @@ subId 1366
 treatment None
 view Alignments
 
+metaObject wgEncodeSydhTfbsGm10847Pol2IggmusPk
+objType table
+antibody Pol2
+cell GM10847
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM10847/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-09
+dateUnrestricted 2012-03-09
+fileName wgEncodeSydhTfbsGm10847Pol2IggmusPk.narrowPeak.gz
+grant Snyder
+lab Yale
+project wgEncode
+setType exp
+subId 4313
+tableName wgEncodeSydhTfbsGm10847Pol2IggmusPk
+treatment None
+view Peaks
+
 metaObject wgEncodeSydhTfbsGm10847Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
@@ -8346,6 +8367,27 @@ setType exp
 subId 1393
 treatment None
 view Alignments
+
+metaObject wgEncodeSydhTfbsGm18505Pol2IggmusPk
+objType table
+antibody Pol2
+cell GM18505
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM18505/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-09
+dateUnrestricted 2012-03-09
+fileName wgEncodeSydhTfbsGm18505Pol2IggmusPk.narrowPeak.gz
+grant Snyder
+lab Yale
+project wgEncode
+setType exp
+subId 4313
+tableName wgEncodeSydhTfbsGm18505Pol2IggmusPk
+treatment None
+view Peaks
 
 metaObject wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep1
 objType file
@@ -27059,6 +27101,27 @@ subId 1392
 treatment None
 view Alignments
 
+metaObject wgEncodeSydhTfbsK562CfosStdPk
+objType table
+antibody c-Fos
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-09
+dateUnrestricted 2012-03-09
+fileName wgEncodeSydhTfbsK562CfosStdPk.narrowPeak.gz
+grant Snyder
+lab Yale
+project wgEncode
+setType exp
+subId 4313
+tableName wgEncodeSydhTfbsK562CfosStdPk
+treatment None
+view Peaks
+
 metaObject wgEncodeSydhTfbsK562CfosStdSig
 objType table
 antibody c-Fos
@@ -38997,4 +39060,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1036728660
+# MAGIC: 686043717
