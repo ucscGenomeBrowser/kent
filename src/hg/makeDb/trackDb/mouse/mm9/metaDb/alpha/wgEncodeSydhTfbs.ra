@@ -3747,7 +3747,7 @@ tableName wgEncodeSydhTfbsMelInputDm2p5dIggyaleSig
 treatment DMSO_2.0pct
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdAlnRep1
+metaObject wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -3759,7 +3759,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
-fileName wgEncodeSydhTfbsMelInputDmso20StdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3771,7 +3771,7 @@ subId 4007
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdRawDataRep1
+metaObject wgEncodeSydhTfbsMelInputDm2p5dStdRawDataRep1
 objType file
 age immortalized
 antibody Input
@@ -3783,7 +3783,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
-fileName wgEncodeSydhTfbsMelInputDmso20StdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMelInputDm2p5dStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3795,7 +3795,7 @@ subId 4007
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdSig
+metaObject wgEncodeSydhTfbsMelInputDm2p5dStdSig
 objType table
 age immortalized
 antibody Input
@@ -3807,7 +3807,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
-fileName wgEncodeSydhTfbsMelInputDmso20StdSig.bigWig
+fileName wgEncodeSydhTfbsMelInputDm2p5dStdSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3816,7 +3816,7 @@ setType input
 sex M
 strain Unknown
 subId 4007
-tableName wgEncodeSydhTfbsMelInputDmso20StdSig
+tableName wgEncodeSydhTfbsMelInputDm2p5dStdSig
 treatment DMSO_2.0pct
 view Signal
 
@@ -6183,4 +6183,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 966502162
+# MAGIC: 2023597779

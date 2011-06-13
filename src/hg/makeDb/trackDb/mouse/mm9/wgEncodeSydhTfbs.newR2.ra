@@ -843,7 +843,7 @@ wgEncode 1
         color 46,0,184
         # subId=4006 dateSubmitted=2011-04-29
 
-        track wgEncodeSydhTfbsMelInputDmso20StdSig
+        track wgEncodeSydhTfbsMelInputDm2p5dStdSig
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL Input Sig
         longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in MEL cells)
@@ -851,4 +851,5 @@ wgEncode 1
         type bigWig 1.000000 103298.000000
         color 46,0,184
         # subId=4007 dateSubmitted=2011-04-29
+        # was wgEncodeSydhTfbsMelInputDmso20StdSig vsmalladi Mon Jun 13 16:46:06 2011
 
