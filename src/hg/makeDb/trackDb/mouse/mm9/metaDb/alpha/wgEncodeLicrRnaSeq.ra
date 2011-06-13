@@ -12,6 +12,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
 fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -38,6 +40,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
 fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -64,6 +68,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
 fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -89,6 +95,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
 fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -114,6 +122,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
 fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -140,6 +150,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
 fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -166,6 +178,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
 fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -192,6 +206,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
 fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -218,6 +234,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
 fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -243,6 +261,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
 fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -268,6 +288,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
 fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -294,6 +316,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
 fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -320,6 +344,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
 fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -346,6 +372,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
 fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -372,6 +400,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
 fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -397,6 +427,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
 fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -422,6 +454,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
 fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -448,6 +482,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
 fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -474,6 +510,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
 fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -500,6 +538,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
 fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -526,6 +566,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
 fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -551,6 +593,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
 fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -576,6 +620,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
 fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -602,6 +648,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
 fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -628,6 +676,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
 fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -654,6 +704,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
 fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -680,6 +732,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
 fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -705,6 +759,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
 fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -730,6 +786,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
 fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -756,6 +814,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
 fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -782,6 +842,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
 fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -808,6 +870,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
 fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -834,6 +898,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
 fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -859,6 +925,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
 fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -884,6 +952,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
 fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -910,6 +980,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
 fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -936,6 +1008,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
 fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -962,6 +1036,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
 fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -988,6 +1064,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
 fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -1013,6 +1091,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
 fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -1038,6 +1118,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
 fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -1064,6 +1146,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
 fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -1090,6 +1174,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
 fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -1116,6 +1202,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
 fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -1142,6 +1230,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
 fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -1167,6 +1257,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
 fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -1192,6 +1284,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
 fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -1218,6 +1312,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
 fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -1244,6 +1340,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
 fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -1270,6 +1368,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
 fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -1296,6 +1396,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
 fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -1321,6 +1423,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
 fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -1346,6 +1450,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
 fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -1372,6 +1478,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
 fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -1398,6 +1506,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
 fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1.bam
 grant Ren
 lab LICR-m
@@ -1424,6 +1534,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
 fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2.bam
 grant Ren
 lab LICR-m
@@ -1450,6 +1562,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
 fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -1475,6 +1589,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
 fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -1500,6 +1616,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
 fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
@@ -1526,6 +1644,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
 fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
@@ -1543,4 +1663,4 @@ tableName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: -1219580943
+# MAGIC: 446219745

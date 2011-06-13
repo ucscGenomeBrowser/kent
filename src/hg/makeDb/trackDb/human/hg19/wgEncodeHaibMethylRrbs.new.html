@@ -1,13 +1,3 @@
-<h2>Release 2</h2>
-<P>
-This release includes an additional 86 subtracks for display representing 39 new cell lines.  There are also tracks for new data that is available from the Downloads page, but are not displayed.  
-Fastq files are available for every experiment.  These contain raw DNA sequencing reads of bisulfite treated DNA. 
-</P>
-<P>
-The subtrack for HSMM Rep 3 was replaced with the correct data for that replicate.  
-Refer to the Duke/UNC/UTA/EBI Open Chromatin protocol for HSMM and HSMMtube.  Replicates 4-6 for HSMM and HSMMtube were revoked due to a cell line mislabeling and will be included in a future release when the correct cell line is registered.
-</P>
-
 <h2>Description</h2>
 <p>
 This track is produced as part of the ENCODE project.  The track reports the percentage of DNA molecules that exhibit cytosine methylation at specific CpG dinucleotides.  In general, DNA methylation within a gene's promoter is associated with gene silencing, and DNA methylation within the exons and introns of a gene is associated with gene expression.  Proper regulation of DNA methylation is essential during development and aberrant DNA methylation is a hallmark of cancer.  DNA methylation status is assayed at more than 500,000 CpG dinucleotides in the genome using Reduced Representation Bisulfite Sequencing (RRBS).  Genomic DNA is digested with the methyl-insensitive restriction enzyme MspI, small genomic DNA fragments are purified by gel electrophoresis, and then used to construct an Illumina sequencing library.  The library fragments are treated with sodium bisulfite and amplified by PCR to convert every unmethylated cytosine to a thymidine while leaving methylated cytosines intact.  The sequenced fragments are aligned to a customized reference genome sequence and for each assayed CpG we report the number of sequencing reads covering that CpG and the percentage of those reads that are methylated.
@@ -38,6 +28,17 @@ RRBS library construction starts with MspI digestion of genomic DNA , which cuts
 
 <h3>Data analysis</h3>
 To analyze the sequence data, a reference genome is created that contains only the 36 base pairs adjacent to every MspI site and every C in those sequences is changed to T.  A converted sequence read file is then created by changing each C in the original sequence reads to a T.  The converted sequence reads are aligned to the converted reference genome, and only reads that map uniquely to the reference genome are kept.  Once reads are aligned the percent methylation is calculated for each CpG using the original sequence reads.  The percent methylation and number of reads is reported for each CpG.
+
+<h2>Release Notes</h2>
+<P>
+This is release 2 (2011) of this track and includes an additional 86 subtracks for display representing 39 new cell lines. 
+There is also additional data in the Downloads only section
+Fastq files are available for every experiment.  These contain raw DNA sequencing reads of bisulfite treated DNA. 
+</P>
+<P>
+The subtrack for HSMM Rep 3 was replaced with the correct data for that replicate.  
+Refer to the Duke/UNC/UTA/EBI Open Chromatin protocol for HSMM and HSMMtube.  Replicates 4-6 for HSMM and HSMMtube were revoked due to a cell line mislabeling and will be included in a future release when the correct cell line is registered.
+</P>
 
 
 <a name="Credits"></a><h2> Credits </h2>

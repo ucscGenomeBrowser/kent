@@ -246,6 +246,15 @@ struct trackDb *tdb, *nextTdb, *newList = NULL;
 for (tdb = list;  tdb != NULL;  tdb = nextTdb)
     {
     nextTdb = tdb->next;
+    if (tdbIsDownloadsOnly(tdb) || tdb->table == NULL)
+        {
+        //freeMem(tdb);  // should not free tdb's.
+        // While hdb.c should and says it does cache the tdbList, it doesn't.
+        // The most notable reason that the tdbs are not cached is this hgTables CGI !!!
+        // It needs to be rewritten to make tdbRef structures for the lists it creates here!
+        continue;
+        }
+
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (tbOff != NULL && startsWithWord("off", tbOff))
 	slAddHead(&forbiddenTrackList, tdb);
@@ -1759,7 +1768,7 @@ else if (cartVarExists(cart, hgtaDoSelectFieldsMore))
     doSelectFieldsMore();
 else if (cartVarExists(cart, hgtaDoPrintSelectedFields))
     doPrintSelectedFields();
-else if (cartVarExists(cart, hgtaDoGalaxySelectedFields)) 
+else if (cartVarExists(cart, hgtaDoGalaxySelectedFields))
     sendParamsToGalaxy(hgtaDoPrintSelectedFields, "get output");
 else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
     doClearAllField(varList->name + strlen(hgtaDoClearAllFieldPrefix));

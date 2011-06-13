@@ -12257,4 +12257,35 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm9.swap lastz.mm9
 
 
+############################################################################
+# NUMTS TRACK (DONE 2011-06-03 - Chin)
+
+    mkdir -p /hive/data/outside/Numts/mm9
+    cd /hive/data/outside/Numts/mm9
+    wget http://193.204.182.50/files/mm9/all_mouse_tracks.txt
+    wget http://193.204.182.50/files/mm9/MMS_NumtS.html
+    wget http://193.204.182.50/files/bam/MMS_NumtS.fasta.sorted.bam
+    wget http://193.204.182.50/files/bam/MMS_NumtS.fasta.sorted.bam.bai
+
+    mkdir /cluster/data/mm9/bed/NumtS
+    cd  /cluster/data/mm9/bed/NumtS
+    cp /hive/data/outside/Numts/mm9/*.* .
+
+
+    # split the all_mouse_tracks.txt into 3 bed files 
+    # mmsNumtSAssembled.bed, mmsNumtS.bed, an mmsNumtSMitochondrion.bed
+
+    cat all_mouse_tracks.txt | awk ' /^track name/ {print $_}'  > tracks.list
+    cat all_mouse_tracks.txt | awk ' /^track type/ {print $_}'  >> tracks.list
+
+    # load the 3 bed files to mm9
+    hgLoadBed mm9  numtSAssembled  mmsNumtSAssembled.bed
+    hgLoadBed mm9 numtS mmsNumtS.bed
+    hgLoadBed mm9 numtSMitochondrion mmsNumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/mm9/NumtS
+    ln -s `pwd`/MMS_NumtS.fasta.sorted.bam{,.bai} /gbdb/mm9/NumtS/
+    hgBbiDbLink mm9 bamMmsNumtSSorted /gbdb/mm9/NumtS/MMS_NumtS.fasta.sorted.bam 
+    # setup trackDb for mm9
+
 ##############################################################################

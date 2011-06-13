@@ -16,7 +16,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -37,7 +37,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -58,7 +58,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -80,7 +80,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdRawDataRep1.fastq.tgz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -101,7 +101,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdRawDataRep2.fastq.tgz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -122,7 +122,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp

@@ -306,8 +306,9 @@ wgEncode 1
 # Riken CAGE (wrangler: braney)
 include wgEncodeRikenCage.ra
 
-# Duke Affy Exon (wrangler: braney)
-include wgEncodeDukeAffyExon.ra
+# Duke Affy Exon (wrangler: braney, Cricket, Jeff)
+include wgEncodeDukeAffyExon.ra beta,public
+include wgEncodeDukeAffyExon.new.ra alpha
 
 # U. Washington Affy Exon (wrangler: Andy, Brian)
 
@@ -1555,8 +1556,8 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 include wgEncodeYaleChIPseq.ra
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
-include wgEncodeHudsonalphaChipSeq.ra
-
+include wgEncodeHudsonalphaChipSeq.ra beta,public
+include wgEncodeHudsonalphaChipSeq.new.ra alpha
 
 #  GENCODE genes (wrangler: braney )
 

@@ -2393,7 +2393,7 @@ color 200,80,0
 type bed 8 +
 urlLabel Laboratoire de Biologie Mol&#233;culaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
-url2Label The miRNA Registry:
+url2Label miRBase:
 #url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 
@@ -2409,7 +2409,7 @@ type bed 8 +
 noScoreFilter .
 urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
-url2Label The miRNA Registry:
+url2Label miRBase:
 #url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
@@ -2960,8 +2960,8 @@ hgsid on
 url http://www.ncbi.nlm.nih.gov/omim/
 
 track omimLocation
-shortLabel OMIM Loci
-longLabel OMIM Non-Gene Entry Cytogenetic Locations
+shortLabel OMIM Pheno Loci
+longLabel OMIM Phenotypes - Gene Unknown
 group phenDis
 priority 29.75
 visibility hide
@@ -2972,7 +2972,7 @@ url http://www.omim.org/entry/
 
 track omimGene2
 shortLabel OMIM Genes
-longLabel OMIM Genes
+longLabel OMIM Genes - Dark Green Are Disease-causing
 group phenDis
 priority 29.73
 visibility hide

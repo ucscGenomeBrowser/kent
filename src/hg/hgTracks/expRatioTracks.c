@@ -528,6 +528,8 @@ struct bed *bedList = tg->items;
 int i;
 int numRows;
 char newLongLabel[512];
+if (!combineGroup)
+    errAbort("Error: somehow there is no grouping select for the %s track", tg->track);
 if (bedList && (bedList->expCount != combineGroup->size))
     errAbort("Error: %s grouping has bad size (%d).  Expected %d", combineGroup->name, combineGroup->size, bedList->expCount);
 maBedClumpGivenGrouping(bedList, combineGroup, subset, subsetOffset);

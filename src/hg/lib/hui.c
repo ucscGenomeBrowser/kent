@@ -56,7 +56,7 @@ struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct 
 /* Look up through self and parents, looking for someone responsible for handling
  * where the downloads are. */
 {
-if (!sameWord(tdb->type,"downloadsOnly") && !sameString(tdb->table, tdb->track) && trackHash)
+if (!tdbIsDownloadsOnly(tdb) && !sameString(tdb->table, tdb->track) && trackHash)
     {
     tdb = hashFindVal(trackHash, tdb->table);
     if (tdb == NULL)
@@ -261,8 +261,8 @@ const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
 if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
 
-printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", title);
+printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s<img src='../images/downBlue.png'/></A>",
+        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", (title?title:""));
 if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
     {
     printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track,
@@ -276,7 +276,8 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash)
 /* Show downlaods, schema and metadata links where appropriate */
 {
-boolean schemaLink = (isCustomTrack(tdb->table) == FALSE)
+boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
+                  && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
 boolean metadataLink = (!tdbIsComposite(tdb)
                   && metadataForTable(db, tdb, NULL) != NULL);
@@ -3366,15 +3367,11 @@ if(filterBySet != NULL)
     }
 }
 
-static char *filterByClause(filterBy_t *filterBy)
-/* returns the "column in (...)" clause for a single filterBy struct */
+static char *filterByClauseStd(filterBy_t *filterBy)
+/* returns the SQL where clause for a single filterBy struct in
+ * the standard cases */
 {
 int count = slCount(filterBy->slChoices);
-if(count == 0)
-    return NULL;
-if(slNameInList(filterBy->slChoices,"All"))
-    return NULL;
-
 struct dyString *dyClause = newDyString(256);
 dyStringAppend(dyClause, filterBy->column);
 if(count == 1)
@@ -3383,12 +3380,12 @@ else
     dyStringPrintf(dyClause, " in (");
 
 struct slName *slChoice = NULL;
-boolean notFirst = FALSE;
+boolean first = TRUE;
 for(slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
     {
-    if(notFirst)
-        dyStringPrintf(dyClause, ",");
-    notFirst = TRUE;
+    if(!first)
+        dyStringAppend(dyClause, ",");
+    first = FALSE;
     if(filterBy->useIndex)
         dyStringAppend(dyClause, slChoice->name);
     else
@@ -3403,6 +3400,15 @@ if(count > 1)
     dyStringPrintf(dyClause, ")");
 
 return dyStringCannibalize(&dyClause);
+}
+
+char *filterByClause(filterBy_t *filterBy)
+/* returns the SQL where clause for a single filterBy struct */
+{
+if ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All")))
+    return NULL;
+else
+    return filterByClauseStd(filterBy);
 }
 
 struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
@@ -4109,7 +4115,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     printf ("<TD title='select to copy'>&nbsp;%s", subtrack->longLabel);
     if (trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
         printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
-    compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE, trackHash);
+    compositeMetadataToggle(db,subtrack,NULL,TRUE,FALSE, trackHash);
     printf("&nbsp;");
 
 #ifndef SUBTRACK_CFG_POPUP
@@ -5290,7 +5296,7 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if(sameString("wgEncodeGencode", name)
+else if(startsWith("wgEncodeGencode", name)
      || sameString("wgEncodeSangerGencode", name)
      || (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
     {
