@@ -243,6 +243,14 @@ for ( ; parent != NULL && !tdbIsContainer(parent); parent = parent->parent)
 return parent;
 }
 
+#define DOWNLOADS_ONLY_TYPE  "downloadsOnly"
+INLINE boolean tdbIsDownloadsOnly(struct trackDb *tdb)
+// Is this a downloadsOnly tdb
+{
+return (tdb && sameWord(tdb->type,DOWNLOADS_ONLY_TYPE));
+}
+
+
 
 struct trackDb *trackDbLoad(char **row);
 /* Load a trackDb from row fetched with select * from trackDb

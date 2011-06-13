@@ -266,3 +266,16 @@ cb4.downloadDir = cb4
     #	39219709 bases of 108371485 (36.190%) in intersection
 
 ############################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/cb4
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 cb4 \
+	 > downloads.log 2>&1
+    #	real    1m33.231s
+
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################
