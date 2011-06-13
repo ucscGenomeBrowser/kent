@@ -18,7 +18,7 @@ dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 1
 setType exp
@@ -43,7 +43,7 @@ dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 2
 setType exp
@@ -166,7 +166,7 @@ dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistCh12InputIggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 1
 setType input
@@ -591,4 +591,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 594084860
+# MAGIC: 499831946
