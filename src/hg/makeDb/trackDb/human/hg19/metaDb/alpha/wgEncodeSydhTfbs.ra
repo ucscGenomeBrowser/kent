@@ -5524,6 +5524,49 @@ tableName wgEncodeSydhTfbsGm12878Znf143166181apStdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1
+objType file
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId GM12878/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-14
+dateUnrestricted 2012-03-14
+fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam
+grant Snyder
+lab UCD
+project wgEncode
+replicate 1
+setType exp
+subId 4324
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2
+objType file
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId GM12878/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-14
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam
+grant Snyder
+lab UCD
+project wgEncode
+replicate 2
+setType exp
+subId 4324
+treatment None
+view Alignments
+
 metaObject wgEncodeSydhTfbsGm12878Znf274UcdPk
 objType table
 antibody ZNF274
@@ -25401,6 +25444,28 @@ tableName wgEncodeSydhTfbsHuvecInputStdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsHuvecInputUcdAlnRep1
+objType file
+antibody Input
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HUVEC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-14
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeSydhTfbsHuvecInputUcdAlnRep1.bam
+grant Snyder
+lab UCD
+project wgEncode
+replicate 1
+setType input
+subId 4324
+treatment None
+view Alignments
+
 metaObject wgEncodeSydhTfbsHuvecInputUcdRawData
 objType file
 antibody Input
@@ -31923,7 +31988,8 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/None/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-14
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdAlnRep1.bam
@@ -31932,7 +31998,7 @@ lab Yale
 project wgEncode
 replicate 1
 setType exp
-subId 1623
+subId 4324
 treatment None
 view Alignments
 
@@ -31944,7 +32010,8 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/None/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-14
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdAlnRep2.bam
@@ -31953,7 +32020,7 @@ lab Yale
 project wgEncode
 replicate 2
 setType exp
-subId 1623
+subId 4324
 treatment None
 view Alignments
 
@@ -39060,4 +39127,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 686043717
+# MAGIC: -715935020
