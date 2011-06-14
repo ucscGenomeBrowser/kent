@@ -2905,6 +2905,10 @@ identifier text2GenomeSequence
     $gbd.t2gArticle.pmcId
     $gbd.t2gSequence.pmcId minCheck=0.99
 
+identifier ceuBcellRNASeqId
+"ID of ceuBcellRNASeq"
+    $hg.ceuBcellRNASeq.name dupeOk
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
