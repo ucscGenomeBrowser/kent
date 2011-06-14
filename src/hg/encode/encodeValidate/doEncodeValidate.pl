@@ -180,7 +180,8 @@ our %validators = (
     obtainedBy => \&validateObtainedBy,
     md5sum => \&validateNoValidation,
     bioRep => \&validateNoValidation,
-	tissueSourceType => \&validateControlledVocabOrControl,
+    tissueSourceType => \&validateControlledVocabOrControl,
+    spikeInPool => \&validateNoValidation,
     default => \&validateControlledVocab,
     );
 
@@ -330,6 +331,7 @@ our %formatCheckers = (
     bedRnaElements => \&validateBed,
     bedRrbs => \&validateBed,
     txt  => \&validateFreepass,
+    doc => \&validateFreepass,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -2135,7 +2137,7 @@ foreach my $ddfLine (@ddfLines) {
     $metadata .= " dateUnrestricted=$dateUnrestricted";
 
     # We should add attic terms to the mdb.txt.  At least those that we can recognize
-    if ($daf->{TRACKS}{$view}{auxilary} && $daf->{TRACKS}{$view}{auxilary} eq "yes") {
+    if ($daf->{TRACKS}{$view}{auxiliary} && $daf->{TRACKS}{$view}{auxiliary} eq "yes") {
         $metadata .= " attic=auxValid";
     } elsif ($ddfLine->{display} && $ddfLine->{display} eq "no") {
         $metadata .= " attic=auxExp";

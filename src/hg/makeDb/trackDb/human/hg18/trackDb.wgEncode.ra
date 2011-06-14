@@ -306,7 +306,7 @@ wgEncode 1
 # Riken CAGE (wrangler: braney)
 include wgEncodeRikenCage.ra
 
-# Duke Affy Exon (wrangler: braney)
+# Duke Affy Exon (wrangler: braney, Cricket, Jeff)
 include wgEncodeDukeAffyExon.ra
 
 # U. Washington Affy Exon (wrangler: Andy, Brian)

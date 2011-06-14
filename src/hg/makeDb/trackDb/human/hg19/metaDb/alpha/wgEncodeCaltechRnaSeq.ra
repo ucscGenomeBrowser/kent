@@ -9448,7 +9448,7 @@ rnaExtract longPolyA
 subId 3477
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1
 treatment DIFF_7d
-view Paired
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
 objType table
@@ -9552,7 +9552,7 @@ rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
-view TrnscrptDeNovo
+view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3
 objType file
@@ -9578,7 +9578,7 @@ rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
-view TrnscrptGencV3c
+view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3
 objType file

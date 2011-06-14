@@ -21,7 +21,7 @@ use strict;
 #
 my $kentSrc   = "/cluster/home/galt/kentclean/src";
   # currently does not get checked-in to git:
-my $gbdDPath  = "/cluster/home/galt/kentclean/src/hg/htdocs/goldenPath/gbdDescriptions.html";  
+my $gbdDPath  = "/cluster/home/galt/kentclean/src/hg/htdocs/goldenPath/gbdDescriptions.html";
 my $noLoad    = 0;
 my $verbose   = 0;
 
@@ -69,9 +69,9 @@ my $basename      = $0;  $basename =~ s@.*/@@;
 sub usage {
     print STDERR "Usage:
 $basename  [-kentSrc dir]  [-gbdDPath f]  [-noLoad]  [-help]
-    -kentSrc dir:	Use dir as the kent/src checkout.  
+    -kentSrc dir:	Use dir as the kent/src checkout.
 			Default: $kentSrc.
-    -gbdDPath f:	Use f as the gbdDescriptions.html.  
+    -gbdDPath f:	Use f as the gbdDescriptions.html.
 			Default: $gbdDPath.
     -db db:             Work only on db, not on all active dbs.
     -hgConf file:       Use file instead of ~/.hg.conf.
@@ -113,7 +113,7 @@ sub simplifyFields {
 }
 
 #
-# getTableFields: connect to db, get tables and fields 
+# getTableFields: connect to db, get tables and fields
 #
 sub getTableFields {
   my $hgConf = shift;
@@ -140,7 +140,7 @@ sub getTableFields {
     }
     $t =~ s/^chr\w+_(\w+_)?/chrN_/;
     $fields = &simplifyFields($fields);
-    if (defined $tableFields{$t} && 
+    if (defined $tableFields{$t} &&
 	$tableFields{$t} ne $fields) {
       warn "table fields differ for split table $db.$t:\n$tableFields{$t} != $fields";
     }
@@ -297,6 +297,8 @@ sub matchAutoSqlByFields {
     return $tASRef->{"lfs"};
   } elsif ($fields eq $tASRef->{"genericNameValue"}->{fields}) {
     return $tASRef->{"genericNameValue"};
+  } elsif ($fields eq $tASRef->{"openChromCombinedPeaks"}->{fields}) {
+    return $tASRef->{"openChromCombinedPeaks"};
   } else {
     for (my $n=12;  $n >= 3;  $n--) {
       if ($fields eq $tASRef->{"bed$n"}->{fields}) {
@@ -436,7 +438,7 @@ foreach my $db (@dbs) {
     }
     my $anchor = $tableAnchors{$table} || "";
     #*** should suggest addition to gbdD of table&.as if not already in there;
-    #*** should complain about gbdD tables not in any active db.  
+    #*** should complain about gbdD tables not in any active db.
     my $asd = (defined $as) ? $as->{autoSql} : "";
     $asd =~ s/'/\\'/g;
     print SQL "INSERT INTO tableDescriptions (tableName, autoSqlDef, gbdAnchor)"

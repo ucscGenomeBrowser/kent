@@ -1890,15 +1890,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3947 dateSubmitted=2011-04-28
         # was wgEncodeRikenCageGm12878CytosolPapMinusRawRep2 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageMcf7CellPapMinusClustersRep1
-        subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel MCF7 cell pA+ - 1
-        longLabel MCF-7 whole cell polyA+ CAGE Minus strand start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=MCF7 localization=cell rnaExtract=pAP rep=rep1
-        type bigWig 0.040000 6428.500000
-        origAssembly hg19
-        # subId=2365 dateSubmitted=2011-04-20
-
         track wgEncodeRikenCageNhekCytosolPapMinusRawRep4
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel NHEK cyto pA+ - 2

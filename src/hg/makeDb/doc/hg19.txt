@@ -8408,7 +8408,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 4/1/11 angie)
+# NHGRI GWAS CATALOG (DONE 6/9/11 angie)
+# Updated 4/1/11 (last one to use snp131)
 # Updated 3/1/11
 # Updated 2/1/11
 # Updated 12/7/10
@@ -8424,21 +8425,21 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
     # Done once, don't need to redo:
-    cut -f 1-4 ../snp131/snp131.bed \
+    zcat ../snp132/snp132.bed.gz | cut -f 1-4  \
     | sort -k4,4 \
-      > snp131Coords.bed
+      > snp132Coords.bed
     set today = `date +%y%m%d`
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog/$today
     cd /hive/data/genomes/hg19/bed/gwasCatalog/$today
 
     # Mapping to hg19 by joining hg19 SNP coords with catalog flatfile (see hg18.txt)
-    join -t "	" -1 4 ../snp131Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
+    join -t "	" -1 4 ../snp132Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 5631 elements of size 22
+#Loaded 6317 elements of size 22
 
 
 ######################################################################## 
@@ -15752,6 +15753,10 @@ hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omim
 perl ./script1.pl --gene-map-file=genemap.txt >omimPhenotype.tab
 hgLoadSqlTab -warn hg19 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
 
+hgsql hg19 -e 'update omimPhenotype set phenotypeClass = -1 where
+phenotypeClass=0'
+hgsql hg19 -e 'update omimPhenotype set phenotypeId = -1 where phenotypeId=0'
+
 doOmimGene2 hg19 j.tmp
 cat j.tmp |sort -u > omimGene2.tab
 
@@ -15813,6 +15818,33 @@ hgLoadBed hg19 omimLocation omimLocation.bed
 
 hgsql hg19 -N -e \
 'delete from omimLocation where name  in (select name from omimGene2) '
+
+# Per OMIM request, delete all the gray entries in omimLocation table.
+
+mkdir cleanUpOmimLocation
+cd cleanUpOmimLocation
+
+hgsql hg19 -N -e \
+'select distinct name from omimLocation' |sort -u >j.all
+
+hgsql hg19 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=1' >j.1
+hgsql hg19 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=2' >j.2
+hgsql hg19 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=3' >j.3
+hgsql hg19 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=4' >j.4
+
+cat j.1 j.2 j.3 j.4 |sort -u >j.1234
+
+diff j.all j.1234 |grep "<" |sed -e 's/</do1/' >doall
+
+cat << '_EOF_' > do1
+hgsql hg19 -e "delete from omimLocation where name='${1}'"
+'_EOF_'
+
+./doall
 
 ############################################################################
 # NUMTS TRACK (DONE 2011-06-03 - Chin)

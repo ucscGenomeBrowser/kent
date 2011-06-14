@@ -4938,6 +4938,27 @@ subId 3298
 tableName wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2
 view Alignments
 
+metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalExonGencV3c
+objType file
+bioRep 001C,002C
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-16
+dateUnrestricted 2012-02-16
+fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalExonGencV3c.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10572,LID10571
+labProtocolId 001Cs,002Cs
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract shortTotal
+subId 4148
+view ExonGencV3c
+
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep1
 objType table
 bioRep 001C
@@ -7518,4 +7539,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: 698502852
+# MAGIC: 1373252996

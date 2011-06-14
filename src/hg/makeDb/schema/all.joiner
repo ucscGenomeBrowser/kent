@@ -2257,9 +2257,6 @@ identifier snpName131
     hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
     hg18.snpArrayIlluminaHumanCytoSNP_12.name minCheck=0.95
     hg18.snpArrayIlluminaHumanOmni1_Quad.name minCheck=0.85
-    # gwasCatalog SNPs were mapped to hg19 using snp131.  Move this and update trackDb
-    # settings if we remap to new dbSNP version:
-    hg19.gwasCatalog.name minCheck=0.99
 
 identifier snpExceptions131
 "Annotations of unusual conditions in dbSNP version 131"
@@ -2276,6 +2273,9 @@ identifier snpName132
     $gbd.snp132Seq.acc minCheck=.98
     $gbd.snp132CodingDbSnp.name minCheck=.90
     $hg.snp132OrthoPt2Pa2Rm2.name
+    # gwasCatalog SNPs were mapped to hg19 using snp132.  Move this and update trackDb
+    # settings if we remap to new dbSNP version:
+    hg19.gwasCatalog.name minCheck=0.99
 
 # Other NCBI Identifiers
 
@@ -2515,6 +2515,7 @@ identifier blastHg18KGPep04Id
      danRer5.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
+     felCat4.blastHg18KG.qName
      dm2.blastHg18KG.qName
      fr2.blastHg18KG.qName
      mm8.blastHg18KG.qName
@@ -2550,6 +2551,7 @@ identifier blastHg18KGRef04Id
      danRer5.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
+     felCat4.blastHg18KG.qName
      dm2.blastHg18KG.qName
      fr2.blastHg18KG.qName
      mm8.blastHg18KG.qName

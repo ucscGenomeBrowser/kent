@@ -217,15 +217,11 @@ int encodeExpExists(char *db, struct mdbVar *vars);
 char *encodeGetExpAccessionByMdbVars(char *db, struct mdbVar *vars);
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 
-void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
-                                int id, char *field, char *val);
-/* Update field in encodeExp identified by id with value.
-   Only supported for a few non-interdependent fields
-   and only for non-accessioned experiments */
-
-void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
-                                int  id, struct slPair *varPairs);
-/* Update expVars in encodeExp identified by accession */
+void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
+                                int id, char *var, char *newVal, char *oldVal);
+/* Update field in encodeExp or var in expVars, identified by id with value.
+ * If oldVal is non-NULL, verify it matches experiment, as a safety check.
+ * Abort if experiment is accessioned (must deaccession first) */
 
 #endif /* ENCODEEXP_H */
 

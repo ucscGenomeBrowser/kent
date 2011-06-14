@@ -183,6 +183,7 @@ term NHEK
 tag NHEK
 type Cell Line
 organism human
+category Tissue
 description epidermal keratinocytes
 tissue Skin
 vendorName Lonza
@@ -193,7 +194,7 @@ karyotype normal
 termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 color 179,0,134
-sex F
+sex U
 tier 3
 protocol Keratinocyte_protocol.pdf
 
@@ -1640,7 +1641,7 @@ organism human
 description Undifferentiated human embryonic stem cells
 karyotype unknown
 lineage inner cell mass
-endorName WiCell
+vendorName WiCell
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 sex U
@@ -2802,7 +2803,7 @@ description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 #put universities in for Stam and Snyder
 vendorId (see protocol documents)
-orderUrl N/A
+orderUrl ;
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -3316,6 +3317,8 @@ organism human
 description Trachea and bronchial epithelial cells, passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells, donor was 21 years old
 vendorName National Disease Research Interchange-provided fresh lung tissue, designated DD009C in-house.
 tissue Epithelium
+vendorId ;
+orderUrl http://www.ndriresource.org/
 #TIB-152 is a lymphocytic cell line with no relation to TBEC
 lineage endoderm
 karyotype unknown
@@ -3540,7 +3543,6 @@ color 153,38,0
 sex M
 protocol UW(Stam):A20_Stam_protocol.pdf
 
-# Needs vendorId, orderUrl
 term AtT-20
 tag ATT20
 type Cell Line
@@ -3551,8 +3553,8 @@ description Pituitary tumor LAF1
 age immortalized
 strain Unknown
 vendorName ATCC
-vendorId N/A
-orderUrl N/A
+vendorId CCL-89
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 153,38,0
@@ -7843,17 +7845,6 @@ tag Ggamma
 type promoter
 description promoter for the G-gamma globulin genes
 
-# freezeDates for Sanger Gencode project
-term 2008-10-01
-tag d20081001
-type freezeDate
-description 2008-10-01 freeze
-
-term 2009-01-01
-tag d20090101
-type freezeDate
-description 2009-01-01 rel2 January freeze
-
 ### Species
 term hg18
 tag hg18
@@ -8047,24 +8038,32 @@ tag DEX500pM
 description 1 h with 500 pM DEX (Myers)
 type treatment
 
+
 term DMSO_0.02pct
-tag DMSO2
-description 1 h with 0.02% DMSO (Myers)
+#tag DMSO2
+tag DM002p1h
+description 1 h with 0.02% DMSO (Myers) 
 type treatment
 
+
 term DMSO_0.02pct_24hr
-tag DMSO224h
+#tag DMSO224h
+tag DM002p24h
 description 24 h with 0.02% DMSO (Myers)
 type treatment
 
+
 term DMSO_2.0pct
-tag DMSO20
+#tag DMSO20
+tag DM2p5d
 description 5 d with 2% DMSO (Weissman)
 type treatment
 
 term DMSO_4hr
-tag DMSO4hr
-description 4 hr with DMSO (Myers)
+#term DMSO_0.02pct_4hr  would like to change
+#tag DMSO4hr
+tag DM002p4h
+description 4 hr with 0.02% DMSO (Myers)
 type treatment
 
 term DIFF_7d
@@ -8073,22 +8072,22 @@ description Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
-tag ESTRADIa1h
+tag EST10nm1h
 description  1 h with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_24hr
-tag ESTRADIa24hh
+tag EST10nm24h
 description  24 hr with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_1nM
-tag ESTRADIb1h
+tag EST1nm1h
 description  1 h with 1 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_4hr
-tag ESTRADIa4h
+tag EST10nm4h
 description  4 h with 10 nM Estradiol (Myers)
 type treatment
 
@@ -8208,15 +8207,17 @@ description grown in serum free media (Crawford)
 type treatment
 
 term 4OHTAM_1uM_36hr
-tag OHTAM1
+# Changed tag from OHTAM1: 6/9/11
+tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
 
-term TAM_1uM_36hr
-tag TAM
-description 36 h with 1 uM 4-hydroxytamoxifen (Myers)
-type treatment
-#This should be retired.  It was registered with the wrong molecule.  For now i am changing the description.  But i am also registereing a replacement. 6/6/11
+# Commented out 6/9/11.  Preparing to remove.
+#term TAM_1uM_36hr
+#tag TAM
+#description 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+#type treatment
+##This should be retired.  It was registered with the wrong molecule.  For now i am changing the description.  But i am also registereing a replacement. 6/6/11
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
@@ -8355,6 +8356,12 @@ tag CONTIGS
 type view
 label Contigs
 description Contigs
+
+term Excludable
+tag EXCLU
+type view
+label Excludable
+description Excludable
 
 term ExonsGencV3c
 tag EXONGENCV3C
@@ -8542,6 +8549,12 @@ type view
 label SNP
 description Single Nucleotide Polymorphism
 
+term Spikeins
+tag SPKNS
+type view
+label Spikeins
+description Spikeins
+
 term Splices
 tag SPLICES
 type view
@@ -8571,6 +8584,12 @@ tag TSS
 type view
 label TSS
 description TSS
+
+term Uniqueness
+tag UNQ
+type view
+label Uniqueness
+description Uniqueness
 
 term Validation
 tag VALIDATION
@@ -8944,24 +8963,23 @@ description the age when the real age is unknown
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
 
-
 term supplemental
 tag sup
 type attic
 description Files supplemental at composite level 
 
-term auxUnValid
-tag auxUV
+term auxSup
+tag auxsup
 type attic
-description Unvalidated files supplemental at experimental level 
+description Unverified files supplemental at experiment level
 
 term auxValid
-tag auxV
+tag auxval
 type attic
 description Validated files supplemental to experiments
 
 term auxExp
-tag auxE
+tag auxexp
 type attic
 description Supplemental experiments
 
@@ -9798,7 +9816,7 @@ projectName UNC-Giddings
 #         expId:100  strain:110  cell:120  sex:130  age:140  rnaExtract:150  localization:160  phase:170  treatment:180  antibody:190
 #         protocol:200  restrictionEnzyme:220  control:230  replicate:240  submittedDataVersion:250
 #       DCC descriptive:
-#         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
+#         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  
 #         subId:335  geoSeries:340  geoSample:345  setType:350  controlId:355
 #       Lab descriptive:
 #         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460 tissueSourceType:470
@@ -10080,16 +10098,6 @@ validate regex: ^[0-9]*k$
 priority 500
 # With more investigation, this could be collapsed in with fragLength (11/19/10)
 
-term freezeDate
-type typeOfTerm
-label Gencode freeze date
-description Date when GENCODE froze data in order to submit to UCSC.
-searchable no
-cvDefined yes
-validate cv
-priority 330
-# outdated, should not be used going forward. 11/3/10
-
 term geoSample
 type typeOfTerm
 label GEO sample accession
@@ -10348,7 +10356,7 @@ label Sequencing Run
 description Sequencing run
 searchable multiSelect
 cvDefined no
-validate integer
+validate regex: ^[0-9]*r[0-9]*$ 
 priority 500
 
 term seqPlatform
@@ -10404,6 +10412,15 @@ description Objects this object was built with.
 searchable no
 cvDefined no
 validate none
+priority 921
+
+term spikeInPool
+type typeOfTerm
+label Spike-In Pool   
+description (Provisional) The spike-in pool that was used.
+searchable no
+cvDefined no
+validate none   
 priority 921
 
 term strain

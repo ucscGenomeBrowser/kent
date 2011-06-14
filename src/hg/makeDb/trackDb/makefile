@@ -100,7 +100,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	caeSp111 \
 	caeJap1 caeJap2 caeJap3 caeJap4 \
 	priPac1 priPac2 \
-	caePb1 caePb2 \
+	caePb1 caePb2 caePb3 \
 	bruMal1 \
 	melHap1 \
 	melInc1 \

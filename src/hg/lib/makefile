@@ -30,9 +30,10 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/encodeRegionInfo.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
     encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o \
     encode/pairedTagAlign.o encode/peptideMapping.o encode/tagAlign.o  \
-    encode/wgEncodeGencodeExonSupport.o encode/wgEncodeGencodeGeneSymbol.o \
-    encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubmed.o \
-    encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeSource.o \
+    encode/wgEncodeGencodeAttrs.o encode/wgEncodeGencodeExonSupport.o \
+    encode/wgEncodeGencodeTag.o  \
+    encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubMed.o \
+    encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeGeneSource.o encode/wgEncodeGencodeTranscriptSource.o \
     encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeUniProt.o \
     encode/encodeExp.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
@@ -119,10 +120,10 @@ clean:
 	rm -f ../../lib/$(MACHTYPE)/jkhgap.a;
 
 ctags:
-	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
+	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c ../inc/encode/*.h ../lib/encode/*.c
 
 tags:
-	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
+	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c ../inc/encode/*.h ../lib/encode/*.c
 
 test:
 	cd tests && ${MAKE} test
