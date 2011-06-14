@@ -3627,3 +3627,6 @@ tablesIgnored calJac3
 
 tablesIgnored rheMac2
     refSeqAnno
+
+tablesIgnored $hg
+    ceuBcellRNASeqBW
