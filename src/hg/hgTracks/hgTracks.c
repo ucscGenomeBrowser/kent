@@ -3681,6 +3681,13 @@ if (!psOutput)
             skipChr(chromName), winStart+1, winEnd);
         hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
         }
+    if (sameString(database, "bosTau6"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
     if (startsWith("oryLat", database))
         {
         hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
