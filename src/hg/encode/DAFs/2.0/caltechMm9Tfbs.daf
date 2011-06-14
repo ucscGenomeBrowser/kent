@@ -38,13 +38,13 @@ validationSettings validateFiles.bam:mismatches=2,bamPercent=99.9;validateFiles.
 view             Peaks
 longLabelPrefix  Caltech TFBS Peaks
 type             narrowPeak
-hasReplicates    no
+hasReplicates    yes
 required         no
 
 view             Signal
 longLabelPrefix  Caltech TFBS Signal
 type             bigWig
-hasReplicates    no
+hasReplicates    yes
 required         no
 
 view             Alignments
