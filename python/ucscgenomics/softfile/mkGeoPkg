@@ -1,0 +1,23 @@
+from RaFile import *
+
+rafile = RaFile(metafile)
+filedict = dict() #expId : filelist
+geomapping = dict() #expId : geoSampleAccession
+
+for stanza in rafile:
+	
+	#if the stanza is a series
+		#process it separately and then continue
+
+	if 'expId' not in stanza:
+		raise KeyError('no expId for ' + stanza.name)
+
+	if stanza['expId'] not in filedict:
+		filedict[stanza['expId']] = list()
+		
+	filedict[stanza['expId']].append(filename)
+
+	if 'geoSampleAccession' in stanza:
+		geomapping[stanza['expId']] = stanza['geoSampleAccession']
+
+#process the filedict and make the soft file
