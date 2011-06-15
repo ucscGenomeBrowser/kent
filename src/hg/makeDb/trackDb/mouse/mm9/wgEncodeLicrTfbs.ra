@@ -55,10 +55,6 @@ noInherit on
 	subTrack wgEncodeLicrTfbs
 	signalFilter 0
 	signalFilterLimits 0:18241
-	pValueFilter 0
-	pValueFilterLimits 0:300
-	qValueFilter 0
-	qValueFilterLimits 0:300
 
 		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
 		parent wgEncodeLicrTfbsViewPeaks 
