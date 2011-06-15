@@ -923,7 +923,8 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		# subId=3476 dateSubmitted=2011-04-28
 
-		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1
+		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1
+#changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1 by wong in June 15
 		parent wgEncodeCaltechRnaSeqViewAligns off
 		longLabel LHCN-M2 differentiated paired read RNA-seq Paired Alignments rep 1 from ENCODE/Caltech
                 shortLabel LHCND 2x75 A 1
