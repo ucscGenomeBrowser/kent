@@ -72,7 +72,7 @@ wgEncode 1
 		longLabel MEL H3K4me3 Histone Modifications Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
 		type narrowPeak
-		color 46,0,184 
+		color 86,180,233 
 
         track wgEncodeSydhHistMelH3k04me3Dm2p5dIggyalePk
         parent wgEncodeSydhHistViewPeaks off
@@ -80,7 +80,7 @@ wgEncode 1
         longLabel ENCODE ENCODE Histone by ChIP-seq at Stanford/Yale Peaks (H3K4me3 in MEL cells)
         subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=DM2p5d
         type narrowPeak
-        color 46,0,184
+        color 86,180,233
         # subId=3057 dateSubmitted=2011-04-20
 
 		
@@ -91,7 +91,7 @@ wgEncode 1
 		longLabel CH12 H3K4me3 Histone Modifications Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
 		type narrowPeak
-		color 153,38,0
+		color 86,180,233
 
 
 	#####Signal Tracks###########
@@ -114,7 +114,7 @@ wgEncode 1
 		longLabel MEL H3K4me3 Histone Modifications Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
 		type bigWig 1 38729
-		color 46,0,184 
+		color 86,180,233 
 
 		#### Submission 1168 ####
 		track wgEncodeSydhHistMelInputIggyaleSig
@@ -123,7 +123,7 @@ wgEncode 1
 		longLabel MEL IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=None
 		type bigWig 1 80497
-		color 46,0,184
+		color 86,180,233
 
 		#### Submision 1194 ####
 		track wgEncodeSydhHistCh12H3k4me3IggyaleSig
@@ -132,7 +132,7 @@ wgEncode 1
 		longLabel CH12 H3K4me3 Histone Modifications Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
 		type bigWig 1.000000 45491.000000
-		color 153,38,0
+		color 86,180,233
 
 		#### Submission 1195 #####
 		track wgEncodeSydhHistCh12InputIggyaleSig
@@ -141,7 +141,7 @@ wgEncode 1
 		longLabel CH12 IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=None
 		type bigWig 1.000000 59055.000000
-		color 153,38,0
+		color 86,180,233
 
         track wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleSig
         parent wgEncodeSydhHistViewSig off
@@ -149,6 +149,6 @@ wgEncode 1
         longLabel ENCODE ENCODE Histone by ChIP-seq at Stanford/Yale Signal (H3K4me3 in MEL cells)
         subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=DM2p5d
         type bigWig 1.000000 52086.000000
-        color 46,0,184
+        color 86,180,233
         # subId=3057 dateSubmitted=2011-04-20
 
