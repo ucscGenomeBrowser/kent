@@ -20,7 +20,6 @@ wgEncode 1
 filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong_Enhancer,5_Strong_Enhancer,6_Weak_Enhancer,7_Weak_Enhancer,8_Insulator,9_Txn_Transition,10_Txn_Elongation,11_Weak_Txn,12_Repressed,13_Heterochrom/lo,14_Repetitive/CNV,15_Repetitive/CNV
 
         track wgEncodeBroadHmmGm12878HMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel GM12878 HMM lift
         longLabel GM12878 Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
@@ -31,7 +30,6 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         # subId=3823 dateSubmitted=2011-03-16
 
         track wgEncodeBroadHmmH1hescHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel H1-hESC HMM lift
         longLabel H1-hESC Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
@@ -42,7 +40,6 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         # subId=3823 dateSubmitted=2011-03-16
 
         track wgEncodeBroadHmmK562HMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel K562 HMM lift
         longLabel K562 Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
@@ -53,7 +50,6 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         # subId=3823 dateSubmitted=2011-03-16
 
         track wgEncodeBroadHmmHepg2HMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel HepG2 HMM lift
         longLabel HepG2 Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
@@ -64,7 +60,6 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         # subId=3823 dateSubmitted=2011-03-16
 
         track wgEncodeBroadHmmHmecHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel HMEC HMM lift
         longLabel HMEC Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
@@ -74,7 +69,6 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         # subId=3823 dateSubmitted=2011-03-16
 
         track wgEncodeBroadHmmNhlfHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel NHLF HMM lift
         longLabel NHLF Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
@@ -84,7 +78,6 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         # subId=3823 dateSubmitted=2011-03-16
 
         track wgEncodeBroadHmmNhekHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel NHEK HMM lift
         longLabel NHEK Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
@@ -95,7 +88,6 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         # subId=3823 dateSubmitted=2011-03-16
 
         track wgEncodeBroadHmmHsmmHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel HSMM HMM lift
         longLabel HSMM Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
@@ -105,7 +97,6 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         # subId=3823 dateSubmitted=2011-03-16
 
         track wgEncodeBroadHmmHuvecHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel HUVEC HMM lift
         longLabel HUVEC Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
