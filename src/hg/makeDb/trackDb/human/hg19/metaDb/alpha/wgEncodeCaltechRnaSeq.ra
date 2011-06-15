@@ -9424,7 +9424,8 @@ submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1
+#changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1 by wong in June 15
 objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9434,7 +9435,8 @@ dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1.bam
+#changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1 by wong in June 15
 md5sum dff28d0040fc6e7a69c7209db0f31bfa
 grant Myers
 insertLength 200
@@ -9446,7 +9448,8 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3477
-tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1
+#changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1 by wong in June 15
 treatment DIFF_7d
 view Alignments
 
@@ -9528,7 +9531,8 @@ submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view TSS
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptDeNovoRep1V3
+#changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptDeNovoRep1V3 by wong in June 15
 objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9538,7 +9542,8 @@ dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3.gtf.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptDeNovoRep1V3.gtf.gz
+#changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptDeNovoRep1V3 by wong in June 15
 md5sum 1080c969eb84ab230a888d328ac97e74
 grant Myers
 insertLength 200
@@ -9554,7 +9559,8 @@ submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view TranscriptDeNovo
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptGencV3cRep1V3
+#changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptGencV3cRep1V3 by wong in June 15
 objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9564,7 +9570,8 @@ dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3.gtf.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptGencV3cRep1V3.gtf.gz
+#changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptGencV3cRep1V3 by wong in June 15
 md5sum 83c021b2bfed8532039555db2c70a226
 grant Myers
 insertLength 200
