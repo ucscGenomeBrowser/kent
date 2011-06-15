@@ -1,28 +1,30 @@
-# Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler:vsmalladi assited by Cricket)
+# Stanford/Yale Histone(wrangler:vsmalladi assited by Cricket)
 
 # Notes:
 #       - Track Long Label: Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale
 #       - Track Short Label: Stan/Yale Histone
-#       - View Long Labels: [cell] [factor] Histone Modifications [view] from ENCODE/Stanford/Yale 
+#       - View Long Labels: [cell] [factor] [treatment] Histone Modifications by ChIP-seq [view] from ENCODE/Stanford/Yale 
 #       - cellType Order: Ordering is alphabetical
 #       - Default View selections
 #               - Peaks = dense
 #               - Signal = full
 #       - Short Labels: 
-#               Template: [cell] {factor] [view]
+#               Template: [cell] [factor] [treatment] [view]
+#               - Cell: Abbreviations for cells
+#               - Factor: Abbreviations for factor
+#               - Treatment
+#                       - DM2p5d = D
 #               - Views: For consistency sake view will be
 #                       - Peaks = Pk
 #                       - Signal = Sg
-#               - Treatment
-#                       - DM2p5d = D
-#       - Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human 
-#               p300 - Signals and Peaks
-#               Pol2 - Signals and Peaks
-#               CTCF = Signals and Peaks
-#       - Matrix Dimensions:
-#               X - Cell Line
-#               Y - Factor
-#               Z - Treatment
+#       - Tracks On: All factors and Cell Types except inputs
+#       - Display matrix:
+#               - Dimension Y - Factor
+#                       - factor Order: Ordering is based on Histone Number then numerically and alphabetaclly. Numerically 09 before 12.
+#               - Dimension X - Cell Type
+#                       - cellType Order: Ordering is based on tier and alphabetical within a tier. :
+#               - Dimension Z - Treatment
+#						- Treatment order: Ordering is based on Treatment alphabetically which None, being forced last. Both treatments are on by default
 
 
 
@@ -39,10 +41,10 @@ subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line CH12=CH12  MEL=MEL
 subGroup3 factor Factor H3K4me3=H3K4me3 zInputIGGYALE=Input_(<i>IgG-Yale</i>)
 subGroup4 control Control IGGYale=IgG-Yale
-subGroup5 treatment Treatment None=None DM2p5d=DMSO_2.0pct
+subGroup5 treatment Treatment zNone=None DM2p5d=DMSO_2.0pct
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
-dimensionZchecked None,DM2p5d
-filterComposite dimZ=multi
+dimensionZchecked zNone,DM2p5d
+filterComposite dimZ=all
 sortOrder cellType=+ factor=+ view=+ treatment=+ 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
@@ -69,15 +71,15 @@ wgEncode 1
 		track wgEncodeSydhHistMelH3k4me3IggyalePk
 		subTrack wgEncodeSydhHistViewPeaks 
 		shortLabel MEL H3K4me3 Pk
-		longLabel MEL H3K4me3 Histone Modifications Peaks from ENCODE/Stanford/Yale
-		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
+		longLabel MEL H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale
+		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=zNone
 		type narrowPeak
 		color 86,180,233 
 
         track wgEncodeSydhHistMelH3k04me3Dm2p5dIggyalePk
-        parent wgEncodeSydhHistViewPeaks off
-        shortLabel MEL H3K4me3 Pk
-        longLabel ENCODE ENCODE Histone by ChIP-seq at Stanford/Yale Peaks (H3K4me3 in MEL cells)
+        parent wgEncodeSydhHistViewPeaks 
+        shortLabel MEL H3K4me3 D Pk
+        longLabel MEL H3K4me3 DMSO 2% Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale
         subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=DM2p5d
         type narrowPeak
         color 86,180,233
@@ -88,8 +90,8 @@ wgEncode 1
 		track wgEncodeSydhHistCh12H3k4me3IggyalePk
 		subTrack wgEncodeSydhHist 
 		shortLabel CH12 H3K4me3 Pk
-		longLabel CH12 H3K4me3 Histone Modifications Peaks from ENCODE/Stanford/Yale
-		subGroups view=Peaks factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
+		longLabel CH12 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale
+		subGroups view=Peaks factor=H3K4me3 cellType=CH12 control=IGGYale treatment=zNone
 		type narrowPeak
 		color 86,180,233
 
@@ -111,8 +113,8 @@ wgEncode 1
 		track wgEncodeSydhHistMelH3k4me3IggyaleSig
 		subTrack wgEncodeSydhHistViewSig 
 		shortLabel MEL H3K4me3 Sg
-		longLabel MEL H3K4me3 Histone Modifications Signal from ENCODE/Stanford/Yale
-		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
+		longLabel MEL H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=zNone
 		type bigWig 1 38729
 		color 86,180,233 
 
@@ -120,8 +122,8 @@ wgEncode 1
 		track wgEncodeSydhHistMelInputIggyaleSig
 		subTrack wgEncodeSydhHistViewSig off
 		shortLabel MEL IgGYale Sg 
-		longLabel MEL IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
-		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=None
+		longLabel MEL IgG-Yale Input Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=zNone
 		type bigWig 1 80497
 		color 86,180,233
 
@@ -129,8 +131,8 @@ wgEncode 1
 		track wgEncodeSydhHistCh12H3k4me3IggyaleSig
 		subTrack wgEncodeSydhHistViewSig 
 		shortLabel CH12 H3K4me3 Sg
-		longLabel CH12 H3K4me3 Histone Modifications Signal from ENCODE/Stanford/Yale
-		subGroups view=Signal factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
+		longLabel CH12 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=H3K4me3 cellType=CH12 control=IGGYale treatment=zNone
 		type bigWig 1.000000 45491.000000
 		color 86,180,233
 
@@ -138,15 +140,15 @@ wgEncode 1
 		track wgEncodeSydhHistCh12InputIggyaleSig
 		subTrack wgEncodeSydhHistViewSig off 
 		shortLabel CH12 IgGYale Sg
-		longLabel CH12 IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
-		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=None
+		longLabel CH12 IgG-Yale Input Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=zNone
 		type bigWig 1.000000 59055.000000
 		color 86,180,233
 
         track wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleSig
-        parent wgEncodeSydhHistViewSig off
-        shortLabel MEL H3K4me3 Sig
-        longLabel ENCODE ENCODE Histone by ChIP-seq at Stanford/Yale Signal (H3K4me3 in MEL cells)
+        parent wgEncodeSydhHistViewSig
+        shortLabel MEL H3K4me3 D Sg
+        longLabel MEL H3K4me3 DMSO 2% Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale
         subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=DM2p5d
         type bigWig 1.000000 52086.000000
         color 86,180,233
