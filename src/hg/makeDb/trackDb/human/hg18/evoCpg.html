@@ -7,7 +7,7 @@ The track shows contiguous (100bp or more) genomic elements with CpG content gre
 <H3>Methods</H3>
 A parameter-rich evolutionary model  was used to infer substitution dynamics over genomic bins of 50bp and clustering analysis identified two major types of genomic behaviors (as described in Mendelson Cohen, Kenigsberg and Tanay, Cell 2011). The distributions of evolutionary parameters in each cluster (Figure 3 in the paper) were used to compute a log-odds score for each 50bp genomic bin. Bins with CpG content higher than 3% (smoothed over 500bp) were then assembled into contiguous segments as follows:
 <ol>
-<li>Adjacent bins from the same cluster were merged
+<li>Adjacent bins from the same cluster were merged.
 <li>Ambiguously classified bins were merged with any adjacent non-ambiguous bins. 
 <li>Bins of the same class with gaps of up to 50bp were merged. Short intervals (<200bp) at a distance less than 100bp were also merged.
 <li>Intervals shorter than 100bp were discarded.
@@ -21,5 +21,6 @@ Thanks to
 Amos Tanay's lab</A>
  at the Weizmann Institute of Science for the evolutionary model and classification scheme.
 <H3>References</H3>
-Cohen et al., Primate CpG Islands Are Maintained by Heterogeneous Evolutionary Regimes Involving Minimal Selection, Cell (2011), doi:10.1016/j.cell.2011.04.024.
+Cohen et al., <A HREF="http://dx.doi.org/10.1016/j.cell.2011.04.024" TARGET=_blank>
+ Primate CpG Islands Are Maintained by Heterogeneous Evolutionary Regimes Involving Minimal Selection </A> , Cell (2011).
 

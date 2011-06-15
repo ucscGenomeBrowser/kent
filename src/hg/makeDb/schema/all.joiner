@@ -2290,7 +2290,7 @@ identifier locusLinkId external=LocusLink
 identifier omimLocationId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) Location ID"
     $hg.omimLocation.name dupeOk exclude=0
-    $hg.omimGeneMap.omimId minCheck=0.10
+    $hg.omimGeneMap.omimId minCheck=0.08
 
 identifier omimAvSnpId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) AV SNP ID"
@@ -2313,8 +2313,8 @@ identifier omimAvId external=OMIM
 identifier omimGeneId
 "omimGene ID"
     $hg.omimGene.name dupeOk
-    $hg.omimGeneMap.omimId minCheck=0.85
-    $hg.refLink.omimId exclude=0 minCheck=0.98
+    $hg.omimGeneMap.omimId minCheck=0.80
+    $hg.refLink.omimId exclude=0 minCheck=0.95
     $hg.omimMorbidMap.omimId minCheck=0.75
     $hg.omimToKnownCanonical.omimId
 
@@ -2904,6 +2904,10 @@ identifier text2GenomeSequence
 "Article to sequence relationship as mapped from publications"
     $gbd.t2gArticle.pmcId
     $gbd.t2gSequence.pmcId minCheck=0.99
+
+identifier ceuBcellRNASeqId
+"ID of ceuBcellRNASeq"
+    $hg.ceuBcellRNASeq.name dupeOk
 
 # Dependencies not already captured in identifiers
 
@@ -3623,3 +3627,6 @@ tablesIgnored calJac3
 
 tablesIgnored rheMac2
     refSeqAnno
+
+tablesIgnored $hg
+    ceuBcellRNASeqBW
