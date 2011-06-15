@@ -2969,6 +2969,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
+tableBrowser off
 
 track omimGene2
 shortLabel OMIM Genes
@@ -2980,6 +2981,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
+tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol mim2gene
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
@@ -2991,6 +2993,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
+tableBrowser off omimAv omimAvRepl
 
 searchTable wgRnaOld
 searchMethod fuzzy
