@@ -3861,7 +3861,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
-color 204,121,16 #Double check if this is reasonable classification of limb
+color 102,50,200 
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol LICR(Ren):Limb_Ren_protocol.pdf
@@ -4079,7 +4079,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
-color 65,105,225 # Need to verify
+color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol LICR:Placenta_Ren_protocol.pdf
