@@ -4,7 +4,7 @@ track wgEncodeBroadHmm
 compositeTrack on
 superTrack wgEncodeHistoneSuper dense
 shortLabel Broad HMM
-longLabel Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+longLabel Chromatin Modeling by HMM from ENCODE/Broad
 group regulation
 subGroup1 cellType Cell_Line GM12878=GM12878 H1=H1-hESC HEPG2=HepG2 HMEC=HMEC HSMM=HSMM HUVEC=HUVEC K562=K562 NHEK=NHEK NHLF=NHLF
 dimensions dimensionX=cellType
@@ -16,13 +16,14 @@ priority 0
 type bed 9 .
 itemRgb on
 wgEncode 1
+origAssembly hg18
 #filterBy name:State="1 Active Promoter"{#FF0000,"2 Weak Promoter"{#FF6969,"3 Poised Promoter"{#CF0BC6,"4 Strong Enhancer"{#FACA00,"5 Strong Enhancer"{#FACA00,"6 Weak Enhancer"{#FFFC04,"7 Weak Enhancer"{#FFFC04,"8 Insulator"{#0ABEFE,"9 Txn Transition"{#00B050,"10 Txn Elongation"{#00B050,"11 Weak Txn"{#99FF66,"12 Repressed"{#7F7F7F,"13 Heterochrom/lo"{#D3D3D3,"14 Repetitive/CNV"{#D3D3D3,"15 Repetitive/CNV"{#DCDCDC
 filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong_Enhancer,5_Strong_Enhancer,6_Weak_Enhancer,7_Weak_Enhancer,8_Insulator,9_Txn_Transition,10_Txn_Elongation,11_Weak_Txn,12_Repressed,13_Heterochrom/lo,14_Repetitive/CNV,15_Repetitive/CNV
 
         track wgEncodeBroadHmmGm12878HMM
         parent wgEncodeBroadHmm
-        shortLabel GM12878 HMM lift
-        longLabel GM12878 Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel GM12878 HMM
+        longLabel GM12878 Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=GM12878
         type bed 9 .
         origAssembly hg18
@@ -31,8 +32,8 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
 
         track wgEncodeBroadHmmH1hescHMM
         parent wgEncodeBroadHmm
-        shortLabel H1-hESC HMM lift
-        longLabel H1-hESC Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel H1-hESC HMM
+        longLabel H1-hESC Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=H1
         type bed 9 .
         origAssembly hg18
@@ -41,8 +42,8 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
 
         track wgEncodeBroadHmmK562HMM
         parent wgEncodeBroadHmm
-        shortLabel K562 HMM lift
-        longLabel K562 Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel K562 HMM
+        longLabel K562 Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=K562
         type bed 9 .
         origAssembly hg18
@@ -51,8 +52,8 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
 
         track wgEncodeBroadHmmHepg2HMM
         parent wgEncodeBroadHmm
-        shortLabel HepG2 HMM lift
-        longLabel HepG2 Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel HepG2 HMM
+        longLabel HepG2 Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=HEPG2
         type bed 9 .
         origAssembly hg18
@@ -61,8 +62,8 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
 
         track wgEncodeBroadHmmHmecHMM
         parent wgEncodeBroadHmm
-        shortLabel HMEC HMM lift
-        longLabel HMEC Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel HMEC HMM
+        longLabel HMEC Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=HMEC
         type bed 9 .
         origAssembly hg18
@@ -70,8 +71,8 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
 
         track wgEncodeBroadHmmNhlfHMM
         parent wgEncodeBroadHmm
-        shortLabel NHLF HMM lift
-        longLabel NHLF Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel NHLF HMM
+        longLabel NHLF Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=NHLF
         type bed 9 .
         origAssembly hg18
@@ -79,8 +80,8 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
 
         track wgEncodeBroadHmmNhekHMM
         parent wgEncodeBroadHmm
-        shortLabel NHEK HMM lift
-        longLabel NHEK Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel NHEK HMM
+        longLabel NHEK Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=NHEK
         type bed 9 .
         origAssembly hg18
@@ -89,8 +90,8 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
 
         track wgEncodeBroadHmmHsmmHMM
         parent wgEncodeBroadHmm
-        shortLabel HSMM HMM lift
-        longLabel HSMM Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel HSMM HMM
+        longLabel HSMM Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=HSMM
         type bed 9 .
         origAssembly hg18
@@ -98,8 +99,8 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
 
         track wgEncodeBroadHmmHuvecHMM
         parent wgEncodeBroadHmm
-        shortLabel HUVEC HMM lift
-        longLabel HUVEC Chromatin Modeling by HMM (lift from hg18) from ENCODE/Broad
+        shortLabel HUVEC HMM
+        longLabel HUVEC Chromatin Modeling by HMM from ENCODE/Broad
         subGroups cellType=HUVEC
         type bed 9 .
         origAssembly hg18
