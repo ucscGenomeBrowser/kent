@@ -112,9 +112,8 @@ if (pid == 0)
 
     /* We might want to do other things with ssl here */
 
-    snprintf(hostnameProto,sizeof(hostnameProto),"%s:https",hostName);
+    safef(hostnameProto,sizeof(hostnameProto),"%s:%d",hostName,port);
     BIO_set_conn_hostname(sbio, hostnameProto);
-    BIO_set_conn_int_port(sbio, &port);
 
     BIO_set_nbio(sbio, 1);     /* non-blocking mode */
 
