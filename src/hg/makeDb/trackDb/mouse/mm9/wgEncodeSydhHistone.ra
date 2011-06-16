@@ -154,3 +154,12 @@ wgEncode 1
         color 86,180,233
         # subId=3057 dateSubmitted=2011-04-20
 
+        track wgEncodeSydhHistMelInputDm2p5dIggyaleSig
+        parent wgEncodeSydhHistViewSig off
+        shortLabel MEL IgG-Yale D Sg
+        longLabel MEL IgG-Yale Input DMSO 2% Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale
+        subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=DM2p5d
+        type bigWig 1.000000 78459.000000
+        color 86,180,233
+        # subId=4326 dateSubmitted=2011-06-16
+

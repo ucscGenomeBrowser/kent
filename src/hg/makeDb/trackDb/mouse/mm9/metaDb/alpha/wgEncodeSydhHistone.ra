@@ -518,6 +518,82 @@ tableName wgEncodeSydhHistMelH3k4me3IggyaleSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistMelInputDm2p5dIggyaleAlnRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-16
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelInputDm2p5dIggyaleAlnRep1.bam
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 1
+setType input
+sex M
+strain Unknown
+subId 4326
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelInputDm2p5dIggyaleRawDataRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-16
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelInputDm2p5dIggyaleRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 1
+setType input
+sex M
+strain Unknown
+subId 4326
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelInputDm2p5dIggyaleSig
+objType table
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-16
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelInputDm2p5dIggyaleSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+sex M
+strain Unknown
+subId 4326
+tableName wgEncodeSydhHistMelInputDm2p5dIggyaleSig
+treatment DMSO_2.0pct
+view Signal
+
 metaObject wgEncodeSydhHistMelInputIggyaleAlnRep1
 objType file
 age immortalized
@@ -591,4 +667,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 499831946
+# MAGIC: 2132076691
