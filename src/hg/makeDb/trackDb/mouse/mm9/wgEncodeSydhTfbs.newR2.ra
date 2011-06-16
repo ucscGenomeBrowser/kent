@@ -14,7 +14,7 @@
 #               - Factor: Abbreviations for factor
 #						- Pol2(phosphoS2) = Pol2S2 (target referenced in cv)
 #               - Treatment
-#                       - DM2p5d = D
+#                       - DM2P5d = D
 #               - Views: For consistency sake view will be
 #                       - Peaks = Pk
 #                       - Signal = Sg
@@ -43,9 +43,9 @@ subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line CH12=CH12 MEL=MEL
 subGroup3 factor Factor BHLHE40NB100=BHLHE40 CHD2AB68301=CHD2 cJUN=c-Jun cMYBSC7874=c-Myb cMYC=c-Myc CTCF=CTCF CTCFSC15914=CTCF_(SC-15914) E2F4=E2F4 GATA1SC265=GATA-1 JUND=JunD MafKab50322=MafK  MAX=Max Mxi1AF4185=Mxi1 NELFE=NELFE P300=p300 P300SC582=p300_(SC-584) POL2=Pol2 POL2S2=Pol2(phosphoS2) RAD21=Rad21 SMC3ab9263=SMC3 TBP=TBP USF2=USF2 zInputIGGMUS=Input_(<i>IgG-mus</i>) zInputIGGRAB=Input_(<i>IgG-rab</i>) zInputIGGRAT=Input_(<i>IgG-rat</i>) zInputstd=Input_(<i>Standard</i>) zInputIGGYALE=Input_(<i>IgG-Yale</i>)
 subGroup4 control Control IGGmus=IgG-mus IGGrab=IgG-rab IGGrat=IgG-rat IGGYale=IgG-Yale std=std
-subGroup5 treatment Treatment zNone=None DM2p5d=DMSO_2.0pct 
+subGroup5 treatment Treatment zNone=None DM2P5d=DMSO_2.0pct 
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
-dimensionZchecked zNone,DM2p5d
+dimensionZchecked zNone,DM2P5d
 filterComposite dimZ=multi
 sortOrder cellType=+ factor=+ treatment=+ control=+ view=+
 dragAndDrop subTracks
@@ -156,7 +156,7 @@ wgEncode 1
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL CTCF D Pk
             longLabel MEL CTCF DMSO 2% TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=CTCFSC15914 cellType=MEL control=IGGYale treatment=DM2p5d
+	        subGroups view=Peaks factor=CTCFSC15914 cellType=MEL control=IGGYale treatment=DM2P5d
 	        type narrowPeak
 	        color 86,180,233
 		# subId=3502 dateSubmitted=2011-02-03
@@ -167,7 +167,7 @@ wgEncode 1
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 D Pk
             longLabel MEL Rad21 DMSO 2% TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGrab treatment=DM2p5d
+	        subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGrab treatment=DM2P5d
 	        type narrowPeak
 	        color 86,180,233
 		# subId=3502 dateSubmitted=2011-02-03
@@ -668,7 +668,7 @@ wgEncode 1
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL CTCF D Sg
             longLabel MEL CTCF DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=CTCFSC15914 cellType=MEL control=IGGYale treatment=DM2p5d
+	        subGroups view=Signal factor=CTCFSC15914 cellType=MEL control=IGGYale treatment=DM2P5d
 	        type bigWig 1.000000 93856.000000
 	        color 86,180,233
 	        # subId=1857 dateSubmitted=2010-07-09
@@ -679,7 +679,7 @@ wgEncode 1
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL IgG-Yale D Sg
             longLabel MEL IgG-Yale Input DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=DM2p5d
+	        subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=DM2P5d
 	        type bigWig 1.000000 78459.000000
 	        color 86,180,233
 	        # subId=1862 dateSubmitted=2010-07-09
@@ -689,7 +689,7 @@ wgEncode 1
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 D Sg
             longLabel MEL Rad21 DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=RAD21 cellType=MEL control=IGGrab treatment=DM2p5d
+	        subGroups view=Signal factor=RAD21 cellType=MEL control=IGGrab treatment=DM2P5d
 	        type bigWig 1.000000 64232.000000
 	        color 86,180,233
 	        # subId=2539 dateSubmitted=2010-10-20
@@ -853,7 +853,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL Std D Sg
         longLabel MEL Standard Input DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputstd cellType=MEL control=std treatment=DM2p5d
+        subGroups view=Signal factor=zInputstd cellType=MEL control=std treatment=DM2P5d
         type bigWig 1.000000 103298.000000
         color 86,180,233
         # subId=4007 dateSubmitted=2011-04-29
