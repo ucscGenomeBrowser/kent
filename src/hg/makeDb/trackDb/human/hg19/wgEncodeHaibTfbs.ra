@@ -9,7 +9,7 @@ subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 BE2C=BE2_C ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HCT116=HCT-116 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87
 subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6SC22823=E2F6_(SC-22823) EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERaa=ERalpha_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HEY1=HEY1 HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) NANOGSC33759=NANOG_(SC-33759) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SRF=SRF TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF12=TCF12 THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388)  zControl=Input(control)
 subGroup4 protocol Protocol PCR1x=PCR1x PCR2x=PCR2x V0416101=v041610.1 V0416102=v041610.2
-subGroup5 treatment Treatment DEX500pM=DEX_500pM DEX5nM=DEX_5nM DEX50nM=DEX_50nM DEX100nM=DEX_100nM DM002p1h=DMSO_0.02pct EST10nm1h=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1h=Genistein_100nM None=None
+subGroup5 treatment Treatment DEX500PM=DEX_500pM DEX5NM=DEX_5nM DEX50NM=DEX_50nM DEX100NM=DEX_100nM DM002P1H=DMSO_0.02pct EST10NM1H=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1H=Genistein_100nM None=None
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
 dimensions dimX=cellType dimY=factor dimA=protocol dimB=treatment dimC=rep
 dimensionAchecked PCR1x,PCR2x,V0416101,V0416102
@@ -200,7 +200,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 ERaa ESTD 2
         longLabel ECC-1 ERaa Estradiol 10 nM V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=ERaa cellType=ECC1 protocol=V0416102 treatment=EST10nm1h rep=rep2
+        subGroups view=Peaks factor=ERaa cellType=ECC1 protocol=V0416102 treatment=EST10NM1H rep=rep2
         type broadPeak
     # subId=1216 dateSubmitted=2010-05-27
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2 wong Tue Jun  7 12:09:22 2011
@@ -209,7 +209,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 ERaa ESTD 1
         longLabel ECC-1 ERaa Estradiol 10 nM V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=ERaa cellType=ECC1 protocol=V0416102 treatment=EST10nm1h rep=rep1
+        subGroups view=Peaks factor=ERaa cellType=ECC1 protocol=V0416102 treatment=EST10NM1H rep=rep1
         type broadPeak
     # subId=1216 dateSubmitted=2010-05-27
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1 wong Tue Jun  7 12:09:21 2011
@@ -740,7 +740,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 GR Dx.5 2
         longLabel A549 GR Dex 500 pM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX500pM rep=rep2
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX500PM rep=rep2
         type broadPeak
         origAssembly hg18
     # subId=1258 dateSubmitted=2010-06-08
@@ -750,7 +750,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 GR Dx.5 1
         longLabel A549 GR Dex 500 pM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX500pM rep=rep1
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX500PM rep=rep1
         type broadPeak
         origAssembly hg18
     # subId=1258 dateSubmitted=2010-06-08
@@ -760,7 +760,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 GR Dx50 2
         longLabel A549 GR Dex 50 nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX50nM rep=rep2
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX50NM rep=rep2
         type broadPeak
         origAssembly hg18
     # subId=1258 dateSubmitted=2010-06-08
@@ -770,7 +770,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 GR Dx50 1
         longLabel A549 GR Dex 50 nM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX50nM rep=rep1
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX50NM rep=rep1
         type broadPeak
         origAssembly hg18
     # subId=1258 dateSubmitted=2010-06-08
@@ -780,7 +780,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 GR Dx5 1
         longLabel A549 GR Dex 5 nM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX5nM rep=rep1
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX5NM rep=rep1
         type broadPeak
         origAssembly hg18
     # subId=1258 dateSubmitted=2010-06-08
@@ -790,7 +790,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 GR Dx100 2
         longLabel ECC-1 GR Dex 100 nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=GR cellType=ECC1 protocol=PCR2x treatment=DEX100nM rep=rep2
+        subGroups view=Peaks factor=GR cellType=ECC1 protocol=PCR2x treatment=DEX100NM rep=rep2
         type broadPeak
     # subId=1254 dateSubmitted=2010-06-07
         # was wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2 wong Tue Jun  7 11:53:59 2011
@@ -799,7 +799,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 GR Dx100 1
         longLabel ECC-1 GR Dex 100 nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=GR cellType=ECC1 protocol=PCR2x treatment=DEX100nM rep=rep1
+        subGroups view=Peaks factor=GR cellType=ECC1 protocol=PCR2x treatment=DEX100NM rep=rep1
         type broadPeak
     # subId=1254 dateSubmitted=2010-06-07
         # was wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1 wong Tue Jun  7 11:53:59 2011
@@ -835,7 +835,7 @@ noInherit on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 GR Dx5 2
         longLabel A549 GR Dex 5 nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX5nM rep=rep2
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1x treatment=DEX5NM rep=rep2
         type broadPeak
     # subId=1452 dateSubmitted=2010-06-16
         # was wgEncodeHaibTfbsA549GrPcr1xDexcPkRep2 wong Tue Jun  7 11:58:03 2011
@@ -1102,7 +1102,7 @@ noInherit on
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel A549 POL2 Dx100 1
             longLabel A549 POL2 Dex 100 nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep1
+            subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep1
             type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
             # was wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep1 wong Tue Jun  7 11:53:57 2011
@@ -1111,7 +1111,7 @@ noInherit on
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel A549 POL2 Dx100 2
             longLabel A549 POL2 Dex 100 nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep2
+            subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep2
             type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
             # was wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep2 wong Tue Jun  7 11:53:58 2011
@@ -1136,7 +1136,7 @@ noInherit on
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel A549 GR Dx100 1
             longLabel A549 GR Dex 100 nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep1
+            subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep1
             type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
             # was wgEncodeHaibTfbsA549GrPcr2xDexaPkRep1 wong Tue Jun  7 11:53:56 2011
@@ -1145,7 +1145,7 @@ noInherit on
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel A549 GR Dx100 2
             longLabel A549 GR Dex 100 nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep2
+            subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep2
             type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
             # was wgEncodeHaibTfbsA549GrPcr2xDexaPkRep2 wong Tue Jun  7 11:53:56 2011
@@ -1154,7 +1154,7 @@ noInherit on
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel T47D ERaa GEN1 2
             longLabel T-47D ERaa Genistein 100 nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=ERaa cellType=T47D protocol=PCR2x treatment=GEN1h rep=rep2
+            subGroups view=Peaks factor=ERaa cellType=T47D protocol=PCR2x treatment=GEN1H rep=rep2
             type broadPeak
         # subId=1826 dateSubmitted=2010-06-22
 
@@ -1162,7 +1162,7 @@ noInherit on
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel T47D ERaa GEN1 1
             longLabel T-47D ERaa Genistein 100 nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=ERaa cellType=T47D protocol=PCR2x treatment=GEN1h rep=rep1
+            subGroups view=Peaks factor=ERaa cellType=T47D protocol=PCR2x treatment=GEN1H rep=rep1
             type broadPeak
         # subId=1826 dateSubmitted=2010-06-22
 
@@ -1441,7 +1441,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 POL2 DMSO 2
         longLabel ECC-1 POL2 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
         # subId=2429 dateSubmitted=2010-09-27
         # was wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep2 wong Wed Jun  8 17:14:19 2011
@@ -1450,7 +1450,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 POL2 DMSO 1
         longLabel ECC-1 POL2 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
         # subId=2429 dateSubmitted=2010-09-27
         # was wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep1 wong Wed Jun  8 17:14:19 2011
@@ -1459,7 +1459,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 ERaa GEN1 2
         longLabel ECC-1 ERaa Genistein 100 nM V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=ERaa cellType=ECC1 protocol=V0416102 treatment=GEN1h rep=rep2
+        subGroups view=Peaks factor=ERaa cellType=ECC1 protocol=V0416102 treatment=GEN1H rep=rep2
         type broadPeak
         # subId=2451 dateSubmitted=2010-09-28
 
@@ -1467,7 +1467,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 ERaa GEN1 1
         longLabel ECC-1 ERaa Genistein 100 nM V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=ERaa cellType=ECC1 protocol=V0416102 treatment=GEN1h rep=rep1
+        subGroups view=Peaks factor=ERaa cellType=ECC1 protocol=V0416102 treatment=GEN1H rep=rep1
         type broadPeak
         # subId=2451 dateSubmitted=2010-09-28
 
@@ -1551,7 +1551,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D ERaa ESTD 2
         longLabel T-47D ERaa Estradiol 10 nM V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=ERaa cellType=T47D protocol=V0416102 treatment=EST10nm1h rep=rep2
+        subGroups view=Peaks factor=ERaa cellType=T47D protocol=V0416102 treatment=EST10NM1H rep=rep2
         type broadPeak
         # subId=2450 dateSubmitted=2010-09-28
         # was wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep2 wong Tue Jun  7 12:09:23 2011
@@ -1560,7 +1560,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D ERaa ESTD 1
         longLabel T-47D ERaa Estradiol 10 nM V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=ERaa cellType=T47D protocol=V0416102 treatment=EST10nm1h rep=rep1
+        subGroups view=Peaks factor=ERaa cellType=T47D protocol=V0416102 treatment=EST10NM1H rep=rep1
         type broadPeak
         # subId=2450 dateSubmitted=2010-09-28
         # was wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep1 wong Tue Jun  7 12:09:23 2011
@@ -1713,7 +1713,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D FOX1 DMSO 2
         longLabel T-47D FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
         # subId=2427 dateSubmitted=2010-11-15
         # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2PkRep2 cricket Tue Apr 19 10:32:43 2011
@@ -1723,7 +1723,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D FOX1 DMSO 1
         longLabel T-47D FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
         # subId=2427 dateSubmitted=2010-11-15
         # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2PkRep1 cricket Tue Apr 19 10:32:43 2011
@@ -1733,7 +1733,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 FOX1 DMSO 2
         longLabel ECC-1 FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
         # subId=2428 dateSubmitted=2010-11-15
         # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2PkRep2 cricket Tue Apr 19 10:32:40 2011
@@ -1743,7 +1743,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC1 FOX1 DMSO 1
         longLabel ECC-1 FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
         # subId=2428 dateSubmitted=2010-11-15
         # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2PkRep1 cricket Tue Apr 19 10:32:40 2011
@@ -1810,7 +1810,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D P300 DMSO 2
         longLabel T-47D P300 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=P300 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=Peaks factor=P300 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
         # subId=3083 dateSubmitted=2010-12-11
         # was wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep2 wong Wed Jun  8 17:14:27 2011
@@ -1819,7 +1819,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D P300 DMSO 1
         longLabel T-47D P300 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=P300 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=Peaks factor=P300 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
         # subId=3083 dateSubmitted=2010-12-11
         # was wgEncodeHaibTfbsT47dP300V0416102Dmso2PkRep1 wong Wed Jun  8 17:14:27 2011
@@ -2216,7 +2216,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D GAT3 DMSO 2
         longLabel T-47D GATA3 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
         # subId=3220 dateSubmitted=2011-01-11
         # was wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep2 wong Wed Jun  8 17:14:25 2011
@@ -2225,7 +2225,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D GAT3 DMSO 1
         longLabel T-47D GATA3 DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
         # subId=3220 dateSubmitted=2011-01-11
         # was wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2PkRep1 wong Wed Jun  8 17:14:25 2011
@@ -2398,7 +2398,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D CTCF DMSO 2
         longLabel T-47D CTCF DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=Peaks factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
         # subId=3108 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep2 wong Wed Jun  8 17:14:21 2011
@@ -2407,7 +2407,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T47D CTCF DMSO 1
         longLabel T-47D CTCF DMSO 0.02 pct V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=Peaks factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
         # subId=3108 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2PkRep1 wong Wed Jun  8 17:14:21 2011
@@ -2794,7 +2794,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 CTCF Dx100 1
         longLabel A549 CTCF Dex 100 nM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=CTCFSC5916 cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep1
+        subGroups view=Peaks factor=CTCFSC5916 cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep1
         type broadPeak
         # subId=3749 dateSubmitted=2011-03-22
 
@@ -2802,7 +2802,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 CTCF Dx100 2
         longLabel A549 CTCF Dex 100 nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=CTCFSC5916 cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep2
+        subGroups view=Peaks factor=CTCFSC5916 cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep2
         type broadPeak
         # subId=3749 dateSubmitted=2011-03-22
 
@@ -2876,7 +2876,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 USF1 Dx100 1
         longLabel A549 USF1 Dex 100 nM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=USF1 cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep1
+        subGroups view=Peaks factor=USF1 cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep1
         type broadPeak
         # subId=3749 dateSubmitted=2011-03-22
 
@@ -2884,7 +2884,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel A549 USF1 Dx100 2
         longLabel A549 USF1 Dex 100 nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=USF1 cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep2
+        subGroups view=Peaks factor=USF1 cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep2
         type broadPeak
         # subId=3749 dateSubmitted=2011-03-22
 
@@ -3234,7 +3234,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 ERaa ESTD 1
         longLabel ECC-1 ERaa Estradiol 10 nM V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=EST10nm1h rep=rep1
+        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=EST10NM1H rep=rep1
         type bigWig 0.314013 166.897995
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawRep1 wong Tue Jun  7 12:09:22 2011
@@ -3243,7 +3243,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 ERaa ESTD 2
         longLabel ECC-1 ERaa Estradiol 10 nM V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=EST10nm1h rep=rep2
+        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=EST10NM1H rep=rep2
         type bigWig 0.332575 178.925003
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawRep2 wong Tue Jun  7 12:09:22 2011
@@ -3252,7 +3252,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 ERaa GEN1 1
         longLabel ECC-1 ERaa Genistein 100 nM V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=GEN1h rep=rep1
+        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=GEN1H rep=rep1
         type bigWig 0.415072 189.065002
         # subId=3021 dateSubmitted=2010-11-29
 
@@ -3260,7 +3260,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 ERaa GEN1 2
         longLabel ECC-1 ERaa Genistein 100 nM V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=GEN1h rep=rep2
+        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=GEN1H rep=rep2
         type bigWig 0.344932 195.921005
         # subId=3021 dateSubmitted=2010-11-29
 
@@ -3268,7 +3268,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D ERaa ESTD 1
         longLabel T-47D ERaa Estradiol 10 nM V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=EST10nm1h rep=rep1
+        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=EST10NM1H rep=rep1
         type bigWig 0.211462 148.658005
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawRep1 wong Tue Jun  7 12:09:23 2011
@@ -3277,7 +3277,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D ERaa GEN1 1
         longLabel T-47D ERaa Genistein 100 nM V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=GEN1h rep=rep1
+        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=GEN1H rep=rep1
         type bigWig 0.106978 163.623993
         # subId=3021 dateSubmitted=2010-11-29
 
@@ -3285,7 +3285,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D ERaa GEN1 2
         longLabel T-47D ERaa Genistein 100 nM V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=GEN1h rep=rep2
+        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=GEN1H rep=rep2
         type bigWig 0.201361 266.501007
         # subId=3021 dateSubmitted=2010-11-29
 
@@ -3302,7 +3302,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D FOX1 DMSO 1
         longLabel T-47D FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.292482 169.054993
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2RawRep1 cricket Tue Apr 19 10:32:44 2011
@@ -3312,7 +3312,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 FOX1 DMSO 1
         longLabel ECC-1 FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.214719 212.035004
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep1 cricket Tue Apr 19 10:32:41 2011
@@ -3322,7 +3322,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 FOX1 DMSO 2
         longLabel ECC-1 FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.221521 202.138000
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep2 cricket Tue Apr 19 10:32:41 2011
@@ -3332,7 +3332,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D FOX1 DMSO 2
         longLabel T-47D FOXA1 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.201189 168.798004
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2RawRep2 cricket Tue Apr 19 10:32:44 2011
@@ -3379,7 +3379,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 GR Dx100 1
         longLabel ECC-1 GR Dex 100 nM V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=ECC1 protocol=V0416102 treatment=DEX100nM rep=rep1
+        subGroups view=RawSignal factor=GR cellType=ECC1 protocol=V0416102 treatment=DEX100NM rep=rep1
         type bigWig 0.393211 166.720993
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep1 wong Tue Jun  7 11:54:00 2011
@@ -3388,7 +3388,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 GR Dx100 2
         longLabel ECC-1 GR Dex 100 nM V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=ECC1 protocol=V0416102 treatment=DEX100nM rep=rep2
+        subGroups view=RawSignal factor=GR cellType=ECC1 protocol=V0416102 treatment=DEX100NM rep=rep2
         type bigWig 0.162726 146.371994
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep2 wong Tue Jun  7 11:54:00 2011
@@ -3495,7 +3495,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 POL2 DMSO 1
         longLabel ECC-1 POL2 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.296027 345.240997
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep1 wong Wed Jun  8 17:14:20 2011
@@ -3513,7 +3513,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 POL2 DMSO 2
         longLabel ECC-1 POL2 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=RawSignal factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.202408 426.877991
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2RawRep2 wong Wed Jun  8 17:14:20 2011
@@ -3906,7 +3906,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D ERaa ESTD 2
         longLabel T-47D ERaa Estradiol 10 nM V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=EST10nm1h rep=rep2
+        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=EST10NM1H rep=rep2
         type bigWig 0.218437 242.957001
         # subId=3026 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawRep2 wong Tue Jun  7 12:09:24 2011
@@ -3988,7 +3988,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 Cont DMSO 1
         longLabel ECC-1 Control DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zControl cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=zControl cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.153951 189.591003
         # subId=3027 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawRep1 wong Wed Jun  8 17:14:16 2011
@@ -4159,7 +4159,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 GR Dx100 1
         longLabel A549 GR Dex 100 nM PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep1
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep1
         type bigWig 0.178638 530.018005
         # subId=3028 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsA549GrPcr2xDexaRawRep1 wong Tue Jun  7 11:53:57 2011
@@ -4186,7 +4186,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D P300 DMSO 1
         longLabel T-47D P300 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=P300 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=P300 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.245330 208.897995
         # subId=3028 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep1 wong Wed Jun  8 17:14:27 2011
@@ -4203,7 +4203,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 POL2 Dx100 1
         longLabel A549 POL2 Dex 100 nM PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep1
+        subGroups view=RawSignal factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep1
         type bigWig 0.206788 585.054016
         # subId=3028 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsA549Pol2Pcr2xDexaRawRep1 wong Tue Jun  7 11:53:58 2011
@@ -4310,7 +4310,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 Cont Dx100 1
         longLabel A549 Control Dex 100 nM PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zControl cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep1
+        subGroups view=RawSignal factor=zControl cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep1
         type bigWig 0.145188 133.645004
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1 wong Tue Jun  7 11:53:55 2011
@@ -4338,7 +4338,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 GR Dx100 2
         longLabel A549 GR Dex 100 nM PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep2
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep2
         type bigWig 0.159649 105.927002
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsA549GrPcr2xDexaRawRep2 wong Tue Jun  7 11:53:57 2011
@@ -4364,7 +4364,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D P300 DMSO 2
         longLabel T-47D P300 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=P300 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=RawSignal factor=P300 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.203288 265.697998
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsT47dP300V0416102Dmso2RawRep2 wong Wed Jun  8 17:14:28 2011
@@ -4524,7 +4524,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 GR Dx.5 2
         longLabel A549 GR Dex 500 pM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX500pM rep=rep2
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX500PM rep=rep2
         type bigWig 0.201001 188.690002
         # subId=3037 dateSubmitted=2010-12-01
         # was wgEncodeHaibTfbsA549GrPcr1xDexdRawRep2 wong Tue Jun  7 11:58:08 2011
@@ -4533,7 +4533,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 GR Dx.5 1
         longLabel A549 GR Dex 500 pM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX500pM rep=rep1
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX500PM rep=rep1
         type bigWig 0.153989 215.815002
         # subId=3037 dateSubmitted=2010-12-01
         # was wgEncodeHaibTfbsA549GrPcr1xDexdRawRep1 wong Tue Jun  7 11:58:08 2011
@@ -4542,7 +4542,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 GR Dx50 2
         longLabel A549 GR Dex 50 nM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX50nM rep=rep2
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX50NM rep=rep2
         type bigWig 0.185807 165.692993
         # subId=3037 dateSubmitted=2010-12-01
         # was wgEncodeHaibTfbsA549GrPcr1xDexbRawRep2 wong Tue Jun  7 11:57:59 2011
@@ -4551,7 +4551,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 GR Dx50 1
         longLabel A549 GR Dex 50 nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX50nM rep=rep1
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX50NM rep=rep1
         type bigWig 0.159708 203.427994
         # subId=3037 dateSubmitted=2010-12-01
         # was wgEncodeHaibTfbsA549GrPcr1xDexbRawRep1 wong Tue Jun  7 11:57:59 2011
@@ -4560,7 +4560,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 GR Dx5 2
         longLabel A549 GR Dex 5 nM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX5nM rep=rep2
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX5NM rep=rep2
         type bigWig 0.148563 218.201996
         # subId=3037 dateSubmitted=2010-12-01
         # was wgEncodeHaibTfbsA549GrPcr1xDexcRawRep2 wong Tue Jun  7 11:58:04 2011
@@ -4569,7 +4569,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 GR Dx5 1
         longLabel A549 GR Dex 5 nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX5nM rep=rep1
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEX5NM rep=rep1
         type bigWig 0.150640 241.927002
         # subId=3037 dateSubmitted=2010-12-01
         # was wgEncodeHaibTfbsA549GrPcr1xDexcRawRep1 wong Tue Jun  7 11:58:04 2011
@@ -5253,7 +5253,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D GAT3 DMSO 2
         longLabel T-47D GATA3 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.163613 185.701004
         # subId=3220 dateSubmitted=2011-01-11
         # was wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep2 wong Wed Jun  8 17:14:26 2011
@@ -5262,7 +5262,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D GAT3 DMSO 1
         longLabel T-47D GATA3 DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.173697 208.783005
         # subId=3220 dateSubmitted=2011-01-11
         # was wgEncodeHaibTfbsT47dGata3sc268V0416102Dmso2RawRep1 wong Wed Jun  8 17:14:26 2011
@@ -5703,7 +5703,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D CTCF DMSO 2
         longLabel T-47D CTCF DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=RawSignal factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.176584 285.800995
         # subId=3108 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep2 wong Wed Jun  8 17:14:22 2011
@@ -5712,7 +5712,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D CTCF DMSO 1
         longLabel T-47D CTCF DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=CTCFSC5916 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.171263 247.860001
         # subId=3108 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2RawRep1 wong Wed Jun  8 17:14:22 2011
@@ -6034,7 +6034,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 Cont Dx100 1
         longLabel A549 Control Dex 100 nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zControl cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep1
+        subGroups view=RawSignal factor=zControl cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep1
         type bigWig 0.216637 169.572006
         # subId=3035 dateSubmitted=2011-01-20
 
@@ -6283,7 +6283,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 ERaa DMSO 2
         longLabel ECC-1 ERaa DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.409478 197.470993
         # subId=3754 dateSubmitted=2011-03-07
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep2 wong Wed Jun  8 17:14:17 2011
@@ -6319,7 +6319,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D Cont DMSO 1
         longLabel T-47D Control DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zControl cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=zControl cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.163367 242.354996
         # subId=3754 dateSubmitted=2011-03-07
         # was wgEncodeHaibTfbsT47dControlV0416102Dmso2RawRep1 wong Wed Jun  8 17:14:20 2011
@@ -6362,7 +6362,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 CTCF Dx100 1
         longLabel A549 CTCF Dex 100 nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=CTCFSC5916 cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep1
+        subGroups view=RawSignal factor=CTCFSC5916 cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep1
         type bigWig 0.133454 115.070999
         # subId=3752 dateSubmitted=2011-03-22
 
@@ -6378,7 +6378,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 CTCF Dx100 2
         longLabel A549 CTCF Dex 100 nM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=CTCFSC5916 cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep2
+        subGroups view=RawSignal factor=CTCFSC5916 cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep2
         type bigWig 0.210514 117.781998
         # subId=3752 dateSubmitted=2011-03-22
 
@@ -6394,7 +6394,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC1 ERaa DMSO 1
         longLabel ECC-1 ERaa DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=ERaa cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.304396 152.350006
         # subId=3752 dateSubmitted=2011-03-22
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep1 wong Wed Jun  8 17:14:17 2011
@@ -6403,7 +6403,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D ERaa DMSO 1
         longLabel T-47D ERaa DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep1
+        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.210769 149.223999
         # subId=3752 dateSubmitted=2011-03-22
         # was wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep1 wong Wed Jun  8 17:14:23 2011
@@ -6412,7 +6412,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T47D ERaa DMSO 2
         longLabel T-47D ERaa DMSO 0.02 pct V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=DM002p1h rep=rep2
+        subGroups view=RawSignal factor=ERaa cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.301206 286.973999
         # subId=3752 dateSubmitted=2011-03-22
         # was wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep2 wong Wed Jun  8 17:14:23 2011
@@ -6456,7 +6456,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 USF1 Dx100 1
         longLabel A549 USF1 Dex 100 nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=USF1 cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep1
+        subGroups view=RawSignal factor=USF1 cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep1
         type bigWig 0.145761 139.164993
         # subId=3752 dateSubmitted=2011-03-22
 
@@ -6464,7 +6464,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 USF1 Dx100 2
         longLabel A549 USF1 Dex 100 nM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=USF1 cellType=A549 protocol=PCR1x treatment=DEX100nM rep=rep2
+        subGroups view=RawSignal factor=USF1 cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep2
         type bigWig 0.262763 148.395996
         # subId=3752 dateSubmitted=2011-03-22
 
@@ -6673,7 +6673,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 POL2 Dx100 2
         longLabel A549 POL2 Dex 100 nM PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep2
+        subGroups view=RawSignal factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep2
         type bigWig 0.162130 1033.780029
         # subId=3877 dateSubmitted=2011-04-18
 
