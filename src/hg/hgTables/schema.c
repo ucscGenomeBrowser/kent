@@ -379,10 +379,6 @@ if (tdbForConn != NULL)
 	printf("<BR>This table simply points to a file in "
 	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
 	       "BigWig</A> format.<BR>\n");
-    else if (startsWithWord("bam", type))
-	printf("<BR>This table simply points to a file in "
-	       "<A HREF=\"http://samtools.sourceforge.net/SAM1.pdf\" TARGET=_BLANK>"
-	       "BAM</A> format.<BR>\n");
     }
 jpList = joinerRelate(joiner, db, table);
 

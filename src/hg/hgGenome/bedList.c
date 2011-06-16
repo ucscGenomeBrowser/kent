@@ -32,12 +32,12 @@ return sameString("tStarts", hti->startsField);
 
 
 char *getBedGraphType(char *table)
-/* Return bedgraph track type if table is a bedGraph in the current database's 
+/* Return bedgraph track type if table is a bedGraph in the current database's
  * trackDb. */
 {
-if (curTrack && sameString(curTrack->table, table))
+if (curTrack && startsWith("bedGraph", curTrack->type))
     {
-    if (startsWith("bedGraph", curTrack->type))
+    if (sameString(curTrack->table, table))
 	return curTrack->type;
     }
 else
@@ -50,7 +50,7 @@ return NULL;
 }
 
 boolean isBedGraph(char *table)
-/* Return TRUE if table is specified as a bedGraph in the current database's 
+/* Return TRUE if table is specified as a bedGraph in the current database's
  * trackDb. */
 {
 char *bgt = getBedGraphType(table);

@@ -20,7 +20,7 @@ include wgEncodePsuTfbs.ra alpha
 include wgEncodePsuHistone.ra alpha
 
 # LICR Histone (wrangler: Venkat)
-include wgEncodeLicrHistone.ra alpha
+include wgEncodeLicrHistone.ra 
 
 # LICR TFBS (wrangler: Venkat)
 include wgEncodeLicrTfbs.ra alpha

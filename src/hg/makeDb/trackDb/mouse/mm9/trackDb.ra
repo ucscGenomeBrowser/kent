@@ -942,7 +942,7 @@ visibility hide
 track NumtSeq
 compositeTrack on
 shortLabel NumtSeq
-longLabel NumtS mitochondrial sequence
+longLabel Mouse NumtS mitochondrial sequence
 group varRep
 priority 500.5
 visibility hide
@@ -953,7 +953,7 @@ html numtSeqHg19
     track numtS
     parent NumtSeq
     shortLabel NumtS
-    longLabel NumtS
+    longLabel Mouse NumtS
     color 0,60,120
      #itemRgb on
     useScore 1
@@ -964,7 +964,7 @@ html numtSeqHg19
     track numtSAssembled
     parent NumtSeq
     shortLabel NumtS assembled
-    longLabel NumtS assembled
+    longLabel Mouse NumtS assembled
     color 0,60,120
     priority 2
     useScore 1
@@ -974,7 +974,7 @@ html numtSeqHg19
     track numtSMitochondrion
     parent NumtSeq
     shortLabel NumtS on mitochondrion
-    longLabel NumtS on mitochondrion
+    longLabel Mouse NumtS on mitochondrion
     useScore 1
     color 0,60,120
     priority 3
@@ -983,7 +983,7 @@ html numtSeqHg19
 
     track  bamMmsNumtSSorted
     parent NumtSeq
-    shortLabel bamMmsNumtSSorted
+    shortLabel NumtS SNPs
     longLabel Mouse NumtS SNPs
     priority 4
     visibility pack

@@ -2393,7 +2393,7 @@ color 200,80,0
 type bed 8 +
 urlLabel Laboratoire de Biologie Mol&#233;culaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
-url2Label The miRNA Registry:
+url2Label miRBase:
 #url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 
@@ -2409,7 +2409,7 @@ type bed 8 +
 noScoreFilter .
 urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
-url2Label The miRNA Registry:
+url2Label miRBase:
 #url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
@@ -2969,6 +2969,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
+tableBrowser off
 
 track omimGene2
 shortLabel OMIM Genes
@@ -2980,6 +2981,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
+tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol mim2gene
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
@@ -2991,6 +2993,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
+tableBrowser off omimAv omimAvRepl
 
 searchTable wgRnaOld
 searchMethod fuzzy
@@ -4148,3 +4151,97 @@ searchType bed
 semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
+
+#NumtS track
+track NumtSeq
+compositeTrack on
+shortLabel NumtSeq
+longLabel Human NumtS mitochondrial sequence
+group varRep
+priority 500.5
+visibility hide
+noInherit on
+type bed 3 .
+html numtSeq
+
+    track numtS
+    parent NumtSeq
+    shortLabel NumtS
+    longLabel Human NumtS
+    color 0,60,120
+     #itemRgb on
+    useScore 1
+    priority 1
+    type bed 6 .
+    html numtSeq
+
+    track numtSAssembled
+    parent NumtSeq
+    shortLabel NumtS assembled
+    longLabel Human NumtS assembled
+    color 0,60,120
+    priority 2
+    useScore 1
+    type bed 12 .
+    html numtSeq
+
+    track numtSMitochondrion
+    parent NumtSeq
+    shortLabel NumtS on mitochondrion
+    longLabel Human NumtS on mitochondrion
+    useScore 1
+    color 0,60,120
+    priority 3
+    type bed 6 .
+    html numtSeq
+
+    track numtSMitochondrionChrPlacement
+    parent NumtSeq
+    shortLabel Human NumtS on mitochondrion with chr placement
+    longLabel NumtS on mitochondrion with chr placement
+    priority 4
+    itemRgb on
+    type bed 9 .
+    html numtSeq
+
+    track  bamAllNumtSSorted
+    parent NumtSeq
+    shortLabel NumtS SNPs
+    longLabel Human NumtS SNPs
+    priority 5
+    visibility pack
+    type bam
+
+
+searchTable numtSMitochondrionChrPlacement
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
+
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
+
+searchTable numtS
+searchMethod exact
+searchType bed 
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
+    
+searchTable numtSAssembled
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
+

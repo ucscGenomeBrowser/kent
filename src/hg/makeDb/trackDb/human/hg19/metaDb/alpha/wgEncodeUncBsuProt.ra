@@ -26,9 +26,9 @@ objType table
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-05
-dateUnrestricted 2011-10-05
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH001199
 dccNotes was subId 3160
 expId 1199
@@ -103,9 +103,9 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-12
-dateUnrestricted 2011-10-12
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH001200
 dccNotes was subId 3238
 expId 1200
@@ -194,4 +194,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: 586222236
+# MAGIC: 586231914

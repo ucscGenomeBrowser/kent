@@ -1,0 +1,403 @@
+<H2>Description</H2>
+<P>
+This track shows multiple alignments of 9 Caenorhabditis nematode
+species and measurements of evolutionary conservation using
+two methods (<em>phastCons</em> and <em>phyloP</em>) from the
+<A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
+PHAST package</A>.
+The multiple alignments were generated using multiz and 
+other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
+TARGET=_blank>Penn State Bioinformatics</A>
+comparative genomics alignment pipeline.
+Conserved elements identified by phastCons are also displayed in this track.
+</P>
+<P>
+PhastCons (which has been used in previous Conservation tracks) is a hidden
+Markov model-based method that estimates the probability that each
+nucleotide belongs to a conserved element, based on the multiple alignment.
+It considers not just each individual alignment column, but also its
+flanking columns.  By contrast, phyloP separately measures conservation at
+individual columns, ignoring the effects of their neighbors.  As a
+consequence, the phyloP plots have a less smooth appearance than the
+phastCons plots, with more "texture" at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to "runs"
+of conserved sites, and is therefore effective for picking out conserved
+elements.  PhyloP, on the other hand, is more appropriate for evaluating
+signatures of selection at particular nucleotides or classes of nucleotides
+(e.g., third codon positions, or first positions of miRNA target sites).
+</P>
+<P>
+Another important difference is that phyloP can measure acceleration
+(faster evolution than expected under neutral drift) as well as
+conservation (slower than expected evolution).  In the phyloP plots, sites
+predicted to be conserved are assigned positive scores (and shown in blue),
+while sites predicted to be fast-evolving are assigned negative scores (and
+shown in red).  The absolute values of the scores represent -log p-values
+under a null hypothesis of neutral evolution.  The phastCons scores, by
+contrast, represent probabilities of negative selection and range between 0
+and 1.
+</P>
+<P>
+Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
+missing data.
+</P>
+
+<P>
+The species aligned for this track include 9 Caenorhabditis nematode
+genome sequences.
+</P>
+<P>
+<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC/WormBase<BR>version</TH><TH>alignment type</TH></TR>
+<TR ALIGN=left><TD>C. elegans</TD><TD>Caenorhabditis elegans</TD><TD>
+    Oct. 2010</TD><TD> <A HREF="../cgi-bin/hgGateway?db=ce10"
+    TARGET=_blank>ce10/WS220</A></TD><TD>reference species</TD></TR>
+<TR ALIGN=left><TD>C. briggsae</TD><TD>Caenorhabditis briggsae</TD><TD>Apr. 2011</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=cb4/"TARGET=_blank>cb4/WS220</A></TD>
+    <TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>C. sp. 9 ju1422</TD><TD>C. sp. 9 ju1422/GCA_000186805.1</TD><TD>
+    Nov. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=caeSp91"
+    TARGET=_blank>caeSp91/GCA_000186805.1</A></TD><TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>C. remanei</TD><TD>Caenorhabditis remanei</TD><TD>July 2007</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=caeRem4"TARGET=_blank>caeRem4/WS220</A></TD>
+    <TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>C. sp. 11 ju1373</TD><TD>C. sp. 11 ju1373/GCA_000186765.1</TD><TD>
+    Nov. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=caeSp111"
+    TARGET=_blank>caeSp111/GCA_000186765.1</A></TD><TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>C. brenneri</TD><TD>Caenorhabditis brenneri</TD><TD>Nov. 2010</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=caePb3"TARGET=_blank>caePb3/GCA_000143925.1</A></TD>
+    <TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>C. sp. 7 ju1373</TD><TD>C. sp. 7 ju1286/GCA_000186785.1</TD><TD>
+    Nov. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=caeSp71"
+    TARGET=_blank>caeSp71/GCA_000186785.1</A></TD><TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>C. japonica</TD><TD>Caenorhabditis japonica</TD><TD>Aug. 2010</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=caeJap4"TARGET=_blank>caeJap3/GCA_000147155.1</A></TD>
+    <TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>C. angaria</TD><TD>Caenorhabditis angaria</TD><TD>Oct. 2010</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=caeAng1"TARGET=_blank>caeAng1/GCA_000165025.1/WS225</A></TD>
+    <TD>MAF Net</TD></TR>
+</TABLE><BR>
+<B>Table 1.</B> <EM>Genome assemblies included in the 9-way Conservation 
+track.</EM>
+</BLOCKQUOTE></P>
+
+Downloads for data in this track are available:
+<UL>
+<LI>
+<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/ce10/multiz9way/">Multiz alignments</A> (MAF format), and phylogenetic trees
+<LI>
+<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/ce10/phyloP9way/">PhyloP conservation</A> (WIG format)
+<LI>
+<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/ce10/phastCons9way/">PhastCons conservation</A> (WIG format)
+</UL>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+The track configuration options allow the user to display
+the conservation scores.
+In full and pack display modes, conservation scores are displayed as a
+<EM>wiggle track</EM> (histogram) in which the height reflects the 
+size of the score. 
+The conservation wiggles can be configured in a variety of ways to 
+highlight different aspects of the displayed information. 
+Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html" 
+TARGET=_blank>Graph configuration help</A> link for an explanation 
+of the configuration options.</P>
+<P>
+Pairwise alignments of each species to the $organism genome are 
+displayed below the conservation histogram as a grayscale density plot (in 
+pack mode) or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, conservation is shown in grayscale using
+darker values to indicate higher levels of overall conservation 
+as scored by phastCons. </P>
+<P>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.  
+Configuration buttons are available to select all of the species (<EM>Set 
+all</EM>), deselect all of the species (<EM>Clear all</EM>), or 
+use the default settings (<EM>Set defaults</EM>).
+By default, all 8 species are displayed.
+Note that excluding species from the pairwise display does not alter the
+the conservation score display.</P>
+<P>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</P>
+
+<H3>Gap Annotation</H3>
+<P>
+The <EM>Display chains between alignments</EM> configuration option 
+enables display of gaps between alignment blocks in the pairwise alignments in 
+a manner similar to the Chain track display.  The following
+conventions are used:
+<UL>
+<LI><B>Single line:</B> no bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the $organism genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<LI><B>Double line:</B> aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between 
+species or independent indels in the region between the aligned blocks in both
+species. 
+<LI><B>Pale yellow coloring:</B> aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species. 
+</UL></P>
+
+<H3>Genomic Breaks</H3>
+<P>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows: 
+<UL>
+<LI>
+<B>Vertical blue bar:</B> represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement. 
+<LI>
+<B>Green square brackets:</B> enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the $organism genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</UL></P>
+
+<H3>Base Level</H3>
+<P>
+When zoomed-in to the base-level display, the track shows the base 
+composition of each alignment, with bases in annotated repetitive 
+elements displayed in lower case. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those 
+alignment positions relative to the longest non-$organism sequence. 
+If there is sufficient space in the display, the size of the gap is shown. 
+If the space is insufficient and the gap size is a multiple of 3, a 
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
+<P>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation,
+select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<UL>
+<LI> 
+<B>No codon translation:</B> the gene annotation is not used; the bases are
+displayed without translation. 
+<LI>
+<B>Use default species reading frames for translation:</B> the annotations from the genome
+displayed 
+in the <EM>Default species for translation</EM>; pull-down menu are used to
+translate all the aligned species present in the alignment. 
+<LI>
+<B>Use reading frames for species if available, otherwise no translation:</B> codon
+translation is performed only for those species where the region is
+annotated as protein coding.
+<LI><B>Use reading frames for species if available, otherwise use default species:</B>
+codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation. 
+</UL></P>
+<P>
+Codon translation uses the following gene tracks as the basis for
+translation, depending on the species chosen (<B>Table 2</B>).  
+Species listed in the row labeled &quot;None&quot; do not have 
+species-specific reading frames for gene translation.
+
+<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
+<TR ALIGN=left><TD>WS210 Ensembl Genes v62</TD><TD>C. elegans</TD></TR>
+<TR ALIGN=left><TD>to be done</TD><TD>C. briggsae</TD></TR>
+<TR ALIGN=left><TD>to be done</TD><TD>C. sp. 9</TD></TR>
+<TR ALIGN=left><TD>to be done</TD><TD>C. remanei</TD></TR>
+<TR ALIGN=left><TD>to be done</TD><TD>C. sp. 11</TD></TR>
+<TR ALIGN=left><TD>to be done</TD><TD>C. brenneri</TD></TR>
+<TR ALIGN=left><TD>to be done</TD><TD>C. sp. 7</TD></TR>
+<TR ALIGN=left><TD>to be done</TD><TD>C. japonica</TD></TR>
+<TR ALIGN=left><TD>to be done</TD><TD>C. angaria</TD></TR>
+</TABLE>
+<B>Table 2.</B> <EM>Gene tracks used for codon translation.</EM>
+</BLOCKQUOTE></P>
+
+<H2>Methods</H2>
+<P> 
+Pairwise alignments with the C. elegans genome were generated for 
+each species using lastz from repeat-masked genomic sequence. 
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.
+The scoring matrix and parameters for pairwise alignment and chaining
+were tuned for each species based on phylogenetic distance from the reference.
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
+For more information about the chaining and netting process and 
+parameters for each species, see the description pages for the Chain and Net 
+tracks.</P>
+<P>
+The resulting best-in-genome pairwise alignments
+were progressively aligned using multiz/autoMZ, 
+following the tree topology diagrammed above, to produce multiple alignments.
+The multiple alignments were post-processed to
+add annotations indicating alignment gaps, genomic breaks,
+and base quality of the component sequences.
+The annotated multiple alignments, in MAF format, are available for
+<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/ce10/multiz9way"
+TARGET=_blank>bulk download</A>.
+An alignment summary table containing an entry for each
+alignment block in each species was generated to improve
+track display performance at large scales.
+Framing tables were constructed to enable
+visualization of codons in the multiple alignment display.</P>
+
+<h3> Phylogenetic Tree Model</h3>
+<P>
+Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that
+rely on a tree model containing the tree topology,
+branch lengths representing evolutionary distance at neutrally
+evolving sites, the background distribution of nucleotides, and a substitution
+rate matrix.  The 
+<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/ce10/phastCons9way/nematode.mod"
+TARGET=_blank>nematode tree model</A> for this track was
+generated using the <em>phyloFit</em> program from the PHAST package  
+(REV model, EM algorithm, medium precision) using multiple alignments of 
+4-fold degenerate sites extracted from the 9-way alignment
+(msa_view).  The 4d sites were derived from the Ensembl v62 gene set
+of C. elegans, filtered to select single-coverage long transcripts.
+</P>
+<h3> PhastCons Conservation </h3>
+<P>
+The phastCons program computes conservation scores based on a phylo-HMM, a
+type of probabilistic model that describes both the process of DNA
+substitution at each site in a genome and the way this process changes from
+one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
+Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
+conserved regions and a state for non-conserved regions.  The value plotted
+at each site is the posterior probability that the corresponding alignment
+column was "generated" by the conserved state of the phylo-HMM.  These
+scores reflect the phylogeny (including branch lengths) of the species in
+question, a continuous-time Markov model of the nucleotide substitution
+process, and a tendency for conservation levels to be autocorrelated along
+the genome (i.e., to be similar at adjacent sites).  The general reversible
+(REV) substitution model was used.  Unlike many conservation-scoring programs, 
+phastCons does not rely on a sliding window
+of fixed size; therefore, short highly-conserved regions and long moderately
+conserved regions can both obtain high scores.  
+More information about
+phastCons can be found in Siepel <EM>et al</EM>. 2005.</P> 
+<P> 
+The phastCons parameters were tuned to produce approximately 70% conserved
+elements in the C. elegans Ensembl v62 gene coding regions.
+This parameter set (expected-length=15, target-coverage=0.55, rho=0.3) was
+then used to generate the conservation scoring.</P>
+
+<h3> PhyloP Conservation </h3>
+<P>
+The phyloP program supports several different methods for computing
+p-values of conservation or acceleration, for individual nucleotides or
+larger elements (http://compgen.bscb.cornell.edu/phast).  Here it was used
+to produce separate scores at each base (--wig-scores option), considering
+all branches of the phylogeny rather than a particular subtree or lineage
+(i.e., the --subtree option was not used).  The scores were computed by
+performing a likelihood ratio test at each alignment column (--method LRT),
+and scores for both conservation and acceleration were produced (--mode
+CONACC). 
+</P>
+<h3> Conserved Elements </h3>
+<P>
+The conserved elements were predicted by running phastCons with the
+--most-conserved (aka --viterbi) option.  The predicted elements are
+segments of the alignment
+that are likely to have been "generated" by the conserved state of the
+phylo-HMM. Each element is assigned a log-odds score equal to its log
+probability under the conserved model minus its log probability under the
+non-conserved model. The "score" field associated with this track contains
+transformed log-odds scores, taking values between 0 and 1000. (The scores
+are transformed using a monotonic function of the form a * log(x) + b.) The
+raw log odds scores are retained in the "name" field and can be seen on the
+details page or in the browser when the track's display mode is set to
+"pack" or "full".
+</P>
+
+<H2>Credits</H2>
+<P> This track was created using the following programs:
+<UL>
+<LI> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb 
+Miller of the <A HREF="http://bio.cse.psu.edu/" 
+TARGET=_blank>Penn State Bioinformatics Group</A>
+<LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by 
+<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" 
+TARGET=_blank>Adam Siepel</A> at Cornell University (original development
+done at the Haussler lab at UCSC).
+<LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<LI> Tree image generator: phyloGif by Galt Barber, UCSC
+<LI> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle 
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</UL>
+</P>
+<P>The phylogenetic tree is based on Kiontke <EM>et al</EM>. (2007).
+</P>
+
+<H2>References</H2>
+
+<H3>Phylo-HMMs, phastCons, and phyloP:</H3>
+<P>
+Pollard KS, Hubisz MJ, Siepel A.
+<A HREF="http://genome.cshlp.org/content/early/2009/10/26/gr.097857.109.abstract"
+TARGET=_blank>Detection of non-neutral substitution rates on
+mammalian phylogenies.</A> <EM>Genome Res</EM>. 2009 Oct 26. [Epub ahead of print]
+</P>
+
+<P>
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, <EM>et al.</EM>
+<A HREF="http://www.genome.org/cgi/doi/10.1101/gr.3715005"
+TARGET=_blank>Evolutionarily conserved elements in vertebrate, insect, worm,
+and yeast genomes</A>.
+<EM>Genome Res</EM>. 2005 Aug;15(8):1034-50.
+</P>
+
+<H3>Chain/Net:</H3>
+<P>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1"
+TARGET=_blank>Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</A>.
+<EM>Proc Natl Acad Sci U S A</EM>. 2003 Sep 30;100(20):11484-9.
+</P>
+
+<H3>Multiz:</H3>
+<P>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <EM>et al.</EM>
+<A HREF="http://www.genome.org/cgi/content/abstract/14/4/708"
+TARGET=_blank>Aligning multiple genomic sequences with the threaded blockset aligner</A>.
+<EM>Genome Res</EM>. 2004 Apr;14(4):708-15.
+</P>
+
+<H3>Blastz:</H3>
+<P>
+Chiaromonte F, Yap VB, Miller W.
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract"
+TARGET=_blank>Scoring pairwise genomic sequence alignments</A>.
+<EM>Pac Symp Biocomput</EM>. 2002;:115-26.
+</P>
+
+<P>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103"
+TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
+<EM>Genome Res</EM>. 2003 Jan;13(1):103-7.
+</P>
+
+<H3>Phylogenetic Tree:</H3>
+<P>
+Karin Kiontke, Antoine Barri~Ore, Irina Kolotuev, Benjamin Podbilewicz,
+Ralf Sommer, David H.A. Fitch and Marie-Anne F~Nlix
+<A HREF="http://www.cell.com/current-biology/retrieve/pii/S0960982207021938"
+TARGET=_blank>Trends, Stasis, and Drift in the Evolution of Nematode Vulva Development</A>.
+
+<EM>Current Biology</EM>. Volume 17, Issue 22, 1925-1937, 20 November 2007
+</P>

@@ -2949,4 +2949,24 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # and file is present on htdocs-hgdownload/goldenPath/panTro3/liftOver
 
 ############################################################################
+# N-SCAN gene predictions (nscanGene) - (2011-06-15 markd)
 
+    # obtained NSCAN predictions from Jeltje van Baren <jeltje@mbari.org>,
+    cd /hive/data/genomes/panTro3/bed/nscan
+    cp -r /cluster/home/jeltje/hive/panTro3/for_browser/{panTro3.gtf,panTro3.prot.fa,readme.txt} .
+    gzip panTro3.* 
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt panTro3.gtf.gz stdout | hgLoadGenePred -genePredExt panTro3 nscanGene stdin
+    hgPepPred panTro3 generic nscanPep panTro3.prot.fa.gz
+    rm *.tab
+
+    # chimp/panTro3/trackDb.ra, add:
+    track nscanGene override
+    informant Nscan-EST on panTro3 with mm9 as informant and is pseudogene masked. Uses TransMap UCSC genes track as transcript evidence.
+
+    # verify top-level search spec, should produce no results an an error for egrep:
+    hgsql -Ne 'select name from nscanGene' panTro3 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
+
+############################################################################
