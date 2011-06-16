@@ -847,32 +847,6 @@ subId 4308
 submittedDataVersion V2 - Third biological replicate added
 view Alignments
 
-metaObject wgEncodeBroadHistoneGm12878H3k27me3StdPk
-objType table
-antibody H3K27me3
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-05
-dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
-dccAccession wgEncodeEH000031
-expId 31
-fileName wgEncodeBroadHistoneGm12878H3k27me3StdPk.broadPeak.gz
-geoSampleAccession GSM733758
-grant Bernstein
-lab Broad
-origAssembly hg18
-project wgEncode
-setType exp
-softwareVersion ScriptureVPaperR3
-subId 2802
-tableName wgEncodeBroadHistoneGm12878H3k27me3StdPk
-view Peaks
-
 metaObject wgEncodeBroadHistoneGm12878H3k27me3StdPkV2
 objType table
 antibody H3K27me3
@@ -968,31 +942,6 @@ setType exp
 subId 4308
 submittedDataVersion V2 - Third biological replicate added
 view RawData
-
-metaObject wgEncodeBroadHistoneGm12878H3k27me3StdSig
-objType table
-antibody H3K27me3
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-05
-dateSubmitted 2009-01-05
-dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000031
-expId 31
-fileName wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig
-geoSampleAccession GSM733758
-grant Bernstein
-lab Broad
-origAssembly hg18
-project wgEncode
-setType exp
-subId 2802
-tableName wgEncodeBroadHistoneGm12878H3k27me3StdSig
-view Signal
 
 metaObject wgEncodeBroadHistoneGm12878H3k27me3StdSigV2
 objType table
@@ -1225,32 +1174,6 @@ setType exp
 subId 2804
 view Alignments
 
-metaObject wgEncodeBroadHistoneGm12878H3k4me1StdPk
-objType table
-antibody H3K4me1
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-05
-dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
-dccAccession wgEncodeEH000033
-expId 33
-fileName wgEncodeBroadHistoneGm12878H3k4me1StdPk.broadPeak.gz
-geoSampleAccession GSM733772
-grant Bernstein
-lab Broad
-origAssembly hg18
-project wgEncode
-setType exp
-softwareVersion ScriptureVPaperR3
-subId 2804
-tableName wgEncodeBroadHistoneGm12878H3k4me1StdPk
-view Peaks
-
 metaObject wgEncodeBroadHistoneGm12878H3k4me1StdRawDataRep1
 objType file
 antibody H3K4me1
@@ -1300,31 +1223,6 @@ replicate 2
 setType exp
 subId 142
 view RawData
-
-metaObject wgEncodeBroadHistoneGm12878H3k4me1StdSig
-objType table
-antibody H3K4me1
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-05
-dateSubmitted 2009-01-05
-dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
-expId 33
-fileName wgEncodeBroadHistoneGm12878H3k4me1StdSig.bigWig
-geoSampleAccession GSM733772
-grant Bernstein
-lab Broad
-origAssembly hg18
-project wgEncode
-setType exp
-subId 2804
-tableName wgEncodeBroadHistoneGm12878H3k4me1StdSig
-view Signal
 
 metaObject wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1
 objType file
@@ -1535,32 +1433,6 @@ setType exp
 subId 2806
 view Alignments
 
-metaObject wgEncodeBroadHistoneGm12878H3k4me3StdPk
-objType table
-antibody H3K4me3
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-05
-dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
-dccAccession wgEncodeEH000028
-expId 28
-fileName wgEncodeBroadHistoneGm12878H3k4me3StdPk.broadPeak.gz
-geoSampleAccession GSM733708
-grant Bernstein
-lab Broad
-origAssembly hg18
-project wgEncode
-setType exp
-softwareVersion ScriptureVPaperR3
-subId 2806
-tableName wgEncodeBroadHistoneGm12878H3k4me3StdPk
-view Peaks
-
 metaObject wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep1
 objType file
 antibody H3K4me3
@@ -1609,31 +1481,6 @@ replicate 2
 setType exp
 subId 140
 view RawData
-
-metaObject wgEncodeBroadHistoneGm12878H3k4me3StdSig
-objType table
-antibody H3K4me3
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-05
-dateSubmitted 2009-01-04
-dateUnrestricted 2009-10-04
-dccAccession wgEncodeEH000028
-expId 28
-fileName wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig
-geoSampleAccession GSM733708
-grant Bernstein
-lab Broad
-origAssembly hg18
-project wgEncode
-setType exp
-subId 2806
-tableName wgEncodeBroadHistoneGm12878H3k4me3StdSig
-view Signal
 
 metaObject wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep1
 objType file
