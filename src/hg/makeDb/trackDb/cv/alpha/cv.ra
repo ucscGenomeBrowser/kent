@@ -7821,7 +7821,7 @@ description  1 h with 1 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_4hr
-tag EST10NM4h
+tag EST10NM4H
 description  4 h with 10 nM Estradiol (Myers)
 type treatment
 
