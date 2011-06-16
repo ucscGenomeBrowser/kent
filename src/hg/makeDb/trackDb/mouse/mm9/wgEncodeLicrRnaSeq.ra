@@ -38,7 +38,7 @@ subGroup8 strain Strain C57BL6=C57BL/6
 dimensions dimensionX=cellType dimensionY=rep 
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+ rep=+
 fileSortOrder cell=Cell_Line treatment=treatment rnaExtract=RNA<BR>Extract view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtrac=rnaExtract sex=sex age=age strain=strain
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract sex=sex age=age strain=strain
 dragAndDrop subTracks
 priority 0
 type bed 3
