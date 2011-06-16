@@ -207,7 +207,7 @@ organism human
 description embryonic stem cells
 tissue EmbryonicStemCell
 vendorName Cellular Dynamics
-vendorId
+#vendorId
 orderUrl http://www.cellulardynamics.com/
 lineage inner cell mass
 karyotype normal
@@ -339,10 +339,10 @@ karyotype normal
 vendorName Lonza
 vendorId CC-7014, CC-7014T75
 orderUrl http://www.lonza.com/
-termUrl
+#termId
+#termUrl
 sex F
 tier 3
-termId
 protocol UW_Stam:AoAF_Stam_protocol.pdf
 
 term AoSMC
@@ -1993,8 +1993,8 @@ lineage endoderm
 karyotype  normal
 sex B
 tissue  Liver
-vendorName  zen-bio
-vendorId
+vendorName zen-bio
+vendorId unknown
 orderUrl http://www.zen-bio.com/
 termId BTO:0000575
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000575
@@ -2011,7 +2011,7 @@ karyotype normal
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
-vendorId
+vendorId N/A
 orderUrl http://myprofile.cos.com/torokstorb
 termId BTO:0002245
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002245
@@ -2028,7 +2028,7 @@ karyotype normal (cMyc)
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
-vendorId
+vendorId N/A
 orderUrl http://myprofile.cos.com/torokstorb
 termId BTO:0002245
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002245
@@ -2073,7 +2073,7 @@ tissue Gingiva
 vendorName ScienCell
 vendorId 2620
 orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
-lineage
+#lineage
 karyotype normal
 termId BTO:0000519 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000519
@@ -2137,7 +2137,7 @@ lineage ectoderm
 vendorName Lonza
 vendorId CC-2551
 orderUrl http://www.lonza.com/
-karyotype
+#karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
 sex U
@@ -2307,7 +2307,7 @@ karyotype  Unknown
 sex F
 tissue  Pancreatic Duct
 vendorName  Dr. Ming-Sound Tsao, Ontario Cancer Institute
-vendorId
+vendorId N/A
 orderUrl http://www.uhnresearch.ca/researchers/profile.php?lookup=6118
 termId BTO:0002362
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002362
@@ -2412,7 +2412,7 @@ description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
-vendorId
+vendorId HSMM
 orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
@@ -2429,7 +2429,7 @@ description Normal Human Skeletal Muscle Myotubes
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
-vendorId
+vendorId HSMM
 orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
@@ -2501,7 +2501,7 @@ karyotype cancer
 sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
-vendorId
+vendorId N/A
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001950
@@ -2518,7 +2518,7 @@ karyotype cancer
 sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
-vendorId
+vendorId N/A
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001950
@@ -2565,7 +2565,7 @@ karyotype  Unknown
 sex B
 tissue  iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
-vendorId
+vendorId N/A
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
 termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -2595,7 +2595,7 @@ tier 3
 organism human
 description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
 lineage mesoderm
-karyotype
+#karyotype
 sex M
 tissue Skeletal muscle myoblast
 vendorName Woodring Wright, M.D., Ph.D.
@@ -2752,7 +2752,7 @@ organism human
 description epidermal melanocytes
 tissue Skin
 lineage ectoderm
-karyotype
+#karyotype
 vendorName ScienCell
 vendorId 2200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2200
@@ -2775,7 +2775,7 @@ karyotype normal
 sex F
 tissue monocytes
 vendorName S. Heimfeld Laboratory, FHCRC
-vendorId
+vendorId N/A
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
@@ -2884,7 +2884,7 @@ description Normal Human Lung Fibroblasts
 vendorName Lonza
 vendorId CC-2512
 orderUrl http://www.lonza.com/
-karyotype
+#karyotype
 termId BTO:0000161 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161
 sex U
@@ -2983,8 +2983,8 @@ description human pancreatic islets
 tissue Pancreas
 lineage endoderm
 vendorName Refer to protocol documents for differing sources
-vendorId
-orderUrl
+#vendorId
+#orderUrl
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
@@ -3083,7 +3083,7 @@ tissue Skin
 vendorName Progeria Research Foundation
 vendorId HGADFN167
 orderUrl http://www.progeriaresearch.org/
-lineage
+#lineage
 karyotype unknown
 termId BTO:0001255 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -3099,9 +3099,9 @@ description prostate tissue purchased for CSHL project
 tissue Prostate
 lineage endoderm
 vendorName ATCC
-vendorId
+vendorId (see protocol document)
 orderUrl http://www.atcc.org/
-karyotype
+#karyotype
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
@@ -3272,7 +3272,7 @@ karyotype  normal
 sex F
 tissue  Liver
 vendorName  Steve Choi, Duke University
-vendorId
+vendorId N/A
 orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
@@ -3387,15 +3387,15 @@ type Cell Line
 organism human
 description A primary culture of urothelial cells derived from a 12 year-old girl and immortalized by transfection with a temperature-sensitive SV-40 large T antigen gene, normal human ureter cells 
 tier 3
-lineage
+#lineage
 karyotype normal
 sex F
 tissue urothelium
 vendorName lab of Dr. D Sens (University of N. Dakota)
 vendorId Urothelia
 orderUrl http://pathology.med.und.nodak.edu/dept_home/MaryAnn.cfm
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A001267
-termId BTO:0001267
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A001245
+termId BTO:0001245
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Urothelia_Crawford_protocol.pdf
 
 term U87
@@ -3461,7 +3461,7 @@ karyotype normal (RAF)
 sex F
 tissue embryonic lung
 vendorName Dr. Carl Mann, SBIGeM
-vendorId
+vendorId N/A
 orderUrl http://www-dsv.cea.fr/dsv/instituts/institut-de-biologie-et-de-technologies-de-saclay-ibitec-s/unites/service-de-biologie-integrative-et-genetique-moleculaire-sbigem/laboratoire-stress-oxydants-et-cancer-lsoc/equipe-mecanismes-de-stabilite-genomique-c.-mann
 termId BTO:0001958
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001958
@@ -3563,7 +3563,7 @@ termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 189,0,157
 sex M
-protocol
+#protocol
 
 term B-cell_(CD19+)
 tag BCELLCD19P
@@ -3649,8 +3649,8 @@ description Cerebrum
 vendorName UW Lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-termId
-termUrl
+#termId
+#termUrl
 color 105,105,105
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
@@ -3677,7 +3677,7 @@ term ES-CJ7
 tag ESCJ7
 type Cell Line
 organism mouse
-tissue
+#tissue
 category primaryCells
 description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
@@ -3685,8 +3685,8 @@ strain 129
 vendorName Uw lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-termId
-termUrl
+#termId
+#termUrl
 color 65,105,225
 sex U
 protocol UW(Stam):ES-CJ7_Stam_protocol.pdf
@@ -3739,8 +3739,8 @@ strain C57BL/6
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
 vendorId N/A
 orderUrl http://cancer.ucsd.edu/research-training/shared-resources/transgenic-core/Pages/default.aspx
-termId
-termUrl
+#termId
+#termUrl
 color 65,105,225
 sex M
 protocol LICR(Ren):ES-Bruce4_Ren_protocol.pdf
@@ -3845,8 +3845,8 @@ description Kidney
 vendorName UW lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-termId
-termUrl
+#termId
+#termUrl
 color 204,121,16
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
@@ -4219,7 +4219,7 @@ term ZhBTc4
 tag ZHBTC4
 type Cell Line
 organism mouse
-tissue
+#tissue
 category primaryCells
 age E0
 strain 129/Ola
@@ -4227,8 +4227,8 @@ description Undifferentiated mouse embryonic stem cells
 vendorName Dr. Levasseur (University of Iowa)
 vendorId N/A
 orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
-termId
-termUrl
+#termId
+#termUrl
 color 65,105,225
 sex M
 protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
@@ -4443,7 +4443,7 @@ vendorName Novus
 vendorId NB100-1800
 orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
 lab Snyder
-lots
+lots N/A
 targetId GeneCards:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation missing
@@ -4776,7 +4776,7 @@ vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
-lots
+lots N/A
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation eGFP-FOS:human_validation_White.pdf
@@ -4791,7 +4791,7 @@ vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
-lots
+lots N/A
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation eGFP-GATA2:human_validation_White.pdf
@@ -4806,7 +4806,7 @@ vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
-lots
+lots N/A
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation eGFP-HDAC8:human_validation_White.pdf
@@ -4821,7 +4821,7 @@ vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
-lots
+lots N/A
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation eGFP-JunB:human_validation_White.pdf
@@ -4836,7 +4836,7 @@ vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
-lots
+lots N/A
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation eGFP-JunD:human_validation_White.pdf
@@ -4851,7 +4851,7 @@ vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
-lots
+lots N/A
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation eGFP-NR4A1:human_validation_White.pdf
@@ -5099,7 +5099,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-266
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
 lab Snyder
-lots
+#lots
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 validation GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf
@@ -5158,7 +5158,7 @@ vendorName Laszlo Tora
 vendorId (None)
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
-lots
+#lots
 targetId GeneCards:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A&search=gcn5
 validation missing
@@ -5343,7 +5343,7 @@ orderUrl http://www.millipore.com/catalogue/item/07-352
 vendorName Millipore
 vendorId 07-352
 lab Farnham
-lots
+#lots
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
@@ -5480,7 +5480,7 @@ orderUrl http://www.cellsignal.com/products/9763.html
 vendorName Cell Signaling
 vendorId 9763S
 lab Farnham
-lots
+#lots
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K36me3B(Western_blot,Peptide_ELISA):human_H3K36me3B_validation_Farnham.pdf
@@ -5563,7 +5563,7 @@ tag HMGN3
 type Antibody
 target HMGN3
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry.
-targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 top 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
+targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 to 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
 orderUrl http://www.acris-antibodies.com/NB100-61076.htm
 vendorName Acris Antibodies
 vendorId NB100-61076
@@ -5740,7 +5740,7 @@ vendorName Sigma-Aldrich
 vendorId M8194
 orderUrl http://www.sigmaaldrich.com/
 lab Snyder
-lots
+#lots
 targetId GeneCards:MAFF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFF
 validation missing
@@ -5755,7 +5755,7 @@ vendorName Abcam
 vendorId ab50322
 orderUrl http://www.abcam.com/MAFK-antibody-ab50322.html
 lab Snyder
-lots
+#lots
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
@@ -5770,7 +5770,7 @@ vendorName Santa Cruz Biotech
 vendorId SC-477
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 lab Snyder
-lots
+#lots
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
@@ -6220,8 +6220,7 @@ vendorId sc-22805
 orderUrl  http://www.scbt.com/product.php?datasheet=22805
 lab Myers
 targetId GeneCard:SPI1
-orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
-targetUrl
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
 validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
 
 term Rad21
@@ -6305,7 +6304,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-66884
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 lab Farnham
-lots
+#lots
 targetId Genecards:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
 validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):human_SETDB1-SC66884_validation_Farnham.pdf
@@ -6362,7 +6361,7 @@ vendorName Abcam
 vendorId ab9263
 orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
 lab Snyder
-lots
+#lots
 targetId GeneCards:SMC3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMC3
 validation missing
@@ -6421,7 +6420,7 @@ vendorName Laszlo Tora
 vendorId (None)
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
-lots
+#lots
 targetId GeneCards:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
 validation missing
@@ -6450,8 +6449,8 @@ vendorName Cayman Chemical
 vendorId 10007663
 orderUrl http://www.caymanchem.com/app/template/Product.vm/catalog/10007663
 lab Snyder
-targetId GeneCards:SREBF1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF1
+targetId GeneCards:SREBF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF2
 validation missing
 
 term SRF
@@ -6846,7 +6845,7 @@ term ZBTB33
 tag ZBTB33
 type Antibody
 target ZBTB33
-antibodyDescription Kaiso (6F8) Mouse monoclonal IgG1; 200 ?g/ml. Raised against amino acids 1-504 representing full length Kaiso of human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA
+antibodyDescription Kaiso (6F8) Mouse monoclonal IgG1. Raised against amino acids 1-504 representing full length Kaiso of human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA
 targetDescription KAISO is a transcriptional regulator that binds, via its zinc fingers, to DNA sequences containing methylated CGCG or to the consensus KAISO-binding site (KBS) TCCTGCNA
 vendorName Santa Cruz Biotech
 vendorId sc-23871
@@ -6896,7 +6895,7 @@ vendorName Proteintech
 vendorId 16618-1-AP
 orderUrl http://www.ptglab.com/Products/ZNF143-Antibody-16618-1-AP.htm
 lab Snyder
-lots
+#lots
 targetId GeneCards:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
 validation missing
@@ -6961,10 +6960,10 @@ vendorName Millipore
 vendorId 05-689
 orderUrl http://www.millipore.com/catalogue/item/05-689
 lab Tenenbaum
-lots
+#lots
 targetId GeneCards:CBX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
-validation
+validation missing
 
 
 term CELF1
@@ -6977,10 +6976,10 @@ vendorName Millipore
 vendorId 05621
 orderUrl http://www.millipore.com/
 lab Tenenbaum
-lots
+#lots
 targetId GeneCards:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
-validation
+validation missing
 
 ##This does not appear in metaDb
 term CELF2
@@ -6993,10 +6992,10 @@ vendorName Millipore
 vendorId 04-047
 orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
-lots
+#lots
 targetId GeneCards:CELF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
-validation
+validation missing
 
 ##This does not appear in metaDb
 term EEF1A1
@@ -7009,10 +7008,10 @@ vendorName Millipore
 vendorId 05-235
 orderUrl http://www.millipore.com/catalogue/item/05-235
 lab Tenenbaum
-lots
+#lots
 targetId Gene:1915
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
-validation
+validation missing
 
 ##This does not appear in metaDb
 term EIF4E
@@ -7025,10 +7024,10 @@ vendorName Millipore
 vendorId 04-1058
 orderUrl http://www.millipore.com/catalogue/item/04-1058
 lab Tenenbaum
-lots
+#lots
 targetId Gene:45525
 targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
-validation
+validation missing
 
 ##This does not appear in metaDb
 term EIF4EBP1
@@ -7041,10 +7040,10 @@ vendorName Millipore
 vendorId 04-1010
 orderUrl http://www.millipore.com/catalogue/item/04-1010
 lab Tenenbaum
-lots
+#lots
 targetId Gene:1978
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
-validation
+validation missing
 
 term ELAVL1
 tag ELAVL1
@@ -7059,7 +7058,7 @@ lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId Gene:1994
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-validation
+validation missing
 
 ##This does not appear in metaDb
 term FXR1
@@ -7072,10 +7071,10 @@ vendorName Millipore
 vendorId 05-1529
 orderUrl http://www.millipore.com/catalogue/item/05-1529
 lab Tenenbaum
-lots
+#lots
 targetId Gene:8087
 targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
-validation
+validation missing
 
 ##This does not appear in metaDb
 term Hexim1
@@ -7088,10 +7087,10 @@ vendorName Millipore
 vendorId 07-955
 orderUrl http://www.millipore.com/catalogue/item/07-955
 lab Tenenbaum
-lots
+#lots
 targetId Gene:10614
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
-validation
+validation missing
 
 ##This does not appear in metaDb
 term HNRNPD
@@ -7104,10 +7103,10 @@ vendorName Millipore
 vendorId 07-260
 orderUrl http://www.millipore.com/catalogue/item/07-260
 lab Tenenbaum
-lots
+#lots
 targetId Gene:3184
 targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
-validation
+validation missing
 
 ##This does not appear in metaDb
 term hnRNPM
@@ -7119,10 +7118,10 @@ vendorName Millipore
 vendorId 05-620
 orderUrl http://www.millipore.com/catalogue/item/05-620
 lab Tenenbaum
-lots
+#lots
 targetId Gene:76936
 targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
-validation
+validation missing
 
 
 term IGF2BP1
@@ -7138,7 +7137,7 @@ lab Tenenbaum
 lots I0607(Nov2008)
 targetId Gene:10642
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
-validation
+validation missing
 
 
 term Mxi1_(AF4185)
@@ -7168,10 +7167,10 @@ vendorName Millipore
 vendorId 05-950
 orderUrl http://www.millipore.com/catalogue/item/05-950
 lab Tenenbaum
-lots
+#lots
 targetId GeneCard:NONO
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
-validation
+validation missing
 
 ##This does not appear in metaDb
 term PABP
@@ -7184,10 +7183,10 @@ vendorName Millipore
 vendorId 04-1467
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 lab Tenenbaum
-lots
+# lots
 targetId Gene:37070
 targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
-validation
+validation missing
 
 term PABPC1
 tag PABPC1
@@ -7202,7 +7201,7 @@ lab Tenenbaum
 lots 044K4810 (Nov 2008)
 targetId 26986
 targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
-validation
+validation missing
 
 ##This does not appear in metaDb
 term QKI
@@ -7215,10 +7214,10 @@ vendorName Millipore
 vendorId AB9904
 orderUrl http://www.millipore.com/catalogue/item/ab9904
 lab Tenenbaum
-lots
+#lots
 targetId 9444
 targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
-validation
+validation missing
 
 
 ##This does not appear in metaDb
@@ -7232,10 +7231,10 @@ vendorName Millipore
 vendorId 07-1477
 orderUrl http://www.millipore.com/catalogue/item/07-1477
 lab Tenenbaum
-lots
+#lots
 targetId 6195
 targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
-validation
+validation missing
 
 
 term ripInput
@@ -7243,15 +7242,15 @@ tag RIPIN
 type Antibody
 target ripInput
 targetDescription  Total input for comparison for RIP experiments
-antibodyDescription
+antibodyDescription Input
 vendorName N/A
 vendorId ; 
 orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
 lab Tenenbaum
-lots
+# lots
 targetId N/A
 targetUrl ;
-validation
+validation missing
 
 term SLBP
 tag SLBP
@@ -7266,7 +7265,7 @@ lab Tenenbaum
 lots 3) 7308-S2
 targetId 7884
 targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
-validation
+validation missing
 
 term T7Tag
 tag T7
@@ -7278,10 +7277,10 @@ vendorName 1)Millipore; 2)Novagen
 vendorId AB3790; Nov_69522
 orderUrl http://www.millipore.com/
 lab Tenenbaum
-lots
+# lots
 targetId N/A
 targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
-validation
+validation missing
 
 
 
@@ -8893,8 +8892,8 @@ label BioChain
 description The BioChain subset of HudsonAlpha
 labInst BioChain
 labPi Myers
-labPiFull
-grantPi
+labPiFull Richard Myers
+grantPi Myers
 organism human
 
 term Broad
@@ -9453,14 +9452,14 @@ tag DEKKER
 type grant
 description Dekker
 grantInst University of Massachusetts Amherst
-projectName
+#projectName 
 
 term Weng
 tag WENG
 type grant
 description Weng
 grantInst University of Massachusetts Amherst
-projectName
+#projectName
 
 term Snyder
 tag SNYDER
