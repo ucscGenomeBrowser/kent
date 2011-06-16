@@ -15,8 +15,8 @@
 # Human cell types, template below
 # --------------------------
 # term (human-readable cell type name. required)
-# tag (machine-readable cell type name, no special characters. required. 
-#      uppercase except for possibly a brief lowercase suffix to differentiate
+# tag (machine-readable cell type name, no special characters. required.
+#      uppercase except for possibly a brief lowercase suffix
 #      closely-related cell types)
 # type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
 # organism (used in many ways.  Should correspond to a "type organism" stanza. required)
@@ -604,8 +604,8 @@ tag BCLEFVENTRI
 type Cell Line
 tier 3
 organism human
-description left ventrible, donor N41, age 26, Asian, DNA extract
-tissue Left ventrible
+description left ventricle, donor N41, age 26, Asian, DNA extract
+tissue Left ventricle
 lineage mesoderm
 karyotype normal
 sex M
@@ -963,6 +963,7 @@ organism human
 description neuroblastoma
 tissue Brain
 lineage ectoderm
+karyotype cancer
 vendorName ATCC
 vendorId CRL-2268
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2268&Template=cellBiology
@@ -1221,6 +1222,7 @@ type Cell Line
 organism human
 description normal fibroblasts taken from individuals with Parkinson's disease
 tissue Skin
+karytype normal
 vendorName Paul Tesar (Case Western)
 vendorId N/A
 orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul
@@ -1990,11 +1992,11 @@ tier 3
 organism human
 description Primary Human Hepatocytes, liver perfused by enzymes to generate single cell suspension
 lineage endoderm
-karyotype  normal
+karyotype normal
 sex B
-tissue  Liver
+tissue Liver
 vendorName zen-bio
-vendorId unknown
+vendorId (missing)
 orderUrl http://www.zen-bio.com/
 termId BTO:0000575
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000575
@@ -2412,7 +2414,7 @@ description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
-vendorId HSMM
+vendorId (missing)
 orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
@@ -2429,7 +2431,7 @@ description Normal Human Skeletal Muscle Myotubes
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
-vendorId HSMM
+vendorId (missing)
 orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
@@ -2802,10 +2804,10 @@ organism human
 tissue Blood
 lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
+vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 #put universities in for Stam and Snyder
 vendorId (see protocol documents)
-#vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
-#orderUrl ;
+#orderUrl 
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -2998,7 +3000,7 @@ organism human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
 lineage mesoderm
-vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
+endorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 vendorId N/A
 vendorName Farnham lab
 orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
@@ -3099,7 +3101,7 @@ description prostate tissue purchased for CSHL project
 tissue Prostate
 lineage endoderm
 vendorName ATCC
-vendorId (see protocol document)
+vendorId (see protocol documents)
 orderUrl http://www.atcc.org/
 #karyotype
 termId BTO:0001129
@@ -3387,7 +3389,7 @@ type Cell Line
 organism human
 description A primary culture of urothelial cells derived from a 12 year-old girl and immortalized by transfection with a temperature-sensitive SV-40 large T antigen gene, normal human ureter cells 
 tier 3
-#lineage
+# lineage
 karyotype normal
 sex F
 tissue urothelium
@@ -3472,8 +3474,8 @@ protocol UW_Stam:WI38_Stam_protocol.pdf
 # Human cell types, template below
 # --------------------------
 # term (human-readable cell type name. required)
-# tag (machine-readable cell type name, no special characters. required.  
-#       Uppercase except for a possible lowercase suffix to differentiate 
+# tag (machine-readable cell type name, no special characters. required.
+#       Uppercase except for a possible lowercase suffix to distinguish
 #       closely-related cell types)
 # type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
 # organism (used in many ways.  Should correspond to a "type organism" stanza. required)
@@ -3507,7 +3509,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7035
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
-color 0,158,115
+color 153,38,0
 sex M
 protocol UW(Stam):3134_Stam_protocol.pdf
 
@@ -3525,7 +3527,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7043
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
-color 86,180,233
+color 153,38,0
 sex M
 protocol UW(Stam):416B_Stam_protocol.pdf
 
@@ -3543,7 +3545,7 @@ vendorId TIB-208
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-208&Template=cellBiology
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
-color 86,180,233
+color 153,38,0
 sex M
 protocol UW(Stam):A20_Stam_protocol.pdf
 
@@ -3561,9 +3563,9 @@ vendorId CCL-89
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
-color 189,0,157
+color 153,38,0
 sex M
-#protocol
+protocol missing
 
 term B-cell_(CD19+)
 tag BCELLCD19P
@@ -3579,7 +3581,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
-color 86,180,233
+color 153,38,0
 sex M
 protocol UW(Stam):bCellCd19_Stam_protocol.pdf
 
@@ -3597,7 +3599,7 @@ vendorId N/A
 orderUrl http://www.seattlechildrens.org/medical-staff/michael-a-bender/
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
-color 86,180,233
+color 153,38,0
 sex M
 protocol UW(Stam):bCellCd43_Stam_protocol.pdf
 
@@ -3615,7 +3617,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
-color 86,180,233
+color 153,38,0
 sex U
 protocol LICR(Ren):BoneMarrow_Ren_protocol.pdf
 
@@ -3633,7 +3635,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
-color 105,105,105
+color 153,38,0
 sex U
 protocol LICR(Ren):Cerebellum_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3651,7 +3653,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
-color 105,105,105
+color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3669,7 +3671,7 @@ vendorId N/A
 orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
-color 86,180,233
+color 153,38,0
 sex F
 protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
@@ -3687,7 +3689,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
-color 65,105,225
+color 153,38,0
 sex U
 protocol UW(Stam):ES-CJ7_Stam_protocol.pdf
 
@@ -3706,7 +3708,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
-color 230,159,0
+color 153,38,0
 sex U
 protocol LICR(Ren):Colon_Ren_protocol.pdf
 
@@ -3724,7 +3726,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
-color 105,105,105
+color 153,38,0
 sex U
 protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
@@ -3741,7 +3743,7 @@ vendorId N/A
 orderUrl http://cancer.ucsd.edu/research-training/shared-resources/transgenic-core/Pages/default.aspx
 #termId
 #termUrl
-color 65,105,225
+color 153,38,0
 sex M
 protocol LICR(Ren):ES-Bruce4_Ren_protocol.pdf
 
@@ -3760,7 +3762,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7108
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
-color 189,0,157
+color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3778,6 +3780,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
 sex U
 protocol UW(Stam):Fibroblast_Stam_protocol.pdf
 
@@ -3847,7 +3850,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
-color 204,121,16
+color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3865,7 +3868,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
-color 102,50,200 
+color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol LICR(Ren):Limb_Ren_protocol.pdf
@@ -3884,7 +3887,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
-color 230,159,0
+color 153,38,0
 sex U
 protocol LICR(Ren):Liver_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3902,6 +3905,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
 sex U
 protocol LICR(Ren):Lung_Ren_protocol.pdf
 
@@ -3920,7 +3924,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
-color 65,105,225
+color 153,38,0
 sex U
 protocol LICR(Ren):MEF_Ren_protocol.pdf
 
@@ -3938,7 +3942,7 @@ vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
-color 86,180,233
+color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
@@ -3956,7 +3960,7 @@ tissue Blood
 vendorName Weissman lab
 vendorId N/A
 orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
-color 86,180,233
+color 46,0,184
 sex M
 protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
 
@@ -3965,14 +3969,14 @@ term Myocyte
 tag MYOCYTE
 type Cell Line
 organism mouse
-tissue Muscle
+tissue Blood
 age ageUnknown
 strain Unknown
 category cellLine
 description Myocyte
 vendorName Hardison
 orderUrl http://bmb.psu.edu/directory/rch8
-color 139,69,19 
+color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol PSU(Hardison):Myocyte_Hardison_protocol.pdf
@@ -3991,7 +3995,7 @@ vendorName Hardison lab
 orderUrl http://bmb.psu.edu/directory/rch8
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
-color 139,69,19
+color 153,38,0
 sex U
 #protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
@@ -4009,7 +4013,7 @@ vendorId CRL-1658
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1658&Template=cellBiology
 termId 7146
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7146
-color 86,180,233
+color 153,38,0
 sex M
 protocol UW(Stam):NIH-3T3_Stam_protocol.pdf
 
@@ -4029,7 +4033,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
-color 105,105,105
+color 153,38,0
 sex U
 protocol LICR(Ren):OlfactoryBulb_Ren_protocol.pdf
 
@@ -4047,7 +4051,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
-color 189,0,157
+color 153,38,0
 sex U
 protocol LICR(Ren):Pancreas_Ren_protocol.pdf
 
@@ -4065,7 +4069,7 @@ vendorId N/A
 orderUrl http://depts.washington.edu/chdd/iddrc/res_aff/disteche.html
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
-color 204,121,167
+color 153,38,0
 sex F
 protocol UW(Stam):Patski_Stam_protocol.pdf
 
@@ -4103,7 +4107,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
-color 230,159,0
+color 153,38,0
 sex U
 protocol LICR(Ren):SmallIntestine_Ren_protocol.pdf
 
@@ -4121,7 +4125,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
-color 86,180,233
+color 153,38,0
 sex U
 protocol LICR(Ren):Spleen_Ren_protocol.pdf
 
@@ -4139,7 +4143,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
-color 0,158,115
+color 153,38,0
 sex U
 protocol LICR(Ren):Testis_Ren_protocol.pdf
 
@@ -4157,7 +4161,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
-color 86,180,233
+color 153,38,0
 sex U
 protocol LICR(Ren):Thymus_Ren_protocol.pdf
 
@@ -4175,7 +4179,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
-color 86,180,233
+color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -4193,7 +4197,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
-color 86,180,233
+color 153,38,0
 sex U
 protocol UW(Stam):TReg_Stam_protocol.pdf
 
@@ -4211,7 +4215,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
-color 105,105,105
+color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -4229,7 +4233,7 @@ vendorId N/A
 orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 #termId
 #termUrl
-color 65,105,225
+color 153,38,0
 sex M
 protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
 
@@ -4237,7 +4241,7 @@ protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
 
 # Gene types
 # term (human-readable cell type name)
-# tag (machine-readable cell type name, no special characters.  Uppercase)
+# tag (machine-readable cell type name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be Gene Type)
 # description (human-readable description of the gene type.  Perhaps it's used by the Gencode track.(
 term Known
@@ -4264,9 +4268,7 @@ description pseudogene
 # template below
 # --------------------------
 # term (human-readable name)
-# tag (machine-readable name, no special characters.  Uppercase, except for 
-#      possibly a short lowercase suffix to differentiate closely-related
-#      antibodies)
+# tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be Antibody)
 # antibodyDescription (human-readable description.  Used in antibodies.html)
 # targetDescription (human-readable description of what the antibody targets.  Used in antibodies.html)
@@ -6220,7 +6222,8 @@ vendorId sc-22805
 orderUrl http://www.scbt.com/product.php?datasheet=22805
 lab Myers
 targetId GeneCard:SPI1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
+orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
+targetUrl
 validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
 
 term Rad21
@@ -6976,7 +6979,7 @@ vendorName Millipore
 vendorId 05621
 orderUrl http://www.millipore.com/
 lab Tenenbaum
-#lots
+# lots
 targetId GeneCards:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation missing
@@ -6992,9 +6995,9 @@ vendorName Millipore
 vendorId 04-047
 orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
-#lots
+# lots
 targetId GeneCards:CELF2
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation missing
 
 ##This does not appear in metaDb
@@ -7008,7 +7011,7 @@ vendorName Millipore
 vendorId 05-235
 orderUrl http://www.millipore.com/catalogue/item/05-235
 lab Tenenbaum
-#lots
+# lots
 targetId Gene:1915
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
 validation missing
@@ -7024,9 +7027,9 @@ vendorName Millipore
 vendorId 04-1058
 orderUrl http://www.millipore.com/catalogue/item/04-1058
 lab Tenenbaum
-#lots
-targetId GeneCard:EIF4E
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EIF4E
+# lots
+targetId Gene:45525
+targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
 validation missing
 
 ##This does not appear in metaDb
@@ -7040,7 +7043,7 @@ vendorName Millipore
 vendorId 04-1010
 orderUrl http://www.millipore.com/catalogue/item/04-1010
 lab Tenenbaum
-#lots
+# lots
 targetId Gene:1978
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
 validation missing
@@ -7071,7 +7074,7 @@ vendorName Millipore
 vendorId 05-1529
 orderUrl http://www.millipore.com/catalogue/item/05-1529
 lab Tenenbaum
-#lots
+# lots
 targetId Gene:8087
 targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
 validation missing
@@ -7087,7 +7090,7 @@ vendorName Millipore
 vendorId 07-955
 orderUrl http://www.millipore.com/catalogue/item/07-955
 lab Tenenbaum
-#lots
+# lots
 targetId Gene:10614
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
 validation missing
@@ -7103,7 +7106,7 @@ vendorName Millipore
 vendorId 07-260
 orderUrl http://www.millipore.com/catalogue/item/07-260
 lab Tenenbaum
-#lots
+# lots
 targetId Gene:3184
 targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
 validation missing
@@ -7114,12 +7117,11 @@ tag HNRNPM
 type Antibody
 target hnRNPM
 targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
-antibodyDescription Anti-hnRNP M1-M4, clone 1D8
 vendorName Millipore
 vendorId 05-620
 orderUrl http://www.millipore.com/catalogue/item/05-620
 lab Tenenbaum
-#lots
+# lots
 targetId Gene:76936
 targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
 validation missing
@@ -7168,7 +7170,7 @@ vendorName Millipore
 vendorId 05-950
 orderUrl http://www.millipore.com/catalogue/item/05-950
 lab Tenenbaum
-#lots
+# lots
 targetId GeneCard:NONO
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
 validation missing
@@ -7215,7 +7217,7 @@ vendorName Millipore
 vendorId AB9904
 orderUrl http://www.millipore.com/catalogue/item/ab9904
 lab Tenenbaum
-#lots
+# lots
 targetId 9444
 targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
 validation missing
@@ -7232,7 +7234,7 @@ vendorName Millipore
 vendorId 07-1477
 orderUrl http://www.millipore.com/catalogue/item/07-1477
 lab Tenenbaum
-#lots
+# lots
 targetId 6195
 targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
 validation missing
@@ -7243,13 +7245,13 @@ tag RIPIN
 type Antibody
 target ripInput
 targetDescription  Total input for comparison for RIP experiments
-antibodyDescription Input
-vendorName Tenenbaum lab
-vendorId (none) 
+antibodyDescription
+vendorName N/A
+vendorId ; 
 orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
 lab Tenenbaum
 # lots
-targetId N/A
+#targetId N/A
 #targetUrl ;
 validation missing
 
@@ -7278,16 +7280,14 @@ vendorName 1)Millipore; 2)Novagen
 vendorId AB3790; Nov_69522
 orderUrl http://www.millipore.com/
 lab Tenenbaum
-# lots
-targetId T7 Tag
-targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
+#lots
+#targetId N/A
+#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 validation missing
-
-
 
 ### mapAlgorithm : Comparing map algorithms
 # term (human-readable map algorithm name)
-# tag (machine-readable map algorithm name, no special characters.  Uppercase)
+# tag (machine-readable map algorithm name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be mapAlgorithm)
 # description (human-readable description of the map algorithm, unclear where/if it's used)
 term NA
@@ -7306,7 +7306,7 @@ type mapAlgorithm
 description erange v3.0
 
 term erng3b
-tag ERNG3B
+tag ERNG3b
 type mapAlgorithm
 description erange v3.0beta
 
@@ -7347,11 +7347,11 @@ description TopHat v1.0.14
 
 ### readType
 # term (human-readable read type name)
-# tag (machine-readable read type name, no special characters.  Uppercase)
+# tag (machine-readable read type name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be readType)
 # description (human-readable description of the read type, unclear where/if it's used)
 term 1x25
-tag r1x25
+tag R1X25
 type readType
 description Single 25 n.t. reads
 
@@ -7430,7 +7430,7 @@ description 20 kb DNA fragments
 
 ### localization
 # term (human-readable name)
-# tag (machine-readable name, no special characters.  Uppercase)
+# tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be localization)
 # description (human-readable description, used with matrix entries for subcellular localization tracks)
 # termId (GO ID for this subcellular compartment)
@@ -7512,6 +7512,13 @@ tag TOTAL
 type rnaExtract
 description Total RNA extract (longer than 200 nt)
 label Total_RNA
+
+# Short should be retired turning into short total
+#term short
+#tag SHORT
+#type rnaExtract
+#description RNA shorter than 200 nt PROVISIONAL TO RETIRE  (1/20/2011)
+#label (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
 
 term shortPolyA
 tag SHORTPOLYA
@@ -7638,8 +7645,6 @@ description This data represents a control being compared to experiments using a
 
 term Control_eGFP-JunD
 tag CONTROLJUND
-type control
-description This data represents a control being compared to experiments using antibody eGFP-JunD
 
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
@@ -7789,7 +7794,9 @@ description 5 d with 2% DMSO (Weissman)
 type treatment
 
 term DMSO_4hr
-tag DM002P4H
+#term DMSO_0.02pct_4hr  would like to change
+#tag DMSO4hr
+tag DM002p4h
 description 4 hr with 0.02% DMSO (Myers)
 type treatment
 
@@ -7804,7 +7811,7 @@ description  1 h with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_24hr
-tag EST10NM24h
+tag EST10NM24H
 description  24 hr with 10 nM Estradiol  (Myers)
 type treatment
 
@@ -7814,7 +7821,7 @@ description  1 h with 1 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_4hr
-tag EST10NM4H
+tag EST10NM4h
 description  4 h with 10 nM Estradiol (Myers)
 type treatment
 
@@ -7830,12 +7837,12 @@ description 36 h with 0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.01pct_4hr
-tag ETOH01b
+tag ETOH01B
 description 4 h with 0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.01pct_12hr
-tag ETOH01c
+tag ETOH01C
 description 12 h with 0.01% EtOH (Snyder)
 type treatment
 
@@ -7881,17 +7888,17 @@ description Interferon alpha treatment - 6 hours (Snyder)
 type treatment
 
 term IFNg30
-tag IFNG30
+tag IFNH30
 description Interferon gamma treatment - 30 minutes (Snyder)
 type treatment
 
 term IFNg4h
-tag IFNG4h
+tag IFNH4H
 description Interferon gamma treatment - 4 hours with 5 ng/ml (Crawford)
 type treatment
 
 term IFNg6h
-tag IFNG6h
+tag IFNG6H
 description Interferon gamma treatment - 6 hours (Snyder)
 type treatment
 
@@ -7975,7 +7982,7 @@ description 1-cycle of PCR (Myers)
 type protocol
 
 term PCR2x
-tag PCR2X
+tag PCR2X 
 description 2-cycles of PCR (Myers)
 type protocol
 
@@ -8038,7 +8045,7 @@ type restrictionEnzyme
 
 ### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
-### tag:   This is brief and uppercase
+### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display
 
 term Alignability
@@ -8319,7 +8326,7 @@ description Validation
 
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type
-### tag:   This is brief and uppercase
+### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display and should also match NHGRI with any further information
 
 term 5C
@@ -8431,7 +8438,7 @@ label Mapability
 description Uniqueness of n-mer sequence fragments across the genome
 
 term MethylArray
-tag MTHYLARRAY
+tag METHYLARRAY
 type dataType
 label Methyl Array
 description Methyl Bead Array
@@ -8663,7 +8670,7 @@ stage Adult
 description Adult 8 weeks
 
 term immortalized
-tag IMMORTAL
+tag IMMPORTAL
 type age
 stage Cell Line
 description Immortal cells
@@ -8679,7 +8686,7 @@ description the age when the real age is unknown
 # Expected fields:
 # ----------------
 # term (human-readable name)
-# tag (machine-readable name, no special characters, uppercase)
+# tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
 
@@ -8706,7 +8713,7 @@ description Supplemental experiments
 # Expected fields:
 # ----------------
 # term (human-readable name)
-# tag (machine-readable name, no special characters.  Uppercase)
+# tag (machine-readable name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be sex)
 # description (human-readable description.  Can't say where/how it's used)
 
@@ -8783,7 +8790,7 @@ type tissueSourceType
 description Tissue analyzed using replicate samples obtained from and individual and by pooling.
 
 term Individual
-tag INDIV
+tag INDIC
 type tissueSourceType
 description Tissue obtained from an individual
 
@@ -8798,7 +8805,7 @@ description Tissue obtained from pooling samples from various sample organisms
 # Expected fields:
 # ---------------
 # term (human-readable name)
-# tag (machine-readable name, no special characters.  Uppercase)
+# tag (machine-readable name, no special characters. uppercase.)
 # type (informs pipeline code of stanza type, should be seqPlatform)
 # description: Working on inputing description from geo and product website
 
@@ -8816,21 +8823,21 @@ type seqPlatform
 description Illumina Genome Analyzer II
 
 term Illumina_GA2e
-tag ILLUMINAGA2E
+tag ILLUMINAGA2e
 geo Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
-tag ILLUMINAG2X
+tag ILLUMINAGA2X
 geo Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
-tag ILLUMINAHISEQ22
+tag ILLUMINAHISEQ2
 geo Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
@@ -8866,7 +8873,7 @@ type seqPlatform
 description Applied Biosystems SOLiD System 2.0
 
 term AB_SOLiD_3.5
-tag ABSOLID3PLUS
+tag ABSOLID3Plus
 geo AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
@@ -8874,7 +8881,7 @@ description Applied Biosystems SOLiD System 3.5
 
 #LABS          This is the CV for naming the labs.
 #term:
-#tag:          Short, uppercase, no special characters
+#tag:	       Short, uppercase, no special characters
 #type:         We use the phrase lab as a source of data
 #label:        What is seen in findTracks.  Roughly "$labPi - $labInst"
 #labInst:      This is the full name of the Institution where the lab is housed
@@ -8893,7 +8900,7 @@ label BioChain
 description The BioChain subset of HudsonAlpha
 labInst BioChain
 labPi Myers
-labPiFull Richard Myers
+labPiFull RIchard Myers
 grantPi Myers
 organism human
 
@@ -9163,7 +9170,7 @@ organism human
 ####  Stanford, Yale, Davis, Harvard
 
 term Stanford
-tag  STANFORD
+tag STANFORD
 type lab
 label Snyder - Stanford University
 description Snyder - Stanford University
@@ -9371,7 +9378,7 @@ grantInst ENCODE Data Analysis Center (DAC)
 projectName DAC
 
 term Tullius
-tag TULLIS
+tag TULLIUS
 type grant
 description Tullis
 grantInst Boston University
@@ -9453,14 +9460,14 @@ tag DEKKER
 type grant
 description Dekker
 grantInst University of Massachusetts Amherst
-#projectName 
+projectName
 
 term Weng
 tag WENG
 type grant
 description Weng
 grantInst University of Massachusetts Amherst
-#projectName
+projectName
 
 term Snyder
 tag SNYDER
@@ -10169,7 +10176,7 @@ term spikeInPool
 tag SPIKEINPOOL
 type typeOfTerm
 label Spike-In Pool   
-description The spike-in pool that was used.
+description (Provisional) The spike-in pool that was used.
 searchable no
 cvDefined no
 validate none   
@@ -10196,7 +10203,7 @@ validate integer
 priority 335
 
 term submittedDataVersion
-tag SUBMITDATEVER
+tag SUBMITTEDDATAVERSION
 type typeOfTerm
 label Version of data if resubmitted
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
