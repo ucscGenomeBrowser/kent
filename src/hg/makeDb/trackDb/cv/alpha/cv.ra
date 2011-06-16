@@ -1162,7 +1162,7 @@ vendorName DSMZ
 vendorId N/A
 orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
-termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002104
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002104
 protocol Bernstein:Dnd41_Bernstein_protocol.pdf
 
 term ECC-1
@@ -2802,10 +2802,10 @@ organism human
 tissue Blood
 lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
-vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 #put universities in for Stam and Snyder
 vendorId (see protocol documents)
-orderUrl ;
+#vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
+#orderUrl ;
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -2998,7 +2998,7 @@ organism human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
 lineage mesoderm
-endorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
+vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 vendorId N/A
 vendorName Farnham lab
 orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
@@ -3319,7 +3319,7 @@ organism human
 description Trachea and bronchial epithelial cells, passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells, donor was 21 years old
 vendorName National Disease Research Interchange-provided fresh lung tissue, designated DD009C in-house.
 tissue Epithelium
-vendorId ;
+vendorId (see description)
 orderUrl http://www.ndriresource.org/
 #TIB-152 is a lymphocytic cell line with no relation to TBEC
 lineage endoderm
@@ -3666,7 +3666,7 @@ age immortalized
 strain B10.H-2aH-4bp/Wts
 vendorName Weissman lab
 vendorId N/A
-orderUrl http://info.med.yale.edu/bcmm/SMW/sherm.html
+orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 86,180,233
@@ -3955,7 +3955,7 @@ strain Unknown
 tissue Blood
 vendorName Weissman lab
 vendorId N/A
-orderUrl http://info.med.yale.edu/bcmm/SMW/sherm.html
+orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 color 86,180,233
 sex M
 protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
@@ -5322,7 +5322,7 @@ tag H3K09AC
 type Antibody
 target H3K9ac
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
+targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
 orderUrl http://www.abcam.com/index.html?datasheet=4441
 vendorName Abcam
 vendorId ab4441
@@ -5960,7 +5960,7 @@ targetDescription Neuron-restrictive silencer transcription factor
 vendorName David Anderson, Caltech
 vendorId  (Made by Protein Expression Center: pec@caltech.edu)
 orderUrl http://www.cns.caltech.edu/people/faculty/anderson.html
-lab Myers / Wold
+lab Myers, Wold
 lots 20070905JV
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
@@ -6217,7 +6217,7 @@ targetDescription PU.1 (H-135)
 antibodyDescription Rabbit Polyclonal IgG
 vendorName Santa Cruz Biotech
 vendorId sc-22805
-orderUrl  http://www.scbt.com/product.php?datasheet=22805
+orderUrl http://www.scbt.com/product.php?datasheet=22805
 lab Myers
 targetId GeneCard:SPI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
@@ -6723,7 +6723,7 @@ vendorId sc-49548
 orderUrl http://www.scbt.com/datasheet-49548-trim37-c-15-antibody.html
 lab Myers
 lots F2507
-targetId TRIM37
+targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
 validation TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 
@@ -6994,7 +6994,7 @@ orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
 #lots
 targetId GeneCards:CELF2
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
 validation missing
 
 ##This does not appear in metaDb
@@ -7025,8 +7025,8 @@ vendorId 04-1058
 orderUrl http://www.millipore.com/catalogue/item/04-1058
 lab Tenenbaum
 #lots
-targetId Gene:45525
-targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
+targetId GeneCard:EIF4E
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EIF4E
 validation missing
 
 ##This does not appear in metaDb
@@ -7114,6 +7114,7 @@ tag HNRNPM
 type Antibody
 target hnRNPM
 targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
+antibodyDescription Anti-hnRNP M1-M4, clone 1D8
 vendorName Millipore
 vendorId 05-620
 orderUrl http://www.millipore.com/catalogue/item/05-620
@@ -7243,13 +7244,13 @@ type Antibody
 target ripInput
 targetDescription  Total input for comparison for RIP experiments
 antibodyDescription Input
-vendorName N/A
-vendorId ; 
+vendorName Tenenbaum lab
+vendorId (none) 
 orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
 lab Tenenbaum
 # lots
 targetId N/A
-targetUrl ;
+#targetUrl ;
 validation missing
 
 term SLBP
@@ -7278,7 +7279,7 @@ vendorId AB3790; Nov_69522
 orderUrl http://www.millipore.com/
 lab Tenenbaum
 # lots
-targetId N/A
+targetId T7 Tag
 targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 validation missing
 
@@ -8134,7 +8135,7 @@ term FiltTransfrags
 tag FILTTRANSFRAGS
 type view
 label Filtered Transfrags
-description FiltTransfrags
+description FilteredTransfrags
 
 term GeneDeNovo
 tag GENEDENO
@@ -9029,7 +9030,7 @@ tag CALTECH
 type lab
 label Wold - California Institute of Technology
 description Wold - California Institute of Technology
-grantInst California Institute of Technology (Wold Lab)
+#grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
@@ -9125,7 +9126,7 @@ tag  RIKEN
 type lab
 labInst Riken Omics Science Center
 description Carninci - RIKEN Omics Science Center
-labName Riken
+#labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
@@ -9210,7 +9211,7 @@ tag UCD
 type lab
 label Farnham - University of California at Davis
 description Farnham - University of California at Davis
-labName UCD
+#labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
@@ -10251,7 +10252,7 @@ priority 500
 
 term view
 tag VIEW
-type typeOfTerm<
+type typeOfTerm
 label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
 searchable multiSelect
