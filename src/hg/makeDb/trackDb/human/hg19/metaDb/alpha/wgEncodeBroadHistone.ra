@@ -446,7 +446,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-09
-dateUnrestricted 2012-03-09
+dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadHistoneGm12878H3k04me1StdAlnRep1V2.bam
@@ -495,7 +495,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-09
-dateUnrestricted 2012-03-09
+dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadHistoneGm12878H3k04me1StdRawDataRep1V2.fastq.gz
@@ -544,7 +544,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-09
-dateUnrestricted 2012-03-09
+dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadHistoneGm12878H3k04me3StdAlnRep2V2.bam
@@ -593,7 +593,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-09
-dateUnrestricted 2012-03-09
+dateUnrestricted 2001-10-05
 dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadHistoneGm12878H3k04me3StdRawDataRep2V2.fastq.gz
@@ -1144,33 +1144,6 @@ subId 2803
 tableName wgEncodeBroadHistoneGm12878H3k36me3StdSig
 view Signal
 
-metaObject wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1
-objType file
-antibody H3K4me1
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-05
-dateSubmitted 2009-01-05
-dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
-expId 33
-fileIndex wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam.bai
-fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam
-geoSampleAccession GSM733772
-grant Bernstein
-lab Broad
-labVersion Illumina Genome Analyzer IIe
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 2804
-view Alignments
-
 metaObject wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2
 objType file
 antibody H3K4me1
@@ -1197,31 +1170,6 @@ replicate 2
 setType exp
 subId 2804
 view Alignments
-
-metaObject wgEncodeBroadHistoneGm12878H3k4me1StdRawDataRep1
-objType file
-antibody H3K4me1
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-01-05
-dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
-expId 33
-fileName wgEncodeBroadHistoneGm12878H3k4me1StdRawDataRep1.fastq.gz
-geoSampleAccession GSM733772
-grant Bernstein
-lab Broad
-labVersion Illumina Genome Analyzer IIe
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 142
-view RawData
 
 metaObject wgEncodeBroadHistoneGm12878H3k4me1StdRawDataRep2
 objType file
@@ -1430,33 +1378,6 @@ setType exp
 subId 2806
 view Alignments
 
-metaObject wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2
-objType file
-antibody H3K4me3
-cell GM12878
-composite wgEncodeBroadHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-05
-dateSubmitted 2009-01-04
-dateUnrestricted 2009-10-04
-dccAccession wgEncodeEH000028
-expId 28
-fileIndex wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam.bai
-fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam
-geoSampleAccession GSM733708
-grant Bernstein
-lab Broad
-labVersion Illumina Genome Analyzer IIe
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 2806
-view Alignments
-
 metaObject wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep1
 objType file
 antibody H3K4me3
@@ -1480,30 +1401,6 @@ project wgEncode
 replicate 1
 setType exp
 subId 2724
-view RawData
-
-metaObject wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep2
-objType file
-antibody H3K4me3
-cell GM12878
-composite wgEncodeBroadHistone
-controlId GM12878/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-01-04
-dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000028
-expId 28
-fileName wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep2.fastq.gz
-geoSampleAccession GSM733708
-grant Bernstein
-lab Broad
-labVersion Illumina Genome Analyzer IIe
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 140
 view RawData
 
 metaObject wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep1
