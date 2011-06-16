@@ -851,7 +851,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-09
-dateUnrestricted 2012-03-09
+dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep3V2.bam
@@ -950,7 +950,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-09
-dateUnrestricted 2012-03-09
+dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdRawDataRep3V2.fastq.gz
