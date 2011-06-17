@@ -3916,6 +3916,7 @@ priority 500.5
 visibility hide
 noInherit on
 type bed 3 .
+configurable on
 html numtSeq
 
     track numtS
@@ -3951,8 +3952,8 @@ html numtSeq
 
     track numtSMitochondrionChrPlacement
     parent NumtSeq
-    shortLabel Human NumtS on mitochondrion with chr placement
-    longLabel NumtS on mitochondrion with chr placement
+    longLabel Human NumtS on mitochondrion with chromosome placement
+    shortLabel NumtS on mitochondrion with chr placement
     priority 4
     itemRgb on
     type bed 9 .
@@ -3965,6 +3966,21 @@ html numtSeq
     priority 5
     visibility pack
     type bam
+    chromosomes chrM
+    pairEndsByName on
+    showNames on
+    noColorTag .
+    bamColorMode gray
+    bamGrayMode aliQual
+    aliQualRange 0:255
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    maxWindowToDraw 1000000
+
 
 
 searchTable numtSMitochondrionChrPlacement

@@ -2519,4 +2519,7 @@ speciesOrder ornAna1 galGal3 taeGut1 anoCar1 chrPic0 allMis0
 #treeImage phylo/hg19_Dino.gif
 priority 100
 
+track NumtSeq override
+html numtSeqHg19
+
 
