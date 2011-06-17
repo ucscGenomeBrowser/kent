@@ -22,7 +22,7 @@ ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
 endif
 
 
-TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
+TEST_DIRS = lib autoDtd autoSql blastToPsl checkCoverageGaps checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToGtf \
 	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross \
             mrnaToGene pslCDnaFilter pslDiff pslHisto \
