@@ -34,7 +34,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
     scoreMin 600
 
         track wgEncodeOpenChromDnaseChorionPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Chorion DNase Pk
         longLabel Chorion DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -43,7 +42,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1412 dateSubmitted=2010-06-14
 
         track wgEncodeOpenChromDnaseMedulloPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Medullo DNase Pk
         longLabel Medullo DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -52,7 +50,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1479 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromDnaseGm12891Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM12891 DNase Pk
         longLabel GM12891 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -61,7 +58,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1487 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm12892Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM12892 DNase Pk
         longLabel GM12892 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -70,7 +66,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1488 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19238Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19238 DNase Pk
         longLabel GM19238 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -79,7 +74,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1489 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm12878Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel GM12878 DNase Pk
         longLabel GM12878 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -89,7 +83,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1494 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseH1hescPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel H1-hESC DNase Pk
         longLabel H1-hESC DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -99,7 +92,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1495 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHelas3Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa-S3 DNase Pk
         longLabel HeLa-S3 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -109,7 +101,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1498 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19239Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19239 DNase Pk
         longLabel GM19239 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -118,7 +109,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1506 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm18507Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM18507 DNase Pk
         longLabel GM18507 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -127,7 +117,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1507 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19240Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19240 DNase Pk
         longLabel GM19240 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -136,7 +125,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1509 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseH9esPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel H9-hESC DNase Pk
         longLabel H9-hESC DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -145,7 +133,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1519 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHepg2Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HepG2 DNase Pk
         longLabel HepG2 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -155,7 +142,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1528 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHuvecPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HUVEC DNase Pk
         longLabel HUVEC DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -165,7 +151,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1532 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseNhekPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel NHEK DNase Pk
         longLabel NHEK DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -175,7 +160,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1533 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseK562Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel K562 DNase Pk
         longLabel K562 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -186,7 +170,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa IFNa DNse Pk
         longLabel HeLa-S3 IFNa DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -196,7 +179,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1544 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseMcf7Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel MCF-7 DNase Pk
         longLabel MCF-7 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -206,7 +188,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
         track wgEncodeOpenChromDnaseProgfibPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel ProgFib DNase Pk
         longLabel ProgFib DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -215,7 +196,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1650 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibropPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel FibroP DNase Pk
         longLabel FibroP DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -224,7 +204,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1651 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibroblPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Fibrobl DNase Pk
         longLabel Fibrobl DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -233,7 +212,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1653 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseHsmmPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMM DNase Pk
         longLabel HSMM DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -242,7 +220,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1654 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseMyometrPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Myometr DNase Pk
         longLabel Myometr DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -251,7 +228,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1655 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnasePanisletsPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel PanIsle DNase Pk
         longLabel PanIslets DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -260,7 +236,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1656 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseAosmcSerumfreePk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel AoSMC sf DNase Pk
         longLabel AoSMC Serum Free DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -269,7 +244,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1678 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseHsmmtPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMMtube DNase Pk
         longLabel HSMMtube DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -278,7 +252,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1679 dateSubmitted=2010-06-20
 
         track wgEncodeOpenChromDnaseMelanoPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Melano DNase Pk
         longLabel Melano DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -287,7 +260,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2096 dateSubmitted=2010-08-11
 
         track wgEncodeOpenChromDnasePhtePk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel pHTE DNase Pk
         longLabel pHTE DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -296,7 +268,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2513 dateSubmitted=2010-10-18
 
         track wgEncodeOpenChromDnaseOsteoblPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Osteobl DNase Pk
         longLabel Osteobl DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -305,7 +276,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2506 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromDnaseLncapAndroPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel LNCaP andro DN Pk
         longLabel LNCaP androgen DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -315,7 +285,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2492 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseLncapPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel LNCaP DNase Pk
         longLabel LNCaP DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -325,7 +294,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2482 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseA549Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel A549 DNase Pk
         longLabel A549 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -334,7 +302,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2493 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseHtr8Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HTR8svn DNase Pk
         longLabel HTR8svn DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -343,7 +310,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2793 dateSubmitted=2010-11-02
 
         track wgEncodeOpenChromDnase8988tPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel 8988T DNase Pk
         longLabel 8988T DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -352,7 +318,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2786 dateSubmitted=2010-11-01
 
         track wgEncodeOpenChromDnasePanisdPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel DNse PanIsletD Pk
         longLabel PanIsletD DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -361,7 +326,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2785 dateSubmitted=2010-10-29
 
         track wgEncodeOpenChromDnaseHmecPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HMEC DNase Pk
         longLabel HMEC DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -370,7 +334,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2764 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromDnaseGlioblaPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Gliobla DNase Pk
         longLabel Gliobla DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -379,7 +342,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2514 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromDnaseCllPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel CLL DNase Pk
         longLabel CLL DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -388,7 +350,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2787 dateSubmitted=2010-11-01
 
         track wgEncodeOpenChromDnaseHepatocytesPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Hepato DNase Pk
         longLabel Hepatocytes DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -397,7 +358,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3063 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHpde6e6e7Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HPDE6 DNase Pk
         longLabel HPDE6-E6E7 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -406,7 +366,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3064 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseIpsPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel iPS DNase Pk
         longLabel iPS DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -415,7 +374,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3065 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHuh7Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Huh-7 DNase Pk
         longLabel Huh-7 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -424,7 +382,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3075 dateSubmitted=2010-12-07
 
         track wgEncodeOpenChromDnaseHuh75Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Huh-7.5 DNase Pk
         longLabel Huh-7.5 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -433,7 +390,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3076 dateSubmitted=2010-12-07
 
         track wgEncodeOpenChromDnaseStellatePk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Stellate DNase Pk
         longLabel Stellate DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -442,7 +398,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3077 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseT47dPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel T-47D DNase Pk
         longLabel T-47D DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -451,7 +406,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3078 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseUrotsaPk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Urothelia DNse Pk
         longLabel Urothelia DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -460,7 +414,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3217 dateSubmitted=2011-01-11
 
         track wgEncodeOpenChromDnaseUrotsaUt189Pk
-        release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Urothl ec DNse Pk
         longLabel Urothelia UT189 E.coli DNaseI HS Peaks from ENCODE/OpenChrom-Duke
@@ -482,7 +435,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
     maxHeightPixels 100:32:16
 
         track wgEncodeOpenChromDnaseChorionSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Chorion DNase DS
         longLabel Chorion DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -491,7 +443,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1412 dateSubmitted=2010-06-14
 
         track wgEncodeOpenChromDnaseMedulloSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Medullo DNase DS
         longLabel Medullo DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -500,7 +451,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1479 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromDnaseGm12891Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM12891 DNase DS
         longLabel GM12891 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -509,7 +459,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1487 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm12892Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM12892 DNase DS
         longLabel GM12892 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -518,7 +467,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1488 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19238Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19238 DNase DS
         longLabel GM19238 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -527,7 +475,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1489 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm12878Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel GM12878 DNase DS
         longLabel GM12878 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -537,7 +484,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1494 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseH1hescSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel H1-hESC DNase DS
         longLabel H1-hESC DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -547,7 +493,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1495 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHelas3Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa-S3 DNase DS
         longLabel HeLa-S3 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -557,7 +502,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1498 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19239Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19239 DNase DS
         longLabel GM19239 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -566,7 +510,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1506 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm18507Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM18507 DNase DS
         longLabel GM18507 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -575,7 +518,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1507 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19240Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19240 DNase DS
         longLabel GM19240 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -584,7 +526,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1509 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseH9esSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel H9-hESC DNase DS
         longLabel H9ES DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -593,7 +534,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1519 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHepg2Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HepG2 DNase DS
         longLabel HepG2 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -603,7 +543,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1528 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHuvecSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HUVEC DNase DS
         longLabel HUVEC DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -613,7 +552,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1532 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseNhekSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel NHEK DNase DS
         longLabel NHEK DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -623,7 +561,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1533 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseK562Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel K562 DNase DS
         longLabel K562 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -634,7 +571,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa IFNa DNse DS
         longLabel HeLa-S3 IFNa DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -644,7 +580,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1544 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseMcf7Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel MCF-7 DNase DS
         longLabel MCF-7 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -654,7 +589,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
         track wgEncodeOpenChromDnaseProgfibSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel ProgFib DNase DS
         longLabel ProgFib DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -663,7 +597,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1650 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibropSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel FibroP DNase DS
         longLabel FibroP DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -672,7 +605,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1651 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibroblSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Fibrobl DNase DS
         longLabel Fibrobl DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -681,7 +613,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1653 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseHsmmSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMM DNase DS
         longLabel HSMM DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -690,7 +621,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1654 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseMyometrSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Myometr DNase DS
         longLabel Myometr DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -699,7 +629,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1655 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnasePanisletsSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PanIsle DNase DS
         longLabel PanIslets Duke DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -708,7 +637,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1656 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseAosmcSerumfreeSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel AoSMC sf DNase DS
         longLabel AoSMC SerumFree DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -717,7 +645,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1678 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseHsmmtSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMMtube DNase DS
         longLabel HSMMtube DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -726,7 +653,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1679 dateSubmitted=2010-06-20
 
         track wgEncodeOpenChromDnaseMelanoSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Melano DNase DS
         longLabel Melano DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -735,7 +661,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2096 dateSubmitted=2010-08-11
 
         track wgEncodeOpenChromDnasePhteSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel pHTE DNase DS
         longLabel pHTE DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -744,7 +669,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2513 dateSubmitted=2010-10-18
 
         track wgEncodeOpenChromDnaseOsteoblSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Osteobl DNase DS
         longLabel Osteobl DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -753,7 +677,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2506 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromDnaseLncapAndroSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel LNCaP andro DN DS
         longLabel LNCaP androgen DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -763,7 +686,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2492 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseLncapSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel LNCaP DNase DS
         longLabel LNCaP DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -773,7 +695,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2482 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseA549Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel A549 DNase DS
         longLabel A549 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -782,7 +703,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2493 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseHtr8Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HTR8svn DNase DS
         longLabel HTR8svn DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -791,7 +711,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2793 dateSubmitted=2010-11-02
 
         track wgEncodeOpenChromDnase8988tSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel 8988T DNase DS
         longLabel 8988T DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -800,7 +719,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2786 dateSubmitted=2010-11-01
 
         track wgEncodeOpenChromDnasePanisdSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel DNse PanIsletD DS
         longLabel PanIsletD DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -809,7 +727,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2785 dateSubmitted=2010-10-29
 
         track wgEncodeOpenChromDnaseHmecSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HMEC DNase DS
         longLabel HMEC DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -818,7 +735,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2764 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromDnaseGlioblaSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Gliobla DNase DS
         longLabel Gliobla DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -827,7 +743,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2514 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromDnaseCllSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel CLL DNase DS
         longLabel CLL DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -836,7 +751,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2787 dateSubmitted=2010-11-01
 
         track wgEncodeOpenChromDnaseHepatocytesSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Hepato DNase DS
         longLabel Hepatocytes DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -845,7 +759,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3063 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHpde6e6e7Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HPDE6 DNase DS
         longLabel HPDE6-E6E7 Duke DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -854,7 +767,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3064 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseIpsSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel iPS DNase DS
         longLabel iPS DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -863,7 +775,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3065 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHuh7Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Huh-7 DNase DS
         longLabel Huh-7 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -872,7 +783,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3075 dateSubmitted=2010-12-07
 
         track wgEncodeOpenChromDnaseHuh75Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Huh-7.5 DNase DS
         longLabel Huh-7.5 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -881,7 +791,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3076 dateSubmitted=2010-12-07
 
         track wgEncodeOpenChromDnaseStellateSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Stellate DNase DS
         longLabel Stellate DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -890,7 +799,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3077 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseT47dSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel T-47D DNase DS
         longLabel T-47D DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -899,7 +807,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3078 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseUrotsaSig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Urothelia DNse DS
         longLabel Urothelia DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -908,7 +815,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3217 dateSubmitted=2011-01-11
 
         track wgEncodeOpenChromDnaseUrotsaUt189Sig
-        release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Urothl ec DNse DS
         longLabel Urothelia UT189 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
@@ -930,7 +836,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
     maxHeightPixels 100:32:16
 
         track wgEncodeOpenChromDnaseChorionBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Chorion DNase OS
         longLabel Chorion DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -939,7 +844,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1412 dateSubmitted=2010-06-14
 
         track wgEncodeOpenChromDnaseMedulloBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Medullo DNase OS
         longLabel Medullo DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -948,7 +852,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1479 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromDnaseGm12891BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM12891 DNase OS
         longLabel GM12891 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -957,7 +860,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1487 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm12892BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM12892 DNase OS
         longLabel GM12892 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -966,7 +868,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1488 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19238BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19238 DNase OS
         longLabel GM19238 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -975,7 +876,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1489 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm12878BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel GM12878 DNase OS
         longLabel GM12878 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -985,7 +885,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1494 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseH1hescBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel H1-hESC DNase OS
         longLabel H1-hESC DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -995,7 +894,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1495 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHelas3BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa-S3 DNase OS
         longLabel HeLa-S3 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1005,7 +903,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1498 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19239BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19239 DNase OS
         longLabel GM19239 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1014,7 +911,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1506 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm18507BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM18507 DNase OS
         longLabel GM18507 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1023,7 +919,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1507 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseGm19240BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19240 DNase OS
         longLabel GM19240 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1032,7 +927,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1509 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseH9esBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel H9-hESC DNase OS
         longLabel H9-hESC DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1041,7 +935,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1519 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHepg2BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HepG2 DNase OS
         longLabel HepG2 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1051,7 +944,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1528 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromDnaseHuvecBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HUVEC DNase OS
         longLabel HUVEC DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1061,7 +953,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1532 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseNhekBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel NHEK DNase OS
         longLabel NHEK DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1071,7 +962,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1533 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseK562BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel K562 DNase OS
         longLabel K562 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1082,7 +972,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa IFNa DNse OS
         longLabel HeLa-S3 IFNa DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1092,7 +981,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1544 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseMcf7BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel MCF-7 DNase OS
         longLabel MCF-7 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1102,7 +990,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
         track wgEncodeOpenChromDnaseProgfibBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel ProgFib DNase OS
         longLabel ProgFib DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1111,7 +998,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1650 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibropBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel FibroP DNase OS
         longLabel FibroP DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1120,7 +1006,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1651 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibroblBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Fibrobl DNase OS
         longLabel Fibrobl DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1129,7 +1014,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1653 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseHsmmBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMM DNase OS
         longLabel HSMM DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1138,7 +1022,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1654 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseMyometrBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Myometr DNase OS
         longLabel Myometr DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1147,7 +1030,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1655 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnasePanisletsBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel PanIsle DNase OS
         longLabel PanIslets DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1156,7 +1038,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1656 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel AoSMC sf DNase OS
         longLabel AoSMC Serum Free DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1165,7 +1046,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1678 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMMtube DNase OS
         longLabel HSMMtube DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1174,7 +1054,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1679 dateSubmitted=2010-06-20
 
         track wgEncodeOpenChromDnaseMelanoBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Melano DNase OS
         longLabel Melano DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1183,7 +1062,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2096 dateSubmitted=2010-08-11
 
         track wgEncodeOpenChromDnasePhteBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel pHTE DNase OS
         longLabel pHTE DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1192,7 +1070,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2513 dateSubmitted=2010-10-18
 
         track wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Osteobl DNase OS
         longLabel Osteobl DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1201,7 +1078,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2506 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel LNCaP andro DN OS
         longLabel LNCaP androgen DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1211,7 +1087,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2492 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseLncapBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel LNCaP DNase OS
         longLabel LNCaP DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1221,7 +1096,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2482 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseA549BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel A549 DNase OS
         longLabel A549 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1230,7 +1104,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2493 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromDnaseHtr8BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HTR8svn DNase OS
         longLabel HTR8svn DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1239,7 +1112,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2793 dateSubmitted=2010-11-02
 
         track wgEncodeOpenChromDnase8988tBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel 8988T DNase OS
         longLabel 8988T DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1248,7 +1120,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2786 dateSubmitted=2010-11-01
 
         track wgEncodeOpenChromDnasePanisdBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel DNse PanIsletD OS
         longLabel PanIsletD DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1257,7 +1128,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2785 dateSubmitted=2010-10-29
 
         track wgEncodeOpenChromDnaseHmecBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HMEC DNase OS
         longLabel HMEC DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1266,7 +1136,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2764 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Gliobla DNase OS
         longLabel Gliobla DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1275,7 +1144,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2514 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromDnaseCllBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel CLL DNase OS
         longLabel CLL DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1284,7 +1152,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2787 dateSubmitted=2010-11-01
 
         track wgEncodeOpenChromDnaseHepatocytesBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Hepato DNase OS
         longLabel Hepatocytes DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1293,7 +1160,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3063 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHpde6e6e7BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HPDE6 DNase OS
         longLabel HPDE6-E6E7 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1302,7 +1168,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3064 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseIpsBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel iPS DNase OS
         longLabel iPS DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1311,7 +1176,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3065 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHuh7BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Huh-7 DNase OS
         longLabel Huh-7 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1320,7 +1184,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3075 dateSubmitted=2010-12-07
 
         track wgEncodeOpenChromDnaseHuh75BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Huh-7.5 DNase OS
         longLabel Huh-7.5 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1329,7 +1192,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3076 dateSubmitted=2010-12-07
 
         track wgEncodeOpenChromDnaseStellateBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Stellate DNase OS
         longLabel Stellate DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1338,7 +1200,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3077 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseT47dBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel T-47D DNase OS
         longLabel T-47D DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1347,7 +1208,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3078 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Urothelia DNse OS
         longLabel Urothelia DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
@@ -1356,7 +1216,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3217 dateSubmitted=2011-01-11
 
         track wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Urothl ec DNse OS
         longLabel Urothelia UT189 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke

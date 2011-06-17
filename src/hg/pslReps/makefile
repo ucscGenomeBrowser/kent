@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = pslReps.o 
 
 pslReps: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslReps${EXE} $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/pslReps${EXE} $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib && ${MAKE}

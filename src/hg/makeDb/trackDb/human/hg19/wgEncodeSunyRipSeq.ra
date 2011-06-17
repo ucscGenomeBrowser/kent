@@ -11,7 +11,7 @@ subGroup4 rep Replicate rep1=1 rep2=2 Pooled=Pooled
 dimensions dimX=factor dimY=cellType dimZ=rep
 dimensionZchecked Pooled
 sortOrder cellType=+ factor=+ view=+ rep=+ 
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target labVersion=Antibody replicate=Rep view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accesssion fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody 
 dragAndDrop subTracks
 priority 0
@@ -188,14 +188,14 @@ noInherit on
     type bigWig
     subTrack wgEncodeSunyRipSeq
     maxHeightPixels 100:24:16
-    autoScale on
+    autoScale off
     viewLimits 0:500
     transformFunc NONE
-    windowingFunction mean
+    windowingFunction mean+whiskers
 
         track wgEncodeSunyRipSeqGm12878RipinputSigRep1
         parent wgEncodeSunyRipSeqViewSignal off 
-        shortLabel GM12878 Input Sig 1
+        shortLabel GM12878 Input 1
         longLabel GM12878 RIP-Input RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=GM12878 rep=rep1
         type bigWig 0.000000 83164.492188
@@ -204,7 +204,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqGm12878RipinputSigRep2
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel GM12878 Input Sig 2
+        shortLabel GM12878 Input 2
         longLabel GM12878 RIP-Input RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=GM12878 rep=rep2
         type bigWig 0.000000 106078.593750
@@ -213,7 +213,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqGm12878Elavl1SigRep1
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel GM12878 ELAVL1 Sig 1
+        shortLabel GM12878 ELAVL1 1
         longLabel GM12878 ELAVL1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=GM12878 rep=rep1
         type bigWig 0.000000 53896.902344
@@ -222,7 +222,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqGm12878Elavl1SigRep2
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel GM12878 ELAVL1 Sig 2
+        shortLabel GM12878 ELAVL1 2
         longLabel GM12878 ELAVL1 RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=GM12878 rep=rep2
         type bigWig 0.000000 55258.855469
@@ -231,7 +231,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqGm12878Pabpc1SigRep1
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel GM12878 PABPC1 Sig 1
+        shortLabel GM12878 PABPC1 1
         longLabel GM12878 PABPC1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=PABPC1 cellType=GM12878 rep=rep1
         type bigWig 0.000000 49859.886719
@@ -240,7 +240,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqGm12878Pabpc1SigRep2
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel GM12878 PABPC1 Sig 2
+        shortLabel GM12878 PABPC1 2
         longLabel GM12878 PABPC1 RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=PABPC1 cellType=GM12878 rep=rep2
         type bigWig 0.000000 51724.476562
@@ -249,7 +249,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqGm12878T7tagSigRep1
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel GM12878 T7Tag Sig 1
+        shortLabel GM12878 T7Tag 1
         longLabel GM12878 T7Tag RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=GM12878 rep=rep1
         type bigWig 0.000000 67823.984375
@@ -258,7 +258,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqGm12878T7tagSigRep2
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel GM12878 T7Tag Sig 2
+        shortLabel GM12878 T7Tag 2
         longLabel GM12878 T7Tag RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=GM12878 rep=rep2
         type bigWig 0.000000 100213.273438
@@ -267,7 +267,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqK562RipinputSigRep1
         parent wgEncodeSunyRipSeqViewSignal off 
-        shortLabel K562 Input Sig 1
+        shortLabel K562 Input 1
         longLabel K562 RIP-Input RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=K562 rep=rep1
         type bigWig 0.000000 88877.484375
@@ -276,7 +276,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqK562RipinputSigRep2
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel K562 Input Sig 2
+        shortLabel K562 Input 2
         longLabel K562 RIP-Input RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=K562 rep=rep2
         type bigWig 0.000000 88306.453125
@@ -285,7 +285,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqK562Elavl1SigRep1
         parent wgEncodeSunyRipSeqViewSignal off 
-        shortLabel K562 ELAVL1 Sig 1
+        shortLabel K562 ELAVL1 1
         longLabel K562 ELAVL1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=K562 rep=rep1
         type bigWig 0.000000 64478.648438
@@ -294,7 +294,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqK562Elavl1SigRep2
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel K562 ELAVL1 Sig 2
+        shortLabel K562 ELAVL1 2
         longLabel K562 ELAVL1 RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=K562 rep=rep2
         type bigWig 0.000000 65775.945312
@@ -303,7 +303,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqK562Pabpc1SigRep1
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel K562 PABPC1 Sig 1
+        shortLabel K562 PABPC1 1
         longLabel K562 PABPC1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=PABPC1 cellType=K562 rep=rep1
         type bigWig 0.000000 53101.386719
@@ -312,7 +312,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqK562Pabpc1SigRep2
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel K562 PABPC1 Sig 2
+        shortLabel K562 PABPC1 2
         longLabel K562 PABPC1 RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=PABPC1 cellType=K562 rep=rep2
         type bigWig 0.000000 57200.070312
@@ -321,7 +321,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqK562T7tagSigRep1
         parent wgEncodeSunyRipSeqViewSignal off 
-        shortLabel K562 T7Tag Sig 1
+        shortLabel K562 T7Tag 1
         longLabel K562 T7Tag RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=K562 rep=rep1
         type bigWig 0.000000 74535.296875
@@ -330,7 +330,7 @@ noInherit on
 
         track wgEncodeSunyRipSeqK562T7tagSigRep2
         parent wgEncodeSunyRipSeqViewSignal off
-        shortLabel K562 T7Tag Sig 2
+        shortLabel K562 T7Tag 2
         longLabel K562 T7Tag RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=K562 rep=rep2
         type bigWig 0.000000 51895.449219
@@ -341,14 +341,15 @@ noInherit on
     shortLabel Peaks      
     view Peaks 
     visibility full 
-    type bed 9
     subTrack wgEncodeSunyRipSeq
     scoreFilter 0
     scoreFilterLimits 0:1000
-    minGrayLevel 100
+    scoreMin 0
+    #minGrayLevel 11%
+    type bed 9
 
         track wgEncodeSunyRipSeqGm12878RipinputPk
-        parent wgEncodeSunyRipSeqViewPeaks on 
+        parent wgEncodeSunyRipSeqViewPeaks off
         shortLabel GM12878 Input Pk
         longLabel GM12878 RIP-Input RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ripInput cellType=GM12878 rep=Pooled
@@ -375,7 +376,7 @@ noInherit on
         # subId=3306 dateSubmitted=2011-01-19
 
         track wgEncodeSunyRipSeqK562RipinputPk
-        parent wgEncodeSunyRipSeqViewPeaks on 
+        parent wgEncodeSunyRipSeqViewPeaks off
         shortLabel K562 Input Pk
         longLabel K562 RIP-Input RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ripInput cellType=K562 rep=Pooled

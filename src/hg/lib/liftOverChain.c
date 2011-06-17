@@ -19,7 +19,7 @@ ret->fromDb = row[0];
 ret->toDb = row[1];
 ret->path = row[2];
 ret->minMatch = atof(row[3]);
-ret->minSizeT = sqlUnsigned(row[4]);
+ret->minChainT = sqlUnsigned(row[4]);
 ret->minSizeQ = sqlUnsigned(row[5]);
 strcpy(ret->multiple, row[6]);
 ret->minBlocks = atof(row[7]);
@@ -37,7 +37,7 @@ ret->fromDb = cloneString(row[0]);
 ret->toDb = cloneString(row[1]);
 ret->path = cloneString(row[2]);
 ret->minMatch = atof(row[3]);
-ret->minSizeT = sqlUnsigned(row[4]);
+ret->minChainT = sqlUnsigned(row[4]);
 ret->minSizeQ = sqlUnsigned(row[5]);
 strcpy(ret->multiple, row[6]);
 ret->minBlocks = atof(row[7]);
@@ -114,7 +114,7 @@ void liftOverChainSaveToDb(struct sqlConnection *conn, struct liftOverChain *el,
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s values ( '%s','%s',%s,%g,%u,%u,'%s',%g,'%s')", 
-	tableName,  el->fromDb,  el->toDb,  el->path,  el->minMatch,  el->minSizeT,  el->minSizeQ,  el->multiple,  el->minBlocks,  el->fudgeThick);
+	tableName,  el->fromDb,  el->toDb,  el->path,  el->minMatch,  el->minChainT,  el->minSizeQ,  el->multiple,  el->minBlocks,  el->fudgeThick);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -137,7 +137,7 @@ multiple = sqlEscapeString(el->multiple);
 fudgeThick = sqlEscapeString(el->fudgeThick);
 
 dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%g,%u,%u,'%s',%g,'%s')", 
-	tableName,  fromDb,  toDb,  path, el->minMatch , el->minSizeT , el->minSizeQ ,  multiple, el->minBlocks ,  fudgeThick);
+	tableName,  fromDb,  toDb,  path, el->minMatch , el->minChainT , el->minSizeQ ,  multiple, el->minBlocks ,  fudgeThick);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&fromDb);
@@ -160,7 +160,7 @@ ret->fromDb = sqlStringComma(&s);
 ret->toDb = sqlStringComma(&s);
 ret->path = sqlStringComma(&s);
 ret->minMatch = sqlFloatComma(&s);
-ret->minSizeT = sqlUnsignedComma(&s);
+ret->minChainT = sqlUnsignedComma(&s);
 ret->minSizeQ = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->multiple, sizeof(ret->multiple));
 ret->minBlocks = sqlFloatComma(&s);
@@ -212,7 +212,7 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%g", el->minMatch);
 fputc(sep,f);
-fprintf(f, "%u", el->minSizeT);
+fprintf(f, "%u", el->minChainT);
 fputc(sep,f);
 fprintf(f, "%u", el->minSizeQ);
 fputc(sep,f);

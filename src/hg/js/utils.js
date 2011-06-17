@@ -423,15 +423,35 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+trackName+"_meta");
+    var img = $(divit).prev('a').find("img");
+    if (img != undefined && $(img).length == 1) {
+        img = $(img)[0];
+        if ($(divit).css('display') == 'none')
+            $(img).attr('src','../images/upBlue.png');
+        else
+            $(img).attr('src','../images/downBlue.png');
+    }
     if($(divit).css('display') == 'none') {
         $("#div_"+trackName+"_cfg").hide();  // Hide any configuration when opening metadata
 
-        if($(divit).find('table').length == 0)
+        if($(divit).find('table').length == 0) {
             lookupMetadata(trackName,showLonglabel,showShortLabel);
+            return false;
+        }
     }
     var tr = $(divit).parents('tr');
     if (tr.length > 0) {
-        $(divit).children('table').css('backgroundColor',$(tr[0]).css('backgroundColor'));
+        tr = tr[0];
+        var bgClass = null;
+        var classes = $( tr ).attr("class").split(" ");
+        for (var ix=0;ix<classes.length;ix++) {
+            if (classes[ix].substring(0,'bgLevel'.length) == 'bgLevel')
+                bgClass = classes[ix];
+        }
+        if (bgClass) {
+            $(divit).children('table').removeClass('bgLevel1 bgLevel2 bgLevel3 bgLevel4');
+            $(divit).children('table').addClass(bgClass);
+        }
     }
     $(divit).toggle();  // jQuery hide/show
     return false;
@@ -607,7 +627,6 @@ function varHashToQueryString(varHash)
             retVal += "&";
         }
         var val = varHash[aVar];
-        // XXXX encode var=val ?
         if (typeof(val) == 'string'
         && val.length >= 2
         && val.indexOf('[') == 0
@@ -616,10 +635,11 @@ function varHashToQueryString(varHash)
             $(vals).each(function (ix) {
                 if (ix > 0)
                     retVal += "&";
-                retVal += aVar + "=" + this;
+                retVal += aVar + "=" + encodeURIComponent(this);
             });
-        } else
-            retVal += aVar + "=" + val;
+        } else {
+            retVal += aVar + "=" + encodeURIComponent(val);
+        }
     }
     return retVal;
 }
@@ -1634,8 +1654,10 @@ function sortTableInitialize(table,addSuperscript,altColors)
     // Highlight rows?  But on subtrack list, this will mess up the "..." coloring.  So just exclude tables with drag and drop
     if ($(table).hasClass('tableWithDragAndDrop') == false) {
         $('tbody.sortable').find('tr').hover(
-            function(){ $(this).addClass('bgLevel3'); },      // Will highlight the rows
-            function(){ $(this).removeClass('bgLevel3');}
+            function(){ $(this).addClass('bgLevel3');
+                        $(this).find('table').addClass('bgLevel3'); },      // Will highlight the rows, including '...'
+            function(){ $(this).removeClass('bgLevel3');
+                        $(this).find('table').removeClass('bgLevel3'); }
         );
     }
 
@@ -1728,10 +1750,16 @@ function findTracksMdbVarChanged(obj)
         if ($('#advancedTab').length == 1 && $('#filesTab').length == 1) {
             $("select.mdbVar[name='hgt_mdbVar"+num+"'][value!='"+newVar+"']").val(newVar);
         }
+        var cgiVars = "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
+        if (document.URL.search('hgFileSearch') != -1)
+            cgiVars += "&fileSearch=1";
+        else
+            cgiVars += "&fileSearch=0";
+
         $.ajax({
                    type: "GET",
                    url: "../cgi-bin/hgApi",
-                   data: "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar,
+                   data: cgiVars,
                    trueSuccess: findTracksHandleNewMdbVals,
                    success: catchErrorOrDispatch,
                    error: errorHandler,
@@ -1765,7 +1793,7 @@ function findTracksHandleNewMdbVals(response, status)
         }
         $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             if (usesFilterBy) {
-                $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+                $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
             } else {
                 $(this).attr("multiple",false);
                 $(this).removeClass('filterBy');
@@ -1793,7 +1821,7 @@ function findTracksMdbValChanged(obj)
                 if ($(this).hasClass('filterBy')) {
                     //$(this).dropdownchecklist("refresh");  // requires v1.1
                     $(this).dropdownchecklist("destroy");
-                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
                 }
             });
         }
@@ -1964,6 +1992,28 @@ function findTracksClearFound()
     return false;
 }
 
+function filterByMaxHeight(multiSel)
+{   // Setting a max hieght to scroll dropdownchecklists but
+    // multiSel is hidden when this is done, so it's position and height must be estimated.
+    var pos = $(multiSel).closest(':visible').offset().top + 30;
+    if (pos <= 0)
+        pos = 260;
+
+    // Special mess since the filterBy's on non-current tabs will calculate pos badly.
+    var tabbed = $('input#currentTab');
+    if (tabbed != undefined) {
+        var tabDiv = $(multiSel).parents('div#'+ $(tabbed).attr('value'));
+        if (tabDiv == null || tabDiv == undefined || $(tabDiv).length == 0) {
+            pos = 360;
+        }
+    }
+    var maxHeight = $(window).height() - pos;
+    var selHeight = $(multiSel).children().length * 21;
+    if (maxHeight > selHeight)
+        maxHeight = null;
+    return maxHeight;
+}
+
 function findTracksClear()
 {// Clear found tracks and all input controls
     findTracksClearFound();
@@ -1971,9 +2021,9 @@ function findTracksClear()
     //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
     $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
     $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
-          //$(this).dropdownchecklist("refresh");  // requires v1.1
-          $(this).dropdownchecklist("destroy");
-          $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+        //$(this).dropdownchecklist("refresh");  // requires v1.1
+        $(this).dropdownchecklist("destroy");
+        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
     });
 
     $('select.groupSearch').attr('selectedIndex',0);

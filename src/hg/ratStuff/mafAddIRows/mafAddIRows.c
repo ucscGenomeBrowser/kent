@@ -28,6 +28,7 @@ errAbort(
   "mafAddIRows - add 'i' rows to a maf\n"
   "usage:\n"
   "   mafAddIRows mafIn twoBitFile mafOut\n"
+  "WARNING:  requires a maf with only a single target sequence\n"
   "options:\n"
   "   -nBeds=listOfBedFiles\n"
   "       reads in list of bed files, one per species, with N locations\n"
@@ -92,6 +93,7 @@ char buffer[2048];
 char buffer2[2048];
 struct strandHead *strandHead;
 struct mafAli *mafList = NULL;
+char *ourChrom = NULL;
 
 while((maf = mafNext(mf)) != NULL)
     {
@@ -99,10 +101,22 @@ while((maf = mafNext(mf)) != NULL)
     char *species = buffer;
     char *chrom;
 
+    if (ourChrom == NULL)
+	ourChrom = masterMc->src;
+    else 
+	{
+	if (differentString(masterMc->src, ourChrom))
+	    errAbort("ERROR: mafAddIrows requires maf have only one target sequence.\n"
+		"Use mafSplit -byTarget -useFullSequenceName to split maf");
+	}
+
     strcpy(species, masterMc->src);
     chrom = strchr(species,'.');
     if (chrom)
 	*chrom++ = 0;
+    else
+	errAbort("reference species has no chrom name\n");
+
     if (masterSpecies == NULL)
 	{
 	masterSpecies = cloneString(species);

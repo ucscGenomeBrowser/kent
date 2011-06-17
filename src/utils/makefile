@@ -21,7 +21,6 @@ scripts:
 	rm -f ${SCRIPTS}/genePredToBed;
 	echo cp -p genePredToBed/genePredToBed ${SCRIPTS};
 	@cp -p genePredToBed/genePredToBed ${SCRIPTS};
-	cd cvsTools && ${MAKE} scripts
 
 alpha: scripts all
 
@@ -30,6 +29,7 @@ test:
 	cd twoBitToFa && ${MAKE} test
 	cd twoBitInfo && ${MAKE} test
 	cd pslLiftSubrangeBlat && ${MAKE} test
+	cd bedGeneParts && ${MAKE} test
 
 clean:
 	@for D in $(USE_DIRS) x; do \
@@ -56,13 +56,18 @@ DIRS = \
 	ave \
 	aveCols \
 	bedClip \
+	bedCommonRegions \
+	bedGeneParts \
 	bedGraphToBigWig \
 	bedRemoveOverlap \
+	bedRestrictToPositions \
 	bedToBigBed \
 	bigBedInfo \
 	bigBedSummary \
 	bigBedToBed \
+	bigWigAverageOverBed \
 	bigWigInfo \
+	bigWigMerge \
 	bigWigSummary \
 	bigWigToBedGraph \
 	bigWigToWig \
@@ -71,9 +76,9 @@ DIRS = \
 	catUncomment \
 	ccCp \
 	chopFaLines \
+	colTransform \
 	countChars \
 	convolve \
-	cvsTools \
 	detab \
 	endsInLf \
 	fastqToFa \

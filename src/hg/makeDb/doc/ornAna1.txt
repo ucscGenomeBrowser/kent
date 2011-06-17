@@ -700,6 +700,7 @@ cat > mafFrags.csh << 'EOF'
 
 #########################################################################
 # MULTIZ6WAY MAF FRAMES (DONE 4/26/2007 angie)
+# this was redone 2011-05-12 see below - Hiram
     ssh hgwdev
     mkdir /cluster/data/ornAna1/bed/multiz6way.2007-04-24/frames
     cd /cluster/data/ornAna1/bed/multiz6way.2007-04-24/frames
@@ -1478,4 +1479,249 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# lastz Lizard swap anoCar2 (DONE - 2011-04-27 - Hiram)
+    # the original alignment
+    cd /cluster/data/anoCar2/bed/lastzOrnAna1.2011-04-26
+    cat fb.anoCar2.chainOrnAna1Link.txt 
+    #	77594222 bases of 1701353770 (4.561%) in intersection
+
+    ## running the swap
+    mkdir /hive/data/genomes/ornAna1/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/ornAna1/bed/blastz.anoCar2.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/anoCar2/bed/lastzOrnAna1.2011-04-26/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+	-swap -bigClusterHub=swarm -tRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    40m51.778s
+    cat fb.ornAna1.chainAnoCar2Link.txt 
+    #	75402821 bases of 1842236818 (4.093%) in intersection
+
+############################################################################
+# rerun maf annotation since mafAddIRows can only work on one sequence
+#	at a time
+    mkdir /hive/data/genomes/ornAna1/bed/multiz6way.2007-04-24/anno/mafSplit
+    cd /hive/data/genomes/ornAna1/bed/multiz6way.2007-04-24/anno/mafSplit
+    #	need to split up the single maf file into individual
+    #	per-scaffold maf files to run annotation on
+    #	create bed files to list approximately 1000 scaffolds in
+    #	a single list, approximately 202 lists
+    cat << '_EOF_' > mkBedLists.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $bedCount = 0;
+my $i = 0;
+
+my $bedFile = sprintf("file_%d.bed", $bedCount);
+
+open (BF,">$bedFile") or die "can not write to $bedFile $!";
+
+open (FH,"</hive/data/genomes/ornAna1/chrom.sizes") or
+        die "can not read /hive/data/genomes/ornAna1/chrom.sizes $!";
+while (my $line = <FH>) {
+    chomp $line;
+    if ( (($i + 1) % 1000) == 0 )  {
+        printf "%s\n", $line;
+        close (BF);
+        ++$bedCount;
+        $bedFile = sprintf("file_%d.bed", $bedCount);
+        open (BF,">$bedFile") or die "can not write to $bedFile $!";
+    }
+    ++$i;
+    my ($chr, $size) = split('\s+',$line);
+    printf BF "%s\t0\t%d\t%s\n", $chr, $size, $chr;
+}
+close (FH);
+close (BH);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkBedLists.pl
+    ./mkBedLists.pl
+    cat *.bed | wc -l
+    #	201523
+    wc -l /hive/data/genomes/ornAna1/chrom.sizes
+    #	201523 /hive/data/genomes/ornAna1/chrom.sizes
+
+    #	now, run a mafsInRegion on each one of those lists
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set runDir = "/cluster/data/ornAna1/bed/multiz6way/anno/mafSplit"
+set resultDir = $1
+set bedFile = $resultDir.bed
+mkdir -p $resultDir
+mkdir -p /scratch/tmp/ornAna1/$resultDir
+pushd /scratch/tmp/ornAna1/$resultDir
+mafsInRegion $runDir/$bedFile -outDir . \
+    /hive/data/genomes/ornAna1/bed/multiz6way.2007-04-24/anno/ornAna1.maf
+popd
+rsync -q -a /scratch/tmp/ornAna1/$resultDir/ ./$resultDir/
+rm -fr /scratch/tmp/ornAna1/$resultDir
+rmdir --ignore-fail-on-non-empty /scratch/tmp/ornAna1
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # running this on memk with 24 CPUs
+    ls file*.bed > runList
+    gensub2 runList single template jobList
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 202 of 202 jobs
+# CPU time in finished jobs:       7640s     127.34m     2.12h    0.09d  0.000 y
+# IO & Wait Time:                 13270s     221.16m     3.69h    0.15d  0.000 y
+# Average job time:                 104s       1.73m     0.03h    0.00d
+# Longest finished job:             245s       4.08m     0.07h    0.00d
+# Submission to last job:          1071s      17.85m     0.30h    0.01d
+
+    cd /hive/data/genomes/ornAna1/bed/multiz6way/anno/run
+for DB in `cat ../../species.lst`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+set outDir = ../maf/$2
+set result = $3
+set input = $1
+mkdir -p $outDir
+cat $input | \
+nice mafAddIRows -nBeds=nBeds stdin /hive/data/genomes/ornAna1/ornAna1.2bit $result
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(path1) $(lastDir1) {check out line+ ../maf/$(lastDir1)/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../mafSplit -type f -name "*.maf" > maf.list
+    gensub2 maf.list single template jobList
+    # slowing this down on swarm, 1 job per node with this memory limit:
+    para -ram=8g create jobList
+    para try ... check ...  etc.
+    para push
+# Completed: 83266 of 83266 jobs
+# CPU time in finished jobs:      17759s     295.98m     4.93h    0.21d  0.001 y
+# IO & Wait Time:                212068s    3534.47m    58.91h    2.45d  0.007 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              19s       0.32m     0.01h    0.00d
+# Submission to last job:          1106s      18.43m     0.31h    0.01d
+
+    #	put the results back together into a single file
+    cd /hive/data/genomes/ornAna1/bed/multiz6way/anno
+    # combine into one file
+    head -q -n 1 maf/file_0/chr1.maf > ornAna1.6way.maf
+    time find ./maf -type f | while read F
+do
+    grep -h -v "^#" ${F}
+done >> ornAna1.6way.maf
+    real    23m17.855s
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 maf/file_0/chr1.maf >> ornAna1.6way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> ornAna1.6way.maf
+
+    cd /cluster/data/ornAna1/bed/multiz6way/anno
+    mkdir -p /gbdb/ornAna1/multiz6way/anno
+    ln -s `pwd`/ornAna1.6way.maf /gbdb/ornAna1/multiz6way/anno/multiz6way.maf
+
+    #	by loading this into the table multiz6way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/ornAna1/multiz6way/anno \
+                ornAna1 multiz6way
+    #	Loaded 2917036 mafs in 1 files from /gbdb/ornAna1/multiz6way/anno
+    #	real    1m17.387s
+
+    #	normally filter this for chrom size > 1,000,000 and only load
+    #	those chroms.  But this is a scaffold assembly, load everything:
+    time nice -n +19 hgLoadMafSummary ornAna1 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000  multiz6waySummary \
+	    /gbdb/ornAna1/multiz6way/anno/multiz6way.maf
+    #	Created 572679 summary blocks from 2650531 components
+    #	and 2917036 mafs from /gbdb/ornAna1/multiz6way/anno/multiz6way.maf
+    #	real    1m13.692s
+
+    #	by loading this into the table multiz6waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	remove the multiz6way*.tab files in this /scratch/tmp directory
+    rm multiz6way*.tab
+
+############################################################################
+# rerun frames on new annotation and more gene sources (2011-05-12 - Hiram)
+    cd /hive/data/genomes/ornAna1/bed/multiz6way.2007-04-24/frames
+# ensGene is good for most
+    for qDB in ornAna1 anoCar1 galGal3 mm8
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+# monDom4 ensGene is an older version with only 10 columns
+for qDB in monDom4
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+# knownGenes for hg18
+for qDB in hg18
+do
+  echo hgsql -N -e \"'select * from 'knownGene\;\" ${qDB}
+      hgsql -N -e "select * from knownGene" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    cat ../anno/ornAna1.6way.maf \
+	| nice -n +19 genePredToMafFrames ornAna1 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.lst` \
+		| gzip > ornAna1.mafFrames.gz
+    # a couple of minutes
+
+    # verify there are frames on everything:
+    zcat ornAna1.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	225496 anoCar1
+    #	318691 galGal3
+    #	428985 hg18
+    #	489490 mm8
+    #	341401 monDom4
+    #	149620 ornAna1
+
+    ssh hgwdev
+    cd /hive/data/genomes/ornAna1/bed/multiz6way/frames
+    time hgLoadMafFrames ornAna1 multiz6wayFrames ornAna1.mafFrames.gz
+    #	real    0m15.994s
+#########################################################################
+# SWAP BOSTAU6 CHAIN/NET (DONE 2011-05-20 - Chin)
+    cd /cluster/data/ornAna1/bed/blastz.bosTau6.swap
+    cat fb.ornAna1.chainBosTau6Link.txt
+    #   190401000 bases of 1842236818 (10.335%) in intersection
+    cd /cluster/data/ornAna1/bed
+    ln -s blastz.bosTau6.swap lastz.bosTau6
+
 ############################################################################

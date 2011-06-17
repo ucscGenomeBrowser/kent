@@ -230,7 +230,7 @@ dataVersion ENCODE Feb 2009, Sep 2009 data freezes
 
          #THE VERY FIRST
          track wgEncodeBroadChipSeqSignalGm12878H4k20me1
-         subTrack wgEncodeBroadChipSeqViewSignal off
+         parent wgEncodeBroadChipSeqViewSignal off
          shortLabel GM128 H4K20me1 S
          longLabel PATCHED ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, GM12878)
          subGroups view=Signal factor=H4K20me1 cellType=GM12878
@@ -240,7 +240,7 @@ dataVersion ENCODE Feb 2009, Sep 2009 data freezes
          metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H4K20me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=147 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalGm12878H4k20me1 fileName=wgEncodeBroadChipSeqSignalGm12878H4k20me1.wig.gz
 
         track wgEncodeBroadChipSeqSignalGm12878H3k27ac
-        subTrack wgEncodeBroadChipSeqViewSignal
+        parent wgEncodeBroadChipSeqViewSignal
         shortLabel GM128 H3K27ac S
         longLabel PATCHED ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, GM12878)
         subGroups view=Signal factor=H3K27ac cellType=GM12878
@@ -250,7 +250,7 @@ dataVersion ENCODE Feb 2009, Sep 2009 data freezes
         metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K27ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=145 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalGm12878H3k27ac fileName=wgEncodeBroadChipSeqSignalGm12878H3k27ac.wig.gz
 
         track wgEncodeBroadChipSeqSignalGm12878H3k27me3
-        subTrack wgEncodeBroadChipSeqViewSignal
+        parent wgEncodeBroadChipSeqViewSignal
         shortLabel GM128 H3K27me3 S
         longLabel PATCHED ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, GM12878)
         subGroups view=Signal factor=H3K27me3 cellType=GM12878

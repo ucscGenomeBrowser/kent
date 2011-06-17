@@ -5,6 +5,7 @@
 #include "hdb.h"
 #include "cheapcgi.h"
 #include "dystring.h"
+#include "suggest.h"
 
 static char const rcsid[] = "$Id: hgSuggest.c,v 1.4 2010/03/04 19:53:28 larrym Exp $";
 
@@ -26,30 +27,32 @@ char **row;
 struct sqlResult *sr;
 int count = 0;
 boolean hasKnownCanonical;
-boolean hasRefSeq;
 struct dyString *str = newDyString(10000);
-char previous[256];
+char *table, previous[256];
 
 if(prefix == NULL || database == NULL)
     fail("Missing prefix or database parameter");
 
 conn = hAllocConn(database);
+table = connGeneSuggestTable(conn);
+if(table == NULL)
+    fail("gene autosuggest is not supported for this assembly");
 
-hasKnownCanonical = sqlTableExists(conn, "knownCanonical");
-hasRefSeq = sqlTableExists(conn, "refGene");
-if(!hasKnownCanonical && !hasRefSeq)
-    fail("gene autosuggest is not supported for this assembly because it does not have a knownCanonical or a refGene table");
+hasKnownCanonical = sameString(table, "knownCanonical");
 
 puts("Content-Type:text/plain");
 puts("\n");
 
 dyStringPrintf(str, "[\n");
+
+// We have to choose one isoform, so we choose the largest one; we order by chrom to make sure we choose normal chromosomes 
+// over _random and _hap chromosomes (see redmine #4257).
 if(exact)
     {
     if(hasKnownCanonical)
-        safef(query, sizeof(query), "select x.geneSymbol, k.chrom, k2.txStart, k2.txEnd from knownCanonical k, knownGene k2, kgXref x where k.transcript = x.kgID and k.transcript = k2.name and x.geneSymbol = '%s' order by x.geneSymbol, k2.txEnd - k2.txStart desc", prefix);
+        safef(query, sizeof(query), "select x.geneSymbol, k.chrom, k2.txStart, k2.txEnd from knownCanonical k, knownGene k2, kgXref x where k.transcript = x.kgID and k.transcript = k2.name and x.geneSymbol = '%s' order by x.geneSymbol, k.chrom, k2.txEnd - k2.txStart desc", prefix);
     else
-        safef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd from refGene r where r.name2 = '%s' order by r.name2, r.txEnd - r.txStart desc", prefix);
+        safef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd from %s r where r.name2 = '%s' order by r.name2, r.chrom, r.txEnd - r.txStart desc", table, prefix);
     }
 else
     {
@@ -57,10 +60,9 @@ else
     // Also note that we take advantage of the fact that searches are case-insensitive in mysql.
     // Some tables have duplicates (e.g. 2 TTn's in mm9 knownCanonical); currently the larger one wins.
     if(hasKnownCanonical)
-        safef(query, sizeof(query), "select x.geneSymbol, k.chrom, k2.txStart, k2.txEnd from knownCanonical k, knownGene k2, kgXref x where k.transcript = x.kgID and k.transcript = k2.name and x.geneSymbol LIKE '%s%%' order by x.geneSymbol, k2.txEnd - k2.txStart desc", prefix);
+        safef(query, sizeof(query), "select x.geneSymbol, k.chrom, k2.txStart, k2.txEnd from knownCanonical k, knownGene k2, kgXref x where k.transcript = x.kgID and k.transcript = k2.name and x.geneSymbol LIKE '%s%%' order by x.geneSymbol, k.chrom, k2.txEnd - k2.txStart desc", prefix);
     else
-        // arbitrarily prefer the longest isoform
-        safef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd from refGene r where r.name2 LIKE '%s%%' order by r.name2, r.txEnd - r.txStart desc", prefix);
+        safef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd from %s r where r.name2 LIKE '%s%%' order by r.name2, r.chrom, r.txEnd - r.txStart desc", table, prefix);
     }
 sr = sqlGetResult(conn, query);
 previous[0] = 0;

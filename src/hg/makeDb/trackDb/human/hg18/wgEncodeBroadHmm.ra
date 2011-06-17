@@ -8,7 +8,7 @@ group regulation
 subGroup1 cellType Cell_Line GM12878=GM12878 H1=H1-hESC HEPG2=HepG2 HMEC=HMEC HSMM=HSMM HUVEC=HUVEC K562=K562 NHEK=NHEK NHLF=NHLF
 dimensions dimensionX=cellType
 sortOrder cellType=+
-fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 priority 0
@@ -22,7 +22,6 @@ filterBy name:State="1 Active Promoter","2 Weak Promoter","3 Poised Promoter","4
 dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeBroadHmmGm12878HMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel GM12878 HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in GM12878 cells)
@@ -32,7 +31,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3446 dateSubmitted=2011-01-21
 
         track wgEncodeBroadHmmH1hescHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel H1-hESC HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in H1-hESC cells)
@@ -42,7 +40,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3446 dateSubmitted=2011-01-21
 
         track wgEncodeBroadHmmK562HMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel K562 HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in K562 cells)
@@ -52,7 +49,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3446 dateSubmitted=2011-01-21
 
         track wgEncodeBroadHmmHepg2HMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel HepG2 HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in HepG2 cells)
@@ -62,7 +58,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3446 dateSubmitted=2011-01-21
 
         track wgEncodeBroadHmmHmecHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel HMEC HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in HMEC cells)
@@ -71,7 +66,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3446 dateSubmitted=2011-01-21
 
         track wgEncodeBroadHmmNhlfHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel NHLF HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in NHLF cells)
@@ -80,7 +74,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3446 dateSubmitted=2011-01-21
 
         track wgEncodeBroadHmmNhekHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel NHEK HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in NHEK cells)
@@ -90,7 +83,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3446 dateSubmitted=2011-01-21
 
         track wgEncodeBroadHmmHsmmHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel HSMM HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in HSMM cells)
@@ -99,7 +91,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3446 dateSubmitted=2011-01-21
 
         track wgEncodeBroadHmmHuvecHMM
-        release alpha
         parent wgEncodeBroadHmm
         shortLabel HUVEC HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in HUVEC cells)

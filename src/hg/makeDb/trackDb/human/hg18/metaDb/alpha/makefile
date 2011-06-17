@@ -17,15 +17,19 @@ wgEncodeHudsonalphaCnv.ra\
 wgEncodeHudsonalphaMethyl27.ra\
 wgEncodeHudsonalphaMethylSeq.ra\
 wgEncodeHudsonalphaRnaSeq.ra\
+wgEncodeMapability.ra\
+wgEncodeNhgriBip.ra\
+wgEncodeNhgriNRE.ra\
 wgEncodeReg.ra\
 wgEncodeRikenCage.ra\
 wgEncodeSangerGencode.ra\
 wgEncodeSunyalbanyRnaGeneChip.ra\
+wgEncodeUmasshaTfbsValid.ra\
 wgEncodeUwAffyExonArray.ra\
 wgEncodeUwChIPSeq.ra\
 wgEncodeUwDGF.ra\
 wgEncodeUwDnaseSeq.ra\
-wgEncodeYaleChIPseq.ra\
-wgEncodeYaleRNAseq.ra
+wgEncodeYaleChIPseq.ra
+
 
 include ../../../../makefile.metaDb

@@ -109,6 +109,9 @@ void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
 void printEntrezPubMedUidUrl(FILE *f, int pmid);
 /* Print URL for Entrez browser on a PubMed search. */
 
+void printSwissProtAccUrl(FILE *f, char *accession);
+/* Print URL for Swiss-Prot protein accession. */
+
 boolean clipToChrom(int *pStart, int *pEnd);
 /* Clip start/end coordinates to fit in chromosome. */
 
@@ -406,6 +409,9 @@ void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 
 void doBamDetails(struct trackDb *tdb, char *item);
 /* Show details of an alignment from a BAM file. */
+
+void doVcfTabixDetails(struct trackDb *tdb, char *item);
+/* Show details of an alignment from a VCF file compressed and indexed by tabix. */
 
 void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
 /* Show details of a makeItems item. */

@@ -1,4 +1,4 @@
-Finished parsing "input/YRI.low_coverage.2010_07_excerpt.genotypes.vcf.gz", got 6 data rows
+Finished parsing "input/YRI.low_coverage.2010_07_excerpt.genotypes.vcf.gz" items in 2:26793738-26794385, got 6 data rows
 First (up to) 100 rows in range:
 2	26793737	26793738	rs1662988:C/T	0.000000
 2	26793755	26793756	.:A/G	0.000000

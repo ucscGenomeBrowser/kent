@@ -6,5 +6,7 @@ wgEncodeUwDnase.ra \
 wgEncodeLicrHistone.ra \
 wgEncodePsuTfbs.ra \
 wgEncodeLicrTfbs.ra \
-wgEncodePsuHistone.ra
+wgEncodePsuHistone.ra \
+wgEncodeSydhRnaSeq.ra \
+wgEncodeLicrRnaSeq.ra
 include ../../../../makefile.metaDb

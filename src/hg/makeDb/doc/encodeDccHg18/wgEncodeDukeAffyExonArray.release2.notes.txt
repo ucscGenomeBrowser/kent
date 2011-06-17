@@ -1,0 +1,174 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release2 of the "ENCODE wgEncodeDukeAffyExonArray"
+The composite track is wgEncodeDukeAffyExonArray
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release2 (new+untouched):
+    Tables: 54
+    Files: 57
+    Gbdbs: 0
+
+A) Untouched Tables (54):
+wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy
+wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion
+wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240
+wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3
+wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h
+wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h
+wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2
+wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec
+wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec
+wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap
+wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro
+wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7
+wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro
+wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle
+wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo
+wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek
+wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl
+wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib
+wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy
+wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240
+wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3
+wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h
+wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h
+wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2
+wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec
+wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec
+wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap
+wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro
+wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro
+wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle
+wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo
+wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek
+wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl
+wgEncodeDukeAffyExonArraySimpleSignalRep2Progfib
+wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878
+wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507
+wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3
+wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2
+
+A') Untouched Files (54 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release2/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
+
+wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Progfib.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2.broadPeak.gz
+
+
+B) Deprecated tables (4):
+wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr
+wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro
+wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr
+wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro
+
+B') Deprecated files (4 downloadables, 0 gbdbs):
+    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
+    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release1/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
+
+wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr.broadPeak.gz
+wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro.broadPeak.gz
+
+
+C) New tables (0):
+
+C') New files (0 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release2/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
+
+
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release2/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
+
+index.html
+files.txt
+md5sum.txt

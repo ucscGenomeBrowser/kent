@@ -13,6 +13,7 @@ int clDims = 1;
 double clScoreScale = 1.0;
 double clForceJoinScore = 2;
 double clWeakLevel = 0.1;
+boolean clAveScore = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +36,7 @@ errAbort(
 "                    Default %g\n"
 "   -forceJoinScore=0.N - if combined score of elements joining 2 clusters above this, the\n"
 "                         clusters will be joined. Default %g\n"
+"   -aveScore - if set cluster score is average of components, not max\n"
 , clDims
 , clScoreScale
 , clWeakLevel
@@ -47,6 +49,7 @@ static struct optionSpec options[] = {
    {"scoreScale", OPTION_DOUBLE},
    {"forceJoinScore", OPTION_DOUBLE},
    {"weakLevel", OPTION_DOUBLE},
+   {"aveScore", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -79,7 +82,11 @@ for (range = rangeList; range != NULL; range = range->next)
 	       fprintf(fCluster, "\t%s", item->source->labels[i]);
 	    fprintf(fCluster, "\n");
 	    }
-	double score = clScoreScale * cluster->maxSubScore;
+	double score;
+	if (clAveScore)
+	    score = clScoreScale * (cluster->score / uniqHash->elCount);
+	else
+	    score = clScoreScale * cluster->maxSubScore;
 	if (score > 1000) score = 1000;
 	fprintf(fBed, "%s\t%d\t%d\t%d\t%d\n", chrom, 
 		cluster->chromStart, cluster->chromEnd, uniqHash->elCount, round(score));
@@ -126,6 +133,7 @@ if (argc != 4)
 clDims = optionInt("dims", clDims);
 clScoreScale = optionDouble("scoreScale", clScoreScale);
 clWeakLevel = optionDouble("weakLevel", clWeakLevel);
+clAveScore = optionExists("aveScore");
 regCluster(argv[1], argv[2], argv[3]);
 return 0;
 }

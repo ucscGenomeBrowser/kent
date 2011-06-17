@@ -437,7 +437,7 @@ struct bed *list = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *row[bedKnownFields];
 
-while (lineFileNext(lf, &line, NULL))
+while (lineFileNextReal(lf, &line))
     {
     int numFields = chopByWhite(line, row, ArraySize(row));
     if (numFields < 4)
@@ -447,6 +447,35 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 slReverse(&list);
 return list;
+}
+
+void bedLoadAllReturnFieldCount(char *fileName, struct bed **retList, int *retFieldCount)
+/* Load bed of unknown size and return number of fields as well as list of bed items.
+ * Ensures that all lines in bed file have same field count. */
+{
+struct bed *list = NULL;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *row[bedKnownFields];
+int fieldCount = 0;
+
+while (lineFileNextReal(lf, &line))
+    {
+    int numFields = chopByWhite(line, row, ArraySize(row));
+    if (numFields < 4)
+	errAbort("file %s doesn't appear to be in bed format. At least 4 fields required, got %d", 
+		fileName, numFields);
+    if (fieldCount == 0)
+        fieldCount = numFields;
+    else
+        if (fieldCount != numFields)
+	    errAbort("Inconsistent number of fields in file. %d on line %d of %s, %d previously.",
+	        numFields, lf->lineIx, lf->fileName, fieldCount);
+    slAddHead(&list, bedLoadN(row, fieldCount));
+    }
+lineFileClose(&lf);
+slReverse(&list);
+*retList = list;
+*retFieldCount = fieldCount;
 }
 
 static void bedOutputN_Opt(struct bed *el, int wordCount, FILE *f,
@@ -827,6 +856,17 @@ for (bed=bedList;  bed != NULL;  bed=bed->next)
 
 slReverse(&bedListOut);
 return bedListOut;
+}
+
+struct bed *bedListNextDifferentChrom(struct bed *bedList)
+/* Return next bed in list that is from a different chrom than the start of the list. */
+{
+char *firstChrom = bedList->chrom;
+struct bed *bed;
+for (bed = bedList->next; bed != NULL; bed = bed->next)
+    if (!sameString(firstChrom, bed->chrom))
+        break;
+return bed;
 }
 
 struct bed *bedCommaInN(char **pS, struct bed *ret, int fieldCount)

@@ -647,6 +647,132 @@ freeMem(mapping->data);
 freez(&mapping);
 }
 
+/* static void uglyPrintSlInt(struct slInt *list) */
+/* { */
+/* struct slInt *item; */
+/* int i = 0; */
+/* for (item = list; item != NULL; item = item->next) */
+/*     uglyf("i = %d, item->val = %d\n", i++, item->val); */
+/* } */
+
+static struct slRef *groupingLoL(struct maGrouping *grouping)
+/* return the grouping groups array as an slRef list of slInts */
+{
+struct slRef *list = NULL;
+int i;
+int off = 0;
+for (i = 0; i < grouping->numGroups; i++)
+    {
+    struct slInt *ints = NULL;
+    int j;
+    for (j = off; j < off + grouping->groupSizes[i]; j++)
+	{
+	struct slInt *oneInt = slIntNew(grouping->expIds[j]);
+	slAddHead(&ints, oneInt);
+	}
+    slReverse(&ints);
+    refAdd(&list, ints);
+    off += grouping->groupSizes[i];
+    }
+slReverse(&list);
+return list;
+}
+
+static void maPruneLoL(struct slRef *lol, struct slInt *subsetList)
+/* remove things from list where the subset */
+{
+struct slRef *ref;
+for (ref = lol; ref != NULL; ref = ref->next)
+    {
+    struct slInt *intList = (struct slInt *)ref->val;
+    struct slInt *cur;
+    struct slInt *newList = NULL;
+    while ((cur = slPopHead(&intList)) != NULL)
+	{
+	if (slIntFind(subsetList, cur->val))
+	    slAddHead(&newList, cur);
+	else
+	    freeMem(cur);
+	}
+    if (newList)
+	slSort(&newList, slIntCmp);
+    ref->val = newList;
+    }
+}
+
+static struct slInt *makeSubsetSlInt(struct maGrouping *subset, int subsetOffset)
+/* just make a linked-list out of an array */
+{
+struct slInt *list = NULL;
+if (subset)
+    {
+    int i;
+    int j = 0;
+    for (i = 0; i < subsetOffset; i++)
+	j += subset->groupSizes[i];
+    for (i = j; i < j + subset->groupSizes[subsetOffset]; i++)
+	{
+	struct slInt *newint = slIntNew(subset->expIds[i]);
+	slAddHead(&list, newint);
+	}
+    slReverse(&list);
+    }
+return list;
+}
+
+static void maPruneGroupingWithSubset(struct maGrouping *grouping, struct maGrouping *subset, int subsetOffset)
+/* remove all the expIds not contained in the subset from the given grouping, */
+/* and remove groups that have no expIds left */
+{
+if (grouping && subset && (subsetOffset < subset->numGroups) && (subsetOffset >= 0))
+    {
+    int i, j, k;
+    int newSize = subset->groupSizes[subsetOffset];
+    struct slRef *lol = groupingLoL(grouping);
+    struct slRef *cur;
+    struct slInt *ssList = makeSubsetSlInt(subset, subsetOffset);
+    int *newExpIds;
+    int newNumGroups = 0;
+    char **newNames;
+    int *newGroupSizes;
+    maPruneLoL(lol, ssList);
+    for (cur = lol; cur != NULL; cur = cur->next)
+	{
+	struct slInt *curList = cur->val;
+	if (slCount(curList) > 0)
+	    newNumGroups++;
+	}
+    AllocArray(newGroupSizes, newNumGroups);
+    AllocArray(newNames, newNumGroups);
+    AllocArray(newExpIds, newSize);
+    i = 0;
+    j = 0;
+    for (k = 0, cur = lol; (k < grouping->numGroups) && (cur != NULL); k++, cur = cur->next)
+	{
+	struct slInt *curList = cur->val;
+	int groupSize = slCount(curList);
+	if (groupSize > 0)
+	    {
+	    struct slInt *intcur;
+	    for (intcur = curList; intcur != NULL; intcur = intcur->next)
+		newExpIds[j++] = intcur->val;
+	    newNames[i] = cloneString(grouping->names[k]);
+	    newGroupSizes[i] = groupSize;
+	    i++;
+	    }
+	freeMem(grouping->names[k]);
+	}
+    freeMem(grouping->names);
+    freeMem(grouping->groupSizes);
+    freeMem(grouping->expIds);
+    grouping->names = newNames;
+    grouping->groupSizes = newGroupSizes;
+    grouping->numGroups = newNumGroups;
+    grouping->expIds = newExpIds;
+    grouping->size = newSize;
+    }
+}
+
 struct expData *maExpDataClumpGivenGrouping(struct expData *exps, struct maGrouping *grouping)
 /* Clump expDatas from a grouping from a .ra file. */
 {
@@ -654,8 +780,8 @@ struct mapArray *mapping;
 struct expData *ret = NULL;
 enum maCombineMethod combine = useMedian;
 char *combType;
-if (!grouping->type || sameWord(grouping->type, "all"))
-    return NULL;
+/* if (!grouping->type || sameWord(grouping->type, "all")) */
+/*     return NULL; */
 combType = cloneString(grouping->type);
 eraseWhiteSpace(combType);
 if (sameWord(combType, "combinemean"))
@@ -888,17 +1014,28 @@ hashFreeList(&hashList);
 return ret;
 }
 
+struct maGrouping *maGetGrouping(struct microarrayGroups *groupings, char *name)
+/* Return the specfic grouping (combine or subset), or NULL if not found */
+{
+struct maGrouping *ret;
+for (ret = groupings->combineSettings; ret != NULL; ret = ret->next)
+    if (sameString(ret->name, name))
+	return ret;
+for (ret = groupings->subsetSettings; ret != NULL; ret = ret->next)
+    if (sameString(ret->name, name))
+	return ret;
+return NULL;
+}
+
 struct maGrouping *maCombineGroupingFromCart(struct microarrayGroups *groupings, 
 				    struct cart *cart, char *trackName)
 /* Determine which grouping to use based on the cart status or lack thereof. */
 {
 char *setting = NULL;
-char cartVar[512];
-struct maGrouping *ret = NULL;
+char *cartVar = expRatioCombineDLName(trackName);
 /* Possibly NULL from custom trackness. */
 if (!groupings)
     return NULL;
-safef(cartVar, sizeof(cartVar), "%s.combine", trackName);
 setting = cartUsualString(cart, cartVar, NULL);
 if (setting && sameWord(groupings->allArrays->name, setting))
     return groupings->allArrays;
@@ -909,11 +1046,42 @@ if (setting)
 	if (sameWord(cur->name, setting))
 	    return cur;
     }
-if (ret == NULL)
-    ret = groupings->defaultCombine;
-if (ret == NULL)
-    ret = groupings->allArrays;
-return ret;
+if (groupings->defaultCombine)
+    return groupings->defaultCombine;
+return groupings->allArrays;
+}
+
+/* int maSubsetOffsetFromCart(struct microarrayGroups *groupings, struct cart *cart, char *trackName) */
+
+struct maGrouping *maSubsetGroupingFromCart(struct microarrayGroups *groupings, 
+				    struct cart *cart, char *trackName)
+/* Determine which grouping to use based on the cart status or lack thereof. */
+{
+char *setting = NULL;
+char *cartVar = expRatioSubsetRadioName(trackName, groupings);
+/* Possibly NULL from custom trackness. */
+if (!groupings)
+    return NULL;
+setting = cartUsualString(cart, cartVar, NULL);
+if (setting)
+    {
+    struct maGrouping *cur;
+    for (cur = groupings->subsetSettings; cur != NULL; cur = cur->next)
+	if (sameWord(cur->name, setting))
+	    return cur;
+    }
+return NULL;
+}
+
+int maSubsetOffsetFromCart(struct maGrouping *subset, struct cart* cart, char *trackName)
+{
+int setting;
+char *cartVar;
+if (!subset)
+    return -1;
+cartVar = expRatioSubsetDLName(trackName, subset);
+setting = cartUsualInt(cart, cartVar, -1);
+return setting;
 }
 
 /********* Dealing with BED. ************/
@@ -944,13 +1112,16 @@ slReverse(&newList);
 return newList;
 }
 
-void maBedClumpGivenGrouping(struct bed *bedList, struct maGrouping *grouping)
+void maBedClumpGivenGrouping(struct bed *bedList, struct maGrouping *grouping, struct maGrouping *subset, int subsetOffset)
 /* Clump (mean/median) a bed 15 given the grouping kind. */
 {
 struct expData *exps = maExpDataListFromExpBedList(bedList);
-struct expData *clumpedExps = maExpDataClumpGivenGrouping(exps, grouping);
+struct expData *clumpedExps;
 struct bed *bed;
 struct expData *exp;
+if (subset)
+    maPruneGroupingWithSubset(grouping, subset, subsetOffset);
+clumpedExps = maExpDataClumpGivenGrouping(exps, grouping);
 expDataFreeList(&exps);
 if (!clumpedExps)
     return;
@@ -985,4 +1156,25 @@ if (sameString(colorScheme, "redBlueOnWhite"))
 if (sameString(colorScheme, "redBlueOnYellow"))
     return redBlueOnYellow;
 return redGreen;
+}
+
+char *expRatioCombineDLName(char *trackName)
+{
+char dropDownName[128];
+safef(dropDownName, sizeof(dropDownName), "%s.combine", trackName);
+return cloneString(dropDownName);
+}
+
+char *expRatioSubsetRadioName(char *trackName, struct microarrayGroups *groupings)
+{
+char radioVarName[128];
+safef(radioVarName, sizeof(radioVarName), "%s.subset", trackName);
+return cloneString(radioVarName);
+}
+
+char *expRatioSubsetDLName(char *trackName, struct maGrouping *group)
+{
+char dropVarName[256];
+safef(dropVarName, sizeof(dropVarName), "%s.subset.%s", trackName, group->name);
+return cloneString(dropVarName);
 }

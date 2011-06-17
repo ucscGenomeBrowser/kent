@@ -153,7 +153,7 @@ for (i=0; i<length; ++i)
 /** List managing routines. */
 
 /* Count up elements in list. */
-int slCount(void *list)
+int slCount(const void *list)
 {
 struct slList *pt = (struct slList *)list;
 int len = 0;
@@ -751,13 +751,32 @@ slReverse(&list);
 return list;
 }
 
-struct slName *slNameListOfUniqueWords(char *text)
+struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes)
 // Return list of unique words found by parsing string delimited by whitespace.
+// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes
 {
 struct slName *list = NULL;
 char *word = NULL;
-while ((word = nextWord(&text)) != NULL)
-    slNameStore(&list, word);
+while (text != NULL)
+    {
+    if (respectQuotes)
+        {
+        word = nextWordRespectingQuotes(&text);
+        if (word != NULL)
+            {
+            if (word[0] == '"')
+                stripChar(word, '"');
+            else if (word[0] == '\'')
+                stripChar(word, '\'');
+            }
+        }
+    else
+        word = nextWord(&text);
+    if (word)
+        slNameStore(&list, word);
+    else
+        break;
+    }
 
 slReverse(&list);
 return list;
@@ -968,62 +987,213 @@ if (el == NULL)
 return el->val;
 }
 
-struct slPair *slPairFromString(char *s)
-/* Return slPair list parsed from list in string s
- * name1=val1 name2=val2 ...
- * Returns NULL if parse error.  Free this up with
- * slPairFreeValsAndList. */
+struct slPair *slPairListFromString(char *str,boolean respectQuotes)
+// Return slPair list parsed from list in string like:  [name1=val1 name2=val2 ...]
+// if respectQuotes then string can have double quotes: [name1="val 1" "name 2"=val2 ...]
+//    resulting pair strips quotes: {name1}={val 1},{name 2}={val2}
+// Returns NULL if parse error.  Free this up with slPairFreeValsAndList.
 {
+char *s = skipLeadingSpaces(str);  // Would like to remove this and tighten up the standard someday.
+if (isEmpty(s))
+    return NULL;
+
 struct slPair *list = NULL;
-char *name;
-char *ss = cloneString(s);
-char *word = ss;
-while((name = nextWord(&word)))
+char name[1024];
+char val[1024];
+char buf[1024];
+bool inQuote = FALSE;
+char *b = buf;
+char sep = '=';
+char c = ' ';
+int mode = 0;
+while(1)
     {
-    char *val = strchr(name,'=');
-    if (!val)
+    c = *s++;
+    if (mode == 0 || mode == 2) // reading name or val
 	{
-	warn("missing equals sign in name=value pair: name=[%s] in string=[%s]\n", name, s);
-	return NULL;
+	boolean term = FALSE;
+	if (respectQuotes && b == buf && !inQuote && c == '"')
+	    inQuote = TRUE;
+	else if (inQuote && c == '"')
+	    term = TRUE;
+	else if ((c == sep || c == 0) && !inQuote)
+	    {
+	    term = TRUE;
+	    --s;  // rewind
+	    }
+	else if (c == ' ' && !inQuote)
+	    {
+	    warn("slPairListFromString: Unexpected whitespace in %s", str);
+	    return NULL;
+	    }
+	else if (c == 0 && inQuote)
+	    {
+	    warn("slPairListFromString: Unterminated quote in %s", str);
+	    return NULL;
+	    }
+	else
+	    {
+	    *b++ = c;
+	    if ((b - buf) > sizeof buf)
+		{
+		warn("slPairListFromString: pair name or value too long in %s", str);
+		return NULL;
+		}
+	    }
+	if (term)
+	    {
+	    inQuote = FALSE;
+	    *b = 0;
+	    if (mode == 0)
+		{
+		safecpy(name, sizeof name, buf);
+		if (strlen(name)<1)
+		    {
+		    warn("slPairListFromString: Pair name cannot be empty in %s", str);
+		    return NULL;
+		    }
+		// Shall we check for name being alphanumeric, at least for the respectQuotes=FALSE case?
+		}
+	    else // mode == 2
+		{
+		safecpy(val, sizeof val, buf);
+		if (!respectQuotes && (hasWhiteSpace(name) || hasWhiteSpace(val))) // should never happen
+		    {
+		    warn("slPairListFromString() Unexpected white space in name=value pair: [%s]=[%s] in string=[%s]\n", name, val, str);
+		    break;
+		    }
+		slPairAdd(&list, name, cloneString(val));
+		}
+	    ++mode;
+	    }
 	}
-    *val++ = 0;
-    slPairAdd(&list, name, cloneString(val));
+    else if (mode == 1) // read required "=" sign
+	{
+	if (c != '=')
+	    {
+	    warn("slPairListFromString: Expected character = after name in %s", str);
+	    return NULL;
+	    }
+	++mode;
+	sep = ' ';
+	b = buf;
+	}
+    else // (mode == 3) reading optional separating space
+	{
+	if (c == 0)
+	    break;
+	if (c != ' ')
+	    {
+	    mode = 0;
+	    --s;
+	    b = buf;
+	    sep = '=';
+	    }
+	}
     }
-freez(&ss);
 slReverse(&list);
 return list;
 }
 
-char *slPairListToString(struct slPair *list)
-// Returns an allocated string of pairs in form of
-// name1=val1 name2=val2 ...
-// Will wrap vals in quotes if contain spaces: name3="val 3"
+char *slPairListToString(struct slPair *list,boolean quoteIfSpaces)
+// Returns an allocated string of pairs in form of [name1=val1 name2=val2 ...]
+// If requested, will wrap name or val in quotes if contain spaces: [name1="val 1" "name 2"=val2]
 {
-// Don't rely on dyString.  Do the accounting ourselves
+// Don't rely on dyString.  We should do the accounting ourselves and not create extra dependencies.
 int count = 0;
 struct slPair *pair = list;
 for(;pair != NULL; pair = pair->next)
     {
+    assert(pair->name != NULL && pair->val != NULL); // Better assert and get this over with, complete with stack
     count += strlen(pair->name);
     count += strlen((char *)(pair->val));
     count += 2; // = and ' ' delimit
-    if (hasWhiteSpace((char *)(pair->val)))
-        count += 2; // " and "
+    if (quoteIfSpaces)
+        {
+        if (hasWhiteSpace(pair->name))
+            count += 2; // " and "
+        if (hasWhiteSpace((char *)(pair->val)))
+            count += 2; // " and "
+        }
     }
 if (count == 0)
     return NULL;
+
 char *str = needMem(count+5); // A bit of slop
 
-char *s = str;
-for(pair = list;pair != NULL; pair = pair->next)
+char *strPtr = str;
+for(pair = list; pair != NULL; pair = pair->next, strPtr += strlen(strPtr))
     {
-    if (hasWhiteSpace((char *)(pair->val)))
-        sprintf(s,"%s=\"%s\" ",pair->name,(char *)(pair->val));
+    if (pair != list) // Not first cycle
+        *strPtr++ = ' ';
+    if (hasWhiteSpace(pair->name))
+        {
+        if (quoteIfSpaces)
+            sprintf(strPtr,"\"%s\"=",pair->name);
+        else
+            {
+            warn("slPairListToString() Unexpected white space in name: [%s]\n", pair->name);
+            sprintf(strPtr,"%s=",pair->name); // warn but still make string
+            }
+        }
     else
-        sprintf(s,"%s=%s ",pair->name,(char *)(pair->val));
-    s += strlen(s);
+        sprintf(strPtr,"%s=",pair->name);
+    strPtr += strlen(strPtr);
+    if (hasWhiteSpace((char *)(pair->val)))
+        {
+        if (quoteIfSpaces)
+            sprintf(strPtr,"\"%s\"",(char *)(pair->val));
+        else
+            {
+            warn("slPairListToString() Unexpected white space in val: [%s]\n", (char *)(pair->val));
+            sprintf(strPtr,"%s",(char *)(pair->val)); // warn but still make string
+            }
+        }
+    else
+        sprintf(strPtr,"%s",(char *)(pair->val));
     }
-str[strlen(str) - 1] = '\0'; // For sweetness, remove the trailing space.
+return str;
+}
+
+char *slPairNameToString(struct slPair *list, char delimiter,boolean quoteIfSpaces)
+// Return string created by joining all names (ignoring vals) with the delimiter.
+// If requested, will wrap name in quotes if contain spaces: [name1,"name 2" ...]
+{
+int elCount = 0;
+int count = 0;
+struct slPair *pair = list;
+for (; pair != NULL; pair = pair->next, elCount++)
+    {
+    assert(pair->name != NULL);
+    count += strlen(pair->name);
+    if (quoteIfSpaces && hasWhiteSpace(pair->name))
+        count += 2;
+    }
+count += elCount;
+if (count == 0)
+    return NULL;
+
+char *str = needMem(count+5); // A bit of slop
+
+char *strPtr = str;
+for(pair = list; pair != NULL; pair = pair->next, strPtr += strlen(strPtr))
+    {
+    if (pair != list)
+        *strPtr++ = delimiter;
+    if (hasWhiteSpace(pair->name))
+        {
+        if (quoteIfSpaces)
+            sprintf(strPtr,"\"%s\"",pair->name);
+        else
+            {
+            if (delimiter == ' ')  // if delimied by commas, this is entirely okay!
+                warn("slPairListToString() Unexpected white space in name delimied by space: [%s]\n", pair->name);
+            sprintf(strPtr,"%s",pair->name); // warn but still make string
+            }
+        }
+    else
+        sprintf(strPtr,"%s",pair->name);
+    }
 return str;
 }
 
@@ -1076,6 +1246,20 @@ void slPairValSort(struct slPair **pList)
 /* Sort slPair list on values (must be string). */
 {
 slSort(pList, slPairValCmp);
+}
+
+int slPairIntCmp(const void *va, const void *vb)
+// Compare two slPairs on their integer values.
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return ((char *)(a->val) - (char *)(b->val)); // cast works and val is 0 vased integer
+}
+
+void slPairIntSort(struct slPair **pList)
+// Sort slPair list on integer values.
+{
+slSort(pList, slPairIntCmp);
 }
 
 
@@ -1154,7 +1338,10 @@ boolean startsWithWordByDelimiter(char *firstWord,char delimit, char *line)
 {
 if(delimit == ' ')
     return startsWithWord(firstWord,line);
-return (startsWith(firstWord,line) && line[strlen(firstWord)] == delimit);
+if (!startsWith(firstWord,line))
+    return FALSE;
+char c = line[strlen(firstWord)];
+return (c == '\0' || c == delimit);
 }
 
 char * findWordByDelimiter(char *word,char delimit, char *line)
@@ -1240,6 +1427,21 @@ char lastChar(char *s)
 if (s == NULL || s[0] == 0)
     return 0;
 return s[strlen(s)-1];
+}
+
+char *lastNonwhitespaceChar(char *s)
+// Return pointer to last character in string that is not whitespace.
+{
+if (s == NULL || s[0] == 0)
+    return NULL;
+
+char *sPos = s + (strlen(s) - 1);
+for (;sPos >= s;sPos--)
+    {
+    if (!isspace(*sPos))
+        return sPos;
+    }
+return NULL;
 }
 
 char *matchingCharBeforeInLimits(char *limit, char *s, char c)
@@ -1671,7 +1873,7 @@ int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize)
  * If doubleQuote is encloses whole string, then they are removed:
  *   "Fred and Ethyl" results in word [Fred and Ethyl]
  * If doubleQuotes exist inside string they are retained:
- *   Fred "and Ethyl" results in word [Fred "and Ethyl"]
+ *   Fred" and Ethyl" results in word [Fred" and Ethyl"]
  * Special note "" is a valid, though empty word. */
 {
 int recordCount = 0;
@@ -1973,6 +2175,35 @@ s = skipLeadingSpaces(s);
 if (s[0] == 0)
     return NULL;
 e = skipToSpaces(s);
+if (e != NULL)
+    *e++ = 0;
+*pLine = e;
+return s;
+}
+
+char *nextWordRespectingQuotes(char **pLine)
+// return next word but respects single or double quotes surrounding sets of words.
+{
+char *s = *pLine, *e;
+if (s == NULL || s[0] == 0)
+    return NULL;
+s = skipLeadingSpaces(s);
+if (s[0] == 0)
+    return NULL;
+if (s[0] == '"')
+    {
+    e = skipBeyondDelimit(s+1,'"');
+    if (e != NULL && !isspace(e[0]))
+        e = skipToSpaces(s);
+    }
+else if (s[0] == '\'')
+    {
+    e = skipBeyondDelimit(s+1,'\'');
+    if (e != NULL && !isspace(e[0]))
+        e = skipToSpaces(s);
+    }
+else
+    e = skipToSpaces(s);
 if (e != NULL)
     *e++ = 0;
 *pLine = e;

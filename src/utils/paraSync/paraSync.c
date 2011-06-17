@@ -16,13 +16,17 @@ errAbort(
     "   paraSync {options} N R URL outPath\n"
     "   where N is the number of connections to use\n"
     "         R is the number of retries\n"
-    "   Options:\n"
-    "    -A='ext1,ext2'  means accept only files with ext1 or ext2\n" 
+    "options:\n"
+    "   -A='ext1,ext2'  means accept only files with ext1 or ext2\n" 
+    "   -newer  only download a file if it is newer than the version we already have.\n"
+    "   -progress  Show progress of download.\n"
     );
 }
 
 static struct optionSpec options[] = {
    {"A", OPTION_STRING},
+   {"newer", OPTION_BOOLEAN},
+   {"progress", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -30,7 +34,7 @@ char *acceptString = NULL;
 char **acceptExtensions = NULL; 
 int acceptExtensionsCount = 0;
 
-boolean paraSync(int numConnections, int numRetries, struct dyString *url, struct dyString *outPath)
+boolean paraSync(int numConnections, int numRetries, struct dyString *url, struct dyString *outPath, boolean newer, boolean progress)
 /* Fetch given URL, send to stdout. */
 {
 // requirements:
@@ -123,7 +127,7 @@ while (TRUE)
     if (isDirectory) 
 	{   
 	// recursive
-	if (!paraSync(numConnections, numRetries, url, outPath))
+	if (!paraSync(numConnections, numRetries, url, outPath, newer, progress))
 	    result = FALSE;
 	}
     else    // file
@@ -141,26 +145,12 @@ while (TRUE)
 	    }
 	if (accepted)
 	    {
-	    // check to see if it needs download, i.e. file does not exist, or it needs a resume
-	    int restoreSize = outPath->stringSize;
-	    dyStringAppend(outPath, ".paraFetchStatus");
-	    boolean needsDownload = fileExists(outPath->string);
-	    dyStringResize(outPath, restoreSize);
-	    if (!fileExists(outPath->string))
-		needsDownload = TRUE;
-	    if (needsDownload)
+	    if (!parallelFetch(url->string, outPath->string, numConnections, numRetries, newer, progress))
 		{
-		if (!parallelFetch(url->string, outPath->string, numConnections, numRetries))
-		    {
-		    warn("failed to download %s\n", url->string);
-		    // write to a log that this one failed
-		    // and try to continue
-		    result = FALSE;
-		    }
-		else
-		    {
-		    verbose(1,"%s downloaded successfully\n", url->string);
-		    }
+		warn("failed to download %s\n", url->string);
+		// write to a log that this one failed
+		// and try to continue
+		result = FALSE;
 		}
 	    }
 	}
@@ -198,7 +188,7 @@ struct dyString *url = dyStringNew(4096);
 struct dyString *outPath = dyStringNew(4096);
 dyStringAppend(url, argv[3]);
 dyStringAppend(outPath, argv[4]);
-if (!paraSync(atoi(argv[1]), atoi(argv[2]), url, outPath))
+if (!paraSync(atoi(argv[1]), atoi(argv[2]), url, outPath, optionExists("newer"), optionExists("progress")))
     exit(1);
 return 0;
 }

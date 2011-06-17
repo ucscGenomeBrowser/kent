@@ -1,0 +1,78 @@
+metaObject wgEncodeNhgriNRE
+objType composite
+composite wgEncodeNhgriNRE
+expVars lab,dataType,cell,promoter
+
+metaObject wgEncodeNhgriNREEnhancerBlockersK562Ggamma
+objType table
+cell K562
+composite wgEncodeNhgriNRE
+dataType NRE
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-25
+dateUnrestricted 2009-08-25
+expId 327
+fileName wgEncodeNhgriNREEnhancerBlockersK562Ggamma.bed6.gz
+grant Elnitski
+lab NHGRI-Elnitski
+project wgEncode
+promoter G-gamma
+subId 100
+tableName wgEncodeNhgriNREEnhancerBlockersK562Ggamma
+view Enhancer_Blockers
+
+metaObject wgEncodeNhgriNREEnhancerBlockersK562Sv40
+objType table
+cell K562
+composite wgEncodeNhgriNRE
+dataType NRE
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-25
+dateUnrestricted 2009-08-25
+expId 328
+fileName wgEncodeNhgriNREEnhancerBlockersK562Sv40.bed6.gz
+grant Elnitski
+lab NHGRI-Elnitski
+project wgEncode
+promoter SV40
+subId 100
+tableName wgEncodeNhgriNREEnhancerBlockersK562Sv40
+view Enhancer_Blockers
+
+metaObject wgEncodeNhgriNRESilencersK562Ggamma
+objType table
+cell K562
+composite wgEncodeNhgriNRE
+dataType NRE
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-25
+dateUnrestricted 2009-08-25
+expId 327
+fileName wgEncodeNhgriNRESilencersK562Ggamma.bed6.gz
+grant Elnitski
+lab NHGRI-Elnitski
+project wgEncode
+promoter G-gamma
+subId 100
+tableName wgEncodeNhgriNRESilencersK562Ggamma
+view Silencers
+
+metaObject wgEncodeNhgriNRESilencersK562Sv40
+objType table
+cell K562
+composite wgEncodeNhgriNRE
+dataType NRE
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-25
+dateUnrestricted 2009-08-25
+expId 328
+fileName wgEncodeNhgriNRESilencersK562Sv40.bed6.gz
+grant Elnitski
+lab NHGRI-Elnitski
+project wgEncode
+promoter SV40
+subId 100
+tableName wgEncodeNhgriNRESilencersK562Sv40
+view Silencers
+
+# MAGIC: 1307917985

@@ -1,0 +1,1512 @@
+GENE CARKD
+DESC carbohydrate kinase domain containing
+UCSC uc001vrc.2
+NUMB 1
+ISOF 8
+NBHD chr13:111175414-111358480
+TRANSC red 6 black 5
+BIPROM no
+DNAPRO 151
+ME3PRO green >200 purple 100 black 60
+ME1PRO lightBlue >50 black 20; both sides stronger in
+ME1BEF -4kb red 40 purple 30; -40kb red 40 blue 30
+ME1INT no
+NOTES 2 possible enhancers upstream, both hypersensitive in less than half cells, but hyper in
+NOTES red (GM12978).
+//
+GENE IRAK2
+DESC interleukin-1 receptor-associated kinase 2
+UCSC uc003bve.1
+NUMB 2
+ISOF 1
+NBHD chr3:10183319-10321611
+TRANSC red 4 black 3
+BIPROM no
+DNAPRO 116
+ME3PRO green > 200 magenta 150 fade to black 50
+ME1PRO lightBlue 30 blue 25 black 10
+ME1BEF -3kb rainbow
+ME1INT +1kb lightBlue 40; +2kb red 30; +6kb rainbow 40; +10kb lightBlue >50 blue 50 black 20
+NOTES Strong CTCF just upstream of promoter. Strongest Me1 about +25k and 5kb wide, rainbow.
+//
+GENE PLCL1
+DESC RecName: Full=Inactive phospholipase C-like protein 1;          Short=PLC-L1; AltName: Full=Phospholipase C-deleted in lung carcinoma; AltName: Full=Phospholipase C-related but catalytically inactive protein;          Short=PRIP;
+UCSC uc010fsp.2
+NUMB 3
+ISOF 2
+NBHD chr2:198592973-199239273
+TRANSC lightBlue 6 blue 5
+BIPROM no
+DNAPRO 148
+ME3PRO lightBlue 90 blue 70 purple 70
+ME1PRO lightBlue 50 blue 30
+ME1BEF no
+ME1INT +5kb blue 20; +9kb blue 30; +19kb blue 45; +25 lightBlue 45; +40 blue 45
+NOTES Continued blue Me1 flairs throughout first 200kb of transcript
+//
+GENE ACBD6
+DESC acyl-coenzyme A binding domain containing 6
+UCSC uc001gog.2
+NUMB 4
+ISOF 1
+NBHD chr1:180238800-180535654
+TRANSC blue 7 black 6.5
+BIPROM no
+DNAPRO 151
+ME3PRO green > 300 lightBlue 200 fade to black 100
+ME1PRO lightBlue 45 both sides fade to black 20
+ME1BEF -2kb lightBlue 40; -4kb light blue 40; -10kb blue 40; -15kb lightBlue 50; -18kb purple 50 
+ME1BEF blue 40; -21kb blue 50; -24kb lightBlue 50 blue 35
+ME1INT +2kb lightBlue 40 blue 35; +3kb blue 25 purple 22
+NOTES -10kb site is strong CTCF, -4kb has GATA-2 
+//
+GENE AMY1B
+DESC salivary amylase alpha 1B precursor
+UCSC uc001duz.2
+NUMB 5
+ISOF 2
+NBHD chr1:104257375-106161557
+TRANSC red 4 purple 4 black 2
+BIPROM no
+DNAPRO no
+ME3PRO no
+ME1PRO no
+ME1BEF no
+ME1INT no
+MAPABL no
+NOTES > 1 MB gene desert downstream.  In cluster of several other amylases.  Not very mappable
+NOTES is probably why there's low signal for all but the RNA.
+//
+GENE RTN4RL2
+DESC reticulon 4 receptor-like 2 precursor
+UCSC uc010rjt.1
+NUMB 6
+ISOF 1
+NBHD chr11:57185221-57282358
+TRANSC orange 6 black 4
+BIPROM no
+DNAPRO 108 
+ME3PRO Relatively weak and spread out. Rainbow 40.
+ME1PRO Weak and spread out. Rainbow 20. 
+ME1BEF -3kb blue 25 black 20; -5kb blue 45 black 25
+ME1INT broad peak orange 30 1kb to 5kb, mixed with blue at 5kb; +7kb orance 25
+NOTES Strong CTCF upstream 3kb and 5kb. Looks like gene model 5' UTR is incomplete, needs 
+NOTES extending by 300 bases. Moderate CTCF right at promoter. Not any TFBS in orange Me1 
+NOTES regions.
+//
+GENE TRIM48
+DESC RecName: Full=Tripartite motif-containing protein 48; AltName: Full=RING finger protein 101;
+UCSC uc010rtx.1
+NUMB 7
+ISOF 1
+NBHD chr11:89530824-89653576
+TRANSC no
+BIPROM no
+DNAPRO no
+ME3PRO no
+ME1PRO no
+ME1BEF no
+ME1INT no
+MAPABL no
+NOTES not mapable
+//
+GENE MSX1
+DESC msh homeobox 1
+UCSC uc003gif.2
+NUMB 8
+ISOF 1
+NBHD chr4:4763532-5021197
+TRANSC magenta 5 green 4 red 3 blue 3 lightBlue 2 orange 1 blue 1 purple
+BIPROM no
+DNAPRO 132
+ME3PRO Stronger downstream of tx start by 500 bases, where it peaks high in green and moderately 
+ME3PRO in magenta and light blueblue.
+ME1PRO black 10 both sides
+ME1BEF -2kb lightBlue 15 black 10; -5 kb orange 15 black 10.
+ME1INT +2kb lightBlue 50 black 10; +5 kb orange 15 black 10; +10kb wide orange 25
+NOTES Very strong Me3 signal in red and green -2 kb.  Moderate Me3 signal fringy black -5 kb.
+NOTES Weaker one +5kb. Overall Me3 signal behaving unusually. Me1 areas surround all these 
+NOTES non-promoter Me3's and these comprise about half of the Me1 areas. 
+//
+GENE TBC1D21
+DESC TBC1 domain family, member 21
+UCSC uc002avz.2
+NUMB 9
+ISOF 2
+NBHD chr15:74032143-74220127
+TRANSC no
+BIPROM no
+DNAPRO no
+ME3PRO no
+ME1PRO no
+ME1BEF no
+ME1INT no
+NOTES More or less testes specific transcript, not transcribed in our 7.
+//
+GENE SNX9
+DESC sorting nexin 9
+UCSC uc003qqv.1
+NUMB 10
+ISOF 1
+NBHD chr6:158066769-158487667
+TRANSC magenta 7 blue 7 black 6
+BIPROM no
+DNAPRO 130
+ME3PRO blue 40 green 40 black 30 surrounding promoter, goes immediately to green 200 and then 
+ME3PRO lightBlue >300 to right of promoter.
+ME1PRO lightBlue 50 blue 50 black 15 surrounding Me3 
+ME1BEF -10kb wide (4kb) blue 50 lightBlue 20; -40kb lightBlue >100 blue 60 black 50
+ME1INT mostly blue fringes up to 70 high first 50 kb of transcript
+NOTES 
+//
+GENE TRPV3
+DESC transient receptor potential cation channel,
+UCSC uc002fvt.1
+NUMB 11
+ISOF 11
+NBHD chr17:3379296-3495677
+TRANSC purple 6 red 5 black 2
+BIPROM no
+DNAPRO 51
+ME3PRO purple 90 red 25 black 10
+ME1PRO purple 80 red 50 black 20
+ME1BEF -5kb red 50 purple 50 black 25
+ME1INT weak
+NOTES After txn start mild Me3/Me1 peaks around alternative promoter and promoter for next gene
+NOTES which has an isoform that starts before this one ends.
+//
+GENE ZNF214
+DESC zinc finger protein 214
+UCSC uc001mfa.2
+NUMB 12
+ISOF 3
+NBHD chr11:6953325-7092757
+TRANSC orange 2.5 black 2
+BIPROM yes
+DNAPRO 132
+ME3PRO lightBlue 180 blue 150 black 100 classic peaks around hypersensitive area
+ME1PRO lightBlue 50 black 25
+ME1BEF no
+ME1INT +15kb lightBlue 35 blue 25 black 20
+NOTES Tight spacing (150 bases) around bidirectional promoter
+//
+GENE PFN3
+DESC profilin 3
+UCSC uc003mgl.2
+NUMB 13
+ISOF 1
+NBHD chr5:176811435-176831473
+TRANSC no	
+BIPROM no
+DNAPRO 45 (weak)
+ME3PRO no
+ME1PRO lightBlue 15 black 5
+ME1BEF no
+ME1INT n/a
+NOTES Single exon gene not expressed.  Gene looks real from protein and mappability standpoint
+//
+GENE TPI1
+DESC triosephosphate isomerase 1 isoform 1
+UCSC uc001qrk.2
+NUMB 14
+ISOF 2
+NBHD chr12:6961285-6982501
+TRANSC black 9
+BIPROM no	
+DNAPRO 146
+ME3PRO black 50 before, green >200 purple 100, blue 75, black 50 after and extended after
+ME1PRO lightBlue > 50 fade to black 20 on both sides of Me3
+ME1BEF n/a (next gene starts soon after promoter)
+ME1INT promoter area Me1 continues throughout 2kb of this short transcript
+NOTES Enzyme involved in glycolosis.  Strong CpG island at promoter.  Ubiquitous expression.
+//
+GENE EIF4E3
+DESC eukaryotic translation initiation factor 4E
+UCSC uc003dov.3
+NUMB 15
+ISOF 5
+NBHD chr3:71619441-71804327
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE SORBS2
+DESC sorbin and SH3 domain containing 2 isoform 2
+UCSC uc003iyg.2
+NUMB 16
+ISOF 20
+NBHD chr4:186435424-187006250
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE C14orf148
+DESC hypothetical protein LOC122945 isoform 1
+UCSC uc001xtr.2
+NUMB 17
+ISOF 2
+NBHD chr14:77843762-77923904
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE FOLR1
+DESC folate receptor 1 precursor
+UCSC uc001osa.1
+NUMB 18
+ISOF 5
+NBHD chr11:71846771-71932993
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ZNF446
+DESC zinc finger protein 446
+UCSC uc002qsz.2
+NUMB 19
+ISOF 3
+NBHD chr19:58982285-59023432
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE MRPS21
+DESC mitochondrial ribosomal protein S21
+UCSC uc001euk.2
+NUMB 20
+ISOF 2
+NBHD chr1:150255229-150301343
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE EREG
+DESC epiregulin preproprotein
+UCSC uc003hie.1
+NUMB 21
+ISOF 2
+NBHD chr4:75174204-75490482
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE MYH7B
+DESC myosin, heavy polypeptide 7B, cardiac muscle,
+UCSC uc002xbi.1
+NUMB 22
+ISOF 2
+NBHD chr20:33516778-33680618
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE C9orf125
+DESC hypothetical protein LOC84302
+UCSC uc004bbm.2
+NUMB 23
+ISOF 1
+NBHD chr9:104235442-104325625
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE RNF38
+DESC ring finger protein 38 isoform 1
+UCSC uc003zzh.2
+NUMB 24
+ISOF 6
+NBHD chr9:36214441-36677678
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE LBX2
+DESC ladybird homeobox 2
+UCSC uc002slw.2
+NUMB 25
+ISOF 2
+NBHD chr2:74710200-74734499
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE NBPF10
+DESC hypothetical protein LOC100132406
+UCSC uc001end.3
+NUMB 26
+ISOF 49
+NBHD chr1:145209111-145373798
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE MINPP1
+DESC multiple inositol polyphosphate histidine
+UCSC uc001keu.2
+NUMB 27
+ISOF 3
+NBHD chr10:89156331-89487246
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE SHKBP1
+DESC SH3KBP1 binding protein 1
+UCSC uc002oob.2
+NUMB 28
+ISOF 8
+NBHD chr19:41036673-41119102
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE INPP5F
+DESC inositol polyphosphate-5-phosphatase F
+UCSC uc001leo.2
+NUMB 29
+ISOF 3
+NBHD chr10:121410882-121612706
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TBC1D5
+DESC TBC1 domain family, member 5 isoform b
+UCSC uc003cbe.2
+NUMB 30
+ISOF 5
+NBHD chr3:16974582-18310408
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE FOXK2
+DESC forkhead box K2
+UCSC uc002kfn.2
+NUMB 31
+ISOF 5
+NBHD chr17:80422163-80606411
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE PRPS2
+DESC phosphoribosyl pyrophosphate synthetase 2
+UCSC uc004cvb.2
+NUMB 32
+ISOF 3
+NBHD chrX:12156585-12908479
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE FABP1
+DESC fatty acid binding protein 1, liver
+UCSC uc002sst.1
+NUMB 33
+ISOF 2
+NBHD chr2:88390531-88486111
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE RHOXF1
+DESC Rhox homeobox family, member 1
+UCSC uc004esk.1
+NUMB 34
+ISOF 1
+NBHD chrX:119206231-119297943
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE AAAS
+DESC achalasia, adrenocortical insufficiency,
+UCSC uc001scr.3
+NUMB 35
+ISOF 2
+NBHD chr12:53693762-53729537
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE DSG1
+DESC desmoglein 1 preproprotein
+UCSC uc002kwp.2
+NUMB 36
+ISOF 2
+NBHD chr18:28711419-28993880
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE GPRC5D
+DESC G protein-coupled receptor, family C, group 5,
+UCSC uc010shp.1
+NUMB 37
+ISOF 1
+NBHD chr12:13068126-13137576
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE CDC42BPA
+DESC CDC42-binding protein kinase alpha isoform B
+UCSC uc001hqr.2
+NUMB 38
+ISOF 8
+NBHD chr1:227170595-227618721
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE HSD11B2
+DESC hydroxysteroid (11-beta) dehydrogenase 2
+UCSC uc002etd.2
+NUMB 39
+ISOF 1
+NBHD chr16:67428323-67493128
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE KIN
+DESC HsKin17 protein
+UCSC uc001ijt.2
+NUMB 40
+ISOF 4
+NBHD chr10:7745236-7841604
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE DUSP5
+DESC dual specificity phosphatase 5
+UCSC uc001kzd.2
+NUMB 41
+ISOF 1
+NBHD chr10:112052799-112364390
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE MAD2L1BP
+DESC MAD2L1 binding protein isoform 2
+UCSC uc003ovv.2
+NUMB 42
+ISOF 2
+NBHD chr6:43588262-43638744
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE DEDD2
+DESC death effector domain-containing  DNA binding
+UCSC uc002osu.1
+NUMB 43
+ISOF 5
+NBHD chr19:42656721-42732353
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE PSG5
+DESC pregnancy specific beta-1-glycoprotein 5
+UCSC uc002ovx.2
+NUMB 44
+ISOF 5
+NBHD chr19:43568398-43709790
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE CLYBL
+DESC citrate lyase beta like precursor
+UCSC uc001vok.2
+NUMB 45
+ISOF 3
+NBHD chr13:100153728-100624178
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TMEM186
+DESC transmembrane protein 186
+UCSC uc002cze.2
+NUMB 46
+ISOF 1
+NBHD chr16:8814573-8900891
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ADCYAP1R1
+DESC adenylate cyclase activating polypeptide 1
+UCSC uc003tca.1
+NUMB 47
+ISOF 6
+NBHD chr7:31009148-31151088
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ZDHHC19
+DESC zinc finger, DHHC domain containing 19
+UCSC uc003fwc.2
+NUMB 48
+ISOF 4
+NBHD chr3:195869626-195954436
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ZDHHC7
+DESC zinc finger, DHHC-type containing 7 isoform 1
+UCSC uc010voi.1
+NUMB 49
+ISOF 3
+NBHD chr16:84853587-85113358
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TDRKH
+DESC tudor and KH domain containing isoform a
+UCSC uc001eza.3
+NUMB 50
+ISOF 7
+NBHD chr1:151739131-151766877
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE CH25H
+DESC cholesterol 25-hydroxylase
+UCSC uc001kfz.2
+NUMB 51
+ISOF 1
+NBHD chr10:90751045-90983587
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE CABYR
+DESC calcium-binding tyrosine
+UCSC uc002kux.2
+NUMB 52
+ISOF 8
+NBHD chr18:21594384-21852196
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE C3orf33
+DESC hypothetical protein LOC285315
+UCSC uc003fal.1
+NUMB 53
+ISOF 2
+NBHD chr3:155197671-155548560
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TSPYL4
+DESC TSPY-like 4
+UCSC uc003pwn.2
+NUMB 54
+ISOF 2
+NBHD chr6:116440086-116577906
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TNK2
+DESC tyrosine kinase, non-receptor, 2 isoform 2
+UCSC uc003fvt.1
+NUMB 55
+ISOF 8
+NBHD chr3:195536517-195638128
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TSPO
+DESC translocator protein isoform PBR-S
+UCSC uc003bdo.2
+NUMB 56
+ISOF 1
+NBHD chr22:43528212-43566280
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ANO2
+DESC anoctamin 2
+UCSC uc001qnm.2
+NUMB 57
+ISOF 1
+NBHD chr12:5603298-6233836
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE MKRN3
+DESC makorin ring finger protein 3
+UCSC uc001ywh.3
+NUMB 58
+ISOF 3
+NBHD chr15:23686019-23891175
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TRIP13
+DESC thyroid hormone receptor interactor 13
+UCSC uc003jbr.2
+NUMB 59
+ISOF 2
+NBHD chr5:876216-997423
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ME1
+DESC cytosolic malic enzyme 1
+UCSC uc003pjy.2
+NUMB 60
+ISOF 3
+NBHD chr6:83903032-84235419
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE PPIAL4F
+DESC peptidylprolyl isomerase A (cyclophilin A)-like
+UCSC uc010pbb.1
+NUMB 61
+ISOF 1
+NBHD chr1:148739562-148902123
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TRIM74
+DESC tripartite motif-containing 74
+UCSC uc010lao.2
+NUMB 62
+ISOF 4
+NBHD chr7:72418833-72443660
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE DDTL
+DESC D-dopachrome tautomerase-like
+UCSC uc002zyy.3
+NUMB 63
+ISOF 2
+NBHD chr22:24299603-24316628
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE C19orf48
+DESC multidrug resistance-related protein
+UCSC uc002ptg.2
+NUMB 64
+ISOF 3
+NBHD chr19:51293672-51322133
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE CD300LB
+DESC CD300 molecule-like family member b
+UCSC uc002jkx.2
+NUMB 65
+ISOF 2
+NBHD chr17:72462522-72542282
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE DLGAP3
+DESC discs, large (Drosophila) homolog-associated
+UCSC uc001byc.2
+NUMB 66
+ISOF 1
+NBHD chr1:35319124-35450920
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE RELN
+DESC reelin isoform b
+UCSC uc010liz.2
+NUMB 67
+ISOF 2
+NBHD chr7:103014659-103848463
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE PIN1
+DESC protein (peptidyl-prolyl cis/trans isomerase)
+UCSC uc002mml.1
+NUMB 68
+ISOF 4
+NBHD chr19:9938568-9968844
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE C2CD3
+DESC C2 calcium-dependent domain containing 3
+UCSC uc001ouu.2
+NUMB 69
+ISOF 3
+NBHD chr11:73713812-73965747
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE LOC100129354
+DESC Homo sapiens NRADD pseudogene (LOC100129354), non-coding RNA.
+UCSC uc011bas.1
+NUMB 70
+ISOF 1
+NBHD chr3:47046675-47088111
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE NBN
+DESC nibrin
+UCSC uc003yej.1
+NUMB 71
+ISOF 3
+NBHD chr8:90914762-91064227
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE FBXO36
+DESC F-box protein 36
+UCSC uc002vqa.2
+NUMB 72
+ISOF 5
+NBHD chr2:230672035-230933264
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE WWP1
+DESC WW domain containing E3 ubiquitin protein ligase
+UCSC uc003ydt.2
+NUMB 73
+ISOF 2
+NBHD chr8:87226288-87521009
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE AKT3
+DESC AKT3 kinase isoform 1
+UCSC uc001iab.1
+NUMB 74
+ISOF 3
+NBHD chr1:243456393-244210617
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE PHLDA3
+DESC pleckstrin homology-like domain, family A,
+UCSC uc001gwq.2
+NUMB 75
+ISOF 1
+NBHD chr1:201378986-201462029
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE PLA2G1B
+DESC phospholipase A2 group IB precursor
+UCSC uc001tyd.2
+NUMB 76
+ISOF 2
+NBHD chr12:120740163-120806958
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TMEM86B
+DESC transmembrane protein 86B
+UCSC uc002qju.2
+NUMB 77
+ISOF 2
+NBHD chr19:55705382-55758740
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ACTR3B
+DESC actin-related protein 3-beta isoform 1
+UCSC uc003wle.1
+NUMB 78
+ISOF 4
+NBHD chr7:152343589-153756646
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TLE3
+DESC transducin-like enhancer protein 3 isoform a
+UCSC uc002asm.2
+NUMB 79
+ISOF 10
+NBHD chr15:70127573-70994620
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE PML
+DESC promyelocytic leukemia protein isoform 1
+UCSC uc002awv.2
+NUMB 80
+ISOF 17
+NBHD chr15:74275561-74356126
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE EMR2
+DESC egf-like module containing, mucin-like, hormone
+UCSC uc002mzr.1
+NUMB 81
+ISOF 11
+NBHD chr19:14800870-14910948
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE TOP3A
+DESC topoisomerase (DNA) III alpha
+UCSC uc002gsx.1
+NUMB 82
+ISOF 6
+NBHD chr17:18164424-18231369
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE BCL2L14
+DESC BCL2-like 14 isoform 1
+UCSC uc001rac.2
+NUMB 83
+ISOF 4
+NBHD chr12:12202798-12419811
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE DYNC1LI2
+DESC dynein, cytoplasmic, light intermediate
+UCSC uc002eqb.1
+NUMB 84
+ISOF 4
+NBHD chr16:66648654-66834956
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ROD1
+DESC ROD1 regulator of differentiation 1 isoform 3
+UCSC uc004bfx.2
+NUMB 85
+ISOF 6
+NBHD chr9:114803062-115180061
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ZAK
+DESC MLK-related kinase isoform 1
+UCSC uc002uhz.2
+NUMB 86
+ISOF 5
+NBHD chr2:173792933-174233718
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE REG1A
+DESC regenerating islet-derived 1 alpha precursor
+UCSC uc002snz.2
+NUMB 87
+ISOF 3
+NBHD chr2:79313005-79365528
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE ZNF681
+DESC zinc finger protein 681
+UCSC uc002nrk.3
+NUMB 88
+ISOF 4
+NBHD chr19:23835709-24010917
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE EFHC2
+DESC EF-hand domain (C-terminal) containing 2
+UCSC uc004dgb.3
+NUMB 89
+ISOF 1
+NBHD chrX:43808024-44402221
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE GOLGA9P
+DESC RecName: Full=Putative golgin subfamily A member 6-like protein 11;
+UCSC uc001yvh.1
+NUMB 90
+ISOF 1
+NBHD chr15:23194713-23311039
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE C10orf46
+DESC chromosome 10 open reading frame 46
+UCSC uc001lds.1
+NUMB 91
+ISOF 2
+NBHD chr10:120352916-120793854
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE SP8
+DESC Sp8 transcription factor isoform 1
+UCSC uc003suz.2
+NUMB 92
+ISOF 2
+NBHD chr7:20762276-20867439
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE CLK1
+DESC CDC-like kinase 1 isoform 1
+UCSC uc002uwe.2
+NUMB 93
+ISOF 6
+NBHD chr2:201677931-201753849
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE SAMD9L
+DESC sterile alpha motif domain containing 9-like
+UCSC uc003umh.1
+NUMB 94
+ISOF 8
+NBHD chr7:92728832-92848870
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE FXYD2
+DESC FXYD domain-containing ion transport regulator 2
+UCSC uc001prl.2
+NUMB 95
+ISOF 3
+NBHD chr11:117389090-117713506
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE RAB40C
+DESC RAB40C, member RAS oncogene family
+UCSC uc002chr.2
+NUMB 96
+ISOF 2
+NBHD chr16:632879-684116
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE RPRML
+DESC reprimo-like
+UCSC uc002ilb.2
+NUMB 97
+ISOF 1
+NBHD chr17:45000486-45105726
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE C5orf32
+DESC hypothetical protein LOC84418
+UCSC uc003lfd.2
+NUMB 98
+ISOF 2
+NBHD chr5:139541538-139626742
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE FMR1
+DESC fragile X mental retardation 1
+UCSC uc010nst.2
+NUMB 99
+ISOF 6
+NBHD chrX:146366173-147108180
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//
+GENE CALD1
+DESC caldesmon 1 isoform 1
+UCSC uc003vrz.2
+NUMB 100
+ISOF 12
+NBHD chr7:134346191-134820526
+TRANSC 
+BIPROM 
+DNAPRO 
+ME3PRO 
+ME1PRO 
+ME1BEF 
+ME1INT 
+NOTES 
+//

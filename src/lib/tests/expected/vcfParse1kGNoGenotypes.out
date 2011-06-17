@@ -1,4 +1,4 @@
-Finished parsing "input/YRI.trio.2010_06.novelsequences.sites.vcf.gz", got 5 data rows
+Finished parsing "input/YRI.trio.2010_06.novelsequences.sites.vcf.gz" items in 2:26790860-194631353, got 5 data rows
 First (up to) 100 rows in range:
 2	26790859	26790860	ns17:T/<INS>	0.000000
 2	46973363	46973364	ns18:GTTCAGTCCTGTGGGACTTGAGCCACTGAGG/<INS>	0.000000

@@ -18,7 +18,7 @@
 #include "hgFind.h"
 #include "hgTracks.h"
 #include "versionInfo.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "imageV2.h"
 
 static char const rcsid[] = "$Id: hgTracks.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
@@ -40,7 +40,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	    "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
 	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
 	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
-	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1",
+	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             NULL };
 

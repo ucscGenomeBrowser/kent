@@ -1,0 +1,76 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release2 of the "ENCODE wgEncodeHudsonalphaCnv"
+The composite track is wgEncodeHudsonalphaCnv
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release2 (new+untouched):
+    Tables: 6
+    Files: 9
+    Gbdbs: 0
+
+A) Untouched Tables (3):
+wgEncodeHudsonalphaCnvSignalGM12878
+wgEncodeHudsonalphaCnvSignalHepG2
+wgEncodeHudsonalphaCnvSignalK562
+
+A') Untouched Files (3 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv/release2/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv/
+
+wgEncodeHudsonalphaCnvSignalGM12878.bedGraph4.gz
+wgEncodeHudsonalphaCnvSignalHepG2.bedGraph4.gz
+wgEncodeHudsonalphaCnvSignalK562.bedGraph4.gz
+
+
+B) Deprecated tables (3):
+wgEncodeHudsonalphaCnvRegionsGM12878
+wgEncodeHudsonalphaCnvRegionsHepG2
+wgEncodeHudsonalphaCnvRegionsK562
+
+B') Deprecated files (3 downloadables, 0 gbdbs):
+    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
+    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv/release1/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv/
+
+wgEncodeHudsonalphaCnvRegionsGM12878.bed.gz
+wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz
+wgEncodeHudsonalphaCnvRegionsK562.bed.gz
+
+
+C) New tables (3):
+wgEncodeHudsonalphaCnvRegionsGM12878V2
+wgEncodeHudsonalphaCnvRegionsHepG2V2
+wgEncodeHudsonalphaCnvRegionsK562V2
+
+C') New files (3 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv/release2/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv/
+
+wgEncodeHudsonalphaCnvRegionsGM12878V2.bed.gz
+wgEncodeHudsonalphaCnvRegionsHepG2V2.bed.gz
+wgEncodeHudsonalphaCnvRegionsK562V2.bed.gz
+
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv/release2/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv/
+
+index.html
+files.txt
+md5sum.txt

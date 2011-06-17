@@ -67,6 +67,10 @@ chainLinearGap loose
 track chainNetEquCab1 override
 priority 440.3
 
+track chainNetBosTau6 override
+shortLabel $o_db Chain/Net
+priority 450.3
+
 track chainNetBosTau4 override
 shortLabel $o_db Chain/Net
 priority 450.3

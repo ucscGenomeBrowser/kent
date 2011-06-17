@@ -507,6 +507,15 @@ if (hdbCc == NULL)
 return sqlConnCacheProfileAlloc(hdbCc, profileName, db);
 }
 
+struct sqlConnection *hAllocConnProfileMaybe(char *profileName, char *db)
+/* Get free connection, specifying a profile and/or a database. If none is
+ * available, allocate a new one.  Return NULL if database doesn't exist. */
+{
+if (hdbCc == NULL)
+    hdbCc = sqlConnCacheNew();
+return sqlConnCacheProfileAllocMaybe(hdbCc, profileName, db);
+}
+
 char *getTrackProfileName(struct trackDb *tdb)
 /* get profile is associated with a track, return it, otherwise NULL */
 {
@@ -524,7 +533,7 @@ struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb)
 return hAllocConnProfile(getTrackProfileName(tdb), db);
 }
 
-struct sqlConnection *hAllocConnProfileTbl(char *db, char *spec, char **tableRet)
+static struct sqlConnection *hAllocConnProfileTblInternal(char *db, char *spec, char **tableRet, bool abortOnError)
 /* Allocate a connection to db, spec can either be in the form `table' or
  * `profile:table'.  If it contains profile, connect via that profile.  Also
  * returns pointer to table in spec string. */
@@ -540,7 +549,26 @@ if (sep != NULL)
     }
 else
     *tableRet = spec;
-return hAllocConnProfile(profile, db);
+if (abortOnError)
+    return hAllocConnProfile(profile, db);
+else
+    return hAllocConnProfileMaybe(profile, db);
+}
+
+struct sqlConnection *hAllocConnProfileTbl(char *db, char *spec, char **tableRet)
+/* Allocate a connection to db, spec can either be in the form `table' or
+ * `profile:table'.  If it contains profile, connect via that profile.  Also
+ * returns pointer to table in spec string. */
+{
+return hAllocConnProfileTblInternal(db, spec, tableRet, TRUE);
+}
+
+struct sqlConnection *hAllocConnProfileTblMaybe(char *db, char *spec, char **tableRet)
+/* Allocate a connection to db, spec can either be in the form `table' or
+ * `profile:table'.  If it contains profile, connect via that profile.  Also
+ * returns pointer to table in spec string. Return NULL if database doesn't exist */
+{
+return hAllocConnProfileTblInternal(db, spec, tableRet, FALSE);
 }
 
 struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *defaultDb)
@@ -817,6 +845,8 @@ char *hTableForTrack(char *db, char *trackName)
  * In addition, caches all the tracks and tables in db the first
  * time it is called (could be many thousand tables). */
 {
+if (trackName == NULL)
+    return NULL;
 struct hash *hash = tableListGetDbHash(db);
 struct slName *tableNames = NULL;
 tableNames = (struct slName *)hashFindVal(hash, trackName);
@@ -828,6 +858,8 @@ return NULL;
 boolean hTableOrSplitExists(char *db, char *track)
 /* Return TRUE if track table (or split table) exists in db. */
 {
+if (track == NULL)
+    return FALSE;
 if (!hDbExists(db))
     return FALSE;
 struct hash *hash = tableListGetDbHash(db);
@@ -2451,6 +2483,32 @@ if (conn)
 return dbList;
 }
 
+struct hash *hDbDbHash()
+/* The hashed-up version of the entire dbDb table, keyed on the db */
+/* this is likely better to use than hArchiveOrganism if it's likely to be */
+/* repeatedly called */
+{
+struct hash *dbDbHash = newHash(16);
+struct dbDb *list = hDbDbList();
+struct dbDb *dbdb;
+for (dbdb = list; dbdb != NULL; dbdb = dbdb->next)
+    hashAdd(dbDbHash, dbdb->name, dbdb);
+return dbDbHash;
+}
+
+struct hash *hDbDbAndArchiveHash()
+/* hDbDbHash() plus the dbDb rows from the archive table */
+{
+struct hash *dbDbHash = newHash(16);
+struct dbDb *archList = hArchiveDbDbList();
+struct dbDb *list = hDbDbList();
+struct dbDb *bothList = slCat(list, archList);
+struct dbDb *dbdb;
+for (dbdb = bothList; dbdb != NULL; dbdb = dbdb->next)
+    hashAdd(dbDbHash, dbdb->name, dbdb);
+return dbDbHash;
+}
+
 int hDbDbCmpOrderKey(const void *va, const void *vb)
 /* Compare to sort based on order key */
 {
@@ -3041,13 +3099,14 @@ else
 boolean hHostHasPrefix(char *prefix)
 /* Return TRUE if this is running on web-server with host name prefix */
 {
+char host[256];
 if (prefix == NULL)
     return FALSE;
 
 char *httpHost = getenv("HTTP_HOST");
-if (httpHost == NULL)
+if (httpHost == NULL && !gethostname(host, sizeof(host)))
     // make sure this works when CGIs are run from the command line.
-    httpHost = getenv("HOST");
+    httpHost = host;
 
 if (httpHost == NULL)
     return FALSE;
@@ -3361,8 +3420,10 @@ static boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
 {
 char *tbl;
 boolean exists;
-struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
-if ((exists = sqlTableExists(conn, tbl)))
+// when using dbProfiles and a list of trackDb entries, it's possible that the
+// database doesn't exist in one of servers.
+struct sqlConnection *conn = hAllocConnProfileTblMaybe(db, tblSpec, &tbl);
+if ((exists = ((conn != NULL) && sqlTableExists(conn, tbl))))
     {
     struct trackDb *oneTable = trackDbLoadWhere(conn, tbl, where), *oneRow;
     while ((oneRow = slPopHead(&oneTable)) != NULL)
@@ -3426,10 +3487,14 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 {
 if ((!tdb->private || privateHost) && trackDataAccessible(database, tdb))
     slAddHead(tdbRetList, tdb);
-else if (sameWord(tdb->type,"downloadsOnly"))
+else if (tdbIsDownloadsOnly(tdb))
     {
-    if (sameString(tdb->table,tdb->track))
-        tdb->table = NULL;
+    // While it would be good to make table NULL, since we should support tracks
+    // without tables (composties, etc) and even data tracks without tables (bigWigs).
+    // However, some CGIs still need careful bullet-proofing.  I have done so with
+    //   hgTrackUi, hgTracks, hgTable and hgGenome
+    //if (tdb->table != NULL && sameString(tdb->table,tdb->track))
+    //    tdb->table = NULL;
     slAddHead(tdbRetList, tdb);
     }
 else
@@ -3574,7 +3639,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         return matchingChild;
     }
 
-/* Look "to the sky" in parents of root generation well. */
+/* Look "to the sky" in parents of root generation as well. */
 if (level == 0)
     {
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
@@ -3600,11 +3665,31 @@ else
 }
 #endif /* DEBUG */
 
+static void addChildRefsToParents(struct trackDb *tdbList)
+/* Go through tdbList and set up the ->children field in parents with references
+ * to their children. */
+{
+struct trackDb *tdb;
+
+/* Insert a little paranoid check here to make sure this doesn't get called twice. */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    if (tdb->children !=  NULL)
+        internalErr();
+
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    struct trackDb *parent = tdb->parent;
+    if (parent != NULL)
+        refAdd(&parent->children, tdb);
+    }
+}
+
 struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db)
 /* Do various massaging that can only be done after parent/child
  * relationships are established. */
 {
 tdbList = pruneEmpties(tdbList, db, hIsPrivateHost() || hIsPreviewHost(), 0);
+addChildRefsToParents(tdbList);
 trackDbContainerMarkup(NULL, tdbList);
 rInheritFields(tdbList);
 slSort(&tdbList, trackDbCmp);
@@ -3621,6 +3706,19 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
+// FIXME: This is NOT CACHED and should be!  Since some callers (e.g. hgTables) consume the list,
+// I would suggest:
+// 1) static hash by db/hub
+// 2) call creates list if not in hash
+// 3) static (to this file) routine gives the actual tdb list
+// 4) public lib routine that returns fully cloned list
+// 5) public lib routine that returns cloned individual tdb complete with up/down inheritance
+// UNFORTUNATELY, cloning the memory with prove costly in time as well, because of all the pointers
+// to relink.  THEREFORE what should be done is to make the tdb list with const ->next pointers and
+// force discpline on the callers.  Sorts should be by hdb.c routines and any new lists (such as
+// hgTables makes) should be via tdbRefs.
+// SO we are back to being STALLED because of the volume of work.
+
 // static char *existingDb = NULL;
 // static struct trackDb *tdbList = NULL;
 struct trackDb *tdbList = NULL;
@@ -3658,27 +3756,6 @@ if (!trackTdb)
 return trackTdb;
 }
 
-void hTrackDbLoadSuper(char *db, struct trackDb *tdb)
-/* Populate child trackDbs of this supertrack */
-{
-if (!tdb || !tdbIsSuper(tdb))
-    return;
-
-struct sqlConnection *conn = hAllocConn(db);
-char where[256];
-safef(where, sizeof(where),
-   "settings rlike '^(.*\n)?superTrack %s([ \n].*)?$' order by priority desc",
-    tdb->track);
-tdb->subtracks = loadAndLookupTrackDb(conn, where);       // TODO: Straighten out when super points to children and when not!
-struct trackDb *subTdb;
-for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-    {
-    subTdb->parent = tdb;
-    trackDbSuperMemberSettings(subTdb);
-    }
-hFreeConn(&conn);
-}
-
 struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
@@ -3691,12 +3768,15 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 struct trackDb *theTdbs = NULL;
 if (tdbList == NULL || *tdbList == NULL)
     {
+#ifdef NOTNOW   /* this is handled by the routines that call us, removed
+                 * from here because we don't have a cart down here */
     if (isHubTrack(track))
         {
 	struct hash *hash = hashNew(0);
 	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
 	}
     else
+#endif
 	{
 	theTdbs = hTrackDb(db);
 	if (tdbList != NULL)
@@ -4156,7 +4236,7 @@ struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0), *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
-chainList = liftOverChainListFiltered();
+chainList = liftOverChainList();
 
 /* Create hash of databases having liftOver chains from this database */
 for (chain = chainList; chain != NULL; chain = chain->next)
@@ -4166,7 +4246,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 
 /* Get list of all current and archived databases */
-regDb = hDbDbListDeadOrAlive();
+regDb = hDbDbList();
 archDb = hArchiveDbDbList();
 allDbList = slCat(regDb, archDb);
 

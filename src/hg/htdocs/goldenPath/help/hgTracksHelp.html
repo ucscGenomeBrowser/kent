@@ -67,7 +67,17 @@
         <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
         <input TYPE="submit" VALUE="Submit">
         </FORM>
-        </p><p>
+        </p>
+	<P>
+ 	<FORM name="googleForm2" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:lists.soe.ucsc.edu/pipermail/genome';">
+ 	Search the Genome mailing list archives: &nbsp;
+ 	<input type="hidden" name="q" value="">
+ 	<input type="hidden" name="num" value="10">
+ 	<input type="hidden" name="filter" value="0">
+ 	<INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+ 	<input TYPE="submit" VALUE="Submit">
+ 	</FORM>
+ 	<P>
         See also the <A HREF="http://www.openhelix.com/downloads/ucsc/ucsc_home.shtml" TARGET=_blank>Open Helix tutorial and training materials</A>.
         </p><p>
         <A HREF="../../contacts.html">Questions and feedback are welcome</A>.
@@ -1071,9 +1081,10 @@ For information on using the Table Browser features, refer to the <A HREF="hgTab
 allows users to configure their browsers with specific track 
 combinations, including custom tracks, and save the configuration options. 
 Multiple sessions may be saved for future reference, for comparison of 
-scenarios or for sharing with colleagues. Saved sessions persist for one 
-year after the last access, unless deleted. Custom tracks persist for at 
-least 48 hours after the last time they are viewed.</P>
+scenarios or for sharing with colleagues. Saved sessions persist for
+four months after the last access, unless deleted.
+<A HREF="/goldenPath/help/hgSessionHelp.html#CTs">User-generated tracks</A>
+can be saved within sessions.</P>
 
 <P>This tool may be accessed via the <B>Sessions</B> link in the top blue 
 navigation bar in any assembly. To ensure privacy and security, users must 

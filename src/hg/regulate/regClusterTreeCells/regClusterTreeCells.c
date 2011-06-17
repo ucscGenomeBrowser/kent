@@ -18,6 +18,7 @@ errAbort(
   "(Eisen style) of expression data.\n"
   "usage:\n"
   "   regClusterTreeCells inFiles.lst output.tree output.distances\n"
+  "Where inFiles.lst is a list of bedGraph format files: <chrom><start><end><score>\n"
   "options:\n"
   "   -short - Abbreviate output by removing stuff shared by all.\n"
   "   -rename=twoCol.tab - Rename files according to file/name columns\n"
@@ -33,8 +34,7 @@ static struct optionSpec options[] = {
 };
 
 struct treeNode
-/* An element in a hierarchical tree.  We use this general structure because it's so
- * easy even though we are just making a binary tree. */
+/* An element in a hierarchical binary tree.  */
     {
     struct treeNode *left, *right;	/* Two children */
     int vectorSize;		/* # of items in vector below. */

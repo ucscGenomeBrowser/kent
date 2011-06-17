@@ -33,16 +33,14 @@ if (sameString(position, "proteome") || sameString(position, "genome") ||
 puts(
 "<FORM ACTION=\"../cgi-bin/pbGsid\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
-"<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
-"<TR><TD><FONT SIZE=\"2\">\n"
-"<CENTER>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
+"<TR><TD><span style='font-size:small; text-align:center;'>\n"
 "The GSID Protein View was created by the \n"
 "<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</CENTER>\n"
-"</FONT></TD></TR></TABLE></CENTER>\n"
+"</span></TD></TR></TABLE></CENTER>\n"
 );
 
 puts("<BR><B>Enter a VAX003 or VAX004 protein ID: </B>");
@@ -81,7 +79,7 @@ else
     }
 
 /* start with a clean slate */
-cartResetInDb(hUserCookie());  
+cartResetInDb(hUserCookie());
 /* This cartResetInDb does nothing since database will be overwritten
  * with memory by cartWebEnd ... unless pgGateway crashes, in which
  * case along with the crash it will wipe out all the users settings.

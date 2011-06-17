@@ -13,7 +13,7 @@
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "imageV2.h"
-#include "searchTracks.h"
+#include "search.h"
 
 #define DOWNLOADS_ONLY_TRACKS_INCLUDED
 #ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
@@ -104,17 +104,18 @@ for (group = groupList; group != NULL; group = group->next)
     boolean isOpen = !isCollapsedGroup(group);
     collapseGroupGoodies(isOpen, FALSE, &indicatorImg,
                             &indicator, &otherState);
-    hTableStart();
-    hPrintf("<TR NOWRAP>");
-    hPrintf("<TH NOWRAP align=\"left\" colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("<TABLE BORDER='1' CELLSPACING='0' style='background-color:#%s; width:54em;'>\n",HG_COL_INSIDE);
+    hPrintf("<TR NOWRAP class='blueToggleBar'>");
+    hPrintf("<TH NOWRAP align='left' colspan=3>");
+    hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
         collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<A HREF='%s?%s&%s=%s#%sGroup' class='bigBlue'><IMG height=22 width=22 onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' class='bigBlue' title='%s this group'></A>&nbsp;&nbsp;",
-        hgTracksName(), cartSidUrlString(cart),collapseGroupVar(group->name),
-         otherState, group->name, group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-    hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
+    hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
+        group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+    hPrintf("<B>&nbsp;%s</B> ", group->label);
     hPrintf("&nbsp;&nbsp;&nbsp;");
+    hPrintf("</td><td style='text-align:right;'>\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
 	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Hide all tracks in this groups'>",
 	    configHideAll, "hide all", configGroupTarget, group->name,
@@ -145,6 +146,7 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintf("%s", wrapWhiteFont("Group Order: "));
         }
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
+    hPrintf("</td></tr></table>\n");
     hPrintf("</TH>\n");
 #ifdef PRIORITY_CHANGES_IN_CONFIG_UI
     if (withPriorityOverride)
@@ -154,7 +156,7 @@ for (group = groupList; group != NULL; group = group->next)
         hDoubleVar(pname, (double)group->priority, 4);
         hPrintf("</TH>\n");
         if (isOpen)
-            hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B></TH> ", wrapWhiteFont("Group"));
+            hPrintf("<TH align=CENTER BGCOLOR='#536ED3'><B>&nbsp;%s</B></TH> ", wrapWhiteFont("Group"));
         hPrintf("\n");
         }
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
@@ -328,8 +330,8 @@ for (group = groupList; group != NULL; group = group->next)
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 	hPrintf("</TR>\n");
 	}
-    hTableEnd();
-    hPrintf("<BR>");
+    hPrintf("</TABLE>\n");
+    cgiDown(0.9);
     }
 }
 
@@ -530,8 +532,8 @@ hPrintf("</TD><TD>");
 hPrintf("Enable advanced javascript features");
 hPrintf("</TD></TR>\n");
 
-
 hTableEnd();
+cgiDown(0.9);
 
 char *freeze = hFreezeFromDb(database);
 char buf[128];
@@ -557,7 +559,7 @@ hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
 hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return setAllTrackGroupVisibility(false)");
 hPrintf(" ");
 hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return setAllTrackGroupVisibility(true)");
-hPrintf("<P STYLE=\"margin-top:5;\">Control track and group visibility more selectively below.<P>");
+hPrintf("<div style='margin-top:.2em; margin-bottom:.9em;'>Control track and group visibility more selectively below.</div>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);

@@ -13,7 +13,7 @@ COMMONO = altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWar
 	mafTrack.o makeItemsTrack.o multiWig.o netTrack.o pslTrack.o rmskTrack.o \
 	sampleTracks.o searchTracks.o simpleTracks.o snakeTrack.o switchGear.o transMapTracks.o \
 	wabaTrack.o wigTrack.o cds.o \
-	wigMafTrack.o encode.o variation.o transcriptome.o\
+	wigMafTrack.o encode.o variation.o vcfTrack.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
 	wiki.o wikiTrack.o imageV2.o
 

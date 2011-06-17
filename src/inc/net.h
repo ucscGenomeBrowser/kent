@@ -119,6 +119,9 @@ void netParseUrl(char *url, struct netParsedUrl *parsed);
  * This is set up so that the http:// and the port are optional. 
  */
 
+char *urlFromNetParsedUrl(struct netParsedUrl *npu);
+/* Build URL from netParsedUrl structure */
+
 int netUrlOpen(char *url);
 /* Return socket descriptor (low-level file handle) for read()ing url data,
  * or -1 if error.  Just close(result) when done. */
@@ -235,10 +238,10 @@ boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirecte
  * can't attach a lineFile since filling the lineFile buffer reads in more than just the http header. */
 
 boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
-/* Return date and size of ftp url file */
+/* Return date in UTC and size of ftp url file */
 
 
-boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries);
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer, boolean progress);
 /* Open multiple parallel connections to URL to speed downloading */
 
 #endif /* NET_H */

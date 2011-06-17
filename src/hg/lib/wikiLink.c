@@ -63,7 +63,7 @@ static char *encodedHgSessionReturnUrl(int hgsid)
 {
 char retBuf[1024];
 safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgSession?hgsid=%d",
-      cgiServerName(), hgsid);
+      cgiServerNamePort(), hgsid);
 return cgiEncode(retBuf);
 }
 

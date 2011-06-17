@@ -6,21 +6,20 @@
 #define ENCODEEXP_H
 
 #include "jksql.h"
-
 #define ENCODEEXP_NUM_COLS 8
 
 struct encodeExp
 /* ENCODE experiments */
     {
     struct encodeExp *next;  /* Next in singly linked list. */
-    int ix;	/* auto-increment ID */
-    char *organism;	/* human | mouse */
-    char *accession;	/* wgEncodeE[H|M]00000N */
+    unsigned ix;	/* auto-increment ID */
+    char *organism;	/* human or mouse */
     char *lab;	/* lab name from ENCODE cv.ra */
     char *dataType;	/* dataType from ENCODE cv.ra */
     char *cellType;	/* cellType from ENCODE cv.ra */
-    char *expVars;	/* typeOfTerm=term list of experiment-defining variables */
-    char *lastUpdated;  /* auto-update timestamp */  // WARNING: hand-edit here
+    char *expVars;	/* var=value list of experiment-defining variables. May be NULL if none. */
+    char *accession;	/* wgEncodeE[H|M]00000N or NULL if proposed but not yet approved */
+    char *updateTime;	/* auto-update timestamp */
     };
 
 void encodeExpStaticLoad(char **row, struct encodeExp *ret);
@@ -100,31 +99,46 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 #define ENCODE_EXP_FIELD_IX             "ix"
 #define ENCODE_EXP_FIELD_ORGANISM       "organism"
-#define ENCODE_EXP_FIELD_ACCESSION      "accession"
 #define ENCODE_EXP_FIELD_LAB            "lab"
 #define ENCODE_EXP_FIELD_DATA_TYPE      "dataType"
 #define ENCODE_EXP_FIELD_CELL_TYPE      "cellType"
 #define ENCODE_EXP_FIELD_FACTORS        "expVars"
-#define ENCODE_EXP_FIELD_LAST_UPDATED   "lastUpdated"
+#define ENCODE_EXP_FIELD_ACCESSION      "accession"
+#define ENCODE_EXP_FIELD_UPDATE_TIME    "updateTime"
+
+#define ENCODE_EXP_ORGANISM_HUMAN       "human"
+#define ENCODE_EXP_ORGANISM_MOUSE       "mouse"
 
 #define ENCODE_EXP_NO_CELL              "None"
-#define ENCODE_EXP_NO_VAR               "None"
 
 #define ENCODE_EXP_TABLE        "encodeExp"
 #define ENCODE_EXP_DATABASE     "hgFixed"
 #define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
 #define ENCODE_EXP_TABLE_LOCK   "lock_encodeExp"
 
+#define ENCODE_EXP_IX_UNDEFINED 0
+
+#define ENCODE_EXP_HISTORY_TABLE_SUFFIX "History"
+
 void encodeExpFieldIndex(char *fieldName);
 /* Get column number of named field in EncodeExp schema */
 
 void encodeExpTableCreate(struct sqlConnection *conn, char *table);
-/* Create an encodeExp table */
+/* Create an encodeExp table and history */
+
+void encodeExpTableDrop(struct sqlConnection *conn, char *tableName);
+/* Drop an encodeExp table and history */
+
+void encodeExpTableRename(struct sqlConnection *conn, char *tableName, char *newTableName);
+/* Rename table and history table, updating triggers to match */
+
+void encodeExpTableCopy(struct sqlConnection *conn, char *tableName, char *newTableName);
+/* Copy table and history table, updating triggers */
 
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *table);
 /* Load all encodeExp in table */
 
-struct encodeExp *encodeExpFromMdb(struct mdbObj *mdb);
+struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn,char *db, struct mdbObj *mdb);
 /* Create an encodeExp from an ENCODE metaDb object */
 
 struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars);
@@ -140,12 +154,42 @@ struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f);
 struct hash *encodeExpToRa(struct encodeExp *exp);
 /* Create a Ra hash from an encodeExp */
 
+boolean encodeExpSame(struct encodeExp *exp, struct encodeExp *exp2);
+/* Return TRUE if two experiments are the same */
+
+struct encodeExp *encodeExpGetByIdFromTable(struct sqlConnection *conn, char *tableName, int id);
+/* Return experiment specified by id from named table */
+
+struct encodeExp *encodeExpGetById(struct sqlConnection *conn, int id);
+/* Return experiment specified by id from default table */
+
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp);
 /* Add encodeExp as a new row to the table specified by tableName.
    Update accession using index assigned with autoincrement */
 
+void encodeExpRemove(struct sqlConnection *conn, char *tableName, struct encodeExp *exp, char *why);
+/* Delete row containing experiment from encodeExp.
+ * WARNING:  This is a management function, not for regular use.  Accession must
+ * not be present.  In general, experiments should be reviewed before adding to table
+ * rather than added and removed if problematic. */
+
+char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id);
+/* Add accession field to an existing "temp" experiment.  This is done
+ * after experiment is determined to be valid.
+ * Return the accession. */
+
+void encodeExpSetAccession(struct encodeExp *exp, char *tableName);
+// Adds accession field to an existing experiment, updating the table.
+
+void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id);
+/* Revoke an experiment by removing the accession. */
+
 char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
+
+char *encodeExpVars(struct encodeExp *exp);
+// Create a string of all experiment defining vars and vals as "lab=UW dataType=ChipSeq ..."
+// WARNING: May be missing var=None if the var was added after composite had exps.
 
 struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, char *cell,
                                 struct slPair *varPairs, char *table);
@@ -170,19 +214,14 @@ struct encodeExp *encodeExpGetOrCreateByMdbVarsFromTable(char *db, struct mdbVar
 int encodeExpExists(char *db, struct mdbVar *vars);
 /* Return TRUE if at least one experiment exists for these vars */
 
-char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars);
+char *encodeGetExpAccessionByMdbVars(char *db, struct mdbVar *vars);
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 
-void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
-                                char *accession, char *field, char *val);
-/* Update field in encodeExp identified by accession with value.
-   Only supported for a few non-interdependent fields */
-
-void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
-                                char *accession, struct slPair *varPairs);
-/* Update expVars in encodeExp identified by accession */
+void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
+                                int id, char *var, char *newVal, char *oldVal);
+/* Update field in encodeExp or var in expVars, identified by id with value.
+ * If oldVal is non-NULL, verify it matches experiment, as a safety check.
+ * Abort if experiment is accessioned (must deaccession first) */
 
 #endif /* ENCODEEXP_H */
-
-
 

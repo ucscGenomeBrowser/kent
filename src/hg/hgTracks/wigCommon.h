@@ -27,26 +27,33 @@ struct wigCartOptions
     char *colorTrack;   /*	Track to use for coloring wiggle track. */
     int graphColumn;	/*	column to be graphing (bedGraph tracks)	*/
     boolean bedGraph;	/*	is this a bedGraph track ?	*/
+    boolean isMultiWig;	/*      If true it's a multi-wig. */
+    boolean overlay;	/*      Overlay multiple wigs on top of each other? */
     };
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);
 /* Create a wigCartOptions from cart contents and tdb. */
 
 struct preDrawContainer
+/* A list of preDraws */
     {
     struct preDrawContainer *next;
     struct preDrawElement *preDraw;
+    int preDrawSize;		/* Size of preDraw */
+    int preDrawZero;		/* Offset from start of predraw array to data requested.  We
+                                 * get more because of smoothing */
+    int width;			/* Passed in width, number of pixels to display without smooth */
     };
 
 struct preDrawElement
     {
-	double	max;	/*	maximum value seen for this point	*/
-	double	min;	/*	minimum value seen for this point	*/
-	unsigned long long	count;	/* number of datum at this point */
-	double	sumData;	/*	sum of all values at this point	*/
-	double  sumSquares;	/* sum of (values squared) at this point */
-	double  plotValue;	/*	raw data to plot	*/
-	double  smooth;	/*	smooth data values	*/
+    double	max;	/*	maximum value seen for this point	*/
+    double	min;	/*	minimum value seen for this point	*/
+    unsigned long long	count;	/* number of datum at this point */
+    double	sumData;	/*	sum of all values at this point	*/
+    double  sumSquares;	/* sum of (values squared) at this point */
+    double  plotValue;	/*	raw data to plot	*/
+    double  smooth;	/*	smooth data values	*/
     };
 
 struct bedGraphItem
@@ -62,8 +69,7 @@ struct bedGraphItem
 
 /*	source to these routines is in wigTrack.c	*/
 
-struct preDrawElement * initPreDraw(int width, int *preDrawSize,
-	int *preDrawZero);
+struct preDrawContainer *initPreDrawContainer(int width);
 /*	initialize a preDraw array of size width	*/
 
 void preDrawWindowFunction(struct preDrawElement *preDraw, int preDrawSize,
@@ -136,6 +142,9 @@ void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis, char *shortLabel, double graphUpperLimit, double graphLowerLimit,
 	boolean showNumbers);
 /* Draw labels on left for a wiggle-type track. */
+
+double wiggleLogish(double x);
+/* Return log-like transform without singularity at 0. */
 
 /******************  in source file bedGraph.c ************************/
 void wigBedGraphFindItemLimits(void *items,

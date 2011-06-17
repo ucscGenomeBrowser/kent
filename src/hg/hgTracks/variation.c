@@ -247,8 +247,8 @@ else
     while (s != NULL && s[0] != 0)
 	{
 	e = strchr(s, ',');
-	if (e == NULL && slNameInList(snp125ValidFilter, s))
-	    return TRUE;
+	if (e == NULL)
+	    return slNameInList(snp125ValidFilter, s);
 	else
 	    {
 	    safencpy(val, sizeof(val), s, e-s);
@@ -692,7 +692,7 @@ snp125LocTypeCart = snp125ColorsFromCart(track, "locType", snp125LocTypeOldColor
 					 snp125LocTypeDefault, snp125LocTypeArraySize);
 snp132ExceptionsCart = snp125ColorsFromCart(track, "exception", snp132ExceptionVarName, FALSE,
 					    snp132ExceptionDefault, snp132ExceptionArraySize);
-snp132BitfieldsCart = snp125ColorsFromCart(track, "bitfield", snp132BitfieldVarName, FALSE,
+snp132BitfieldsCart = snp125ColorsFromCart(track, "bitfields", snp132BitfieldVarName, FALSE,
 					   snp132BitfieldDefault, snp132BitfieldArraySize);
 
 snp125FuncCartColorHash = hashNew(0);

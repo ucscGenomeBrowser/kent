@@ -58,4 +58,4 @@ track nscanGene override
 informant Pig N-SCAN uses human (hg19) as the informant, updated with PASA clusters of pig cDNAs.
 
 track ensGene override
-longLabel Ensembl Gene Predictions (lifted to susScr2 from Ensembl version Sscrofa9)
+longLabel Ensembl Genes (lifted to susScr2 from Ensembl version Sscrofa9)

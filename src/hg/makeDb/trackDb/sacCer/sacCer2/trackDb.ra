@@ -53,4 +53,4 @@ track sgdOther override
 noScoreFilter .
 
 track ensGene override
-longLabel Ensembl Gene Predictions (lifted to sacCer2 from Ensembl version EF 2)
+longLabel Ensembl Genes (lifted to sacCer2 from Ensembl version EF 2)

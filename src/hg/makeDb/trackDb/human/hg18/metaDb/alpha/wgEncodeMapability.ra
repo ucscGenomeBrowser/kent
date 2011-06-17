@@ -1,0 +1,178 @@
+metaObject wgEncodeBroadMapabilityAlign36mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE July 2009 Freeze
+expId 316
+fileName wgEncodeBroadMapabilityAlign36mer.wig.gz
+grant Bernstein
+lab Broad
+project wgEncode
+size 36mer
+subId 344
+tableName wgEncodeBroadMapabilityAlign36mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign100mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE January 2010 Freeze
+expId 317
+fileName wgEncodeCrgMapabilityAlign100mer.bw.gz
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 100mer
+tableName wgEncodeCrgMapabilityAlign100mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign36mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE January 2010 Freeze
+expId 318
+fileName wgEncodeCrgMapabilityAlign36mer.bw.gz
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 36mer
+tableName wgEncodeCrgMapabilityAlign36mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign40mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE January 2010 Freeze
+expId 319
+fileName wgEncodeCrgMapabilityAlign40mer.bw.gz
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 40mer
+tableName wgEncodeCrgMapabilityAlign40mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign50mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE January 2010 Freeze
+expId 320
+fileName wgEncodeCrgMapabilityAlign50mer.bw.gz
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 50mer
+tableName wgEncodeCrgMapabilityAlign50mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign75mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE January 2010 Freeze
+expId 321
+fileName wgEncodeCrgMapabilityAlign75mer.bw.gz
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 75mer
+tableName wgEncodeCrgMapabilityAlign75mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeDukeRegionsExcluded
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE Nov 2008 Freeze
+expId 322
+fileName wgEncodeDukeRegionsExcluded.bed6.gz
+grant Crawford
+lab Duke
+labVersion satellite_rna_chrM_500.bed.20080925
+project wgEncode
+subId 104
+tableName wgEncodeDukeRegionsExcluded
+view Excludable
+
+metaObject wgEncodeDukeUniqueness20bp
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE Nov 2008 Freeze
+expId 323
+fileName wgEncodeDukeUniqueness20bp.wig.gz
+grant Crawford
+lab Duke
+labVersion 1.0 - 4 or less
+project wgEncode
+size 20mer
+subId 104
+tableName wgEncodeDukeUniqueness20bp
+uniqueness 1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more
+view Uniqueness
+
+metaObject wgEncodeDukeUniqueness24bp
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE Nov 2008 Freeze
+expId 324
+fileName wgEncodeDukeUniqueness24bp.wig.gz
+grant Crawford
+lab Duke
+labVersion 1.0 - 4 or less
+project wgEncode
+size 24mer
+subId 104
+tableName wgEncodeDukeUniqueness24bp
+uniqueness 1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more
+view Uniqueness
+
+metaObject wgEncodeDukeUniqueness35bp
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE Nov 2008 Freeze
+expId 325
+fileName wgEncodeDukeUniqueness35bp.wig.gz
+grant Crawford
+lab Duke
+labVersion 1.0 - 4 or less
+project wgEncode
+size 35mer
+subId 104
+tableName wgEncodeDukeUniqueness35bp
+uniqueness 1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more
+view Uniqueness
+
+metaObject wgEncodeMapability
+objType composite
+composite wgEncodeMapability
+expVars lab,dataType,view,size
+
+metaObject wgEncodeUmassMapabilityUniq15
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE July 2009 Freeze
+expId 326
+fileName wgEncodeUmassMapabilityUniq15.wig.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+size 15mer
+subId 345
+tableName wgEncodeUmassMapabilityUniq15
+view Uniqueness
+
+# MAGIC: 1265492559

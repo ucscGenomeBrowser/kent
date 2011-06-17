@@ -21,6 +21,8 @@
 #define JS_SET_ALL_BUTTON_LABEL  "Set all"
 #define JS_DEFAULTS_BUTTON_LABEL "Set defaults"
 
+// #define NEW_JQUERY 1          // temporary define turn on to test new jQuery (1.5) and jQuery UI (1.8)
+
 void jsCreateHiddenForm(struct cart *cart, char *scriptName,
 	char **vars, int varCount);
 /* Create a hidden form with the given variables.  Must be

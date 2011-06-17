@@ -59,8 +59,19 @@ if ("$HOST" == "hgwbeta") then
   #clear out the old and copy in the new
   foreach f ( ${DESTDIR}${BINDIR}/* )
     echo $f
-    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
-    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
+    switch ($f)
+	# these three go in the blat subdirectory
+	case ${DESTDIR}${BINDIR}/blat:
+	case ${DESTDIR}${BINDIR}/gfClient:
+	case ${DESTDIR}${BINDIR}/gfServer:
+	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
+	    breaksw
+	default:
+	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
+	    breaksw
+    endsw
   end
 endif
 

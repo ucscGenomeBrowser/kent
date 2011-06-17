@@ -34,8 +34,8 @@ static char const rcsid[] = "$Id: qaPushQ.c,v 1.124 2010/04/16 19:05:01 galt Exp
 char msg[2048] = "";
 char ** saveEnv;
 
-#define BLSIZE 256000  /* size of strings for processing big lists of tables and files */
-#define BUFMAX 256000
+#define BLSIZE 512000  /* size of strings for processing big lists of tables and files */
+#define BUFMAX 512000
 char html[BUFMAX];
 
 char *action = NULL;   /* have to put declarations first */
@@ -70,9 +70,9 @@ char *showColumns = NULL;
 char *defaultColumns =
     "pqid,qid,priority,importance,qadate,track,dbs,tbls,cgis,files,currLoc,makeDocYN,onlineHelp,ndxYN,stat,sponsor,reviewer,extSource,notes";
 
-char *newRandState = NULL;    
-char *oldRandState = NULL;    
-    
+char *newRandState = NULL;
+char *oldRandState = NULL;
+
 /*
 "qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,"
 "makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,"
@@ -123,12 +123,12 @@ static char const *colName[] = {
  "openIssues",
  "notes"     ,
  "pushState" ,
- "initdate"  ,  
- "lastdate"  ,  
- "bounces"   , 
- "lockUser"  , 
+ "initdate"  ,
+ "lastdate"  ,
+ "bounces"   ,
+ "lockUser"  ,
  "lockDateTime",
- "releaseLog", 
+ "releaseLog",
  "releaseLogUrl",
  "importance"
 };
@@ -213,7 +213,7 @@ char *numberToMonth[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oc
 
 char pushQtbl[256] = "pushQ";   /* default */
 
-char month[256] = "";  
+char month[256] = "";
 
 enum colEnum colOrder[e_NUMCOLS];
 int numColumns = 0;
@@ -233,7 +233,7 @@ for(i=0;i<length;i++)
     {
     s[i]='0'+randInt(10);
     }
-s[length]=0;    
+s[length]=0;
 return s;
 }
 
@@ -246,20 +246,20 @@ bool isDateValid(char *s)
 int yyyy = 0, mm = 0, dd = 0;
 char *y = NULL, *m = NULL, *d = NULL;
 if (strlen(s)!=10) return FALSE;
-if (s[4]!='-') return FALSE; 
-if (s[7]!='-') return FALSE; 
+if (s[4]!='-') return FALSE;
+if (s[7]!='-') return FALSE;
 y = cloneStringZ(&s[0],4);
 m = cloneStringZ(&s[5],2);
 d = cloneStringZ(&s[8],2);
 if (sscanf(y,"%d",&yyyy) != 1) return FALSE;
 if (sscanf(m,"%d",&mm)   != 1) return FALSE;
 if (sscanf(d,"%d",&dd)   != 1) return FALSE;
-if (yyyy < 1900) return FALSE; 
-if (yyyy > 2100) return FALSE; 
-if (  mm > 12  ) return FALSE; 
-if (  mm <  1  ) return FALSE; 
-if (  dd > 31  ) return FALSE; 
-if (  dd <  1  ) return FALSE; 
+if (yyyy < 1900) return FALSE;
+if (yyyy > 2100) return FALSE;
+if (  mm > 12  ) return FALSE;
+if (  mm <  1  ) return FALSE;
+if (  dd > 31  ) return FALSE;
+if (  dd <  1  ) return FALSE;
 return TRUE;
 }
 
@@ -277,7 +277,7 @@ void encryptNewPWD(char *password, char *buf, int bufsize)
 {
 unsigned long seed[2];
 char salt[] = "$1$........";
-const char *const seedchars = 
+const char *const seedchars =
 "./0123456789ABCDEFGHIJKLMNOPQRST"
 "UVWXYZabcdefghijklmnopqrstuvwxyz";
 int i;
@@ -316,7 +316,7 @@ printf("%s",msg);
 bool mySqlGetLock(char *name, int timeout)
 /* Tries to acquire (for 10 seconds) and set an advisory lock.
  *  note: mysql returns 1 if successful,
- *   0 if name already locked or NULL if error occurred 
+ *   0 if name already locked or NULL if error occurred
  *   blocks another client from obtaining a lock with the same name
  *   lock is automatically released by mysql when connection is closed or detected broken
  *   may even detect program crash and release lock.
@@ -351,7 +351,7 @@ char query[256];
 safef(query, sizeof(query), "select release_lock('%s')", name);
 sqlUpdate(conn, query);
 }
-                                                                                
+
 
 
 void setLock()
@@ -386,7 +386,7 @@ return -1;
 
 
 
-void replaceInStr(char *s, int ssize, char *t, char *r) 
+void replaceInStr(char *s, int ssize, char *t, char *r)
 /* Strings: Replace an occurrence of t in s with r.
  * size is sizeof(s)
  * note: s must have room to hold any expansion, as it happens in-place in s */
@@ -417,7 +417,7 @@ if (bufsize==0)
     {
     return FALSE;
     }
-while (TRUE) 
+while (TRUE)
     {
     if (n==num)
 	{
@@ -456,7 +456,7 @@ while (TRUE)
 void replaceSelectOptions(char *varname, char *values, char *value)
 /* Replace <!sel-name-val> tags in select option picklist.
  * This initializes the correct default selection.
- * Currently values is a list of single characters only, 
+ * Currently values is a list of single characters only,
  * picklists with string-values not supported. */
 {
 int i = 0;
@@ -464,16 +464,16 @@ char *p = NULL;
 char tempTag[256] = "";
 char tempVal[256];
 while(TRUE)
-    { 
+    {
     parseList(values,',',i,tempVal,sizeof(tempVal));
-    if (tempVal[0]==0) 
+    if (tempVal[0]==0)
 	{
 	break;
 	}
     safef(tempTag,sizeof(tempTag),"<!sel-%s-%s>",varname,tempVal);
     if (sameString(value,tempVal))
 	{p = "selected";}
-    else 
+    else
 	{p = "";}
     replaceInStr(html, sizeof(html), tempTag, p);
     i++;
@@ -494,7 +494,7 @@ numColumns=0;
 while(parseList(showColumns,',',i,colName,sizeof(colName)))
     {
     e = mapFieldToEnum(colName,FALSE);
-    if (e >= 0) /* tolerate old nonexistent colnames in pseudocart more gracefully */ 
+    if (e >= 0) /* tolerate old nonexistent colnames in pseudocart more gracefully */
 	{
 	colOrder[i] = e;
 	dyStringPrintf(s, "%s%s", sep, colName);
@@ -516,15 +516,15 @@ void showSizesJavascript()
 /* set showSizes for cross-posting to support file sizes */
 {
 char sizesButton[1024];
-safef(sizesButton, sizeof(sizesButton), 
+safef(sizesButton, sizeof(sizesButton),
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\""
     " ONCLICK=\"if (document.forms[0].currLoc.value!='%s') {"
 		" document.forms[0]._action.value='xpost';"
 		" document.forms[0].action='http://%s.cse.ucsc.edu/cgi-bin/qaPushQ';"
 		"};return true;\">"
     , utsName.nodename
-    , sameString(utsName.nodename, "hgwdev") ? "hgwbeta" : "hgwdev" 
-    ); 
+    , sameString(utsName.nodename, "hgwdev") ? "hgwbeta" : "hgwdev"
+    );
 replaceInStr(html, sizeof(html), "<!sizesbutton>", sizesButton);
 }
 
@@ -541,139 +541,139 @@ if (sameString(ki->lockUser,qaUser))
     myLock = TRUE;
     }
 
-safef(html,sizeof(html),"%s",formQ); 
+safef(html,sizeof(html),"%s",formQ);
 
 safef(tempSizeMB, sizeof(tempSizeMB), "%u", ki->sizeMB);
-if (ki->sizeMB == 0) 
+if (ki->sizeMB == 0)
     {
     safef(tempSizeMB,sizeof(tempSizeMB),"%s","");
     }
 
 
-replaceInStr(html, sizeof(html) , "<!qid>"         , ki->qid       ); 
+replaceInStr(html, sizeof(html) , "<!qid>"         , ki->qid       );
 replaceSelectOptions("priority" , "A,B,C,D,L"      , ki->priority  );
-replaceInStr(html, sizeof(html) , "<!qadate>"      , ki->qadate    ); 
+replaceInStr(html, sizeof(html) , "<!qadate>"      , ki->qadate    );
 replaceSelectOptions("newYN"    ,"Y,N,X"           , ki->newYN     );
-replaceInStr(html, sizeof(html) , "<!track>"       , ki->track     ); 
-replaceInStr(html, sizeof(html) , "<!dbs>"         , ki->dbs       ); 
-replaceInStr(html, sizeof(html) , "<!tbls>"        , ki->tbls      ); 
-replaceInStr(html, sizeof(html) , "<!cgis>"        , ki->cgis      ); 
-replaceInStr(html, sizeof(html) , "<!files>"       , ki->files     ); 
-replaceInStr(html, sizeof(html) , "<!sizeMB>"      , tempSizeMB    ); 
-replaceInStr(html, sizeof(html) , "<!currLoc>"     , ki->currLoc   ); 
+replaceInStr(html, sizeof(html) , "<!track>"       , ki->track     );
+replaceInStr(html, sizeof(html) , "<!dbs>"         , ki->dbs       );
+replaceInStr(html, sizeof(html) , "<!tbls>"        , ki->tbls      );
+replaceInStr(html, sizeof(html) , "<!cgis>"        , ki->cgis      );
+replaceInStr(html, sizeof(html) , "<!files>"       , ki->files     );
+replaceInStr(html, sizeof(html) , "<!sizeMB>"      , tempSizeMB    );
+replaceInStr(html, sizeof(html) , "<!currLoc>"     , ki->currLoc   );
 replaceSelectOptions("currLoc"  , "hgwdev,hgwbeta" , ki->currLoc   );
 replaceSelectOptions("makeDocYN", "Y,N,X"          , ki->makeDocYN );
-replaceInStr(html, sizeof(html) , "<!onlineHelp>"  , ki->onlineHelp); 
+replaceInStr(html, sizeof(html) , "<!onlineHelp>"  , ki->onlineHelp);
 replaceSelectOptions("ndxYN"    , "Y,N,X"          , ki->ndxYN     );
 replaceSelectOptions("joinerYN" , "Y,N,X"          , ki->joinerYN  );
-replaceInStr(html, sizeof(html) , "<!stat>"        , ki->stat      ); 
-replaceInStr(html, sizeof(html) , "<!featureBits>" , ki->featureBits); 
-replaceInStr(html, sizeof(html) , "<!sponsor>"     , ki->sponsor   ); 
-replaceInStr(html, sizeof(html) , "<!reviewer>"    , ki->reviewer  ); 
-replaceInStr(html, sizeof(html) , "<!extSource>"   , ki->extSource ); 
-replaceInStr(html, sizeof(html) , "<!openIssues>"  , ki->openIssues); 
+replaceInStr(html, sizeof(html) , "<!stat>"        , ki->stat      );
+replaceInStr(html, sizeof(html) , "<!featureBits>" , ki->featureBits);
+replaceInStr(html, sizeof(html) , "<!sponsor>"     , ki->sponsor   );
+replaceInStr(html, sizeof(html) , "<!reviewer>"    , ki->reviewer  );
+replaceInStr(html, sizeof(html) , "<!extSource>"   , ki->extSource );
+replaceInStr(html, sizeof(html) , "<!openIssues>"  , ki->openIssues);
 replaceInStr(html, sizeof(html) , "<!notes>"       , ki->notes     );
-replaceInStr(html, sizeof(html) , "<!initdate>"    , ki->initdate  ); 
-replaceInStr(html, sizeof(html) , "<!releaseLog>"  , ki->releaseLog); 
-replaceInStr(html, sizeof(html) , "<!releaseLogUrl>", ki->releaseLogUrl); 
+replaceInStr(html, sizeof(html) , "<!initdate>"    , ki->initdate  );
+replaceInStr(html, sizeof(html) , "<!releaseLog>"  , ki->releaseLog);
+replaceInStr(html, sizeof(html) , "<!releaseLogUrl>", ki->releaseLogUrl);
 replaceSelectOptions("importance", " ,B,L,M,H,U"   , ki->importance  );
 
-replaceInStr(html, sizeof(html) , "<!cb>"          , newRandState  ); 
+replaceInStr(html, sizeof(html) , "<!cb>"          , newRandState  );
 
 if (isNew)
     {
-    replaceInStr(html, sizeof(html), "<!DISABLED>", ""); 
-    replaceInStr(html, sizeof(html), "<!READONLY>", ""); 
-    replaceInStr(html, sizeof(html), "<!submitbutton>", "<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\" >&nbsp;&nbsp;"); 
-    replaceInStr(html, sizeof(html), "<!delbutton>", ""); 
-    replaceInStr(html, sizeof(html), "<!pushbutton>", ""); 
-    replaceInStr(html, sizeof(html), "<!clonebutton>", ""); 
-    replaceInStr(html, sizeof(html), "<!bouncebutton>", ""); 
-    replaceInStr(html, sizeof(html), "<!lockbutton>", ""); 
-    replaceInStr(html, sizeof(html), "<!refreshlink>", ""); 
-    replaceInStr(html, sizeof(html), "<!transferbutton>", ""); 
-    
-    safef(tempLink, sizeof(tempLink), "<a href=\"/cgi-bin/qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState); 
-    replaceInStr(html, sizeof(html), "<!cancellink>", tempLink ); 
+    replaceInStr(html, sizeof(html), "<!DISABLED>", "");
+    replaceInStr(html, sizeof(html), "<!READONLY>", "");
+    replaceInStr(html, sizeof(html), "<!submitbutton>", "<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\" >&nbsp;&nbsp;");
+    replaceInStr(html, sizeof(html), "<!delbutton>", "");
+    replaceInStr(html, sizeof(html), "<!pushbutton>", "");
+    replaceInStr(html, sizeof(html), "<!clonebutton>", "");
+    replaceInStr(html, sizeof(html), "<!bouncebutton>", "");
+    replaceInStr(html, sizeof(html), "<!lockbutton>", "");
+    replaceInStr(html, sizeof(html), "<!refreshlink>", "");
+    replaceInStr(html, sizeof(html), "<!transferbutton>", "");
+
+    safef(tempLink, sizeof(tempLink), "<a href=\"/cgi-bin/qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState);
+    replaceInStr(html, sizeof(html), "<!cancellink>", tempLink );
 
     showSizesJavascript();
-	
+
     }
 else
     {
-    if (myLock) 
+    if (myLock)
 	{
-	replaceInStr(html, sizeof(html), "<!DISABLED>", ""); 
+	replaceInStr(html, sizeof(html), "<!DISABLED>", "");
     	replaceInStr(html, sizeof(html), "<!READONLY>", "");
-	
-        replaceInStr(html, sizeof(html), "<!submitbutton>", "<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\" >&nbsp;&nbsp;"); 
-	replaceInStr(html, sizeof(html), 
-	    "<!delbutton>" , 
+
+        replaceInStr(html, sizeof(html), "<!submitbutton>", "<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\" >&nbsp;&nbsp;");
+	replaceInStr(html, sizeof(html),
+	    "<!delbutton>" ,
 	    "<input TYPE=SUBMIT NAME=\"delbutton\"  VALUE=\"delete\">&nbsp;&nbsp;"
 	    );
-	    
+
 	if (ki->priority[0]!='L')
 	    {
-	    replaceInStr(html, sizeof(html), 
-		"<!pushbutton>", 
+	    replaceInStr(html, sizeof(html),
+		"<!pushbutton>",
 		"<input TYPE=SUBMIT NAME=\"pushbutton\" VALUE=\"push requested\">&nbsp;&nbsp;"
-		); 
+		);
 	    }
-	    
-	replaceInStr(html, sizeof(html), 
-	    "<!clonebutton>", 
+
+	replaceInStr(html, sizeof(html),
+	    "<!clonebutton>",
 	    "<input TYPE=SUBMIT NAME=\"clonebutton\" VALUE=\"clone\">&nbsp;&nbsp;"
-	    ); 
-	    
+	    );
+
 	if (ki->priority[0]=='A')
 	    {
-	    replaceInStr(html, sizeof(html), 
-		"<!bouncebutton>", 
+	    replaceInStr(html, sizeof(html),
+		"<!bouncebutton>",
 		"<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"bounce\">&nbsp;&nbsp;"
-		); 
+		);
 	    }
 	else
 	    {
-	    replaceInStr(html, sizeof(html), 
-		"<!bouncebutton>", 
+	    replaceInStr(html, sizeof(html),
+		"<!bouncebutton>",
 		"<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"unbounce\">&nbsp;&nbsp;"
-		); 
+		);
 	    }
-	    
-	replaceInStr(html, sizeof(html), "<!lockbutton>", ""); 
-    	
-	replaceInStr(html, sizeof(html), "<!cancellink>",  
-	    "<input TYPE=SUBMIT NAME=\"cancelbutton\" VALUE=\"Cancel\" >&nbsp;&nbsp;"); 
-	
-	replaceInStr(html, sizeof(html), "<!refreshlink>", ""); 
-	
-	replaceInStr(html, sizeof(html), 
-	    "<!transferbutton>", 
-	    "<input TYPE=SUBMIT NAME=\"transfer\" VALUE=\"Transfer\">&nbsp;&nbsp;"); 
-	
+
+	replaceInStr(html, sizeof(html), "<!lockbutton>", "");
+
+	replaceInStr(html, sizeof(html), "<!cancellink>",
+	    "<input TYPE=SUBMIT NAME=\"cancelbutton\" VALUE=\"Cancel\" >&nbsp;&nbsp;");
+
+	replaceInStr(html, sizeof(html), "<!refreshlink>", "");
+
+	replaceInStr(html, sizeof(html),
+	    "<!transferbutton>",
+	    "<input TYPE=SUBMIT NAME=\"transfer\" VALUE=\"Transfer\">&nbsp;&nbsp;");
+
 	showSizesJavascript();
 	}
-    else 
+    else
 	{ /* we don't have a lock yet, disable and readonly */
-	replaceInStr(html, sizeof(html), "<!DISABLED>", "DISABLED"); 
+	replaceInStr(html, sizeof(html), "<!DISABLED>", "DISABLED");
     	replaceInStr(html, sizeof(html), "<!READONLY>", "READONLY");
-	replaceInStr(html, sizeof(html), "<!submitbutton>", ""); 
-	replaceInStr(html, sizeof(html), "<!delbutton>", ""); 
-	replaceInStr(html, sizeof(html), "<!pushbutton>", ""); 
-	replaceInStr(html, sizeof(html), "<!clonebutton>", ""); 
-	replaceInStr(html, sizeof(html), "<!bouncebutton>", ""); 
-	replaceInStr(html, sizeof(html), "<!lockbutton>", 
-	    "<input TYPE=SUBMIT NAME=\"lockbutton\" VALUE=\"Lock\" >&nbsp;&nbsp;"); 
-	
-	safef(tempLink, sizeof(tempLink), 
-	    "<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a>&nbsp;&nbsp;",newRandState); 
-	replaceInStr(html, sizeof(html), "<!cancellink>", tempLink ); 
-	
-	safef(tempLink, sizeof(tempLink), 
+	replaceInStr(html, sizeof(html), "<!submitbutton>", "");
+	replaceInStr(html, sizeof(html), "<!delbutton>", "");
+	replaceInStr(html, sizeof(html), "<!pushbutton>", "");
+	replaceInStr(html, sizeof(html), "<!clonebutton>", "");
+	replaceInStr(html, sizeof(html), "<!bouncebutton>", "");
+	replaceInStr(html, sizeof(html), "<!lockbutton>",
+	    "<input TYPE=SUBMIT NAME=\"lockbutton\" VALUE=\"Lock\" >&nbsp;&nbsp;");
+
+	safef(tempLink, sizeof(tempLink),
+	    "<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a>&nbsp;&nbsp;",newRandState);
+	replaceInStr(html, sizeof(html), "<!cancellink>", tempLink );
+
+	safef(tempLink, sizeof(tempLink),
 	    "<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">REFRESH</a>&nbsp;&nbsp;",
-	    ki->qid,newRandState); 
-	replaceInStr(html, sizeof(html), "<!refreshlink>", tempLink ); 
-	
+	    ki->qid,newRandState);
+	replaceInStr(html, sizeof(html), "<!refreshlink>", tempLink );
+
 	replaceInStr(html, sizeof(html), "<!transferbutton>", "");
 	replaceInStr(html, sizeof(html), "<!sizesbutton>", "");
 	if (sameString(ki->lockUser,""))
@@ -686,9 +686,9 @@ else
 		msg, ki->lockUser, ki->qid,ki->lockDateTime );
 	    }
 	safef(msg,sizeof(msg), "%s", tempMsg);
-	}   
-    }   
-    
+	}
+    }
+
 replaceInStr(html, sizeof(html) , "<!msg>"         , msg           );
 
 safef(msg,sizeof(msg),"%s","");
@@ -710,8 +710,8 @@ safef(q.qid, sizeof(q.qid), "%s", "");
 safef(q.priority, sizeof(q.priority), "%s", "A");  /* default priority */
 strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* default to today's date */
 safef(q.newYN, sizeof(q.newYN), "%s", "N");  /* default to not new track */
-q.track  = ""; 
-q.dbs    = ""; 
+q.track  = "";
+q.dbs    = "";
 q.tbls   = "";
 q.cgis   = "";
 q.files  = "";
@@ -725,7 +725,7 @@ q.stat   = "";
 q.featureBits = "";
 
 safef(q.sponsor   , sizeof(q.sponsor)   , "%s", "" );
-safef(q.reviewer  , sizeof(q.reviewer)  , "%s", "" ); 
+safef(q.reviewer  , sizeof(q.reviewer)  , "%s", "" );
 if (sameString(myUser.role,"qa"))
     {
     safef(q.reviewer, sizeof(q.reviewer), "%s", qaUser);   /* if role is qa, default reviewer to this user */
@@ -745,7 +745,7 @@ safef(q.importance, sizeof(q.importance), "%s", " ");  /* default importance */
 
 if (sameString(myUser.role,"dev"))
     {
-    safef(msg, sizeof(msg), "%s", 
+    safef(msg, sizeof(msg), "%s",
 	"Developer: Please leave priority and date alone. "
 	"Do specify if the track is new. Enter the shortLabel for the track name. "
 	"Be sure to fill out the database, tables,  and external files, if any. "
@@ -800,8 +800,8 @@ switch(col)
     case e_pqid:
 	printf("<td>%s</td>\n", ki->pqid   );
 	break;
-	
-	
+
+
     case e_priority:
 	if (ki->priority[0] == 'L')
 	    {
@@ -816,109 +816,109 @@ switch(col)
 		"</td></tr><tr><td>&nbsp</td><td>"
 		"<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\">v</A>&nbsp;&nbsp;"
 		"<A href=\"/cgi-bin/qaPushQ?action=bottom&qid=%s&cb=%s\">B</A>"
-		"</td></tr></table></td>\n", 
+		"</td></tr></table></td>\n",
 		ki->priority,
-		ki->qid, newRandState, 
-		ki->qid, newRandState, 
-		ki->qid, newRandState, 
+		ki->qid, newRandState,
+		ki->qid, newRandState,
+		ki->qid, newRandState,
 		ki->qid, newRandState
 		);
 	    }
 	break;
-	
+
     case e_rank:
 	printf("<td>%d</td>\n", ki->rank      );
 	break;
-	
+
     case e_qadate:
 	printf("<td>%s</td>\n", ki->qadate    );
 	break;
-	
+
     case e_newYN:
 	printf("<td>%s</td>\n", ki->newYN     );
 	break;
-	
+
     case e_track:
 	dotdotdot(ki->track,MAXBLOBSHOW);  /* chr(255) */
 	printf("<td>%s</td>\n", ki->track     );
 	break;
-	
+
     case e_dbs:
 	dotdotdot(ki->tbls ,MAXBLOBSHOW);  /* chr(255) */
 	printf("<td>%s</td>\n", ki->dbs       );
 	break;
-	
+
     case e_tbls:
 	dotdotdot(ki->tbls,MAXBLOBSHOW);  /* longblob */
 	printf("<td>%s</td>\n", ki->tbls      );
 	break;
-	
+
     case e_cgis:
 	dotdotdot(ki->cgis ,MAXBLOBSHOW);  /* chr(255) */
 	printf("<td>%s</td>\n", ki->cgis      );
 	break;
-	
+
     case e_files:
 	dotdotdot(ki->files,MAXBLOBSHOW);  /* chr(255) */
 	printf("<td>%s</td>\n", fixLineBreaks(ki->files)  );
 	break;
-	
+
     case e_sizeMB:
 	printf("<td>%u</td>\n", ki->sizeMB    );
 	break;
-	
+
     case e_currLoc:
 	printf("<td>%s</td>\n", ki->currLoc   );
 	break;
-	
+
     case e_makeDocYN:
 	printf("<td>%s</td>\n", ki->makeDocYN );
 	break;
-	
+
     case e_onlineHelp:
 	printf("<td>%s</td>\n", ki->onlineHelp);
 	break;
-	
+
     case e_ndxYN:
 	printf("<td>%s</td>\n", ki->ndxYN     );
 	break;
-	
+
     case e_joinerYN:
 	printf("<td>%s</td>\n", ki->joinerYN  );
 	break;
-	
+
     case e_stat:
 	dotdotdot(ki->stat ,MAXBLOBSHOW);  /* chr(255) */
 	printf("<td>%s</td>\n", ki->stat      );
 	break;
-	
+
     case e_featureBits:
 	dotdotdot(ki->featureBits,MAXBLOBSHOW);  /* longblob */
 	printf("<td>%s</td>\n", ki->featureBits);
 	break;
-	
+
     case e_sponsor:
 	printf("<td>%s</td>\n", ki->sponsor   );
 	break;
-	
+
     case e_reviewer:
 	printf("<td>%s</td>\n", ki->reviewer  );
 	break;
-	
+
     case e_extSource:
 	printf("<td>%s</td>\n", ki->extSource );
 	break;
-	
+
     case e_openIssues:
 	dotdotdot(ki->openIssues,MAXBLOBSHOW);  /* longblob */
 	printf("<td>%s</td>\n", ki->openIssues);
 	break;
-	
+
     case e_notes:
 	dotdotdot(ki->notes,MAXBLOBSHOW);       /* longblob */
 	printf("<td>%s</td>\n", ki->notes     );
 	break;
-	
+
     case e_pushState:
 	printf("<td>%s</td>\n", ki->pushState);
 	break;
@@ -926,28 +926,28 @@ switch(col)
     case e_initdate:
 	printf("<td>%s</td>\n", ki->initdate  );
 	break;
-	
+
     case e_lastdate:
 	printf("<td>%s</td>\n", ki->lastdate  );
 	break;
-	
+
     case e_bounces:
 	printf("<td>%u</td>\n", ki->bounces   );
 	break;
-	
+
     case e_lockUser:
 	printf("<td>%s</td>\n", ki->lockUser  );
 	break;
-	
+
     case e_lockDateTime:
 	printf("<td>%s</td>\n", ki->lockDateTime );
 	break;
-	
+
     case e_releaseLog:
 	dotdotdot(ki->releaseLog,MAXBLOBSHOW);  /* chr(255) */
 	printf("<td>%s</td>\n", ki->releaseLog   );
 	break;
-	
+
     case e_releaseLogUrl:
 	dotdotdot(ki->releaseLogUrl,MAXBLOBSHOW);  /* chr(255) */
 	printf("<td>%s</td>\n", ki->releaseLogUrl  );
@@ -969,10 +969,10 @@ switch(col)
 	    temp = "Urgent";
 	printf("<td>%s</td>\n", temp );
 	break;
-	
+
     default:
 	errAbort("drawDisplayLine: unexpected case enum %d.",col);
-	
+
 
     }
 
@@ -1002,7 +1002,7 @@ if (!sameString(month,""))
     }
 
 /* Get a list of all (or in month). */
-safef(query, sizeof(query), "select * from %s%s%s", 
+safef(query, sizeof(query), "select * from %s%s%s",
     pushQtbl,
     monthsql,
     " order by priority, rank, qadate desc, qid desc limit 200"
@@ -1015,7 +1015,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&kiList, ki);
     }
 sqlFreeResult(&sr);
-slReverse(&kiList); 
+slReverse(&kiList);
 
 /* #rows returned
 slCount(kiList)
@@ -1063,12 +1063,12 @@ if (!sameString(pushQtbl,"pushQ"))
     {
     printf(" for %s",pushQtbl);
     }
-if (!sameString(month,""))    
+if (!sameString(month,""))
     {
     printf(" (%s)",month);
     }
 printf("</H2>\n");
-    
+
 printf("<TABLE BORDER CELLSPACING=0 CELLPADDING=5>\n");
 printf("  <TR>\n");
 
@@ -1100,30 +1100,30 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     {
 
     /* Major-priority section header */
-    if (ki->priority[0] != lastP) 
+    if (ki->priority[0] != lastP)
 	{
 	lastP = ki->priority[0];
 	safef(comment,sizeof(comment),"%s","");
 	switch (ki->priority[0])
 	    {
-	    case 'A': 
+	    case 'A':
 		safef(comment,sizeof(comment),"%s","active");
 		break;
-	    case 'B': 
+	    case 'B':
 		safef(comment,sizeof(comment),"%s","short hold");
 		break;
-	    case 'C': 
+	    case 'C':
 		safef(comment,sizeof(comment),"%s","long hold");
 		break;
-	    case 'L': 
+	    case 'L':
 		safef(comment,sizeof(comment),"%s","log");
 		break;
-	    
+
 	    }
 	printf("<tr>");
 	printf("<td><h1><A name=\"priority%s\">%s</A></h1></td><td><b>%s</b></td>\n", ki->priority, ki->priority, comment);
 	printf("</tr>");
-    
+
     }
 
     /* Regular row */
@@ -1169,7 +1169,7 @@ struct pushQ *mustLoadPushQ(char *qid)
 struct pushQ *q = loadPushQ(qid);
 if (!q)
     errAbort("loadPushQ: Queue Id %s not found.",qid);
-return q;    
+return q;
 }
 
 
@@ -1188,15 +1188,15 @@ if (sameString(q->lockUser,"") && sameString(q->pushState,"Y"))
     safef(q->lastdate, sizeof(q->lastdate), q->qadate);
     strftime (q->qadate  , sizeof(q->qadate  ), "%Y-%m-%d", loctime); /* today's date */
 
-    safef(query, sizeof(query), 
-	"update %s set rank = 0, priority ='L', pushState='D', qadate='%s', lastdate='%s' where qid = '%s' ", 
+    safef(query, sizeof(query),
+	"update %s set rank = 0, priority ='L', pushState='D', qadate='%s', lastdate='%s' where qid = '%s' ",
 	pushQtbl, q->qadate, q->lastdate, q->qid);
     sqlUpdate(conn, query);
 
 
     /* first close the hole where it was */
-    safef(query, sizeof(query), 
-	"update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
+    safef(query, sizeof(query),
+	"update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
 	pushQtbl, q->priority, q->rank);
     sqlUpdate(conn, query);
     }
@@ -1219,7 +1219,7 @@ doDisplay();
 
 
 void XdoPromote(int change)
-/* Promote the ranking of this Q item 
+/* Promote the ranking of this Q item
  * >0 means promote, <0 means demote */
 {
 
@@ -1234,13 +1234,13 @@ q = mustLoadPushQ(newQid);
 if ((q->rank > 1) && (change>0))
     {
     /* swap places with rank-1 */
-    safef(query, sizeof(query), 
-    "update %s set rank = rank + 1 where priority ='%s' and rank = %d ", 
+    safef(query, sizeof(query),
+    "update %s set rank = rank + 1 where priority ='%s' and rank = %d ",
     pushQtbl, q->priority, q->rank-1);
     sqlUpdate(conn, query);
     q->rank--;
-    safef(query, sizeof(query), 
-    "update %s set rank = %d where qid ='%s'", 
+    safef(query, sizeof(query),
+    "update %s set rank = %d where qid ='%s'",
     pushQtbl, q->rank, q->qid);
     sqlUpdate(conn, query);
     }
@@ -1248,14 +1248,14 @@ if ((q->rank > 1) && (change>0))
 if (change<0)
     {
     /* swap places with rank+1 */
-    safef(query, sizeof(query), 
-    "update %s set rank = rank - 1 where priority ='%s' and rank = %d ", 
+    safef(query, sizeof(query),
+    "update %s set rank = rank - 1 where priority ='%s' and rank = %d ",
     pushQtbl, q->priority, q->rank+1);
     if (sqlUpdateRows(conn, query, NULL)>0)
 	{
 	q->rank++;
-	safef(query, sizeof(query), 
-	    "update %s set rank = %d where qid ='%s'", 
+	safef(query, sizeof(query),
+	    "update %s set rank = %d where qid ='%s'",
 	    pushQtbl, q->rank, q->qid);
 	sqlUpdate(conn, query);
 	}
@@ -1289,7 +1289,7 @@ char query[256];
 char *quickres = NULL;
 safef(query, sizeof(query), "select max(qid) from %s",pushQtbl);
 quickres = sqlQuickString(conn, query);
-if (quickres != NULL) 
+if (quickres != NULL)
     {
     safef(q.qid, sizeof(q.qid), quickres);
     sscanf(q.qid,"%d",&newqid);
@@ -1305,11 +1305,11 @@ int getNextAvailRank(char *priority)
 struct pushQ q;
 char query[256];
 char *quickres = NULL;
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
     "select rank from %s where priority='%s' order by rank desc limit 1",
     pushQtbl, priority);
 quickres = sqlQuickString(conn, query);
-if (quickres == NULL) 
+if (quickres == NULL)
     {
     q.rank = 0;
     }
@@ -1335,14 +1335,14 @@ safef(newQid, sizeof(newQid), cgiString("qid"));
 q = mustLoadPushQ(newQid);
 
 /* first close the hole where it was */
-safef(query, sizeof(query), 
-"update %s set rank = rank + 1 where priority ='%s' and rank < %d ", 
+safef(query, sizeof(query),
+"update %s set rank = rank + 1 where priority ='%s' and rank < %d ",
 pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
 q->rank = 1;
-safef(query, sizeof(query), 
-"update %s set rank = %d where qid = '%s' ", 
+safef(query, sizeof(query),
+"update %s set rank = %d where qid = '%s' ",
 pushQtbl, q->rank, q->qid);
 sqlUpdate(conn, query);
 
@@ -1363,14 +1363,14 @@ safef(newQid, sizeof(newQid), cgiString("qid"));
 q = mustLoadPushQ(newQid);
 
 /* first close the hole where it was */
-safef(query, sizeof(query), 
-"update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
+safef(query, sizeof(query),
+"update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
 pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
 q->rank = getNextAvailRank(q->priority);
-safef(query, sizeof(query), 
-"update %s set rank = %d where qid = '%s' ", 
+safef(query, sizeof(query),
+"update %s set rank = %d where qid = '%s' ",
 pushQtbl, q->rank, q->qid);
 sqlUpdate(conn, query);
 
@@ -1383,13 +1383,13 @@ doDisplay();
 /* too bad this isn't part of autoSql's code generation */
 
 void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tableName, int updateSize)
-/* Update pushQ row to the table specified by tableName. 
+/* Update pushQ row to the table specified by tableName.
  * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
+ * of a string that would contain the entire query. Automatically
  * escapes all simple strings (not arrays of string) but may be slower than pushQSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * For example automatically copies and converts:
+ * "autosql's features include" --> "autosql\'s features include"
+ * before inserting into database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *featureBits, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog, *releaseLogUrl, *importance;
@@ -1425,7 +1425,7 @@ releaseLogUrl = sqlEscapeString(el->releaseLogUrl);
 importance = sqlEscapeString(el->importance);
 
 /* had to split this up because dyStringPrintf only up to 4000 chars at one time */
-dyStringPrintf(update, 
+dyStringPrintf(update,
     "update %s set "
     "pqid='%s',priority='%s',rank=%u,qadate='%s',newYN='%s',track='%s',",
     tableName,  pqid,  priority, el->rank,  qadate, newYN, track);
@@ -1436,13 +1436,13 @@ dyStringPrintf(update, "files='%s',",files);
 dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
     "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
     "sponsor='%s',reviewer='%s',extSource='%s',",
-    el->sizeMB ,  currLoc,  makeDocYN,  
-    onlineHelp,  ndxYN,  joinerYN,  stat,  
+    el->sizeMB ,  currLoc,  makeDocYN,
+    onlineHelp,  ndxYN,  joinerYN,  stat,
     sponsor,  reviewer,  extSource);
 dyStringPrintf(update, "openIssues='%s',",openIssues);
 dyStringPrintf(update, "notes='%s',",notes);
 dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s',featureBits='%s',releaseLogUrl='%s',importance='%s' "
-	"where qid='%s'", 
+	"where qid='%s'",
 	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, featureBits, releaseLogUrl, importance,
 	qid
 	);
@@ -1497,7 +1497,7 @@ else
     {
     fld = (char *) ptr;
     }
-if (size != -1)  /* -1 for blob, has no length */ 
+if (size != -1)  /* -1 for blob, has no length */
     {
     if (l>(size-1))
 	{
@@ -1554,7 +1554,7 @@ char newPriority[sizeof(q->priority)] = "";
 
 safef(newQid, sizeof(newQid), cgiString("qid"));
 
-if (sameString(newQid,"")) 
+if (sameString(newQid,""))
     {
     isNew = TRUE;
     }
@@ -1563,18 +1563,18 @@ else
     isNew = FALSE;
     }
 
-if (!isNew) 
+if (!isNew)
     {
-    /* we need to preload q with existing values 
-     * because some fields like rank are not carried in form 
-    */	
-    q = mustLoadPushQ(newQid); 
-	/* true means optional, it was asked if we could tolerate this, 
+    /* we need to preload q with existing values
+     * because some fields like rank are not carried in form
+    */
+    q = mustLoadPushQ(newQid);
+	/* true means optional, it was asked if we could tolerate this,
 	 *  e.g. delete, then hit back-button
-	* user is trying to use back button to recover deleted rec 
-	safef(newQid, sizeof(newQid), ""); 
+	* user is trying to use back button to recover deleted rec
+	safef(newQid, sizeof(newQid), "");
 	isNew = TRUE;
-	*/	
+	*/
 
     /* check lock status */
 
@@ -1612,7 +1612,7 @@ if (!isNew)
 	    }
 	lockOK = FALSE;
 	}
-	
+
     if (!lockOK)
 	{
 	doEdit();
@@ -1622,7 +1622,7 @@ if (!isNew)
 
     }
 
-if (isNew) 
+if (isNew)
     {
     AllocVar(q);
     newqid = getNextAvailQid();
@@ -1633,7 +1633,7 @@ if (isNew)
 
 safef(newPriority, sizeof(newPriority), cgiString("priority"));
 
-    
+
 /* dates */
 getCgiData(&isOK, FALSE, q->qadate    , sizeof(q->qadate    ), "qadate"    );
 getCgiData(&isOK, FALSE, q->initdate  , sizeof(q->initdate  ), "initdate"  );
@@ -1652,7 +1652,7 @@ getCgiData(&isOK, TRUE ,&q->cgis      , 256                 , "cgis"      );
 getCgiData(&isOK, TRUE ,&q->stat      , 256                 , "stat"      );
 
 /* integers */
-if (sscanf(cgiString("sizeMB"),"%u",&q->sizeMB) != 1) 
+if (sscanf(cgiString("sizeMB"),"%u",&q->sizeMB) != 1)
     {
     q->sizeMB = 0;
     }
@@ -1665,7 +1665,7 @@ getCgiData(&isOK, FALSE, q->reviewer  , sizeof(q->reviewer  ), "reviewer"  );
 getCgiData(&isOK, FALSE, q->extSource , sizeof(q->extSource ), "extSource" );
 
 /* blobs */
-getCgiData(&isOK, TRUE ,&q->tbls      , -1                  , "tbls"      );  
+getCgiData(&isOK, TRUE ,&q->tbls      , -1                  , "tbls"      );
 getCgiData(&isOK, TRUE ,&q->files     , -1                  , "files"     );
 getCgiData(&isOK, TRUE ,&q->featureBits, -1                 , "featureBits");
 getCgiData(&isOK, TRUE ,&q->openIssues, -1                  , "openIssues");
@@ -1756,20 +1756,20 @@ if ((sameString(bouncebutton,"unbounce"))&&(sameString(q->priority,"A")))
 
 if (isRedo)
     {
-    replacePushQFields(q, isNew);  
+    replacePushQFields(q, isNew);
     pushQFree(&q);
     return;
     }
 
 
-if (sameString(bouncebutton,"bounce")) 
+if (sameString(bouncebutton,"bounce"))
     {
     safef(newPriority, sizeof(newPriority), "B");
     safef(q->lastdate, sizeof(q->lastdate), q->qadate);
     strftime (q->qadate, sizeof(q->qadate), "%Y-%m-%d", loctime); /* set to today's date */
     q->bounces++;
     }
-if (sameString(bouncebutton,"unbounce")) 
+if (sameString(bouncebutton,"unbounce"))
     {
     safef(newPriority, sizeof(newPriority), "A");
     safef(q->lastdate, sizeof(q->lastdate), q->qadate);
@@ -1781,14 +1781,14 @@ if (sameString(bouncebutton,"unbounce"))
 if ( (!sameString(newPriority,q->priority)) || (sameString(delbutton,"delete")) )
     {
     /* first close the hole where it was */
-    safef(query, sizeof(query), 
-    "update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
+    safef(query, sizeof(query),
+    "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
     pushQtbl, q->priority, q->rank);
     sqlUpdate(conn, query);
     }
 
 /* if not deleted, then if new or priority class change, then take last rank */
-if (!sameString(delbutton,"delete")) 
+if (!sameString(delbutton,"delete"))
     {
     if ((!sameString(newPriority,q->priority)) || isNew)
 	{
@@ -1797,19 +1797,19 @@ if (!sameString(delbutton,"delete"))
 	}
     }
 
-if (q->priority[0]=='L') 
+if (q->priority[0]=='L')
     {
     q->rank = 0;
     }
 
 
-if (sameString(pushbutton,"push requested")) 
+if (sameString(pushbutton,"push requested"))
     {
     /* reset pushState in case was prev-> a log already */
     safef(q->pushState,sizeof(q->pushState),"Y");
     }
 
-if (sameString(delbutton,"delete")) 
+if (sameString(delbutton,"delete"))
     {
     /* delete old record */
     safef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, q->qid);
@@ -1817,7 +1817,7 @@ if (sameString(delbutton,"delete"))
     }
 else
     {
-    if (sameString(showSizes,"Show Sizes") || sameString(transfer,"Transfer")) 
+    if (sameString(showSizes,"Show Sizes") || sameString(transfer,"Transfer"))
 	{ /* mark record as locked */
 	safef(q->lockUser, sizeof(q->lockUser), qaUser);
 	strftime(q->lockDateTime, sizeof(q->lockDateTime), "%Y-%m-%d %H:%M", loctime);
@@ -1837,14 +1837,14 @@ else
 	pushQSaveToDbEscaped(conn, q, pushQtbl, updateSize);
 	}
     else
-	{  
+	{
 	/* update existing record */
 	pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
 	}
     }
 
-if (sameString(clonebutton,"clone")) 
-    {  
+if (sameString(clonebutton,"clone"))
+    {
     /* save new clone */
     safef(q->pqid,sizeof(q->pqid), q->qid);  /* daughter will point to parent */
     newqid = getNextAvailQid();
@@ -1852,7 +1852,7 @@ if (sameString(clonebutton,"clone"))
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q->qid, sizeof(q->qid), newQid);
     safef(msg, sizeof(msg), "%s", "");
-    if (q->priority[0]=='L') 
+    if (q->priority[0]=='L')
 	{
 	q->rank = 0;
 	}
@@ -1865,23 +1865,23 @@ if (sameString(clonebutton,"clone"))
     }
 
 
-if (sameString(showSizes,"Show Sizes")) 
+if (sameString(showSizes,"Show Sizes"))
     {
     cgiVarSet("qid", q->qid); /* for new rec */
     doShowSizes();
     }
 
-else if (sameString(transfer,"Transfer")) 
+else if (sameString(transfer,"Transfer"))
     {
     cgiVarSet("qid", q->qid); /* for new rec */
     doTransfer();
     }
 
-else if (sameString(submitbutton,"Submit")) 
+else if (sameString(submitbutton,"Submit"))
     { /* if submit button, saved data, now return to readonly view->  */
-    
+
     safef(msg, sizeof(msg), "Data saved->");
-    
+
     cgiVarSet("qid", q->qid); /* for new rec */
     doEdit();
     }
@@ -1909,14 +1909,14 @@ if (!q)
     return;
     }
 
-if ( sameString(qaUser,"kuhn") || 
-     sameString(qaUser,"kuhn2") || 
-     sameString(qaUser,"mary") || 
+if ( sameString(qaUser,"kuhn") ||
+     sameString(qaUser,"kuhn2") ||
+     sameString(qaUser,"mary") ||
      sameString(qaUser,"ann") ||
-     sameString(qaUser,"antonio") 
+     sameString(qaUser,"antonio")
      )  /* for users that want to automatically try to lock record immediately */
     {
-    if (sameString(action,"edit") || sameString(action,"setSize")) 
+    if (sameString(action,"edit") || sameString(action,"setSize"))
 	{
 	if (sameString(q->lockUser,""))  /* q->lockUser blank if nobody has lock */
 	    {
@@ -1931,7 +1931,7 @@ if ( sameString(qaUser,"kuhn") ||
 	return;  /* this is needed? */
 	}
     }
-    
+
 replacePushQFields(q, FALSE);  /* new rec = false */
 pushQFree(&q);
 }
@@ -2091,9 +2091,9 @@ while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
     {
 
     parseList(tempVar,'=',0,tempVarName,sizeof(tempVarName));
-   
+
     parseList(tempVar,'=',1,tempVal,sizeof(tempVal));
-   
+
     if (sameString(tempVarName,"showColumns"))
 	{
 	showColumns = cloneString(tempVal);
@@ -2155,7 +2155,7 @@ if (!readAUser(&u, TRUE))
     }
 else
     {
-    if (strlen(u.password)==0) 
+    if (strlen(u.password)==0)
 	{ /* if pwd in db is blank, use this as their new password and encrypt it and save in db. */
 	if (strlen(userPassword) < 6)
 	    { /* bad pwd */
@@ -2163,9 +2163,9 @@ else
 	    }
 	else
 	    {
-	    encryptNewPWD(userPassword, u.password, sizeof(u.password));  
-	    safef(query, sizeof(query), 
-		"update %s set password = '%s' where user = '%s' ", 
+	    encryptNewPWD(userPassword, u.password, sizeof(u.password));
+	    safef(query, sizeof(query),
+		"update %s set password = '%s' where user = '%s' ",
 		tbl, u.password, u.user);
 	    sqlUpdate(conn, query);
 	    loginOK = TRUE;
@@ -2173,7 +2173,7 @@ else
 	}
     else
 	{ /* verify password matches db */
-	if (checkPWD(userPassword, u.password)) 
+	if (checkPWD(userPassword, u.password))
 	    { /* good pwd, save user in cookie */
 	    loginOK = TRUE;
 	    }
@@ -2183,13 +2183,13 @@ else
 	    }
 	}
     }
-    
+
 if (loginOK)
     {
     /* try to make same cookie work with both hgwdev and hgwbeta to obviate need for double-login */
     /* note: for permanent cookie, set NULL to expire in format "Wdy, DD-Mon-YYYY HH:MM:SS GMT" (must be GMT) */
     htmlSetCookie("qapushq", u.user, NULL, NULL, ".cse.ucsc.edu", FALSE);
-   
+
     qaUser=u.user;
     oldRandState="";
     showColumns=cloneString(defaultColumns);
@@ -2219,7 +2219,7 @@ if ((qaUser == NULL) || (sameString(qaUser,"")))
     {
     return;
     }
-dyStringPrintf(query,  
+dyStringPrintf(query,
     "update %s set contents = '?showColumns=%s?org=%s?month=%s?oldRandState=%s' where user = '%s'",
     tbl, showColumns, pushQtbl, month, oldRandState, myUser.user);
 sqlUpdate(conn, query->string);
@@ -2230,12 +2230,12 @@ freeDyString(&query);
 
 
 void XdoPromoteColumn(int change)
-/* Promote the column 
+/* Promote the column
  * 1 = promote, 0 = hide, -1 = demote */
 {
 char target[256] = "";
 
-int i = 0;  
+int i = 0;
 char tempBefore[256] = "";
 char tempVal   [256] = "";
 char tempAfter [256] = "";
@@ -2246,7 +2246,7 @@ s = newDyString(2048);  /* need room */
 safef(target, sizeof(target), cgiString("col"));
 
 while(TRUE)
-    { 
+    {
     parseList(showColumns,',',i,tempAfter,sizeof(tempAfter));
     if ((tempBefore[0]==0) && (tempVal[0]==0) && (tempAfter[0]==0))
 	{
@@ -2254,7 +2254,7 @@ while(TRUE)
 	}
     if (sameString(target,tempVal))
 	{
-	
+
 	if (change==1)
 	    {
 	    /*  swap places with Before */
@@ -2274,9 +2274,9 @@ while(TRUE)
 	    safef(tempAfter , sizeof(tempAfter ), tempVal   );
 	    safef(tempVal   , sizeof(tempVal   ), tempSwap  );
 	    }
-	    
+
 	change = 99;  /* just suppress any more changes */
-	
+
 	}
     if (!sameString(tempBefore,""))
 	{
@@ -2317,7 +2317,7 @@ XdoPromoteColumn(-1);
 
 
 void doShowAllColumns()
-/* Display hidden columns available for resurrection */ 
+/* Display hidden columns available for resurrection */
 {
 int c = 0;
 char templist[512];
@@ -2325,7 +2325,7 @@ char tempe[64];
 
 printf("<h4>Show Hidden Columns</h4>\n");
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState); 
+printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
 printf("<br>\n");
 printf("Click on any column below to un-hide it.<br>\n");
 printf("<br>\n");
@@ -2337,13 +2337,13 @@ for (c=0; c<e_NUMCOLS; c++)
     safef(tempe,sizeof(tempe),",%s,",colName[c]);  /* add sentinel comma values to the ends of the col element */
     if (strstr(templist,tempe)==NULL)
 	{
-	printf("<a href=\"/cgi-bin/qaPushQ?action=showColumn&colName=%s&cb=%s\">%s</a><br><br>", 
+	printf("<a href=\"/cgi-bin/qaPushQ?action=showColumn&colName=%s&cb=%s\">%s</a><br><br>",
 	    colName[c], newRandState, colName[c]);
 	}
     }
 
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState); 
+printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
 }
 
 
@@ -2406,13 +2406,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState); 
+printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
 }
 
 
 
 void getIndexes(struct sqlConnection *conn, char *tbl, char *s, int ssize)
-/* Get indexes with show index on table command. Return -1 if err. Will match multiple if "%" used in tbl */ 
+/* Get indexes with show index on table command. Return -1 if err. Will match multiple if "%" used in tbl */
 {
 char query[256];
 char **row;
@@ -2450,7 +2450,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     else
 	{
-	if (c > 1) 
+	if (c > 1)
 	    {
 	    strcat(s,", ");
 	    }
@@ -2483,7 +2483,7 @@ if (size > 0)
     safef(temp,slength,s);
     safef(s,slength,"%3d%s%s",(int)size,sep,temp);
     }
-else 
+else
     {
     safef(s,slength,"0");  /* special case zero*/
     }
@@ -2493,7 +2493,7 @@ freez(&temp);
 
 
 long long pq_getTableSize(char *rhost, char *db, char *tbl, int *errCount)  /* added extension pq_ to supress name conflict in hdb.c */
-/* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */ 
+/* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */
 {
 char query[256];
 char **row;
@@ -2521,7 +2521,7 @@ if ((sameString(utsName.nodename,"hgwbeta")) && (sameString(rhost,"hgwdev")))
     user     = cfgOption("db.user"    );
     password = cfgOption("db.password");
     }
-	
+
 if ((sameString(utsName.nodename,"hgwdev")) && (sameString(rhost,"hgwbeta")))
     {  // inaccurate but doesn't matter since we only use it to test qaPushQ cgi on dev.
     host     = cfgOption("central.host"    );
@@ -2558,20 +2558,20 @@ while ((row = sqlNextRow(sr)) != NULL)
     c++;
     printf("<tr>");
     printf("<td>%s</td>",row[n]);
-    
+
     sscanf(row[d],"%lu",&size);
     totalsize+=size;
     mySprintWithCommas(nicenumber, sizeof(nicenumber), size);
     printf("<td align=right>%s</td>",nicenumber);
-	
+
     sscanf(row[i],"%lu",&size);
     totalsize+=size;
     mySprintWithCommas(nicenumber, sizeof(nicenumber), size);
     printf("<td align=right>%s</td>",nicenumber);
-	
+
     getIndexes( sqlConnectRemote(host, user, password, db), row[n], indexlist, sizeof(indexlist));
     printf("<td>%s</td>",indexlist);
-	
+
     printf("</tr>\n");
     }
 sqlFreeResult(&sr);
@@ -2621,7 +2621,7 @@ for(i=0;i<=l;i++)
     c = s[i];
     switch (c)
 	{
-	case '\t' : 
+	case '\t' :
 	case '\n' :
 	case '\r' :
 	case '\f' :
@@ -2682,7 +2682,7 @@ safef(newQid, sizeof(newQid), cgiString("qid"));
 
 printf("<H2>Show File Sizes </H2>\n");
 
-q = mustLoadPushQ(newQid); 
+q = mustLoadPushQ(newQid);
 
 if (crossPost)  // support showSizes across machines
     {
@@ -2717,13 +2717,13 @@ q->tbls = replaceChars(q->tbls,"_","\\_");
 
 for(j=0;parseList(q->dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
     {
-    if (dbsComma[0]==0) 
+    if (dbsComma[0]==0)
 	{
 	continue;
 	}
     for(jj=0;parseList(dbsComma, ' ' ,jj,dbsSpace,sizeof(dbsSpace));jj++)
 	{
-	if (dbsSpace[0]==0) 
+	if (dbsSpace[0]==0)
 	    {
 	    continue;
 	    }
@@ -2745,7 +2745,7 @@ for(j=0;parseList(q->dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 		break;
 		}
 	    }
-	if (dbsVal[0]!=0) 
+	if (dbsVal[0]!=0)
 	    {
 	    safef(db,sizeof(db),"%s",dbsVal);
 
@@ -2761,13 +2761,13 @@ for(j=0;parseList(q->dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 	    /* we parsed the db multiples, now parse the tbl mutiples  */
 	    for(i=0;parseList(q->tbls, ',' ,i,tempComma,sizeof(tempComma));i++)
 		{
-		if (tempComma[0]==0) 
+		if (tempComma[0]==0)
 		    {
 		    continue;
 		    }
 		for(ii=0;parseList(tempComma, ' ' ,ii,tempSpace,sizeof(tempSpace));ii++)
 		    {
-		    if (tempSpace[0]==0) 
+		    if (tempSpace[0]==0)
 			{
 			continue;
 			}
@@ -2793,7 +2793,7 @@ for(j=0;parseList(q->dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 			    break;
 			    }
 			}
-		    if (tempVal[0]!=0) 
+		    if (tempVal[0]!=0)
 			{
 			safef(tbl,sizeof(tbl),"%s",tempVal);
 			long long tableSize = pq_getTableSize(q->currLoc,db,tbl,&errCount);
@@ -2805,7 +2805,7 @@ for(j=0;parseList(q->dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 		}
 
 	    printf("</table>");
-	    }   
+	    }
 	 }
      }
 
@@ -2818,13 +2818,13 @@ if (!sameString(q->cgis,""))
     printf("<th>cgi</th><th># bytes</th>");
     for(g=0;parseList(q->cgis, ',' ,g,gComma,sizeof(gComma));g++)
 	{
-	if (gComma[0]==0) 
+	if (gComma[0]==0)
 	    {
 	    continue;
 	    }
 	for(gg=0;parseList(gComma, ' ' ,gg,gSpace,sizeof(gSpace));gg++)
 	    {
-	    if (gSpace[0]==0) 
+	    if (gSpace[0]==0)
 		{
 		continue;
 		}
@@ -2847,7 +2847,7 @@ if (!sameString(q->cgis,""))
 		    break;
 		    }
 		}
-	    if (gVal[0]!=0) 
+	    if (gVal[0]!=0)
 		{
 		safef(cgiPath,sizeof(cgiPath),"%s%s","./",gVal);
 		size=fileSize(cgiPath);
@@ -2862,7 +2862,7 @@ if (!sameString(q->cgis,""))
 		    sprintLongWithCommas(nicenumber, size);
 		    printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
 		    }
-		}   
+		}
 	     }
 	 }
     printf("</table>");
@@ -2876,13 +2876,13 @@ if (!sameString(q->files,""))
     printf("<th>file</th><th># bytes</th>");
     for(g=0;parseList(q->files, ',' ,g,gComma,sizeof(gComma));g++)
 	{
-	if (gComma[0]==0) 
+	if (gComma[0]==0)
 	    {
 	    continue;
 	    }
 	for(gg=0;parseList(gComma, ' ' ,gg,gSpace,sizeof(gSpace));gg++)
 	    {
-	    if (gSpace[0]==0) 
+	    if (gSpace[0]==0)
 		{
 		continue;
 		}
@@ -2909,8 +2909,8 @@ if (!sameString(q->files,""))
 		    break;
 		    }
 		}
-	
-	    if (gVal[0]!=0) 
+
+	    if (gVal[0]!=0)
 		{
 
 		if (strrchr(gVal, '*') == NULL)
@@ -2943,7 +2943,7 @@ if (!sameString(q->files,""))
 		    { /* wildcards found in name, use listDirX */
 		    printf("<tr><td>expansion for %s<td/></tr>\n",gVal);
 		    found = strrchr(gVal, '/');
-		    if (found == NULL) 
+		    if (found == NULL)
 			{
 			filePath[0]=0;
 			safef(fileName,sizeof(fileName),"%s",gVal);
@@ -2962,7 +2962,7 @@ if (!sameString(q->files,""))
 			    char *errStr = htmlEncode(strerror(fi->statErrno));
     			    printf("<tr><td style=\"color:red\">%s<td/>"
 				"<td style=\"color:red\">stat() failed: %s</td></tr>\n"
-				, fi->name 
+				, fi->name
 				, errStr);
 			    freeMem(errStr);
 			    ++errCount;
@@ -2991,8 +2991,8 @@ if (!sameString(q->files,""))
 			}
 		    printf("<tr><td>&nbsp;<td/></tr>\n"); /* spacer */
 		    }
-		    
-		}   
+
+		}
 	     }
 	 }
     printf("</table>");
@@ -3079,7 +3079,7 @@ safef(newQid, sizeof(newQid), cgiString("qid"));
 
 printf("<H2>Transfer Queue Entry %s:%s to Another Queue </H2>\n", pushQtbl, newQid);
 
-q=mustLoadPushQ(newQid); 
+q=mustLoadPushQ(newQid);
 
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> \n",newQid,newRandState);
 printf("<br>\n");
@@ -3287,7 +3287,7 @@ char *field = NULL;
 safef(query, sizeof(query), "desc %s",table);
 checkConn2();
 field = sqlQuickString(conn2, query);
-result = sameString(field,"qid"); 
+result = sameString(field,"qid");
 freez(&field);
 return result;
 }
@@ -3310,8 +3310,8 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (!(isTransfer && sameString(row[0],pushQtbl)) &&
-	!sameString(row[0],"pushQ") && 
-	!sameString(row[0],"users") && 
+	!sameString(row[0],"pushQ") &&
+	!sameString(row[0],"users") &&
 	!sameString(row[0],"gbjunk"))
 	{
 	if (verifyTableIsQueue(row[0]))
@@ -3363,7 +3363,7 @@ doDisplay();
 
 
 /* ======================================================== */
-		
+
 
 void doDrawReleaseLog(boolean isEncode)
 /* Test - draw the release log using log data in pushQ  */
@@ -3407,7 +3407,7 @@ webStart(NULL, NULL, "Track and Table Releases");
 sqlDisconnect(&conn);
 
 betaconn = sqlConnectRemote(chost, cuser, cpassword, centraldb);
-    
+
 
 printf(" This page contains track and table release information for the following genome assemblies:<br>\n");
 
@@ -3475,17 +3475,17 @@ printf("<em>Last updated %s. <a HREF=\"/contacts.html\">Inquiries and feedback w
 /* 10 LATEST CHANGES */
 webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
 
-printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
+printf("<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%%;'>\n"
     "<TR>\n"
-    "<TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
-    "<TD nowrap><FONT color=\"#006666\"><B>Assembly</B></FONT></TD>\n"
-    "<TD nowrap><FONT color=\"#006666\"><B>Release Date</B></FONT></TD>\n"
+    "<TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>\n"
+    "<TD nowrap><B style='color:#006666;'>Assembly</B></TD>\n"
+    "<TD nowrap><B style='color:#006666;'>Release Date</B></TD>\n"
     "</TR>\n"
     );
 safef(query,sizeof(query),
     "select releaseLog, dbs, qadate, releaseLogUrl from pushQ "
     "where priority='L' and releaseLog != '' and dbs != '' %s"
-    "order by qadate desc, qid desc ", encodeClause 
+    "order by qadate desc, qid desc ", encodeClause
     );
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3548,7 +3548,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {break;}
 
 	}
-	
+
     }
 sqlFreeResult(&sr);
 printf("</table>\n");
@@ -3561,15 +3561,15 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	{
 	safef(tempName,sizeof(tempName),"<em>%s</em>",ki->genome);
 	}
-    
-    webNewSection("<A NAME=%s></A>%s %s (%s, %s)", 
+
+    webNewSection("<A NAME=%s></A>%s %s (%s, %s)",
 	ki->name, tempName, ki->description, ki->name, ki->sourceName);
-    printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
-	"<TR><TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
-	"    <TD nowrap><FONT color=\"#006666\"><B>Release Date</B></FONT>\n"
+    printf("<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%%;'>\n"
+	"<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>\n"
+	"    <TD nowrap><B style='color:#006666;'>Release Date</B>\n"
 	"</TD></TR>\n"
 	);
-    
+
     safef(query,sizeof(query),
 	"select releaseLog, qadate, releaseLogUrl from pushQ "
 	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' %s"
@@ -3577,7 +3577,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	ki->name,
 	encodeClause
 	);
-	
+
     //printf("query=%s\n",query);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -3688,7 +3688,7 @@ setLock();
 
 /* default columns */
 showColumns = cloneString(defaultColumns);
-    
+
 readMyUser();
 
 org = cgiUsualString("org","");  /* get org, defaults to display of main push queue */
@@ -3739,112 +3739,112 @@ if (!sameString(reqRandState,oldRandState))
 
 /* ---- Push Queue  ----- */
 
-if (sameString(action,"display")) 
+if (sameString(action,"display"))
     {
     doDisplay();
     }
 
-else if (sameString(action,"add")) 
+else if (sameString(action,"add"))
     {
     doAdd();
     }
 
-else if (sameString(action,"edit")) 
+else if (sameString(action,"edit"))
     {
     doEdit();
     }
 
-else if (sameString(action,"post")) 
+else if (sameString(action,"post"))
     {
     doPost();
     }
 
-else if (sameString(action,"promote")) 
+else if (sameString(action,"promote"))
     {
     doPromote();
     }
 
-else if (sameString(action,"demote")) 
+else if (sameString(action,"demote"))
     {
     doDemote();
     }
 
-else if (sameString(action,"top")) 
+else if (sameString(action,"top"))
     {
     doTop();
     }
 
-else if (sameString(action,"bottom")) 
+else if (sameString(action,"bottom"))
     {
     doBottom();
     }
 
-else if (sameString(action,"pushDone")) 
+else if (sameString(action,"pushDone"))
     {
     doPushDone();
     }
-    
-else if (sameString(action,"demoteColumn" )) 
+
+else if (sameString(action,"demoteColumn" ))
     {
     doDemoteColumn();
     }
 
-else if (sameString(action,"hideColumn"   )) 
+else if (sameString(action,"hideColumn"   ))
     {
     doHideColumn();
     }
 
-else if (sameString(action,"promoteColumn")) 
+else if (sameString(action,"promoteColumn"))
     {
     doPromoteColumn();
     }
 
-else if (sameString(action,"showAllCol" )) 
+else if (sameString(action,"showAllCol" ))
     {
-    doShowAllColumns(); 
+    doShowAllColumns();
     }
 
-else if (sameString(action,"showColumn"   )) 
+else if (sameString(action,"showColumn"   ))
     {
-    doShowColumn(); 
+    doShowColumn();
     }
 
-else if (sameString(action,"showDefaultCol" )) 
+else if (sameString(action,"showDefaultCol" ))
     {
-    doShowDefaultColumns(); 
+    doShowDefaultColumns();
     }
 
-else if (sameString(action,"showMonths" )) 
+else if (sameString(action,"showMonths" ))
     {
     doShowMonths();
     }
 
-else if (sameString(action,"showSizes" )) 
+else if (sameString(action,"showSizes" ))
     {
     doShowSizes();
     }
 
-else if (sameString(action,"transfer" )) 
+else if (sameString(action,"transfer" ))
     {
     doTransfer();
     }
 
-else if (sameString(action,"transferTo" )) 
+else if (sameString(action,"transferTo" ))
     {
     doTransferTo();
     }
 
-else if (sameString(action,"showGateway" )) 
+else if (sameString(action,"showGateway" ))
     {
     doShowGateway();
     }
 
-else if (sameString(action,"unlock" )) 
+else if (sameString(action,"unlock" ))
     {
     doUnlock();
     }
 
-else if (sameString(action,"setSize" )) 
+else if (sameString(action,"setSize" ))
     {
     doSetSize();
     }
@@ -3896,7 +3896,7 @@ password = cfgOption("pq.password");
 
 /* workaround for name-collision on form.action now as form._action on form */
 action = cgiUsualString("_action","display");  /* get action, defaults to display of push queue */
-action = cgiUsualString("action",action);  
+action = cgiUsualString("action",action);
 
 if (sameString(action,"xpost"))
     {
@@ -3938,25 +3938,25 @@ if (sameString(action,"login"))
     htmShell(TITLE, doLogin, NULL);
     }
 
-else if (sameString(action,"postLogin")) 
+else if (sameString(action,"postLogin"))
     {
     doPostLogin();        /* cant start htmShell until cookie is set */
     }
-else if (sameString(action,"reset")) 
+else if (sameString(action,"reset"))
     {
     doCookieReset();      /* cant start htmShell until cookie is re-set */
     }
 
 /* The help screens open in a separate window and don't hurt anything. Only displays text. Ignore cb. */
-else if (sameString(action,"showDisplayHelp" )) 
+else if (sameString(action,"showDisplayHelp" ))
     {
     htmShell(TITLE, doShowDisplayHelp , NULL);
     }
-else if (sameString(action,"showEditHelp"    )) 
+else if (sameString(action,"showEditHelp"    ))
     {
     htmShell(TITLE, doShowEditHelp    , NULL);
     }
-else if (sameString(action,"showSizesHelp"   )) 
+else if (sameString(action,"showSizesHelp"   ))
     {
     htmShell(TITLE, doShowSizesHelp   , NULL);
     }

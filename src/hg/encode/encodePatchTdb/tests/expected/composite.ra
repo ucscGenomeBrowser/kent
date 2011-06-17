@@ -371,7 +371,7 @@ wgEncode 1
         metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878V2 fileName=wgEncodeUncFAIREseqPeaksGm12878V2.narrowPeak.gz
 
         track wgEncodeDukeDNaseSeqPeaksGm12878V3
-        subTrack wgEncodeChromatinMapViewPeaks
+        parent wgEncodeChromatinMapViewPeaks
         shortLabel GM12878 DNase Pk3
         longLabel PATCHED ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
         subGroups view=Peaks EXP=DNase cellType=1GM12878

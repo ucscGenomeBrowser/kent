@@ -46,7 +46,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	rn3 rn4 \
 	speTri1 cavPor3 \
 	oryCun1 oryCun2 \
-	bosTau2 bosTau3 bosTau4 bosTau5 \
+	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 \
 	equCab1 \
 	equCab2 \
 	oviAri1 \
@@ -58,7 +58,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	loxAfr1 loxAfr2 loxAfr3 \
 	echTel1 \
 	monDom1 monDom4 monDom5 \
-	anoCar1 \
+	anoCar1 anoCar2 \
 	galGal2 galGal3 \
 	melGal1 \
 	taeGut1 \
@@ -91,12 +91,16 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	strPur1 strPur2 \
     nemVec1 \
 	aplCal1 \
-	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 \
-	cb1 cb2 cb3 \
-	caeRem1 caeRem2 caeRem3 \
-	caeJap1 caeJap2 caeJap3 \
+	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 \
+	cb1 cb2 cb3 cb4 \
+	caeRem1 caeRem2 caeRem3 caeRem4 \
+	caeAng1 \
+	caeSp71 \
+	caeSp91 \
+	caeSp111 \
+	caeJap1 caeJap2 caeJap3 caeJap4 \
 	priPac1 priPac2 \
-	caePb1 caePb2 \
+	caePb1 caePb2 caePb3 \
 	bruMal1 \
 	melHap1 \
 	melInc1 \

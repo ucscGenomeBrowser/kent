@@ -8816,7 +8816,8 @@ rm bed.tab
 
 
 #########################################################################
-# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/12/10 angie)
+# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/22/11 Fan)
+# done 3/22/11 w/files emailed from Carol
 # renamed to ikmc 3/25/10 at Carol's request
 # done 3/12/10 w/files emailed from Carol 3/12
 # done 12/8/09 w/files emailed from Carol 12/7
@@ -8825,13 +8826,12 @@ rm bed.tab
 # done 2/12/09 w/files emailed from Carol Bult 2/12
 # done 10/21/08 w/files emailed from Carol Bult 10/18
     ssh hgwdev
-    mkdir -p /hive/data/genomes/mm9/bed/komp/2010_03
-    cd /hive/data/genomes/mm9/bed/komp/2010_03
-#*** NOTE FOR NEXT TIME: load as ikmc, ikmcExtra
-    # Save files emailed from Carol Bult 3/12 as 
-    # 20100312_ikmc.gff.gz
+    mkdir -p /hive/data/genomes/mm9/bed/ikmc/2011_03
+    cd /hive/data/genomes/mm9/bed/ikmc/2011_03
+    # Save files emailed from Carol Bult as 
+    # 20110221_ikmc.gff.gz
     # Make bed12 with itemRgb:
-    zcat 20100312_ikmc.gff.gz \
+    zcat 20110221_ikmc.gff.gz \
     | perl -we \
       'while (<>) { \
          s/\r?\n$//; \
@@ -8865,60 +8865,54 @@ rm bed.tab
         print join("\t", $chrom, $chromStart, $chromEnd, $name, 0, ".", $chromStart, \
                    $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
       }' \
-    | sort -k 1,1 -k 2n,2n > komp.bed
-#Got 40093 genes.
+    | sort -k 1,1 -k 2n,2n > ikmc.bed
+#Got 46125 genes.
     # No stderr empty-coord warnings this time (no unmapped items).
     # Make an alias-style table with associated info (MGI ID and status):
-    zcat 20100312_ikmc.gff.gz \
+    zcat 20110221_ikmc.gff.gz \
     | perl -wpe 's/\r?\n$//; @w = split("\t"); \
       if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
       if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
       $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
       ($mgi, $designId, $status) = ($1, $2, $3); \
       $_ = "$w[10]_$designId\t$mgi,$w[2],$status\n";' \
-    | sort -u > kompExtra.tab
-    wc -l kompExtra.tab
-#40093 kompExtra.tab
+    | sort -u > ikmcExtra.tab
+    wc -l ikmcExtra.tab
+#46125 ikmcExtra.tab
     # Load 'em up:
-    hgLoadBed mm9 komp komp.bed
-#Loaded 32185 elements of size 12
-    hgLoadSqlTab mm9 kompExtra $HOME/kent/src/hg/lib/genericAlias.sql kompExtra.tab
-    checkTableCoords -verbose=2 mm9 komp
-#mm9.komp item Eif2s1_42274 chr12:79973648-79983000: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Cntn5_44827 chr9:10008998-10019351: blocks 1 and 2 overlap.
+    hgLoadBed mm9 ikmc ikmc.bed
+#Loaded 46125 elements of size 12
+    hgLoadSqlTab mm9 ikmcExtra $HOME/kent/src/hg/lib/genericAlias.sql ikmcExtra.tab
+    checkTableCoords -verbose=2 mm9 ikmc
+#mm9.ikmc item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
     # Carol talked to the Sanger folks about those... pls waive.
 
     # Note from July '09: Carol noticed some very long items and is asking
     # Sanger about them.  Here's how to check it ourselves next time:
-    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from komp \
+    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from ikmc \
                   where chromEnd - chromStart > 1000000 order by length desc;'
-#+----------------------+-----------+
-#| name                 | length    |
-#+----------------------+-----------+
-#| Chrac1_77013         | 100321422 | 
-#| Ankrd22_67616        |  51920750 | 
-#| Sp140_77012          |   2457682 | 
-#| Ptprd_VG12763        |   2270723 | 
-#| A430089I19Rik_71812  |   1814706 | 
-#| 1700049E17Rik2_68957 |   1596021 | 
-#| Pcdh15_VG15967       |   1550393 | 
-#| Gpc5_VG15750         |   1431812 | 
-#| Agbl4_VG16439        |   1266664 | 
-#| Prkg1_VG15918        |   1197272 | 
-#| Rnaset2b_77193       |   1153790 | 
-#| Ptprt_VG10147        |   1139158 | 
-#| Nrxn1_VG16178        |   1056424 | 
-#| Ccl21b_67667         |   1019106 | 
-#+----------------------+-----------+
+#+----------------+-----------+
+#| name           | length    |
+#+----------------+-----------+
+#| Wdr63_92626    | 152775366 | 
+#| H2-Gs10_68977  |  86354720 | 
+#| Ptprd_VG12763  |   2270723 | 
+#| Pcdh15_VG15967 |   1550393 | 
+#| Gpc5_VG15750   |   1431812 | 
+#| Agbl4_VG16439  |   1266664 | 
+#| Lingo2_VG18888 |   1244126 | 
+#| Prkg1_VG15918  |   1197272 | 
+#| Ptprt_VG10147  |   1139158 | 
+#| Anks1b_VG16505 |   1099796 | 
+#| Erbb4_VG18672  |   1075874 | 
+#| Nrxn1_VG16178  |   1056424 | 
+#+----------------+-----------+
 
-    runJoiner.csh mm9 komp
-# mm9.kompExtra.name - hits 40093 of 40093 ok
-
-
+    runJoiner.csh mm9 ikmc
+# mm9.ikmcExtra.name - hits 46125 of 46125 ok
 #########################################################################
 ### Affy MOE430 version 2 (DONE - 2008-09-25,10-02 - Hiram)
     # Align probes from MOE430v2 chip.
@@ -11584,7 +11578,8 @@ knownToVisiGene mm9
     # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
 
 #############################################################################
-# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 2/28/2011 Fan)
+# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/22/11 Fan)
+# done 3/22/11 w/files emailed from Carol
 # renamed to ikmc 3/25/10 at Carol's request
 # done 3/12/10 w/files emailed from Carol 3/12
 # done 12/8/09 w/files emailed from Carol 12/7
@@ -11593,10 +11588,9 @@ knownToVisiGene mm9
 # done 2/12/09 w/files emailed from Carol Bult 2/12
 # done 10/21/08 w/files emailed from Carol Bult 10/18
     ssh hgwdev
-    mkdir -p /hive/data/genomes/mm9/bed/komp/2011_02
-    cd /hive/data/genomes/mm9/bed/komp/2011_02
-#*** NOTE FOR NEXT TIME: load as ikmc, ikmcExtra
-    # Save files emailed from Carol Bult 3/12 as 
+    mkdir -p /hive/data/genomes/mm9/bed/ikmc/2011_03
+    cd /hive/data/genomes/mm9/bed/ikmc/2011_03
+    # Save files emailed from Carol Bult as 
     # 20110221_ikmc.gff.gz
     # Make bed12 with itemRgb:
     zcat 20110221_ikmc.gff.gz \
@@ -11633,7 +11627,7 @@ knownToVisiGene mm9
         print join("\t", $chrom, $chromStart, $chromEnd, $name, 0, ".", $chromStart, \
                    $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
       }' \
-    | sort -k 1,1 -k 2n,2n > komp.bed
+    | sort -k 1,1 -k 2n,2n > ikmc.bed
 #Got 46125 genes.
     # No stderr empty-coord warnings this time (no unmapped items).
     # Make an alias-style table with associated info (MGI ID and status):
@@ -11644,24 +11638,34 @@ knownToVisiGene mm9
       $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
       ($mgi, $designId, $status) = ($1, $2, $3); \
       $_ = "$w[10]_$designId\t$mgi,$w[2],$status\n";' \
-    | sort -u > kompExtra.tab
-    wc -l kompExtra.tab
-#46125 kompExtra.tab
+    | sort -u > ikmcExtra.tab
+    wc -l ikmcExtra.tab
+#46125 ikmcExtra.tab
     # Load 'em up:
-    hgLoadBed mm9 komp komp.bed
+    hgLoadBed mm9 ikmc ikmc.bed
 #Loaded 46125 elements of size 12
-    hgLoadSqlTab mm9 kompExtra $HOME/kent/src/hg/lib/genericAlias.sql kompExtra.tab
-    checkTableCoords -verbose=2 mm9 komp
-#mm9.komp item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp has 4 records with overlapping blocks.
-    # Carol talked to the Sanger folks about those (last time) ... pls waive.
+    hgLoadSqlTab mm9 ikmcExtra $HOME/kent/src/hg/lib/genericAlias.sql ikmcExtra.tab
+    checkTableCoords -verbose=2 mm9 ikmc
+#mm9.ikmc item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
+
+#Remove those records having the overlapping block problem.
+
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41479"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41478"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41477"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41476"'
+
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41479"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41478"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41477"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41476"'
 
     # Note from July '09: Carol noticed some very long items and is asking
     # Sanger about them.  Here's how to check it ourselves next time:
-    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from komp \
+    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from ikmc \
                   where chromEnd - chromStart > 1000000 order by length desc;'
 #+----------------+-----------+
 #| name           | length    |
@@ -11680,6 +11684,608 @@ knownToVisiGene mm9
 #| Nrxn1_VG16178  |   1056424 | 
 #+----------------+-----------+
 
-    runJoiner.csh mm9 komp
-#  mm9.kompExtra.name - hits 46125 of 46125 ok 
+    runJoiner.csh mm9 ikmc
+# mm9.ikmcExtra.name - hits 46121 of 46121 ok
+
 #########################################################################
+# LASTZ Turkey MelGal1 ( DONE - 2011-03-30 - Chin)
+    mkdir /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30
+    cd /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30
+
+    cat << '_EOF_' > DEF
+# Turkey vs Mouse
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey melGal1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    71m8.450s
+    cat fb.mm9.chainMelGal1Link.txt
+    #   62597891 bases of 2620346127 (2.389%) in intersection
+    cd /hive/data/genomes/mm9/bed
+    ln -s lastzMelGal1.2011-03-30 lastz.melGal1
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m49.871s
+    cat fb.melGal1.chainMm9Link.txt
+    #   50649368 bases of 935922386 (5.412%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
+############################################################################
+# Nuclear Lamina (woring 2011-04-04 - Chin)
+# The track is based on:
+# "Molecular maps of the reorganization of genome-nuclear lamina 
+# interactions during differentiation"
+# Peric-Hupkes D, Meuleman W, Pagie L, Bruggeman SW et al. 
+# Mol Cell 2010 May 28;38(4):603-13. PMID: 20513434
+# GEO Accession Series GSE17051
+# Main Contact: 
+# Bas van Steensel
+# Division of Gene Regulation, room B4.042
+# Netherlands Cancer Institute
+# Plesmanlaan 121
+# 1066 CX Amsterdam
+# The Netherlands
+# Phone +31.20.5122040
+# http://research.nki.nl/vansteensellab
+
+    # Download data
+    mkdir /hive/data/outside/vansteensel
+    cd /hive/data/outside/vansteensel
+    # Raw GEO data
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/supplementary/series/GSE17051/GSE17051_RAW.tar
+    # SOFT formatted family file(s)
+     wget --timestamping \
+       ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SOFT/by_series/GSE17051/GSE17051_family.soft.gz
+    # MINiML formatted family file(s) 
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/MINiML/by_series/GSE17051/GSE17051_family.xml.tgz
+    # Series Matrix File(s)
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SeriesMatrix/GSE17051/GSE17051_series_matrix.txt.gz
+
+    # wiggle data from vansteensel lab:
+    # Embryonic Stem Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/ES.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/ES.wig.gz
+    # Neuronal Precursor Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/NP.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/NP.wig.gz
+    # Astrocytes
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/AC.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/AC.wig.gz
+    # NIH3T3 Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/EF.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/EF.wig.gz
+
+    mkdir /hive/data/genomes/mm9/bed/nuclearLamina
+    cd /hive/data/genomes/mm9/bed/nuclearLamina
+    cp /hive/data/outside/vansteensel/*.gff.gz .
+    cp /hive/data/outside/vansteensel/*.wig.gz .
+    gunzip *.gz
+
+    # The wiggle files contain 51 set of duplicates (all on chr18), 
+    # Per data provider's instruction, fixed them by taking
+    # the average.
+    cat << '_EOF_' > quickCheckWig.pl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+my $chrom;
+my $curPos;
+my $curValue;
+my $prevPos;
+my $prevValue;
+my $lineNum = 0;
+my $tf1;
+my $tf2;
+
+open(FH, $ARGV[0]) or die("Error: cannot open file '$ARGV[0]'\n");
+while (my $line = <FH>) {
+    $lineNum += 1;   
+    if ($line =~ m/^browser/ ) {
+        next;
+    } elsif ($line =~ m/track/ ) {
+        next;
+    } elsif ($line =~ m/^variableStep/ ) {
+      ($tf1, $chrom, $tf2) = split('\s+', $line, 3);
+      $chrom =~ s/^chrom=//;
+      $curPos=0;
+      $curValue=0;      
+      $prevPos=0;
+      $prevValue=0;
+      next;
+    } elsif ($line =~ m/^[0-9]/ ) {
+	$prevPos = $curPos;
+	$prevValue = $curValue;
+        ($curPos, $curValue)=split('\s+', $line, 2);
+	$curValue =~ s/\n//;
+	$prevValue = $curValue;
+        if ($curPos == $prevPos)  {
+          printf("Duplicate %s %s on %s at line # %s \n", $curPos, $curValue, $chrom, $lineNum);
+	  next;   
+	}   
+    }
+} 
+   
+close (FH);
+'_EOF_'
+    #<< happy emacs
+    chmod +x quickCheckWig.pl
+    # check for duplicates in wiggles
+for WIG in AC EF ES NP
+do 
+./quickCheckWig.pl ${WIG}.wig > ${WIG}.dup.list 2>&1
+done
+
+    cat << '_EOF_' > fixDupWig.pl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+my $chrom;
+my $curPos;
+my $curValue;
+my $prevPos;
+my $prevValue;
+my $tf1;
+my $tf2;
+sub resetAll {
+  $curPos=0;
+  $curValue=0;
+  $prevPos=0;
+  $prevValue=0;
+}
+my $lineNum = 0;
+my $prtPos=0;
+my $prtValue=0;
+resetAll();
+open(FH, $ARGV[0]) or die("Error: cannot open file '$ARGV[0]'\n");
+while (my $line = <FH>) {
+    $lineNum += 1;   
+    if ($line =~ m/^browser/ ) {
+	printf("%s", $line);
+        next;
+    } elsif ($line =~ m/track/ ) {
+        printf("%s", $line);
+        next;
+    } elsif ($line =~ m/^variableStep/ ) {
+      #  get chrom number  
+      ($tf1, $chrom, $tf2) = split('\s+', $line, 3);
+      $chrom =~ s/^chrom=//;
+      &resetAll();      
+      printf  ("%s",$line);
+      next;
+    } elsif ($line =~ m/^[0-9]/ ) {
+        chomp($line);
+        ($curPos, $curValue)=split('\s+', $line, 2);
+        if ($prevPos == 0) {
+          $prevPos = $curPos;
+          $prevValue = $curValue;
+	  next;
+	} elsif ($prevPos == $curPos) {
+	  $prevValue=($prevValue+$curValue)/2;
+	 next;
+        } else {
+	 printf("%s\t%s\n", $prevPos, $prevValue);
+          $prevPos=$curPos;
+          $prevValue=$curValue;
+	}
+   }	
+} 
+close (FH);
+'_EOF_'
+    #<< happy emacs
+    chmod +x fixDupWig.pl
+
+    # fix duplicates in wiggles by takig average of duplicates
+for WIG in AC EF ES NP
+do
+./fixDupWig.pl ${WIG}.wig > ${WIG}_Fixed.wig
+done
+
+   # tested by loading **_Fixed.wig as customer tracks
+
+
+#########################################################################
+# LASTZ Lizard AnoCar2 (DONE - 2011-04-25 - Hiram)
+    # XXX FYI: the date on this directory is incorrect, it was done 04-25
+    mkdir /hive/data/genomes/mm9/bed/lastzAnoCar2.2011-04-19
+    cd /hive/data/genomes/mm9/bed/lastzAnoCar2.2011-04-19
+
+    cat << '_EOF_' > DEF
+# mouse vs lizard
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Lizard anoCar2
+SEQ2_DIR=/scratch/data/anoCar2/anoCar2.2bit
+SEQ2_LEN=/scratch/data/anoCar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/mm9/bed/lastzAnoCar2.2011-04-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+	-bigClusterHub=swarm -qRepeats=windowmaskerSdust > do.log 2>&1 &
+    #	real    289m10.549s
+    cat fb.mm9.chainAnoCar2Link.txt 
+    #	88067954 bases of 2620346127 (3.361%) in intersection
+
+    #	running the swap - DONE - 2011-04-19
+    mkdir /hive/data/genomes/anoCar2/bed/blastz.mm9.swap
+    cd /hive/data/genomes/anoCar2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzAnoCar2.2011-04-19/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet -swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    14m28.747s
+    cat fb.anoCar2.chainMm9Link.txt 
+    #	84738440 bases of 1701353770 (4.981%) in intersection
+
+##############################################################################
+# BUILD mm9 GERP TRACK (DONE 4/25/11, Fan)
+
+ssh hgwdev
+mkdir /hive/data/genomes/mm9/bed/gerp
+cd /hive/data/genomes/mm9/bed/gerp
+
+# place the wig data file, All_mm9_RS.wig, here.
+
+ulimit -d 180000000
+ulimit -v 180000000
+
+wigToBigWig All_mm9_RS.wig /hive/data/genomes/mm9/chrom.sizes All_mm9_RS.bw
+
+ln -s `pwd`/All_mm9_RS.bw /gbdb/mm9/bbi/All_mm9_RS.bw
+
+hgsql mm9 -e 'drop table if exists allMm9RS_BW; \
+              create table allMm9RS_BW (fileName varchar(255) not null); \
+	                    insert into allMm9RS_BW values ("/gbdb/mm9/bbi/All_mm9_RS.bw");'
+
+# create corresponding trackDb.ra section and html description page.
+
+
+############################################################################
+# Nuclear Lamina (DONE 2011-04-04 - Chin)
+#
+# "Molecular maps of the reorganization of genome-nuclear lamina 
+# interactions during differentiation"
+# Peric-Hupkes D, Meuleman W, Pagie L, Bruggeman SW et al. 
+# Mol Cell 2010 May 28;38(4):603-13. PMID: 20513434
+# GEO Accession Series GSE17051
+# Main Contact: 
+# Bas van Steensel
+# Division of Gene Regulation, room B4.042
+# Netherlands Cancer Institute
+# Plesmanlaan 121
+# 1066 CX Amsterdam
+# The Netherlands
+# Phone +31.20.5122040
+# http://research.nki.nl/vansteensellab
+
+    # Download data
+    mkdir /hive/data/outside/vansteensel
+    cd /hive/data/outside/vansteensel
+    # Raw GEO data which we did not use at this time,
+    # get them any way to keep data in sync for the future
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/supplementary/series/GSE17051/GSE17051_RAW.tar
+    # SOFT formatted family file(s)
+     wget --timestamping \
+       ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SOFT/by_series/GSE17051/GSE17051_family.soft.gz
+    # MINiML formatted family file(s) 
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/MINiML/by_series/GSE17051/GSE17051_family.xml.tgz
+    # Series Matrix File(s)
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SeriesMatrix/GSE17051/GSE17051_series_matrix.txt.gz
+
+    # wiggle data from vansteensel lab (2011-04-26):
+    # Embryonic Stem Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/ES.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/ES.wig.gz
+    # Neuronal Precursor Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/NP.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/NP.wig.gz
+    # Astrocytes
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/AC.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/AC.wig.gz
+    # NIH3T3 Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/EF.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/EF.wig.gz
+
+    ### new wiggles without duplicates from Wouter
+    mkdir /hive/data/outside/vansteensel/2011-04-26
+    cd /hive/data/outside/vansteensel/2011-04-26
+    for WIG in AC EF ES NP
+    do
+      wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/Chin/${WIG}.wig.gz
+    done
+     
+
+
+    mkdir /hive/data/genomes/mm9/bed/nuclearLamina/rawdata
+    cd /hive/data/genomes/mm9/bed/nuclearLamina/rawdata
+    cp /hive/data/outside/vansteensel/2011-04-26/*.wig.gz .
+    gunzip *.gz
+
+    # The wiggle files contain 51 set of duplicates (all on chr18), 
+    # Per data provider's instruction, fixed them by taking
+    # the average.
+    cat << '_EOF_' > quickCheckWig.pl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+my $chrom;
+my $curPos;
+my $curValue;
+my $prevPos;
+my $prevValue;
+my $lineNum = 0;
+my $tf1;
+my $tf2;
+
+open(FH, $ARGV[0]) or die("Error: cannot open file '$ARGV[0]'\n");
+while (my $line = <FH>) {
+    $lineNum += 1;   
+    if ($line =~ m/^browser/ ) {
+        next;
+    } elsif ($line =~ m/track/ ) {
+        next;
+    } elsif ($line =~ m/^variableStep/ ) {
+      ($tf1, $chrom, $tf2) = split('\s+', $line, 3);
+      $chrom =~ s/^chrom=//;
+      $curPos=0;
+      $curValue=0;      
+      $prevPos=0;
+      $prevValue=0;
+      next;
+    } elsif ($line =~ m/^[0-9]/ ) {
+	$prevPos = $curPos;
+	$prevValue = $curValue;
+        ($curPos, $curValue)=split('\s+', $line, 2);
+	$curValue =~ s/\n//;
+	$prevValue = $curValue;
+        if ($curPos == $prevPos)  {
+          printf("Duplicate %s %s on %s at line # %s \n", $curPos, $curValue, $chrom, $lineNum);
+	  next;   
+	}   
+    }
+} 
+   
+close (FH);
+'_EOF_'
+    #<< happy emacs
+    chmod +x quickCheckWig.pl
+    # check for duplicates in wiggles
+for WIG in AC EF ES NP
+do 
+./quickCheckWig.pl ${WIG}.wig > ${WIG}.dup.list 2>&1
+done
+    wc -l *.dup.list
+    # all dup.list are empty, so there is no duplicate in the wiggles.
+    rm *.dup.list
+
+    # load the tracks on hgwdev
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/nuclearLamina/
+    for WIG in AC EF ES NP
+    do
+      wigEncode ./rawdata/${WIG}.wig laminB1_${WIG}.wig \
+          laminB1_${WIG}.wib
+    done
+    # Converted ./rawdata/AC.wig, upper limit 4.29, lower limit -5.74
+    # Converted ./rawdata/EF.wig, upper limit 4.92, lower limit -5.44
+    # Converted ./rawdata/ES.wig, upper limit 4.62, lower limit -5.57
+    # Converted ./rawdata/NP.wig, upper limit 4.29, lower limit -6.00
+
+    for WIG in AC EF ES NP
+    do
+      hgLoadWiggle mm9 laminB1_${WIG} laminB1_${WIG}.wig
+    done
+    # Connected to database mm9 for track laminB1_AC
+    # Creating wiggle table definition in mm9.laminB1_AC
+    # Saving wiggle.tab
+    # Loading mm9
+    # ... ...
+    rm wiggle.tab
+  
+    for WIG in AC EF ES NP
+    do
+      ln -s /cluster/data/mm9/bed/nuclearLamina/laminB1_${WIG}.wib \
+         /gbdb/mm9/wib/
+    done
+
+    # Create the laminB1 supertrack definitions in mm9/trackDb.ra 
+    # copy the descrition html to right place
+    cp /hive/data/outside/vansteensel/2011-05-11/mouse_laminB1_DamID.html \
+    /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/mouse/mm9/laminB1Mm9.html
+    cp /hive/data/outside/vansteensel/2011-05-11/MolCell2010_cartoon.png \
+     /cluster/home/chinhli/kent/src/hg/htdocs/images/laminB1Mm9.png
+    # edit/rescale the html and png files
+    # add the new html and image files to git
+    
+    # collect wiggle stats for track definition:
+    for WIG in AC EF ES NP
+    do
+      wigTableStats.sh mm9 laminB1_${WIG}
+    done
+# db.table      min max mean count sumData stdDev viewLimits
+mm9.laminB1_AC  -5.742 4.293 -0.00201324 2102030 -4231.89 1.14068 viewLimits=-5.70541:4.293
+# db.table      min max mean count sumData stdDev viewLimits
+mm9.laminB1_EF  -5.444 4.922 -0.00154509 2102030 -3247.82 1.04232 viewLimits=-5.21314:4.922
+# db.table      min max mean count sumData stdDev viewLimits
+mm9.laminB1_ES  -5.572 4.617 -0.00133816 2102030 -2812.85 0.929746 viewLimits=-4.65007:4.617
+# db.table      min max mean count sumData stdDev viewLimits
+mm9.laminB1_NP  -5.998 4.292 -0.00148136 2102030 -3113.87 1.059 viewLimits=-5.29649:4.292
+
+    # Create the laminB1 supertrack definitions in mm9/trackDb.ra 
+    # copy the descrition html to right place
+    cp /hive/data/outside/vansteensel/2011-05-11/mouse_laminB1_DamID.html \
+    /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/mouse/mm9/laminB1Mm9.html
+    # scale down to 32%
+    convert -size 32% \
+        /hive/data/outside/vansteensel/2011-05-11/MolCell2010_cartoon.png \
+    -resize 32% \
+        /cluster/home/chinhli/kent/src/hg/htdocs/images/laminB1Mm9.png
+    # edit/rescale the html and png files
+    # add the new html and image files to git
+    # cd ~/kent/src/hg/htdocs and make
+    # cd ~/kent/src/hg/makeDb/trackDb and make DBS=mm9
+
+
+#########################################################################
+# LASTZ Cow BosTau6 (DONE - 2011-05-17 - Chin)
+    mkdir /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17
+    cd /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17
+
+    cat << '_EOF_' > DEF
+# mouse vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau6 
+SEQ2_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ2_LEN=/scratch/data/bosTau6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # real     211m26.412s 
+    cat fb.mm9.chainBosTau6Link.txt
+    # 699351036 bases of 2620346127 (26.689%) in intersection
+    # Create link
+    cd /hive/data/genomes/mm9/bed
+    ln -s  lastzBosTau6.2011-05-17 lastz.bosTau6
+
+
+    #   and the swap 
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real     53m5.237s
+    cat fb.bosTau6.chainMm9Link.txt
+    # 688894115 bases of 2649682029 (25.999%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
+
+############################################################################
+# NUMTS TRACK (DONE 2011-06-03 - Chin)
+
+    mkdir -p /hive/data/outside/Numts/mm9
+    cd /hive/data/outside/Numts/mm9
+    wget http://193.204.182.50/files/mm9/all_mouse_tracks.txt
+    wget http://193.204.182.50/files/mm9/MMS_NumtS.html
+    wget http://193.204.182.50/files/bam/MMS_NumtS.fasta.sorted.bam
+    wget http://193.204.182.50/files/bam/MMS_NumtS.fasta.sorted.bam.bai
+
+    mkdir /cluster/data/mm9/bed/NumtS
+    cd  /cluster/data/mm9/bed/NumtS
+    cp /hive/data/outside/Numts/mm9/*.* .
+
+
+    # split the all_mouse_tracks.txt into 3 bed files 
+    # mmsNumtSAssembled.bed, mmsNumtS.bed, an mmsNumtSMitochondrion.bed
+
+    cat all_mouse_tracks.txt | awk ' /^track name/ {print $_}'  > tracks.list
+    cat all_mouse_tracks.txt | awk ' /^track type/ {print $_}'  >> tracks.list
+
+    # load the 3 bed files to mm9
+    hgLoadBed mm9  numtSAssembled  mmsNumtSAssembled.bed
+    hgLoadBed mm9 numtS mmsNumtS.bed
+    hgLoadBed mm9 numtSMitochondrion mmsNumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/mm9/NumtS
+    ln -s `pwd`/MMS_NumtS.fasta.sorted.bam{,.bai} /gbdb/mm9/NumtS/
+    hgBbiDbLink mm9 bamMmsNumtSSorted /gbdb/mm9/NumtS/MMS_NumtS.fasta.sorted.bam 
+    # setup trackDb for mm9
+
+##############################################################################

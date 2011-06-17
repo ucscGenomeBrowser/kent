@@ -1,0 +1,114 @@
+track wgEncodeSydhRnaSeq
+compositeTrack on
+shortLabel Stan/Yale RNA-seq
+longLabel RNA-seq from ENCODE/Stanford/Yale
+group regulation
+subGroup1 view Views Signal=Signal Alignments=Alignments
+subGroup2 cellType Cell_Line CH12=CH12 MEL=MEL
+subGroup3 treatment Treatment DM2p5d=DMSO_2.0pct None=None
+subGroup4 rnaExtract RnaExtract polyA=polyA+
+subGroup5 rep Replicate rep1=1 
+dimensions dimensionX=cellType dimensionY=treatment
+sortOrder cellType=+ treatment=+ rnaExtract=+ view=+ rep=+
+fileSortOrder cell=Cell_Line treatment=treatment rnaExtract=RNA<BR>Extract view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment rnaExtract=rnaExtract
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+
+	track wgEncodeSydhRnaSeqViewSignal
+	shortLabel Signal
+	view Signal
+	visibility full
+	subTrack wgEncodeSydhRnaSeq
+	viewLimits 0:500
+	autoScale on
+	transformFunc NONE
+	windowingFunction mean
+	maxHeightPixels 100:24:16
+
+        track wgEncodeSydhRnaSeqMelPolyaSigRep1
+        parent wgEncodeSydhRnaSeqViewSignal
+        shortLabel MEL Sig 1
+        longLabel ENCODE Stanford/Yale RNA-seq Signal Replicate 1 (in MEL cells)
+        subGroups view=Signal cellType=MEL rnaExtract=polyA treatment=None rep=rep1
+        type bigWig 1.000000 232309.000000
+        origAssembly mm9
+        color 46,0,184
+        # subId=3818 dateSubmitted=2011-03-21
+
+        track wgEncodeSydhRnaSeqMelDm2p5dPolyaSigRep1
+        parent wgEncodeSydhRnaSeqViewSignal
+        shortLabel MEL Sig 1
+        longLabel ENCODE Stanford/Yale RNA-seq Signal Replicate 1 (in MEL cells)
+        subGroups view=Signal cellType=MEL rnaExtract=polyA treatment=DM2p5d rep=rep1
+        type bigWig 1.000000 289457.000000
+        origAssembly mm9
+        color 46,0,184
+        # subId=3764 dateSubmitted=2011-03-16
+        # was wgEncodeSydhRnaSeqMelDmso20PolyaSigRep1 wong Thu Jun  9 10:57:40 2011
+
+        track wgEncodeSydhRnaSeqCh12PolyaSigRep1
+        parent wgEncodeSydhRnaSeqViewSignal off
+        shortLabel CH12 Sig 1
+        longLabel ENCODE Stanford/Yale RNA-seq Signal Replicate 1 (in CH12 cells)
+        subGroups view=Signal cellType=CH12 rnaExtract=polyA treatment=None rep=rep1
+        type bigWig 1.000000 201875.000000
+        origAssembly mm9
+        color 153,38,0
+        # subId=3817 dateSubmitted=2011-04-20
+
+	track wgEncodeSydhRnaSeqViewAlignments
+	shortLabel Alignments
+	view Alignments
+	visibility hide
+	subTrack wgEncodeSydhRnaSeq
+	type bam
+	pairEndsByName on
+	showNames off
+	noColorTag .
+	bamColorMode off
+	bamGrayMode aliQual
+	baseColorDefault diffBases
+	baseColorUseSequence lfExtra
+	indelDoubleInsert on
+	indelQueryInsert on
+	showDiffBasesAllScales .
+	showDiffBasesMaxZoom 100
+	maxWindowToDraw 1000000
+
+        track wgEncodeSydhRnaSeqMelPolyaAlnRep1
+        parent wgEncodeSydhRnaSeqViewAlignments
+        shortLabel MEL Aln 1
+        longLabel ENCODE Stanford/Yale RNA-seq Alignments Replicate 1 (in MEL cells)
+        subGroups view=Alignments cellType=MEL rnaExtract=polyA treatment=None rep=rep1
+        type bam
+        origAssembly mm9
+        color 46,0,184
+        # subId=3818 dateSubmitted=2011-03-21
+
+        track wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1
+        parent wgEncodeSydhRnaSeqViewAlignments
+        shortLabel MEL Aln 1
+        longLabel ENCODE Stanford/Yale RNA-seq Alignments Replicate 1 (in MEL cells)
+        subGroups view=Alignments cellType=MEL rnaExtract=polyA treatment=DM2p5d rep=rep1
+        type bam
+        origAssembly mm9
+        color 46,0,184
+        # subId=3764 dateSubmitted=2011-03-16
+        # was wgEncodeSydhRnaSeqMelDmso20PolyaAlnRep1 wong Thu Jun  9 10:57:40 2011
+
+        track wgEncodeSydhRnaSeqCh12PolyaAlnRep1
+        parent wgEncodeSydhRnaSeqViewAlignments off
+        shortLabel CH12 Aln 1
+        longLabel ENCODE Stanford/Yale RNA-seq Alignments Replicate 1 (in CH12 cells)
+        subGroups view=Alignments cellType=CH12 rnaExtract=polyA treatment=None rep=rep1
+        type bam
+        origAssembly mm9
+        color 153,38,0
+        # subId=3817 dateSubmitted=2011-04-20
+
+
+

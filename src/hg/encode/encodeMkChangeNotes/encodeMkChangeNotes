@@ -148,9 +148,9 @@ def main(argv=None):
     addition_files = []
 
     # some re we will be using
-    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedRrbs|bedGraph\d+|bed\d*|bedLogR|pairedTagAlign|shortFrags)$")
+    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedRrbs|bedGraph\d+|bed\d*|bedLogR|pairedTagAlign|shortFrags|peptideMapping)$")
     gbdb = re.compile("^(wig|tagAlign|bigWig|bam)$")
-    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|junction|fpkm|fpkm1|fpkm2|insDistrib|insDist|junction)$")
+    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|junction|fpkm|fpkm1|fpkm2|insDistrib|insDist|junction|txt)$")
 
     # if new relase, add the full path to all files
     path_prefix = ""
@@ -159,7 +159,7 @@ def main(argv=None):
             % (database, options.composite_name, current_release_dir)
 
     # generate the list of files
-    file_pattern = ".*\.(gz|bigWig|bam)$"   # the pattern that describes what files we even consider
+    file_pattern = ".*\.(gz|bigWig|bam|tgz)$"   # the pattern that describes what files we even consider
     current_files = get_file_set(current_release_dir, file_pattern)
     if prev_release_dir == "-":
         prev_files = set()
@@ -197,7 +197,7 @@ def main(argv=None):
         elif f.count(".") == 2:
             name, type, compression = f.split(".")
 
-        assert compression == None or compression == "gz"
+        assert compression == None or compression == "gz" or compression == "tgz"
         
         # we don't deal with revisions yet
         stem, version = parse_version(name)
@@ -314,7 +314,7 @@ def main(argv=None):
         elif f.count(".") == 2:
             name, type, compression = f.split(".")
 
-        assert compression == None or compression == "gz"
+        assert compression == None or compression == "gz" or compression == "tgz"
 
         if gbdb.match(type):
             new_files_list.append(path_prefix + f)

@@ -25,6 +25,13 @@ chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
+track chainNetBosTau6 override
+priority 350.3
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+shortLabel $o_db Chain/Net
+
 track chainNetBosTau4 override
 priority 350.3
 chainMinScore 5000
@@ -87,6 +94,9 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
     track netHg18 override
     shortLabel $o_db Net
+
+track chainNetAnoCar2 override
+priority 560.3
 
 track chainNetAnoCar1 override
 priority 560.3

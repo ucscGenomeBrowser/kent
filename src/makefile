@@ -57,20 +57,23 @@ blatSuite: topLibs
 #	of DESTDIR and BINDIR
 
 UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
-        bigBedInfo bigBedSummary bigBedToBed \
+        bigBedInfo bigBedSummary bigBedToBed bigWigAverageOverBed  \
 	bigWigInfo bigWigSummary bigWigToBedGraph bigWigToWig\
-	faCount faFrag faOneRecord faRandomize faSize faSomeRecords faToNib \
-	faToTwoBit htmlCheck nibFrag paraFetch sizeof stringify \
+	faCount faFrag faOneRecord faPolyASizes faRandomize faSize \
+	faSomeRecords faToNib \
+	faToTwoBit htmlCheck nibFrag paraFetch paraSync sizeof stringify \
 	textHistogram twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
 
 HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
 	 ratStuff/mafsInRegion ratStuff/mafSpeciesSubset \
-	 pslCDnaFilter genePredToGtf
+	 pslCDnaFilter genePredToGtf pslPretty pslReps pslSort 
 
 
-HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred overlapSelect
+HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred overlapSelect makeTableList
 
 HG_HGWIGGLE_APP = hgWiggle
+
+BLAT_APPLIST = blat gfClient gfServer 
 
 userApps: topLibs hgLib
 	@for P in ${UTILS_APPLIST}; do \
@@ -84,6 +87,9 @@ userApps: topLibs hgLib
 	done
 	@for P in ${HG_HGWIGGLE_APP}; do \
 	    ( cd hg/makeDb/hgLoadWiggle && echo hg/makeDb/hgLoadWiggle && ${MAKE} $${P} ) ; \
+	done
+	@for P in ${BLAT_APPLIST}; do \
+	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done
 
 clean:

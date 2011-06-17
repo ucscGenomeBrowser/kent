@@ -1,0 +1,119 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+visibility pack
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+visibility hide
+
+track cons9way
+compositeTrack on
+shortLabel Conservation
+longLabel Nematode Multiz Alignment & Conservation (9 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+type bed 4
+group compGeno
+priority 103.29
+
+    track cons9wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility full
+    viewUi on
+    subTrack cons9way
+
+        track multiz9way
+        subTrack cons9wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 9 Caenorhabditis nematodes
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz9waySummary
+#        frames multiz9wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg19
+        speciesGroups Caenorhabditis
+        sGroup_Caenorhabditis caeSp91 caeRem4 caePb3 caeSp71 cb4 caeSp111 caeJap4 caeAng1
+        itemFirstCharCase noChange
+        treeImage phylo/ce10_9way.png
+        priority 5
+
+    track cons9wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    subTrack cons9way
+    visibility full
+    viewLimits -.3:2
+    viewLimitsMax -15.41:7.13
+
+        # PhyloP conservation
+        track phyloP9way
+        subTrack cons9wayViewphyloP
+        subGroups view=phyloP
+        shortLabel phyloP Cons
+        longLabel Caenorhabditis Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -1.03 1.95
+        maxHeightPixels 100:50:11
+        viewLimits -1.03:1.95
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,40,120
+        altColor 120,40,40
+        priority 1
+
+    track cons9wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons9way
+
+        # phastCons conservation
+        track phastCons9way
+        subTrack cons9wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel phastCons Cons
+        longLabel Caenorhabditis Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 3
+
+    track cons9wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons9way
+
+        # Conserved Elements (Most Conserved)
+        track phastConsElements9way
+        subTrack cons9wayViewelements
+        subGroups view=elements
+        shortLabel Elements
+        longLabel Caenorhabditis Conserved Elements
+        noInherit on
+        type bed 5 .
+        color 170,50,100
+        priority 6
+
+track xenoRefGene override
+visibility hide
+
+track mrna override
+visibility hide

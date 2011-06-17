@@ -10,7 +10,7 @@ void printMainHelp()
 /* Put up main page help info. */
 {
 hPrintf("%s",
-"<P>This section provides brief line-by-line descriptions of the Table \n"
+"This section provides brief line-by-line descriptions of the Table \n"
 "Browser controls. For more information on using this program, see the \n"
 "<A HREF=\"../goldenPath/help/hgTablesHelp.html\" TARGET=_blank>Table \n"
 "Browser User's Guide</A>.\n"
@@ -45,7 +45,7 @@ hPrintf("%s",
 "        <LI><B>region: </B>Restricts the query to a\n"
 "        particular chromosome or region. Select <em>genome</em> to apply the \n"
 "        query to the entire genome or <em>ENCODE</em> to examine only the \n"
-"        ENCODE regions. \n"
+"        ENCODE Pilot regions.\n"
 "        To limit the query to a specific position, type a \n"
 "        chromosome name, e.g. <em>chrX</em>, or a chromosome coordinate \n"
 "        range, such as chrX:100000-200000, or a gene name or other id in \n"
@@ -71,7 +71,7 @@ hPrintf("%s",
 "        single set of data based on specific join criteria. For example, this \n"
 "        can be used to find all SNPs that intersect with RefSeq coding \n"
 "        regions. The intersection can be configured to retain the \n"
-"        existing alignment structure of the table with a specified amount of \n" 
+"        existing alignment structure of the table with a specified amount of \n"
 "        overlap, or discard the structure in favor of a simple list of position\n"
 "        ranges using a base-pair intersection or union of the two data sets. \n"
 "        The button functionalities are similar to those of the <em>filter</em>\n"

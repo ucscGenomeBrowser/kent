@@ -129,7 +129,7 @@ retStats->stdev = sqrt(total / N);
 
 /* copied from hgGateway: */
 static char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
-/* User can choose from Track, Positional or Non-positional tables.  
+/* User can choose from Track, Positional or Non-positional tables.
  * When one is selected, clear the others: */
 static char *onChangeTrack = "onchange=\"document.mainForm.tbCustomTrack.value = document.mainForm.tbCustomTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
 static char *onChangeCT = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
@@ -294,7 +294,7 @@ for (cv=cgiVarList();  cv != NULL;  cv=cv->next)
     if (startsWith("hgSeq", cv->name))
 	cartSetString(cart, cv->name, cv->val);
     }
-/* Second pass: booleans may not appear in CGI; also, their representation 
+/* Second pass: booleans may not appear in CGI; also, their representation
  * is different so translate to boolean and store boolean. */
 snprintf(shadowPrefix, sizeof(shadowPrefix), "%s%s",
 	 cgiBooleanShadowPrefix(), "hgSeq");
@@ -336,7 +336,7 @@ return(sameWord(pos, "genome"));
 }
 
 boolean isBatch()
-/* Return TRUE if user has selected to filter by name/accession, and table 
+/* Return TRUE if user has selected to filter by name/accession, and table
  * is positional. */
 {
 char *posOrKeys = cartCgiUsualString(cart, "tbPosOrKeys", "undef");
@@ -420,7 +420,7 @@ cgiContinueHiddenVar("tbUserKeys");
 
 
 char *searchPosition(char *pos, char **retChrom, int *retStart, int *retEnd)
-/* Use hgFind if necessary; return NULL 
+/* Use hgFind if necessary; return NULL
  * if we had to display the gateway page or hgFind's selection page. */
 {
 if (! isGenome(pos))
@@ -463,7 +463,7 @@ if (ct != NULL && strcmp(ct, "Choose table") == 0)
 
 if (table0 != NULL && strcmp(table0, "Choose table") == 0)
     table0 = NULL;
-	
+
 if (table1 != NULL && strcmp(table1, "Choose table") == 0)
     table1 = NULL;
 
@@ -482,7 +482,7 @@ else
 char *getTableName()
 {
 char *val, *ptr;
-	
+
 val = getTableVar();
 
 if (val == NULL)
@@ -496,7 +496,7 @@ else
 char *getTableDb()
 {
 char *val, *ptr;
-	
+
 val = cloneString(getTableVar());
 
 if (val == NULL)
@@ -538,7 +538,7 @@ else
 char *getTable2Name()
 {
 char *val, *ptr;
-	
+
 val = getTable2Var();
 if (val == NULL)
     return val;
@@ -551,7 +551,7 @@ else
 char *getTable2Db()
 {
 char *val, *ptr;
-	
+
 val = cloneString(getTable2Var());
 if (val == NULL)
     return(val);
@@ -586,6 +586,8 @@ trackLabels[0] = "Browser tracks";
 trackNames[0] = "Choose table";
 for (t = trackList, i=1; t != NULL; t = t->next, ++i)
     {
+    if (tdbIsDownloadsOnly(tdb) || tdb->table == NULL)  // Don't bother with downloadsOnly for now
+        continue;
     trackLabels[i] = t->shortLabel;
     safef(chrN_track, sizeof(chrN_track), "%s_%s", hDefaultChrom(),
 	  t->table);
@@ -599,7 +601,7 @@ for (t = trackList, i=1; t != NULL; t = t->next, ++i)
     }
 if (selected == NULL)
     selected = trackNames[0];
-cgiMakeDropListFull(varName, trackLabels, trackNames, 
+cgiMakeDropListFull(varName, trackLabels, trackNames,
 	trackCount+1, selected, javascript);
 }
 
@@ -629,16 +631,14 @@ if (! hDbIsActive(database))
 
 puts(
 "<CENTER>"
-"<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
-"<TR><TD><FONT SIZE=\"2\">\n"
-"<CENTER>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
+"<TR><TD style='font-size:small; text-align:center;'>\n"
 "The UCSC Table Browser was created by the \n"
 "<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>. \n"
 "<BR>\n"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</CENTER>\n"
-"</FONT></TD></TR></TABLE></CENTER><P>\n"
+"</TD></TR></TABLE></CENTER><P>\n"
 );
 
 puts("<P>This tool allows you to download portions of the Genome Browser \n"
@@ -647,7 +647,7 @@ puts("<P>This tool allows you to download portions of the Genome Browser \n"
      "then press the Submit button.\n");
 puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
      "User Guide</A> for more information.<P>\n"
-     "<FONT COLOR=\"#FF0000\"><B>NOTE: This software has been replaced by a "
+     "<B style='color:#FF0000;'>NOTE: This software has been replaced by a "
      "<A HREF=\"hgTables\">newer version</A> of the Table Browser. "
      "This version of the tool is no longer "
      "maintained or updated by UCSC; therefore, we can make no guarantees "
@@ -656,20 +656,20 @@ puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
      "Browser, which has many more features. Please "
      "email our public <A HREF=\"mailto:genome@soe.ucsc.edu\">mailing "
      "list</A> with questions or comments.</B> "
-     "</FONT><P> ");
+     "<P> ");
 
-puts("<center>");
+puts("<CENTER>");
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
 puts(
-"<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
+"<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
-"<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"  
+"<table CELLPADDING=0 CELLSPACING=0 style='background-color:#FEFDEF; border-style:none;'>\n"
 "<tr><td>\n"
 );
 
 puts(
-"<table bgcolor=\"FFFEF3\" border=0>\n"
+"<table bgcolor='#FFFEF3' border=0>\n"
 "<tr>\n"
 "<td>\n"
 );
@@ -700,7 +700,7 @@ puts(
 cgiMakeHiddenVar("phase", chooseTablePhase);
 puts(
 "</FORM>"
-"</center>\n"
+"</CENTER>\n"
 );
 
 printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
@@ -747,7 +747,7 @@ return(strstr(type, "char") ||
 
 
 char *getPosition(char **retChrom, int *retStart, int *retEnd)
-/* Get position from cgi (not cart); use hgFind if necessary; return NULL 
+/* Get position from cgi (not cart); use hgFind if necessary; return NULL
  * if we had to display the gateway page or hgFind's selection page. */
 {
 char *pos = stripCommas(cgiOptionalString("position"));
@@ -971,8 +971,8 @@ return strcmp(na, nb);
 }
 
 boolean excludeTable(char *tbl)
-/* Exclude these large tables. I think we should use a better algo. than 
- * hardcoding -- a count(*) cutoff?  And should alert the user that the 
+/* Exclude these large tables. I think we should use a better algo. than
+ * hardcoding -- a count(*) cutoff?  And should alert the user that the
  * tables exist, but are being excluded due to size. */
 {
 return(sameString(tbl, "all_est") ||
@@ -982,7 +982,7 @@ return(sameString(tbl, "all_est") ||
 void getTableNames(char *db, struct sqlConnection *conn,
 		   struct hashEl **retPosTableList,
 		   struct hashEl **retNonposTableList)
-/* separate tables in db into positional and nonpositional lists, 
+/* separate tables in db into positional and nonpositional lists,
  * with db added as a prefix to each name. */
 {
 struct hash *posTableHash = newHash(7);
@@ -1011,7 +1011,7 @@ while((row = sqlNextRow(sr)) != NULL)
 	(sscanf(row[0], "chr%32[^_]_%64s", chrom, post) == 2))
 	{
 	snprintf(name, sizeof(name), "chrN_%s", post);
-	// If a chrN_ table is already in the (positional) hash, 
+	// If a chrN_ table is already in the (positional) hash,
 	// don't bother looking up its fields.
 	if (hashLookup(posTableHash, name))
 	    continue;
@@ -1060,7 +1060,7 @@ return(ctTableList);
 
 void categorizeTables(struct hashEl **retPosTableList,
 		      struct hashEl **retNonposTableList)
-/* Return sorted lists of positional and non-positional table names 
+/* Return sorted lists of positional and non-positional table names
  * from the current database and hgFixed. */
 {
 struct sqlConnection *conn;
@@ -1086,8 +1086,8 @@ slSort(retNonposTableList, compareTable);
 }
 
 void explainCoordSystem()
-/* Our coord system is counter-intuitive to users.  Warn them in advance to 
- * reduce the frequency with which they find this "bug" on their own and 
+/* Our coord system is counter-intuitive to users.  Warn them in advance to
+ * reduce the frequency with which they find this "bug" on their own and
  * we have to explain it on the genome list. */
 {
 puts("<P>Note: all start coordinates in our database are 0-based, not \n"
@@ -1113,7 +1113,7 @@ cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiContinueHiddenVar("tbUserKeys");
 
-puts("<FONT COLOR=\"#FF0000\"><B>NOTE: This software has been replaced by a "
+puts("<B style='color:#FF0000;'>NOTE: This software has been replaced by a "
      "<A HREF=\"hgTables\">newer version</A> of the Table Browser. "
      "This version of the tool is no longer "
      "maintained or updated by UCSC; therefore, we can make no guarantees "
@@ -1122,7 +1122,7 @@ puts("<FONT COLOR=\"#FF0000\"><B>NOTE: This software has been replaced by a "
      "Browser, which has many more features. Please "
      "email our public <A HREF=\"mailto:genome@soe.ucsc.edu\">mailing "
      "list</A> with questions or comments.</B> "
-     "</FONT><P> ");
+     "<P> ");
 
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\">"
      "<B>Help</B></A>");
@@ -1240,7 +1240,7 @@ printf("</TD><TD>%s</TD></TR>\n", logOp);
 
 void eqFilterOption(char *field, char *fieldLabel1, char *fieldLabel2,
 		    char *tableId, char *logOp)
-/* Print out a table row with filter constraint options for an equality 
+/* Print out a table row with filter constraint options for an equality
  * comparison. */
 {
 char name[128];
@@ -1550,7 +1550,7 @@ void constrainFreeForm(char *rawQuery, struct dyString *clause)
  * - numbers
  * - patterns with wildcards
  * Make sure they don't use any SQL reserved words, ;'s, etc.
- * Let SQL handle the actual parsing of nested expressions etc. - 
+ * Let SQL handle the actual parsing of nested expressions etc. -
  * this is just a token cop. */
 {
 struct kxTok *tokList, *tokPtr;
@@ -1598,38 +1598,38 @@ for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
 	{
 	char *word = cloneString(tokPtr->string);
 	toUpperN(word, strlen(word));
-	if (startsWith("SQL_", word) || 
-	    startsWith("MYSQL_", word) || 
-	    sameString("ALTER", word) || 
-	    sameString("BENCHMARK", word) || 
-	    sameString("CHANGE", word) || 
-	    sameString("CREATE", word) || 
-	    sameString("DELAY", word) || 
-	    sameString("DELETE", word) || 
-	    sameString("DROP", word) || 
-	    sameString("FLUSH", word) || 
-	    sameString("GET_LOCK", word) || 
-	    sameString("GRANT", word) || 
-	    sameString("INSERT", word) || 
-	    sameString("KILL", word) || 
-	    sameString("LOAD", word) || 
-	    sameString("LOAD_FILE", word) || 
-	    sameString("LOCK", word) || 
-	    sameString("MODIFY", word) || 
-	    sameString("PROCESS", word) || 
-	    sameString("QUIT", word) || 
-	    sameString("RELEASE_LOCK", word) || 
-	    sameString("RELOAD", word) || 
-	    sameString("REPLACE", word) || 
-	    sameString("REVOKE", word) || 
-	    sameString("SELECT", word) || 
-	    sameString("SESSION_USER", word) || 
-	    sameString("SHOW", word) || 
-	    sameString("SYSTEM_USER", word) || 
-	    sameString("UNLOCK", word) || 
-	    sameString("UPDATE", word) || 
-	    sameString("USE", word) || 
-	    sameString("USER", word) || 
+	if (startsWith("SQL_", word) ||
+	    startsWith("MYSQL_", word) ||
+	    sameString("ALTER", word) ||
+	    sameString("BENCHMARK", word) ||
+	    sameString("CHANGE", word) ||
+	    sameString("CREATE", word) ||
+	    sameString("DELAY", word) ||
+	    sameString("DELETE", word) ||
+	    sameString("DROP", word) ||
+	    sameString("FLUSH", word) ||
+	    sameString("GET_LOCK", word) ||
+	    sameString("GRANT", word) ||
+	    sameString("INSERT", word) ||
+	    sameString("KILL", word) ||
+	    sameString("LOAD", word) ||
+	    sameString("LOAD_FILE", word) ||
+	    sameString("LOCK", word) ||
+	    sameString("MODIFY", word) ||
+	    sameString("PROCESS", word) ||
+	    sameString("QUIT", word) ||
+	    sameString("RELEASE_LOCK", word) ||
+	    sameString("RELOAD", word) ||
+	    sameString("REPLACE", word) ||
+	    sameString("REVOKE", word) ||
+	    sameString("SELECT", word) ||
+	    sameString("SESSION_USER", word) ||
+	    sameString("SHOW", word) ||
+	    sameString("SYSTEM_USER", word) ||
+	    sameString("UNLOCK", word) ||
+	    sameString("UPDATE", word) ||
+	    sameString("USE", word) ||
+	    sameString("USER", word) ||
 	    sameString("VERSION", word))
 	    {
 	    webAbort("Error", "Illegal SQL word \"%s\" in free-form query string",
@@ -1699,7 +1699,7 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
     /* Look for pattern variable associated with each field. */
     snprintf(varName, sizeof(varName), "pat%s_", tableId);
     if (startsWith(varName, current->name))
-	{	
+	{
 	fieldName = current->name + strlen(varName);
 	/* make sure that the field name doesn't have anything "weird" in it */
 	checkIsAlpha("field name", fieldName);
@@ -1722,7 +1722,7 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
 	     (cmp != NULL && sameString(cmp, "ignored")) ||
 		sameString(fieldName,"wigDataValue") )
 	    continue;
-	/* Otherwise, expect it to be a well-formed constraint and tack 
+	/* Otherwise, expect it to be a well-formed constraint and tack
 	 * it on to the clause. */
 	clause = andClause;
 	if (cmp != NULL && sameString(cmp, "in range"))
@@ -1766,7 +1766,7 @@ return ret;
 
 void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
 		     char **retVals, boolean *retInv)
-/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in 
+/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in
  * retCft, retVals and retInv to make a filter. */
 {
 char *vals, *ptrs[32];
@@ -1778,7 +1778,7 @@ assert(retVals != NULL);
 assert(retInv != NULL);
 assert(sameString(dd, "does") || sameString(dd, "doesn't"));
 
-/* catch null-constraint cases.  ? will be treated as a literal match, 
+/* catch null-constraint cases.  ? will be treated as a literal match,
  * which would make sense for bed strand and maybe other single-char things: */
 if (pat == NULL)
     pat = "";
@@ -1801,7 +1801,7 @@ vals[i] = 0;
 
 void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
 		       char ***retVals, boolean *retInv)
-/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in 
+/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in
  * retCft, retVals and retInv to make a filter. */
 {
 char **vals, *ptrs[32];
@@ -1835,7 +1835,7 @@ vals[i] = NULL;
 
 void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
 		    int **retVals)
-/* Given a comparison operator and a (pair of) integers from CGI, fill in 
+/* Given a comparison operator and a (pair of) integers from CGI, fill in
  * retNft and retVals to make a filter. */
 {
 char *ptrs[3];
@@ -1860,7 +1860,7 @@ else if (sameString(cmp, "in range"))
     numWords = chopString(pat, " \t,", ptrs, ArraySize(ptrs));
     if (numWords != 2)
 	errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
-    vals = needMem(2 * sizeof(int)); 
+    vals = needMem(2 * sizeof(int));
     vals[0] = atoi(ptrs[0]);
     vals[1] = atoi(ptrs[1]);
     if (vals[0] > vals[1])
@@ -1912,7 +1912,7 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
     /* Look for pattern variable associated with each field. */
     snprintf(varName, sizeof(varName), "pat%s_", tableId);
     if (startsWith(varName, current->name))
-	{	
+	{
 	fieldName = current->name + strlen(varName);
 	checkIsAlpha("field name", fieldName);
 	pat = cloneString(current->val);
@@ -1966,8 +1966,8 @@ return(bf);
 
 
 void preserveConstraints(char *fullTblName, char *db, char *tableId)
-/* Add CGI variables for filtering constraints, so they will be passed to 
- * the next page.  Also parse the constraints and do a null query with them 
+/* Add CGI variables for filtering constraints, so they will be passed to
+ * the next page.  Also parse the constraints and do a null query with them
  * in order to catch any syntax errors sooner rather than later. */
 {
 struct cgiVar *current;
@@ -2009,7 +2009,7 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
     snprintf(varName, sizeof(varName), "rawQuery%s", tableId);
     if (sameString(varName, current->name))
 	{
-	// Replace " with ' in rawQuery; the value will be double-quoted 
+	// Replace " with ' in rawQuery; the value will be double-quoted
 	// in the form, and double-quotes in the value really mess it up.
 	subChar(current->val, '"', '\'');
 	cgiMakeHiddenVar(current->name, current->val);
@@ -2121,9 +2121,9 @@ return(hti);
 
 
 struct hTableInfo *getOutputHti()
-/* Return effective table info for the output.  If we're doing a 
- * base-pair-wise intersection/union of 2 tables, this will be a 
- * bed4 that isn't a track (unless user makes it a custom track).  
+/* Return effective table info for the output.  If we're doing a
+ * base-pair-wise intersection/union of 2 tables, this will be a
+ * bed4 that isn't a track (unless user makes it a custom track).
  * Otherwise this will just be the primary table info. */
 {
 char *db = getTableDb();
@@ -2268,7 +2268,7 @@ if (tableIsPositional)
     puts("</SELECT>");
     hashElFreeList(&posTableList);
     hashElFreeList(&nonposTableList);
-    
+
     puts("<P>");
     cgiMakeButton("phase", intersectOptionsPhase);
     }
@@ -2345,7 +2345,7 @@ for (i=0;  i < bitSize+8;  ++i)
 	end = i;
 	if (end >= bitSize)
 	    end = bitSize - 1;
-	// Lop off elements that go all the way to the beginning/end of the 
+	// Lop off elements that go all the way to the beginning/end of the
 	// chrom... unless our range actually includes the beginning/end.
 	// (That can happen with the AND/OR of two NOT's...)
 	if (lastBit &&
@@ -2396,7 +2396,7 @@ else
 
 
 struct bed *getBedList(boolean ignoreConstraints, char *onlyThisChrom)
-/* For any positional table output: get the features selected by the user 
+/* For any positional table output: get the features selected by the user
  * and return them as a bed list.  This is where table intersection happens. */
 {
 struct slName *chromList, *chromPtr;
@@ -2576,7 +2576,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 		    (sameString("less", op) &&
 		     (pctBasesOverlap <= lessThresh)))
 		    {
-		    newBed = cloneBed(bed);		    
+		    newBed = cloneBed(bed);
 		    slAddHead(&bedListChrom, newBed);
 		    }
 		}
@@ -2688,10 +2688,10 @@ else
 	{
 	if (startsWith("field_", varPtr->name) &&
 	    sameString("on", varPtr->val))
-	    {	
+	    {
 	    char *fieldStr = varPtr->name + strlen("field_");
 	    checkIsAlpha("field name", fieldStr);
-	    /* check that the field is there in the current table (and not 
+	    /* check that the field is there in the current table (and not
 	     * just a stale CGI var) */
 	    if (slNameInList(tableFields, fieldStr))
 		{
@@ -2921,7 +2921,7 @@ if (browserLines != NULL)
 
 
 boolean showTableDescriptions(struct sqlConnection *conn, char *table)
-/* Display autoSql definition and gbdDescriptions link for table, 
+/* Display autoSql definition and gbdDescriptions link for table,
  * if available. */
 {
 boolean gotInfo = FALSE;
@@ -3017,7 +3017,7 @@ if (count > 0)
 
 
 void descTable(boolean histButtons)
-/* Print out an HTML table showing table fields and types, and optionally 
+/* Print out an HTML table showing table fields and types, and optionally
  * offering histograms for the text/enum fields. */
 {
 char *db = getTableDb();
@@ -3031,10 +3031,10 @@ char query[256];
 safef(query, sizeof(query), "desc %s", fullTableName);
 sr = sqlGetResult(conn, query);
 // For some reason BORDER=1 does not work in our web.c nested table scheme.
-// So use web.c's trick of using an enclosing table to provide a border.  
+// So use web.c's trick of using an enclosing table to provide a border.
 puts("<!--outer table is for border purposes-->" "\n"
-     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+     "<TABLE BGCOLOR='#" HG_COL_BORDER "' BORDER=0 CELLSPACING=0 CELLPADDING=1><TR><TD>");
+puts("<TABLE BGCOLOR='#" HG_COL_INSIDE "' BORDER=1 CELLSPACING=0>");
 printf("<TR> <TH>name</TH> <TH>SQL type</TH> ");
 histButtons = (histButtons && ! tooBig);
 if (histButtons)
@@ -3104,8 +3104,8 @@ else
     printf("<H4> Fields of %s: </H4>\n", table);
     descTable(TRUE);
     showItemCountFirstFew(conn, 3);
-    // "show table status" is a SLOW query (~30s!), but it would be kinda cool 
-    // to tell the creation & last-update dates and times.  
+    // "show table status" is a SLOW query (~30s!), but it would be kinda cool
+    // to tell the creation & last-update dates and times.
     if (tableIsPositional && sqlTableExists(conn, hTrackDbName()))
 	{
 	struct trackDb *tdb;
@@ -3619,8 +3619,8 @@ char source[64];
 char *db = getTableDb();
 char *track = getTrackName();
 int itemCount;
-// Would be nice to allow user to select this, but I don't want to 
-// make an options page for just one param... any others?  
+// Would be nice to allow user to select this, but I don't want to
+// make an options page for just one param... any others?
 // ? exon / CDS ?
 boolean gtf2StopCodons = FALSE;
 
@@ -3883,7 +3883,7 @@ else if (doCt)
 	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
 	  redirDelay, browserUrl);
     webStartHeader(cart, headerText,
-		   "Table Browser: %s %s: %s", hOrganism(database), 
+		   "Table Browser: %s %s: %s", hOrganism(database),
 		   freezeName, getCtPhase);
     printf("You will be automatically redirected to the genome browser in\n"
 	   "%d seconds, or you can <BR>\n"
@@ -4050,7 +4050,7 @@ webEnd();
 
 
 void descForm()
-/* Print out an HTML FORM showing table fields and types, and offering 
+/* Print out an HTML FORM showing table fields and types, and offering
  * histograms for the text/enum fields. */
 {
 char *db = getTableDb();
@@ -4208,7 +4208,7 @@ else
 
 void getBedBaseCounts(struct bed *bedList, boolean hasBlocks,
 		      int *utr5s, int *cdss, int *utr3s)
-/* Given a list of beds with CDS, tally up the number of bases in 
+/* Given a list of beds with CDS, tally up the number of bases in
  * 5'UTR, CDS and 3'UTR and store them in the count arrays. */
 {
 struct bed *bed;
@@ -4638,13 +4638,13 @@ if (typeWiggle2)
 if (! wiggleDone)
     {
     // For some reason BORDER=1 does not work in our web.c nested table scheme.
-    // So use web.c's trick of using an enclosing table to provide a border.  
+    // So use web.c's trick of using an enclosing table to provide a border.
     puts("<!--outer table is for border purposes-->" "\n"
-	 "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-    puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+	 "<TABLE BGCOLOR='#" HG_COL_BORDER "' BORDER=0 CELLSPACING=0 CELLPADDING=1><TR><TD>");
+    puts("<TABLE BGCOLOR='#" HG_COL_INSIDE "' BORDER=1 CELLSPACING=0>");
     /* Use fixed-font for decimal point/integer alignment. */
-    /* All these non-blocking spaces are to widen the first column so that some 
-     * row descriptions below do not get wrapped (which would mess up the <br> 
+    /* All these non-blocking spaces are to widen the first column so that some
+     * row descriptions below do not get wrapped (which would mess up the <br>
      * formatting of row contents). */
     puts("<TR><TH><TT>statistic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TT></TH>");
     /* These non-blocking spaces are for decimal point/integer alignment: */
@@ -4794,7 +4794,7 @@ else
 
 
 static int descendingFreqCmp(const void *el1, const void *el2)
-/* descending sort on pointers to pointers to hash elements whose 
+/* descending sort on pointers to pointers to hash elements whose
  * values are int (not pointer to int! because of hashAddInt()). */
 {
 const struct hashEl *hel1 = *((struct hashEl **)el1);
@@ -5140,7 +5140,7 @@ if (position != NULL)
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", 
+char *excludeVars[] = {"Submit", "submit",
 	"tbUserKeys",
 	"tbShowPasteResults", "tbShowUploadResults", NULL};
 
@@ -5152,7 +5152,7 @@ struct cart *theCart;
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-/* Sometimes we output HTML and sometimes plain text; let each outputter 
+/* Sometimes we output HTML and sometimes plain text; let each outputter
  * take care of headers instead of using a fixed cart*Shell(). */
 theCart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, FALSE);
 doMiddle(theCart);

@@ -22,20 +22,20 @@ static struct rgbColor getColorForExprBed(float val, float max,
 /* Return the correct color for a given score */
 {
 float absVal = fabs(val);
-struct rgbColor color; 
+struct rgbColor color;
 int colorIndex = 0;
 
 /* if log score is -10000 data is missing */
-if(val == -10000) 
+if(val == -10000)
     {
     color.g = color.r = color.b = 128;
     return(color);
     }
 
-if(absVal > max) 
+if(absVal > max)
     absVal = max;
-if (max == 0) 
-    errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n"); 
+if (max == 0)
+    errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n");
 colorIndex = (int)(absVal * 255/max);
 color.r = color.g = color.b = 0;
 if (colorScheme == redBlue)
@@ -70,7 +70,7 @@ else if (colorScheme == redBlueOnYellow)
 	color.r = 255;
 	color.g = 255 - colorIndex;
 	}
-    else 
+    else
 	{
 	color.r = 255 - colorIndex;
 	color.g = 255 - colorIndex;
@@ -85,8 +85,8 @@ else
 return color;
 }
 
-static void msBedPrintTableHeader(struct bed *bedList, 
-			   struct hash *erHash, char *itemName, 
+static void msBedPrintTableHeader(struct bed *bedList,
+			   struct hash *erHash, char *itemName,
 			   char **headerNames, int headerCount, char *scoresHeader)
 /* print out a bed with multiple scores header for a table.
    headerNames contain titles of columns up to the scores columns. scoresHeader
@@ -111,7 +111,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 printf("</tr>\n");
 }
 
-static void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, 
+static void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash,
 			     char *itemName)
 /* print out a header with names for each bed with itemName highlighted */
 {
@@ -132,7 +132,7 @@ numColumns = maxVal/stepSize *2+1;
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
 printf("<th colspan=%d>False Color Key, all values log base %d</th></tr><tr>\n",numColumns, base);
-/* have to add the stepSize/2 to account for the ability to 
+/* have to add the stepSize/2 to account for the ability to
    absolutely represent some numbers as floating points */
 for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
     {
@@ -148,11 +148,11 @@ printf("</tr></table>\n");
 printf("</td></tr></table>\n");
 }
 
-static void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
+static void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash,
      int expIndex, char *expName, float maxScore,
      enum expColorType colorScheme)
-/* print the name of the experiment and color the 
-   background of individual cells using the score to 
+/* print the name of the experiment and color the
+   background of individual cells using the score to
    create false two color display */
 {
 char buff[32];
@@ -164,7 +164,7 @@ er = hashMustFindVal(erHash, buff);
 
 printf("<tr>\n");
 if(strstr(er->name, expName))
-    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
+    printf("<td align=left bgcolor='#D9E4F8'> %s</td>\n",er->name);
 else
     {
     if (isCancerGenomicsTrack)
@@ -245,7 +245,7 @@ struct sqlResult *sr;
 char **row;
 struct bed *bedList = NULL, *bed;
 char query[512];
-sprintf(query, "select * from %s", table); 
+sprintf(query, "select * from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -284,10 +284,10 @@ int i;
 erList = loadExpRecord(expTable, "hgFixed");
 
 /* Get either all of the data, or only that data in the range */
-if (all) 
+if (all)
     bedList = loadMsBedAll(bedTable);
-else 
-    bedList = loadMsBed(tdb, bedTable, seqName, winStart, winEnd); 
+else
+    bedList = loadMsBed(tdb, bedTable, seqName, winStart, winEnd);
 
 /* Print out a header row */
 printf("<HTML><BODY><PRE>\n");
@@ -295,7 +295,7 @@ printf("Name\tChr\tChrStart\tChrEnd\tTallChrStart\tTallChrEnd");
 for (er = erList; er != NULL; er = er->next)
     if (sameString(bedTable, "cghNci60"))
 	printf("\t%s(%s)",er->name, er->extras[1]);
-    else 
+    else
 	printf("\t%s",er->name);
 printf("\n");
 
@@ -362,9 +362,9 @@ mapping = needMem(sizeof(int) * M * columns);
 /*   things in the original list in the group (k things), and the next k elements  on */
 /*   that row are indeces. */
 for (er = *pERList, i = 0; er != NULL && i < N; er = er->next, i++)
-    {    
+    {
     int ix = slNameFindIx(extras, er->extras[extrasIndex]) * columns;
-    mapping[ix + ++mapping[ix]] = er->id; 
+    mapping[ix + ++mapping[ix]] = er->id;
     }
 /* Make a new expRecord list. */
 for (oneSlName = extras, i = 0; oneSlName != NULL && i < M; oneSlName = oneSlName->next, i++)
@@ -396,7 +396,7 @@ for (bed = *pBedList; bed != NULL; bed = bed->next)
     freeMem(bed->expIds);
     bed->expIds = newExpIds;
     freeMem(bed->expScores);
-    bed->expScores = newExpScores;    
+    bed->expScores = newExpScores;
     }
 /* Free stuff. */
 slNameFreeList(&extras);
@@ -456,16 +456,20 @@ else
     {
     struct microarrayGroups *groupings = NULL;
     struct maGrouping *combineGroup;
+    struct maGrouping *subset = NULL;
+    int subsetOffset = -1;
     struct hash *erHash = newHash(6);
     int i;
     if (!ct)
 	{
 	groupings = maGetTrackGroupings(database, tdb);
 	combineGroup = maCombineGroupingFromCart(groupings, cart, tdb->track);
+	subset = maSubsetGroupingFromCart(groupings, cart, tdb->track);
+	subsetOffset = maSubsetOffsetFromCart(subset, cart, tdb->track);
 	}
     else
 	combineGroup = maGetGroupingFromCt(ct);
-    maBedClumpGivenGrouping(bedList, combineGroup);
+    maBedClumpGivenGrouping(bedList, combineGroup, subset, subsetOffset);
     for (i = 0; i < combineGroup->numGroups; i++)
 	{
 	/* make stupid exprecord hash.perhaps eventually this won't be needed */
@@ -485,4 +489,3 @@ else
 puts("<h2></h2><p>\n");
 bedFreeList(&bedList);
 }
-

@@ -87,6 +87,14 @@ The format of the type fields:
    <fieldCount> - the number of standard fields
    <extraInfo> - either '.' meaning no non-standard fields
        or '+' if there are additional non-standard fields.
+   Optional variable for any '+' bed:
+   extraFields - a list of field=label pairs of table columns beyond those
+        defined before the '+'. Seen in hgc and available to filterBy (see below)
+        extraFields {columnInTable}=[{type}]{label}
+        type = [float],[integer],[string] OPTIONAL default:[string]
+            square brackets required, only first letter is tested: [float]=[f]
+        label = What will be seen in hgc and hgTrackUi.
+                May include '_' to be replaced by space. May include html tags.
    Optional variable for bed tracks with 9 or more of the standard fields:
    itemRgb=on  - interpret field nine as a color for this item specified
                - as an R,G,B triplet.  When loaded this field appears
@@ -122,6 +130,14 @@ The format of the type fields:
    Optional fields to be defined elsewhere in the trackDb.ra record:
 	itemAttrTbl - table used to color individual items in a track,
                       selected by name and locations.
+        itemClassTbl - table use to associate a given genePred name with
+                       a arbitrary class name, use in picking a color.
+        itemClassNameColumn - name of column that is joined with the genePred
+                              name column, default is `name'.
+        itemClassClassColumn - name of column that contains the class, default
+                               is `class'.
+        geneClasses - white space separated list of valid gene classes.
+        gClass_XXX - color to use for items that map to class XXX.
 
 8. type maf
     A type of multiple alignment track, becoming obsolete,
@@ -275,7 +291,7 @@ The format of the type fields:
 
 
     bigBed-specific optional fields:
-    nonBedFieldsLabel - text heading string printed on item details page before 
+    nonBedFieldsLabel - text heading string printed on item details page before
 	display of non-bed type fields.  Default is: "Non-BED fields:"
     denseCoverage maxVal
 	In dense mode do a density plot based on maximum coverage seen under
@@ -623,15 +639,20 @@ Some settings used by various tracks:
       the user on the hgTrackUi page.
     o inputTrackTable - for tracks that are type factorSource or otherwise created
       by clustering or aggregating data found in other tracks.  This names a table
-      that is in three column format - first the input track name, then the source
-      name (cell line etc) if any, then the factor name if any.
+      that includes in it's first column the input track name.  For factorSource
+      the second column should be the the source name (cell line etc) if any, 
+      and the third should be the factor name if any.  The second and third columns
+      are optional for other track types. In general though the most important few
+      metadata fields should be included as columns, and these should be listed in
+      the inputTableFieldDisplay tag described below.
     o inputTableFieldDisplay - used with inputTrackTable.  Countains a list of the
       fields from that table to display as columns in the details display table.
     o inputTracksSubgroupDisplay - used with inputTrackTable.  One and only one of
       inputTableFieldsDisplay or inputTracksSubgroupDisplay should be used. If present
-      this tag contains a list of group types (just the left size of the var=val pairs 
-      in the subGroupN line of the parent) to display as columns in the details 
-      display table.
+      this tag contains a list of group types (just the left size of the var=val pairs
+      in the subGroupN line of the parent) to display as columns in the details
+      display table. DEPRECIATED - this tends to cause the clusters to break when
+      there is any data churn.  Use inputTableFieldDisplay instead.
     o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
       a table of tracks and this is set, a small patch of color indicating the track color
       is part of the table.
@@ -701,6 +722,11 @@ This sets up 2 filter by category drop downs.  The first is on the table field '
 both 'Validated' and 'Manual', then an item must have a 1 or 2 in the level field in order to be seen.
 And if the user also selects 'coding' in the second filter, an item would have to have level 1 or 2 and
 class='coding'.
+
+For genePred tables, the itemClass table, as described with the genePred track
+type is used.
+
+It is not know if filterBy works on anything else.
 
 
 COMPOSITE TRACKS

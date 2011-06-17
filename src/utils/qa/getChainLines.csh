@@ -21,7 +21,7 @@ set fullLine=""
 
 if ( $#argv != 2 ) then
   echo
-  echo '  Searches the documentation to find the correct parameters for the '
+  echo '  Searches the README.txt files to find the correct parameters for the '
   echo '  $chainMinScore and $chainLinearGap variables. ' 
   echo
   echo '    usage:  fromDb toDb (these can be in either order)'

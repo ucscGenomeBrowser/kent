@@ -36,7 +36,6 @@ group             regulation
 variables         cell, antibody, control
 assembly          hg19
 
-#medianFragmentLength 200
 validationSettings validateFiles.bam:mismatches=2
 
 # Track/view definition

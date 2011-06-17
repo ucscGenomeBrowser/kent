@@ -32,7 +32,9 @@ Following the instructions in scripts/README
 	CentOS Linux on Intel or AMD Opteron environment.
 	Other users do report successful operation on other systems.
 
-	Other variables to be set: USE_BAM  USE_SSL
+        Depending upon what libraries you have installed locally, you may want
+        to  set one or more of these variables: USE_SSL, USE_BAM, USE_TABIX.
+
 	See also:
 	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
 
@@ -210,7 +212,14 @@ make: *** [aliType.o] Error 1
     src/inc/common.mk file.  We will fix this error as soon as we
     get our hands on a newer version of the gcc compiler.
 
-7.  Build fails at the point of building a CGI binary with the error:
+7.  Build fails complaining about missing png.h file:
+	pngwrite.c:7:87: error: png.h: No such file or directory
+
+    Find out where your png.h file is and set PNGINCL to something like:
+    export PNGINCL="-I/opt/local/include/libpng14"
+    pointing to the directory where png.h exists.
+
+8.  Build fails at the point of building a CGI binary with the error:
     Undefined symbols:
 	"_png_write_png", referenced from:
 	    _mgSaveToPng in jkweb.a(pngwrite.o)
@@ -224,5 +233,5 @@ make: *** [aliType.o] Error 1
     export PNGLIB='-L/opt/local/lib -lpng'
 
 ====================================================================
-This file last updated: 2010/10/27 12:28:59
+This file last updated: 2011/04/01 09:05:00
 ====================================================================

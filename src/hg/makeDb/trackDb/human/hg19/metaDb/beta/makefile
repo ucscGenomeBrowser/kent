@@ -18,6 +18,16 @@ wgEncodeUwAffyExonArray.ra \
 wgEncodeUwTfbs.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromFaire.ra \
+wgEncodeSunyAlbanyGeneSt.ra \
+wgEncodeOpenChromDnase.ra\
+wgEncodeBuOrchid.ra \
+wgEncodeOpenChromSynth.ra \
+wgEncodeReg.ra \
+wgEncodeSydhHistone.ra \
+wgEncodeUchicagoTfbs.ra \
+wgEncodeDukeAffyExon.ra \
+wgEncodeBroadHmm.ra \
+
 
 include ../../../../makefile.metaDb
 

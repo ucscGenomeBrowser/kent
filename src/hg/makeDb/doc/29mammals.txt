@@ -1,0 +1,65 @@
+# for emacs: -*- mode: sh; -*-
+
+# this file describes the procedure of loading the 29 mammals tracks
+# into the genome wiki.  You can also read a generic description of
+# this procdure at:
+# http://genomewiki.ucsc.edu/index.php/User_generated_custom_tracks
+
+# construct a file to use for loading all the tracks in one go:
+    cat 29mammals_track.txt
+http://genomewiki.ucsc.edu/images/a/a7/29mammals2xARs_track.txt
+http://genomewiki.ucsc.edu/images/e/ed/29mammalsNovelExons_track.txt
+http://genomewiki.ucsc.edu/images/5/5e/29mammalsExaptedElements_track.txt
+http://genomewiki.ucsc.edu/images/f/fd/29mammalsMotifInstances_track.txt
+http://genomewiki.ucsc.edu/images/a/ac/29mammalsConstraintStructure_track.txt
+
+# to load a file such as this into the genome wiki, use gwUploadFile
+# the output of this operation, example included here,
+#  indicates the URL to use as a reference to the file:
+
+$HOME/src/hg/utils/automation/gwUploadFile --debug \
+	29mammals_track.txt 29mammals_track.txt
+
+# setting tracebacklimit to 10
+# loading file: 29mammals_track.txt
+# into Image name: 29mammals_track.txt
+# login name: Hiram
+# siteUrl: genomewiki.ucsc.edu
+# traceBackLimit: 10
+# traceBackLimit: 10 past site.Images
+Image info: {u'comment': u'gwUploadFile upload', u'sha1': u'90ed9262a860681781ff7ba6bbb3bf08b609e695', u'url': u'http://genomewiki.ucsc.edu/images/b/b0/29mammals_track.txt', u'timestamp': u'2011-03-22T18:29:28Z', u'metadata': None, u'height': 0, u'width': 0, u'user': u'Hiram', u'descriptionurl': u'http://genomewiki.ucsc.edu/index.php/Image:29mammals_track.txt', u'size': 358}
+Image Image:29mammals track.txt usage:
+
+# in the genome wikipage, to use this file as a custom track, construct
+# a URL in the genomewiki page of:
+
+[http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg18&hgt.customText=http://genomewiki.ucsc.edu/images/b/b0/29mammals_track.txt 29mammals custom tracks]
+
+# note the correspondence of the URL from gwUploadFile and how it
+# is used in this URL reference images/b/b0/29mammals_track.txt
+
+# other files were loaded in a similar fashion.
+# the URL references to the .bb, .bw and _html.txt files are
+#	used in the bigDataUrl and htmlUrl specifications in
+#	the *_track.txt files
+
+gwUploadFile --debug 29mammalsNovelExons.bb 29mammalsNovelExons.bb
+gwUploadFile --debug 29mammalsNovelExons.html 29mammalsNovelExons_html.txt
+gwUploadFile --debug 29mammalsNovelExons_track.txt 29mammalsNovelExons_track.txt
+
+gwUploadFile --debug 29mammals2xHARs.bb 29mammals2xHARs.bb
+gwUploadFile --debug 29mammals2xPARs.bb 29mammals2xPARs.bb
+gwUploadFile --debug 29mammals2xARs.html 29mammals2xARs_html.txt
+gwUploadFile --debug 29mammals2xARs_track.txt 29mammals2xARs_track.txt
+
+gwUploadFile --debug 29mammalsExaptedElements.bb 29mammalsExaptedElements.bb
+gwUploadFile --debug 29mammalsExaptedElements.html 29mammalsExaptedElements_html.txt
+gwUploadFile --debug 29mammalsExaptedElements_track.txt 29mammalsExaptedElements_track.txt
+
+gwUploadFile --debug 29mammalsMotifInstances.bb 29mammalsMotifInstances.bb
+gwUploadFile --debug 29mammalsMotifInstances.html 29mammalsMotifInstances_html.txt
+gwUploadFile --debug 29mammalsMotifInstances_track.txt 29mammalsMotifInstances_track.txt
+
+gwUploadFile --debug 29mammalsConstraintStructure.bw 29mammalsConstraintStructure.bw
+gwUploadFile --debug 29mammalsConstraintStructure.html 29mammalsConstraintStructure_html.txt
+gwUploadFile --debug 29mammalsConstraintStructure_track.txt 29mammalsConstraintStructure_track.txt

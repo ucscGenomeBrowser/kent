@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "sqlNum.h"
 #include "vcf.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
@@ -27,11 +28,14 @@ static struct optionSpec options[] = {
 void vcfParseTest(char *fileOrUrl, char *seqName, int start, int end)
 /* vcfParseTest - Parse VCF header and data lines in given position range.. */
 {
-struct vcfFile *vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, 100, stderr);
+struct vcfFile *vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, 100);
 if (vcff == NULL)
     errAbort("Failed to parse \"%s\" and/or its index file \"%s.tbi\"", fileOrUrl, fileOrUrl);
-printf("Finished parsing \"%s\", got %d data rows\n", fileOrUrl, slCount(vcff->records));
-printf("First (up to) 100 rows in range:\n");
+int recCount = slCount(vcff->records);
+printf("Finished parsing \"%s\" items in %s:%d-%d, got %d data rows\n",
+       fileOrUrl, seqName, start+1, end, recCount);
+if (recCount > 0)
+    printf("First (up to) 100 rows in range:\n");
 int i = 0;
 struct vcfRecord *rec = vcff->records;
 while (rec != NULL && i < 100)
@@ -51,6 +55,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
-vcfParseTest(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]));
+vcfParseTest(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]));
 return 0;
 }

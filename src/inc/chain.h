@@ -24,6 +24,9 @@ struct cBlock
     void *data;			/* Some associated data pointer. */
     };
 
+int cBlockCmpQuery(const void *va, const void *vb);
+/* Compare to sort based on query start. */
+
 int cBlockCmpTarget(const void *va, const void *vb);
 /* Compare to sort based on target start. */
 

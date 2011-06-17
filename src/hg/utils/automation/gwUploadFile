@@ -113,17 +113,18 @@ try:
 	sys.stderr.write("ERROR: can not read file to upload: '%s'\n" % (file, ))
 	raise
     try:
-	site.upload(fh, pageName, 'test upload', ignore=True)
+	site.upload(fh, pageName, 'gwUploadFile upload', ignore=True)
     except Exception:
 	sys.stderr.write('ERROR: upload returned some kind of error')
 	raise
     fh.close()
     # Printing imageusage information
     image = site.Images[pageName]
-    sys.stderr.write('Image info:', image.imageinfo)
-    sys.stderr.write('Image', image.name.encode('utf-8'), 'usage:')
+    sys.stderr.write("# traceBackLimit: %d past site.Images\n" % (sys.tracebacklimit, ))
+    sys.stderr.write('Image info: %s\n' % (image.imageinfo, ))
+    sys.stderr.write('Image %s usage:\n' % (image.name.encode('utf-8'), ))
     for page in image.imageusage():
-	sys.stderr.write('Used:', page.name.encode('utf-8'), '; namespace', page.namespace)
+	sys.stderr.write('Used: %s; namespace %s\n' % (page.name.encode('utf-8'), page.namespace))
 except Exception, ex:
     sys.stderr.write('ERROR: some kind of problem in main\n');
     print ex

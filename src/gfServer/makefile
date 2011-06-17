@@ -8,8 +8,8 @@ O = gfServer.o
 X = gfServer
 
 gfServer: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/$X $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/$X${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/$X $O $(MYLIBS) $L
+	${STRIP} ${DESTDIR}${BINDIR}/$X${EXE}
 
 test:
 	${MKDIR} tests/output

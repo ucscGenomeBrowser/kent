@@ -1765,3 +1765,109 @@ TMPDIR=/scratch/tmp
     #	178331930 bases of 3501660299 (5.093%) in intersection
 
 #########################################################################
+# LASTZ Turkey MelGal1 ( Done 2011-03-30 - Chin)
+    mkdir /hive/data/genomes/monDom5/bed/lastzMelGal1.2011-03-30
+    cd /hive/data/genomes/monDom5/bed/lastzMelGal1.2011-03-30
+
+    cat << '_EOF_' > DEF
+# Turkey vs Opossum
+
+# TARGET: Opossum monDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey melGal1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzMelGal1.2011-03-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    129m24.914s
+    cat fb.monDom5.chainMelGal1Link.txt
+    #   79077534 bases of 3501660299 (2.258%) in intersection
+    cd /hive/data/genomes/monDom5/bed
+    ln -s lastzMelGal1.2011-03-30 lastzmelGal1
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   Elapsed time: 10m15s
+    cat fb.melGal1.chainMonDom5Link.txt
+    #   64933013 bases of 935922386 (6.938%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s lastz.monDom5.swap lastz.monDom5
+
+
+##############################################################################
+# LASTZ Cow bosTau6 (DONE - 2011-05-31- Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31
+    cd /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31
+
+    cat << '_EOF_' > DEF
+# Cow vs. Opossum
+BLASTZ_M=50
+
+# TARGET: Opossum MonDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow BosTau6
+SEQ2_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ2_LEN=/scratch/data/bosTau6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #   real   real    1188m23.907s
+    cat fb.monDom5.chainBosTau6Link.txt
+    #   207703303 bases of 3501660299 (5.932%) in intersection
+
+    # and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    52m10.229s
+
+    cat fb.bosTau6.chainMonDom5Link.txt
+    #   199980646 bases of 2649682029 (7.547%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+#########################################################################
+

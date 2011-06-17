@@ -1,0 +1,26 @@
+
+To add a new species.  Take the last largest .nh tree diagram:
+
+cp 49way.nh 50way.nh
+
+Edit the new 50way.nh tree and insert the organism as
+determined from NCBI taxonomy order.  See also, any of:
+vertebrates.txt
+nematodes.txt
+placentals.txt
+primates.txt
+
+From that new .nh tree, generate a dissect output
+
+/cluster/bin/phast/tree_doctor --dissect 50way.nh > 50way.dissect.txt
+
+The chainNet.pl script has hard coded numbers in it for the
+reference to the proper tree.  Edit that script to update
+the reference to the new .nh tree and add the new species to
+the new species list.  This will all work as long as the new
+species is not next to another new species.
+
+Verify the new chainNet.pl will produce the same numbering
+sequence as the previous one did.  To see an order,
+check one of the trackDb/organism/trackDb.chainNet.ra files
+which have the order for that organism as the top of the tree

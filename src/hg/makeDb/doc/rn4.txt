@@ -5644,3 +5644,117 @@ for bed in agilent*.bed; do
 done
 rm bed.tab
 
+
+#########################################################################
+# LASTZ Turkey MelGal1 ( DONE - 2011-04-04 - Chin)
+    mkdir /hive/data/genomes/rn4/bed/lastzMelGal1.2011-04-04
+    cd /hive/data/genomes/rn4/bed/lastzMelGal1.2011-04-04
+
+    cat << '_EOF_' > DEF
+# Turkey vs Mouse
+
+# TARGET: Mouse rn4
+SEQ1_DIR=/scratch/data/rn4/nib
+SEQ1_LEN=/scratch/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey melGal1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rn4/bed/lastzMelGal1.2011-04-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    71m8.450s
+    cat fb.rn4.chainMelGal1Link.txt
+    #   60383476 bases of 2571531505 (2.348%) in intersection
+    cd /hive/data/genomes/rn4/bed
+    ln -s lastzMelGal1.2011-04-04 lastz.melGal1
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.rn4.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/lastzMelGal1.2011-04-04/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m49.871s
+    cat fb.melGal1.chainRn4Link.txt
+    #   48636842 bases of 935922386 (5.197%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.rn4.swap lastz.rn4
+
+
+#########################################################################
+# LASTZ Cow bosTau6 (DONE - 2011-05-31 - Chin)
+    ssh hgwdev
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31
+    cd /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31
+
+    cat << '_EOF_' > DEF
+# Rat vs. Cow
+BLASTZ_M=50
+
+# TARGET: Rat Rn4
+SEQ1_DIR=/scratch/data/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+/2011-05-31/2011-05-31/g
+
+# QUERY: Cow bosTau6
+SEQ2_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ2_LEN=/cluster/data/bosTau6/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=100
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastzBosTau6.2011-05-31
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    #   real    241m0.549s
+    cat fb.rn4.chainBosTau6Link.txt
+    # 660647959 bases of 2571531505 (25.691%) in intersection
+    # Create link
+    cd /hive/data/genomes/rn4/bed
+    ln -s blastzBosTau6.2011-05-31 lastz.bosTau6
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.rn4.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    49m43.881
+
+    cat fb.bosTau6.chainRn4Link.txt
+    # 648232024 bases of 2649682029 (24.465%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.rn4.swap lastz.rn4
+
+#############################################################################

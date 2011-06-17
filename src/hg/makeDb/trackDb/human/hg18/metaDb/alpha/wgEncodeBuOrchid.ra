@@ -1,14 +1,20 @@
+metaObject wgEncodeBuOrchid
+objType composite
+composite wgEncodeBuOrchid
+expVars lab,dataType
+
 metaObject wgEncodeBuOrchidSignalRep1Gm12878
 objType table
-cell GM12878
 composite wgEncodeBuOrchid
 dataType Orchid
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
+expId 1
 fileName wgEncodeBuOrchidSignalRep1Gm12878.bw
 grant Tullius
 lab BU
+md5sum 1e7f6a81f763d21c20647b34bb5cdc6a
 project wgEncode
 replicate 1
 subId 1095
@@ -17,19 +23,20 @@ view Signal
 
 metaObject wgEncodeBuOrchidSignalRep2Gm12878
 objType table
-cell GM12878
 composite wgEncodeBuOrchid
 dataType Orchid
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
+expId 1
 fileName wgEncodeBuOrchidSignalRep2Gm12878.bw
 grant Tullius
 lab BU
+md5sum 93b1543e536938817f1a3a0bf21a5059
 project wgEncode
 replicate 2
 subId 1095
 tableName wgEncodeBuOrchidSignalRep2Gm12878
 view Signal
 
-# MAGIC: 390992319
+# MAGIC: -589587063

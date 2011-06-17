@@ -63,9 +63,9 @@ for (i=0; i<size; ++i)
     else if (best >= 0.50)
         printf("%c", tolower(c));
     else if (best >= 0.40)
-        printf("<FONT COLOR=\"#A0A0A0\">%c</FONT>", tolower(c));
+        printf("<span style='color:#A0A0A0;'>%c</span>", tolower(c));
     else
-        printf("<FONT COLOR=\"#A0A0A0\">.</FONT>");
+        printf("<span style='color:#A0A0A0;'>.</span>");
     printf("</td>");
     }
 }

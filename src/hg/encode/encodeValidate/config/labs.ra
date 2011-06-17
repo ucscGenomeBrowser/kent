@@ -1,8 +1,11 @@
 lab	Ruan
-wranglerEmail	braney@soe.ucsc.edu
+wranglerEmail	cricket@soe.ucsc.edu
 
 lab	Bernstein
 wranglerEmail	vsmalladi@soe.ucsc.edu
+
+lab	Birney
+wranglerEmail	tdreszer@soe.ucsc.edu
 
 lab	Crawford
 wranglerEmail	vsmalladi@soe.ucsc.edu
@@ -20,7 +23,7 @@ lab	Myers
 wranglerEmail   vsmalladi@soe.ucsc.edu
 
 lab     Stam
-wranglerEmail   vsmalladi@soe.ucsc.edu
+wranglerEmail   wong@soe.ucsc.edu
 
 lab	Snyder
 wranglerEmail	vsmalladi@soe.ucsc.edu
@@ -43,7 +46,7 @@ wranglerEmail	kate@soe.ucsc.edu
 # Mouse and ARRA grants
 
 lab	Hardison
-wranglerEmail	cricket@soe.ucsc.edu
+wranglerEmail	vsmalladi@soe.ucsc.edu
 
 lab	Ren
 wranglerEmail	vsmalladi@soe.ucsc.edu

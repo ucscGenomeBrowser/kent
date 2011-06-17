@@ -1,0 +1,22 @@
+metaObject wgEncodeUmasshaTfbsValid
+objType composite
+composite wgEncodeUmasshaTfbsValid
+expVars lab,dataType,cell
+
+metaObject wgEncodeUmasshaTfbsValidTestedSitesK562
+objType table
+cell K562
+composite wgEncodeUmasshaTfbsValid
+dataType TfbsValid
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-14
+dateUnrestricted 2010-07-14
+fileName wgEncodeUmasshaTfbsValidTestedSitesK562.bed6+.gz
+grant Weng
+lab UMass-Weng
+project wgEncode
+subId 689
+tableName wgEncodeUmasshaTfbsValidTestedSitesK562
+view TestedSites
+
+# MAGIC: -1417901040

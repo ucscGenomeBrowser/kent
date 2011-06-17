@@ -9,6 +9,8 @@ monDom	Euteleostomi; Mammalia; Metatheria; Didelphimorphia; Didelphidae; Monodel
 
 ornAna	Euteleostomi; Mammalia; Monotremata; Ornithorhynchidae; Ornithorhynchus
 
+melGal	Euteleostomi; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Meleagridinae; Meleagris;
+
 galGal	Euteleostomi; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae; Gallus
 
 taeGut	Euteleostomi; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Estrildidae; Estrildinae; Taeniopygia

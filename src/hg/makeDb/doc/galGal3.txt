@@ -2783,4 +2783,121 @@ see doc/builds.txt for specific details.
      hgLoadPsl galGal3 -table=caCondor454 results/nscanPasaUnmappedRealign/combined.psl.gz
      ln -s /hive/data/genomes/galGal3/bed/caCondor454/data/wugsc-454-cdna.fa  /gbdb/galGal3/caCondor454.fa
      hgLoadSeq galGal3 /gbdb/galGal3/caCondor454.fa
+
+#######################################################################
+#  BLASTZ/CHAIN/NET Turkey vs Chicken (DONE - 2011-03-24 - Chin)
+# use a screen to manage this multi-day job
+
+    mkdir /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
+    cd /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
+
+    cat << '_EOF_' > DEF
+# Chicken vs. Turkey
+BLASTZ_M=50
+
+# TARGET: Chicken GalGal3
+SEQ1_DIR=/scratch/data/galGal3/galGal3.2bit
+SEQ1_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Turkey MelGal1
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # real    120m58.775s
+    #  *** All done !  Elapsed time: 120m59s
+    #  *** Make sure that goldenPath/galGal3/vsMelGal1/README.txt is accurate.
+    #  *** Add {chain,net}MelGal1 tracks to trackDb.ra if necessary.
+    cd /hive/data/genomes/galGal3/bed
+    ln -s lastzMelGal1.2011-03-24 lastz.melGal3
+
+    cat fb.galGal3.chainMelGal1Link.txt
+    # 924755061 bases of 1042591351 (88.698%) in intersection
+    cd /hive/data/genomes/galGal3/bed
+    ln -s lastzMelGal1.2011-03-24 lastz.melGal3
+
+    #   and then swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    38m4.406s
+    cat fb.melGal1.chainGalGal3Link.txt
+    # 874579772 bases of 935922386 (93.446%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+
 ############################################################################
+# LASTZ Lizard AnoCar2 (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25
+    cd /hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25
+
+    cat << '_EOF_' > DEF
+# Chicken vs lizard
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal3
+SEQ1_DIR=/scratch/data/galGal3/nib
+SEQ1_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Lizard anoCar2
+SEQ2_DIR=/scratch/data/anoCar2/anoCar2.2bit
+SEQ2_LEN=/scratch/data/anoCar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
+	-qRepeats=windowmaskerSdust > do.log 2>&1 &
+    #	real    210m1.468s
+    cat fb.galGal3.chainAnoCar2Link.txt 
+    #	113851392 bases of 1042591351 (10.920%) in intersection
+
+    #	running the swap - DONE - 2011-04-26
+    mkdir /hive/data/genomes/anoCar2/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/anoCar2/bed/blastz.galGal3.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet -swap -qRepeats=windowmaskerSdust \
+	-tRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    11m8.229s
+    cat fb.anoCar2.chainGalGal3Link.txt 
+    #	116069635 bases of 1701353770 (6.822%) in intersection
+
+##############################################################################

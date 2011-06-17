@@ -1,9 +1,14 @@
+metaObject wgEncodeSunyAlbanyTiling
+objType composite
+composite wgEncodeSunyAlbanyTiling
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell GM12878
 composite wgEncodeSunyAlbanyTiling
-dataType RipChip
+dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
@@ -22,7 +27,7 @@ objType table
 antibody PABPC1
 cell GM12878
 composite wgEncodeSunyAlbanyTiling
-dataType RipChip
+dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
@@ -41,7 +46,7 @@ objType table
 antibody ripInput
 cell GM12878
 composite wgEncodeSunyAlbanyTiling
-dataType RipChip
+dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
@@ -60,7 +65,7 @@ objType table
 antibody T7Tag
 cell GM12878
 composite wgEncodeSunyAlbanyTiling
-dataType RipChip
+dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
@@ -79,7 +84,7 @@ objType table
 antibody ELAVL1
 cell K562
 composite wgEncodeSunyAlbanyTiling
-dataType RipChip
+dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
@@ -98,7 +103,7 @@ objType table
 antibody PABPC1
 cell K562
 composite wgEncodeSunyAlbanyTiling
-dataType RipChip
+dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
@@ -117,7 +122,7 @@ objType table
 antibody ripInput
 cell K562
 composite wgEncodeSunyAlbanyTiling
-dataType RipChip
+dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
@@ -136,7 +141,7 @@ objType table
 antibody T7Tag
 cell K562
 composite wgEncodeSunyAlbanyTiling
-dataType RipChip
+dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
@@ -150,4 +155,4 @@ subId 1245
 tableName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 107326309
+# MAGIC: 1141846845

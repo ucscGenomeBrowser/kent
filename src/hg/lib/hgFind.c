@@ -1616,7 +1616,7 @@ for (el = *pAccList; el != NULL; el = el->next)
     if (hTableExists(db, "gbStatus"))
 	{
 	safef(query, sizeof(query),
-	      "select (orgCat = 'native') from gbStatus where acc = '%s'", acc);
+          "select (orgCat = 'native' && srcDb != 'RefSeq') from gbStatus where acc = '%s'", acc); /* redmine #3301 */
 	if (isXeno == sqlQuickNum(conn, query))
 	    continue;
 	}

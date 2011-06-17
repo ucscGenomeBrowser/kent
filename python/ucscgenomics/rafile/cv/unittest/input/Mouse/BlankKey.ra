@@ -1,0 +1,37 @@
+term 3134
+tag 3134
+type Cell Line
+organism mouse
+tissue Mammary
+description Mammary
+age immortalized
+strain RIII
+vendorName
+termId 7035
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+orderUrl foo
+color 153,38,0
+sex M
+protocol UW(Stam):3134_Stam_protocol.pdf
+
+term mouse
+tag mouse
+type organism
+description Mouse
+
+term M
+tag M
+type sex
+description Male
+
+term immortalized
+tag immortal
+type age
+stage Cell Line
+description epic Immortal cells
+
+term RIII
+tag RIII
+type strain
+description High mammary tumor incidence in unfostered substrains.
+

@@ -128,7 +128,7 @@ void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
 struct dyString *dyTmp = dyStringNew(1024);
 dyStringPrintf(dyTmp, "http://%s%s?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
-	       cgiServerName(), destAppScriptName(), userName, sessionName);
+	       cgiServerNamePort(), destAppScriptName(), userName, sessionName);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -172,7 +172,7 @@ void addUrlLink(struct dyString *dy, char *url, boolean encode)
 struct dyString *dyTmp = dyStringNew(1024);
 char *encodedUrl = cgiEncodeFull(url);
 dyStringPrintf(dyTmp, "http://%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
-	       cgiServerName(), destAppScriptName(), encodedUrl);
+	       cgiServerNamePort(), destAppScriptName(), encodedUrl);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -474,7 +474,7 @@ else if (wikiLinkEnabled())
 	   "named sessions which will be displayed with Browser and Email "
 	   "links.</LI>\n", wikiLinkUserLoginUrl(cartSessionId(cart)));
     }
-dyStringPrintf(dyUrl, "http://%s%s", cgiServerName(), cgiScriptName());
+dyStringPrintf(dyUrl, "http://%s%s", cgiServerNamePort(), cgiScriptName());
 
 printf("<LI>If you have saved your settings to a local file, you can send "
        "email to others with the file as an attachment and direct them to "
@@ -700,9 +700,8 @@ if (helList != NULL)
 	}
     dyStringPrintf(dyMessage,
 		   "Custom tracks are subject to an expiration policy described in the "
-		   "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_BLANK>custom "
-		   "track documentation</A>.  In order to keep a custom track from expiring, "
-		   "you can periodically view the custom track in the genome browser.</P>");
+		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
+		   "Session documentation</A>.</P>");
     slNameFreeList(&liveDbList);
     slNameFreeList(&expiredDbList);
     }
@@ -723,17 +722,16 @@ if (isNotEmpty(ss))
 
     if (exists)
 	dyStringPrintf(dyMessage,
-		       "<P>Note: the session contains saved BLAT results.  ");
+		       "<P>Note: the session contains BLAT results.  ");
     else
 	dyStringPrintf(dyMessage,
 		"<P>Note: the session contains an expired reference to "
 		"previously saved BLAT results, so it may not appear as "
 		"originally intended.  ");
     dyStringPrintf(dyMessage,
-		   "BLAT results are subject to the same expiration policy as "
-		   "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_BLANK>custom "
-		   "tracks</A>.  In order to keep BLAT results from expiring, you can "
-		   "periodically view them in the genome browser.</P>");
+		   "BLAT results are subject to an "
+		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
+		   "expiration policy</A>.");
     }
 }
 
@@ -935,9 +933,9 @@ else
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
-		   "<A HREF=\"http://%s%s?%s=%u\">Browser</A>",
-		   cgiServerName(), destAppScriptName(),
-		   cartSessionVarName(), cartSessionId(cart));
+	   "<A HREF=\"http://%s%s?%s=%u\">Browser</A>",
+	   cgiServerNamePort(), destAppScriptName(),
+	   cartSessionVarName(), cartSessionId(cart));
     }
 if (lf != NULL)
     {

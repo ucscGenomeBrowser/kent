@@ -644,3 +644,131 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+
+############################################################################
+# construct ucscToEnsembl chrom name translation (2011-04-21 - Hiram)
+    # the Ensembl genes v62 have new chrom names, construct translation:
+    mkdir /hive/data/genomes/oryCun2/bed/ucscToEnsembl
+    cd /hive/data/genomes/oryCun2/bed/ucscToEnsembl
+
+grep "^chr" /hive/data/genomes/oryCun2/genbank/Primary_Assembly/localID2acc \
+    | sort > genbank.names
+cut -f1 genbank.names | sort > findChrNames
+
+cut -f1 ../../chrom.sizes | sort > ucsc.names
+
+join ucsc.names genbank.names | sed -e 's/\.1$//' > ens.names
+
+comm -23 ucsc.names findChrNames | grep -v chrM | while read C
+do
+    ensName=${C/chr/}
+    echo -e "${C}\t${ensName}"
+done >> ens.names
+
+sort ens.names > ucscToEnsembl.tab
+
+# find length of ucsc names for key length in SQL below:
+awk '{print length($1)}' ucscToEnsembl.tab | sort -u
+4
+5
+9
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(9))
+);
+'_EOF_'
+
+    hgsql oryCun2 < ucscToEnsembl.sql
+    hgsql oryCun2 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+############################################################################
+#  oryCun2 - Rabbit - Ensembl Genes version 62  (DONE - 2011-04-21 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/oryCun2/jkStuff
+    # construct new lift file with new Ensembl contig names
+
+    cat << '_EOF_' > ens62Lift.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %chrSize;
+
+open (FH, "<../chrom.sizes") or die "can not read ../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chrSize{$chr} = $size;
+}
+close (FH);
+
+my %ensName;
+open (FH, "<../bed/ucscToEnsembl/ucscToEnsembl.tab") or
+        die "can not read ../bed/ucscToEnsembl/ucscToEnsembl.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $name) = split('\s+', $line);
+    $ensName{$chr} = $name;
+}
+close (FH);
+
+foreach my $chr (keys %ensName) {
+    printf "0\t%s\t%d\t%s\t%d\n", $ensName{$chr}, $chrSize{$chr}, $chr, $chrSize{$chr};
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x ens62Lift.pl
+    ./ens62Lift.pl > ens.62.lft
+
+    # now, using that in the ensGene definition
+
+    cd /hive/data/genomes/oryCun2
+    cat << '_EOF_' > oryCun2.ensGene.ra
+# required db variable
+db oryCun2
+# the lift file will change the chrom names, no nameTranslation needed
+# nameTranslation "s/^/chr/;"
+# ensembl v62 has new naming scheme based on NCBI release:
+liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=62 oryCun2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/oryCun2/bed/ensGene.62
+    featureBits oryCun2 ensGene
+    # 31797207 bases of 2604023284 (1.221%) in intersection
+
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2011-05-02 markd)
+
+/cluster/home/jeltje/hive/rabbit/oryCun2.prot.fa
+/cluster/home/jeltje/hive/rabbit/chr_gtf/chr*.fa
+
+    # obtained NSCAN predictions from Jeltje van Baren <jeltje@mbari.org>,
+    cd /hive/data/genomes/oryCun2/bed/nscan
+    cp /cluster/home/jeltje/hive/rabbit/oryCun2.prot.fa  .
+    cp -r /cluster/home/jeltje/hive/rabbit/chr_gtf .
+    gzip oryCun2.* chr_gtf/*
+    chmod a-w oryCun2.* chr_gtf/*
+
+    # load track
+    zcat chr_gtf/*.gtf.gz | gtfToGenePred -genePredExt stdin stdout | hgLoadGenePred -genePredExt oryCun2 nscanGene stdin
+    hgPepPred oryCun2 generic nscanPep oryCun2.prot.fa.gz
+    rm *.tab
+
+    # rabbit/oryCun2/trackDb.ra, add:
+    track nscanGene override
+    informant Rabbit N-SCAN used human (hg19) as the informant for conservation.
+
+    # verify top-level search spec, should produce no results an an error for egrep:
+    hgsql -Ne 'select name from nscanGene' oryCun2 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
+
+############################################################################

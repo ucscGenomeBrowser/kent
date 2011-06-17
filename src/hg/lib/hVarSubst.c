@@ -102,7 +102,7 @@ int wordCount = 0, headerCount = 0;
 
 wordCount = chopString(cloneString(matrix), ", \t", words, ArraySize(words));
 if (matrixHeader != NULL)
-    headerCount = chopString(cloneString(matrixHeader), 
+    headerCount = chopString(cloneString(matrixHeader),
                     ", \t", headerWords, ArraySize(headerWords));
 errno = 0;
 size = sqrt(sqlDouble(words[0]));
@@ -111,7 +111,7 @@ if (errno)
              words[0]);
 dyStringAppend(dest, "The following matrix was used:<P>\n");
 k = 1;
-dyStringAppend(dest, "<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR=\"#aaaaaa\">\n");
+dyStringAppend(dest, "<BLOCKQUOTE><TABLE CELLPADDING=4 style='border:1px solid #aaaaaa;'>\n");
 if (matrixHeader)
     {
     dyStringAppend(dest, "<TR ALIGN=right><TD>&nbsp;</TD>");
@@ -152,7 +152,7 @@ if (matrix != NULL)
 }
 
 static boolean isAbbrevScientificName(char *name)
-/* Return true if name looks like an abbreviated scientific name 
+/* Return true if name looks like an abbreviated scientific name
 * (e.g. D. yakuba). */
 {
 return (name != NULL && strlen(name) > 4 &&
@@ -205,7 +205,7 @@ else if (sameString(varBase, "organism"))
     char *org = hOrganism(database);
     if ((org != NULL) && !isAbbrevScientificName(org))
             tolowers(org);
-        else 
+        else
             org = valOrDb(org, database);
     dyStringAppend(dest, org);
     freeMem(org);
@@ -301,7 +301,7 @@ if (dest != NULL)
     *varPtr = dest;
     }
 }
-                       
+
 void hVarSubstTrackDb(struct trackDb *tdb, char *database)
 /* Substitute variables in trackDb shortLabel, longLabel, and html fields. */
 {

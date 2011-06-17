@@ -19,7 +19,7 @@ struct liftOverChain
     char *toDb;	/* Short name of 'to' database.  'hg16' or the like */
     char *path;	/* Path to chain file */
     float minMatch;	/* Minimum ratio of bases that must remap. */
-    unsigned minSizeT;	/* Minimum chain size in target. */
+    unsigned minChainT;	/* Minimum chain size in target. */
     unsigned minSizeQ;	/* Minimum chain size in query. */
     char multiple[2];	/* Use -multiple by default. */
     float minBlocks;	/* Min ratio of alignment blocks/exons that must map. */

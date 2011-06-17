@@ -230,7 +230,7 @@ dataVersion ENCODE Feb 2009, Sep 2009 data freezes
 
         #THE VERY FIRST
         track wgEncodeBroadChipSeqSignalGm12878H4k20me1
-        subTrack wgEncodeBroadChipSeqViewSignal off
+        parent wgEncodeBroadChipSeqViewSignal off
         shortLabel GM128 H4K20me1 S
         longLabel PATCHED ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, GM12878)
         subGroups view=Signal factor=H4K20me1 cellType=GM12878

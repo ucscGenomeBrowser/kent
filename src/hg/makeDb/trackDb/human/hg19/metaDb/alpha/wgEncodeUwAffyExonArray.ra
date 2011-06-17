@@ -12,6 +12,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000823
+expId 823
 fileName wgEncodeUwAffyExonArrayA549SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -31,6 +33,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000823
+expId 823
 fileName wgEncodeUwAffyExonArrayA549SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -51,6 +55,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000375
+expId 375
 fileName wgEncodeUwAffyExonArrayAg04449SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -71,6 +77,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000375
+expId 375
 fileName wgEncodeUwAffyExonArrayAg04449SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -91,6 +99,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000376
+expId 376
 fileName wgEncodeUwAffyExonArrayAg04450SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -111,6 +121,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000376
+expId 376
 fileName wgEncodeUwAffyExonArrayAg04450SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -131,6 +143,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000377
+expId 377
 fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -150,6 +164,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000377
+expId 377
 fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -170,6 +186,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000378
+expId 378
 fileName wgEncodeUwAffyExonArrayAg09319SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -190,6 +208,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000378
+expId 378
 fileName wgEncodeUwAffyExonArrayAg09319SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -210,6 +230,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000379
+expId 379
 fileName wgEncodeUwAffyExonArrayAg10803SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -230,6 +252,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000379
+expId 379
 fileName wgEncodeUwAffyExonArrayAg10803SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -249,6 +273,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000801
+expId 801
 fileName wgEncodeUwAffyExonArrayAoafSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -268,6 +294,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000801
+expId 801
 fileName wgEncodeUwAffyExonArrayAoafSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -287,6 +315,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000824
+expId 824
 fileName wgEncodeUwAffyExonArrayBe2cSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -306,6 +336,8 @@ dataType AffyExonArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
+dccAccession wgEncodeEH000824
+expId 824
 fileName wgEncodeUwAffyExonArrayBe2cSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -328,6 +360,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000365
+expId 365
 fileName wgEncodeUwAffyExonArrayBjSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -348,6 +382,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000365
+expId 365
 fileName wgEncodeUwAffyExonArrayBjSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -368,6 +404,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000359
+expId 359
 fileName wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -388,6 +426,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000359
+expId 359
 fileName wgEncodeUwAffyExonArrayCaco2SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -408,6 +448,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000380
+expId 380
 fileName wgEncodeUwAffyExonArrayCmkSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -428,6 +470,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000360
+expId 360
 fileName wgEncodeUwAffyExonArrayGm06990SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -448,6 +492,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000360
+expId 360
 fileName wgEncodeUwAffyExonArrayGm06990SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -468,6 +514,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000366
+expId 366
 fileName wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -488,6 +536,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000381
+expId 381
 fileName wgEncodeUwAffyExonArrayH7esSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -507,6 +557,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000381
+expId 381
 fileName wgEncodeUwAffyExonArrayH7esSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -526,6 +578,8 @@ dataType AffyExonArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
+dccAccession wgEncodeEH000831
+expId 831
 fileName wgEncodeUwAffyExonArrayHacSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -547,6 +601,8 @@ dataType AffyExonArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
+dccAccession wgEncodeEH000831
+expId 831
 fileName wgEncodeUwAffyExonArrayHacSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -569,6 +625,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000382
+expId 382
 fileName wgEncodeUwAffyExonArrayHaeSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -589,6 +647,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000382
+expId 382
 fileName wgEncodeUwAffyExonArrayHaeSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -608,6 +668,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000825
+expId 825
 fileName wgEncodeUwAffyExonArrayHaspSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -627,6 +689,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000825
+expId 825
 fileName wgEncodeUwAffyExonArrayHaspSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -646,6 +710,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000802
+expId 802
 fileName wgEncodeUwAffyExonArrayHbmecSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -665,6 +731,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000802
+expId 802
 fileName wgEncodeUwAffyExonArrayHbmecSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -685,6 +753,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000383
+expId 383
 fileName wgEncodeUwAffyExonArrayHcfSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -705,6 +775,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000383
+expId 383
 fileName wgEncodeUwAffyExonArrayHcfSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -724,6 +796,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000803
+expId 803
 fileName wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -743,6 +817,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000803
+expId 803
 fileName wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -763,6 +839,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000384
+expId 384
 fileName wgEncodeUwAffyExonArrayHcmSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -783,6 +861,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000384
+expId 384
 fileName wgEncodeUwAffyExonArrayHcmSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -802,6 +882,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000805
+expId 805
 fileName wgEncodeUwAffyExonArrayHconfSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -821,6 +903,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000805
+expId 805
 fileName wgEncodeUwAffyExonArrayHconfSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -841,6 +925,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000385
+expId 385
 fileName wgEncodeUwAffyExonArrayHcpeSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -861,6 +947,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000385
+expId 385
 fileName wgEncodeUwAffyExonArrayHcpeSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -880,6 +968,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000804
+expId 804
 fileName wgEncodeUwAffyExonArrayHct116SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -899,6 +989,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000804
+expId 804
 fileName wgEncodeUwAffyExonArrayHct116SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -919,6 +1011,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000386
+expId 386
 fileName wgEncodeUwAffyExonArrayHeeSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -939,6 +1033,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000386
+expId 386
 fileName wgEncodeUwAffyExonArrayHeeSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -958,6 +1054,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000806
+expId 806
 fileName wgEncodeUwAffyExonArrayHek293SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -977,6 +1075,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000806
+expId 806
 fileName wgEncodeUwAffyExonArrayHek293SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -997,6 +1097,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000357
+expId 357
 fileName wgEncodeUwAffyExonArrayHelas3SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1017,6 +1119,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
+dccAccession wgEncodeEH000357
+expId 357
 fileName wgEncodeUwAffyExonArrayHelas3SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1037,6 +1141,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000361
+expId 361
 fileName wgEncodeUwAffyExonArrayHepg2SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1057,6 +1163,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000361
+expId 361
 fileName wgEncodeUwAffyExonArrayHepg2SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1076,6 +1184,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000807
+expId 807
 fileName wgEncodeUwAffyExonArrayHgfSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1095,6 +1205,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000807
+expId 807
 fileName wgEncodeUwAffyExonArrayHgfSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1115,6 +1227,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000387
+expId 387
 fileName wgEncodeUwAffyExonArrayHipeSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1135,6 +1249,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000387
+expId 387
 fileName wgEncodeUwAffyExonArrayHipeSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1154,6 +1270,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000808
+expId 808
 fileName wgEncodeUwAffyExonArrayHl60SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1173,6 +1291,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000808
+expId 808
 fileName wgEncodeUwAffyExonArrayHl60SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1193,6 +1313,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000367
+expId 367
 fileName wgEncodeUwAffyExonArrayHmecSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1212,6 +1334,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000367
+expId 367
 fileName wgEncodeUwAffyExonArrayHmecSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1231,6 +1355,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000809
+expId 809
 fileName wgEncodeUwAffyExonArrayHmfSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1250,6 +1376,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000809
+expId 809
 fileName wgEncodeUwAffyExonArrayHmfSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1269,6 +1397,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000812
+expId 812
 fileName wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1288,6 +1418,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000812
+expId 812
 fileName wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1307,6 +1439,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000813
+expId 813
 fileName wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1326,6 +1460,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000813
+expId 813
 fileName wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1345,6 +1481,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000814
+expId 814
 fileName wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1364,6 +1502,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000814
+expId 814
 fileName wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1383,6 +1523,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000815
+expId 815
 fileName wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1402,6 +1544,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000815
+expId 815
 fileName wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1421,6 +1565,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000816
+expId 816
 fileName wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1440,6 +1586,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000816
+expId 816
 fileName wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1459,6 +1607,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000810
+expId 810
 fileName wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1478,6 +1628,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000810
+expId 810
 fileName wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1497,6 +1649,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000811
+expId 811
 fileName wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1516,6 +1670,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000811
+expId 811
 fileName wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1536,6 +1692,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000388
+expId 388
 fileName wgEncodeUwAffyExonArrayHnpceSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1556,6 +1714,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000388
+expId 388
 fileName wgEncodeUwAffyExonArrayHnpceSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1575,6 +1735,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000817
+expId 817
 fileName wgEncodeUwAffyExonArrayHpafSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1594,6 +1756,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000817
+expId 817
 fileName wgEncodeUwAffyExonArrayHpafSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1613,6 +1777,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000819
+expId 819
 fileName wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1632,6 +1798,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000819
+expId 819
 fileName wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1651,6 +1819,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000818
+expId 818
 fileName wgEncodeUwAffyExonArrayHpfSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1670,6 +1840,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000818
+expId 818
 fileName wgEncodeUwAffyExonArrayHpfSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1690,6 +1862,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
+dccAccession wgEncodeEH000355
+expId 355
 fileName wgEncodeUwAffyExonArrayHrceSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1710,6 +1884,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
+dccAccession wgEncodeEH000355
+expId 355
 fileName wgEncodeUwAffyExonArrayHrceSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1730,6 +1906,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
+dccAccession wgEncodeEH000356
+expId 356
 fileName wgEncodeUwAffyExonArrayHreSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1750,6 +1928,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
+dccAccession wgEncodeEH000356
+expId 356
 fileName wgEncodeUwAffyExonArrayHreSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1769,6 +1949,8 @@ dataType AffyExonArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
+dccAccession wgEncodeEH000832
+expId 832
 fileName wgEncodeUwAffyExonArrayHrgecSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1790,6 +1972,8 @@ dataType AffyExonArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
+dccAccession wgEncodeEH000832
+expId 832
 fileName wgEncodeUwAffyExonArrayHrgecSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1812,6 +1996,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000389
+expId 389
 fileName wgEncodeUwAffyExonArrayHrpeSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1832,6 +2018,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000389
+expId 389
 fileName wgEncodeUwAffyExonArrayHrpeSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1851,6 +2039,8 @@ dataType AffyExonArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
+dccAccession wgEncodeEH000833
+expId 833
 fileName wgEncodeUwAffyExonArrayHsmmSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1872,6 +2062,8 @@ dataType AffyExonArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
+dccAccession wgEncodeEH000833
+expId 833
 fileName wgEncodeUwAffyExonArrayHsmmSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1893,6 +2085,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000826
+expId 826
 fileName wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1913,6 +2107,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000368
+expId 368
 fileName wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1932,6 +2128,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000368
+expId 368
 fileName wgEncodeUwAffyExonArrayHuvecSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1951,6 +2149,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000820
+expId 820
 fileName wgEncodeUwAffyExonArrayHvmfSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -1970,6 +2170,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000820
+expId 820
 fileName wgEncodeUwAffyExonArrayHvmfSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -1990,6 +2192,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000369
+expId 369
 fileName wgEncodeUwAffyExonArrayJurkatSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2010,6 +2214,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000369
+expId 369
 fileName wgEncodeUwAffyExonArrayJurkatSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2030,6 +2236,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000362
+expId 362
 fileName wgEncodeUwAffyExonArrayK562SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2050,6 +2258,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000362
+expId 362
 fileName wgEncodeUwAffyExonArrayK562SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2069,6 +2279,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000827
+expId 827
 fileName wgEncodeUwAffyExonArrayLncapSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2088,6 +2300,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000827
+expId 827
 fileName wgEncodeUwAffyExonArrayLncapSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2108,6 +2322,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000370
+expId 370
 fileName wgEncodeUwAffyExonArrayMcf7SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2128,6 +2344,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000370
+expId 370
 fileName wgEncodeUwAffyExonArrayMcf7SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2148,6 +2366,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000371
+expId 371
 fileName wgEncodeUwAffyExonArrayNb4SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2168,6 +2388,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000371
+expId 371
 fileName wgEncodeUwAffyExonArrayNb4SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2187,6 +2409,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000821
+expId 821
 fileName wgEncodeUwAffyExonArrayNhaSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2206,6 +2430,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000821
+expId 821
 fileName wgEncodeUwAffyExonArrayNhaSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2225,6 +2451,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000822
+expId 822
 fileName wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2244,6 +2472,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
+dccAccession wgEncodeEH000822
+expId 822
 fileName wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2264,6 +2494,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000390
+expId 390
 fileName wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2284,6 +2516,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000390
+expId 390
 fileName wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2304,6 +2538,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000372
+expId 372
 fileName wgEncodeUwAffyExonArrayNhekSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2324,6 +2560,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000391
+expId 391
 fileName wgEncodeUwAffyExonArrayNhlfSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2344,6 +2582,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000391
+expId 391
 fileName wgEncodeUwAffyExonArrayNhlfSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2364,6 +2604,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000373
+expId 373
 fileName wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2384,6 +2626,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000373
+expId 373
 fileName wgEncodeUwAffyExonArrayPanc1SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2403,6 +2647,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000828
+expId 828
 fileName wgEncodeUwAffyExonArrayRptecSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2422,6 +2668,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000828
+expId 828
 fileName wgEncodeUwAffyExonArrayRptecSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2442,6 +2690,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000374
+expId 374
 fileName wgEncodeUwAffyExonArraySaecSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2462,6 +2712,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
+dccAccession wgEncodeEH000374
+expId 374
 fileName wgEncodeUwAffyExonArraySaecSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2482,6 +2734,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000363
+expId 363
 fileName wgEncodeUwAffyExonArraySkmcSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2502,6 +2756,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000363
+expId 363
 fileName wgEncodeUwAffyExonArraySkmcSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2522,6 +2778,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000358
+expId 358
 fileName wgEncodeUwAffyExonArraySknshraSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2542,6 +2800,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
+dccAccession wgEncodeEH000358
+expId 358
 fileName wgEncodeUwAffyExonArraySknshraSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2562,6 +2822,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
+dccAccession wgEncodeEH000364
+expId 364
 fileName wgEncodeUwAffyExonArrayTh1SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2581,6 +2843,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000830
+expId 830
 fileName wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2601,6 +2865,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000830
+expId 830
 fileName wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2621,6 +2887,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000829
+expId 829
 fileName wgEncodeUwAffyExonArrayWi38SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2641,6 +2909,8 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH000829
+expId 829
 fileName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2652,4 +2922,4 @@ tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 treatment None
 view SimpleSignal
 
-# MAGIC: 557421393
+# MAGIC: 1081040728

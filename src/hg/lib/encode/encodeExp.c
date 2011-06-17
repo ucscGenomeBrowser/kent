@@ -6,22 +6,24 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "verbose.h"
 #include "encode/encodeExp.h"
+
+// WARNING: autogen section has been manually updated to support fields that can be NULL
+
 
 void encodeExpStaticLoad(char **row, struct encodeExp *ret)
 /* Load a row from encodeExp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->ix = sqlSigned(row[0]);
+ret->ix = sqlUnsigned(row[0]);
 ret->organism = row[1];
-ret->accession = row[2];
-ret->lab = row[3];
-ret->dataType = row[4];
-ret->cellType = row[5];
-ret->expVars = row[6];
-ret->lastUpdated = row[7];
+ret->lab = row[2];
+ret->dataType = row[3];
+ret->cellType = row[4];
+ret->expVars = row[5];
+ret->accession = row[6];
+ret->updateTime = row[7];
 }
 
 struct encodeExp *encodeExpLoadByQuery(struct sqlConnection *conn, char *query)
@@ -46,6 +48,8 @@ sqlFreeResult(&sr);
 return list;
 }
 
+static void encodeExpSaveToDbMayBeEscaped(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize, boolean escaped);
+
 void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize)
 /* Save encodeExp as a row to the table specified by tableName.
  * As blob fields may be arbitrary size updateSize specifies the approx size
@@ -55,11 +59,7 @@ void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *t
  * For example "autosql's features include" --> "autosql\'s features include"
  * If worried about this use encodeExpSaveToDbEscaped() */
 {
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')",
-	tableName,  el->ix,  el->organism,  el->accession,  el->lab,  el->dataType,  el->cellType,  el->expVars,  el->lastUpdated);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
+encodeExpSaveToDbMayBeEscaped(conn, el, tableName, updateSize, FALSE);
 }
 
 void encodeExpSaveToDbEscaped(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize)
@@ -71,27 +71,7 @@ void encodeExpSaveToDbEscaped(struct sqlConnection *conn, struct encodeExp *el, 
  * "autosql's features include" --> "autosql\'s features include"
  * before inserting into database. */
 {
-struct dyString *update = newDyString(updateSize);
-char  *organism, *accession, *lab, *dataType, *cellType, *expVars, *lastUpdated;
-organism = sqlEscapeString(el->organism);
-accession = sqlEscapeString(el->accession);
-lab = sqlEscapeString(el->lab);
-dataType = sqlEscapeString(el->dataType);
-cellType = sqlEscapeString(el->cellType);
-expVars = sqlEscapeString(el->expVars);
-lastUpdated = sqlEscapeString(el->lastUpdated);
-
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')",
-	tableName,  el->ix,  organism,  accession,  lab,  dataType,  cellType,  expVars,  lastUpdated);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&organism);
-freez(&accession);
-freez(&lab);
-freez(&dataType);
-freez(&cellType);
-freez(&expVars);
-freez(&lastUpdated);
+encodeExpSaveToDbMayBeEscaped(conn, el, tableName, updateSize, TRUE);
 }
 
 struct encodeExp *encodeExpLoad(char **row)
@@ -101,14 +81,14 @@ struct encodeExp *encodeExpLoad(char **row)
 struct encodeExp *ret;
 
 AllocVar(ret);
-ret->ix = sqlSigned(row[0]);
+ret->ix = sqlUnsigned(row[0]);
 ret->organism = cloneString(row[1]);
-ret->accession = cloneString(row[2]);
-ret->lab = cloneString(row[3]);
-ret->dataType = cloneString(row[4]);
-ret->cellType = cloneString(row[5]);
-ret->expVars = cloneString(row[6]);
-ret->lastUpdated = cloneString(row[7]);
+ret->lab = cloneString(row[2]);
+ret->dataType = cloneString(row[3]);
+ret->cellType = cloneString(row[4]);
+ret->expVars = cloneString(row[5]);
+ret->accession = cloneString(row[6]);
+ret->updateTime = cloneString(row[7]);
 return ret;
 }
 
@@ -157,14 +137,14 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->ix = sqlSignedComma(&s);
+ret->ix = sqlUnsignedComma(&s);
 ret->organism = sqlStringComma(&s);
-ret->accession = sqlStringComma(&s);
 ret->lab = sqlStringComma(&s);
 ret->dataType = sqlStringComma(&s);
 ret->cellType = sqlStringComma(&s);
 ret->expVars = sqlStringComma(&s);
-ret->lastUpdated = sqlStringComma(&s);
+ret->accession = sqlStringComma(&s);
+ret->updateTime = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -177,12 +157,12 @@ struct encodeExp *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->organism);
-freeMem(el->accession);
 freeMem(el->lab);
 freeMem(el->dataType);
 freeMem(el->cellType);
 freeMem(el->expVars);
-freeMem(el->lastUpdated);
+freeMem(el->accession);
+freeMem(el->updateTime);
 freez(pEl);
 }
 
@@ -202,14 +182,10 @@ for (el = *pList; el != NULL; el = next)
 void encodeExpOutput(struct encodeExp *el, FILE *f, char sep, char lastSep)
 /* Print out encodeExp.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%d", el->ix);
+fprintf(f, "%u", el->ix);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->organism);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->accession);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -229,7 +205,11 @@ fprintf(f, "%s", el->expVars);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->lastUpdated);
+fprintf(f, "%s", el->accession);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->updateTime);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -242,7 +222,7 @@ fputc('"',f);
 fprintf(f,"ix");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%d", el->ix);
+fprintf(f, "%u", el->ix);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"organism");
@@ -250,14 +230,6 @@ fputc('"',f);
 fputc(':',f);
 fputc('"',f);
 fprintf(f, "%s", el->organism);
-fputc('"',f);
-fputc(',',f);
-fputc('"',f);
-fprintf(f,"accession");
-fputc('"',f);
-fputc(':',f);
-fputc('"',f);
-fprintf(f, "%s", el->accession);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
@@ -293,11 +265,19 @@ fprintf(f, "%s", el->expVars);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
-fprintf(f,"lastUpdated");
+fprintf(f,"accession");
 fputc('"',f);
 fputc(':',f);
 fputc('"',f);
-fprintf(f, "%s", el->lastUpdated);
+fprintf(f, "%s", el->accession);
+fputc('"',f);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"updateTime");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->updateTime);
 fputc('"',f);
 fputc('}',f);
 }
@@ -317,7 +297,7 @@ char *encodeExpGetIx(struct encodeExp *exp)
 /* Return ix field of encodeExp */
 {
 char buf[64];
-safef(buf, 64, "%d", exp->ix);
+safef(buf, sizeof(buf), "%d", exp->ix);
 return cloneString(buf);
 }
 
@@ -357,10 +337,10 @@ char *encodeExpGetExpVars(struct encodeExp *exp)
 return cloneString(exp->expVars);
 }
 
-char *encodeExpGetLastUpdated(struct encodeExp *exp)
-/* Return lastUpdated field of encodeExp */
+char *encodeExpGetUpdateTime(struct encodeExp *exp)
+/* Return updateTime field of encodeExp */
 {
-return cloneString(exp->lastUpdated);
+return cloneString(exp->updateTime);
 }
 
 typedef char * (*encodeExpGetField)(struct encodeExp *exp);
@@ -372,61 +352,265 @@ struct encodeExpField {
 } encodeExpField;
 
 struct encodeExpField encodeExpFields[] =
-   { {ENCODE_EXP_FIELD_IX, &encodeExpGetIx, TRUE},                  //required, set to 0
+   { {ENCODE_EXP_FIELD_IX, &encodeExpGetIx, TRUE},                  //required, set to 0 initially
      {ENCODE_EXP_FIELD_ORGANISM, &encodeExpGetOrganism, TRUE},      //required
-     {ENCODE_EXP_FIELD_ACCESSION, &encodeExpGetAccession, FALSE},
      {ENCODE_EXP_FIELD_LAB, &encodeExpGetLab, TRUE},                 //required
      {ENCODE_EXP_FIELD_DATA_TYPE, &encodeExpGetDataType, TRUE},      //required
      {ENCODE_EXP_FIELD_CELL_TYPE, &encodeExpGetCellType, TRUE},      //required
      {ENCODE_EXP_FIELD_FACTORS, &encodeExpGetExpVars, FALSE},
-     {ENCODE_EXP_FIELD_LAST_UPDATED, &encodeExpGetLastUpdated, FALSE},
+     {ENCODE_EXP_FIELD_ACCESSION, &encodeExpGetAccession, FALSE},
+     {ENCODE_EXP_FIELD_UPDATE_TIME, &encodeExpGetUpdateTime, FALSE},
      {NULL, 0, 0} };
 
 static char *sqlCreate =
 "CREATE TABLE %s (\n"
-"    ix int not null AUTO_INCREMENT,     # auto-increment ID\n"
+"    ix int auto_increment,              # auto-increment ID\n"
 "    organism varchar(255) not null,     # human | mouse\n"
-"    accession varchar(255) not null,    # ENC[H|M]E00000N\n"
 "    lab varchar(255) not null,  # lab name from ENCODE cv.ra\n"
 "    dataType varchar(255) not null,     # dataType from ENCODE cv.ra\n"
 "    cellType varchar(255) not null,     # cellType from ENCODE cv.ra\n"
-"    expVars text,                       # var=val list of experiment-defining variables\n"
-"    lastUpdated timestamp default current_timestamp on update current_timestamp,  # last update date-time"
+"    expVars varchar(255),	         # var=value list of experiment-defining variables. May be NULL if none.\n"
+"    accession varchar(255),	        # wgEncodeE[H|M]00000N or NULL if proposed but not yet approved\n"
+"    updateTime timestamp default now() on update now(),  # last update date-time"
 "              #Indices\n"
 "    PRIMARY KEY(ix)\n"
 ")";
 
-/* END schema-dependent section */
 
-static char *expFactors[] = {
-    /* alpha sorted list, includes all exp-defining variables */
-    // TODO: -> whitelist from cv.ra
-    "antibody",
-    "insertLength",
-    "localization",
-    "protocol",
-    "readType",
-    "restrictionEnzyme",
-    "ripTgtProtein",
-    "rnaExtract",
-    "treatment",
-    0,
-};
+/* History table approach from Peter Brawley, http://www.artfulsoftware.com */
+
+static void encodExpAddHistoryTrigger(struct sqlConnection *conn, char *tableName, char *action)
+/* Create an SQL query to add a trigger to the history table for an encodeExp table */
+{
+struct dyString *dy;
+char *which = NULL;
+
+if (sameString(action, "insert") || sameString(action, "update"))
+    which = "NEW";
+else if sameString(action, "delete")
+    which = "OLD";
+else
+    errAbort("Invalid SQL trigger action: %s", action);
+dy = dyStringCreate(
+    "CREATE TRIGGER %s_%s AFTER %s ON %s FOR EACH ROW INSERT INTO %s%s VALUES \n"
+    "(%s.ix, %s.organism, %s.lab, %s.dataType, %s.cellType, %s.expVars, %s.accession, NOW(), '%c', USER(), '')",
+        tableName, action, action, tableName,
+        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX,
+        which, which, which, which, which, which, which, toupper(action[0]));
+sqlUpdate(conn, dyStringCannibalize(&dy));
+}
+
+static void encodExpDropHistoryTrigger(struct sqlConnection *conn, char *tableName, char *action)
+/* Drop history trigger from a table */
+{
+struct dyString *dy;
+
+if (differentString(action, "insert") && differentString(action, "update") &&
+    differentString(action, "delete"))
+        errAbort("Invalid SQL trigger action: %s", action);
+dy = dyStringCreate("DROP TRIGGER IF EXISTS %s_%s", tableName, action);
+sqlUpdate(conn, dyStringCannibalize(&dy));
+}
+
+static void encodExpAddTriggers(struct sqlConnection *conn, char *tableName)
+{
+/* Add history triggers to experiment table */
+encodExpAddHistoryTrigger(conn, tableName, "insert");
+encodExpAddHistoryTrigger(conn, tableName, "update");
+encodExpAddHistoryTrigger(conn, tableName, "delete");
+}
+
+static void encodeExpDropTriggers(struct sqlConnection *conn, char *tableName)
+{
+/* Drop history triggers from experiment table */
+encodExpDropHistoryTrigger(conn, tableName, "insert");
+encodExpDropHistoryTrigger(conn, tableName, "update");
+encodExpDropHistoryTrigger(conn, tableName, "delete");
+}
+
+void encodeExpTableRename(struct sqlConnection *conn, char *tableName, char *newTableName)
+/* Rename table and history table, updating triggers to match */
+{
+char oldBuf[64];
+char newBuf[64];
+
+encodeExpDropTriggers(conn, tableName);
+sqlRenameTable(conn, tableName, newTableName);
+safef(oldBuf, sizeof oldBuf, "%s%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+safef(newBuf, sizeof newBuf, "%s%s", newTableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+sqlRenameTable(conn, oldBuf, newBuf);
+encodExpAddTriggers(conn, newTableName);
+}
+
+void encodeExpTableCopy(struct sqlConnection *conn, char *tableName, char *newTableName)
+/* Copy table and history table, updating triggers */
+{
+char oldBuf[64];
+char newBuf[64];
+
+sqlCopyTable(conn, tableName, newTableName);
+safef(oldBuf, sizeof oldBuf, "%s%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+safef(newBuf, sizeof newBuf, "%s%s", newTableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+sqlCopyTable(conn, oldBuf, newBuf);
+encodExpAddTriggers(conn, newTableName);
+}
+
+void encodeExpTableDrop(struct sqlConnection *conn, char *tableName)
+{
+/* Drop an encodeExp table */
+char buf[64];
+
+encodeExpDropTriggers(conn, tableName);
+sqlDropTable(conn, tableName);
+safef(buf, sizeof buf, "%s%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+sqlDropTable(conn, buf);
+}
+
+#define ENCODE_EXP_HISTORY_FIELD_WHAT   "action"
+#define ENCODE_EXP_HISTORY_FIELD_WHO    "changedBy"
+#define ENCODE_EXP_HISTORY_FIELD_WHY    "why"
 
 void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
 /* Create an encodeExp table */
 {
-struct dyString *dy = newDyString(0);
-dyStringPrintf(dy, sqlCreate, tableName, dyStringContents(dy));
-sqlRemakeTable(conn, tableName, dyStringContents(dy));
-dyStringFree(&dy);
+struct dyString *dy;
+dy = dyStringCreate(sqlCreate, tableName);
+sqlRemakeTable(conn, tableName, dyStringCannibalize(&dy));
+
+/* Create history table -- a clone with 3 additional columns (action, changedBy, why).
+ * 'why' is only required for deletes
+ * Remove auto-inc attribute on ix, and use ix and updateTime as primary key  */
+dy = dyStringCreate("CREATE TABLE %s%s LIKE %s",
+                tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, tableName);
+sqlUpdate(conn, dyStringCannibalize(&dy));
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s CHAR(1) DEFAULT ''",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHAT);
+sqlUpdate(conn, dyStringCannibalize(&dy));
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s VARCHAR(77) NOT NULL",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHO);
+sqlUpdate(conn, dyStringCannibalize(&dy));
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s VARCHAR(255) NOT NULL",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHY);
+sqlUpdate(conn, dyStringCannibalize(&dy));
+dy = dyStringCreate("ALTER TABLE %s%s MODIFY COLUMN %s INT DEFAULT 0",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_FIELD_IX);
+sqlUpdate(conn, dyStringCannibalize(&dy));
+dy = dyStringCreate("ALTER TABLE %s%s DROP PRIMARY KEY",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+
+sqlUpdate(conn, dyStringCannibalize(&dy));
+
+//possible TODO:  if we do need a primary key, will need to add a msec or autoinc column */
+//alter table %s add idx int unsigned not null auto_increment, add primary key (idx);
+
+encodExpAddTriggers(conn, tableName);
 }
+
+static void encodeExpAddToLatestHistory(struct sqlConnection *conn, char *table, int id, char *field, char *value)
+/* Add user name to history table record */
+{
+struct dyString *dy = dyStringCreate(
+        "select max(updateTime) from %s%s where %s='%d'",
+                        table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_FIELD_IX, id);
+verbose(3, "%s\n", dy->string);
+char *updateTime = sqlQuickString(conn, dyStringCannibalize(&dy));
+dy = dyStringCreate(
+        "update %s%s set %s='%s' where updateTime = '%s'",
+                        table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, field, value, updateTime);
+verbose(3, "%s\n", dy->string);
+sqlUpdate(conn, dyStringCannibalize(&dy));
+}
+
+static void encodeExpAddUserToLatestHistory(struct sqlConnection *conn, char *table, int id)
+/* Add user name to history table record */
+{
+encodeExpAddToLatestHistory(conn, table, id, ENCODE_EXP_HISTORY_FIELD_WHO, getlogin());
+}
+
+static void encodeExpAddWhyToLatestHistory(struct sqlConnection *conn, char *table, int id, char *why)
+/* Add comment to history table record */
+{
+encodeExpAddToLatestHistory(conn, table, id, ENCODE_EXP_HISTORY_FIELD_WHY, why);
+}
+
+static void encodeExpSaveToDbMayBeEscaped(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize, boolean escaped)
+/* Save encodeExp as a row to the table specified by tableName.
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically
+ * escapes all simple strings (not arrays of string) but may be slower than encodeExpSaveToDb().
+ * For example automatically copies and converts:
+ * "autosql's features include" --> "autosql\'s features include"
+ * before inserting into database. */
+{
+// NOTE: Manually updated to handle NULL fields, including setting NULL
+struct dyString *update = newDyString(updateSize);
+char  *organism, *lab, *dataType, *cellType, *expVars, *accession;
+if (escaped)
+    {
+    organism = sqlEscapeString(el->organism);
+    lab = sqlEscapeString(el->lab);
+    dataType = sqlEscapeString(el->dataType);
+    cellType = sqlEscapeString(el->cellType);
+    if (expVars != NULL)
+        expVars = sqlEscapeString(el->expVars);
+    if (accession != NULL)
+        accession = sqlEscapeString(el->accession);
+    }
+else
+    {
+    organism = el->organism;
+    lab = el->lab;
+    dataType = el->dataType;
+    cellType = el->cellType;
+    expVars = el->expVars;
+    accession = el->accession;
+    }
+dyStringPrintf(update, "insert into %s set %s=%u, %s='%s', %s='%s', %s='%s', %s='%s'", tableName,
+                ENCODE_EXP_FIELD_IX, el->ix,
+                ENCODE_EXP_FIELD_ORGANISM, organism,
+                ENCODE_EXP_FIELD_LAB, lab,
+                ENCODE_EXP_FIELD_DATA_TYPE, dataType,
+                ENCODE_EXP_FIELD_CELL_TYPE, cellType);
+dyStringPrintf(update, ", %s=", ENCODE_EXP_FIELD_FACTORS);
+if (expVars == NULL)
+    dyStringAppend(update, "NULL");
+else
+    dyStringQuoteString(update, '\'', expVars);
+dyStringPrintf(update, ", %s=", ENCODE_EXP_FIELD_ACCESSION);
+if (accession == NULL)
+    dyStringAppend(update, "NULL");
+else
+    dyStringQuoteString(update, '\'', accession);
+
+sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
+sqlUpdate(conn, update->string);
+int id = sqlLastAutoId(conn);
+encodeExpAddUserToLatestHistory(conn, tableName, id);
+sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+
+freeDyString(&update);
+if (escaped)
+    {
+    freez(&organism);
+    freez(&lab);
+    freez(&dataType);
+    freez(&cellType);
+    if (expVars != NULL)
+        freez(&expVars);
+    if (accession != NULL)
+        freez(&accession);
+    }
+}
+
+/* END schema-dependent section */
 
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *tableName)
 /* Load all encodeExp in table */
 {
-struct encodeExp *exps;
+struct encodeExp *exps = NULL;
 
+if (!sqlTableExists(conn, tableName))
+    return NULL;
 struct dyString *dy = newDyString(0);
 dyStringPrintf(dy, "select * from %s", tableName);
 exps = encodeExpLoadByQuery(conn, dyStringContents(dy));
@@ -434,53 +618,29 @@ dyStringFree(&dy);
 return exps;
 }
 
-struct encodeExp *encodeExpFromMdb(struct mdbObj *mdb)
+struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn, char *db, struct mdbObj *mdb)
 /* Create an encodeExp from an ENCODE metaDb object */
 {
-struct encodeExp *exp;
-
 if (!mdbObjIsEncode(mdb))
     errAbort("Metadata object is not from ENCODE");
 
-AllocVar(exp);
-
-/* extract lab */
-exp->lab = mdbObjFindValue(mdb, MDB_FIELD_LAB);
-if (exp->lab == NULL)
-    errAbort("ENCODE metadata object \'%s\' missing lab\n", mdb->obj);
-
-// TODO: -> lib (stripPiFromLab)
-/* Strip off trailing parenthesized PI name if present */
-chopSuffixAt(exp->lab, '(');  // FIXME: This should be removed when mdb is sanitized.
-
-/* extract data type */
-exp->dataType = mdbObjFindValue(mdb, MDB_FIELD_DATA_TYPE);
-if (exp->dataType == NULL)
-    errAbort("ENCODE metadata object \'%s\' missing dataType\n", mdb->obj);
-
-exp->cellType = mdbObjFindValue(mdb, MDB_FIELD_CELL_TYPE);
-if (exp->cellType == NULL)
-    {
-    exp->cellType = ENCODE_EXP_NO_CELL;
+struct mdbVar *edVars = mdbObjFindEncodeEdvs(conn,mdb,FALSE); // exclude vars where val=None
+// To use shared metaDb:
+//struct mdbVar *edVars = mdbObjFindEncodeEdvPairs(conn, MDB_DEFAULT_NAME, mdb, FALSE);
+if (edVars == NULL)
+    {  // Not willing to make these erraborts at this time.
+    char *composite = mdbObjFindValue(mdb,MDB_VAR_COMPOSITE);
+    if (composite == NULL)
+        verbose(1,"MDB object '%s' does not have a composite defined in user metaDb\n",mdb->obj);
+    else
+        verbose(1,"Experiment Defining Variables not defined for composite '%s' in user metaDb\n",composite);
+    return NULL;
     }
-
-/* experimental expVars (variables) */
-int i;
-char *var, *val;
-struct dyString *dy = newDyString(0);
-for (i = 0; expFactors[i] != NULL; i++)
-    {
-    var = expFactors[i];
-    val = mdbObjFindValue(mdb, var);
-    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
-        continue;
-    dyStringPrintf(dy, "%s=%s ", var, val);
-    }
-exp->expVars = dyStringCannibalize(&dy);
-eraseTrailingSpaces(exp->expVars);
-
+struct encodeExp *exp = encodeExpFromMdbVars(db, edVars);
+mdbVarsFree(&edVars);
 return exp;
 }
+
 
 struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars)
 // Creates and returns an encodeExp struct from mdbVars, but does not touch the table
@@ -488,7 +648,7 @@ struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars)
 {
 struct encodeExp *exp;
 AllocVar(exp);
-exp->ix = -1; // This exp is not yet defined
+exp->ix = ENCODE_EXP_IX_UNDEFINED; // This exp is not yet defined
 
 if (db == NULL)
     errAbort("Missing assembly");
@@ -497,57 +657,47 @@ if (db == NULL)
 exp->organism = hOrganism(db);
 strLower(exp->organism);
 
-// KATE: This will not do.  There is not a white list defined yet and the call from mdb will be limited to EDVs
-//struct mdbObj *mdb = mdbObjNew(NULL, vars);
-//// extract exp vars into an slPair list
-//int i;
-//char *var, *val;
-//for (i = 0; expFactors[i] != NULL; i++)
-//    {
-//    var = expFactors[i];
-//    val = mdbObjFindValue(mdb, var);
-//    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
-//        continue;
-//    slPairAdd(&varPairs, var, val);
-//    }
-
 struct slPair *varPairs = NULL;
 struct mdbVar *edv = vars;
 for(;edv != NULL; edv = edv->next)
     {
-    if (sameWord(edv->var,MDB_FIELD_LAB))
+    if (sameWord(edv->var,MDB_VAR_LAB))
         {
         assert(exp->lab == NULL);
-        exp->lab = cloneString((char *)(edv->val));
+        exp->lab = cvLabNormalize((char *)(edv->val));
         }
-    else if (sameWord(edv->var,MDB_FIELD_DATA_TYPE))
+    else if (sameWord(edv->var,MDB_VAR_DATATYPE))
         {
         assert(exp->dataType == NULL);
         exp->dataType = cloneString((char *)(edv->val));
         }
-    else if (sameWord(edv->var,MDB_FIELD_CELL_TYPE))
+    else if (sameWord(edv->var,MDB_VAR_CELL))
         {
         assert(exp->cellType == NULL);
         exp->cellType = cloneString((char *)(edv->val));
         }
     else
-        slPairAdd(&varPairs, edv->var, edv->val); // No need to clone
+        {
+        // exclude uninformative EDV's
+        if (differentString(MDB_VAL_ENCODE_EDV_NONE, (char *)(edv->val)))
+            slPairAdd(&varPairs, edv->var, edv->val); // No need to clone
+        }
     }
 
 // Be sure we have what we need
 if (exp->lab == NULL || exp->dataType == NULL)
     {
     verbose(1,"Experiment Defining Variables must contain '%s' and '%s'\n",
-            MDB_FIELD_LAB,MDB_FIELD_DATA_TYPE); // Not willing to make this an errabort at this time.
+            MDB_VAR_LAB,MDB_VAR_DATATYPE); // Not willing to make this an errabort at this time.
     return NULL;
     }
 if (exp->cellType == NULL)  // Okay if no cell
-    exp->cellType = ENCODE_EXP_NO_CELL;
+    exp->cellType = cloneString(ENCODE_EXP_NO_CELL);
 
 if (varPairs != NULL)
     {
     slPairSortCase(&varPairs);
-    exp->expVars = slPairListToString(varPairs);
+    exp->expVars = slPairListToString(varPairs,FALSE); // don't bother adding quotes since EDVs should not have spaces
     slPairFreeList(&varPairs);
     }
 return exp;
@@ -567,7 +717,7 @@ for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
     assert(fp->name != NULL);
     char *val = hashFindVal(ra, fp->name);
     if (val == NULL && fp->required)
-        errAbort("Required field \'%s\' not found in .ra", fp->name);
+        errAbort("Required field \'%s\' not found in .ra:\n\n%s", fp->name, hashToRaString(ra));
     rows[i] = cloneString(val);
     }
 encodeExpStaticLoad(rows, exp);
@@ -591,8 +741,23 @@ for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
             fprintf(f, "%s %s\n", fp->name, val);
         }
     }
-fputs("\n", f);
+if (f != NULL)
+    fputs("\n", f);
 return ra;
+}
+
+boolean encodeExpSame(struct encodeExp *exp, struct encodeExp *exp2)
+/* Return TRUE if two experiments are the same */
+{
+int i;
+for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
+    {
+    struct encodeExpField *fp = &encodeExpFields[i];
+    assert(fp->name != NULL);
+    if (differentStringNullOk(fp->get(exp), fp->get(exp2)))
+        return FALSE;
+    }
+return TRUE;
 }
 
 struct hash *encodeExpToRa(struct encodeExp *exp)
@@ -601,15 +766,30 @@ struct hash *encodeExpToRa(struct encodeExp *exp)
 return encodeExpToRaFile(exp, NULL);
 }
 
+struct encodeExp *encodeExpGetByIdFromTable(struct sqlConnection *conn, char *tableName, int id)
+/* Return experiment specified by id from named table */
+{
+struct dyString *query = NULL;
+
+query = dyStringCreate("select * from %s where %s=\'%d\'", tableName, ENCODE_EXP_FIELD_IX, id);
+return encodeExpLoadByQuery(conn, dyStringCannibalize(&query));
+}
+
+struct encodeExp *encodeExpGetById(struct sqlConnection *conn, int id)
+/* Return experiment specified by id from default table */
+{
+return encodeExpGetByIdFromTable(conn, ENCODE_EXP_TABLE, id);
+}
+
 static char *encodeExpMakeAccession(struct encodeExp *exp)
 /* Make accession string from prefix + organism + id */
 {
 char accession[64];
 
 char org = '\0';
-if (sameString(exp->organism, "human"))
+if (sameString(exp->organism, ENCODE_EXP_ORGANISM_HUMAN))
     org = 'H';
-else if (sameString(exp->organism, "mouse"))
+else if (sameString(exp->organism, ENCODE_EXP_ORGANISM_MOUSE))
     org = 'M';
 else
     errAbort("Invalid organism %s", exp->organism);
@@ -619,69 +799,161 @@ return cloneString(accession);
 
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp)
 /* Add encodeExp as a new row to the table specified by tableName.
-   Update accession using index assigned with autoincrement
 */
 {
-struct dyString *query = dyStringNew(0);
-char *accession = NULL;
-
-sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
 encodeExpSaveToDb(conn, exp, tableName, 0);
-
-dyStringPrintf(query, "select max(ix) from %s", tableName);
-exp->ix = sqlQuickNum(conn, dyStringContents(query));
-accession = encodeExpMakeAccession(exp);
-freeDyString(&query);
-
-query = newDyString(0);
-dyStringPrintf(query, "update %s set accession=\'%s\' where ix=%d",
-                        tableName, accession, exp->ix);
-sqlUpdate(conn, dyStringContents(query));
-sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
-
-freez(&accession);
-freeDyString(&query);
 }
 
-void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
-                                char *accession, char *field, char *val)
-/* Update field in encodeExp identified by accession with value.
-   Only supported for a few non-interdependent fields */
+static char *encodeExpAccession(struct sqlConnection *conn, char *tableName, int id, boolean add)
+/* Add or remove an accession from an experiment.
+   This is done after the experiment definition is checked for validity.
+*/
 {
 struct dyString *query = NULL;
+char *accession = NULL;
+struct encodeExp *exp = NULL;
+char queryAcc[64];
 
-if (differentString(field, ENCODE_EXP_FIELD_LAB) &&
-    differentString(field, ENCODE_EXP_FIELD_DATA_TYPE) &&
-    differentString(field, ENCODE_EXP_FIELD_CELL_TYPE))
-        errAbort("Unsupported encodeExp field update: %s", field);
-
-query = dyStringCreate("update %s set %s=\'%s\' where accession=\'%s\'",
-                        tableName, field, val, accession);
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
-sqlUpdate(conn, dyStringContents(query));
+exp = encodeExpGetByIdFromTable(conn, tableName, id);
+if (exp == NULL)
+    errAbort("Experiment id %d not found in table %s", id, tableName);
+if (add)
+    {
+    accession = encodeExpMakeAccession(exp);
+    safef(queryAcc, sizeof(queryAcc), "\'%s\'", accession);
+    }
+else
+    safecpy(queryAcc, sizeof(queryAcc), "NULL");
+
+query = dyStringCreate("update %s set %s=%s where %s=%d", tableName,
+                        ENCODE_EXP_FIELD_ACCESSION, queryAcc,
+                        ENCODE_EXP_FIELD_IX, exp->ix);
+sqlUpdate(conn, dyStringCannibalize(&query));
+encodeExpAddUserToLatestHistory(conn, tableName, id);
 sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
-freeDyString(&query);
+return accession;
 }
 
-void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
-                                char *accession, struct slPair *varPairs)
-/* Update expVars in encodeExp identified by accession */
+char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id)
+/* Add accession field to an existing "temp" experiment.  This is done
+ * after experiment is determined to be valid.
+ * Return the accession. */
 {
-struct dyString *dy = dyStringNew(0);
-char *expVars;
-struct slPair *pair;
+return encodeExpAccession(conn, tableName, id, TRUE);
+}
 
-slPairSortCase(&varPairs);
-for (pair = varPairs; pair != NULL; pair = pair->next)
-    dyStringPrintf(dy, "%s=%s ", pair->name, (char *)pair->val);
-expVars = dyStringCannibalize(&dy);
-eraseTrailingSpaces(expVars);
-dy = dyStringCreate("update %s set %s=\'%s\' where accession=\'%s\'",
-                        tableName, ENCODE_EXP_FIELD_FACTORS, expVars, accession);
+void encodeExpSetAccession(struct encodeExp *exp, char *tableName)
+/* Adds accession field to an existing experiment, updating the table. */
+{
+struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
+
+exp->accession = encodeExpAccession(conn, tableName, exp->ix, TRUE);
+
+sqlDisconnect(&conn);
+}
+
+void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id)
+/* Revoke an experiment by removing the accession.
+*/
+{
+encodeExpAccession(conn, tableName, id, FALSE);
+}
+
+void encodeExpRemove(struct sqlConnection *conn, char *tableName, struct encodeExp *exp, char *why)
+/* Delete row containing experiment from encodeExp.
+ * WARNING:  This is a management function, not for regular use.  Accession must
+ * not be present.  In general, experiments should be reviewed before adding to table
+ * rather than added and removed if problematic.
+*/
+{
+char query[256];
+
+/* must match entry in table in all ways */
+struct encodeExp *exp2 = encodeExpGetByIdFromTable(conn, tableName, exp->ix);
+if (encodeExpSame(exp, exp2))
+    {
+    safef(query, sizeof(query), "delete from %s where %s=%d", 
+                                tableName, ENCODE_EXP_FIELD_IX, exp->ix); 
+    sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
+    sqlUpdate(conn, query);
+    encodeExpAddUserToLatestHistory(conn, tableName, exp->ix);
+    encodeExpAddWhyToLatestHistory(conn, tableName, exp->ix, why);
+    sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+    }
+}
+
+boolean encodeExpIsFieldVar(char *var)
+/* Return true if var is a field in schema -- one of standard set (not an expVar) */
+{
+if (var == NULL)
+    return FALSE;
+return (sameString(var, ENCODE_EXP_FIELD_LAB) ||
+    sameString(var, ENCODE_EXP_FIELD_DATA_TYPE) ||
+    sameString(var, ENCODE_EXP_FIELD_CELL_TYPE));
+}
+
+void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
+                                int id, char *var, char *newVal, char *oldVal)
+/* Update field in encodeExp or var in expVars, identified by id with value.
+ * If oldVal is non-NULL, verify it matches experiment, as a safety check.
+ * Abort if experiment is accessioned (must deaccession first) */
+{
+char *val = NULL;
+struct dyString *dy = NULL;
+
+/* verify new value is valid term in CV */
+char *type = cvTermNormalized(var);
+if (type == NULL)
+    errAbort("Attempt to update encodeExp experiment with unknown CV type %s", var);
+if (cvOneTermHash(type, newVal) == NULL)
+    errAbort("Attempt to update encodeExp experiment with unknown CV term %s of type %s", newVal, var);
+
+struct encodeExp *exp = encodeExpGetByIdFromTable(conn, tableName, id);
+if (exp == NULL)
+    errAbort("Id %d not found in experiment table %s", id, tableName);
+if (exp->accession)
+    errAbort("Id %d in table %s has accession", id, tableName);
+
+if (encodeExpIsFieldVar(var))
+    {
+    /* check if old value matches */
+    if (oldVal)
+        {
+        struct hash *expRa = encodeExpToRa(exp);
+        val = hashFindVal(expRa, var);
+        if (val == NULL)
+            errAbort("Field %s not found in id %d from table %s", var, id, tableName);
+        if (differentString(val, oldVal))
+            errAbort("Mismatch: id %d has %s=%s, not %s in table %s", id, var, val, oldVal, tableName);
+        }
+    dy = dyStringCreate("update %s set %s=\'%s\' ", tableName, var, newVal);
+    }
+else
+    {
+    /* must be an expVar -- extract all expVars for this experiment */
+    struct slPair *varPairs = slPairListFromString(exp->expVars,FALSE);
+    struct slPair *pair = slPairFind(varPairs, var);
+    if (pair == NULL)
+        errAbort("Attempt to change experiment %d with unknown expVar %s in table %s",
+                    id, var, tableName);
+    // TODO: allow adding a new expVar
+    if (oldVal)
+        {
+        val = (char *)pair->val;
+        if (differentString(val, oldVal))
+            errAbort("Mismatch: id %d has %s=%s, not %s in table %s", id, var, val, oldVal, tableName);
+        }
+    /* change the designated var */
+    pair->val = newVal;
+    char *expVars = slPairListToString(varPairs, FALSE);
+    dy = dyStringCreate("update %s set %s=\'%s\' ", tableName, ENCODE_EXP_FIELD_FACTORS, expVars);
+    }
+dyStringPrintf(dy, " where ix=%d", id);
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
-sqlUpdate(conn, dyStringContents(dy));
+sqlUpdate(conn, dyStringCannibalize(&dy));
+encodeExpAddUserToLatestHistory(conn, tableName, id);
 sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
-freeDyString(&dy);
 }
 
 char *encodeExpKey(struct encodeExp *exp)
@@ -694,13 +966,24 @@ if (exp->expVars != NULL)
 return dyStringCannibalize(&dy);
 }
 
+char *encodeExpVars(struct encodeExp *exp)
+// Create a string of all experiment defining vars and vals as "lab=UW dataType=ChipSeq ..."
+// WARNING: May be missing var=None if the var was added after composite had defined exps.
+{
+struct dyString *dy = newDyString(0);
+dyStringPrintf(dy, "%s=%s %s=%s", MDB_VAR_LAB, exp->lab, MDB_VAR_DATATYPE, exp->dataType );
+if (exp->cellType != NULL)
+    dyStringPrintf(dy, " %s=%s", MDB_VAR_CELL, exp->cellType);
+if (exp->expVars != NULL)
+    dyStringPrintf(dy, " %s", exp->expVars);
+return dyStringCannibalize(&dy);
+}
+
 struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType,
                                 char *cell, struct slPair *varPairs, char *table)
 /* Return experiments matching args in named experiment table.
  * Organism, Lab and DataType must be non-null */
 {
-char *expVars;
-struct slPair *pair;
 struct encodeExp *exps = NULL;
 
 if (organism == NULL || lab == NULL || dataType == NULL)
@@ -711,21 +994,23 @@ if (cell == NULL)
 
 struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
 
-/* construct expVars string var=val from pairs */
-struct dyString *dy = dyStringNew(0);
-for (pair = varPairs; pair != NULL; pair = pair->next)
-    dyStringPrintf(dy, "%s=%s ", pair->name, (char *)pair->val);
-expVars = dyStringCannibalize(&dy);
-eraseTrailingSpaces(expVars);
-
-dy = dyStringCreate(
-        "select * from %s where %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\'",
+struct dyString *dy = dyStringCreate(
+        "select * from %s where %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s",
                 table,
                 ENCODE_EXP_FIELD_ORGANISM, organism,
                 ENCODE_EXP_FIELD_LAB, lab,
                 ENCODE_EXP_FIELD_DATA_TYPE, dataType,
                 ENCODE_EXP_FIELD_CELL_TYPE, cell,
-                ENCODE_EXP_FIELD_FACTORS, expVars);
+                ENCODE_EXP_FIELD_FACTORS);
+/* construct expVars string var=val from pairs */
+if (varPairs == NULL)
+    dyStringAppend(dy, " is NULL");
+else
+    {
+    dyStringAppend(dy, "=");
+    dyStringQuoteString(dy, '\'', slPairListToString(varPairs, FALSE));
+    }
+verbose(2, "query: %s\n", dy->string);
 exps = encodeExpLoadByQuery(conn, dyStringCannibalize(&dy));
 sqlDisconnect(&conn);
 return exps;
@@ -743,12 +1028,13 @@ struct encodeExp *encodeExpGetByMdbVarsFromTable(char *db, struct mdbVar *vars, 
 /* Return experiments by looking up mdb var list from the named experiment table */
 {
 struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
-struct slPair *edvVars = slPairFromString(exp->expVars);
+struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 
 struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
 // No longer needed
 encodeExpFree(&exp);
-slPairFreeValsAndList(&edvVars);
+if (edvVars != NULL)
+    slPairFreeValsAndList(&edvVars);
 return expFound;
 }
 
@@ -762,26 +1048,19 @@ struct encodeExp *encodeExpGetOrCreateByMdbVarsFromTable(char *db, struct mdbVar
 // Return experiment looked up or created from the mdb var list from the named experiment table.
 {
 struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
-struct slPair *edvVars = slPairFromString(exp->expVars);
+struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 
 struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
-slPairFreeValsAndList(&edvVars);
-if (expFound)
+if (expFound == NULL)
     {
-    // No longer needed
-    encodeExpFree(&exp);
-    slPairFreeValsAndList(&edvVars);
-    return expFound;
+    struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
+    encodeExpAdd(conn, table, exp);
+    sqlDisconnect(&conn);
+    expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
     }
-
-struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
-encodeExpAdd(conn, table, exp);
-sqlDisconnect(&conn);
-
-// No longer needed
+encodeExpFree(&exp);
 slPairFreeValsAndList(&edvVars);
-
-return exp;
+return expFound;
 }
 
 int encodeExpExists(char *db, struct mdbVar *vars)
@@ -793,7 +1072,7 @@ freez(&exp);
 return found;
 }
 
-char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars)
+char *encodeExpGetAccessionByMdbVars(char *db, struct mdbVar *vars)
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 {
 struct encodeExp *exp = encodeExpGetByMdbVars(db, vars);
@@ -801,4 +1080,3 @@ char *acc = encodeExpGetAccession(exp);
 freez(&exp);
 return acc;
 }
-

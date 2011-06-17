@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 L += -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS = ../lib/${MACHTYPE}/encode.a ${MYLIBDIR}/jkweb.a 
 
 A = encodePatchTdb
 O = encodePatchTdb.o

@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = pslPretty.o
 
 pslPretty: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslPretty $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/pslPretty $O $(MYLIBS) $L
 
 test:: testRna testDnax
 

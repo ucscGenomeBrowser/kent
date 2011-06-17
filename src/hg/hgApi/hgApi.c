@@ -7,7 +7,7 @@
 #include "hPrint.h"
 #include "dystring.h"
 #include "hui.h"
-#include "searchTracks.h"
+#include "search.h"
 
 static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
@@ -100,7 +100,8 @@ else if(!strcmp(cmd, "metaDb"))
             var = sqlEscapeString(var);
         else
             fail("Missing var parameter");
-        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
+        boolean fileSearch = (cgiOptionalInt("fileSearch",0) == 1);
+        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, !fileSearch, fileSearch); // not tags, either a file or table search
         struct slPair *pair;
         dyStringPrintf(output, "[\n");
         for (pair = pairs; pair != NULL; pair = pair->next)
@@ -137,15 +138,16 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
         if(ix == 0) //
             fail("Unsupported 'cmd' parameter");
 
-        enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
+        enum cvSearchable searchBy = cvSearchMethod(var);
         char name[128];
         safef(name,sizeof name,"%s%i",METADATA_VALUE_PREFIX,ix);
-        if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
+        if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
             {
-            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
+            boolean fileSearch = (cgiOptionalInt("fileSearch",0) == 1);
+            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, !fileSearch, fileSearch); // not tags, either a file or table search
             if (slCount(pairs) > 0)
                 {
-                char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvsSearchByMultiSelect),
+                char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
                         name, pairs,NULL, ANYLABEL,"mdbVal", "style='min-width: 200px; font-size: .9em;' onchange='findTracksMdbValChanged(this);'");
                 if (dropDownHtml)
                     {
@@ -155,12 +157,12 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
                 slPairFreeList(&pairs);
                 }
             }
-        else if (searchBy == cvsSearchByFreeText)
+        else if (searchBy == cvSearchByFreeText)
             {
             dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
                             name);
             }
-        else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+        else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
             {
             // TO BE IMPLEMENTED
             }

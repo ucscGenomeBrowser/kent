@@ -125,6 +125,7 @@ verifyGreatAssemblies();
 startGreatForm();
 cgiMakeHiddenVar(hgtaDoTopSubmit, "get output");
 printGreatSubmitButtons();
+hPrintf("<div style='height:.9em;'></div>\n");
 htmlClose();
 }
 
@@ -164,7 +165,7 @@ void doSubmitToGreat(const char *path)
 /* Send a URL to GREAT that it can use to retrieve the results. */
 {
 struct dyString *requestName = getRequestName();
-struct dyString *requestURL = dyStringCreate("http://%s/%s", cgiServerName(), path);
+struct dyString *requestURL = dyStringCreate("http://%s/%s", cgiServerNamePort(), path);
 struct dyString *greatRequest;
 
 greatRequest = dyStringCreate(

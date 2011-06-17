@@ -20,6 +20,7 @@ DIRS = \
 	crTreeIndexBed \
 	crTreeSearchBed \
 	gapToLift \
+	hubCheck hubPublicCheck \
 	oligoMatch \
 	positionalTblCheck \
 	safePush \

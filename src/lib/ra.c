@@ -44,78 +44,130 @@ lineFileReuse(lf);
 return TRUE;
 }
 
-boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString *dy)
-/* Read next line.  Return FALSE at end of file or blank line.  Otherwise
- * fill in *retTag and *retVal and return TRUE.
- * If dy parameter is non-null, then the text parsed gets appended to dy. */
+boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString *dyRecord)
+// Read next line.  Return FALSE at end of file or blank line.  Otherwise fill in
+// *retTag and *retVal and return TRUE.  If dy parameter is non-null, then the text parsed
+// gets appended to dy. Continuation lines in RA file will be joined to produce tag and val,
+// but dy will be filled with the unedited multiple lines containing the continuation chars.
+// NOTE: retTag & retVal, if returned, point to static mem which will be overwritten on next call!
 {
-char *line;
-for (;;)
+*retTag = NULL;
+*retVal = NULL;
+
+char *line, *raw = NULL;
+int lineLen,rawLen;
+
+// Don't bother with raw if it isn't used.
+char **pRaw    = NULL;
+int   *pRawLen = NULL;
+if (dyRecord != NULL)
     {
-    if (!lineFileNext(lf, &line, NULL))
-       return FALSE;
-    char *tag = skipLeadingSpaces(line);
-    if (tag[0] == 0)
-       {
-       if (dy)
-	   lineFileReuse(lf);	/* Just so don't lose leading space in dy. */
-       return FALSE;
-       }
-    if (dy)
-       {
-       dyStringAppend(dy, line);
-       dyStringAppendC(dy, '\n');
-       }
-    if (tag[0] == '#')
-       {
-       if (startsWith("#EOF", tag))
-	   return FALSE;
-       else
-	   {
-	   continue;
-	   }
-       }
-    break;
+    pRaw    = &raw;
+    pRawLen = &rawLen;
     }
-*retTag = nextWord(&line);
-*retVal = trimSpaces(line);
-return TRUE;
+
+while (lineFileNextFull(lf, &line, &lineLen, pRaw, pRawLen)) // Joins continuation lines
+    {
+    char *clippedText = skipLeadingSpaces(line);
+    if (*clippedText == 0)
+        {
+        if (dyRecord)
+            lineFileReuse(lf);   // Just so don't loose leading space in dy.
+        return FALSE;
+        }
+
+    // Append whatever line was read from file.
+    if (dyRecord)
+       {
+        if (raw != NULL)
+            dyStringAppendN(dyRecord, raw, rawLen);
+       else
+            dyStringAppendN(dyRecord, line, lineLen);
+       dyStringAppendC(dyRecord,'\n');
+       }
+
+    // Skip comments
+    if (*clippedText == '#')
+       {
+       if (startsWith("#EOF", clippedText))
+           return FALSE;
+       else
+           continue;
+       }
+    *retTag = nextWord(&line);
+    *retVal = trimSpaces(line);
+    return TRUE;
+    }
+return FALSE;
 }
 
-struct hash *raNextRecord(struct lineFile *lf)
-/* Return a hash containing next record.
- * Returns NULL at end of file.  freeHash this
- * when done.  Note this will free the hash
- * keys and values as well, so you'll have to
- * cloneMem them if you want them for later. */
+struct hash *raNextStanza(struct lineFile *lf)
+// Return a hash containing next record.
+// Will ignore '#' comments and joins continued lines (ending in '\').
+// Returns NULL at end of file.  freeHash this when done.
+// Note this will free the hash keys and values as well,
+// so you'll have to cloneMem them if you want them for later.
 {
 struct hash *hash = NULL;
 char *key, *val;
 
 if (!raSkipLeadingEmptyLines(lf, NULL))
     return NULL;
+
 while (raNextTagVal(lf, &key, &val, NULL))
     {
     if (hash == NULL)
-	hash = newHash(7);
-    val = lmCloneString(hash->lm, val);
-    hashAdd(hash, key, val);
+        hash = newHash(7);
+    hashAdd(hash, key, lmCloneString(hash->lm, val));
     }
 return hash;
 }
 
-struct slPair *raNextRecordAsSlPairList(struct lineFile *lf)
-/* Return ra record as a slPair list instead of a hash.  Handy if you want to preserve the order.
- * Do a slPairFreeValsAndList on result when done. */
+struct slPair *raNextStanzAsPairs(struct lineFile *lf)
+// Return ra stanza as an slPair list instead of a hash.  Handy to preserve the
+// order.  Will ignore '#' comments and joins continued lines (ending in '\').
 {
 struct slPair *list = NULL;
 char *key, *val;
 if (!raSkipLeadingEmptyLines(lf, NULL))
     return NULL;
+
 while (raNextTagVal(lf, &key, &val, NULL))
-    slPairAdd(&list, key, cloneString(val));
+    {
+    slPairAdd(&list, key, cloneString(val)); // key gets cloned by slPairAdd
+    }
+
 slReverse(&list);
 return list;
+}
+
+struct slPair *raNextStanzaLinesAndUntouched(struct lineFile *lf)
+// Return list of lines starting from current position, up through last line of next stanza.
+// May return a few blank/comment lines at end with no real stanza.
+// Will join continuation lines, allocating memory as needed.
+// returns pairs with name=joined line and if joined,
+// val will contain raw lines '\'s and linefeeds, else val will be NULL.
+{
+struct slPair *pairs = NULL;
+boolean stanzaStarted = FALSE;
+char *line, *raw;
+int lineLen,rawLen;
+while (lineFileNextFull(lf, &line, &lineLen, &raw, &rawLen)) // Joins continuation lines
+    {
+    char *clippedText = skipLeadingSpaces(line);
+
+    if (stanzaStarted && clippedText[0] == 0)
+        {
+        lineFileReuse(lf);
+        break;
+        }
+    if (!stanzaStarted && clippedText[0] != 0 && clippedText[0] != '#')
+        stanzaStarted = TRUE; // Comments don't start stanzas and may be followed by blanks
+
+    slPairAdd(&pairs, line,(raw != NULL?cloneString(raw):NULL));
+    }
+slReverse(&pairs);
+return pairs;
 }
 
 struct hash *raFromString(char *string)
@@ -157,7 +209,7 @@ struct hashEl *hel;
 
 /* Get first nonempty non-comment line and make sure
  * it contains name. */
-if (!lineFileNextReal(lf, &line))
+if (!lineFileNextFullReal(lf, &line))
     return NULL;
 word = nextWord(&line);
 if (!sameString(word, "name"))
@@ -180,11 +232,11 @@ if ((ra = hashFindVal(hashOfHash, name)) == NULL)
  * blank line or end of file. */
 for (;;)
     {
-    if (!lineFileNext(lf, &line, NULL))
+    if (!lineFileNextFull(lf, &line, NULL,NULL,NULL)) // Not using FullReal to detect end of stanza
         break;
     line = skipLeadingSpaces(line);
     if (line[0] == 0)
-        break;
+        break;                                        // End of stanza detected
     if (line[0] == '#')
         continue;
     word = nextWord(&line);
@@ -293,3 +345,22 @@ if (hashNumEntries(bigHash) == 0)
 return bigHash;
 }
 
+struct hash *raTagVals(char *fileName, char *tag)
+/* Return a hash of all values of given tag seen in any stanza of ra file. */
+{
+struct hash *hash = hashNew(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+while (lineFileNextFullReal(lf, &line))
+    {
+    char *word = nextWord(&line);
+    if (sameString(word, tag))
+        {
+	char *val = trimSpaces(line);
+	if (!hashLookup(hash, val))
+	    hashAdd(hash, val, NULL);
+	}
+    }
+lineFileClose(&lf);
+return hash;
+}
