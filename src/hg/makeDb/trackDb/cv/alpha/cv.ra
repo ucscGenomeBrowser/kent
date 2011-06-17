@@ -3796,7 +3796,7 @@ vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
-color 204,121,16
+color 153,38,0
 sex U
 protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
@@ -3813,7 +3813,7 @@ vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
-color 204,121,16
+color 153,38,0
 sex U
 protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
 
@@ -3849,7 +3849,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
-color 189,0,157
+color 204,121,16
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -4085,7 +4085,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
-color 230,159,0
+color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol LICR:Placenta_Ren_protocol.pdf
@@ -4105,7 +4105,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
-color 86,180,233
+color 230,159,0
 sex U
 protocol LICR(Ren):SmallIntestine_Ren_protocol.pdf
 
