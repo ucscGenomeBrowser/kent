@@ -780,7 +780,7 @@ tier 3
 organism human
 description rectum, donor N29, age 29, Asian, DNA extract
 tissue Rectum
-lineage Rectum
+lineage endoderm
 karyotype normal
 sex M
 vendorName BioChain
@@ -831,6 +831,7 @@ tier 3
 organism human
 description skin, donor 01-11002, age 83, caucasian, DNA extract
 tissue Skin
+lineage ectoderm, mesoderm
 karyotype normal
 sex F
 vendorName BioChain
