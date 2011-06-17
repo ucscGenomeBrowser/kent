@@ -975,7 +975,7 @@ termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex M
 tier 3
-protocol HudsonAlpha:BE2-C_Myers_protocol.pdf
+protocol UW_Stam:BE2-C_Stam_protocol.pdf HudsonAlpha:BE2-C_Myers_protocol.pdf
 
 term BG02ES
 tag BG02ES
@@ -2417,15 +2417,15 @@ organism human
 description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
-vendorName Lonza
-vendorId (missing)
-orderUrl http://www.lonza.com/
+vendorName Refer to the protocol documents for differing sources
+#vendorId (missing)
+#orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
 sex U
 tier 3
-protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf UW_Stam:HSMM_Stam_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -3193,7 +3193,7 @@ termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 sex F
 tier 3
-protocol HudsonAlpha:SK-N-MC_protocol.pdf
+protocol HudsonAlpha:SK-N-MC_protocol.pdf SK-N-MC_Stam_protocol.pdf
 
 term SK-N-SH
 tag SKNSH
