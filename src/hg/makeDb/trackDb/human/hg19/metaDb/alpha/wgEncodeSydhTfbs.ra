@@ -978,6 +978,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
+dccAccession wgEncodeEH000622
+expId 622
 fileName wgEncodeSydhTfbsGm12878CfosRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -1000,6 +1002,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
+dccAccession wgEncodeEH000622
+expId 622
 fileName wgEncodeSydhTfbsGm12878CfosRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -1022,6 +1026,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
+dccAccession wgEncodeEH000622
+expId 622
 fileName wgEncodeSydhTfbsGm12878CfosRawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -1045,6 +1051,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-06-11
 dateUnrestricted 2009-08-25
+dccAccession wgEncodeEH000622
+expId 622
 fileName wgEncodeSydhTfbsGm12878CfosStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -1069,6 +1077,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-06-11
 dateUnrestricted 2009-08-25
+dccAccession wgEncodeEH000622
+expId 622
 fileName wgEncodeSydhTfbsGm12878CfosStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -1093,6 +1103,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-06-11
 dateUnrestricted 2009-08-25
+dccAccession wgEncodeEH000622
+expId 622
 fileName wgEncodeSydhTfbsGm12878CfosStdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -1116,6 +1128,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000622
+expId 622
 fileName wgEncodeSydhTfbsGm12878CfosStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -1137,6 +1151,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000622
+expId 622
 fileName wgEncodeSydhTfbsGm12878CfosStdSig.bigWig
 grant Snyder
 lab Yale
@@ -1898,6 +1914,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
+dccAccession wgEncodeEH000625
+expId 625
 fileName wgEncodeSydhTfbsGm12878InputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -1920,6 +1938,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-09
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000625
+expId 625
 fileName wgEncodeSydhTfbsGm12878InputStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -1943,6 +1963,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000625
+expId 625
 fileName wgEncodeSydhTfbsGm12878InputStdSig.bigWig
 grant Snyder
 lab Yale
@@ -2096,6 +2118,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000639
+expId 639
 fileName wgEncodeSydhTfbsGm12878JundRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -2118,6 +2142,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000639
+expId 639
 fileName wgEncodeSydhTfbsGm12878JundRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -2141,6 +2167,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000639
+expId 639
 fileName wgEncodeSydhTfbsGm12878JundStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -2165,6 +2193,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000639
+expId 639
 fileName wgEncodeSydhTfbsGm12878JundStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -2188,6 +2218,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000639
+expId 639
 fileName wgEncodeSydhTfbsGm12878JundStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -2209,6 +2241,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000639
+expId 639
 fileName wgEncodeSydhTfbsGm12878JundStdSig.bigWig
 grant Snyder
 lab Yale
@@ -2230,6 +2264,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
+dccAccession wgEncodeEH000623
+expId 623
 fileName wgEncodeSydhTfbsGm12878MaxRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -2252,6 +2288,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
+dccAccession wgEncodeEH000623
+expId 623
 fileName wgEncodeSydhTfbsGm12878MaxRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -2275,6 +2313,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
+dccAccession wgEncodeEH000623
+expId 623
 fileName wgEncodeSydhTfbsGm12878MaxStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -2299,6 +2339,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
+dccAccession wgEncodeEH000623
+expId 623
 fileName wgEncodeSydhTfbsGm12878MaxStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -2322,6 +2364,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000623
+expId 623
 fileName wgEncodeSydhTfbsGm12878MaxStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -2343,6 +2387,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000623
+expId 623
 fileName wgEncodeSydhTfbsGm12878MaxStdSig.bigWig
 grant Snyder
 lab Yale
@@ -2728,6 +2774,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -2751,6 +2799,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -2774,6 +2824,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -2796,6 +2848,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep4.fastq.gz
 grant Snyder
 lab Yale
@@ -2819,6 +2873,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -2843,6 +2899,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -2867,6 +2925,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -2891,6 +2951,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep4.bam
 grant Snyder
 lab Yale
@@ -2914,6 +2976,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -2935,6 +2999,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000691
+expId 691
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdSig.bigWig
 grant Snyder
 lab Yale
@@ -3587,6 +3653,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
+dccAccession wgEncodeEH000626
+expId 626
 fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -3609,6 +3677,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
+dccAccession wgEncodeEH000626
+expId 626
 fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -3632,6 +3702,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
+dccAccession wgEncodeEH000626
+expId 626
 fileName wgEncodeSydhTfbsGm12878Pol2StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -3656,6 +3728,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
+dccAccession wgEncodeEH000626
+expId 626
 fileName wgEncodeSydhTfbsGm12878Pol2StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -3679,6 +3753,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000626
+expId 626
 fileName wgEncodeSydhTfbsGm12878Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -3700,6 +3776,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000626
+expId 626
 fileName wgEncodeSydhTfbsGm12878Pol2StdSig.bigWig
 grant Snyder
 lab Yale
@@ -3849,6 +3927,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000645
+expId 645
 fileName wgEncodeSydhTfbsGm12878Pol3RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -3872,6 +3952,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000645
+expId 645
 fileName wgEncodeSydhTfbsGm12878Pol3RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -3896,6 +3978,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000645
+expId 645
 fileName wgEncodeSydhTfbsGm12878Pol3StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -3920,6 +4004,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000645
+expId 645
 fileName wgEncodeSydhTfbsGm12878Pol3StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -3943,6 +4029,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000645
+expId 645
 fileName wgEncodeSydhTfbsGm12878Pol3StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -3964,6 +4052,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000645
+expId 645
 fileName wgEncodeSydhTfbsGm12878Pol3StdSig.bigWig
 grant Snyder
 lab Yale
@@ -4895,6 +4985,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000697
+expId 697
 fileName wgEncodeSydhTfbsGm12878Tr4RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -4918,6 +5010,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000697
+expId 697
 fileName wgEncodeSydhTfbsGm12878Tr4RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -4942,6 +5036,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000697
+expId 697
 fileName wgEncodeSydhTfbsGm12878Tr4StdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -4966,6 +5062,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000697
+expId 697
 fileName wgEncodeSydhTfbsGm12878Tr4StdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -4989,6 +5087,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000697
+expId 697
 fileName wgEncodeSydhTfbsGm12878Tr4StdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -5010,6 +5110,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000697
+expId 697
 fileName wgEncodeSydhTfbsGm12878Tr4StdSig.bigWig
 grant Snyder
 lab UCD
@@ -5292,6 +5394,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000695
+expId 695
 fileName wgEncodeSydhTfbsGm12878Yy1RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -5316,6 +5420,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000695
+expId 695
 fileName wgEncodeSydhTfbsGm12878Yy1RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -5341,6 +5447,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000695
+expId 695
 fileName wgEncodeSydhTfbsGm12878Yy1StdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -5365,6 +5473,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000695
+expId 695
 fileName wgEncodeSydhTfbsGm12878Yy1StdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -5388,6 +5498,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000695
+expId 695
 fileName wgEncodeSydhTfbsGm12878Yy1StdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -5409,6 +5521,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000695
+expId 695
 fileName wgEncodeSydhTfbsGm12878Yy1StdSig.bigWig
 grant Snyder
 lab UCD
@@ -12439,6 +12553,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000627
+expId 627
 fileName wgEncodeSydhTfbsHct116InputRawData.fastq.gz
 grant Snyder
 lab UCD
@@ -12461,6 +12577,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000627
+expId 627
 fileName wgEncodeSydhTfbsHct116InputUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -12484,6 +12602,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000627
+expId 627
 fileName wgEncodeSydhTfbsHct116InputUcdSig.bigWig
 grant Snyder
 lab UCD
@@ -12505,6 +12625,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-15
 dateUnrestricted 2010-02-15
+dccAccession wgEncodeEH000651
+expId 651
 fileName wgEncodeSydhTfbsHct116Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -12528,6 +12650,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-15
 dateUnrestricted 2010-02-15
+dccAccession wgEncodeEH000651
+expId 651
 fileName wgEncodeSydhTfbsHct116Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -12552,6 +12676,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-15
 dateUnrestricted 2010-02-15
+dccAccession wgEncodeEH000651
+expId 651
 fileName wgEncodeSydhTfbsHct116Pol2UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -12576,6 +12702,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-15
 dateUnrestricted 2010-02-15
+dccAccession wgEncodeEH000651
+expId 651
 fileName wgEncodeSydhTfbsHct116Pol2UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -12599,6 +12727,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000651
+expId 651
 fileName wgEncodeSydhTfbsHct116Pol2UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -12620,6 +12750,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000651
+expId 651
 fileName wgEncodeSydhTfbsHct116Pol2UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -12641,6 +12773,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000628
+expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -12665,6 +12799,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000628
+expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -12690,6 +12826,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000628
+expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -12714,6 +12852,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000628
+expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -12737,6 +12877,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000628
+expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -12758,6 +12900,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000628
+expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -12779,6 +12923,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000631
+expId 631
 fileName wgEncodeSydhTfbsHek293InputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -12862,6 +13008,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000632
+expId 632
 fileName wgEncodeSydhTfbsHek293Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -12884,6 +13032,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000632
+expId 632
 fileName wgEncodeSydhTfbsHek293Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -12906,6 +13056,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000632
+expId 632
 fileName wgEncodeSydhTfbsHek293Pol2RawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -13057,6 +13209,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-09
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000631
+expId 631
 fileName wgEncodeSydhTfbsHek293bInputStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -13080,6 +13234,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000631
+expId 631
 fileName wgEncodeSydhTfbsHek293bInputStdSig.bigWig
 grant Snyder
 lab Yale
@@ -13230,6 +13386,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000632
+expId 632
 fileName wgEncodeSydhTfbsHek293bPol2StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -13254,6 +13412,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000632
+expId 632
 fileName wgEncodeSydhTfbsHek293bPol2StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -13278,6 +13438,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000632
+expId 632
 fileName wgEncodeSydhTfbsHek293bPol2StdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -13301,6 +13463,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000632
+expId 632
 fileName wgEncodeSydhTfbsHek293bPol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -13322,6 +13486,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000632
+expId 632
 fileName wgEncodeSydhTfbsHek293bPol2StdSig.bigWig
 grant Snyder
 lab Yale
@@ -13343,6 +13509,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
+dccAccession wgEncodeEH000685
+expId 685
 fileName wgEncodeSydhTfbsHelas3Ap2alphaRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -13367,6 +13535,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
+dccAccession wgEncodeEH000685
+expId 685
 fileName wgEncodeSydhTfbsHelas3Ap2alphaRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -13392,6 +13562,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
+dccAccession wgEncodeEH000685
+expId 685
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -13416,6 +13588,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
+dccAccession wgEncodeEH000685
+expId 685
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -13439,6 +13613,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000685
+expId 685
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -13460,6 +13636,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000685
+expId 685
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdSig.bigWig
 grant Snyder
 lab UCD
@@ -13481,6 +13659,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
+dccAccession wgEncodeEH000686
+expId 686
 fileName wgEncodeSydhTfbsHelas3Ap2gammaRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -13505,6 +13685,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
+dccAccession wgEncodeEH000686
+expId 686
 fileName wgEncodeSydhTfbsHelas3Ap2gammaRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -13530,6 +13712,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
+dccAccession wgEncodeEH000686
+expId 686
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -13554,6 +13738,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
+dccAccession wgEncodeEH000686
+expId 686
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -13577,6 +13763,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000686
+expId 686
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -13598,6 +13786,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000686
+expId 686
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdSig.bigWig
 grant Snyder
 lab UCD
@@ -13985,6 +14175,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000763
+expId 763
 fileName wgEncodeSydhTfbsHelas3Bdp1RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -14008,6 +14200,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000763
+expId 763
 fileName wgEncodeSydhTfbsHelas3Bdp1RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -14032,6 +14226,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000763
+expId 763
 fileName wgEncodeSydhTfbsHelas3Bdp1StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -14056,6 +14252,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000763
+expId 763
 fileName wgEncodeSydhTfbsHelas3Bdp1StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -14079,6 +14277,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000763
+expId 763
 fileName wgEncodeSydhTfbsHelas3Bdp1StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -14100,6 +14300,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000763
+expId 763
 fileName wgEncodeSydhTfbsHelas3Bdp1StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -14253,6 +14455,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000764
+expId 764
 fileName wgEncodeSydhTfbsHelas3Brf1RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -14275,6 +14479,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000764
+expId 764
 fileName wgEncodeSydhTfbsHelas3Brf1RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -14298,6 +14504,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000764
+expId 764
 fileName wgEncodeSydhTfbsHelas3Brf1StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -14322,6 +14530,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000764
+expId 764
 fileName wgEncodeSydhTfbsHelas3Brf1StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -14345,6 +14555,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000764
+expId 764
 fileName wgEncodeSydhTfbsHelas3Brf1StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -14366,6 +14578,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000764
+expId 764
 fileName wgEncodeSydhTfbsHelas3Brf1StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -14387,6 +14601,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000765
+expId 765
 fileName wgEncodeSydhTfbsHelas3Brf2RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -14409,6 +14625,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000765
+expId 765
 fileName wgEncodeSydhTfbsHelas3Brf2RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -14432,6 +14650,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000765
+expId 765
 fileName wgEncodeSydhTfbsHelas3Brf2StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -14456,6 +14676,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000765
+expId 765
 fileName wgEncodeSydhTfbsHelas3Brf2StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -14479,6 +14701,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000765
+expId 765
 fileName wgEncodeSydhTfbsHelas3Brf2StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -14500,6 +14724,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000765
+expId 765
 fileName wgEncodeSydhTfbsHelas3Brf2StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -14522,6 +14748,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000781
+expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep1.bam
 grant Snyder
 lab Yale
@@ -14546,6 +14774,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000781
+expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep2.bam
 grant Snyder
 lab Yale
@@ -14570,6 +14800,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000781
+expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep3.bam
 grant Snyder
 lab Yale
@@ -14593,6 +14825,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000781
+expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -14614,6 +14848,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000781
+expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -14637,6 +14873,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000781
+expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -14660,6 +14898,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000781
+expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -14683,6 +14923,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000781
+expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusSig.bigWig
 grant Snyder
 lab Yale
@@ -14836,6 +15078,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000647
+expId 647
 fileName wgEncodeSydhTfbsHelas3CfosRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -14859,6 +15103,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000647
+expId 647
 fileName wgEncodeSydhTfbsHelas3CfosRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -14883,6 +15129,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000647
+expId 647
 fileName wgEncodeSydhTfbsHelas3CfosStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -14907,6 +15155,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000647
+expId 647
 fileName wgEncodeSydhTfbsHelas3CfosStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -14930,6 +15180,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000647
+expId 647
 fileName wgEncodeSydhTfbsHelas3CfosStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -14951,6 +15203,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000647
+expId 647
 fileName wgEncodeSydhTfbsHelas3CfosStdSig.bigWig
 grant Snyder
 lab Yale
@@ -15106,6 +15360,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000648
+expId 648
 fileName wgEncodeSydhTfbsHelas3CmycRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -15129,6 +15385,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000648
+expId 648
 fileName wgEncodeSydhTfbsHelas3CmycRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -15153,6 +15411,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000648
+expId 648
 fileName wgEncodeSydhTfbsHelas3CmycStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -15177,6 +15437,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000648
+expId 648
 fileName wgEncodeSydhTfbsHelas3CmycStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -15200,6 +15462,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000648
+expId 648
 fileName wgEncodeSydhTfbsHelas3CmycStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -15221,6 +15485,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000648
+expId 648
 fileName wgEncodeSydhTfbsHelas3CmycStdSig.bigWig
 grant Snyder
 lab Yale
@@ -15242,6 +15508,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000699
+expId 699
 fileName wgEncodeSydhTfbsHelas3E2f1RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -15266,6 +15534,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000699
+expId 699
 fileName wgEncodeSydhTfbsHelas3E2f1RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -15291,6 +15561,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000699
+expId 699
 fileName wgEncodeSydhTfbsHelas3E2f1StdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -15315,6 +15587,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000699
+expId 699
 fileName wgEncodeSydhTfbsHelas3E2f1StdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -15338,6 +15612,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000699
+expId 699
 fileName wgEncodeSydhTfbsHelas3E2f1StdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -15359,6 +15635,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000699
+expId 699
 fileName wgEncodeSydhTfbsHelas3E2f1StdSig.bigWig
 grant Snyder
 lab UCD
@@ -15380,6 +15658,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000689
+expId 689
 fileName wgEncodeSydhTfbsHelas3E2f4RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -15404,6 +15684,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000689
+expId 689
 fileName wgEncodeSydhTfbsHelas3E2f4RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -15429,6 +15711,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000689
+expId 689
 fileName wgEncodeSydhTfbsHelas3E2f4StdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -15453,6 +15737,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000689
+expId 689
 fileName wgEncodeSydhTfbsHelas3E2f4StdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -15476,6 +15762,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000689
+expId 689
 fileName wgEncodeSydhTfbsHelas3E2f4StdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -15497,6 +15785,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000689
+expId 689
 fileName wgEncodeSydhTfbsHelas3E2f4StdSig.bigWig
 grant Snyder
 lab UCD
@@ -15518,6 +15808,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-21
 dateUnrestricted 2010-07-20
+dccAccession wgEncodeEH000692
+expId 692
 fileName wgEncodeSydhTfbsHelas3E2f6RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -15542,6 +15834,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-21
 dateUnrestricted 2010-07-20
+dccAccession wgEncodeEH000692
+expId 692
 fileName wgEncodeSydhTfbsHelas3E2f6RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -15567,6 +15861,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-21
 dateUnrestricted 2010-07-20
+dccAccession wgEncodeEH000692
+expId 692
 fileName wgEncodeSydhTfbsHelas3E2f6StdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -15591,6 +15887,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-21
 dateUnrestricted 2010-07-20
+dccAccession wgEncodeEH000692
+expId 692
 fileName wgEncodeSydhTfbsHelas3E2f6StdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -15614,6 +15912,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000692
+expId 692
 fileName wgEncodeSydhTfbsHelas3E2f6StdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -15635,6 +15935,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000692
+expId 692
 fileName wgEncodeSydhTfbsHelas3E2f6StdSig.bigWig
 grant Snyder
 lab UCD
@@ -16044,6 +16346,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000688
+expId 688
 fileName wgEncodeSydhTfbsHelas3HaRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -16068,6 +16372,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000688
+expId 688
 fileName wgEncodeSydhTfbsHelas3HaRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -16093,6 +16399,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
+dccAccession wgEncodeEH000688
+expId 688
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -16117,6 +16425,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
+dccAccession wgEncodeEH000688
+expId 688
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -16140,6 +16450,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000688
+expId 688
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -16161,6 +16473,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000688
+expId 688
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdSig.bigWig
 grant Snyder
 lab UCD
@@ -16366,6 +16680,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-09
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000611
+expId 611
 fileName wgEncodeSydhTfbsHelas3InputIfng30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -16389,6 +16705,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000611
+expId 611
 fileName wgEncodeSydhTfbsHelas3InputIfng30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -16411,6 +16729,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000633
+expId 633
 fileName wgEncodeSydhTfbsHelas3InputIggmusAlnRep1.bam
 grant Snyder
 lab Yale
@@ -16435,6 +16755,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000633
+expId 633
 fileName wgEncodeSydhTfbsHelas3InputIggmusAlnRep2.bam
 grant Snyder
 lab Yale
@@ -16458,6 +16780,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000633
+expId 633
 fileName wgEncodeSydhTfbsHelas3InputIggmusSig.bigWig
 grant Snyder
 lab Yale
@@ -16525,6 +16849,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-23
 dateUnrestricted 2010-02-22
+dccAccession wgEncodeEH000634
+expId 634
 fileName wgEncodeSydhTfbsHelas3InputLargefragmentAlnRep1.bam
 grant Snyder
 lab Yale
@@ -16549,6 +16875,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-23
 dateUnrestricted 2010-02-22
+dccAccession wgEncodeEH000634
+expId 634
 fileName wgEncodeSydhTfbsHelas3InputLargefragmentAlnRep2.bam
 grant Snyder
 lab Yale
@@ -16572,6 +16900,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000634
+expId 634
 fileName wgEncodeSydhTfbsHelas3InputLargefragmentSig.bigWig
 grant Snyder
 lab Yale
@@ -16594,6 +16924,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000635
+expId 635
 fileName wgEncodeSydhTfbsHelas3InputMnaseAlnRep1.bam
 grant Snyder
 lab Yale
@@ -16618,6 +16950,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000635
+expId 635
 fileName wgEncodeSydhTfbsHelas3InputMnaseAlnRep2.bam
 grant Snyder
 lab Yale
@@ -16641,6 +16975,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000635
+expId 635
 fileName wgEncodeSydhTfbsHelas3InputMnaseSig.bigWig
 grant Snyder
 lab Yale
@@ -16663,6 +16999,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000636
+expId 636
 fileName wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep1.bam
 grant Snyder
 lab Yale
@@ -16687,6 +17025,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000636
+expId 636
 fileName wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep2.bam
 grant Snyder
 lab Yale
@@ -16711,6 +17051,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000636
+expId 636
 fileName wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep3.bam
 grant Snyder
 lab Yale
@@ -16734,6 +17076,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000636
+expId 636
 fileName wgEncodeSydhTfbsHelas3InputNakeddnaSig.bigWig
 grant Snyder
 lab Yale
@@ -16756,6 +17100,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000612
+expId 612
 fileName wgEncodeSydhTfbsHelas3InputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -16778,6 +17124,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-09
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000612
+expId 612
 fileName wgEncodeSydhTfbsHelas3InputStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -16801,6 +17149,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000612
+expId 612
 fileName wgEncodeSydhTfbsHelas3InputStdSig.bigWig
 grant Snyder
 lab Yale
@@ -17146,6 +17496,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000634
+expId 634
 fileName wgEncodeSydhTfbsHelas3LargefragmentRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -17168,6 +17520,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000634
+expId 634
 fileName wgEncodeSydhTfbsHelas3LargefragmentRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -17190,6 +17544,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000646
+expId 646
 fileName wgEncodeSydhTfbsHelas3MaxRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -17213,6 +17569,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000646
+expId 646
 fileName wgEncodeSydhTfbsHelas3MaxRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -17237,6 +17595,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000646
+expId 646
 fileName wgEncodeSydhTfbsHelas3MaxStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -17261,6 +17621,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000646
+expId 646
 fileName wgEncodeSydhTfbsHelas3MaxStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -17284,6 +17646,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000646
+expId 646
 fileName wgEncodeSydhTfbsHelas3MaxStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -17305,6 +17669,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000646
+expId 646
 fileName wgEncodeSydhTfbsHelas3MaxStdSig.bigWig
 grant Snyder
 lab Yale
@@ -17326,6 +17692,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000635
+expId 635
 fileName wgEncodeSydhTfbsHelas3MnaseRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -17348,6 +17716,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000635
+expId 635
 fileName wgEncodeSydhTfbsHelas3MnaseRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -17370,6 +17740,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000633
+expId 633
 fileName wgEncodeSydhTfbsHelas3MouseiggRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -17392,6 +17764,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000633
+expId 633
 fileName wgEncodeSydhTfbsHelas3MouseiggRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -17546,6 +17920,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000636
+expId 636
 fileName wgEncodeSydhTfbsHelas3NakeddnaRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -17568,6 +17944,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000636
+expId 636
 fileName wgEncodeSydhTfbsHelas3NakeddnaRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -17590,6 +17968,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000636
+expId 636
 fileName wgEncodeSydhTfbsHelas3NakeddnaRawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -17881,6 +18261,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000613
+expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -17904,6 +18286,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000613
+expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -17927,6 +18311,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000613
+expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -17950,6 +18336,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000613
+expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -17974,6 +18362,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000613
+expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -17998,6 +18388,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000613
+expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -18021,6 +18413,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000613
+expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -18042,6 +18436,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000613
+expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2StdSig.bigWig
 grant Snyder
 lab Yale
@@ -18606,6 +19002,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000766
+expId 766
 fileName wgEncodeSydhTfbsHelas3Rpc155RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -18628,6 +19026,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000766
+expId 766
 fileName wgEncodeSydhTfbsHelas3Rpc155RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -18651,6 +19051,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000766
+expId 766
 fileName wgEncodeSydhTfbsHelas3Rpc155StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -18675,6 +19077,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000766
+expId 766
 fileName wgEncodeSydhTfbsHelas3Rpc155StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -18698,6 +19102,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000766
+expId 766
 fileName wgEncodeSydhTfbsHelas3Rpc155StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -18719,6 +19125,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000766
+expId 766
 fileName wgEncodeSydhTfbsHelas3Rpc155StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -18997,6 +19405,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000614
+expId 614
 fileName wgEncodeSydhTfbsHelas3Stat1Ifng30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -19021,6 +19431,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000614
+expId 614
 fileName wgEncodeSydhTfbsHelas3Stat1Ifng30StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -19044,6 +19456,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000614
+expId 614
 fileName wgEncodeSydhTfbsHelas3Stat1Ifng30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -19065,6 +19479,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000614
+expId 614
 fileName wgEncodeSydhTfbsHelas3Stat1Ifng30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -19343,6 +19759,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000747
+expId 747
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -19367,6 +19785,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000747
+expId 747
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -19390,6 +19810,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000747
+expId 747
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -19411,6 +19833,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000747
+expId 747
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -19432,6 +19856,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000747
+expId 747
 fileName wgEncodeSydhTfbsHelas3TfiiicRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -19454,6 +19880,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000747
+expId 747
 fileName wgEncodeSydhTfbsHelas3TfiiicRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -19476,6 +19904,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000687
+expId 687
 fileName wgEncodeSydhTfbsHelas3Tr4RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -19500,6 +19930,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000687
+expId 687
 fileName wgEncodeSydhTfbsHelas3Tr4RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -19525,6 +19957,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000687
+expId 687
 fileName wgEncodeSydhTfbsHelas3Tr4StdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -19549,6 +19983,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000687
+expId 687
 fileName wgEncodeSydhTfbsHelas3Tr4StdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -19572,6 +20008,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000687
+expId 687
 fileName wgEncodeSydhTfbsHelas3Tr4StdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -19593,6 +20031,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000687
+expId 687
 fileName wgEncodeSydhTfbsHelas3Tr4StdSig.bigWig
 grant Snyder
 lab UCD
@@ -20007,6 +20447,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000611
+expId 611
 fileName wgEncodeSydhTfbsHelas3ifngInputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -20029,6 +20471,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000614
+expId 614
 fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -20052,6 +20496,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000614
+expId 614
 fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -21565,6 +22011,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000640
+expId 640
 fileName wgEncodeSydhTfbsHepg2InputPravastStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -21589,6 +22037,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000640
+expId 640
 fileName wgEncodeSydhTfbsHepg2InputPravastStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -21613,6 +22063,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000640
+expId 640
 fileName wgEncodeSydhTfbsHepg2InputPravastStdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -21636,6 +22088,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000640
+expId 640
 fileName wgEncodeSydhTfbsHepg2InputPravastStdSig.bigWig
 grant Snyder
 lab Yale
@@ -21657,6 +22111,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000640
+expId 640
 fileName wgEncodeSydhTfbsHepg2InputRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -21679,6 +22135,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000640
+expId 640
 fileName wgEncodeSydhTfbsHepg2InputRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -21701,6 +22159,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000640
+expId 640
 fileName wgEncodeSydhTfbsHepg2InputRawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -23020,6 +23480,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000641
+expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -23044,6 +23506,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000641
+expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -23068,6 +23532,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000641
+expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -23091,6 +23557,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000641
+expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2PravastStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -23112,6 +23580,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000641
+expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2PravastStdSig.bigWig
 grant Snyder
 lab Yale
@@ -23133,6 +23603,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000641
+expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -23155,6 +23627,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000641
+expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -23177,6 +23651,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000641
+expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2RawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -23826,6 +24302,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000642
+expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -23850,6 +24328,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000642
+expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -23874,6 +24354,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000642
+expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -23897,6 +24379,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000642
+expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1PravastStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -23918,6 +24402,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000642
+expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1PravastStdSig.bigWig
 grant Snyder
 lab Yale
@@ -24008,6 +24494,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000642
+expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -24030,6 +24518,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000642
+expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -24052,6 +24542,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000642
+expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -24075,6 +24567,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000643
+expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -24099,6 +24593,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000643
+expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -24123,6 +24619,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000643
+expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -24146,6 +24644,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000643
+expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2PravastStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -24167,6 +24667,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000643
+expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2PravastStdSig.bigWig
 grant Snyder
 lab Yale
@@ -24188,6 +24690,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000643
+expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -24210,6 +24714,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000643
+expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -24232,6 +24738,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000643
+expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2RawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -24638,6 +25146,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000674
+expId 674
 fileName wgEncodeSydhTfbsHepg2bInputRawData.fastq.gz
 grant Snyder
 lab UCD
@@ -24660,6 +25170,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000674
+expId 674
 fileName wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -24683,6 +25195,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000674
+expId 674
 fileName wgEncodeSydhTfbsHepg2bInputUcdSig.bigWig
 grant Snyder
 lab UCD
@@ -24704,6 +25218,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000675
+expId 675
 fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -24727,6 +25243,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000675
+expId 675
 fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -24752,6 +25270,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000675
+expId 675
 fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -24776,6 +25296,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000675
+expId 675
 fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -24799,6 +25321,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000675
+expId 675
 fileName wgEncodeSydhTfbsHepg2bTr4UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -24820,6 +25344,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000675
+expId 675
 fileName wgEncodeSydhTfbsHepg2bTr4UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -25366,6 +25892,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000780
+expId 780
 fileName wgEncodeSydhTfbsHuvecInputStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -25390,6 +25918,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000780
+expId 780
 fileName wgEncodeSydhTfbsHuvecInputStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -25413,6 +25943,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000780
+expId 780
 fileName wgEncodeSydhTfbsHuvecInputStdRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -25435,6 +25967,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000780
+expId 780
 fileName wgEncodeSydhTfbsHuvecInputStdRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -25457,6 +25991,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000780
+expId 780
 fileName wgEncodeSydhTfbsHuvecInputStdSig.bigWig
 grant Snyder
 lab Yale
@@ -25858,6 +26394,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000700
+expId 700
 fileName wgEncodeSydhTfbsK562Atf3RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -25880,6 +26418,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000700
+expId 700
 fileName wgEncodeSydhTfbsK562Atf3RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -25903,6 +26443,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000700
+expId 700
 fileName wgEncodeSydhTfbsK562Atf3StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -25927,6 +26469,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000700
+expId 700
 fileName wgEncodeSydhTfbsK562Atf3StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -25950,6 +26494,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000700
+expId 700
 fileName wgEncodeSydhTfbsK562Atf3StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -25971,6 +26517,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000700
+expId 700
 fileName wgEncodeSydhTfbsK562Atf3StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -25992,6 +26540,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000678
+expId 678
 fileName wgEncodeSydhTfbsK562Bdp1RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -26015,6 +26565,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000678
+expId 678
 fileName wgEncodeSydhTfbsK562Bdp1RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -26038,6 +26590,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000678
+expId 678
 fileName wgEncodeSydhTfbsK562Bdp1RawDataRep3.fastq.gz
 grant Snyder
 lab Harvard
@@ -26062,6 +26616,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000678
+expId 678
 fileName wgEncodeSydhTfbsK562Bdp1StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -26086,6 +26642,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000678
+expId 678
 fileName wgEncodeSydhTfbsK562Bdp1StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -26110,6 +26668,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000678
+expId 678
 fileName wgEncodeSydhTfbsK562Bdp1StdAlnRep3.bam
 grant Snyder
 lab Harvard
@@ -26133,6 +26693,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000678
+expId 678
 fileName wgEncodeSydhTfbsK562Bdp1StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -26154,6 +26716,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000678
+expId 678
 fileName wgEncodeSydhTfbsK562Bdp1StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -26303,6 +26867,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000679
+expId 679
 fileName wgEncodeSydhTfbsK562Brf1RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -26326,6 +26892,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000679
+expId 679
 fileName wgEncodeSydhTfbsK562Brf1RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -26349,6 +26917,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000679
+expId 679
 fileName wgEncodeSydhTfbsK562Brf1RawDataRep3.fastq.gz
 grant Snyder
 lab Harvard
@@ -26373,6 +26943,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000679
+expId 679
 fileName wgEncodeSydhTfbsK562Brf1StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -26397,6 +26969,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000679
+expId 679
 fileName wgEncodeSydhTfbsK562Brf1StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -26421,6 +26995,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000679
+expId 679
 fileName wgEncodeSydhTfbsK562Brf1StdAlnRep3.bam
 grant Snyder
 lab Harvard
@@ -26444,6 +27020,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000679
+expId 679
 fileName wgEncodeSydhTfbsK562Brf1StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -26465,6 +27043,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000679
+expId 679
 fileName wgEncodeSydhTfbsK562Brf1StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -26486,6 +27066,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000767
+expId 767
 fileName wgEncodeSydhTfbsK562Brf2RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -26508,6 +27090,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000767
+expId 767
 fileName wgEncodeSydhTfbsK562Brf2RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -26530,6 +27114,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000767
+expId 767
 fileName wgEncodeSydhTfbsK562Brf2RawDataRep3.fastq.gz
 grant Snyder
 lab Harvard
@@ -26553,6 +27139,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000767
+expId 767
 fileName wgEncodeSydhTfbsK562Brf2StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -26577,6 +27165,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000767
+expId 767
 fileName wgEncodeSydhTfbsK562Brf2StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -26601,6 +27191,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000767
+expId 767
 fileName wgEncodeSydhTfbsK562Brf2StdAlnRep3.bam
 grant Snyder
 lab Harvard
@@ -26624,6 +27216,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000767
+expId 767
 fileName wgEncodeSydhTfbsK562Brf2StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -26645,6 +27239,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000767
+expId 767
 fileName wgEncodeSydhTfbsK562Brf2StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -27062,6 +27658,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000619
+expId 619
 fileName wgEncodeSydhTfbsK562CfosRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -27084,6 +27682,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000619
+expId 619
 fileName wgEncodeSydhTfbsK562CfosRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -27106,6 +27706,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000619
+expId 619
 fileName wgEncodeSydhTfbsK562CfosRawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -27129,6 +27731,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000619
+expId 619
 fileName wgEncodeSydhTfbsK562CfosStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -27153,6 +27757,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000619
+expId 619
 fileName wgEncodeSydhTfbsK562CfosStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -27177,6 +27783,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000619
+expId 619
 fileName wgEncodeSydhTfbsK562CfosStdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -27200,6 +27808,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
+dccAccession wgEncodeEH000619
+expId 619
 fileName wgEncodeSydhTfbsK562CfosStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -27221,6 +27831,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000619
+expId 619
 fileName wgEncodeSydhTfbsK562CfosStdSig.bigWig
 grant Snyder
 lab Yale
@@ -27375,6 +27987,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000667
+expId 667
 fileName wgEncodeSydhTfbsK562CjunIfna6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -27399,6 +28013,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000667
+expId 667
 fileName wgEncodeSydhTfbsK562CjunIfna6hStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -27422,6 +28038,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000667
+expId 667
 fileName wgEncodeSydhTfbsK562CjunIfna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -27443,6 +28061,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000667
+expId 667
 fileName wgEncodeSydhTfbsK562CjunIfna6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -27465,6 +28085,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000673
+expId 673
 fileName wgEncodeSydhTfbsK562CjunIfng30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -27489,6 +28111,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000673
+expId 673
 fileName wgEncodeSydhTfbsK562CjunIfng30StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -27512,6 +28136,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000673
+expId 673
 fileName wgEncodeSydhTfbsK562CjunIfng30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -27533,6 +28159,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000673
+expId 673
 fileName wgEncodeSydhTfbsK562CjunIfng30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -27555,6 +28183,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000668
+expId 668
 fileName wgEncodeSydhTfbsK562CjunIfng6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -27579,6 +28209,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000668
+expId 668
 fileName wgEncodeSydhTfbsK562CjunIfng6hStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -27602,6 +28234,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000668
+expId 668
 fileName wgEncodeSydhTfbsK562CjunIfng6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -27623,6 +28257,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000668
+expId 668
 fileName wgEncodeSydhTfbsK562CjunIfng6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -27644,6 +28280,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000620
+expId 620
 fileName wgEncodeSydhTfbsK562CjunRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -27666,6 +28304,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000620
+expId 620
 fileName wgEncodeSydhTfbsK562CjunRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -27689,6 +28329,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000620
+expId 620
 fileName wgEncodeSydhTfbsK562CjunStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -27713,6 +28355,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000620
+expId 620
 fileName wgEncodeSydhTfbsK562CjunStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -27736,6 +28380,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000620
+expId 620
 fileName wgEncodeSydhTfbsK562CjunStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -27757,6 +28403,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000620
+expId 620
 fileName wgEncodeSydhTfbsK562CjunStdSig.bigWig
 grant Snyder
 lab Yale
@@ -27779,6 +28427,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000659
+expId 659
 fileName wgEncodeSydhTfbsK562CmycIfna30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -27803,6 +28453,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000659
+expId 659
 fileName wgEncodeSydhTfbsK562CmycIfna30StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -27826,6 +28478,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000659
+expId 659
 fileName wgEncodeSydhTfbsK562CmycIfna30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -27847,6 +28501,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000659
+expId 659
 fileName wgEncodeSydhTfbsK562CmycIfna30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -27869,6 +28525,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000669
+expId 669
 fileName wgEncodeSydhTfbsK562CmycIfna6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -27893,6 +28551,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000669
+expId 669
 fileName wgEncodeSydhTfbsK562CmycIfna6hStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -27916,6 +28576,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000669
+expId 669
 fileName wgEncodeSydhTfbsK562CmycIfna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -27937,6 +28599,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000669
+expId 669
 fileName wgEncodeSydhTfbsK562CmycIfna6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -28087,6 +28751,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000670
+expId 670
 fileName wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -28111,6 +28777,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000670
+expId 670
 fileName wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -28134,6 +28802,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000670
+expId 670
 fileName wgEncodeSydhTfbsK562CmycIfng6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -28155,6 +28825,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000670
+expId 670
 fileName wgEncodeSydhTfbsK562CmycIfng6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -28176,6 +28848,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000621
+expId 621
 fileName wgEncodeSydhTfbsK562CmycRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -28198,6 +28872,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000621
+expId 621
 fileName wgEncodeSydhTfbsK562CmycRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -28221,6 +28897,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000621
+expId 621
 fileName wgEncodeSydhTfbsK562CmycStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -28245,6 +28923,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
+dccAccession wgEncodeEH000621
+expId 621
 fileName wgEncodeSydhTfbsK562CmycStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -28268,6 +28948,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000621
+expId 621
 fileName wgEncodeSydhTfbsK562CmycStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -28289,6 +28971,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000621
+expId 621
 fileName wgEncodeSydhTfbsK562CmycStdSig.bigWig
 grant Snyder
 lab Yale
@@ -28752,6 +29436,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000659
+expId 659
 fileName wgEncodeSydhTfbsK562Ifna30CmycRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -28775,6 +29461,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000659
+expId 659
 fileName wgEncodeSydhTfbsK562Ifna30CmycRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -28797,6 +29485,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000655
+expId 655
 fileName wgEncodeSydhTfbsK562Ifna30InputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -28818,6 +29508,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000660
+expId 660
 fileName wgEncodeSydhTfbsK562Ifna30Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -28841,6 +29533,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000660
+expId 660
 fileName wgEncodeSydhTfbsK562Ifna30Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -28863,6 +29557,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000663
+expId 663
 fileName wgEncodeSydhTfbsK562Ifna30Stat1RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -28886,6 +29582,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000663
+expId 663
 fileName wgEncodeSydhTfbsK562Ifna30Stat1RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -28909,6 +29607,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000665
+expId 665
 fileName wgEncodeSydhTfbsK562Ifna30Stat2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -28932,6 +29632,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000665
+expId 665
 fileName wgEncodeSydhTfbsK562Ifna30Stat2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -28954,6 +29656,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000667
+expId 667
 fileName wgEncodeSydhTfbsK562Ifna6hCjunRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -28976,6 +29680,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000667
+expId 667
 fileName wgEncodeSydhTfbsK562Ifna6hCjunRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -28998,6 +29704,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000669
+expId 669
 fileName wgEncodeSydhTfbsK562Ifna6hCmycRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -29021,6 +29729,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000669
+expId 669
 fileName wgEncodeSydhTfbsK562Ifna6hCmycRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -29043,6 +29753,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000656
+expId 656
 fileName wgEncodeSydhTfbsK562Ifna6hInputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -29064,6 +29776,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000661
+expId 661
 fileName wgEncodeSydhTfbsK562Ifna6hPol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -29086,6 +29800,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000661
+expId 661
 fileName wgEncodeSydhTfbsK562Ifna6hPol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -29108,6 +29824,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000664
+expId 664
 fileName wgEncodeSydhTfbsK562Ifna6hStat1RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -29130,6 +29848,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000664
+expId 664
 fileName wgEncodeSydhTfbsK562Ifna6hStat1RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -29152,6 +29872,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000666
+expId 666
 fileName wgEncodeSydhTfbsK562Ifna6hStat2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -29175,6 +29897,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000666
+expId 666
 fileName wgEncodeSydhTfbsK562Ifna6hStat2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -29197,6 +29921,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000673
+expId 673
 fileName wgEncodeSydhTfbsK562Ifng30CjunRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -29219,6 +29945,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000673
+expId 673
 fileName wgEncodeSydhTfbsK562Ifng30CjunRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -29241,6 +29969,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000657
+expId 657
 fileName wgEncodeSydhTfbsK562Ifng30InputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -29306,6 +30036,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000668
+expId 668
 fileName wgEncodeSydhTfbsK562Ifng6hCjunRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -29328,6 +30060,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000668
+expId 668
 fileName wgEncodeSydhTfbsK562Ifng6hCjunRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -29350,6 +30084,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000670
+expId 670
 fileName wgEncodeSydhTfbsK562Ifng6hCmycRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -29372,6 +30108,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000670
+expId 670
 fileName wgEncodeSydhTfbsK562Ifng6hCmycRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -29394,6 +30132,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000658
+expId 658
 fileName wgEncodeSydhTfbsK562Ifng6hInputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -29415,6 +30155,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000662
+expId 662
 fileName wgEncodeSydhTfbsK562Ifng6hPol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -29437,6 +30179,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000662
+expId 662
 fileName wgEncodeSydhTfbsK562Ifng6hPol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -29642,6 +30386,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-09
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000655
+expId 655
 fileName wgEncodeSydhTfbsK562InputIfna30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -29665,6 +30411,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000655
+expId 655
 fileName wgEncodeSydhTfbsK562InputIfna30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -29687,6 +30435,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-09
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000656
+expId 656
 fileName wgEncodeSydhTfbsK562InputIfna6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -29710,6 +30460,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000656
+expId 656
 fileName wgEncodeSydhTfbsK562InputIfna6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -29732,6 +30484,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-09
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000657
+expId 657
 fileName wgEncodeSydhTfbsK562InputIfng30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -29755,6 +30509,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000657
+expId 657
 fileName wgEncodeSydhTfbsK562InputIfng30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -29777,6 +30533,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-09
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000658
+expId 658
 fileName wgEncodeSydhTfbsK562InputIfng6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -29800,6 +30558,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000658
+expId 658
 fileName wgEncodeSydhTfbsK562InputIfng6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -29953,6 +30713,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-06-29
+dccAccession wgEncodeEH000615
+expId 615
 fileName wgEncodeSydhTfbsK562InputStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -29977,6 +30739,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-06-29
+dccAccession wgEncodeEH000615
+expId 615
 fileName wgEncodeSydhTfbsK562InputStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -30000,6 +30764,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000615
+expId 615
 fileName wgEncodeSydhTfbsK562InputStdSig.bigWig
 grant Snyder
 lab Yale
@@ -30022,6 +30788,8 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-06-29
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000615
+expId 615
 fileName wgEncodeSydhTfbsK562InputV2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -30046,6 +30814,8 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-06-29
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000615
+expId 615
 fileName wgEncodeSydhTfbsK562InputV2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -30328,6 +31098,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000644
+expId 644
 fileName wgEncodeSydhTfbsK562JundRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -30350,6 +31122,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000644
+expId 644
 fileName wgEncodeSydhTfbsK562JundRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -30373,6 +31147,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000644
+expId 644
 fileName wgEncodeSydhTfbsK562JundStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -30397,6 +31173,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000644
+expId 644
 fileName wgEncodeSydhTfbsK562JundStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -30420,6 +31198,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000644
+expId 644
 fileName wgEncodeSydhTfbsK562JundStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -30441,6 +31221,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000644
+expId 644
 fileName wgEncodeSydhTfbsK562JundStdSig.bigWig
 grant Snyder
 lab Yale
@@ -30590,6 +31372,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000637
+expId 637
 fileName wgEncodeSydhTfbsK562MaxRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -30612,6 +31396,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000637
+expId 637
 fileName wgEncodeSydhTfbsK562MaxRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -30635,6 +31421,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000637
+expId 637
 fileName wgEncodeSydhTfbsK562MaxStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -30659,6 +31447,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000637
+expId 637
 fileName wgEncodeSydhTfbsK562MaxStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -30682,6 +31472,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000637
+expId 637
 fileName wgEncodeSydhTfbsK562MaxStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -30703,6 +31495,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000637
+expId 637
 fileName wgEncodeSydhTfbsK562MaxStdSig.bigWig
 grant Snyder
 lab Yale
@@ -30856,6 +31650,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000701
+expId 701
 fileName wgEncodeSydhTfbsK562NelfeRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -30878,6 +31674,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000701
+expId 701
 fileName wgEncodeSydhTfbsK562NelfeRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -30901,6 +31699,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000701
+expId 701
 fileName wgEncodeSydhTfbsK562NelfeStdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -30925,6 +31725,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000701
+expId 701
 fileName wgEncodeSydhTfbsK562NelfeStdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -30948,6 +31750,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000701
+expId 701
 fileName wgEncodeSydhTfbsK562NelfeStdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -30969,6 +31773,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000701
+expId 701
 fileName wgEncodeSydhTfbsK562NelfeStdSig.bigWig
 grant Snyder
 lab Harvard
@@ -30990,6 +31796,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
+dccAccession wgEncodeEH000624
+expId 624
 fileName wgEncodeSydhTfbsK562Nfe2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -31012,6 +31820,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
+dccAccession wgEncodeEH000624
+expId 624
 fileName wgEncodeSydhTfbsK562Nfe2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -31035,6 +31845,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
+dccAccession wgEncodeEH000624
+expId 624
 fileName wgEncodeSydhTfbsK562Nfe2StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -31059,6 +31871,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
+dccAccession wgEncodeEH000624
+expId 624
 fileName wgEncodeSydhTfbsK562Nfe2StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -31082,6 +31896,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000624
+expId 624
 fileName wgEncodeSydhTfbsK562Nfe2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -31103,6 +31919,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000624
+expId 624
 fileName wgEncodeSydhTfbsK562Nfe2StdSig.bigWig
 grant Snyder
 lab Yale
@@ -31385,6 +32203,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000660
+expId 660
 fileName wgEncodeSydhTfbsK562Pol2Ifna30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -31409,6 +32229,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000660
+expId 660
 fileName wgEncodeSydhTfbsK562Pol2Ifna30StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -31432,6 +32254,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000660
+expId 660
 fileName wgEncodeSydhTfbsK562Pol2Ifna30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -31453,6 +32277,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000660
+expId 660
 fileName wgEncodeSydhTfbsK562Pol2Ifna30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -31475,6 +32301,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000661
+expId 661
 fileName wgEncodeSydhTfbsK562Pol2Ifna6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -31499,6 +32327,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000661
+expId 661
 fileName wgEncodeSydhTfbsK562Pol2Ifna6hStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -31522,6 +32352,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000661
+expId 661
 fileName wgEncodeSydhTfbsK562Pol2Ifna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -31543,6 +32375,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000661
+expId 661
 fileName wgEncodeSydhTfbsK562Pol2Ifna6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -31655,6 +32489,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000662
+expId 662
 fileName wgEncodeSydhTfbsK562Pol2Ifng6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -31679,6 +32515,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000662
+expId 662
 fileName wgEncodeSydhTfbsK562Pol2Ifng6hStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -31702,6 +32540,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000662
+expId 662
 fileName wgEncodeSydhTfbsK562Pol2Ifng6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -31723,6 +32563,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000662
+expId 662
 fileName wgEncodeSydhTfbsK562Pol2Ifng6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -31880,6 +32722,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000616
+expId 616
 fileName wgEncodeSydhTfbsK562Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -31902,6 +32746,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000616
+expId 616
 fileName wgEncodeSydhTfbsK562Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -31925,6 +32771,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000616
+expId 616
 fileName wgEncodeSydhTfbsK562Pol2StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -31949,6 +32797,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000616
+expId 616
 fileName wgEncodeSydhTfbsK562Pol2StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -31972,6 +32822,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000616
+expId 616
 fileName wgEncodeSydhTfbsK562Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -31993,6 +32845,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000616
+expId 616
 fileName wgEncodeSydhTfbsK562Pol2StdSig.bigWig
 grant Snyder
 lab Yale
@@ -32282,6 +33136,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000649
+expId 649
 fileName wgEncodeSydhTfbsK562Rad21RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -32305,6 +33161,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000649
+expId 649
 fileName wgEncodeSydhTfbsK562Rad21RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -32329,6 +33187,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000649
+expId 649
 fileName wgEncodeSydhTfbsK562Rad21StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -32353,6 +33213,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000649
+expId 649
 fileName wgEncodeSydhTfbsK562Rad21StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -32376,6 +33238,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000649
+expId 649
 fileName wgEncodeSydhTfbsK562Rad21StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -32397,6 +33261,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000649
+expId 649
 fileName wgEncodeSydhTfbsK562Rad21StdSig.bigWig
 grant Snyder
 lab Yale
@@ -32418,6 +33284,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000680
+expId 680
 fileName wgEncodeSydhTfbsK562Rpc155RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -32441,6 +33309,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000680
+expId 680
 fileName wgEncodeSydhTfbsK562Rpc155RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -32465,6 +33335,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000680
+expId 680
 fileName wgEncodeSydhTfbsK562Rpc155StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -32489,6 +33361,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000680
+expId 680
 fileName wgEncodeSydhTfbsK562Rpc155StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -32512,6 +33386,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000680
+expId 680
 fileName wgEncodeSydhTfbsK562Rpc155StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -32533,6 +33409,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000680
+expId 680
 fileName wgEncodeSydhTfbsK562Rpc155StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -32554,6 +33432,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000681
+expId 681
 fileName wgEncodeSydhTfbsK562Sirt6RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -32577,6 +33457,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000681
+expId 681
 fileName wgEncodeSydhTfbsK562Sirt6RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -32601,6 +33483,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000681
+expId 681
 fileName wgEncodeSydhTfbsK562Sirt6StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -32625,6 +33509,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000681
+expId 681
 fileName wgEncodeSydhTfbsK562Sirt6StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -32648,6 +33534,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000681
+expId 681
 fileName wgEncodeSydhTfbsK562Sirt6StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -32669,6 +33557,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000681
+expId 681
 fileName wgEncodeSydhTfbsK562Sirt6StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -32819,6 +33709,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000663
+expId 663
 fileName wgEncodeSydhTfbsK562Stat1Ifna30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -32843,6 +33735,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000663
+expId 663
 fileName wgEncodeSydhTfbsK562Stat1Ifna30StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -32866,6 +33760,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000663
+expId 663
 fileName wgEncodeSydhTfbsK562Stat1Ifna30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -32887,6 +33783,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000663
+expId 663
 fileName wgEncodeSydhTfbsK562Stat1Ifna30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -32909,6 +33807,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000664
+expId 664
 fileName wgEncodeSydhTfbsK562Stat1Ifna6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -32933,6 +33833,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000664
+expId 664
 fileName wgEncodeSydhTfbsK562Stat1Ifna6hStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -32956,6 +33858,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000664
+expId 664
 fileName wgEncodeSydhTfbsK562Stat1Ifna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -32977,6 +33881,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000664
+expId 664
 fileName wgEncodeSydhTfbsK562Stat1Ifna6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -33268,6 +34174,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000665
+expId 665
 fileName wgEncodeSydhTfbsK562Stat2Ifna30StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -33292,6 +34200,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000665
+expId 665
 fileName wgEncodeSydhTfbsK562Stat2Ifna30StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -33315,6 +34225,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000665
+expId 665
 fileName wgEncodeSydhTfbsK562Stat2Ifna30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -33336,6 +34248,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000665
+expId 665
 fileName wgEncodeSydhTfbsK562Stat2Ifna30StdSig.bigWig
 grant Snyder
 lab Yale
@@ -33358,6 +34272,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000666
+expId 666
 fileName wgEncodeSydhTfbsK562Stat2Ifna6hStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -33382,6 +34298,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
+dccAccession wgEncodeEH000666
+expId 666
 fileName wgEncodeSydhTfbsK562Stat2Ifna6hStdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -33405,6 +34323,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000666
+expId 666
 fileName wgEncodeSydhTfbsK562Stat2Ifna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -33426,6 +34346,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000666
+expId 666
 fileName wgEncodeSydhTfbsK562Stat2Ifna6hStdSig.bigWig
 grant Snyder
 lab Yale
@@ -33712,6 +34634,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000748
+expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -33736,6 +34660,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000748
+expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -33760,6 +34686,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000748
+expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdAlnRep3.bam
 grant Snyder
 lab Harvard
@@ -33783,6 +34711,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000748
+expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -33804,6 +34734,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000748
+expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -33825,6 +34757,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000748
+expId 748
 fileName wgEncodeSydhTfbsK562TfiiicRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -33848,6 +34782,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000748
+expId 748
 fileName wgEncodeSydhTfbsK562TfiiicRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -33871,6 +34807,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000748
+expId 748
 fileName wgEncodeSydhTfbsK562TfiiicRawDataRep3.fastq.gz
 grant Snyder
 lab Harvard
@@ -34022,6 +34960,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000650
+expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -34045,6 +34985,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000650
+expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -34069,6 +35011,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000650
+expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -34093,6 +35037,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
+dccAccession wgEncodeEH000650
+expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -34116,6 +35062,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000650
+expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -34137,6 +35085,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000650
+expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4StdSig.bigWig
 grant Snyder
 lab Yale
@@ -34158,6 +35108,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000671
+expId 671
 fileName wgEncodeSydhTfbsK562bE2f4RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -34181,6 +35133,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000671
+expId 671
 fileName wgEncodeSydhTfbsK562bE2f4RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -34205,6 +35159,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000671
+expId 671
 fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -34229,6 +35185,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000671
+expId 671
 fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -34252,6 +35210,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000671
+expId 671
 fileName wgEncodeSydhTfbsK562bE2f4UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -34273,6 +35233,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000671
+expId 671
 fileName wgEncodeSydhTfbsK562bE2f4UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -34294,6 +35256,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
+dccAccession wgEncodeEH000676
+expId 676
 fileName wgEncodeSydhTfbsK562bE2f6RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -34317,6 +35281,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
+dccAccession wgEncodeEH000676
+expId 676
 fileName wgEncodeSydhTfbsK562bE2f6RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -34342,6 +35308,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
+dccAccession wgEncodeEH000676
+expId 676
 fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -34366,6 +35334,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
+dccAccession wgEncodeEH000676
+expId 676
 fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -34389,6 +35359,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000676
+expId 676
 fileName wgEncodeSydhTfbsK562bE2f6UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -34410,6 +35382,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000676
+expId 676
 fileName wgEncodeSydhTfbsK562bE2f6UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -34431,6 +35405,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000638
+expId 638
 fileName wgEncodeSydhTfbsK562bGata1RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -34455,6 +35431,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000638
+expId 638
 fileName wgEncodeSydhTfbsK562bGata1RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -34480,6 +35458,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000638
+expId 638
 fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -34504,6 +35484,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000638
+expId 638
 fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -34527,6 +35509,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000638
+expId 638
 fileName wgEncodeSydhTfbsK562bGata1UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -34548,6 +35532,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000638
+expId 638
 fileName wgEncodeSydhTfbsK562bGata1UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -34569,6 +35555,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-02
 dateUnrestricted 2010-06-02
+dccAccession wgEncodeEH000683
+expId 683
 fileName wgEncodeSydhTfbsK562bGata2RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -34593,6 +35581,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-02
 dateUnrestricted 2010-06-02
+dccAccession wgEncodeEH000683
+expId 683
 fileName wgEncodeSydhTfbsK562bGata2RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -34618,6 +35608,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-02
 dateUnrestricted 2010-06-02
+dccAccession wgEncodeEH000683
+expId 683
 fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -34642,6 +35634,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-02
 dateUnrestricted 2010-06-02
+dccAccession wgEncodeEH000683
+expId 683
 fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -34665,6 +35659,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000683
+expId 683
 fileName wgEncodeSydhTfbsK562bGata2UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -34686,6 +35682,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000683
+expId 683
 fileName wgEncodeSydhTfbsK562bGata2UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -34707,6 +35705,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000672
+expId 672
 fileName wgEncodeSydhTfbsK562bInputRawData.fastq.gz
 grant Snyder
 lab UCD
@@ -34730,6 +35730,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000672
+expId 672
 fileName wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -34753,6 +35755,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000672
+expId 672
 fileName wgEncodeSydhTfbsK562bInputUcdSig.bigWig
 grant Snyder
 lab UCD
@@ -34904,6 +35908,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000769
+expId 769
 fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -34928,6 +35934,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000769
+expId 769
 fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -34953,6 +35961,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000769
+expId 769
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -34977,6 +35987,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000769
+expId 769
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -35000,6 +36012,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000769
+expId 769
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -35021,6 +36035,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000769
+expId 769
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig.bigWig
 grant Snyder
 lab UCD
@@ -35042,6 +36058,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
+dccAccession wgEncodeEH000677
+expId 677
 fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -35066,6 +36084,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
+dccAccession wgEncodeEH000677
+expId 677
 fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -35091,6 +36111,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
+dccAccession wgEncodeEH000677
+expId 677
 fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -35115,6 +36137,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
+dccAccession wgEncodeEH000677
+expId 677
 fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -35138,6 +36162,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000677
+expId 677
 fileName wgEncodeSydhTfbsK562bSetdb1UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -35159,6 +36185,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000677
+expId 677
 fileName wgEncodeSydhTfbsK562bSetdb1UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -35180,6 +36208,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000682
+expId 682
 fileName wgEncodeSydhTfbsK562bTr4RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -35204,6 +36234,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000682
+expId 682
 fileName wgEncodeSydhTfbsK562bTr4RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -35229,6 +36261,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000682
+expId 682
 fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -35253,6 +36287,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
+dccAccession wgEncodeEH000682
+expId 682
 fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -35276,6 +36312,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000682
+expId 682
 fileName wgEncodeSydhTfbsK562bTr4UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -35297,6 +36335,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000682
+expId 682
 fileName wgEncodeSydhTfbsK562bTr4UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -35318,6 +36358,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-03
 dateUnrestricted 2010-06-03
+dccAccession wgEncodeEH000684
+expId 684
 fileName wgEncodeSydhTfbsK562bYy1RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -35342,6 +36384,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-03
 dateUnrestricted 2010-06-03
+dccAccession wgEncodeEH000684
+expId 684
 fileName wgEncodeSydhTfbsK562bYy1RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -35367,6 +36411,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-03
 dateUnrestricted 2010-06-03
+dccAccession wgEncodeEH000684
+expId 684
 fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -35391,6 +36437,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-03
 dateUnrestricted 2010-06-03
+dccAccession wgEncodeEH000684
+expId 684
 fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -35414,6 +36462,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000684
+expId 684
 fileName wgEncodeSydhTfbsK562bYy1UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -35435,6 +36485,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000684
+expId 684
 fileName wgEncodeSydhTfbsK562bYy1UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -35456,6 +36508,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000630
+expId 630
 fileName wgEncodeSydhTfbsK562bZnf263RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -35480,6 +36534,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000630
+expId 630
 fileName wgEncodeSydhTfbsK562bZnf263RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -35505,6 +36561,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000630
+expId 630
 fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -35529,6 +36587,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000630
+expId 630
 fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -35552,6 +36612,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000630
+expId 630
 fileName wgEncodeSydhTfbsK562bZnf263UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -35573,6 +36635,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000630
+expId 630
 fileName wgEncodeSydhTfbsK562bZnf263UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -35594,6 +36658,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
 dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000696
+expId 696
 fileName wgEncodeSydhTfbsK562bZnf274RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -35618,6 +36684,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
 dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000696
+expId 696
 fileName wgEncodeSydhTfbsK562bZnf274RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -35643,6 +36711,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-05
 dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000696
+expId 696
 fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -35667,6 +36737,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-05
 dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000696
+expId 696
 fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -35690,6 +36762,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000696
+expId 696
 fileName wgEncodeSydhTfbsK562bZnf274UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -35711,6 +36785,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000696
+expId 696
 fileName wgEncodeSydhTfbsK562bZnf274UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -36702,6 +37778,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-28
 dateUnrestricted 2010-07-28
+dccAccession wgEncodeEH000693
+expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -36726,6 +37804,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-28
 dateUnrestricted 2010-07-28
+dccAccession wgEncodeEH000693
+expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -36751,6 +37831,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-28
 dateUnrestricted 2010-07-28
+dccAccession wgEncodeEH000693
+expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -36775,6 +37857,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-28
 dateUnrestricted 2010-07-28
+dccAccession wgEncodeEH000693
+expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -36798,6 +37882,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000693
+expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -36819,6 +37905,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000693
+expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -36840,6 +37928,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000762
+expId 762
 fileName wgEncodeSydhTfbsMcf7InputRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -36864,6 +37954,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000762
+expId 762
 fileName wgEncodeSydhTfbsMcf7InputRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -36889,6 +37981,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000762
+expId 762
 fileName wgEncodeSydhTfbsMcf7InputUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -36913,6 +38007,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000762
+expId 762
 fileName wgEncodeSydhTfbsMcf7InputUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -36936,6 +38032,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000762
+expId 762
 fileName wgEncodeSydhTfbsMcf7InputUcdSig.bigWig
 grant Snyder
 lab UCD
@@ -37085,6 +38183,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000617
+expId 617
 fileName wgEncodeSydhTfbsNb4InputRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -37107,6 +38207,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000617
+expId 617
 fileName wgEncodeSydhTfbsNb4InputStdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -37130,6 +38232,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000617
+expId 617
 fileName wgEncodeSydhTfbsNb4InputStdSig.bigWig
 grant Snyder
 lab Yale
@@ -37281,6 +38385,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000618
+expId 618
 fileName wgEncodeSydhTfbsNb4Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
@@ -37303,6 +38409,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000618
+expId 618
 fileName wgEncodeSydhTfbsNb4Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
@@ -37325,6 +38433,8 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000618
+expId 618
 fileName wgEncodeSydhTfbsNb4Pol2RawDataRep3.fastq.gz
 grant Snyder
 lab Yale
@@ -37348,6 +38458,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000618
+expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdAlnRep1.bam
 grant Snyder
 lab Yale
@@ -37372,6 +38484,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000618
+expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdAlnRep2.bam
 grant Snyder
 lab Yale
@@ -37396,6 +38510,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccAccession wgEncodeEH000618
+expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdAlnRep3.bam
 grant Snyder
 lab Yale
@@ -37419,6 +38535,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000618
+expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -37440,6 +38558,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000618
+expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdSig.bigWig
 grant Snyder
 lab Yale
@@ -37461,6 +38581,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000654
+expId 654
 fileName wgEncodeSydhTfbsNt2d1InputRawData.fastq.gz
 grant Snyder
 lab UCD
@@ -37483,6 +38605,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
+dccAccession wgEncodeEH000654
+expId 654
 fileName wgEncodeSydhTfbsNt2d1InputUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -37506,6 +38630,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000654
+expId 654
 fileName wgEncodeSydhTfbsNt2d1InputUcdSig.bigWig
 grant Snyder
 lab UCD
@@ -37527,6 +38653,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
+dccAccession wgEncodeEH000652
+expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -37551,6 +38679,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
+dccAccession wgEncodeEH000652
+expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -37576,6 +38706,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
+dccAccession wgEncodeEH000652
+expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -37600,6 +38732,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
+dccAccession wgEncodeEH000652
+expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -37623,6 +38757,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000652
+expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -37644,6 +38780,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000652
+expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -37665,6 +38803,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
+dccAccession wgEncodeEH000653
+expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1RawDataRep1.fastq.gz
 grant Snyder
 lab UCD
@@ -37689,6 +38829,8 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
+dccAccession wgEncodeEH000653
+expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1RawDataRep2.fastq.gz
 grant Snyder
 lab UCD
@@ -37714,6 +38856,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
+dccAccession wgEncodeEH000653
+expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -37738,6 +38882,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
+dccAccession wgEncodeEH000653
+expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -37761,6 +38907,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000653
+expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
@@ -37782,6 +38930,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000653
+expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdSig.bigWig
 grant Snyder
 lab UCD
@@ -38841,6 +39991,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000916
+expId 916
 fileName wgEncodeSydhTfbsU2osInputUcdAln.bam
 grant Snyder
 lab UCD
@@ -38861,6 +40013,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000916
+expId 916
 fileName wgEncodeSydhTfbsU2osInputUcdRawData.fastq.gz
 grant Snyder
 lab UCD
@@ -38881,6 +40035,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH000916
+expId 916
 fileName wgEncodeSydhTfbsU2osInputUcdSig.bigWig
 grant Snyder
 lab UCD
@@ -39150,4 +40306,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -416163203
+# MAGIC: -1133032353
