@@ -2095,6 +2095,31 @@ wgEncode 1
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
 
+        track wgEncodeSydhTfbsGm10847Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM10847 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM10847 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM10847 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4313 dateSubmitted=2011-06-09
+
+        track wgEncodeSydhTfbsGm18505Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM18505 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM18505 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM18505 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4313 dateSubmitted=2011-06-09
+
+        track wgEncodeSydhTfbsK562CfosStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Fos Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Fos in K562 cells)
+        subGroups view=Peaks factor=cFOS cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4313 dateSubmitted=2011-06-09
+
     #Signal Track SYDH TFBS#
     #Short Labels for signal =Sg # 
     track wgEncodeSydhTfbsViewSignal
@@ -2110,15 +2135,6 @@ wgEncode 1
     maxHeightPixels 100:32:16
     windowingFunction mean
    
-
-	    track wgEncodeSydhTfbsGm12878WhipIggmusSig
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel GM12878 WHIP   Sg
-	    longLabel GM12878 WHIP IgG mus ChIP-seq Signal from ENCODE/SYDH
-	    subGroups view=Signal factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
-	    type bigWig 1 8218
-	    color 153,38,0
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=GM12878 antibody=WHIP treatment=None control=IgG-mus setType=exp inputType=GM12878/None/Input/IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1178 dateSubmitted=2010-04-26 dateUnrestricted=2011-01-26 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878WhipIggmusSig fileName=wgEncodeSydhTfbsGm12878WhipIggmusSig.bigWig.gz
 
 #	    track wgEncodeSydhTfbsHelas3Rad21IggrabSig
 #	    subTrack wgEncodeSydhTfbsViewSignal off
@@ -3222,7 +3238,7 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878Xrcc4IggmusSig
+        track wgEncodeSydhTfbsGm12878WhipIggmusSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 WHIP Sig
         longLabel GM12878 WHIP IgG mus ChIP-seq Signal from ENCODE/SYDH
