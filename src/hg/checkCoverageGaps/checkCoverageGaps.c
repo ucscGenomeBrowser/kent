@@ -37,12 +37,17 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void bigWigBiggestGap(struct trackDb *tdb, struct sqlConnection *conn, 
-	char *chrom, int chromSize, struct rbTree *rt)
+
+void bigCoverageIntoTree(struct trackDb *tdb, struct sqlConnection *conn, 
+	char *chrom, int chromSize, struct rbTree *rt, boolean isBigBed)
 /* Find biggest gap in given chromosome in bigWig */
 {
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi = bigWigFileOpen(fileName);
+struct bbiFile *bbi;
+if (isBigBed)
+    bbi = bigBedFileOpen(fileName);
+else
+    bbi = bigWigFileOpen(fileName);
 int sampleSize = 10000;
 int sampleCount = chromSize/sampleSize;
 if (sampleCount > 1)
@@ -50,7 +55,12 @@ if (sampleCount > 1)
     int evenEnd = sampleCount * sampleSize;
     double *summaryVals;
     AllocArray(summaryVals, sampleCount);
-    if (bigWigSummaryArray(bbi, chrom, 0, evenEnd, bbiSumCoverage, sampleCount, summaryVals))
+    boolean ok;
+    if (isBigBed)
+       ok = bigBedSummaryArray(bbi, chrom, 0, evenEnd, bbiSumCoverage, sampleCount, summaryVals);
+    else
+       ok = bigWigSummaryArray(bbi, chrom, 0, evenEnd, bbiSumCoverage, sampleCount, summaryVals);
+    if (ok)
 	{
 	int s=0, e, i;
 	for (i=0; i<sampleCount; ++i)
@@ -65,11 +75,18 @@ if (sampleCount > 1)
 bigWigFileClose(&bbi);
 }
 
+void bigWigBiggestGap(struct trackDb *tdb, struct sqlConnection *conn, 
+	char *chrom, int chromSize, struct rbTree *rt)
+/* Find biggest gap in given chromosome in bigWig */
+{
+bigCoverageIntoTree(tdb, conn, chrom, chromSize, rt, FALSE);
+}
+
 void bigBedBiggestGap(struct trackDb *tdb, struct sqlConnection *conn, 
 	char *chrom, int chromSize, struct rbTree *rt)
 /* Find biggest gap in given chromosome in bigBed */
 {
-uglyAbort("bigBed not implemented");
+bigCoverageIntoTree(tdb, conn, chrom, chromSize, rt, TRUE);
 }
 
 void tableBiggestGap(struct hTableInfo *hti, struct trackDb *tdb, struct sqlConnection *conn, 
@@ -133,9 +150,8 @@ else
 void addGaps(struct sqlConnection *conn, char *chrom, struct rbTree *rt)
 /* Add gaps to range tree. */
 {
-char query[256];
-safef(query, sizeof(query), "select chromStart, chromEnd from gap where chrom='%s'", chrom);
-struct sqlResult *sr = sqlGetResult(conn, query);
+struct sqlResult *sr = hExtendedChromQuery(conn, "gap", chrom, NULL, FALSE,
+	"chromStart,chromEnd", NULL);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
