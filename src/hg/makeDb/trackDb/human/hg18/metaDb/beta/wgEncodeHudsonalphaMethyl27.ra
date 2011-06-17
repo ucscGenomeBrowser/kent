@@ -1,14 +1,21 @@
+metaObject wgEncodeHudsonalphaMethyl27
+objType composite
+composite wgEncodeHudsonalphaMethyl27
+expVars lab,dataType,cell
+
 metaObject wgEncodeHudsonalphaMethyl27GM12878r1
 objType table
 cell GM12878
 composite wgEncodeHudsonalphaMethyl27
-dataType Methyl27
+dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+expId 276
 fileName wgEncodeHudsonalphaMethyl27GM12878r1.bed.gz
 grant Myers
 lab HudsonAlpha
+labVersion Methyl27
 project wgEncode
 replicate 1
 subId 685
@@ -18,13 +25,15 @@ metaObject wgEncodeHudsonalphaMethyl27GM12878r2
 objType table
 cell GM12878
 composite wgEncodeHudsonalphaMethyl27
-dataType Methyl27
+dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+expId 276
 fileName wgEncodeHudsonalphaMethyl27GM12878r2.bed.gz
 grant Myers
 lab HudsonAlpha
+labVersion Methyl27
 project wgEncode
 replicate 2
 subId 685
@@ -34,13 +43,15 @@ metaObject wgEncodeHudsonalphaMethyl27HepG2r1
 objType table
 cell HepG2
 composite wgEncodeHudsonalphaMethyl27
-dataType Methyl27
+dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+expId 277
 fileName wgEncodeHudsonalphaMethyl27HepG2r1.bed.gz
 grant Myers
 lab HudsonAlpha
+labVersion Methyl27
 project wgEncode
 replicate 1
 subId 685
@@ -50,13 +61,15 @@ metaObject wgEncodeHudsonalphaMethyl27HepG2r2
 objType table
 cell HepG2
 composite wgEncodeHudsonalphaMethyl27
-dataType Methyl27
+dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+expId 277
 fileName wgEncodeHudsonalphaMethyl27HepG2r2.bed.gz
 grant Myers
 lab HudsonAlpha
+labVersion Methyl27
 project wgEncode
 replicate 2
 subId 685
@@ -66,13 +79,15 @@ metaObject wgEncodeHudsonalphaMethyl27K562r1
 objType table
 cell K562
 composite wgEncodeHudsonalphaMethyl27
-dataType Methyl27
+dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+expId 278
 fileName wgEncodeHudsonalphaMethyl27K562r1.bed.gz
 grant Myers
 lab HudsonAlpha
+labVersion Methyl27
 project wgEncode
 replicate 1
 subId 685
@@ -82,16 +97,18 @@ metaObject wgEncodeHudsonalphaMethyl27K562r2
 objType table
 cell K562
 composite wgEncodeHudsonalphaMethyl27
-dataType Methyl27
+dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+expId 278
 fileName wgEncodeHudsonalphaMethyl27K562r2.bed.gz
 grant Myers
 lab HudsonAlpha
+labVersion Methyl27
 project wgEncode
 replicate 2
 subId 685
 tableName wgEncodeHudsonalphaMethyl27K562r2
 
-# MAGIC: -487688087
+# MAGIC: -1965493348

@@ -115,6 +115,59 @@ searchType genePred
 termRegex PGOMOU[0-9]+
 searchPriority 50
 
+track ucscRetroAli1
+shortLabel Retroposed Genes
+longLabel Retroposed GenesV1, Including Pseudogenes - November 2010 
+group genes
+type psl
+priority 37.5
+color 20,0,250
+visibility hide
+nextItemButton on
+ucscRetroInfo ucscRetroInfo1
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds
+baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes - November 2010
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo1
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo1.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
 track tRNAs
 shortLabel tRNA Genes
 longLabel Transfer RNA genes identified with tRNAscan-SE
@@ -816,7 +869,7 @@ longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Stem cells, log2-rati
 group regulation
 priority 310
 visibility hide
-color 255, 125, 0
+color 255, 165, 0
 maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
@@ -870,7 +923,7 @@ longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Fibroblasts, log2-rat
 group regulation
 priority 340
 visibility hide
-color 0,255, 0
+color 0,100,0
 maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
@@ -879,4 +932,78 @@ type wig -5.45 4.93
 spanList 60
 viewLimits -1.5:1.5
 html laminB1Mm9
+
+track NumtSeq
+compositeTrack on
+shortLabel NumtSeq
+longLabel Mouse NumtS mitochondrial sequence
+group varRep
+priority 500.5
+visibility hide
+noInherit on
+type bed 3 .
+html numtSeqHg19
+
+    track numtS
+    parent NumtSeq
+    shortLabel NumtS
+    longLabel Mouse NumtS
+    color 0,60,120
+     #itemRgb on
+    useScore 1
+    priority 1
+    type bed 6 .
+    html numtSeqHg19
+
+    track numtSAssembled
+    parent NumtSeq
+    shortLabel NumtS assembled
+    longLabel Mouse NumtS assembled
+    color 0,60,120
+    priority 2
+    useScore 1
+    type bed 12 .
+    html numtSeqHg19
+
+    track numtSMitochondrion
+    parent NumtSeq
+    shortLabel NumtS on mitochondrion
+    longLabel Mouse NumtS on mitochondrion
+    useScore 1
+    color 0,60,120
+    priority 3
+    type bed 6 .
+    html numtSeqHg19
+
+    track  bamMmsNumtSSorted
+    parent NumtSeq
+    shortLabel NumtS SNPs
+    longLabel Mouse NumtS SNPs
+    priority 4
+    visibility pack
+    type bam
+
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
+
+searchTable numtS
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
+
+searchTable numtSAssembled
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
 

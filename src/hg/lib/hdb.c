@@ -845,6 +845,8 @@ char *hTableForTrack(char *db, char *trackName)
  * In addition, caches all the tracks and tables in db the first
  * time it is called (could be many thousand tables). */
 {
+if (trackName == NULL)
+    return NULL;
 struct hash *hash = tableListGetDbHash(db);
 struct slName *tableNames = NULL;
 tableNames = (struct slName *)hashFindVal(hash, trackName);
@@ -856,6 +858,8 @@ return NULL;
 boolean hTableOrSplitExists(char *db, char *track)
 /* Return TRUE if track table (or split table) exists in db. */
 {
+if (track == NULL)
+    return FALSE;
 if (!hDbExists(db))
     return FALSE;
 struct hash *hash = tableListGetDbHash(db);
@@ -2489,7 +2493,7 @@ struct dbDb *list = hDbDbList();
 struct dbDb *dbdb;
 for (dbdb = list; dbdb != NULL; dbdb = dbdb->next)
     hashAdd(dbDbHash, dbdb->name, dbdb);
-return dbDbHash; 
+return dbDbHash;
 }
 
 struct hash *hDbDbAndArchiveHash()
@@ -2502,7 +2506,7 @@ struct dbDb *bothList = slCat(list, archList);
 struct dbDb *dbdb;
 for (dbdb = bothList; dbdb != NULL; dbdb = dbdb->next)
     hashAdd(dbDbHash, dbdb->name, dbdb);
-return dbDbHash; 
+return dbDbHash;
 }
 
 int hDbDbCmpOrderKey(const void *va, const void *vb)
@@ -3483,10 +3487,14 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 {
 if ((!tdb->private || privateHost) && trackDataAccessible(database, tdb))
     slAddHead(tdbRetList, tdb);
-else if (sameWord(tdb->type,"downloadsOnly"))
+else if (tdbIsDownloadsOnly(tdb))
     {
-    if (sameString(tdb->table,tdb->track))
-        tdb->table = NULL;
+    // While it would be good to make table NULL, since we should support tracks
+    // without tables (composties, etc) and even data tracks without tables (bigWigs).
+    // However, some CGIs still need careful bullet-proofing.  I have done so with
+    //   hgTrackUi, hgTracks, hgTable and hgGenome
+    //if (tdb->table != NULL && sameString(tdb->table,tdb->track))
+    //    tdb->table = NULL;
     slAddHead(tdbRetList, tdb);
     }
 else
@@ -3667,7 +3675,7 @@ struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     if (tdb->children !=  NULL)
         internalErr();
-        
+
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     struct trackDb *parent = tdb->parent;
@@ -3698,6 +3706,19 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
+// FIXME: This is NOT CACHED and should be!  Since some callers (e.g. hgTables) consume the list,
+// I would suggest:
+// 1) static hash by db/hub
+// 2) call creates list if not in hash
+// 3) static (to this file) routine gives the actual tdb list
+// 4) public lib routine that returns fully cloned list
+// 5) public lib routine that returns cloned individual tdb complete with up/down inheritance
+// UNFORTUNATELY, cloning the memory with prove costly in time as well, because of all the pointers
+// to relink.  THEREFORE what should be done is to make the tdb list with const ->next pointers and
+// force discpline on the callers.  Sorts should be by hdb.c routines and any new lists (such as
+// hgTables makes) should be via tdbRefs.
+// SO we are back to being STALLED because of the volume of work.
+
 // static char *existingDb = NULL;
 // static struct trackDb *tdbList = NULL;
 struct trackDb *tdbList = NULL;

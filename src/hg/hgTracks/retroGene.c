@@ -4,6 +4,18 @@
 
 static char const rcsid[] = "$Id: retroGene.c,v 1.19 2010/05/11 01:43:28 kent Exp $";
 
+static void addToLabel(struct dyString *label, char *val)
+/* append a label to the label, separating with a space, do nothing if val is
+ * NULL.*/
+{
+if (val != NULL)
+    {
+    if (label->stringSize > 0)
+        dyStringAppendC(label, ' ');
+    dyStringAppend(label, val);
+    }
+}
+
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
       useOrgAbbrv  = 0x02,
@@ -11,7 +23,7 @@ enum {useOrgCommon = 0x01,
       useGene      = 0x08,
       useAcc       = 0x10};
 
-struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg)
+struct linkedFeatures *lfFromRetroGene(struct ucscRetroInfo *pg)
 /* Return a linked feature from a retroGene. */
 {
 struct linkedFeatures *lf;
@@ -49,7 +61,7 @@ void lfRetroGene(struct track *tg)
  * window... */
 {
 struct linkedFeatures *lfList = NULL, *lf;
-struct retroMrnaInfo *pg = NULL, *list = NULL;
+struct ucscRetroInfo *pg = NULL, *list = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -60,10 +72,10 @@ sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset)
 colCount = sqlCountColumns(sr);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (colCount == 56)
-        pg = retroMrnaInfo56Load(row+rowOffset);
-    else
-        pg = retroMrnaInfoLoad(row+rowOffset);
+    //if (colCount == 56) 
+    //    pg = retroMrnaInfo56Load(row+rowOffset);
+    //else
+    pg = ucscRetroInfoLoad(row+rowOffset);
     slAddHead(&list, pg);
     }
 sqlFreeResult(&sr);
@@ -97,7 +109,7 @@ Color retroGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 return hvGfxFindColorIx(hvg, CHROM_20_R, CHROM_20_G, CHROM_20_B);
 }
 
-char *getRetroParentSymbol(struct retroMrnaInfo *r, char *parentName)
+char *getRetroParentSymbol(struct ucscRetroInfo *r, char *parentName)
 {
 struct sqlConnection *conn = hAllocConn(database);
 char cond_str[512];
@@ -124,9 +136,7 @@ char *retroName(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
 char cartvar[512];
-boolean isNative = sameString(tg->table, "pseudoGeneLink") ;
-boolean isRetroNative = startsWith( "ucscRetro", tg->table) || startsWith( "retroMrnaInfo", tg->table);
-safef(cartvar, sizeof(cartvar), "%s.label", (isNative ? "pseudoGeneLink.label" : (isRetroNative ? tg->track : "xenoRefGene.label")));
+safef(cartvar, sizeof(cartvar), "%s.label", tg->table);
 char *refGeneLabel = cartUsualString(cart, cartvar, "gene") ;
 boolean useGeneName = sameString(refGeneLabel, "gene")
     || sameString(refGeneLabel, "both");
@@ -179,9 +189,7 @@ if (labels == NULL)
     // default to common name+accession and save this in cart so it makes sense in trackUi
     labelSet = useAcc;
     char setting[64];
-    safef(setting, sizeof(setting), "%s.label.acc", tg->tdb->track);
-    cartSetBoolean(cart, setting, TRUE);
-    safef(setting, sizeof(setting), "%s.label.orgCommon", tg->tdb->track);
+    safef(setting, sizeof(setting), "%s.label.gene", tg->tdb->track);
     cartSetBoolean(cart, setting, TRUE);
     }
 struct hashEl *label;
@@ -201,34 +209,29 @@ for (label = labels; label != NULL; label = label->next)
 return labelSet;
 }
 static void getItemLabel(struct sqlConnection *conn,
-                         char *retroMrnaInfoTbl , //char *transMapGeneTbl,
+                         char *retroInfoTbl , //char *transMapGeneTbl,
                          unsigned labelSet,
                          struct linkedFeatures *lf)
 /* get label for a retro item */
 {
-struct retroMrnaInfo *info = NULL;
-info = retroMrnaInfoQuery(conn, retroMrnaInfoTbl, lf->name);
+struct ucscRetroInfo *info = NULL;
+info = ucscRetroInfoQuery(conn, retroInfoTbl, lf->name);
 char *geneSymbol = getRetroParentSymbol(info, lf->name);
-lf->extra = geneSymbol;
-#ifdef junk
-if ((labelSet & useGene) && (transMapGeneTbl != NULL))
-    gene = transMapGeneQuery(conn, transMapGeneTbl,
-                             info->srcDb, transMapIdToAcc(info->srcId));
+//lf->extra = geneSymbol;
 
 struct dyString *label = dyStringNew(64);
-if (labelSet & useGene) 
+if ((labelSet & useGene) && (retroInfoTbl != NULL))
     {
-    if ((gene != NULL) && (strlen(gene->geneName) > 0))
-        addToLabel(label, gene->geneName);
+    if ((geneSymbol != NULL) && (strlen(geneSymbol) > 0))
+        addToLabel(label, geneSymbol);
     else
         labelSet |= useAcc;  // no gene, so force acc
     }
 if (labelSet & useAcc)
-    addToLabel(label, transMapIdToAcc(lf->name));
+    addToLabel(label, lf->name);
 
-retroMrnaInfoFree(&info);
+ucscRetroInfoFree(&info);
 lf->extra = dyStringCannibalize(&label);
-#endif
 }
 
 static void lookupRetroAliLabels(struct track *tg)
@@ -286,14 +289,19 @@ tg->itemDataName = transMapGetItemDataName;
 
 void retroRegisterTrackHandlers()
 {
-registerTrackHandler("pseudoGeneLink", retroGeneMethods);
-registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
-registerTrackHandler("retroMrnaInfo", retroGeneMethods);
-registerTrackHandler("retroMrnaInfo2", retroGeneMethods);
-registerTrackHandler("retroMrnaInfo3", retroGeneMethods);
+//registerTrackHandler("pseudoGeneLink", retroGeneMethods);
+//registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
+//registerTrackHandler("retroMrnaInfo", retroGeneMethods);
+//registerTrackHandler("retroMrnaInfo2", retroGeneMethods);
+//registerTrackHandler("retroMrnaInfo3", retroGeneMethods);
+registerTrackHandler("ucscRetroInfo", retroGeneMethods);
+registerTrackHandler("ucscRetroInfo1", retroGeneMethods);
+registerTrackHandler("ucscRetroInfo2", retroGeneMethods);
 registerTrackHandler("ucscRetroInfo3", retroGeneMethods);
-registerTrackHandler("retroCdsAli", retroAliMethods);
-registerTrackHandler("retroCdsAli3", retroAliMethods);
+//registerTrackHandler("retroCdsAli", retroAliMethods);
+//registerTrackHandler("retroCdsAli3", retroAliMethods);
 registerTrackHandler("ucscRetroAli", retroAliMethods);
+registerTrackHandler("ucscRetroAli1", retroAliMethods);
+registerTrackHandler("ucscRetroAli2", retroAliMethods);
 registerTrackHandler("ucscRetroAli3", retroAliMethods);
 }

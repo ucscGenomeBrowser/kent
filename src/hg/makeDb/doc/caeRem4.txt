@@ -1,0 +1,259 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis remanei
+#	Washington University School of Medicine GSC and Sanger Institute
+#
+
+###########################################################################
+## Download sequence (DONE - 2011-05-25 - Hiram)
+    mkdir /hive/data/genomes/caeRem4
+    cd /hive/data/genomes/caeRem4
+    mkdir ws220
+    cd ws220
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS220/genomes/c_remanei/
+
+    # no AGP, make one from the fasta file
+    hgFakeAgp -minContigGap=1 sequences/dna/c_remanei.WS220.dna.fa.gz \
+	caeRem4.ws220.fake.agp
+
+    faSize sequences/dna/c_remanei.WS220.dna.fa.gz
+# 145442736 bases (7036533 N's 138406203 real 0 upper 138406203 lower)
+#	in 3670 sequences in 1 files
+# %95.16 masked total, %100.00 masked real
+
+###########################################################################
+## Initial sequence (DONE - 2011-05-25 - Hiram)
+    cd /hive/data/genomes/caeRem4
+    cat << '_EOF_' > caeRem4.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caeRem4
+# clade worm
+# genomeCladePriority 10
+scientificName Caenorhabditis remanei
+commonName C. remanei
+assemblyDate Jul. 2007
+assemblyLabel Washington University School of Medicine GSC C. remanei 15.0.1
+assemblyShortLabel WS220
+orderKey 877
+mitoAcc none
+fastaFiles /hive/data/genomes/caeRem4/ws220/sequences/dna/c_remanei.WS220.dna.fa.gz
+agpFiles /hive/data/genomes/caeRem4/ws220/caeRem4.ws220.fake.agp
+# qualFiles none
+taxId 31234
+'_EOF_'
+    # << happy emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    time nice -n +19 makeGenomeDb.pl caeRem4.config.ra -stop=agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	real    0m22.470s
+    #	check that log to verify it has no errors
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl caeRem4.config.ra -continue=db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m22.079s
+
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+    # should have been type W not type D:
+
+    hgsql -e 'update gold set type="W" where type="D";' caeRem4
+
+###########################################################################
+## RepeatMasker (DONE - 2011-05-25 - Hiram)
+    mkdir /hive/data/genomes/caeRem4/bed/repeatMasker
+    cd /hive/data/genomes/caeRem4/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
+	-buildDir=`pwd` caeRem4 > do.log 2>&1 &
+    #	real    10m0.784s
+
+    #	from the do.log:
+# RepeatMasker version development-$Id: RepeatMasker,v
+#	1.25 2010/09/08 21:32:26 angie Exp $
+#	CC   RELEASE 20090604; 
+
+    cat faSize.rmsk.txt
+# 145442736 bases (7036533 N's 138406203 real 137059054 upper 1347149 lower)
+#	in 3670 sequences in 1 files
+# %0.93 masked total, %0.97 masked real
+
+###########################################################################
+## Simple Repeats (DONE - 2011-05-25 - Hiram)
+    mkdir /cluster/data/caeRem4/bed/simpleRepeat
+    cd /cluster/data/caeRem4/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
+	-workhorse=hgwdev -buildDir=`pwd` caeRem4 > do.log 2>&1 &
+    #	real    12m41.640s
+    cat fb.simpleRepeat 
+    #	5219501 bases of 138406203 (3.771%) in intersection
+
+###########################################################################
+## WindowMasker (DONE - 2011-05-25 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/caeRem4/bed/windowMasker
+    cd /hive/data/genomes/caeRem4/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -verbose=2 -buildDir=`pwd` \
+	-workhorse=hgwdev caeRem4 > do.log 2>&1 &
+    #	real    5m22.429s
+    twoBitToFa caeRem4.wmsk.sdust.2bit stdout | faSize stdin
+# 145442736 bases (7036533 N's 138406203 real 96272057 upper 42134146 lower)
+#	in 3670 sequences in 1 files
+# %28.97 masked total, %30.44 masked real
+
+    #	load this initial data to get ready to clean it
+    cd /hive/data/genomes/caeRem4/bed/windowMasker
+    hgLoadBed caeRem4 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 1074076 elements of size 3
+    featureBits -countGaps caeRem4 windowmaskerSdust
+    #	49170450 bases of 145442736 (33.807%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits caeRem4 -not gap -bed=notGap.bed
+    #	138406203 bases of 138406203 (100.000%) in intersection
+    time nice -n +19 featureBits caeRem4 windowmaskerSdust notGap.bed \
+	-bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	42134146 bases of 138406203 (30.442%) in intersection
+    #	reload track to get it clean
+    hgLoadBed caeRem4 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 1073077 elements of size 4
+    featureBits -countGaps caeRem4 windowmaskerSdust
+    #	featureBits -countGaps caeRem4 windowmaskerSdust
+
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../caeRem4.unmasked.2bit stdin \
+	    -type=.bed caeRem4.cleanWMSdust.2bit
+    twoBitToFa caeRem4.cleanWMSdust.2bit stdout | faSize stdin \
+        > caeRem4.cleanWMSdust.faSize.txt
+    cat caeRem4.cleanWMSdust.faSize.txt
+# 145442736 bases (7036533 N's 138406203 real 96272057 upper 42134146 lower)
+#	in 3670 sequences in 1 files
+# %28.97 masked total, %30.44 masked real
+
+########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-25 - Hiram)
+    cd /hive/data/genomes/caeRem4
+    twoBitMask -add bed/windowMasker/caeRem4.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed caeRem4.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa caeRem4.2bit stdout | faSize stdin > faSize.caeRem4.txt
+    cat faSize.caeRem4.txt
+# 145442736 bases (7036533 N's 138406203 real 96220935 upper 42185268 lower)
+#	in 3670 sequences in 1 files
+# %29.00 masked total, %30.48 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/caeRem4/caeRem4.2bit
+    ln -s `pwd`/caeRem4.2bit /gbdb/caeRem4/caeRem4.2bit
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-25 - Hiram)
+    # numerator is caeRem4 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases "real" as reported by faSize
+    # 1024 is threshold used for human -repMatch:
+    calc \( 138406203 / 2897310462 \) \* 1024
+    #	( 138406203 / 2897310462 ) * 1024 = 48.917075
+
+    # Round up to use -repMatch=100 since 50 would result in too many
+    cd /hive/data/genomes/caeRem4
+    blat caeRem4.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/caeRem4.11.ooc -repMatch=100
+    #	Wrote 10105 overused 11-mers to jkStuff/caeRem4.11.ooc
+    # there are no non-bridged gaps here to make a lift file from
+    # cd jkStuff
+    # gapToLift -verbose=2 caeRem4 caeRem4.nonBridged.lift -bedFile=caeRem4.nonBridged.bed
+
+    mkdir /hive/data/staging/data/caeRem4
+    cp -p chrom.sizes caeRem4.2bit jkStuff/caeRem4.11.ooc \
+	/hive/data/staging/data/caeRem4
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2011-05-26 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add caeRem4 just before caeRem3
+
+# caeRem4 (C. remanei)
+caeRem4.serverGenome = /hive/data/genomes/caeRem4/caeRem4.2bit
+caeRem4.clusterGenome = /scratch/data/caeRem4/caeRem4.2bit
+caeRem4.ooc = /scratch/data/caeRem4/caeRem4.11.ooc
+caeRem4.lift = no
+caeRem4.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeRem4.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeRem4.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeRem4.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeRem4.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeRem4.refseq.mrna.native.load = no
+caeRem4.refseq.mrna.xeno.load  = yes
+caeRem4.refseq.mrna.xeno.loadDesc = yes
+caeRem4.genbank.mrna.xeno.load = yes
+caeRem4.genbank.est.native.load = yes
+caeRem4.genbank.est.native.loadDesc = no
+caeRem4.downloadDir = caeRem4
+caeRem4.perChromTables = no
+
+    git commit -m "Added caeRem4 C. remanei WS220" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeRem4 &
+    #	logFile:  var/build/logs/2011.05.26-09:19:08.caeRem4.initalign.log
+    #	real	320m18.548s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeRem4
+    #	logFile: var/dbload/hgwdev/logs/2011.05.26-14:41:33.dbload.log
+    #	real    21m49.269s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add caeRem4 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added caeRem4 C. remanei WS220" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# lastz swap ce10 to caeRem4 (DONE - 2011-06-07 - Hiram)
+    #	original alignment on ce10
+    cd /hive/data/genomes/ce10/bed/lastzCaeRem4.2011-06-07
+    cat fb.ce10.chainCaeRem4Link.txt 
+    #	41841289 bases of 100286070 (41.722%) in intersection
+
+    mkdir /hive/data/genomes/caeRem4/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeRem4/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeRem4.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    3m52.350s
+
+    cat fb.caeRem4.chainCe10Link.txt
+    #	46320954 bases of 138406203 (33.467%) in intersection
+
+############################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caeRem4
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caeRem4 \
+	 > downloads.log 2>&1
+    #	real    1m15.214s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################

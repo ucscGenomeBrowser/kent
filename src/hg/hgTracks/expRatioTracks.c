@@ -518,7 +518,7 @@ else
 bedFreeList(&bedList);
 }
 
-static void lfsFromBedAndGrouping(struct track *tg, struct maGrouping *combineGroup)
+static void lfsFromBedAndGrouping(struct track *tg, struct maGrouping *combineGroup, struct maGrouping *subset, int subsetOffset)
 /* This is sort of a replacement of msBedGroupByIndex. */
 /* It's meant to be the default microarray track filter */
 /* for tracks using the new microarrayGroups.ra scheme. */
@@ -526,11 +526,14 @@ static void lfsFromBedAndGrouping(struct track *tg, struct maGrouping *combineGr
 struct linkedFeaturesSeries *lfsList = NULL;
 struct bed *bedList = tg->items;
 int i;
-int numRows = combineGroup->numGroups;
+int numRows;
 char newLongLabel[512];
+if (!combineGroup)
+    errAbort("Error: somehow there is no grouping select for the %s track", tg->track);
 if (bedList && (bedList->expCount != combineGroup->size))
     errAbort("Error: %s grouping has bad size (%d).  Expected %d", combineGroup->name, combineGroup->size, bedList->expCount);
-maBedClumpGivenGrouping(bedList, combineGroup);
+maBedClumpGivenGrouping(bedList, combineGroup, subset, subsetOffset);
+numRows = combineGroup->numGroups;
 /* Initialize the lfs array first. */
 for (i = 0; i < numRows; i++)
     {
@@ -567,14 +570,18 @@ void lfsFromExpRatio(struct track *tg)
 {
 struct customTrack *ct = tg->customPt;
 struct maGrouping *grouping = NULL;
+struct maGrouping *subset = NULL;
+int subsetOffset = -1;
 if (ct != NULL)
     grouping = maGetGroupingFromCt(ct);
 else
     {
     struct microarrayGroups *groups = maGetTrackGroupings(database, tg->tdb);
     grouping = maCombineGroupingFromCart(groups, cart, tg->track);
+    subset = maSubsetGroupingFromCart(groups, cart, tg->track);
+    subsetOffset = maSubsetOffsetFromCart(subset, cart, tg->track);
     }
-lfsFromBedAndGrouping(tg, grouping);
+lfsFromBedAndGrouping(tg, grouping, subset, subsetOffset);
 }
 
 void lfsFromAffyUclaNormBed(struct track *tg)

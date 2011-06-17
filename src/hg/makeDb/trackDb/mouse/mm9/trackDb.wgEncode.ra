@@ -11,6 +11,7 @@ include wgEncodeSydhHistone.ra alpha
 
 # UW DNaseI HS (wrangler: Venkat)
 include wgEncodeUwDnase.ra alpha
+#include wgEncodeUwDnase.new.ra alpha 
 
 # PSU TFBS (wrangler: Venkat)
 include wgEncodePsuTfbs.ra alpha
@@ -19,7 +20,7 @@ include wgEncodePsuTfbs.ra alpha
 include wgEncodePsuHistone.ra alpha
 
 # LICR Histone (wrangler: Venkat)
-include wgEncodeLicrHistone.ra alpha
+include wgEncodeLicrHistone.ra 
 
 # LICR TFBS (wrangler: Venkat)
 include wgEncodeLicrTfbs.ra alpha

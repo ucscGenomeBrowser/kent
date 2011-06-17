@@ -77,12 +77,25 @@ LI {		line-height: 1.5;
 	}
 
 
-/* used by CCDS details page in hgc */
+/*** used by CCDS details page in hgc *** */
+    
+/* give the tables some breathing room and a consistent width */
+TABLE.hgcCcds {
+    margin-bottom: 30px;
+    width: 500px;
+}
+
 TABLE.hgcCcds, TABLE.hgcCcds TH, TABLE.hgcCcds TD {
-    border: 3px gray ridge;
+    border: 1px gray ridge;
     border-collapse: collapse;
     text-align: left;
     vertical-align: top;
+}
+TABLE.hgcCcds TH {
+    white-space: nowrap;
+}
+TABLE.hgcCcds TD {
+    height: 1em;
 }
 TABLE.hgcCcds THEAD {
     background-color: #2636D1;
@@ -216,6 +229,10 @@ div.sliceDiv { overflow:hidden; }
 /* These are for dragReorder: both in imageV2 and in hgTrackUi subtrack list */
 .trDrag { background-color: #CCFFCC; }
 .dragHandle { cursor: n-resize; }
+
+/* These are duplicates of btnBlue and trDrag but allow useful highlighting to persist after hover */
+.blueButtons { background-color:#91B3E6; }
+.greenRows { background-color: #CCFFCC; }
 
 /* The are for sortable tables */
 table.subtracks { overflow: visible; white-space: nowrap; border: 1px solid #FFFEE8; }

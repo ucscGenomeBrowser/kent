@@ -188,7 +188,7 @@ def processAntibodyEntry(entry, species, downloadsDirectory, username, password,
             stanza["term"] = term
         else:
             stanza["term"] = term + "_(" + vendorId + ")"
-        stanza["tag"] = re.sub("[-_\(\)]", "", stanza["term"])
+        stanza["tag"] = re.sub("[-_\(\)]", "", stanza["term"]).upper()
         stanza["type"] = "Antibody"
         stanza["antibodyDescription"] = getContents(cells[1])
         stanza["target"] = re.split("_", stanza["term"])[0]

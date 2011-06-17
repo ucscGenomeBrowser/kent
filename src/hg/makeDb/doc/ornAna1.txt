@@ -1713,7 +1713,15 @@ done
     #	149620 ornAna1
 
     ssh hgwdev
-    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    cd /hive/data/genomes/ornAna1/bed/multiz6way/frames
     time hgLoadMafFrames ornAna1 multiz6wayFrames ornAna1.mafFrames.gz
     #	real    0m15.994s
+#########################################################################
+# SWAP BOSTAU6 CHAIN/NET (DONE 2011-05-20 - Chin)
+    cd /cluster/data/ornAna1/bed/blastz.bosTau6.swap
+    cat fb.ornAna1.chainBosTau6Link.txt
+    #   190401000 bases of 1842236818 (10.335%) in intersection
+    cd /cluster/data/ornAna1/bed
+    ln -s blastz.bosTau6.swap lastz.bosTau6
+
 ############################################################################

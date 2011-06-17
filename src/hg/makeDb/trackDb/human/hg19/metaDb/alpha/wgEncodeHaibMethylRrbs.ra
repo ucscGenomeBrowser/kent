@@ -5445,94 +5445,6 @@ tableName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHtb11HaibRawDataRep1
-objType file
-cell HTB-11
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-21
-dateUnrestricted 2011-12-21
-dccAccession wgEncodeEH001404
-expId 1404
-fileName wgEncodeHaibMethylRrbsHtb11HaibRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL3549
-obtainedBy HudsonAlpha
-project wgEncode
-replicate 1
-subId 3822
-treatment None
-view RawData
-
-metaObject wgEncodeHaibMethylRrbsHtb11HaibRawDataRep2
-objType file
-cell HTB-11
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-21
-dateUnrestricted 2011-12-21
-dccAccession wgEncodeEH001404
-expId 1404
-fileName wgEncodeHaibMethylRrbsHtb11HaibRawDataRep2.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL3550
-obtainedBy HudsonAlpha
-project wgEncode
-replicate 2
-subId 3822
-treatment None
-view RawData
-
-metaObject wgEncodeHaibMethylRrbsHtb11HaibSitesRep1
-objType table
-cell HTB-11
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-06
-dateUnrestricted 2011-10-06
-dccAccession wgEncodeEH001404
-expId 1404
-fileName wgEncodeHaibMethylRrbsHtb11HaibSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683888
-grant Myers
-lab HudsonAlpha
-labExpId SL3549
-obtainedBy HudsonAlpha
-project wgEncode
-replicate 1
-subId 3159
-tableName wgEncodeHaibMethylRrbsHtb11HaibSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHtb11HaibSitesRep2
-objType table
-cell HTB-11
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-06
-dateUnrestricted 2011-10-06
-dccAccession wgEncodeEH001404
-expId 1404
-fileName wgEncodeHaibMethylRrbsHtb11HaibSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683775
-grant Myers
-lab HudsonAlpha
-labExpId SL3550
-obtainedBy HudsonAlpha
-project wgEncode
-replicate 2
-subId 3159
-tableName wgEncodeHaibMethylRrbsHtb11HaibSitesRep2
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethylRrbsHtr8DukeRawDataRep1
 objType file
 cell HTR8svn
@@ -6316,7 +6228,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 1
 subId 3821
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep2
@@ -6337,7 +6249,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 2
 subId 3821
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep3
@@ -6359,7 +6271,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 3
 subId 3819
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep1
@@ -6383,7 +6295,7 @@ project wgEncode
 replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep1
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep2
@@ -6407,7 +6319,7 @@ project wgEncode
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep2
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
@@ -6431,7 +6343,7 @@ project wgEncode
 replicate 3
 subId 3190
 tableName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7DukeRawDataRep1
@@ -8689,6 +8601,94 @@ tableName wgEncodeHaibMethylRrbsSknmcHaibSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsSknshHaibRawDataRep1
+objType file
+cell SK-N-SH
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-12-21
+dccAccession wgEncodeEH001404
+expId 1404
+fileName wgEncodeHaibMethylRrbsSknshHaibRawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3549
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 1
+subId 3822
+treatment None
+view RawData
+
+metaObject wgEncodeHaibMethylRrbsSknshHaibRawDataRep2
+objType file
+cell SK-N-SH
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-12-21
+dccAccession wgEncodeEH001404
+expId 1404
+fileName wgEncodeHaibMethylRrbsSknshHaibRawDataRep2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3550
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 2
+subId 3822
+treatment None
+view RawData
+
+metaObject wgEncodeHaibMethylRrbsSknshHaibSitesRep1
+objType table
+cell SK-N-SH
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+dccAccession wgEncodeEH001404
+expId 1404
+fileName wgEncodeHaibMethylRrbsSknshHaibSitesRep1.bedRrbs.gz
+geoSampleAccession GSM683888
+grant Myers
+lab HudsonAlpha
+labExpId SL3549
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 1
+subId 3159
+tableName wgEncodeHaibMethylRrbsSknshHaibSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsSknshHaibSitesRep2
+objType table
+cell SK-N-SH
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+dccAccession wgEncodeEH001404
+expId 1404
+fileName wgEncodeHaibMethylRrbsSknshHaibSitesRep2.bedRrbs.gz
+geoSampleAccession GSM683775
+grant Myers
+lab HudsonAlpha
+labExpId SL3550
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 2
+subId 3159
+tableName wgEncodeHaibMethylRrbsSknshHaibSitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsSknshraUwRawDataRep1
 objType file
 cell SK-N-SH_RA
@@ -8779,7 +8779,7 @@ tableName wgEncodeHaibMethylRrbsSknshraUwSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsT47dDmso224hHaibRawDataRep1
+metaObject wgEncodeHaibMethylRrbsT47dDm002p24hHaibRawDataRep1
 objType file
 cell T-47D
 composite wgEncodeHaibMethylRrbs
@@ -8789,7 +8789,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001412
 expId 1412
-fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibRawDataRep1.fastq.gz
+fileName wgEncodeHaibMethylRrbsT47dDm002p24hHaibRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3485
@@ -8800,7 +8800,7 @@ subId 3822
 treatment DMSO_0.02pct_24hr
 view RawData
 
-metaObject wgEncodeHaibMethylRrbsT47dDmso224hHaibRawDataRep2
+metaObject wgEncodeHaibMethylRrbsT47dDm002p24hHaibRawDataRep2
 objType file
 cell T-47D
 composite wgEncodeHaibMethylRrbs
@@ -8810,7 +8810,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001412
 expId 1412
-fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibRawDataRep2.fastq.gz
+fileName wgEncodeHaibMethylRrbsT47dDm002p24hHaibRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1436
@@ -8821,7 +8821,7 @@ subId 3819
 treatment DMSO_0.02pct_24hr
 view RawData
 
-metaObject wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep1
+metaObject wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep1
 objType table
 cell T-47D
 composite wgEncodeHaibMethylRrbs
@@ -8831,7 +8831,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001412
 expId 1412
-fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683937
 grant Myers
 lab HudsonAlpha
@@ -8840,11 +8840,11 @@ obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
 subId 3159
-tableName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep1
+tableName wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep1
 treatment DMSO_0.02pct_24hr
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep2
+metaObject wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep2
 objType table
 cell T-47D
 composite wgEncodeHaibMethylRrbs
@@ -8854,7 +8854,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001412
 expId 1412
-fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683771
 grant Myers
 lab HudsonAlpha
@@ -8863,7 +8863,7 @@ obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
 subId 3159
-tableName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep2
+tableName wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep2
 treatment DMSO_0.02pct_24hr
 view Sites
 
@@ -9043,4 +9043,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -1613740045
+# MAGIC: -1478183533

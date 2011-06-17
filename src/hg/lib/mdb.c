@@ -1139,7 +1139,7 @@ assert(mdbObjs != NULL);  // If this is the case, then be vocal
 long lastTime = 0;
 
 count = mdbObjPrintToTabFile(mdbObjs,MDB_TEMPORARY_TAB_FILE);
-verboseTime(2, "past mdbObjPrintToTabFile()", tableName);
+verboseTime(2, "past mdbObjPrintToTabFile()");
 
 // Disable keys in hopes of speeding things up.  No danger since it only disables non-unique keys
 char query[8192];
@@ -1748,6 +1748,20 @@ if(mdbVar == NULL)
 return mdbVar->val;
 }
 
+struct slName *mdbObjsFindAllVals(struct mdbObj *mdbObjs, char *var)
+// Returns a list of all vals in mdbObjs for a requested var
+{
+struct slName *vals = NULL;
+struct mdbObj *mdbObj = mdbObjs;
+for (;mdbObj != NULL;mdbObj = mdbObj->next)
+    {
+    char *val = mdbObjFindValue(mdbObj,var);
+    if (val != NULL)
+        slNameStore(&vals, val);
+    }
+return vals;
+}
+
 boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val)
 // Returns TRUE if object contains var, val or both
 {
@@ -2186,19 +2200,20 @@ return mdbObjSetVar(mdbObj,var,buf);
 }
 
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis)
-// Replaces objs' vars with var=vap pairs provided, preparing for DB update.
+// Replaces objs' vars with var=val pairs provided, preparing for DB update.
 {
 struct mdbObj *mdbObj = NULL;
 for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     mdbObj->deleteThis = deleteThis;
 
-    if(mdbObj->varHash != NULL)
+    if (mdbObj->varHash != NULL)
         hashFree(&mdbObj->varHash);
 
     mdbVarsFree(&(mdbObj->vars));
 
-    mdbObjAddVarPairs(mdbObj,vars);
+    if (vars != NULL)
+        mdbObjAddVarPairs(mdbObj,vars);
     }
 }
 
@@ -2851,7 +2866,7 @@ while(mdbObjs != NULL)
 
         // Make sure the accession is set if requested.
         if (createExpIfNecessary && updateAccession
-        && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
+        && exp != NULL && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
             encodeExpSetAccession(exp, expTable);
 
         if (exp != NULL)
@@ -2959,8 +2974,7 @@ while(mdbObjs != NULL)
                 {
                 mdbObjSetVarInt(obj,MDB_VAR_ENCODE_EXP_ID,expId);
                 struct mdbObj *newObj = mdbObjCreate(obj->obj,MDB_VAR_ENCODE_EXP_ID, experimentId);
-                assert(exp != NULL);
-                if (exp->accession != NULL && updateAccession)
+                if (updateAccession && exp != NULL && exp->accession != NULL)
                     mdbObjSetVar(newObj,MDB_VAR_DCC_ACCESSION,exp->accession);
                 slAddHead(&mdbUpdateObjs,newObj);
                 }
@@ -3093,7 +3107,7 @@ if(setting == NULL)
     return NULL;
 struct mdbObj *mdbObj;
 AllocVar(mdbObj);
-mdbObj->obj     = cloneString(tdb->table);
+mdbObj->obj     = cloneString(tdb->table?tdb->table:tdb->track);
 AllocVar(mdbObj->vars);
 mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
 mdbObj->vars->val = cloneString(MDB_OBJ_TYPE_TABLE);

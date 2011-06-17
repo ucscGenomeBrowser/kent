@@ -65,19 +65,24 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track gwasCatalog override
+release beta,public
 snpTable snp131
 snpVersion 131
 
-track ucscRetroAli2
-shortLabel Retroposed GenesV2
-longLabel Retroposed GenesV2, Including Pseudogenes November 2010 [ucscRetroAli]
+track gwasCatalog override
+release alpha
+snpTable snp132
+snpVersion 132
+
+track ucscRetroAli1
+shortLabel Retroposed Genes
+longLabel Retroposed GenesV1, Including Pseudogenes - November 2010 
 group genes
 type psl
 priority 37.5
 color 20,0,250
 visibility hide
-nextItemButton on
-retroMrnaInfo ucscRetroInfo2
+ucscRetroInfo ucscRetroInfo1
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds
 baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
@@ -88,37 +93,37 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 
-searchName ucscRetroInfoRefSeq2
-searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes [ucscRetroAli]
+searchName ucscRetroInfoRefSeq1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes - November 2010
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo2
+xrefTable refLink, ucscRetroInfo1
 dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo2.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo1.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
-searchName ucscRetroInfoMrna2
-searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes [ucscRetroAli]
+searchName ucscRetroInfoMrna1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 searchPriority 3.55
 
-searchName ucscRetroUniProt2
-searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes [ucscRetroAli]
+searchName ucscRetroUniProt1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo2
-xrefQuery select ucscRetroInfo2.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
 searchPriority 3.54
 
-searchName ucscRetroKnownGene2
-searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes [ucscRetroAli]
+searchName ucscRetroKnownGene1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo2
-xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
 track tRNAs
@@ -2369,4 +2374,29 @@ priority 105
 type bigWig -15 7
 autoScale on
 maxHeightPixels 128:64:20
+
+track multizDino
+#subTrack consDinoViewalign on
+shortLabel Dino Align
+longLabel Dino Alignments of 7 
+#subGroups view=align clade=vert
+noInherit on
+irows on
+summary multizDinoSummary
+frames multiz46wayFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault hg19
+#speciesGroups Primate Placental_Mammal Vertebrate
+#sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 papHam1 calJac1 tarSyr1 micMur1 otoGar1
+#sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 dasNov2 choHof1 
+#sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6 petMar1 
+#speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 tarSyr1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 ornAna1 taeGut1 anoCar1 proCap1 tetNig2 fr2 gasAcu1 oryLat2 petMar1
+speciesOrder ornAna1 galGal3 taeGut1 anoCar1 chrPic0 allMis0
+#itemFirstCharCase noChange
+#treeImage phylo/hg19_Dino.gif
+priority 100
+
 

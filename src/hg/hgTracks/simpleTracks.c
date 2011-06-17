@@ -3992,7 +3992,7 @@ hvGfxBox(hvg, x1, y, w, heightPer, color);
 if (vis == tvFull)
     {
     int textWidth = mgFontStringWidth(font, bpl->label);
-    hvGfxTextRight(hvg, x1-textWidth-2, y, textWidth, heightPer, MG_BLACK, font, bpl->label);
+    hvGfxTextRight(hvg, x1-textWidth-2, y, textWidth, heightPer, color, font, bpl->label);
     }
 }
 
@@ -4201,75 +4201,161 @@ void genieAltMethods(struct track *tg)
 tg->itemName = genieName;
 }
 
+static struct dyString *genePredClassFilterBySetQuery(struct track *tg, char *classTable,
+                                                      filterBy_t *filterBySet, struct linkedFeatures *lf)
+/* construct the query for a standard genePred class filterBtSet */
+{
+char *clause = filterBySetClause(filterBySet);
+if (clause == NULL)
+    return NULL;
+
+// don't care about a column value here, just if it exists, so get a constant
+char *nameCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_NAME_COLUMN, GENEPRED_CLASS_NAME_COLUMN_DEFAULT);
+struct dyString *dyQuery = dyStringCreate("select 1 from %s where %s = \"%s\" and ", classTable, nameCol, lf->name);
+dyStringAppend(dyQuery, clause);
+freeMem(clause);
+return dyQuery;
+}
+
+static void gencodeFilterByMethodChoice(struct dyString *dyClause, char *choice)
+/* add compared for a choice for special case of GENCODE transcript method. */
+{
+if (sameString(choice, "manual"))
+    dyStringAppend(dyClause, "(transSrc.source like \"%havana%\")");
+else if (sameString(choice, "automatic"))
+    dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\")");
+else if (sameString(choice, "manual_only"))
+    dyStringAppend(dyClause, "(transSrc.source not like \"%havana%\")");
+else if (sameString(choice, "automatic_only"))
+    dyStringAppend(dyClause, "(transSrc.source not like \"%ensembl%\")");
+else
+    errAbort("BUG: filterByMethodChoice missing choice: \"%s\"", choice);
+}
+
+static char *gencodeFilterByMethod(filterBy_t *filterBy)
+{
+if ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All")))
+    return NULL;
+
+struct dyString *clause = newDyString(256);
+struct slName *slChoice = NULL;
+dyStringAppend(clause, "(transSrc.transcriptId = attrs.transcriptId) and ");
+boolean first = TRUE;
+for(slChoice = filterBy->slChoices; slChoice != NULL; slChoice = slChoice->next)
+    {
+    if(!first)
+        dyStringPrintf(clause, " or ");
+    first = FALSE;
+    gencodeFilterByMethodChoice(clause, slChoice->name);
+    }
+return dyStringCannibalize(&clause);
+}
+
+static void gencodeFilterBy(filterBy_t *filterBy, struct dyString *where)
+/* handle adding on filterBy clause for gencode */
+{
+char *clause;
+if (sameString(filterBy->column, "transcriptMethod"))
+    clause = gencodeFilterByMethod(filterBy);
+else
+    clause = filterByClause(filterBy);
+if (clause != NULL)
+    {
+    dyStringPrintf(where, " and (%s)", clause);
+    freeMem(clause);
+    }
+}
+
+static struct dyString *gencodeFilterBySetQueryWhere(struct track *tg, filterBy_t *filterBySet)
+/* build where clause based on filters, or NULL if none */
+{
+struct dyString *where = dyStringNew(0);
+filterBy_t *filterBy;
+for (filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
+    gencodeFilterBy(filterBy, where);
+if (dyStringLen(where) == 0)
+    dyStringFree(&where);
+return where;
+}
+
+static struct dyString *gencodeFilterBySetQuery(struct track *tg, filterBy_t *filterBySet, struct linkedFeatures *lf)
+/* construct the query for GENCODE filterBySet */
+{
+struct dyString *where = gencodeFilterBySetQueryWhere(tg, filterBySet);
+if (where == NULL)
+    return NULL;
+char *attrsTbl = trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs");
+char *srcTbl = trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptSource");
+struct dyString *dyQuery = dyStringCreate("select 1 from %s attrs, %s transSrc where (attrs.transcriptId = \"%s\") %s", attrsTbl, srcTbl, lf->name, where->string);
+dyStringFree(&where);
+return dyQuery;
+}
+
+static boolean genePredClassFilterBySet(struct track *tg, char *classTable,
+                                        filterBy_t *filterBySet, struct linkedFeatures *lf)
+/* Check if an item passes a filterBySet filter  */
+{
+struct dyString *dyQuery = NULL;
+if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
+    {
+    if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
+        || startsWith("wgEncodeGencodeFull", tg->tdb->track)
+        || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
+        dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
+    }
+else
+    dyQuery = genePredClassFilterBySetQuery(tg, classTable, filterBySet, lf);
+if (dyQuery == NULL)
+    return TRUE;
+
+struct sqlConnection *conn = hAllocConn(database);
+boolean passesThroughFilter = sqlQuickNum(conn, dyQuery->string);
+dyStringFree(&dyQuery);
+hFreeConn(&conn);
+return passesThroughFilter;
+}
+
+static boolean genePredClassFilterAcembly(struct track *tg, char *classTable,
+                                          struct linkedFeatures *lf)
+/* Check if an item passes a filterBySet filter  */
+{
+char *classString = addSuffix(tg->track, ".type");
+char *classType = cartUsualString(cart, classString, acemblyEnumToString(0));
+freeMem(classString);
+enum acemblyOptEnum ct = acemblyStringToEnum(classType);
+if (ct == acemblyAll)
+    return TRUE;
+struct sqlConnection *conn = hAllocConn(database);
+char query[1024];
+safef(query, sizeof(query),
+      "select 1 from %s where (name = \"%s\") and (class = \"%s\")", classTable, lf->name, classType);
+boolean passesThroughFilter = sqlQuickNum(conn, query);
+hFreeConn(&conn);
+return passesThroughFilter;
+}
+
 boolean genePredClassFilter(struct track *tg, void *item)
 /* Returns true if an item should be added to the filter. */
 {
 struct linkedFeatures *lf = item;
-char *classType = NULL;
-enum acemblyOptEnum ct;
-struct sqlConnection *conn = NULL;
-char query[1024];
-char **row = NULL;
-struct sqlResult *sr;
-char *classTable = NULL;
-/* default is true then for no filtering */
-boolean sameClass = TRUE;
-classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
+char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 
 if (classTable != NULL && hTableExists(database, classTable))
     {
     filterBy_t *filterBySet = filterBySetGet(tg->tdb,cart,NULL);
-    if(filterBySet != NULL)
+    if (filterBySet != NULL)
         {
-        query[0] = 0;
-        boolean passesThroughFilter = FALSE;
-        char *clause = filterBySetClause(filterBySet);
-        if(clause == NULL)
-            passesThroughFilter = TRUE;
-        else
-            {
-            struct dyString *dyQuery = dyStringCreate("select class from %s where name = \"%s\" and ", classTable, lf->name);
-            dyStringAppend(dyQuery, clause);
-
-            freeMem(clause);
-
-            conn = hAllocConn(database);
-            sr = sqlGetResult(conn, dyStringCannibalize(&dyQuery));
-            if ((row = sqlNextRow(sr)) != NULL)
-                passesThroughFilter = TRUE;
-            sqlFreeResult(&sr);
-            hFreeConn(&conn);
-            }
+        boolean passesThroughFilter = genePredClassFilterBySet(tg, classTable, filterBySet, lf);
         filterBySetFree(&filterBySet);
         return passesThroughFilter;
         }
 
     if (sameString(tg->table, "acembly"))
         {
-	char *classString = addSuffix(tg->track, ".type");
-        classType = cartUsualString(cart, classString, acemblyEnumToString(0));
-	freeMem(classString);
-        ct = acemblyStringToEnum(classType);
-        if (ct == acemblyAll)
-            return sameClass;
+        return genePredClassFilterAcembly(tg, classTable, lf);
         }
-    else if (classType == NULL) // FIXME: Bug? All but acembly drop out here
-        return TRUE;
-
-    conn = hAllocConn(database);
-    safef(query, sizeof(query),
-         "select class from %s where name = \"%s\"", classTable, lf->name);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-        {
-        /* check if this is the same as the class required */
-        if (!sameString(row[0], classType))
-            sameClass = FALSE;
-        }
-    sqlFreeResult(&sr);
     }
-hFreeConn(&conn);
-return sameClass;
+return TRUE;
 }
 
 void loadGenePredWithName2(struct track *tg)
@@ -9978,10 +10064,12 @@ loadGenePredWithName2(tg);
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(SMALLDYBUF);
-    if (useGeneName && lf->extra)
+    if (useGeneName && !isEmpty((char*)lf->extra))
+        {
         dyStringAppend(name, lf->extra);
-    if (useGeneName && useAcc)
-        dyStringAppendC(name, '/');
+        if (useAcc)
+            dyStringAppendC(name, '/');
+        }
     if (useAcc)
         dyStringAppend(name, lf->name);
     lf->extra = dyStringCannibalize(&name);
@@ -10009,6 +10097,8 @@ int class, classCt = 0;
 char *classes[20];
 char gClass[SMALLBUF];
 char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
+char *nameCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_NAME_COLUMN, GENEPRED_CLASS_NAME_COLUMN_DEFAULT);
+char *classCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_CLASS_COLUMN, GENEPRED_CLASS_CLASS_COLUMN_DEFAULT);
 struct linkedFeatures *lf = item;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -10033,7 +10123,7 @@ if (geneClasses)
 if (hTableExists(database, classTable))
    {
    safef(query, sizeof(query),
-        "select class from %s where name = \"%s\"", classTable, lf->name);
+         "select %s from %s where %s = \"%s\"", classCol, classTable, nameCol, lf->name);
    sr = sqlGetResult(conn, query);
    if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -10758,25 +10848,69 @@ hFreeConn(&conn);
 return(dy->string);
 }
 
-char *getDisorderClass(char *omimId)
-/* Look up phenotypeClass for omimId, for filtering items.  Don't free result! */
+boolean isOmimOtherClass(char *omimId)
+/* check if this omimId belongs to the "Others" phenotype class */
+
+/* NOTE: The definition of Others class is kind of tricky.
+
+   The Other class is defined as:
+
+	1. does not have class 1 or 2 or 3, or 4; some may have class '-1'.
+	2. for an entry of omimId that the omimPhenotype table does not even have a row with omimId
+*/
 {
-static char answer[256];
+boolean result;
+char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 safef(query,sizeof(query),
-      "select phenotypeClass from omimPhenotype where omimId =%s", omimId);
+      "select phenotypeClass from omimPhenotype where omimId =%s and (phenotypeClass=1 or phenotypeClass=2 or phenotypeClass=3 or phenotypeClass=4)", omimId);
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
+
 if (ret == NULL)
-    safecpy(answer, sizeof(answer), "0");
+    {
+    result = TRUE;
+    }
+else
+    {
+    result = FALSE;
+    }
 hFreeConn(&conn);
-return(answer);
+return(result);
+}
+
+int hasOmimPhenotypeClass(char *omimId, int targetClass)
+/* Look up phenotypeClass for omimId, for filtering items.  Don't free result! */
+{
+int result;
+char answer[255];
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+safef(query,sizeof(query),
+      "select phenotypeClass from omimPhenotype where omimId =%s and phenotypeClass=%d", omimId, 
+      targetClass);
+char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
+
+if (ret == NULL)
+    {
+    if (targetClass == -1)
+    	{
+	result = -1;
+	}
+    else
+    	{
+    	result = 0;
+	}
+    }
+else
+    result = targetClass;
+hFreeConn(&conn);
+return(result);
 }
 
 boolean doThisOmimEntry(struct track *tg, char *omimId)
 /* check if the specific class of this OMIM entry is selected by the user */
 {
-char *disorderClass = NULL;
 boolean doIt;
 
 char labelName[255];
@@ -10791,6 +10925,7 @@ struct hashEl *label;
 
 safef(labelName, sizeof(labelName), "%s.label", tg->table);
 omimLocationLabels = cartFindPrefix(cart, labelName);
+
 /* if user has not made selection(s) from the filter, enable every item */
 if (omimLocationLabels == NULL) return(TRUE);
 
@@ -10819,14 +10954,19 @@ for (label = omimLocationLabels; label != NULL; label = label->next)
 	}
     }
 
-disorderClass = getDisorderClass(omimId);
-
 doIt = FALSE;
-doIt = doIt || (doClass1 && sameWord(disorderClass, "1")) ;
-doIt = doIt || (doClass2 && sameWord(disorderClass, "2")) ;
-doIt = doIt || (doClass3 && sameWord(disorderClass, "3")) ;
-doIt = doIt || (doClass4 && sameWord(disorderClass, "4")) ;
-doIt = doIt || (doOthers && sameWord(disorderClass, "0")) ;
+
+/* process regular class 1-4 first */
+doIt = doIt || (doClass1 && (hasOmimPhenotypeClass(omimId, 1) == 1));
+doIt = doIt || (doClass2 && (hasOmimPhenotypeClass(omimId, 2) == 2));
+doIt = doIt || (doClass3 && (hasOmimPhenotypeClass(omimId, 3) == 3));
+doIt = doIt || (doClass4 && (hasOmimPhenotypeClass(omimId, 4) == 4));
+
+// if this is a regular (1-4) class and the result is to do it, return TRUE now
+if (doIt) return(doIt);
+
+/* process the tricky "Other" class here */
+doIt = doOthers && isOmimOtherClass(omimId);
 
 return(doIt);
 }
@@ -10863,10 +11003,45 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter;
+struct rgbColor lightest;
+
+Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
+
+/* color scheme:
+    
+    Lighter Green:
+    	for Class 1 OMIM records 
+    Light Green:
+    	for Class 2 OMIM records
+    Dark Green:
+    	for Class 3 OMIM records
+    Purple:
+    	for Class 4 OMIM records
+    Light Gray:
+    	for Others
+*/
+
+lighter.r = (6*normal->r + 4*255) / 10;
+lighter.g = (6*normal->g + 4*255) / 10;
+lighter.b = (6*normal->b + 4*255) / 10;
+
+lightest.r = (1*normal->r + 2*255) / 3;
+lightest.g = (1*normal->g + 2*255) / 3;
+lightest.b = (1*normal->b + 2*255) / 3;
+
+
 struct sqlConnection *conn = hAllocConn(database);
 
+class1Clr = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
+class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
+class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
+class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
+classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
+
 safef(query, sizeof(query),
-      "select omimId, phenotypeClass from omimPhenotype where omimId=%s", el->name);
+      "select omimId, phenotypeClass from omimPhenotype where omimId=%s order by phenotypeClass desc", el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -10876,7 +11051,7 @@ if (row == NULL)
     {
     // set to gray if this entry does not have any disorder info
     sqlFreeResult(&sr);
-    return hvGfxFindColorIx(hvg, 200, 200, 200);
+    return classOtherClr;
     }
 else
     {
@@ -10885,27 +11060,33 @@ else
 
     if (sameWord(phenClass, "3"))
     	{
-	// set to dark red, the same color as omimGene2 track
+	// set to dark green, the same color as omimGene2 track
 	sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 220, 0, 0);
+	return class3Clr;
     	}
     else if (sameWord(phenClass, "2"))
     	{
-	// set to green for class 2
+	// set to light green for class 2
 	sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 0, 255, 0);
+	return class2Clr;
     	}
     else if (sameWord(phenClass, "1"))
     	{
-	// set to orange for class 1
+	// set to lighter green for class 1
 	sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 200, 0, 200);
+	return class1Clr;
     	}
+    else if (sameWord(phenClass, "4"))
+	{
+	// set to the color for phenClass 4
+        sqlFreeResult(&sr);
+	return class4Clr; 
+	}
     else
 	{
-	// set to purplish color for phenClass 4
+	// set to the color for Others
         sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 200, 100, 100);
+	return classOtherClr; 
 	}
     }
 }
@@ -10920,7 +11101,6 @@ tg->drawItemAt    = bedPlusLabelDrawAt;
 tg->mapItem       = bedPlusLabelMapItem;
 tg->nextPrevExon = simpleBedNextPrevEdge;
 }
-
 
 static char *omimAvSnpAaReplacement(char *name)
 /* Return replacement string associated with a OMIM AV (Allelic Variant) entry */
@@ -10992,6 +11172,40 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter;
+struct rgbColor lightest;
+
+Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
+
+/* color scheme:
+    
+    Lighter Green:
+    	for Class 1 OMIM records 
+    Light Green:
+    	for Class 2 OMIM records
+    Dark Green:
+    	for Class 3 OMIM records
+    Purple:
+    	for Class 4 OMIM records
+    Light Gray:
+    	for Others
+*/
+
+lighter.r = (6*normal->r + 4*255) / 10;
+lighter.g = (6*normal->g + 4*255) / 10;
+lighter.b = (6*normal->b + 4*255) / 10;
+
+lightest.r = (1*normal->r + 2*255) / 3;
+lightest.g = (1*normal->g + 2*255) / 3;
+lightest.b = (1*normal->b + 2*255) / 3;
+
+class1Clr = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
+class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
+class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
+class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
+classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
+
 struct sqlConnection *conn = hAllocConn(database);
 
 safef(query, sizeof(query),
@@ -11005,7 +11219,7 @@ if (row == NULL)
     {
     // set to gray if this entry does not have any disorder info
     sqlFreeResult(&sr);
-    return hvGfxFindColorIx(hvg, 200, 200, 200);
+    return classOtherClr;
     }
 else
     {
@@ -11014,34 +11228,39 @@ else
 
     if (sameWord(phenClass, "3"))
     	{
-	// set to dark red, the same color as omimGene2 track
+	// set to dark green, the same color as omimGene2 track
 	sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 220, 0, 0);
+	return class3Clr;
     	}
     else
     	{
     	if (sameWord(phenClass, "2"))
     	    {
-	    // set to green for class 2
+	    // set to light green for class 2
 	    sqlFreeResult(&sr);
-	    return hvGfxFindColorIx(hvg, 0, 255, 0);
+	    return class2Clr; 
     	    }
 	else
 	    {
     	    if (sameWord(phenClass, "1"))
     	    	{
-		// set to orange for class 1
+		// set to lighter green for class 1
 	    	sqlFreeResult(&sr);
-	    	return hvGfxFindColorIx(hvg, 200, 0, 200);
+	    	return class1Clr;
     	    	}
-	    else
-	    	{
-	    	// set to purplish color for phenClass 4
-            	sqlFreeResult(&sr);
-	    	return hvGfxFindColorIx(hvg, 200, 100, 100);
-            	}
+    	    else if (sameWord(phenClass, "4"))
+		{	
+		// set to the color for phenClass 4
+        	sqlFreeResult(&sr);
+		return class4Clr; 
+		}	
+    	    else
+		{
+		// set to the color for Others
+        	sqlFreeResult(&sr);
+		return classOtherClr; 
+		}
 	    }
-
 	}
     }
 }
@@ -11058,9 +11277,10 @@ void omimLocationMethods (struct track *tg)
 {
 tg->loadItems     = omimLocationLoad;
 tg->itemColor     = omimLocationColor;
+tg->itemNameColor = omimLocationColor;
 tg->drawItemAt    = bedPlusLabelDrawAt;
 tg->mapItem       = bedPlusLabelMapItem;
-tg->nextPrevExon = simpleBedNextPrevEdge;
+tg->nextPrevExon  = simpleBedNextPrevEdge;
 }
 
 char *omimGeneName(struct track *tg, void *item)
@@ -12483,6 +12703,12 @@ registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeBasicV7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeFullV7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodePseudoGeneV7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencode2wayConsPseudoV7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodePolyaV7", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);

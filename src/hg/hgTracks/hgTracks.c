@@ -3681,6 +3681,13 @@ if (!psOutput)
             skipChr(chromName), winStart+1, winEnd);
         hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
         }
+    if (sameString(database, "bosTau6"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
     if (startsWith("oryLat", database))
         {
         hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
@@ -3689,6 +3696,16 @@ if (!psOutput)
     if (sameString(database, "cb3"))
         {
         hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        }
+    if (sameString(database, "cb4"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            chromName, winStart+1, winEnd, "WormBase");
+        }
+    if (sameString(database, "ce10"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
             skipChr(chromName), winStart+1, winEnd, "WormBase");
         }
     if (sameString(database, "ce4"))
@@ -5160,10 +5177,9 @@ withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 if (!cgiVarExists("hgt.imageV1"))
-    {
     withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
-    withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
-    }
+
+withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
 if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);

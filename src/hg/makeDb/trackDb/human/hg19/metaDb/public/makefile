@@ -21,6 +21,11 @@ wgEncodeOpenChromDnase.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeSunyAlbanyGeneSt.ra \
 wgEncodeBuOrchid.ra \
+wgEncodeSydhHistone.ra \
+wgEncodeReg.ra \
+wgEncodeUchicagoTfbs.ra \
+wgEncodeOpenChromSynth.ra \
+wgEncodeDukeAffyExon.ra \
 
 include ../../../../makefile.metaDb
 
