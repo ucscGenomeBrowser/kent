@@ -979,7 +979,7 @@ configurable on
     track  bamMmsNumtSSorted
     parent NumtSeq
     shortLabel NumtS SNPs
-    longLabel Mouse NumtS SNPs
+    longLabel Mouse NumtS on mitochondrion SNPs
     priority 4
     visibility pack
     type bam

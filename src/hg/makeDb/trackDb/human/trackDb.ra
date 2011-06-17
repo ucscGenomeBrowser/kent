@@ -3962,7 +3962,7 @@ html numtSeq
     track  bamAllNumtSSorted
     parent NumtSeq
     shortLabel NumtS SNPs
-    longLabel Human NumtS SNPs
+    longLabel Human NumtS on mitochondrion SNPs
     priority 5
     visibility pack
     type bam
