@@ -131,6 +131,68 @@ tableName wgEncodeSydhTfbsFetalpbdeGata1UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsFetalpbdeInputUcdAln
+objType file
+antibody Input
+cell FetalPBDE
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId FetalPBDE/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-13
+dateUnrestricted 2012-02-13
+fileName wgEncodeSydhTfbsFetalpbdeInputUcdAln.bam
+grant Snyder
+lab UCD(Farnham)
+project wgEncode
+setType input
+subId 4119
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsFetalpbdeInputUcdRawData
+objType file
+antibody Input
+cell FetalPBDE
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId FetalPBDE/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-13
+dateUnrestricted 2012-02-13
+fileName wgEncodeSydhTfbsFetalpbdeInputUcdRawData.fastq.tgz
+grant Snyder
+lab UCD(Farnham)
+project wgEncode
+setType input
+subId 4119
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsFetalpbdeInputUcdSig
+objType table
+antibody Input
+cell FetalPBDE
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId FetalPBDE/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-13
+dateUnrestricted 2012-02-13
+fileName wgEncodeSydhTfbsFetalpbdeInputUcdSig.bigWig
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 4119
+tableName wgEncodeSydhTfbsFetalpbdeInputUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsGm10847IggmusRawDataRep1
 objType file
 antibody Input
@@ -38976,4 +39038,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -409505409
+# MAGIC: -1608580730
