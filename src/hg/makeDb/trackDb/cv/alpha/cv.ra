@@ -3509,7 +3509,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7035
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
-color 153,38,0
+color 0,158,115
 sex M
 protocol UW(Stam):3134_Stam_protocol.pdf
 
@@ -3527,7 +3527,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7043
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
-color 153,38,0
+color 86,180,233
 sex M
 protocol UW(Stam):416B_Stam_protocol.pdf
 
@@ -3545,7 +3545,7 @@ vendorId TIB-208
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-208&Template=cellBiology
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
-color 153,38,0
+color 86,180,233
 sex M
 protocol UW(Stam):A20_Stam_protocol.pdf
 
@@ -3563,7 +3563,7 @@ vendorId CCL-89
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
-color 153,38,0
+color 189,0,157
 sex M
 protocol missing
 
@@ -3581,7 +3581,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
-color 153,38,0
+color 86,180,233
 sex M
 protocol UW(Stam):bCellCd19_Stam_protocol.pdf
 
@@ -3599,7 +3599,7 @@ vendorId N/A
 orderUrl http://www.seattlechildrens.org/medical-staff/michael-a-bender/
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
-color 153,38,0
+color 86,180,233
 sex M
 protocol UW(Stam):bCellCd43_Stam_protocol.pdf
 
@@ -3617,7 +3617,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
-color 153,38,0
+color 86,180,233
 sex U
 protocol LICR(Ren):BoneMarrow_Ren_protocol.pdf
 
@@ -3635,7 +3635,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
-color 153,38,0
+color 105,105,105
 sex U
 protocol LICR(Ren):Cerebellum_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3653,7 +3653,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
-color 153,38,0
+color 105,105,105
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3671,7 +3671,7 @@ vendorId N/A
 orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
-color 153,38,0
+color 86,180,233
 sex F
 protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
@@ -3689,7 +3689,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
-color 153,38,0
+color 65,105,225
 sex U
 protocol UW(Stam):ES-CJ7_Stam_protocol.pdf
 
@@ -3708,7 +3708,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
-color 153,38,0
+color 230,159,0
 sex U
 protocol LICR(Ren):Colon_Ren_protocol.pdf
 
@@ -3726,7 +3726,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
-color 153,38,0
+color 105,105,105
 sex U
 protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
@@ -3743,7 +3743,7 @@ vendorId N/A
 orderUrl http://cancer.ucsd.edu/research-training/shared-resources/transgenic-core/Pages/default.aspx
 #termId
 #termUrl
-color 153,38,0
+color 65,105,225
 sex M
 protocol LICR(Ren):ES-Bruce4_Ren_protocol.pdf
 
@@ -3762,7 +3762,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7108
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
-color 153,38,0
+color 189,0,157
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3780,7 +3780,6 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
-color 153,38,0
 sex U
 protocol UW(Stam):Fibroblast_Stam_protocol.pdf
 
@@ -3797,7 +3796,7 @@ vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
-color 153,38,0
+color 204,121,16
 sex U
 protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
@@ -3814,7 +3813,7 @@ vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
-color 153,38,0
+color 204,121,16
 sex U
 protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
 
@@ -3850,7 +3849,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
-color 153,38,0
+color 189,0,157
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3868,7 +3867,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
-color 153,38,0
+color 102,50,200
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol LICR(Ren):Limb_Ren_protocol.pdf
@@ -3887,7 +3886,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
-color 153,38,0
+color 230,159,0
 sex U
 protocol LICR(Ren):Liver_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -3905,7 +3904,6 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
-color 153,38,0
 sex U
 protocol LICR(Ren):Lung_Ren_protocol.pdf
 
@@ -3924,7 +3922,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
-color 153,38,0
+color 65,105,225
 sex U
 protocol LICR(Ren):MEF_Ren_protocol.pdf
 
@@ -3942,7 +3940,7 @@ vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
-color 153,38,0
+color 86,180,233
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
@@ -3960,7 +3958,7 @@ tissue Blood
 vendorName Weissman lab
 vendorId N/A
 orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
-color 46,0,184
+color 86,180,233
 sex M
 protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
 
@@ -3976,7 +3974,7 @@ category cellLine
 description Myocyte
 vendorName Hardison
 orderUrl http://bmb.psu.edu/directory/rch8
-color 153,38,0
+color 139,69,19
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol PSU(Hardison):Myocyte_Hardison_protocol.pdf
@@ -3995,7 +3993,7 @@ vendorName Hardison lab
 orderUrl http://bmb.psu.edu/directory/rch8
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
-color 153,38,0
+color 139,69,19
 sex U
 #protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
@@ -4013,7 +4011,7 @@ vendorId CRL-1658
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1658&Template=cellBiology
 termId 7146
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7146
-color 153,38,0
+color 86,180,233
 sex M
 protocol UW(Stam):NIH-3T3_Stam_protocol.pdf
 
@@ -4033,7 +4031,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
-color 153,38,0
+color 105,105,105
 sex U
 protocol LICR(Ren):OlfactoryBulb_Ren_protocol.pdf
 
@@ -4051,7 +4049,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
-color 153,38,0
+color 189,0,157
 sex U
 protocol LICR(Ren):Pancreas_Ren_protocol.pdf
 
@@ -4069,7 +4067,7 @@ vendorId N/A
 orderUrl http://depts.washington.edu/chdd/iddrc/res_aff/disteche.html
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
-color 153,38,0
+color 204,121,167
 sex F
 protocol UW(Stam):Patski_Stam_protocol.pdf
 
@@ -4087,7 +4085,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
-color 153,38,0
+color 230,159,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol LICR:Placenta_Ren_protocol.pdf
@@ -4107,7 +4105,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
-color 153,38,0
+color 86,180,233
 sex U
 protocol LICR(Ren):SmallIntestine_Ren_protocol.pdf
 
@@ -4125,7 +4123,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
-color 153,38,0
+color 86,180,233
 sex U
 protocol LICR(Ren):Spleen_Ren_protocol.pdf
 
@@ -4143,7 +4141,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
-color 153,38,0
+color 0,158,115
 sex U
 protocol LICR(Ren):Testis_Ren_protocol.pdf
 
@@ -4161,7 +4159,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
-color 153,38,0
+color 86,180,233
 sex U
 protocol LICR(Ren):Thymus_Ren_protocol.pdf
 
@@ -4179,7 +4177,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
-color 153,38,0
+color 86,180,233
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -4197,7 +4195,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
-color 153,38,0
+color 86,180,233
 sex U
 protocol UW(Stam):TReg_Stam_protocol.pdf
 
@@ -4215,7 +4213,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
-color 153,38,0
+color 105,105,105
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -4233,7 +4231,7 @@ vendorId N/A
 orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 #termId
 #termUrl
-color 153,38,0
+color 65,105,225
 sex M
 protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
 
@@ -7645,6 +7643,8 @@ description This data represents a control being compared to experiments using a
 
 term Control_eGFP-JunD
 tag CONTROLJUND
+type control
+description This data represents a control being compared to experiments using antibody eGFP-JunD
 
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
