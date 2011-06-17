@@ -402,7 +402,8 @@ tier 3
 organism human
 description adrenal gland, donor H12803N, age 88, caucasian, DNA extract
 tissue Adrenal gland
-lineage adrenal gland
+lineage mesoderm, ectoderm
+# http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 karyotype normal
 sex F
 vendorName BioChain
@@ -470,7 +471,8 @@ tier 3
 organism human
 description uterine cervix, donor BN0773, age 44, Asian, DNA extract
 tissue Uterine cervix
-lineage Uterine cervix
+lineage mesoderm
+# http://en.wikipedia.org/wiki/Paramesonephric_duct
 karyotype normal
 sex F
 vendorName BioChain
@@ -555,7 +557,8 @@ tier 3
 organism human
 description jejunum, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Jejunum
-lineage Jejunum
+lineage endoderm
+# http://en.wikipedia.org/wiki/Jejunum
 karyotype normal
 sex M
 vendorName BioChain
@@ -740,9 +743,10 @@ tag BCPLACENTA
 type Cell Line
 tier 3
 organism human
-description placenta, donor UHN00189, age 29, Native Indian, DNA extract
+description placenta, donor UHN00189, age 29
 tissue Placenta
-lineage Placenta
+lineage extraembryonic mesoderm, trophectoderm
+# decidua basalis, chorion frondosum
 karyotype normal
 sex F
 vendorName BioChain
@@ -759,7 +763,7 @@ tier 3
 organism human
 description prostate gland, donor H12817N, age 71, caucasian, DNA extract
 tissue Prostate gland
-lineage Prostate gland
+lineage endoderm
 karyotype normal
 sex M
 vendorName BioChain
@@ -1110,7 +1114,7 @@ description chorion cells (outermost of two fetal membranes), fetal membranes we
 tissue FetalMembrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-lineage chorion
+lineage extraembryonic mesoderm, trophectoderm
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252
