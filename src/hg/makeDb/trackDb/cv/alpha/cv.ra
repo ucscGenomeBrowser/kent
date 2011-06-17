@@ -402,7 +402,8 @@ tier 3
 organism human
 description adrenal gland, donor H12803N, age 88, caucasian, DNA extract
 tissue Adrenal gland
-lineage adrenal gland
+lineage mesoderm, ectoderm
+# http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 karyotype normal
 sex F
 vendorName BioChain
@@ -470,7 +471,8 @@ tier 3
 organism human
 description uterine cervix, donor BN0773, age 44, Asian, DNA extract
 tissue Uterine cervix
-lineage Uterine cervix
+lineage mesoderm
+# http://en.wikipedia.org/wiki/Paramesonephric_duct
 karyotype normal
 sex F
 vendorName BioChain
@@ -555,7 +557,8 @@ tier 3
 organism human
 description jejunum, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Jejunum
-lineage Jejunum
+lineage endoderm
+# http://en.wikipedia.org/wiki/Jejunum
 karyotype normal
 sex M
 vendorName BioChain
@@ -740,9 +743,10 @@ tag BCPLACENTA
 type Cell Line
 tier 3
 organism human
-description placenta, donor UHN00189, age 29, Native Indian, DNA extract
+description placenta, donor UHN00189, age 29
 tissue Placenta
-lineage Placenta
+lineage extraembryonic mesoderm, trophectoderm
+# decidua basalis, chorion frondosum
 karyotype normal
 sex F
 vendorName BioChain
@@ -759,7 +763,7 @@ tier 3
 organism human
 description prostate gland, donor H12817N, age 71, caucasian, DNA extract
 tissue Prostate gland
-lineage Prostate gland
+lineage endoderm
 karyotype normal
 sex M
 vendorName BioChain
@@ -971,7 +975,7 @@ termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex M
 tier 3
-protocol HudsonAlpha:BE2-C_Myers_protocol.pdf
+protocol UW_Stam:BE2-C_Stam_protocol.pdf HudsonAlpha:BE2-C_Myers_protocol.pdf
 
 term BG02ES
 tag BG02ES
@@ -1110,7 +1114,7 @@ description chorion cells (outermost of two fetal membranes), fetal membranes we
 tissue FetalMembrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-lineage chorion
+lineage extraembryonic mesoderm, trophectoderm
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252
@@ -2413,15 +2417,15 @@ organism human
 description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
-vendorName Lonza
-vendorId (missing)
-orderUrl http://www.lonza.com/
+vendorName Refer to the protocol documents for differing sources
+#vendorId (missing)
+#orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
 sex U
 tier 3
-protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf UW_Stam:HSMM_Stam_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -3189,7 +3193,7 @@ termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 sex F
 tier 3
-protocol HudsonAlpha:SK-N-MC_protocol.pdf
+protocol HudsonAlpha:SK-N-MC_protocol.pdf UW_Stam:SK-N-MC_Stam_protocol.pdf
 
 term SK-N-SH
 tag SKNSH
@@ -3796,7 +3800,7 @@ vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
-color 204,121,16
+color 153,38,0
 sex U
 protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
@@ -3813,7 +3817,7 @@ vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
-color 204,121,16
+color 153,38,0
 sex U
 protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
 
@@ -3849,7 +3853,7 @@ vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
-color 189,0,157
+color 204,121,16
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
 
@@ -4085,7 +4089,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
-color 230,159,0
+color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol LICR:Placenta_Ren_protocol.pdf
@@ -4105,7 +4109,7 @@ vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
-color 86,180,233
+color 230,159,0
 sex U
 protocol LICR(Ren):SmallIntestine_Ren_protocol.pdf
 
