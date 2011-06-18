@@ -244,7 +244,7 @@ function filterCompositeSelectionChanged(obj)
         }
         // Filter for Matrix CBs too
         if (subCBsToSelect.length > 0) {
-            var matCb = $("input.matCb").filter(":checked");
+            var matCb = $("input.matCB").filter(":checked");
             if (matCb.length > 0) {
                 var matchClasses = "";
                 $( matCb ).each( function(i) {
@@ -921,7 +921,7 @@ function filterCompositeExcludeOptions(obj)
     });
     // Matrix CBs need to be considered too
     if (subCBs.length > 0) {
-        var matCb = $("input.matCb").filter(":checked");
+        var matCb = $("input.matCB").filter(":checked");
         if (matCb.length == 0)
             oneEmpty = true;
         else {//if (matCb.length > 0) {
@@ -1077,7 +1077,13 @@ $(document).ready(function()
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
 
     $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
+        if (newJQuery) {
+            if ($(this).hasClass('filterBy'))
+                ddclSetup(this, 'noneIsAll');
+            else
+                ddclSetup(this);
+        } else
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
     });
 
     // Put navigation links in top corner

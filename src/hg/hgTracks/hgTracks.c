@@ -4373,8 +4373,10 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" MET
 hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
 hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
 #ifdef NEW_JQUERY
-hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
-#endif
+hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
+#else///ifndef NEW_JQUERY
+hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
+#endif///ndef NEW_JQUERY
 if (!psOutput) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
@@ -5587,19 +5589,21 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     }
 hWrites(commonCssStyles());
 jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("utils.js", NULL);
-if(dragZooming)
+jsIncludeFile("ajax.js", NULL);
+boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0");
+if(dragZooming && !searching)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
-    jsIncludeFile("ajax.js", NULL);
 #ifdef NEW_JQUERY
     webIncludeResourceFile("jquery.ui.autocomplete.css");
-#else
+#else///ifndef NEW_JQUERY
     webIncludeResourceFile("autocomplete.css");
     jsIncludeFile("jquery.autocomplete.js", NULL);
-#endif
-    jsIncludeFile("autocomplete.js", NULL);
+#endif///ndef NEW_JQUERY
     }
+    jsIncludeFile("autocomplete.js", NULL);
 jsIncludeFile("hgTracks.js", NULL);
 
 #ifdef LOWELAB
@@ -5609,7 +5613,7 @@ jsIncludeFile("lowetooltip.js", NULL);
 if(advancedJavascriptFeaturesEnabled(cart))
     {
     webIncludeResourceFile("jquery-ui.css");
-    if (sameString(cartUsualString(cart, TRACK_SEARCH,"0"),"0")) // NOT doing search
+    if (!searching) // NOT doing search
         {
         webIncludeResourceFile("jquery.contextmenu.css");
         jsIncludeFile("jquery.contextmenu.js", NULL);
@@ -5620,7 +5624,6 @@ if(advancedJavascriptFeaturesEnabled(cart))
         jsIncludeFile("ui.dropdownchecklist.js", NULL);
         }
     }
-jsIncludeFile("jquery-ui.js", NULL);
 
 //if (!trackImgOnly)
     {

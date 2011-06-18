@@ -26,7 +26,6 @@ var currentMapItem;
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;
-var newJQuery = false;       // temporary #define for use while testing jQuery 1.5/jQuery UI 1.8 in dev trees
 
 function initVars(img)
 {
@@ -1256,9 +1255,6 @@ function postToSaveSettings(obj)
 $(document).ready(function()
 {
     var db = getDb();
-    if(document.getElementById("hgt.newJQuery") != null) {
-        newJQuery = true;
-    }
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         if(newJQuery) {
             $('input#suggest').autocomplete({
@@ -1887,7 +1883,7 @@ function makeImgTag(img)
 // Return img tag with explicit dimensions for img (dimensions are currently hardwired).
 // This fixes the "weird shadow problem when first loading the right-click menu" seen in FireFox 3.X,
 // which occurred b/c FF doesn't actually fetch the image until the menu is being shown.
-    return "<img width='16px' height='16px' src='../images/" + img + "' />";
+    return "<img style='width:16px; height:16px; border-style:none;' src='../images/" + img + "' />";
 }
 
 function loadContextMenu(img)
@@ -1938,6 +1934,7 @@ function loadContextMenu(img)
                     if (offerHideSubset) {
                         var o = new Object();
                         o[blankImg + " hide track subset (green)"] = {onclick: makeContextMenuHitCallback('hideSet')};
+                        //o[makeImgTag("highliteGreenX.png") + " hide track subset"] = {onclick: makeContextMenuHitCallback('hideSet')};
                         menu.push(o);
                     }
 
@@ -1946,6 +1943,7 @@ function loadContextMenu(img)
                     if (offerHideSubset)
                         str += " (blue)";
                     o[str] = {onclick: makeContextMenuHitCallback('hideComposite')};
+                    //o[makeImgTag("btnBlueX.png") + " hide track set"] = {onclick: makeContextMenuHitCallback('hideComposite')};
                     menu.push(o);
                 }
 
@@ -2323,9 +2321,15 @@ function handleTrackUi(response, status)
         popSaveAllVars = getAllVars( $('#hgTrackUiDialog'), subtrack );  // Saves the vars that may get changed by the popup cfg.
 
         // -- popup.ready() -- Here is the place to do things that might otherwise go into a $('#pop').ready() routine!
-        $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
-        });
+        if (!newJQuery) {
+            $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
+                $(this).dropdownchecklist({ firstItemChecksAll: true,
+                        noneIsAll: $(this).hasClass('filterBy'),
+                        maxDropHeight: filterByMaxHeight(this),
+                        emptyText: "Please select ...",
+                        textFormatFunction: ddclTextFormatter });
+            });
+        }
     }
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
@@ -2350,6 +2354,18 @@ function handleTrackUi(response, status)
                                //     var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
                                //     popSaveAllVars = getAllVars( $('#pop'), subtrack );
                                //},
+                               open: function () {
+                                    if (newJQuery) {
+                                        if( ! popUpTrackDescriptionOnly ) {
+                                            $('#hgTrackUiDialog').find('.filterComp').each( function(i) {
+                                                if ($(this).hasClass('filterBy'))
+                                                    ddclSetup(this, 'noneIsAll');
+                                                else
+                                                    ddclSetup(this);
+                                            });
+                                        }
+                                    }
+                               },
                                close: function() {
                                    popUpBoxCleanup();
                                }
@@ -2428,19 +2444,19 @@ function handleUpdateTrackMap(response, status)
         if(json) {
             if(this.id != null) {
                 if(json[this.id]) {
-                    var visibility = visibilityStrsOrder[json[this.id].visibility];
-                    var limitedVis;
-                    if(json[this.id].limitedVis)
-                        limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
-                    if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
-                        alert("There are too many items to display the track in " + this.newVisibility + " mode.");
-                    var rec = trackDbJson[this.id];
-                    rec.limitedVis = json[this.id].limitedVis;
-                    updateVisibility(this.id, visibility);
-                 } else {
-                    showWarning("Invalid trackDbJson received from the server");
-                 }
-            } else {
+            var visibility = visibilityStrsOrder[json[this.id].visibility];
+            var limitedVis;
+            if(json[this.id].limitedVis)
+                limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
+            if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
+                alert("There are too many items to display the track in " + this.newVisibility + " mode.");
+            var rec = trackDbJson[this.id];
+            rec.limitedVis = json[this.id].limitedVis;
+            updateVisibility(this.id, visibility);
+        } else {
+            showWarning("Invalid trackDbJson received from the server");
+        }
+    } else {
                  trackDbJson = json;
             }
         } else {
@@ -2459,8 +2475,8 @@ function handleUpdateTrackMap(response, status)
           if(updateTrackImgForId(response, id)) {
                afterImgTblReload();
           } else {
-              showWarning("Couldn't parse out new image for id: " + id);
-              //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
+               showWarning("Couldn't parse out new image for id: " + id);
+               //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
           }
     } else {
         if(imageV2) {

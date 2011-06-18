@@ -60,9 +60,11 @@ jsIncludeFile("jquery.js", NULL);
 #ifdef NEW_JQUERY
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
-#else
+printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
+#else///ifndef NEW_JQUERY
 jsIncludeFile("jquery.autocomplete.js", NULL);
-#endif
+printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
+#endif///ndef NEW_JQUERY
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("autocomplete.js", NULL);
 jsIncludeFile("hgGateway.js", NULL);

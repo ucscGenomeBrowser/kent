@@ -2683,6 +2683,11 @@ if (!ajax)
     webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
+#ifdef NEW_JQUERY
+    printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
+#else///ifndef NEW_JQUERY
+    printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
+#endif///ndef NEW_JQUERY
     }
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];
