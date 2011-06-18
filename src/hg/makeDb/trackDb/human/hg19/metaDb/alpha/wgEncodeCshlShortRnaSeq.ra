@@ -55,7 +55,7 @@ subId 4059
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalExonsGencV3c
 objType file
 bioRep 021WC,022WC
 cell A549
@@ -64,7 +64,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqA549CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20749,LID20750
@@ -274,7 +274,7 @@ subId 3336
 tableName wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalExonsGencV3c
 objType file
 bioRep 017WC,018WC
 cell AG04450
@@ -283,7 +283,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20745,LID20746
@@ -493,7 +493,7 @@ subId 3293
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalExonsGencV3c
 objType file
 bioRep 037WC,038WC
 cell BJ
@@ -502,7 +502,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20909,LID20910
@@ -822,7 +822,7 @@ subId 3304
 tableName wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalExonsGencV3c
 objType file
 bioRep 003WC,004WC
 cell GM12878
@@ -831,7 +831,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20899,LID20902
@@ -1179,7 +1179,7 @@ subId 3307
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalExonsGencV3c
 objType file
 bioRep 003C,004C
 cell GM12878
@@ -1188,7 +1188,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20901,LID20904
@@ -1536,7 +1536,7 @@ subId 3338
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalExonsGencV3c
 objType file
 bioRep 003N,004N
 cell GM12878
@@ -1545,7 +1545,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20900,LID20903
@@ -1755,7 +1755,7 @@ subId 3341
 tableName wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalExonsGencV3c
 objType file
 bioRep 005WC,006WC
 cell H1-hESC
@@ -1764,7 +1764,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20905,LID20906
@@ -1949,7 +1949,7 @@ subId 3342
 tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalExonsGencV3c
 objType file
 bioRep 006C
 cell H1-hESC
@@ -1958,7 +1958,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20908
@@ -2069,7 +2069,7 @@ subId 3343
 tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalExonsGencV3c
 objType file
 bioRep 006N
 cell H1-hESC
@@ -2078,7 +2078,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20907
@@ -2214,7 +2214,7 @@ subId 3345
 tableName wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalExonsGencV3c
 objType file
 bioRep 011WC,012WC
 cell HeLa-S3
@@ -2223,7 +2223,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21143,LID21146
@@ -2433,7 +2433,7 @@ subId 3347
 tableName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalExonsGencV3c
 objType file
 bioRep 011C,012C
 cell HeLa-S3
@@ -2442,7 +2442,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21145,LID21148
@@ -2652,7 +2652,7 @@ subId 3349
 tableName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalExonsGencV3c
 objType file
 bioRep 011N,012N
 cell HeLa-S3
@@ -2661,7 +2661,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21144,LID21147
@@ -2871,7 +2871,7 @@ subId 4062
 tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalExonsGencV3c
 objType file
 bioRep 013WC,014WC
 cell HepG2
@@ -2880,7 +2880,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44460,LID44461
@@ -3065,7 +3065,7 @@ subId 4114
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalExonsGencV3c
 objType file
 bioRep 013C,014C
 cell HepG2
@@ -3074,7 +3074,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44464,LID44465
@@ -3210,7 +3210,7 @@ subId 4113
 tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalExonsGencV3c
 objType file
 bioRep 013N,014N
 cell HepG2
@@ -3219,7 +3219,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44462,LID44463
@@ -3429,7 +3429,7 @@ subId 3359
 tableName wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalExonsGencV3c
 objType file
 bioRep 009WC,010WC
 cell HUVEC
@@ -3438,7 +3438,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21054,LID21055
@@ -3648,7 +3648,7 @@ subId 3361
 tableName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalExonsGencV3c
 objType file
 bioRep 029C,030C
 cell HUVEC
@@ -3657,7 +3657,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21057,LID21059
@@ -3867,7 +3867,7 @@ subId 3295
 tableName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalExonsGencV3c
 objType file
 bioRep 029N,030N
 cell HUVEC
@@ -3876,7 +3876,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21056,LID21058
@@ -4224,7 +4224,7 @@ subId 3363
 tableName wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalExonsGencV3c
 objType file
 bioRep 001WC,002WC
 cell K562
@@ -4233,7 +4233,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqK562CellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqK562CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID10567,LID10568
@@ -4581,7 +4581,7 @@ subId 3365
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalExonsGencV3c
 objType file
 bioRep 025CH,026CH
 cell K562
@@ -4590,7 +4590,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID8930,LID18560
@@ -5295,7 +5295,7 @@ subId 3367
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalExonsGencV3c
 objType file
 bioRep 025NL,026NL
 cell K562
@@ -5304,7 +5304,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID8928,LID18558
@@ -5652,7 +5652,7 @@ subId 3369
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalExonsGencV3c
 objType file
 bioRep 025NP,026NP
 cell K562
@@ -5661,7 +5661,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID8929,LID18559
@@ -6009,7 +6009,7 @@ subId 3301
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalExonsGencV3c
 objType file
 bioRep 001N,002N
 cell K562
@@ -6018,7 +6018,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID10570,LID10569
@@ -6361,7 +6361,7 @@ subId 3370
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalExonsGencV3c
 objType file
 bioRep 015WC,016WC
 cell MCF-7
@@ -6370,7 +6370,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20743,LID20744
@@ -6580,7 +6580,7 @@ subId 3372
 tableName wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalExonsGencV3c
 objType file
 bioRep 007WC,008WC
 cell NHEK
@@ -6589,7 +6589,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20999,LID21000
@@ -6799,7 +6799,7 @@ subId 3374
 tableName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalExonsGencV3c
 objType file
 bioRep 027C,028C
 cell NHEK
@@ -6808,7 +6808,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21002,LID21004
@@ -7018,7 +7018,7 @@ subId 3375
 tableName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalExonsGencV3c
 objType file
 bioRep 027N,028N
 cell NHEK
@@ -7027,7 +7027,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21001,LID21003
@@ -7370,7 +7370,7 @@ subId 3377
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalExonGencV3c
+metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalExonsGencV3c
 objType file
 bioRep 019WC,020WC
 cell SK-N-SH_RA
@@ -7379,7 +7379,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
-fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalExonGencV3c.gtf.gz
+fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20747,LID20748
@@ -7539,4 +7539,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: 1373252996
+# MAGIC: -97433940

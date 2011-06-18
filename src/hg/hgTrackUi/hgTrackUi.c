@@ -1440,8 +1440,10 @@ printf("<LI>");
 labelMakeCheckBox(tdb, "class3", "Class 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
 printf("<LI>");
 labelMakeCheckBox(tdb, "class4", "Class 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
-printf("<LI>");
-labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype class info available.", TRUE);
+
+// removed the "others" option for the time being
+//printf("<LI>");
+//labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype class info available.", TRUE);
 printf("</UL>");
 }
 

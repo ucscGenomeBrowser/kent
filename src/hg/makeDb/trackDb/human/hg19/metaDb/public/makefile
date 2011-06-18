@@ -25,6 +25,7 @@ wgEncodeSydhHistone.ra \
 wgEncodeReg.ra \
 wgEncodeUchicagoTfbs.ra \
 wgEncodeOpenChromSynth.ra \
+wgEncodeDukeAffyExon.ra \
 
 include ../../../../makefile.metaDb
 

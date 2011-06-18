@@ -1675,13 +1675,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 21708.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel PFSK-1 Ctrl R2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in PFSK-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep2 prot=PCR2x treat=aNONE
-        type wig 1.00 11343.00
-
         track wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel SKNMC FOXP2 R1
