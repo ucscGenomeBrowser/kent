@@ -2652,8 +2652,6 @@ identifier jaxAlleleName external=MGI
     $mm.jaxAllelePheno.allele dupeOk
     $mm.jaxAlleleInfo.name minCheck=0.9
     $mm.jaxAllele.name minCheck=0.9
-    $mm.jaxGeneTrapInfo.name minCheck=0.000001
-    $mm.jaxGeneTrap.name minCheck=0.000001
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
