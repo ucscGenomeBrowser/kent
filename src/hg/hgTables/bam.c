@@ -357,7 +357,7 @@ hPrintf("<B>BAM File:</B> %s", fileName);
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
 hPrintf("See the <A HREF=\"%s\" target=_blank>SAM Format Specification</A> for  more details<BR>\n",
-	"http://samtools.sourceforge.net/SAM-1.3.pdf");
+	"http://samtools.sourceforge.net/SAM1.pdf");
 
 /* Put up table that describes fields. */
 hTableStart();

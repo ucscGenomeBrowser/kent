@@ -32,7 +32,8 @@ html wgEncodeMapability.new
     windowingFunction mean
     maxHeightPixels 100:32:16
 
-        track wgEncodeMapabilityDukeUniqueness20bp
+        track wgEncodeDukeMapabilityUniqueness20bp
+#changed from wgEncodeMapabilityDukeUniqueness20bp to wgEncodeDukeMapabilityUniqueness20bp by wong in June 15
         parent wgEncodeMapabilityViewDuniq off
         shortLabel Duke Uniq 20
         longLabel Uniqueness of 20bp Windows from ENCODE/OpenChrom(Duke)
@@ -40,7 +41,8 @@ html wgEncodeMapability.new
         type bigWig 0.000000 1.000000
         # subId=3840 dateSubmitted=2011-03-28
 
-        track wgEncodeMapabilityDukeUniqueness35bp
+        track wgEncodeDukeMapabilityUniqueness35bp
+#changed from wgEncodeMapabilityDukeUniqueness35bp to wgEncodeDukeMapabilityUniqueness35bp by wong in June 15
         parent wgEncodeMapabilityViewDuniq
         shortLabel Duke Uniq 35
         longLabel Uniqueness of 35bp Windows from ENCODE/OpenChrom(Duke)
@@ -54,7 +56,8 @@ html wgEncodeMapability.new
     visibility hide
     subTrack wgEncodeMapability
 
-        track wgEncodeMapabilityDukeRegionsExcluded
+        track wgEncodeDukeMapabilityRegionsExcludable
+#changed from wgEncodeMapabilityDukeRegionsExcluded to wgEncodeDukeMapabilityRegionsExcludable by wong in June 15
         parent wgEncodeMapabilityViewXR off
         shortLabel Duke Excluded
         longLabel Duke Excluded Regions from ENCODE/OpenChrom(Duke)
@@ -63,7 +66,8 @@ html wgEncodeMapability.new
         noScoreFilter on
         # subId=3840 dateSubmitted=2011-03-28
 
-        track wgEncodeMapabilityDacConsensusBlacklist
+        track wgEncodeDacMapabilityConsensusExcludable
+#changed from wgEncodeMapabilityDacConsensusBlacklist to wgEncodeDacMapabilityConsensusExcludable by wong in June 15
         parent wgEncodeMapabilityViewXR off
         shortLabel DAC Blacklist
         longLabel DAC Blacklisted Regions from ENCODE/DAC(Kundaje)

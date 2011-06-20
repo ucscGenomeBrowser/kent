@@ -1461,7 +1461,8 @@ tableName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1 by wong in June 15
 objType table
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1469,7 +1470,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1.gtf.gz
+#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1481,11 +1483,13 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2 by wong in June 15
 objType table
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1493,7 +1497,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2.gtf.gz
+#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1505,7 +1510,8 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
@@ -2379,7 +2385,8 @@ tableName wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1 by wong in June 15
 objType table
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2387,7 +2394,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1.gtf.gz
+#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL316
@@ -2399,11 +2407,13 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2 by wong in June 15
 objType table
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2411,7 +2421,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2.gtf.gz
+#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2423,7 +2434,8 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
@@ -2569,7 +2581,8 @@ tableName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 objType table
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2577,7 +2590,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1.gtf.gz
+#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2589,11 +2603,13 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 objType table
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2601,7 +2617,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2.gtf.gz
+#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -2613,7 +2630,8 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
@@ -2759,7 +2777,8 @@ tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 objType table
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -2767,7 +2786,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1.gtf.gz
+#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -2779,11 +2799,13 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 objType table
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -2791,7 +2813,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2.gtf.gz
+#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -2803,7 +2826,8 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
@@ -2949,7 +2973,8 @@ tableName wgEncodeHaibRnaSeqSknshShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1 by wong in June 15
 objType table
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -2957,7 +2982,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1.gtf.gz
+#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -2969,11 +2995,13 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2 by wong in June 15
 objType table
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -2981,7 +3009,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2.gtf.gz
+#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -2993,7 +3022,8 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
@@ -3891,7 +3921,8 @@ tableName wgEncodeHaibRnaSeqU87ShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 objType table
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -3899,7 +3930,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1.gtf.gz
+#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -3911,11 +3943,13 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1
+#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 objType table
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -3923,7 +3957,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2.gtf.gz
+#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -3935,7 +3970,8 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
+#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2 by wong in June 15
 treatment None
 view TranscriptGencV3c
 
