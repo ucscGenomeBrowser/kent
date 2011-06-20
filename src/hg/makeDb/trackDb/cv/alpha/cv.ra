@@ -1227,7 +1227,7 @@ type Cell Line
 organism human
 description normal fibroblasts taken from individuals with Parkinson's disease
 tissue Skin
-karytype normal
+karyotype normal
 vendorName Paul Tesar (Case Western)
 vendorId N/A
 orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul
@@ -3005,7 +3005,7 @@ organism human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
 lineage mesoderm
-endorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
+#vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 vendorId N/A
 vendorName Farnham lab
 orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
@@ -6225,8 +6225,7 @@ vendorId sc-22805
 orderUrl http://www.scbt.com/product.php?datasheet=22805
 lab Myers
 targetId GeneCard:SPI1
-orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
-targetUrl
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
 validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
 
 term Rad21
@@ -7000,7 +6999,7 @@ orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
 # lots
 targetId GeneCards:CELF2
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
 validation missing
 
 ##This does not appear in metaDb
@@ -7120,6 +7119,7 @@ tag HNRNPM
 type Antibody
 target hnRNPM
 targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
+antibodyDescription Anti-hnRNP M1-M4, clone 1D8
 vendorName Millipore
 vendorId 05-620
 orderUrl http://www.millipore.com/catalogue/item/05-620
@@ -7248,13 +7248,13 @@ tag RIPIN
 type Antibody
 target ripInput
 targetDescription  Total input for comparison for RIP experiments
-antibodyDescription
-vendorName N/A
-vendorId ; 
+antibodyDescription Total input
+vendorId RIP Input
+vendorName Tenenbaum lab
 orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
 lab Tenenbaum
 # lots
-#targetId N/A
+targetId (input)
 #targetUrl ;
 validation missing
 
@@ -7284,7 +7284,7 @@ vendorId AB3790; Nov_69522
 orderUrl http://www.millipore.com/
 lab Tenenbaum
 #lots
-#targetId N/A
+targetId (input)
 #targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 validation missing
 

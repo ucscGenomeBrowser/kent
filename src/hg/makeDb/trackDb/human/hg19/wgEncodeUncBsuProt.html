@@ -19,6 +19,7 @@ identify the peptide from a protein or DNA sequence database. For
 proteogenomic mapping, this identifying spectrum is mapped directly
 back to its most likely encoding locus on a genome sequence[1]. This
 allows the direct verification of protein-encoding transcripts.</p>
+
 <p>The proteogenomic track displays mass spectrometry data that has
 been matched to the genomic sequence for selected cell lines, using a
 workflow and software specifically designed for this purpose. </p>
@@ -27,10 +28,10 @@ genome are translated into proteins, to verify which transcripts
 discovered by ENCODE are protein-encoding, and can also reveal new
 genes and/or splice variants of genes. Of particular interest may be
 its ability to reveal the translation of small ORFs, antisense
-transcripts, or sites annotated as introns that encode proteins
+transcripts, or sites annotated as introns that encode proteins.
 </p>
 <h2>Display Conventions and Configuration</h2>
-<p>The display for this track show peptide mappings as
+<p>The display for this track shows peptide mappings as
 grayscale-colored items where higher scores correspond to
 darker-colored blocks.<br>
 </p>
@@ -42,29 +43,28 @@ fields are available for each track item.<br>
 the strength of the peptide mapping, in contrast to the <span
  style="font-style: italic;">Score</span> field which reflects the
 confidence of the mapping. The <span style="font-style: italic;">Score</span>
-field is computed as <span style="font-style: italic;">-log10(EValue) </span>for
-the peptide mapping, and scores of 130 or greater have an estimated 5%
-false positive rate. The Raw Score offers an additional
-level of confidence: raw scores of 200 or greater have an estimated 1%
-false positive rate. Note that <span style="font-style: italic;">Raw
+field is computed as <span style="font-style: italic;">-log10(E-Value) * 100 </span>for
+the peptide mapping. Scores of 200 or greater have an estimated 5%
+false discovery rate (FDR), while scores of 230 or greater have an estimated 0.5% FDR. 
+The <span style="font-style: italic;"> Raw Score </span> offers an additional
+level of confidence: raw scores of 300 or greater have an estimated 5%
+false discovery rate. Note that <span style="font-style: italic;">Raw
 Score</span> is not normalized for the length of the peptide mapping,
 while <span style="font-style: italic;">Score</span> is.
-Consequently, short mappings might have a strong raw score but a weaker
-score.</li>
+Consequently, short mappings might have a strong <span style="font-style: italic;"> Raw Score </span> but a weaker
+<span style="font-style: italic;"> Score. </span></li>
   <li>The <span style="font-style: italic;">Repeat Count</span>
 indicates the number of places in the genome that match the peptide
 sequence. This reflects the uniqueness of the peptide mapping in
 the genome. Any mappings to highly-duplicated regions will have
-high repeat counts.<br>
+high <span style="font-style: italic;"> Repeat Counts </span> and peptides which are repeated more than 10 times in 
+the genome are deleted from the track.<br>
   </li>
-  <li>The <span style="font-style: italic;">Peptide Rank </span>reflects
-that any single peak in the spectrum can be mapped with confidence to two or 
-more distinct peptides.  The reasons for this include that the peak can be
-chimeric, containing more than one peptide, and that one peak can match two
-or more distinct peptides.  In the cases where a peak maps to multiple peptides,
-the <span style="font-style: italic;">Peptide Rank</span> indicates the rank 
-of each mapping.</li>
-  <li>The <span style="font-style: italic;">spectrum ID</span> is a
+  <li>The <span style="font-style: italic;">Peptide Rank </span> indicates the rank 
+of each peptide/spectrum mapping.  A spectrum can be
+chimeric, containing more than one peptide, and the spectrum can be mapped with confidence to two or 
+more distinct peptides.  Peptides with ranks greater than 3 are deleted from the track.</li>
+  <li>The <span style="font-style: italic;">Spectrum ID</span> is a
 semi-unique identifier of the spectrum associated with the peptide
 mapping, and can be used to track the origins of the mapping.<br>
   </li>
@@ -75,26 +75,28 @@ proteomic analysis. Cell lines were cultured according to standard
 ENCODE cell culture protocols
 and in-gel digestion was completed according to the standard
 protocol[3]. </p>
-The proteolytic enzyme <i>trypsin</i> was used to digest the proteins
+The proteolytic enzyme trypsin was used to digest the proteins
 in order to produce short, MS/MS analyzable peptides. Trypsin is a
 common protease that typically cleaves proteins after R or K. The
 metadata parameter <i>enzyme</i> specifies the restriction enzyme used
-for
-digestion. Tandem mass spectrometry (RPLC-MS/MS) analysis was then
+for digestion. Tandem mass spectrometry (RPLC-MS/MS) analysis was then
 performed on an Eksigent Ultra-LTQ Orbitrap system. However, due
 to enzyme inefficiency, it does not always cleave at R or K, so there
 may be peptides that include an uncleaved R/K site. The number of such
 missed cleavages allowed in the search is described by the metadata
 parameter <i>miscleavages</i>.
-<p>We performed proteogenomic mapping with two miscleavages allowed and
-using whole human genomic sequence (UCSC hg19) via the genome
-fingerprint scanning (GFS) program [2], which uses HMM_Score [4] to
-accurately match MS/MS spectra to their corresponding genome sequences.
-E-values are calculated for all results, which estimate the number of
+<p>We performed proteogenomic mapping with two missed cleavages
+allowed and using the whole human genomic sequence (UCSC hg19) via the
+genome fingerprint scanning (GFS) program [2], which uses HMM_Score
+[4] to accurately match MS/MS spectra to their corresponding genome
+sequences.  E-values are calculated, which estimate the number of
 results at the given score level which would be expected by random
-chance. The E-values are used to assess the false-positive rate, and
-only those matches falling within the specified 5% FPR rate
-are included in the track. </p>
+chance. We then empirically derived the false discovery rate for a
+given E-Value using a decoy database search and only those matches
+falling within the specified 5% FDR rate (E-Value <0.01) are included
+in the track. The results with 10% FDR (E-Value <0.05) are available
+on the Downloads page. 
+</p>
 <h2>Credits</h2>
 <p>Proteogenomic mapping: Dr. Jainab Khatun, Brian Risk, Mustaque
 Ahamed, Christopher Maier and Dennis Crenshaw (Giddings Lab). </p>
