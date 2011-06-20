@@ -3,6 +3,6 @@ table omimPhenotype
 (
 uint omimId;			"OMIM ID"
 string description;		"disorder description"
-uint phenotypeId;		"phenoteype ID"
+uint phenotypeId;		"phenotype ID"
 uint phenotypeClass;		"phenotype class"
 )

@@ -523,7 +523,7 @@ void doGencodeGene(struct trackDb *tdb, char *gencodeId)
 struct sqlConnection *conn = hAllocConn(database);
 struct genePred *anno = transAnnoLoad(conn, tdb, gencodeId);
 if (startsWith("wgEncodeGencodeBasic", tdb->track)
-    || startsWith("wgEncodeGencodeFull", tdb->track)
+    || startsWith("wgEncodeGencodeComp", tdb->track)
     || startsWith("wgEncodeGencodePseudoGene", tdb->track))
     doGencodeGeneTrack(tdb, gencodeId, conn, anno);
 else if (startsWith("wgEncodeGencode2wayConsPseudo", tdb->track))

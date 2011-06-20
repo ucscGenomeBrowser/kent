@@ -64,6 +64,7 @@ UTIL_DIRS = \
 	bedSplitOnChrom \
 	blastToPsl \
 	borfBig \
+	checkCoverageGaps \
 	checkHgFindSpec \
 	checkTableCoords \
 	ctgFaToFa \

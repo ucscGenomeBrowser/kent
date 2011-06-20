@@ -82,7 +82,6 @@ type psl
 priority 37.5
 color 20,0,250
 visibility hide
-nextItemButton on
 ucscRetroInfo ucscRetroInfo1
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds
@@ -162,6 +161,7 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track pgSnp override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+#not all have been lifted, do at subtrack level after adding new
 
 track sestanBrainAtlas override
 origAssembly hg18
@@ -1644,30 +1644,149 @@ priority 451
 
 track pgVenter override
 longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track pgWatson override
 longLabel James Watson (CSHL) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track pgYoruban3 override
 longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track pgYh1 override
 longLabel Han Chinese Individual (YanHuang Project) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track pgSjk override
 longLabel Seong-Jin Kim (SJK, GUMS/KOBIC) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track pgNA12878 override
 longLabel CEU Trio Daughter NA12878 (1000 Genomes Project) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track pgNA12891 override
 longLabel CEU Trio Father NA12891 (1000 Genomes Project) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track pgNA12892 override
 longLabel CEU Trio Mother NA12892 (1000 Genomes Project) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track pgNA19240 override
 longLabel YRI Trio Daughter NA19240 (1000 Genomes Project) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgNA19239 override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgNA19238 override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgKb1Illum override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgKb1454 override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgKb1Indel override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgKb1Comb override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgNb1 override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgNb1Indel override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgMd8 override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgMd8Indel override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgTk1 override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgTk1Indel override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgAbtSolid override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgAbt454 override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgAbt454indels override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgAbtIllum override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgChurch override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgAngrist override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgGill override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgGatesSr override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgGatesJr override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgQuake override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgIrish override 
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgSaqqaq override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgSaqqaqHc override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
 
 searchTable nscanGene
 searchType genePred
@@ -2376,80 +2495,31 @@ type bigWig -15 7
 autoScale on
 maxHeightPixels 128:64:20
 
-
-track NumtSeq
-compositeTrack on
-shortLabel NumtSeq
-longLabel NumtS mitochondrial sequence
-group varRep
-priority 500.5
-visibility hide
+track multizDino
+#subTrack consDinoViewalign on
+shortLabel Dino Align
+longLabel Dino Alignments of 7 
+#subGroups view=align clade=vert
 noInherit on
-type bed 3 .
+irows on
+summary multizDinoSummary
+frames multiz46wayFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault hg19
+#speciesGroups Primate Placental_Mammal Vertebrate
+#sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 papHam1 calJac1 tarSyr1 micMur1 otoGar1
+#sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 dasNov2 choHof1 
+#sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6 petMar1 
+#speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 tarSyr1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 ornAna1 taeGut1 anoCar1 proCap1 tetNig2 fr2 gasAcu1 oryLat2 petMar1
+speciesOrder ornAna1 galGal3 taeGut1 anoCar1 chrPic0 allMis0
+#itemFirstCharCase noChange
+#treeImage phylo/hg19_Dino.gif
+priority 100
+
+track NumtSeq override
 html numtSeqHg19
-
-    track numtS
-    parent NumtSeq
-    shortLabel NumtS
-    longLabel NumtS
-    color 0,60,120
-     #itemRgb on
-    useScore 1
-    priority 1
-    type bed 6 .
-    html numtSeqHg19
-
-    track numtSAssembled
-    parent NumtSeq
-    shortLabel NumtS assembled
-    longLabel NumtS assembled
-    color 0,60,120
-    priority 2
-    useScore 1
-    type bed 12 .
-    html numtSeqHg19
-
-    track numtSMitochondrion
-    parent NumtSeq
-    shortLabel NumtS on mitochondrion
-    longLabel NumtS on mitochondrion
-    useScore 1
-    color 0,60,120
-    priority 3
-    type bed 6 .
-    html numtSeqHg19
-
-    track  bamAllNumtSSorted
-    parent NumtSeq
-    shortLabel bamAllNumtSSorted
-    longLabel Human NumtS SNPs
-    priority 4
-    visibility pack
-    type bam
-
-searchTable numtSMitochondrion
-searchMethod exact
-searchType bed
-#shortCircuit 1
-searchPriority 15
-query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
-
-searchTable numtS
-searchMethod exact
-searchType bed
-#shortCircuit 1
-searchPriority 15
-query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
-
-searchTable numtSAssembled
-searchMethod exact
-searchType bed
-#shortCircuit 1
-searchPriority 15
-query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
-
 
 
