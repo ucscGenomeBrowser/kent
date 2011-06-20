@@ -5,7 +5,7 @@ compositeTrack on
 shortLabel Broad HMM
 longLabel ENCODE Chromatin Modeling by HMM from Broad Institute, MIT and MGH
 group regulation
-subGroup1 cellType Cell_Line GM12878=GM12878&nbsp;(Tier&nbsp;1) H1=H1-hESC&nbsp;(Tier&nbsp;1) K562=K562&nbsp;(Tier&nbsp;1) HEPG2=HepG2 HMEC=HMEC HSMM=HSMM HUVEC=HUVEC NHEK=NHEK NHLF=NHLF
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier&nbsp;1) 1H1=H1-hESC&nbsp;(Tier&nbsp;1) 1K562=K562&nbsp;(Tier&nbsp;1) 2HEPG2=HepG2 2HMEC=HMEC 2HSMM=HSMM 2HUVEC=HUVEC 2NHEK=NHEK 2NHLF=NHLF
 dimensions dimensionX=cellType
 sortOrder cellType=+
 fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -26,7 +26,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel GM12878 HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in GM12878 cells)
-        subGroups cellType=GM12878
+        subGroups cellType=1GM12878
         type bed 9 .
         #color 153,38,0
         # subId=3446 dateSubmitted=2011-01-21
@@ -35,7 +35,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel H1-hESC HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in H1-hESC cells)
-        subGroups cellType=H1
+        subGroups cellType=1H1
         type bed 9 .
         #color 0,107,27
         # subId=3446 dateSubmitted=2011-01-21
@@ -44,7 +44,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel K562 HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in K562 cells)
-        subGroups cellType=K562
+        subGroups cellType=1K562
         type bed 9 .
         #color 46,0,184
         # subId=3446 dateSubmitted=2011-01-21
@@ -53,7 +53,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel HepG2 HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in HepG2 cells)
-        subGroups cellType=HEPG2
+        subGroups cellType=2HEPG2
         type bed 9 .
         #color 189,0,157
         # subId=3446 dateSubmitted=2011-01-21
@@ -62,7 +62,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel HMEC HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in HMEC cells)
-        subGroups cellType=HMEC
+        subGroups cellType=2HMEC
         type bed 9 .
         # subId=3446 dateSubmitted=2011-01-21
 
@@ -70,7 +70,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel NHLF HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in NHLF cells)
-        subGroups cellType=NHLF
+        subGroups cellType=2NHLF
         type bed 9 .
         # subId=3446 dateSubmitted=2011-01-21
 
@@ -78,7 +78,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel NHEK HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in NHEK cells)
-        subGroups cellType=NHEK
+        subGroups cellType=2NHEK
         type bed 9 .
         #color 179,0,134
         # subId=3446 dateSubmitted=2011-01-21
@@ -87,7 +87,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel HSMM HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in HSMM cells)
-        subGroups cellType=HSMM
+        subGroups cellType=2HSMM
         type bed 9 .
         # subId=3446 dateSubmitted=2011-01-21
 
@@ -95,7 +95,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeBroadHmm
         shortLabel HUVEC HMM
         longLabel ENCODE Broad Chromatin Modeling by HMM (in HUVEC cells)
-        subGroups cellType=HUVEC
+        subGroups cellType=2HUVEC
         type bed 9 .
         #color 224,75,0
         # subId=3446 dateSubmitted=2011-01-21

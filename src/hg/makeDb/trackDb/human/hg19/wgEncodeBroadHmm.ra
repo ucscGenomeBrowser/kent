@@ -6,7 +6,7 @@ superTrack wgEncodeHistoneSuper dense
 shortLabel Broad HMM
 longLabel Chromatin Modeling by HMM from ENCODE/Broad
 group regulation
-subGroup1 cellType Cell_Line GM12878=GM12878&nbsp;(Tier&nbsp;1) H1=H1-hESC&nbsp;(Tier&nbsp;1) K562=K562&nbsp;(Tier&nbsp;1) HEPG2=HepG2 HMEC=HMEC HSMM=HSMM HUVEC=HUVEC NHEK=NHEK NHLF=NHLF
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier&nbsp;1) 1H1=H1-hESC&nbsp;(Tier&nbsp;1) 1K562=K562&nbsp;(Tier&nbsp;1) 2HEPG2=HepG2 2HMEC=HMEC 2HSMM=HSMM 2HUVEC=HUVEC 2NHEK=NHEK 2NHLF=NHLF
 dimensions dimensionX=cellType
 sortOrder cellType=+
 fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -25,7 +25,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel GM12878 HMM
         longLabel GM12878 Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=GM12878
+        subGroups cellType=1GM12878
         type bed 9 .
         origAssembly hg18
         #color 153,38,0
@@ -35,7 +35,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel H1-hESC HMM
         longLabel H1-hESC Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=H1
+        subGroups cellType=1H1
         type bed 9 .
         origAssembly hg18
         #color 0,107,27
@@ -45,7 +45,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel K562 HMM
         longLabel K562 Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=K562
+        subGroups cellType=1K562
         type bed 9 .
         origAssembly hg18
         #color 46,0,184
@@ -55,7 +55,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel HepG2 HMM
         longLabel HepG2 Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=HEPG2
+        subGroups cellType=2HEPG2
         type bed 9 .
         origAssembly hg18
         #color 189,0,157
@@ -65,7 +65,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel HMEC HMM
         longLabel HMEC Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=HMEC
+        subGroups cellType=2HMEC
         type bed 9 .
         origAssembly hg18
         # subId=3823 dateSubmitted=2011-03-16
@@ -74,7 +74,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel NHLF HMM
         longLabel NHLF Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=NHLF
+        subGroups cellType=2NHLF
         type bed 9 .
         origAssembly hg18
         # subId=3823 dateSubmitted=2011-03-16
@@ -83,7 +83,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel NHEK HMM
         longLabel NHEK Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=NHEK
+        subGroups cellType=2NHEK
         type bed 9 .
         origAssembly hg18
         #color 179,0,134
@@ -93,7 +93,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel HSMM HMM
         longLabel HSMM Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=HSMM
+        subGroups cellType=2HSMM
         type bed 9 .
         origAssembly hg18
         # subId=3823 dateSubmitted=2011-03-16
@@ -102,7 +102,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
         parent wgEncodeBroadHmm
         shortLabel HUVEC HMM
         longLabel HUVEC Chromatin Modeling by HMM from ENCODE/Broad
-        subGroups cellType=HUVEC
+        subGroups cellType=2HUVEC
         type bed 9 .
         origAssembly hg18
         #color 224,75,0
