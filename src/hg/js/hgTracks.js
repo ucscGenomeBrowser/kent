@@ -1803,6 +1803,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                 for (var ix=rows.length - 1; ix >= 0; ix--) { // from bottom, just in case remove screws with us
                     $(rows[ix]).remove();
                 }
+            var selectUpdated = updateVisibility(rec.parentTrack, 'hide');
             setCartVar(rec.parentTrack, 'hide' );
             initImgTblButtons();
             loadImgAreaSelect(false);

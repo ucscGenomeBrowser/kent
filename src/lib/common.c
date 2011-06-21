@@ -3094,7 +3094,10 @@ int vasafef(char* buffer, int bufSize, char *format, va_list args)
 int sz = vsnprintf(buffer, bufSize, format, args);
 /* note that some version return -1 if too small */
 if ((sz < 0) || (sz >= bufSize))
-    errAbort("buffer overflow, size %d, format: %s", bufSize, format);
+    {
+    buffer[bufSize-1] = (char) 0;
+    errAbort("buffer overflow, size %d, format: %s, buffer: '%s'", bufSize, format, buffer);
+    }
 return sz;
 }
 

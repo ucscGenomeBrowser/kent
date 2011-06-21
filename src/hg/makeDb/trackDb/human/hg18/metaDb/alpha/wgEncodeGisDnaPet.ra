@@ -11,6 +11,7 @@ dataType DnaPet
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000242
 expId 242
 fileName wgEncodeGisDnaPetAlignmentsGm1287810k.pairedTagAlign.gz
 fragSize 10k
@@ -29,6 +30,7 @@ dataType DnaPet
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+dccAccession wgEncodeEH000245
 expId 245
 fileName wgEncodeGisDnaPetAlignmentsGm128781k.pairedTagAlign.gz
 fragSize 1k
@@ -47,6 +49,7 @@ dataType DnaPet
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+dccAccession wgEncodeEH000246
 expId 246
 fileName wgEncodeGisDnaPetAlignmentsGm128785k.pairedTagAlign.gz
 fragSize 5k
@@ -65,6 +68,7 @@ dataType DnaPet
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000243
 expId 243
 fileName wgEncodeGisDnaPetAlignmentsK56210k.pairedTagAlign.gz
 fragSize 10k
@@ -83,6 +87,7 @@ dataType DnaPet
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000244
 expId 244
 fileName wgEncodeGisDnaPetAlignmentsK5621k.pairedTagAlign.gz
 fragSize 1k
@@ -101,6 +106,7 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
 expId 247
 fileName wgEncodeGisDnaPetAlignmentsK56220k.pairedTagAlign.gz
 fragSize 20k
@@ -119,6 +125,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000242
 expId 242
 fileName wgEncodeGisDnaPetFasta3pGm1287810k.csfasta.gz
 fragSize 10k
@@ -136,6 +143,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000245
 expId 245
 fileName wgEncodeGisDnaPetFasta3pGm128781k.csfasta.gz
 fragSize 1k
@@ -153,6 +161,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000246
 expId 246
 fileName wgEncodeGisDnaPetFasta3pGm128785k.csfasta.gz
 fragSize 5k
@@ -170,6 +179,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
 expId 243
 fileName wgEncodeGisDnaPetFasta3pK56210k.csfasta.gz
 fragSize 10k
@@ -187,6 +197,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
 expId 244
 fileName wgEncodeGisDnaPetFasta3pK5621k.csfasta.gz
 fragSize 1k
@@ -204,6 +215,7 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
 expId 247
 fileName wgEncodeGisDnaPetFasta3pK56220k.csfasta.gz
 fragSize 20k
@@ -221,6 +233,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000242
 expId 242
 fileName wgEncodeGisDnaPetFasta5pGm1287810k.csfasta.gz
 fragSize 10k
@@ -238,6 +251,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000245
 expId 245
 fileName wgEncodeGisDnaPetFasta5pGm128781k.csfasta.gz
 fragSize 1k
@@ -255,6 +269,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000246
 expId 246
 fileName wgEncodeGisDnaPetFasta5pGm128785k.csfasta.gz
 fragSize 5k
@@ -272,6 +287,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
 expId 243
 fileName wgEncodeGisDnaPetFasta5pK56210k.csfasta.gz
 fragSize 10k
@@ -289,6 +305,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
 expId 244
 fileName wgEncodeGisDnaPetFasta5pK5621k.csfasta.gz
 fragSize 1k
@@ -306,6 +323,7 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
 expId 247
 fileName wgEncodeGisDnaPetFasta5pK56220k.csfasta.gz
 fragSize 20k
@@ -323,6 +341,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
 expId 243
 fileName wgEncodeGisDnaPetFastqRd1K56210k.fastq.gz
 fragSize 10k
@@ -340,6 +359,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
 expId 244
 fileName wgEncodeGisDnaPetFastqRd1K5621k.fastq.gz
 fragSize 1k
@@ -357,6 +377,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
 expId 243
 fileName wgEncodeGisDnaPetFastqRd2K56210k.fastq.gz
 fragSize 10k
@@ -374,6 +395,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
 expId 244
 fileName wgEncodeGisDnaPetFastqRd2K5621k.fastq.gz
 fragSize 1k
@@ -391,6 +413,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000242
 expId 242
 fileName wgEncodeGisDnaPetQual3pGm1287810k.csqual.gz
 fragSize 10k
@@ -408,6 +431,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000245
 expId 245
 fileName wgEncodeGisDnaPetQual3pGm128781k.csqual.gz
 fragSize 1k
@@ -425,6 +449,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000246
 expId 246
 fileName wgEncodeGisDnaPetQual3pGm128785k.csqual.gz
 fragSize 5k
@@ -442,6 +467,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
 expId 243
 fileName wgEncodeGisDnaPetQual3pK56210k.csqual.gz
 fragSize 10k
@@ -459,6 +485,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
 expId 244
 fileName wgEncodeGisDnaPetQual3pK5621k.csqual.gz
 fragSize 1k
@@ -476,6 +503,7 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
 expId 247
 fileName wgEncodeGisDnaPetQual3pK56220k.csqual.gz
 fragSize 20k
@@ -493,6 +521,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000242
 expId 242
 fileName wgEncodeGisDnaPetQual5pGm1287810k.csqual.gz
 fragSize 10k
@@ -510,6 +539,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000245
 expId 245
 fileName wgEncodeGisDnaPetQual5pGm128781k.csqual.gz
 fragSize 1k
@@ -527,6 +557,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000246
 expId 246
 fileName wgEncodeGisDnaPetQual5pGm128785k.csqual.gz
 fragSize 5k
@@ -544,6 +575,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
 expId 243
 fileName wgEncodeGisDnaPetQual5pK56210k.csqual.gz
 fragSize 10k
@@ -561,6 +593,7 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
 expId 244
 fileName wgEncodeGisDnaPetQual5pK5621k.csqual.gz
 fragSize 1k
@@ -578,6 +611,7 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
 expId 247
 fileName wgEncodeGisDnaPetQual5pK56220k.csqual.gz
 fragSize 20k
@@ -587,4 +621,4 @@ project wgEncode
 subId 1075
 view Qual5p
 
-# MAGIC: 186096109
+# MAGIC: -1878511891
