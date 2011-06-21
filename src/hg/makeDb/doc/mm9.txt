@@ -8238,93 +8238,24 @@ see doc/builds.txt for specific details.
 
 
 ############################################################################
-# JAX/MGI TRACKS (IN PROGRESS 9/20/10 angie)
+# JAX/MGI TRACKS (DONE 6/20/11 angie)
+# Previously done 9/20/10 in /hive/data/genomes/mm9/bed/jax/2010_09 (pushed)
 # Previously done 8/20/09 in /hive/data/genomes/mm9/bed/jax/2009_08 (pushed)
 # Previously done 6/11/09 in /hive/data/genomes/mm9/bed/jax/2009_06 (pushed)
 # Previously done 4/24/09 in /hive/data/genomes/mm9/bed/jax/2009_04 (not pushed)
 # Previously done 9/24/08 in /cluster/data/mm9/bed/jax/2008_09
-    mkdir -p /hive/data/genomes/mm9/bed/jax/2010_09
-    cd /hive/data/genomes/mm9/bed/jax/2010_09
+    mkdir -p /hive/data/genomes/mm9/bed/jax/2011_06
+    cd /hive/data/genomes/mm9/bed/jax/2011_06
     wget --timestamping ftp://ftp.informatics.jax.org/pub/gbrowse/\*
     wget --timestamping ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
+    # Oops, June 2011 has a file that ends in "gff" not ".gff":
+    mv MP_0010768_mortalitygff MP_0010768_mortality.gff
 
     # Jax Rep Transcript track
     # SEQ_RepTransGenomic_rpt.gff --> jaxRepTranscript{,Alias}
     # -- names like AK016604_4933401J01Rik, NM_001011874_AY534250
     # -- aliases ~ MGI:\d+
-    cat > parseRepTranscript.pl <<'_EOF_'
-#!/usr/bin/perl -w
-# Parse this particular flavor of GFF3 into GFF1 (stdout) 
-# plus an association file (alias.tab) and a fixit SQL file (fixit.sql).  
-
-use strict;
-
-# Keep track of transcript names; our GFF-parsing code requires unique 
-# transcript names but non-unique ones are used here.  Add uniquifying 
-# suffix.  Rely on the fact that a REP_transcript line always immediately 
-# precedes the REP_exon lines.  
-my %txNameIndx;
-my $tweakedName;
-
-my $alias = "jaxRepTranscriptAlias.tab";
-my $fixit = "fixJaxRepTranscript.sql";
-open(OUT, ">$alias") || die "Cant open $alias for writing: $!\n";
-open(SQL, ">$fixit") || die "Cant open $fixit for writing: $!\n";
-while (<>) {
-  chomp;
-  s/\s*$//;
-  my ($chr, undef, $type, $start, $end, undef, $strand, undef, $info) =
-    split("\t");
-  if ($type eq "mRNA") {
-    my ($name1, $latter) = split(/_MGI:/, $info);
-    $name1 =~ s/^mRNA //
-      || die "line parse, $type line $.:\n$info\n";
-    $latter =~ m/^(\d+)_([\w.\(\)\/-]+);/
-      || die "latter parse, $type line $.:\n$latter\n";
-    my ($mgiID, $name2) = ($1, $2);
-    my $name = $name1 . "_" . $name2;
-    if (defined $txNameIndx{$name}) {
-      $tweakedName = $name . "_" . $txNameIndx{$name};
-      print SQL "update jaxRepTranscript set name = \"$name\" " .
-                "where name = \"$tweakedName\";\n";
-    } else {
-      undef $tweakedName;
-      print OUT "$name\tMGI:$mgiID\n";
-    }
-    $txNameIndx{$name}++;
-  } elsif ($type eq "exon" || $type eq "CDS") {
-    $type = "exon" if ($type eq "CDS"); # They set cdsStart=txStart, cdsEnd=txEnd! even for N.C.
-    my ($name1, $latter) = split(/_MGI:/, $info);
-    $name1 =~ s/^mRNA //
-      || die "line parse, $type line $.:\n$info\n";
-    $latter =~ m/^(\d+)_([\w.\(\)\/-]+)$/
-      || die "latter parse, $type line $.:\n$latter\n";
-    my ($mgiID, $name2) = ($1, $2);
-    my $name = $name1 . "_" . $name2;
-    if (defined $tweakedName) {
-      my $quotedName = $name;  $quotedName =~ s/\(/\\(/g;  $quotedName =~ s/\)/\\)/g;
-      if ($tweakedName !~ /^${quotedName}_\d+$/) {
-        die "tweakedName $tweakedName does not match /^${quotedName}_\\d+\$/ like expected";
-      }
-      $name = $tweakedName;
-    }
-    $chr =~ s/MT/M/;
-    if (/^Chr/) {
-      $chr =~ s/^Chr/chr/;
-    } elsif (!/^chr/) {
-      $chr = "chr$chr";
-    }
-    print "$chr\tMGI\t$type\t$start\t$end\t.\t$strand\t.\t$name\n";
-  } elsif ($type ne "gene") {
-    die "unrecognized type $type, line $.";
-  }
-}
-close(OUT);
-close(SQL);
-'_EOF_'
-    # << emacs
-    chmod a+x parseRepTranscript.pl
-    ./parseRepTranscript.pl SEQ_RepTransGenomic_from_models.gff \
+    ~/kent/src/hg/jaxMgi/parseRepTranscript.pl SEQ_RepTransGenomic_from_models.gff \
       > jaxRepTranscript.gff
 
     # Jax Allele track
@@ -8332,102 +8263,10 @@ close(SQL);
     # -- bed12Source -- add type from filename
     # -- names like NM_011283_Rp1h<tm1Jnz>, XM_129721_Slc9a2<tm1Ges>
     # -- Info: name, mgiID, source {"Gene trapped", ...}
-    cat > parseAllele.pl <<'_EOF_'
-#!/usr/bin/perl -w
-use strict;
-# Parse this particular flavor of GFF3 into GFF1 (stdout) with allele source 
-# appended to the name (for later parsing back out in to bed+ field).  
-# Also, *append* to an info file and a fixit SQL file.  
-# Add uniquifying suffix to transcript names when necessary.  
-# Rely on the fact that an mRNA line always immediately 
-# precedes the exon lines.  
-
-my $sourceSuffixes = "Induced|Other|Spontaneous|Targeted|Transgenic";
-my %gffSource = ( "AL_IND" => "Induced", "AL_OTHER" => "Other", "AL_SPON" => "Spontaneous",
-                  "AL_TARG" => "Targeted", "AL_TRANS" => "Transgenic",
-                  "MGI_DNA_GTRAP" => "GeneTrappedDna", "MGI_RNA_GTRAP" => "GeneTrappedRna", );
-
-my $alias = "jaxAlleleInfo.tab";
-my $fixit = "fixJaxAllele.sql";
-open(OUT, ">>$alias") || die "Cant open $alias for appending: $!\n";
-open(SQL, ">>$fixit") || die "Cant open $fixit for appending: $!\n";
-my (%txNameIndx, $tweakedName);
-while (<>) {
-  chomp;
-  s/\s*$//;
-  my ($chr, $source, $type, $start, $end, undef, $strand, undef, $info) = split("\t");
-  die "Unrecognized GFF source $source" if (! defined $gffSource{$source});
-  $chr =~ s/MT/M/;  $chr =~ s/Chr/chr/ || $chr =~ s/^([^c])/chr$1/;
-  $source = $gffSource{$source};
-  $info =~ s/Lexicon Genetics/LG/;  $info =~ s/BayGenomics/BG/;
-  if ($info =~ /Note "(\d)-RACE"/) {
-    $source .= $1;
-  }
-  if ($type eq "mRNA" || $type eq "genetrap_DNA") {
-    my ($name, $alName, $mgiID);
-    $info =~ s/^([^;]+)_($sourceSuffixes);/$1;/;
-    if ($info =~ /^mRNA ([\w.\/-]+(\<[\w\(\).,\*\/+-]+(\>|Byg))?); Dbxref "(MGI:\d+)";/) {
-      ($name, $mgiID) = ($1, $4);
-      if ($name =~ /\<.*[^\>]$/) {
-        print STDERR "Missing > for mRNA name $name\n";
-        $name = $name . ">";
-      }
-    } elsif ($info =~ /^Genetrap_DNA ([\w.\/-]+); Dbxref "(MGI:\d+)"/) {
-      ($name, $mgiID) = ($1, $2);
-      print "$chr\tMGI\texon\t$start\t$end\t.\t$strand\t.\t$name\|\|$source\n";
-    } else {
-      die "parse, mRNA/Genetrap_DNA line $.:\n$info\n";
-    }
-    if (defined $txNameIndx{$name}) {
-      $tweakedName = $name . "_" . $txNameIndx{$name};
-      print SQL "update jaxAllele set name = \"$name\" " .
-                "where name = \"$tweakedName\";\n";
-    } else {
-      undef $tweakedName;
-      $source =~ s/GeneTrapped([DR])na/Gene trapped $1NA/;
-      $source =~ s/([35])$/ ($1'-RACE)/;
-      if ($source =~ /GeneTrapped([DR])na([35]?)/) {
-        $source = "Gene";
-      }
-      print OUT "$name\t$mgiID\t$source\n";
-    }
-    $txNameIndx{$name}++;
-  } elsif ($type =~ /^exon$/) {
-    my ($name);
-    $info =~ s/_($sourceSuffixes)$//;
-    if ($info =~ /^mRNA ([\w.\/-]+(\<[\w\(\).,\*\/+-]+(\>|Byg))?)$/) {
-      $name = $1;
-      if ($name =~ /\<.*[^\>]$/) {
-        $name = $name . ">";
-      }
-    } elsif ($info =~ /^mRNA ([\w.\/-]+);/) {
-      $name = $1;
-    } else {
-      die "parse, exon line $.:\n$info\n";
-    }
-    if (defined $tweakedName) {
-      my $escName = $name;
-      $escName =~ s/\(/\\(/g;  $escName =~ s/\)/\\)/g;
-      if ($tweakedName !~ /^${escName}_\d+$/) {
-        die "tweakedName $tweakedName does not start with name $name and " .
-            " have a numeric suffix like expected";
-      }
-      $name = $tweakedName;
-    }
-    print "$chr\tMGI\t$type\t$start\t$end\t.\t$strand\t.\t$name\|\|$source\n";
-  } elsif ($type ne "gene") {
-    die "unrecognized type $type, line $.";
-  }
-}
-close(OUT);
-close(SQL);
-'_EOF_'
-    # << emacs
-    chmod a+x parseAllele.pl
     rm -f jaxGeneTrap.bed jaxAlleleInfo.tab fixJaxAllele.sql
     foreach f (MGI_GT[DR]NA_GBrowse.gff)
       echo $f:t:r | sed -e 's/MGI_//; s/_GBrowse//'
-      ./parseAllele.pl $f \
+      ~/kent/src/hg/jaxMgi/parseAllele.pl $f \
       | ldHgGene mm9 placeholder stdin -nobin -out=stdout \
       | /cluster/bin/scripts/genePredToBed \
       | perl -wpe 'chomp; @w = split; $w[3] =~ s/\|\|(\w+)$// || die;  $source = $1; \
@@ -8435,14 +8274,17 @@ close(SQL);
                            ($source eq "GeneTrappedRna3") ? "50,205,50" : "25,25,112"; \
                    $_ = join("\t", @w, $source) . "\n";' \
       >> jaxGeneTrap.bed
-      if ($status) break
+      if ($status) then
+        echo "\nERRORS - FixMe\n"
+        break
+      endif
     end
     mv jaxAlleleInfo.tab jaxGeneTrapInfo.tab
     mv fixJaxAllele.sql fixJaxGeneTrap.sql
     cut -f 13 jaxGeneTrap.bed | sort | uniq -c
-#  297818 GeneTrappedDna
-#  184431 GeneTrappedRna3
-#   35236 GeneTrappedRna5
+# 298285 GeneTrappedDna
+# 186042 GeneTrappedRna3
+#  35389 GeneTrappedRna5
     rm -f jaxAllele.bed jaxAlleleInfo.tab fixJaxAllele.sql
     foreach f (AL_{IND,OTHER,SPON,TARG,TRANS}.gff)
       echo $f:t:r | sed -e 's/AL_//;'
@@ -8452,13 +8294,18 @@ close(SQL);
       | perl -wpe 'chomp; @w = split; $w[3] =~ s/\|\|(\w+)$// || die; \
                    $_ = join("\t", @w, $1) . "\n";' \
       >> jaxAllele.bed
-      if ($status) break
+      if ($status) then
+        echo "\nERRORS - FixMe\n"
+        break
+      endif
     end
     cut -f 13 jaxAllele.bed | sort | uniq -c
-#   1214 Induced
-#    102 Other
-#   1146 Spontaneous
-#  13329 Targeted
+#TARG
+#Missing > for mRNA name NM_016893_Fut8<tm1Nt
+#   1333 Induced
+#     98 Other
+#   1181 Spontaneous
+#  14250 Targeted
 #     39 Transgenic
 
     # Jax Phenotype track
@@ -8493,10 +8340,11 @@ close(SQL);
                     s@TouchVibrissae@Touch@ || \
                     s@Tumorigenesis@Tumorigenesis@ || \
                     s@VisionEye@Vision/Eye@ || \
-                    m/^Craniofacial|Cellular|Embryogenesis|Muscle|Normal|Other|Pigmentation|Skeleton|$/ || \
-                    die "Unrec $_";'`
+                    m/^Craniofacial|Cellular|Embryogenesis|Integument|Mortality|Muscle|Normal|Other|Pigmentation|Skeleton$/ || \
+                    die "\n\nUnrecognized phenotype $_\n\n\t";'`
       echo $type
-      /hive/data/genomes/mm8/bed/jax/2006_10/parsePhenotype.pl $f \
+      if ("$type" == "") break
+      ~/kent/src/hg/jaxMgi/parsePhenotype.pl $f \
       | ldHgGene mm9 placeholder stdin -nobin -out=stdout \
       | /cluster/bin/scripts/genePredToBed \
       | sed -e 's/^/chr/; s@$@'"\t$type"'@;' \
@@ -8508,10 +8356,10 @@ close(SQL);
     # Jax QTL track
     # QTL*.gff --> jaxQtl2 (or 3?)... but we're missing MIT SSLP marker
     # and CM distance for 2, or those plus flanking markers for 3...
-    cmp MGI_QTL.gff ../2009_06/MGI_QTL.gff 
-#MGI_QTL.gff ../2009_06/MGI_QTL.gff differ: char 29629, line 232
-    # OK, don't skip this part:
-    if (0)
+    dos2unix MGI_QTL.gff
+    # Compare against the previous update to see if we need to reload:
+    if (`cmp MGI_QTL.gff ../2010_09/MGI_QTL.gff` != 0) then
+      echo MGI_QTL.gff changed, updating...
       perl -wpe 'chomp; s/\s*$//; \
         ($c, undef, undef, $start, $end, undef, $strand, undef, $info) = \
           split("\t"); \
@@ -8522,22 +8370,27 @@ close(SQL);
         $start-- unless $start == 0; \
         s/^.*$/chr$c\t$start\t$end\t$name\t1000\t$strand\t\t$mgiID\t$desc\t0.0\n/;' \
         MGI_QTL.gff > jaxQtl.bed
+    else
+      echo No change to MGI_QTL.gff
     endif
+#MGI_QTL.gff ../2010_09/MGI_QTL.gff differ: char 99310, line 780
 
     # Extract phenotype-allele relationships:
     # Make a file for the one code not already in a filename:
     cp /dev/null MP_0003012_no_phenotypic_analysis
     # Wrote a script to extract the phenotype-allele relationships --
     # it uses the filenames to map MP:* codes to our phenotype names.
-    /hive/data/genomes/mm8/bed/jax/2007_07/parsePhenotypicAllele.pl \
-      MGI_PhenotypicAllele.rpt > jaxAllelePheno.tab
+    ~/kent/src/hg/jaxMgi/parsePhenotypicAllele.pl MGI_PhenotypicAllele.rpt > jaxAllelePheno.tab
     # The file "err" has messages about missing data (no gene name in 
     # PhenotypicAllele.rpt, or gene/mgiId not found in jaxAlleleInfo).
+    wc -l jaxAllelePheno.tab err
+#  15147 jaxAllelePheno.tab
+#  11778 err
 
     # Load tables
     # jaxRepTranscript
     ldHgGene mm9 jaxRepTranscript jaxRepTranscript.gff
-#  40689 groups 22 seqs 1 sources 1 feature types
+#  38436 groups 22 seqs 1 sources 1 feature types
     hgsql mm9 < fixJaxRepTranscript.sql
     hgLoadSqlTab mm9 jaxRepTranscriptAlias \
       ~/kent/src/hg/lib/genericAlias.sql jaxRepTranscriptAlias.tab
@@ -8545,7 +8398,7 @@ close(SQL);
     # jaxAllele
     hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
       mm9 jaxAllele jaxAllele.bed
-#Loaded 15830 elements of size 13
+#Loaded 16901 elements of size 13
     checkTableCoords mm9 jaxAllele
     # fixJaxAllele.sql is empty so don't need to do this:
     # hgsql mm9 < fixJaxAllele.sql
@@ -8554,28 +8407,28 @@ close(SQL);
     # jaxGeneTrap
     hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
       mm9 jaxGeneTrap jaxGeneTrap.bed
-#Loaded 517485 elements of size 13
+#Loaded 519716 elements of size 13
     checkTableCoords mm9 jaxGeneTrap
-    # fixJaxGeneTrap.sql is empty so don't need to do this:
-    # hgsql mm9 < fixJaxGeneTrap.sql
+    hgsql mm9 < fixJaxGeneTrap.sql
     hgLoadSqlTab mm9 jaxGeneTrapInfo \
       ~/kent/src/hg/lib/jaxAlleleInfo.sql jaxGeneTrapInfo.tab
     # jaxPhenotype
     hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
       -tab mm9 jaxPhenotype jaxPhenotype.bed
-#Loaded 36501 elements of size 13
+#Loaded 42917 elements of size 13
     checkTableCoords mm9 jaxPhenotype
     # fixJaxPhenotype.sql is empty so don't need to execute it.
     # hgsql mm9 < fixJaxPhenotype.sql
     hgLoadSqlTab mm9 jaxPhenotypeAlias \
       ~/kent/src/hg/lib/genericAlias.sql jaxPhenotypeAlias.tab
     # jaxQtl
-    cmp MGI_QTL.gff ../2009_06/MGI_QTL.gff 
-#MGI_QTL.gff ../2009_06/MGI_QTL.gff differ: char 29629, line 232
-    # If there were no output we would skip this:
-    hgLoadBed -tab -notItemRgb -noBin \
-      -sqlTable=$HOME/kent/src/hg/lib/jaxQtl.sql \
-      mm9 jaxQtl jaxQtl.bed
+    if (`cmp MGI_QTL.gff ../2010_09/MGI_QTL.gff` != 0) then
+      echo MGI_QTL.gff changed, updating...
+      hgLoadBed -tab -notItemRgb -noBin \
+        -sqlTable=$HOME/kent/src/hg/lib/jaxQtl.sql \
+        mm9 jaxQtl jaxQtl.bed
+#Loaded 1890 elements of size 10
+    endif
     checkTableCoords -verbose=2 mm9 jaxQtl
 #mm9.jaxQtl item Ath13 chr14:51915898-165887941: chromEnd > chromSize 125194864
 #mm9.jaxQtl item Ity2 chr11:145756703-145756947: chromEnd > chromSize 121843856
@@ -8588,7 +8441,7 @@ close(SQL);
       ~/kent/src/hg/lib/jaxAllelePheno.sql jaxAllelePheno.tab
 
     # Check joiner (noTimes to avoid flood of refGene/knownGene timestamp warnings):
-    foreach t (jaxRepTranscript jaxAllele jaxPhenotype jaxGeneTrap)
+    foreach t (jaxRepTranscript jaxPhenotype jaxGeneTrap)
       echo $t
       runJoiner.csh mm9 $t noTimes
     end

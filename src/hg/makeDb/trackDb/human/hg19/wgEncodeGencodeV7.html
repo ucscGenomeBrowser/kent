@@ -29,10 +29,10 @@ The available tracks are:
 </p>
 <ul>
   <li><em>GENCODE Basic set</em> - subset of the GENCODE coding and non-coding
-    transcript annotations, inluding polymorphic pseudogenes.  This includes
+    transcript annotations, including polymorphic pseudogenes.  This includes
     both manual and automatic annotations.  The selection criteria is
     described in the <a href="#basicSetSelection">next section</a>.
-    This is super-set of the <em>comprehensive set</em>.
+    This is subset of the <em>comprehensive set</em>.
 
   <li><em>GENCODE Comprehensive set</em> - all GENCODE coding and non-code transcript annotations,
     including polymorphic pseudogenes.  This includes both manual and
@@ -42,8 +42,8 @@ The available tracks are:
 
   <li><em>GENCODE 2-way Pseudogenes</em> - Pseudogenes predicted by the Yale
     Pseudopipe and UCSC Retrofinder pipelines, but not annotated by the HAVANA
-    manual annotation process.  The set was derived by looking for a 50 bp
-    overlap between pseudogenes derived from both sets based on their genomic
+    manual annotation process.  The set was derived by looking for a 50 base pairs
+    of overlap between pseudogenes derived from both sets based on their genomic
     locations i.e. chromosomal coordinates.  When multiple Pseudopipe
     predictions map to a single Retrofinder prediction, only one match is kept
     for the 2-way consensus set.
@@ -94,8 +94,7 @@ and the following criteria:
   <li> poorly characterized: <em>non_coding, processed_transcript,
       retrotransposed, misc_RNA</em>
 </ul>
-
-
+ 
 <p>
 <B>NOTE</B>: We try and synchronize the release cycles for GENCODE, Havana and
 Ensembl. This GENCODE version 7 corresponds to Ensembl 62 from 13 April 2011
@@ -224,3 +223,6 @@ nine months following the release of the dataset.  This date is listed in
 the <EM>Restricted Until</EM> column on the track configuration page and
 the download page.  The full data release policy for ENCODE is available
 <a HREF="../ENCODE/terms.html" TARGET=_BLANK>here</a>.</p>
+
+<!--  LocalWords:  pseudogenes Pseudopipe Retrofinder GENCODE
+ -->
