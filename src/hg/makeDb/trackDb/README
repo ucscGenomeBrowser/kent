@@ -800,9 +800,9 @@ COMPOSITE SUBTRACK CONFIGURATION - 3 ways
    Cfg settings can be at level of composite, view, or subtrack. 
 3) Individual subtracks configurable - used in combination with 1 or 2.
    "configurable on" setting, which can be at composite, view, or subtrack level.
-   (* Note: There is one exception to "Multi-view" requirement mentioned above --
-     CompositeTrack track NumtSeq of hg19 and mm9 have two types of subtracks (bed and bam)
-    without view, but all subtracks are configurable.)
+   (NOTE: it is possible to have a composite track that is not multi-view but has 
+    different types of subtracks. In this case, the subtracks should be individually 
+    configurable.)
 
 Composite Track "ClosestToHome" paradigm
 ----------------------------------------
