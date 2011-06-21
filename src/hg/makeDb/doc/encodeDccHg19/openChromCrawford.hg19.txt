@@ -4211,3 +4211,13 @@ mv ../wgEncodeMapabilityDac/wgEncodeMapabilityDacRegionsExcluded.bed.gz wgEncode
 -rw-rw-r-- 2 encodeteam genecats  36267278 May 11 18:49 DNCT_Duke_DNaseHS_HMEC_ENCArray.tgz
 -rw-rw-r-- 2 encodeteam genecats  12161387 May 12 05:42 DNCT_Duke_DNaseHS_LNCaP_androgen_ENCArray.tgz
 -rw-rw-r-- 2 encodeteam genecats  12290470 May 12 05:58 DNCT_Duke_DNaseHS_MCF-7_ENCArray.tgz
+
+2011-06-14 Open Chrom Synth has been released.
+==============================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 released
+
+# These shouuld be approved:
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 4107 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 4154 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 4155 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 4161 approved
