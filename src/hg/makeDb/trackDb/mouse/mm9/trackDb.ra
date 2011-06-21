@@ -935,7 +935,7 @@ html laminB1Mm9
 
 track numtSeq
 compositeTrack on
-shortLabel NumtS Seq
+shortLabel NumtS Sequence
 longLabel Mouse NumtS mitochondrial sequence
 group varRep
 priority 500.5
