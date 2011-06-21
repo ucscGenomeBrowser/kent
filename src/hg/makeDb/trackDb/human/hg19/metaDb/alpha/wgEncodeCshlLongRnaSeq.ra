@@ -15022,7 +15022,7 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 2555
 tableName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1
@@ -15048,7 +15048,7 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 2555
 view FastqRd1
@@ -15073,7 +15073,7 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 2555
 view FastqRd2
@@ -15098,7 +15098,7 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 2555
 tableName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaMinusRawSigRep1
@@ -15124,7 +15124,7 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 2555
 tableName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaPlusRawSigRep1
@@ -15150,7 +15150,7 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 3619
 tableName wgEncodeCshlLongRnaSeqHmecCellPamContigs
@@ -15176,7 +15176,7 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 3619
 view ExonsGencV3c
@@ -15201,7 +15201,7 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 3619
 view GeneDeNovo
@@ -15226,7 +15226,7 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 3619
 view GeneGencV3c
@@ -15251,7 +15251,7 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 3619
 view Junctions
@@ -15326,7 +15326,7 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 3619
 view TranscriptDeNovo
@@ -15351,7 +15351,7 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longNonPolyA
 subId 3619
 view TranscriptGencV3c
