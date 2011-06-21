@@ -10,6 +10,7 @@ dataType Orchid
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
+dccAccession wgEncodeEH000001
 expId 1
 fileName wgEncodeBuOrchidSignalRep1Gm12878.bw
 grant Tullius
@@ -28,6 +29,7 @@ dataType Orchid
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
+dccAccession wgEncodeEH000001
 expId 1
 fileName wgEncodeBuOrchidSignalRep2Gm12878.bw
 grant Tullius
@@ -39,4 +41,4 @@ subId 1095
 tableName wgEncodeBuOrchidSignalRep2Gm12878
 view Signal
 
-# MAGIC: -589587063
+# MAGIC: -963679849

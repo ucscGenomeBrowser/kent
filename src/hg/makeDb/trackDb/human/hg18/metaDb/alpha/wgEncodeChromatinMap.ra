@@ -12,6 +12,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000601
 expId 601
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1AosmcSerumfree.tagAlign.gz
 grant Crawford
@@ -32,6 +33,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000595
 expId 595
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Chorion.tagAlign.gz
 grant Crawford
@@ -51,6 +53,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000583
 expId 583
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Fibrobl.tagAlign.gz
 grant Crawford
@@ -70,6 +73,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000605
 expId 605
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Fibrop.tagAlign.gz
 grant Crawford
@@ -89,6 +93,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm12878V2.tagAlign.gz
 grant Crawford
@@ -109,6 +114,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
+dccAccession wgEncodeEH000564
 expId 564
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm12891.tagAlign.gz
 grant Crawford
@@ -128,6 +134,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000565
 expId 565
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm12892.tagAlign.gz
 grant Crawford
@@ -147,6 +154,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm18507.tagAlign.gz
 grant Crawford
@@ -166,6 +174,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000566
 expId 566
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm19238.tagAlign.gz
 grant Crawford
@@ -185,6 +194,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
 expId 567
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm19239.tagAlign.gz
 grant Crawford
@@ -204,6 +214,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000568
 expId 568
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm19240.tagAlign.gz
 grant Crawford
@@ -223,6 +234,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000556
 expId 556
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1H1hesc.tagAlign.gz
 grant Crawford
@@ -242,6 +254,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000594
 expId 594
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1H9es.tagAlign.gz
 grant Crawford
@@ -261,6 +274,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000577
 expId 577
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Helas3Ifna4h.tagAlign.gz
 grant Crawford
@@ -282,6 +296,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Helas3V2.tagAlign.gz
 grant Crawford
@@ -303,6 +318,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Hepg2V2.tagAlign.gz
 grant Crawford
@@ -323,6 +339,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000584
 expId 584
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Hsmm.tagAlign.gz
 grant Crawford
@@ -342,6 +359,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000585
 expId 585
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Hsmmt.tagAlign.gz
 grant Crawford
@@ -361,6 +379,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000548
 expId 548
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Huvec.tagAlign.gz
 grant Crawford
@@ -381,6 +400,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1K562V2.tagAlign.gz
 grant Crawford
@@ -401,6 +421,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000578
 expId 578
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Lhsr.tagAlign.gz
 grant Crawford
@@ -420,6 +441,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000582
 expId 582
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1LhsrAndro.tagAlign.gz
 grant Crawford
@@ -440,6 +462,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000579
 expId 579
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Mcf7.tagAlign.gz
 grant Crawford
@@ -459,6 +482,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000574
 expId 574
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Medullo.tagAlign.gz
 grant Crawford
@@ -478,6 +502,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000602
 expId 602
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Melano.tagAlign.gz
 grant Crawford
@@ -497,6 +522,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000603
 expId 603
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Myometr.tagAlign.gz
 grant Crawford
@@ -516,6 +542,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000553
 expId 553
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Nhek.tagAlign.gz
 grant Crawford
@@ -535,6 +562,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000575
 expId 575
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Panislets.tagAlign.gz
 grant Crawford
@@ -554,6 +582,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000576
 expId 576
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Progfib.tagAlign.gz
 grant Crawford
@@ -573,6 +602,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000601
 expId 601
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2AosmcSerumfree.tagAlign.gz
 grant Crawford
@@ -593,6 +623,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000595
 expId 595
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Chorion.tagAlign.gz
 grant Crawford
@@ -612,6 +643,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000583
 expId 583
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Fibrobl.tagAlign.gz
 grant Crawford
@@ -631,6 +663,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000605
 expId 605
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Fibrop.tagAlign.gz
 grant Crawford
@@ -651,6 +684,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm12878V2.tagAlign.gz
 grant Crawford
@@ -671,6 +705,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
+dccAccession wgEncodeEH000564
 expId 564
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm12891.tagAlign.gz
 grant Crawford
@@ -690,6 +725,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000565
 expId 565
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm12892.tagAlign.gz
 grant Crawford
@@ -709,6 +745,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm18507.tagAlign.gz
 grant Crawford
@@ -728,6 +765,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000566
 expId 566
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm19238.tagAlign.gz
 grant Crawford
@@ -747,6 +785,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
 expId 567
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm19239.tagAlign.gz
 grant Crawford
@@ -766,6 +805,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000568
 expId 568
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm19240.tagAlign.gz
 grant Crawford
@@ -785,6 +825,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000556
 expId 556
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2H1hesc.tagAlign.gz
 grant Crawford
@@ -804,6 +845,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000594
 expId 594
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2H9es.tagAlign.gz
 grant Crawford
@@ -823,6 +865,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000577
 expId 577
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Helas3Ifna4h.tagAlign.gz
 grant Crawford
@@ -844,6 +887,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Helas3V2.tagAlign.gz
 grant Crawford
@@ -865,6 +909,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Hepg2V2.tagAlign.gz
 grant Crawford
@@ -885,6 +930,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000584
 expId 584
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Hsmm.tagAlign.gz
 grant Crawford
@@ -904,6 +950,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000585
 expId 585
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Hsmmt.tagAlign.gz
 grant Crawford
@@ -923,6 +970,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000548
 expId 548
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Huvec.tagAlign.gz
 grant Crawford
@@ -943,6 +991,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2K562V2.tagAlign.gz
 grant Crawford
@@ -963,6 +1012,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000578
 expId 578
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Lhsr.tagAlign.gz
 grant Crawford
@@ -982,6 +1032,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000582
 expId 582
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2LhsrAndro.tagAlign.gz
 grant Crawford
@@ -1002,6 +1053,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000579
 expId 579
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Mcf7.tagAlign.gz
 grant Crawford
@@ -1021,6 +1073,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000574
 expId 574
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Medullo.tagAlign.gz
 grant Crawford
@@ -1040,6 +1093,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000602
 expId 602
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Melano.tagAlign.gz
 grant Crawford
@@ -1059,6 +1113,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000603
 expId 603
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Myometr.tagAlign.gz
 grant Crawford
@@ -1078,6 +1133,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000553
 expId 553
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Nhek.tagAlign.gz
 grant Crawford
@@ -1097,6 +1153,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000575
 expId 575
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Panislets.tagAlign.gz
 grant Crawford
@@ -1116,6 +1173,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000576
 expId 576
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Progfib.tagAlign.gz
 grant Crawford
@@ -1135,6 +1193,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000605
 expId 605
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Fibrop.tagAlign.gz
 grant Crawford
@@ -1155,6 +1214,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Gm12878V2.tagAlign.gz
 grant Crawford
@@ -1175,6 +1235,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Gm18507.tagAlign.gz
 grant Crawford
@@ -1195,6 +1256,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Helas3V2.tagAlign.gz
 grant Crawford
@@ -1216,6 +1278,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Hepg2V2.tagAlign.gz
 grant Crawford
@@ -1236,6 +1299,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000584
 expId 584
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Hsmm.tagAlign.gz
 grant Crawford
@@ -1255,6 +1319,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000585
 expId 585
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Hsmmt.tagAlign.gz
 grant Crawford
@@ -1274,6 +1339,7 @@ dataType DnaseSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3K562.tagAlign.gz
 grant Crawford
@@ -1293,6 +1359,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000575
 expId 575
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Panislets.tagAlign.gz
 grant Crawford
@@ -1312,6 +1379,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000601
 expId 601
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalAosmcSerumfree.wig.gz
 grant Crawford
@@ -1332,6 +1400,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000595
 expId 595
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalChorion.wig.gz
 grant Crawford
@@ -1351,6 +1420,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000583
 expId 583
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalFibrobl.wig.gz
 grant Crawford
@@ -1370,6 +1440,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000605
 expId 605
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalFibrop.wig.gz
 grant Crawford
@@ -1390,6 +1461,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2.wig.gz
 grant Crawford
@@ -1411,6 +1483,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
+dccAccession wgEncodeEH000564
 expId 564
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalGm12891.wig.gz
 grant Crawford
@@ -1431,6 +1504,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000565
 expId 565
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalGm12892.wig.gz
 grant Crawford
@@ -1450,6 +1524,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalGm18507.wig.gz
 grant Crawford
@@ -1470,6 +1545,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000566
 expId 566
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalGm19238.wig.gz
 grant Crawford
@@ -1490,6 +1566,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
 expId 567
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239.wig.gz
 grant Crawford
@@ -1510,6 +1587,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000568
 expId 568
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240.wig.gz
 grant Crawford
@@ -1530,6 +1608,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000556
 expId 556
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalH1hesc.wig.gz
 grant Crawford
@@ -1549,6 +1628,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000594
 expId 594
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalH9es.wig.gz
 grant Crawford
@@ -1568,6 +1648,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000577
 expId 577
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3Ifna4h.wig.gz
 grant Crawford
@@ -1589,6 +1670,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-07
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2.wig.gz
 grant Crawford
@@ -1610,6 +1692,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2.wig.gz
 grant Crawford
@@ -1630,6 +1713,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000584
 expId 584
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalHsmm.wig.gz
 grant Crawford
@@ -1649,6 +1733,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000585
 expId 585
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalHsmmt.wig.gz
 grant Crawford
@@ -1669,6 +1754,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000548
 expId 548
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalHuvec.wig.gz
 grant Crawford
@@ -1689,6 +1775,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2.wig.gz
 grant Crawford
@@ -1709,6 +1796,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000578
 expId 578
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalLhsr.wig.gz
 grant Crawford
@@ -1728,6 +1816,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000582
 expId 582
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalLhsrAndro.wig.gz
 grant Crawford
@@ -1748,6 +1837,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000579
 expId 579
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalMcf7.wig.gz
 grant Crawford
@@ -1767,6 +1857,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000574
 expId 574
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalMedullo.wig.gz
 grant Crawford
@@ -1786,6 +1877,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000602
 expId 602
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalMelano.wig.gz
 grant Crawford
@@ -1805,6 +1897,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000603
 expId 603
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalMyometr.wig.gz
 grant Crawford
@@ -1825,6 +1918,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000553
 expId 553
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalNhek.wig.gz
 grant Crawford
@@ -1844,6 +1938,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000575
 expId 575
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalPanislets.wig.gz
 grant Crawford
@@ -1863,6 +1958,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000576
 expId 576
 fileName wgEncodeDukeDNaseSeqBaseOverlapSignalProgfib.wig.gz
 grant Crawford
@@ -1882,6 +1978,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000601
 expId 601
 fileName wgEncodeDukeDNaseSeqPeaksAosmcSerumfree.narrowPeak.gz
 grant Crawford
@@ -1902,6 +1999,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000595
 expId 595
 fileName wgEncodeDukeDNaseSeqPeaksChorion.narrowPeak.gz
 grant Crawford
@@ -1921,6 +2019,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000583
 expId 583
 fileName wgEncodeDukeDNaseSeqPeaksFibrobl.narrowPeak.gz
 grant Crawford
@@ -1940,6 +2039,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000605
 expId 605
 fileName wgEncodeDukeDNaseSeqPeaksFibrop.narrowPeak.gz
 grant Crawford
@@ -1960,6 +2060,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqPeaksGm12878V3.narrowPeak.gz
 grant Crawford
@@ -1981,6 +2082,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
+dccAccession wgEncodeEH000564
 expId 564
 fileName wgEncodeDukeDNaseSeqPeaksGm12891V2.narrowPeak.gz
 grant Crawford
@@ -2002,6 +2104,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000565
 expId 565
 fileName wgEncodeDukeDNaseSeqPeaksGm12892V2.narrowPeak.gz
 grant Crawford
@@ -2022,6 +2125,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqPeaksGm18507.narrowPeak.gz
 grant Crawford
@@ -2042,6 +2146,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000566
 expId 566
 fileName wgEncodeDukeDNaseSeqPeaksGm19238V2.narrowPeak.gz
 grant Crawford
@@ -2063,6 +2168,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
 expId 567
 fileName wgEncodeDukeDNaseSeqPeaksGm19239V2.narrowPeak.gz
 grant Crawford
@@ -2084,6 +2190,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000568
 expId 568
 fileName wgEncodeDukeDNaseSeqPeaksGm19240V2.narrowPeak.gz
 grant Crawford
@@ -2105,6 +2212,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000556
 expId 556
 fileName wgEncodeDukeDNaseSeqPeaksH1hescV2.narrowPeak.gz
 grant Crawford
@@ -2125,6 +2233,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000594
 expId 594
 fileName wgEncodeDukeDNaseSeqPeaksH9es.narrowPeak.gz
 grant Crawford
@@ -2144,6 +2253,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000577
 expId 577
 fileName wgEncodeDukeDNaseSeqPeaksHelas3Ifna4h.narrowPeak.gz
 grant Crawford
@@ -2165,6 +2275,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqPeaksHelas3V3.narrowPeak.gz
 grant Crawford
@@ -2186,6 +2297,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqPeaksHepg2V3.narrowPeak.gz
 grant Crawford
@@ -2206,6 +2318,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000584
 expId 584
 fileName wgEncodeDukeDNaseSeqPeaksHsmm.narrowPeak.gz
 grant Crawford
@@ -2225,6 +2338,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000585
 expId 585
 fileName wgEncodeDukeDNaseSeqPeaksHsmmt.narrowPeak.gz
 grant Crawford
@@ -2245,6 +2359,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000548
 expId 548
 fileName wgEncodeDukeDNaseSeqPeaksHuvecV2.narrowPeak.gz
 grant Crawford
@@ -2266,6 +2381,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqPeaksK562V3.narrowPeak.gz
 grant Crawford
@@ -2286,6 +2402,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000578
 expId 578
 fileName wgEncodeDukeDNaseSeqPeaksLhsr.narrowPeak.gz
 grant Crawford
@@ -2305,6 +2422,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000582
 expId 582
 fileName wgEncodeDukeDNaseSeqPeaksLhsrAndro.narrowPeak.gz
 grant Crawford
@@ -2325,6 +2443,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000579
 expId 579
 fileName wgEncodeDukeDNaseSeqPeaksMcf7.narrowPeak.gz
 grant Crawford
@@ -2344,6 +2463,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000574
 expId 574
 fileName wgEncodeDukeDNaseSeqPeaksMedullo.narrowPeak.gz
 grant Crawford
@@ -2363,6 +2483,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000602
 expId 602
 fileName wgEncodeDukeDNaseSeqPeaksMelano.narrowPeak.gz
 grant Crawford
@@ -2382,6 +2503,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000603
 expId 603
 fileName wgEncodeDukeDNaseSeqPeaksMyometr.narrowPeak.gz
 grant Crawford
@@ -2402,6 +2524,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000553
 expId 553
 fileName wgEncodeDukeDNaseSeqPeaksNhekV2.narrowPeak.gz
 grant Crawford
@@ -2422,6 +2545,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000575
 expId 575
 fileName wgEncodeDukeDNaseSeqPeaksPanislets.narrowPeak.gz
 grant Crawford
@@ -2441,6 +2565,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000576
 expId 576
 fileName wgEncodeDukeDNaseSeqPeaksProgfib.narrowPeak.gz
 grant Crawford
@@ -2460,6 +2585,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000595
 expId 595
 fileName wgEncodeDukeDNaseSeqRawDataRep1Chorion.fastq.gz
 grant Crawford
@@ -2479,6 +2605,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm12878V2.fastq.gz
 grant Crawford
@@ -2499,6 +2626,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
+dccAccession wgEncodeEH000564
 expId 564
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm12891.fastq.gz
 grant Crawford
@@ -2517,6 +2645,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000565
 expId 565
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm12892.fastq.gz
 grant Crawford
@@ -2535,6 +2664,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm18507.fastq.gz
 grant Crawford
@@ -2553,6 +2683,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000566
 expId 566
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm19238.fastq.gz
 grant Crawford
@@ -2571,6 +2702,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
 expId 567
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm19239.fastq.gz
 grant Crawford
@@ -2589,6 +2721,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000568
 expId 568
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm19240.fastq.gz
 grant Crawford
@@ -2607,6 +2740,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000556
 expId 556
 fileName wgEncodeDukeDNaseSeqRawDataRep1H1hesc.fastq.gz
 grant Crawford
@@ -2625,6 +2759,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000594
 expId 594
 fileName wgEncodeDukeDNaseSeqRawDataRep1H9es.fastq.gz
 grant Crawford
@@ -2643,6 +2778,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000577
 expId 577
 fileName wgEncodeDukeDNaseSeqRawDataRep1Helas3Ifna4h.fastq.gz
 grant Crawford
@@ -2663,6 +2799,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqRawDataRep1Helas3V2.fastq.gz
 grant Crawford
@@ -2683,6 +2820,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqRawDataRep1Hepg2V2.fastq.gz
 grant Crawford
@@ -2702,6 +2840,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000548
 expId 548
 fileName wgEncodeDukeDNaseSeqRawDataRep1Huvec.fastq.gz
 grant Crawford
@@ -2721,6 +2860,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqRawDataRep1K562V2.fastq.gz
 grant Crawford
@@ -2740,6 +2880,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000578
 expId 578
 fileName wgEncodeDukeDNaseSeqRawDataRep1Lhsr.fastq.gz
 grant Crawford
@@ -2758,6 +2899,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000582
 expId 582
 fileName wgEncodeDukeDNaseSeqRawDataRep1LhsrAndro.fastq.gz
 grant Crawford
@@ -2777,6 +2919,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000579
 expId 579
 fileName wgEncodeDukeDNaseSeqRawDataRep1Mcf7.fastq.gz
 grant Crawford
@@ -2795,6 +2938,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000574
 expId 574
 fileName wgEncodeDukeDNaseSeqRawDataRep1Medullo.fastq.gz
 grant Crawford
@@ -2813,6 +2957,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000602
 expId 602
 fileName wgEncodeDukeDNaseSeqRawDataRep1Melano.fastq.gz
 grant Crawford
@@ -2831,6 +2976,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000553
 expId 553
 fileName wgEncodeDukeDNaseSeqRawDataRep1Nhek.fastq.gz
 grant Crawford
@@ -2849,6 +2995,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000595
 expId 595
 fileName wgEncodeDukeDNaseSeqRawDataRep2Chorion.fastq.gz
 grant Crawford
@@ -2868,6 +3015,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm12878V2.fastq.gz
 grant Crawford
@@ -2888,6 +3036,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
+dccAccession wgEncodeEH000564
 expId 564
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm12891.fastq.gz
 grant Crawford
@@ -2906,6 +3055,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000565
 expId 565
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm12892.fastq.gz
 grant Crawford
@@ -2924,6 +3074,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm18507.fastq.gz
 grant Crawford
@@ -2942,6 +3093,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000566
 expId 566
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm19238.fastq.gz
 grant Crawford
@@ -2960,6 +3112,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
 expId 567
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm19239.fastq.gz
 grant Crawford
@@ -2978,6 +3131,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000568
 expId 568
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm19240.fastq.gz
 grant Crawford
@@ -2996,6 +3150,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000556
 expId 556
 fileName wgEncodeDukeDNaseSeqRawDataRep2H1hesc.fastq.gz
 grant Crawford
@@ -3014,6 +3169,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000594
 expId 594
 fileName wgEncodeDukeDNaseSeqRawDataRep2H9es.fastq.gz
 grant Crawford
@@ -3032,6 +3188,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000577
 expId 577
 fileName wgEncodeDukeDNaseSeqRawDataRep2Helas3Ifna4h.fastq.gz
 grant Crawford
@@ -3052,6 +3209,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqRawDataRep2Helas3V2.fastq.gz
 grant Crawford
@@ -3072,6 +3230,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqRawDataRep2Hepg2V2.fastq.gz
 grant Crawford
@@ -3091,6 +3250,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000548
 expId 548
 fileName wgEncodeDukeDNaseSeqRawDataRep2Huvec.fastq.gz
 grant Crawford
@@ -3110,6 +3270,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqRawDataRep2K562V2.fastq.gz
 grant Crawford
@@ -3129,6 +3290,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000578
 expId 578
 fileName wgEncodeDukeDNaseSeqRawDataRep2Lhsr.fastq.gz
 grant Crawford
@@ -3147,6 +3309,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000582
 expId 582
 fileName wgEncodeDukeDNaseSeqRawDataRep2LhsrAndro.fastq.gz
 grant Crawford
@@ -3166,6 +3329,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000579
 expId 579
 fileName wgEncodeDukeDNaseSeqRawDataRep2Mcf7.fastq.gz
 grant Crawford
@@ -3184,6 +3348,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000574
 expId 574
 fileName wgEncodeDukeDNaseSeqRawDataRep2Medullo.fastq.gz
 grant Crawford
@@ -3202,6 +3367,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000602
 expId 602
 fileName wgEncodeDukeDNaseSeqRawDataRep2Melano.fastq.gz
 grant Crawford
@@ -3220,6 +3386,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000553
 expId 553
 fileName wgEncodeDukeDNaseSeqRawDataRep2Nhek.fastq.gz
 grant Crawford
@@ -3239,6 +3406,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqRawDataRep3Gm12878V2.fastq.gz
 grant Crawford
@@ -3258,6 +3426,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqRawDataRep3Gm18507.fastq.gz
 grant Crawford
@@ -3277,6 +3446,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqRawDataRep3Helas3V2.fastq.gz
 grant Crawford
@@ -3297,6 +3467,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqRawDataRep3Hepg2V2.fastq.gz
 grant Crawford
@@ -3316,6 +3487,7 @@ dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-10
 dateUnrestricted 2009-08-10
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqRawDataRep3K562.fastq.gz
 grant Crawford
@@ -3335,6 +3507,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000601
 expId 601
 fileName wgEncodeDukeDNaseSeqSignalAosmcSerumfree.wig.gz
 grant Crawford
@@ -3355,6 +3528,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000595
 expId 595
 fileName wgEncodeDukeDNaseSeqSignalChorion.wig.gz
 grant Crawford
@@ -3374,6 +3548,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000583
 expId 583
 fileName wgEncodeDukeDNaseSeqSignalFibrobl.wig.gz
 grant Crawford
@@ -3393,6 +3568,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000605
 expId 605
 fileName wgEncodeDukeDNaseSeqSignalFibrop.wig.gz
 grant Crawford
@@ -3413,6 +3589,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000534
 expId 534
 fileName wgEncodeDukeDNaseSeqSignalGm12878V2.wig.gz
 grant Crawford
@@ -3433,6 +3610,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
+dccAccession wgEncodeEH000564
 expId 564
 fileName wgEncodeDukeDNaseSeqSignalGm12891.wig.gz
 grant Crawford
@@ -3452,6 +3630,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000565
 expId 565
 fileName wgEncodeDukeDNaseSeqSignalGm12892.wig.gz
 grant Crawford
@@ -3471,6 +3650,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000581
 expId 581
 fileName wgEncodeDukeDNaseSeqSignalGm18507.wig.gz
 grant Crawford
@@ -3490,6 +3670,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000566
 expId 566
 fileName wgEncodeDukeDNaseSeqSignalGm19238.wig.gz
 grant Crawford
@@ -3509,6 +3690,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
 expId 567
 fileName wgEncodeDukeDNaseSeqSignalGm19239.wig.gz
 grant Crawford
@@ -3528,6 +3710,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000568
 expId 568
 fileName wgEncodeDukeDNaseSeqSignalGm19240.wig.gz
 grant Crawford
@@ -3547,6 +3730,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000556
 expId 556
 fileName wgEncodeDukeDNaseSeqSignalH1hesc.wig.gz
 grant Crawford
@@ -3566,6 +3750,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000594
 expId 594
 fileName wgEncodeDukeDNaseSeqSignalH9es.wig.gz
 grant Crawford
@@ -3585,6 +3770,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000577
 expId 577
 fileName wgEncodeDukeDNaseSeqSignalHelas3Ifna4h.wig.gz
 grant Crawford
@@ -3606,6 +3792,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000540
 expId 540
 fileName wgEncodeDukeDNaseSeqSignalHelas3V2.wig.gz
 grant Crawford
@@ -3627,6 +3814,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000537
 expId 537
 fileName wgEncodeDukeDNaseSeqSignalHepg2V2.wig.gz
 grant Crawford
@@ -3647,6 +3835,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000584
 expId 584
 fileName wgEncodeDukeDNaseSeqSignalHsmm.wig.gz
 grant Crawford
@@ -3666,6 +3855,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000585
 expId 585
 fileName wgEncodeDukeDNaseSeqSignalHsmmt.wig.gz
 grant Crawford
@@ -3685,6 +3875,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000548
 expId 548
 fileName wgEncodeDukeDNaseSeqSignalHuvec.wig.gz
 grant Crawford
@@ -3705,6 +3896,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-02-26
 dateUnrestricted 2009-11-26
+dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeDukeDNaseSeqSignalK562V2.wig.gz
 grant Crawford
@@ -3725,6 +3917,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000578
 expId 578
 fileName wgEncodeDukeDNaseSeqSignalLhsr.wig.gz
 grant Crawford
@@ -3744,6 +3937,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000582
 expId 582
 fileName wgEncodeDukeDNaseSeqSignalLhsrAndro.wig.gz
 grant Crawford
@@ -3764,6 +3958,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000579
 expId 579
 fileName wgEncodeDukeDNaseSeqSignalMcf7.wig.gz
 grant Crawford
@@ -3783,6 +3978,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000574
 expId 574
 fileName wgEncodeDukeDNaseSeqSignalMedullo.wig.gz
 grant Crawford
@@ -3802,6 +3998,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000602
 expId 602
 fileName wgEncodeDukeDNaseSeqSignalMelano.wig.gz
 grant Crawford
@@ -3821,6 +4018,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000603
 expId 603
 fileName wgEncodeDukeDNaseSeqSignalMyometr.wig.gz
 grant Crawford
@@ -3840,6 +4038,7 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000553
 expId 553
 fileName wgEncodeDukeDNaseSeqSignalNhek.wig.gz
 grant Crawford
@@ -3859,6 +4058,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000575
 expId 575
 fileName wgEncodeDukeDNaseSeqSignalPanislets.wig.gz
 grant Crawford
@@ -3878,6 +4078,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
+dccAccession wgEncodeEH000576
 expId 576
 fileName wgEncodeDukeDNaseSeqSignalProgfib.wig.gz
 grant Crawford
@@ -3897,6 +4098,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeUncFAIREseqAlignmentsPanislets.tagAlign.gz
 grant Crawford
@@ -3916,6 +4118,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqAlignmentsRep1Gm12878V2.tagAlign.gz
 grant Crawford
@@ -3936,6 +4139,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeUncFAIREseqAlignmentsRep1Gm18507.tagAlign.gz
 grant Crawford
@@ -3955,6 +4159,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeUncFAIREseqAlignmentsRep1Gm19239.tagAlign.gz
 grant Crawford
@@ -3974,6 +4179,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeUncFAIREseqAlignmentsRep1H1hesc.tagAlign.gz
 grant Crawford
@@ -3993,6 +4199,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeUncFAIREseqAlignmentsRep1Helas3Ifna4h.tagAlign.gz
 grant Crawford
@@ -4013,6 +4220,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeUncFAIREseqAlignmentsRep1Helas3Ifng4h.tagAlign.gz
 grant Crawford
@@ -4034,6 +4242,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqAlignmentsRep1Helas3V2.tagAlign.gz
 grant Crawford
@@ -4055,6 +4264,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqAlignmentsRep1Hepg2V2.tagAlign.gz
 grant Crawford
@@ -4075,6 +4285,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeUncFAIREseqAlignmentsRep1Huvec.tagAlign.gz
 grant Crawford
@@ -4095,6 +4306,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqAlignmentsRep1K562V2.tagAlign.gz
 grant Crawford
@@ -4115,6 +4327,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000590
 expId 590
 fileName wgEncodeUncFAIREseqAlignmentsRep1Lhsr.tagAlign.gz
 grant Crawford
@@ -4134,6 +4347,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000591
 expId 591
 fileName wgEncodeUncFAIREseqAlignmentsRep1LhsrAndro.tagAlign.gz
 grant Crawford
@@ -4154,6 +4368,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeUncFAIREseqAlignmentsRep1Nhbe.tagAlign.gz
 grant Crawford
@@ -4173,6 +4388,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeUncFAIREseqAlignmentsRep1Nhek.tagAlign.gz
 grant Crawford
@@ -4193,6 +4409,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqAlignmentsRep2Gm12878V2.tagAlign.gz
 grant Crawford
@@ -4213,6 +4430,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeUncFAIREseqAlignmentsRep2Gm18507.tagAlign.gz
 grant Crawford
@@ -4232,6 +4450,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeUncFAIREseqAlignmentsRep2Gm19239.tagAlign.gz
 grant Crawford
@@ -4251,6 +4470,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeUncFAIREseqAlignmentsRep2H1hesc.tagAlign.gz
 grant Crawford
@@ -4270,6 +4490,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3Ifna4h.tagAlign.gz
 grant Crawford
@@ -4290,6 +4511,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3Ifng4h.tagAlign.gz
 grant Crawford
@@ -4311,6 +4533,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3V2.tagAlign.gz
 grant Crawford
@@ -4332,6 +4555,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqAlignmentsRep2Hepg2V2.tagAlign.gz
 grant Crawford
@@ -4352,6 +4576,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeUncFAIREseqAlignmentsRep2Huvec.tagAlign.gz
 grant Crawford
@@ -4372,6 +4597,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqAlignmentsRep2K562V2.tagAlign.gz
 grant Crawford
@@ -4392,6 +4618,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000590
 expId 590
 fileName wgEncodeUncFAIREseqAlignmentsRep2Lhsr.tagAlign.gz
 grant Crawford
@@ -4411,6 +4638,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000591
 expId 591
 fileName wgEncodeUncFAIREseqAlignmentsRep2LhsrAndro.tagAlign.gz
 grant Crawford
@@ -4431,6 +4659,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeUncFAIREseqAlignmentsRep2Nhbe.tagAlign.gz
 grant Crawford
@@ -4450,6 +4679,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeUncFAIREseqAlignmentsRep2Nhek.tagAlign.gz
 grant Crawford
@@ -4470,6 +4700,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqAlignmentsRep3Gm12878V2.tagAlign.gz
 grant Crawford
@@ -4491,6 +4722,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqAlignmentsRep3Helas3V2.tagAlign.gz
 grant Crawford
@@ -4512,6 +4744,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqAlignmentsRep3Hepg2V2.tagAlign.gz
 grant Crawford
@@ -4533,6 +4766,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqAlignmentsRep3K562V2.tagAlign.gz
 grant Crawford
@@ -4554,6 +4788,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2.wig.gz
 grant Crawford
@@ -4574,6 +4809,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeUncFAIREseqBaseOverlapSignalGm18507.wig.gz
 grant Crawford
@@ -4593,6 +4829,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeUncFAIREseqBaseOverlapSignalGm19239.wig.gz
 grant Crawford
@@ -4613,6 +4850,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeUncFAIREseqBaseOverlapSignalH1hesc.wig.gz
 grant Crawford
@@ -4632,6 +4870,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeUncFAIREseqBaseOverlapSignalHelas3Ifna4h.wig.gz
 grant Crawford
@@ -4652,6 +4891,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeUncFAIREseqBaseOverlapSignalHelas3Ifng4h.wig.gz
 grant Crawford
@@ -4673,6 +4913,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wig.gz
 grant Crawford
@@ -4694,6 +4935,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2.wig.gz
 grant Crawford
@@ -4715,6 +4957,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeUncFAIREseqBaseOverlapSignalHuvec.wig.gz
 grant Crawford
@@ -4735,6 +4978,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wig.gz
 grant Crawford
@@ -4755,6 +4999,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000590
 expId 590
 fileName wgEncodeUncFAIREseqBaseOverlapSignalLhsr.wig.gz
 grant Crawford
@@ -4774,6 +5019,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000591
 expId 591
 fileName wgEncodeUncFAIREseqBaseOverlapSignalLhsrAndro.wig.gz
 grant Crawford
@@ -4794,6 +5040,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeUncFAIREseqBaseOverlapSignalNhbe.wig.gz
 grant Crawford
@@ -4814,6 +5061,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeUncFAIREseqBaseOverlapSignalNhek.wig.gz
 grant Crawford
@@ -4834,6 +5082,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeUncFAIREseqBaseOverlapSignalPanislets.wig.gz
 grant Crawford
@@ -4854,6 +5103,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqPeaksGm12878V3.narrowPeak.gz
 grant Crawford
@@ -4874,6 +5124,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeUncFAIREseqPeaksGm18507.narrowPeak.gz
 grant Crawford
@@ -4893,6 +5144,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeUncFAIREseqPeaksGm19239.narrowPeak.gz
 grant Crawford
@@ -4913,6 +5165,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeUncFAIREseqPeaksH1hescV2.narrowPeak.gz
 grant Crawford
@@ -4933,6 +5186,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeUncFAIREseqPeaksHelas3Ifna4h.narrowPeak.gz
 grant Crawford
@@ -4953,6 +5207,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeUncFAIREseqPeaksHelas3Ifng4h.narrowPeak.gz
 grant Crawford
@@ -4974,6 +5229,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqPeaksHelas3V3.narrowPeak.gz
 grant Crawford
@@ -4995,6 +5251,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqPeaksHepg2V3.narrowPeak.gz
 grant Crawford
@@ -5016,6 +5273,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeUncFAIREseqPeaksHuvecV2.narrowPeak.gz
 grant Crawford
@@ -5037,6 +5295,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqPeaksK562V3.narrowPeak.gz
 grant Crawford
@@ -5057,6 +5316,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000590
 expId 590
 fileName wgEncodeUncFAIREseqPeaksLhsr.narrowPeak.gz
 grant Crawford
@@ -5076,6 +5336,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000591
 expId 591
 fileName wgEncodeUncFAIREseqPeaksLhsrAndro.narrowPeak.gz
 grant Crawford
@@ -5096,6 +5357,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeUncFAIREseqPeaksNhbe.narrowPeak.gz
 grant Crawford
@@ -5116,6 +5378,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeUncFAIREseqPeaksNhekV2.narrowPeak.gz
 grant Crawford
@@ -5136,6 +5399,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeUncFAIREseqPeaksPanislets.narrowPeak.gz
 grant Crawford
@@ -5155,6 +5419,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeUncFAIREseqRawDataPanislets.fastq.gz
 grant Crawford
@@ -5173,6 +5438,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqRawDataRep1Gm12878V2.fastq.gz
 grant Crawford
@@ -5192,6 +5458,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeUncFAIREseqRawDataRep1Gm18507.fastq.gz
 grant Crawford
@@ -5210,6 +5477,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeUncFAIREseqRawDataRep1Gm19239.fastq.gz
 grant Crawford
@@ -5228,6 +5496,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeUncFAIREseqRawDataRep1H1hesc.fastq.gz
 grant Crawford
@@ -5246,6 +5515,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeUncFAIREseqRawDataRep1Helas3Ifna4h.fastq.gz
 grant Crawford
@@ -5265,6 +5535,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeUncFAIREseqRawDataRep1Helas3Ifng4h.fastq.gz
 grant Crawford
@@ -5285,6 +5556,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqRawDataRep1Helas3V2.fastq.gz
 grant Crawford
@@ -5305,6 +5577,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqRawDataRep1Hepg2V2.fastq.gz
 grant Crawford
@@ -5324,6 +5597,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeUncFAIREseqRawDataRep1Huvec.fastq.gz
 grant Crawford
@@ -5343,6 +5617,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqRawDataRep1K562V2.fastq.gz
 grant Crawford
@@ -5362,6 +5637,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000590
 expId 590
 fileName wgEncodeUncFAIREseqRawDataRep1Lhsr.fastq.gz
 grant Crawford
@@ -5380,6 +5656,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000591
 expId 591
 fileName wgEncodeUncFAIREseqRawDataRep1LhsrAndro.fastq.gz
 grant Crawford
@@ -5399,6 +5676,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeUncFAIREseqRawDataRep1Nhbe.fastq.gz
 grant Crawford
@@ -5417,6 +5695,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeUncFAIREseqRawDataRep1Nhek.fastq.gz
 grant Crawford
@@ -5436,6 +5715,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqRawDataRep2Gm12878V2.fastq.gz
 grant Crawford
@@ -5455,6 +5735,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeUncFAIREseqRawDataRep2Gm18507.fastq.gz
 grant Crawford
@@ -5473,6 +5754,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeUncFAIREseqRawDataRep2Gm19239.fastq.gz
 grant Crawford
@@ -5491,6 +5773,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeUncFAIREseqRawDataRep2H1hesc.fastq.gz
 grant Crawford
@@ -5509,6 +5792,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeUncFAIREseqRawDataRep2Helas3Ifna4h.fastq.gz
 grant Crawford
@@ -5528,6 +5812,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeUncFAIREseqRawDataRep2Helas3Ifng4h.fastq.gz
 grant Crawford
@@ -5548,6 +5833,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqRawDataRep2Helas3V2.fastq.gz
 grant Crawford
@@ -5568,6 +5854,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqRawDataRep2Hepg2V2.fastq.gz
 grant Crawford
@@ -5587,6 +5874,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeUncFAIREseqRawDataRep2Huvec.fastq.gz
 grant Crawford
@@ -5606,6 +5894,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqRawDataRep2K562V2.fastq.gz
 grant Crawford
@@ -5625,6 +5914,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000590
 expId 590
 fileName wgEncodeUncFAIREseqRawDataRep2Lhsr.fastq.gz
 grant Crawford
@@ -5643,6 +5933,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000591
 expId 591
 fileName wgEncodeUncFAIREseqRawDataRep2LhsrAndro.fastq.gz
 grant Crawford
@@ -5662,6 +5953,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeUncFAIREseqRawDataRep2Nhbe.fastq.gz
 grant Crawford
@@ -5680,6 +5972,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeUncFAIREseqRawDataRep2Nhek.fastq.gz
 grant Crawford
@@ -5699,6 +5992,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqRawDataRep3Gm12878V2.fastq.gz
 grant Crawford
@@ -5719,6 +6013,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqRawDataRep3Helas3V2.fastq.gz
 grant Crawford
@@ -5739,6 +6034,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqRawDataRep3Hepg2V2.fastq.gz
 grant Crawford
@@ -5759,6 +6055,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqRawDataRep3K562V2.fastq.gz
 grant Crawford
@@ -5779,6 +6076,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqSignalGm12878V2.wig.gz
 grant Crawford
@@ -5799,6 +6097,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeUncFAIREseqSignalGm18507.wig.gz
 grant Crawford
@@ -5818,6 +6117,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeUncFAIREseqSignalGm19239.wig.gz
 grant Crawford
@@ -5837,6 +6137,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeUncFAIREseqSignalH1hesc.wig.gz
 grant Crawford
@@ -5856,6 +6157,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeUncFAIREseqSignalHelas3Ifna4h.wig.gz
 grant Crawford
@@ -5876,6 +6178,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeUncFAIREseqSignalHelas3Ifng4h.wig.gz
 grant Crawford
@@ -5897,6 +6200,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqSignalHelas3V2.wig.gz
 grant Crawford
@@ -5918,6 +6222,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqSignalHepg2V2.wig.gz
 grant Crawford
@@ -5938,6 +6243,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeUncFAIREseqSignalHuvec.wig.gz
 grant Crawford
@@ -5958,6 +6264,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-02-26
 dateUnrestricted 2009-11-26
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqSignalK562V2.wig.gz
 grant Crawford
@@ -5978,6 +6285,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000590
 expId 590
 fileName wgEncodeUncFAIREseqSignalLhsr.wig.gz
 grant Crawford
@@ -5997,6 +6305,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
+dccAccession wgEncodeEH000591
 expId 591
 fileName wgEncodeUncFAIREseqSignalLhsrAndro.wig.gz
 grant Crawford
@@ -6017,6 +6326,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeUncFAIREseqSignalNhbe.wig.gz
 grant Crawford
@@ -6036,6 +6346,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeUncFAIREseqSignalNhek.wig.gz
 grant Crawford
@@ -6055,6 +6366,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeUncFAIREseqSignalPanislets.wig.gz
 grant Crawford
@@ -6074,6 +6386,7 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
+dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeUncFAIREseqZinbaGm12878.narrowPeak.gz
 grant Crawford
@@ -6093,6 +6406,7 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
+dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeUncFAIREseqZinbaH1hesc.narrowPeak.gz
 grant Crawford
@@ -6112,6 +6426,7 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
+dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeUncFAIREseqZinbaHelas3.narrowPeak.gz
 grant Crawford
@@ -6131,6 +6446,7 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
+dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeUncFAIREseqZinbaHepg2.narrowPeak.gz
 grant Crawford
@@ -6150,6 +6466,7 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
+dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeUncFAIREseqZinbaHuvec.narrowPeak.gz
 grant Crawford
@@ -6169,6 +6486,7 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
+dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeUncFAIREseqZinbaK562.narrowPeak.gz
 grant Crawford
@@ -6188,6 +6506,7 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
+dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeUncFAIREseqZinbaNhek.narrowPeak.gz
 grant Crawford
@@ -6208,6 +6527,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeUtaChIPseqAlignmentsH1hescCmyc.tagAlign.gz
 grant Crawford
@@ -6228,6 +6548,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeUtaChIPseqAlignmentsH1hescCtcf.tagAlign.gz
 grant Crawford
@@ -6248,6 +6569,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeUtaChIPseqAlignmentsH1hescPol2.tagAlign.gz
 grant Crawford
@@ -6268,6 +6590,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeUtaChIPseqAlignmentsHuvecCmyc.tagAlign.gz
 grant Crawford
@@ -6288,6 +6611,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
+dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12878Cmyc.tagAlign.gz
 grant Crawford
@@ -6310,6 +6634,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12878CtcfV2.tagAlign.gz
 grant Crawford
@@ -6332,6 +6657,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12878Pol2.tagAlign.gz
 grant Crawford
@@ -6353,6 +6679,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12891Ctcf.tagAlign.gz
 grant Crawford
@@ -6374,6 +6701,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12892Ctcf.tagAlign.gz
 grant Crawford
@@ -6395,6 +6723,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm19238Ctcf.tagAlign.gz
 grant Crawford
@@ -6416,6 +6745,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm19239Ctcf.tagAlign.gz
 grant Crawford
@@ -6437,6 +6767,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm19240Ctcf.tagAlign.gz
 grant Crawford
@@ -6459,6 +6790,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3CmycV2.tagAlign.gz
 grant Crawford
@@ -6482,6 +6814,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3CtcfV2.tagAlign.gz
 grant Crawford
@@ -6503,6 +6836,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3Pol2.tagAlign.gz
 grant Crawford
@@ -6525,6 +6859,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2CmycV2.tagAlign.gz
 grant Crawford
@@ -6548,6 +6883,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2CtcfV2.tagAlign.gz
 grant Crawford
@@ -6570,6 +6906,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2Pol2.tagAlign.gz
 grant Crawford
@@ -6591,6 +6928,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
+dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeUtaChIPseqAlignmentsRep1HuvecCtcf.tagAlign.gz
 grant Crawford
@@ -6612,6 +6950,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeUtaChIPseqAlignmentsRep1HuvecPol2.tagAlign.gz
 grant Crawford
@@ -6634,6 +6973,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqAlignmentsRep1K562CmycV2.tagAlign.gz
 grant Crawford
@@ -6657,6 +6997,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqAlignmentsRep1K562CtcfV2.tagAlign.gz
 grant Crawford
@@ -6679,6 +7020,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeUtaChIPseqAlignmentsRep1K562Pol2.tagAlign.gz
 grant Crawford
@@ -6700,6 +7042,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000599
 expId 599
 fileName wgEncodeUtaChIPseqAlignmentsRep1Mcf7Cmyc.tagAlign.gz
 grant Crawford
@@ -6721,6 +7064,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeUtaChIPseqAlignmentsRep1Mcf7Ctcf.tagAlign.gz
 grant Crawford
@@ -6742,6 +7086,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeUtaChIPseqAlignmentsRep1NhekCtcf.tagAlign.gz
 grant Crawford
@@ -6763,6 +7108,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
+dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeUtaChIPseqAlignmentsRep1ProgfibCtcf.tagAlign.gz
 grant Crawford
@@ -6784,6 +7130,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeUtaChIPseqAlignmentsRep1ProgfibPol2.tagAlign.gz
 grant Crawford
@@ -6805,6 +7152,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
+dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12878Cmyc.tagAlign.gz
 grant Crawford
@@ -6827,6 +7175,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz
 grant Crawford
@@ -6849,6 +7198,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12878Pol2.tagAlign.gz
 grant Crawford
@@ -6870,6 +7220,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12891Ctcf.tagAlign.gz
 grant Crawford
@@ -6891,6 +7242,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12892Ctcf.tagAlign.gz
 grant Crawford
@@ -6912,6 +7264,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm19238Ctcf.tagAlign.gz
 grant Crawford
@@ -6933,6 +7286,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm19239Ctcf.tagAlign.gz
 grant Crawford
@@ -6954,6 +7308,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm19240Ctcf.tagAlign.gz
 grant Crawford
@@ -6976,6 +7331,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3CmycV2.tagAlign.gz
 grant Crawford
@@ -6999,6 +7355,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3CtcfV2.tagAlign.gz
 grant Crawford
@@ -7020,6 +7377,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3Pol2.tagAlign.gz
 grant Crawford
@@ -7042,6 +7400,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2CmycV2.tagAlign.gz
 grant Crawford
@@ -7065,6 +7424,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2CtcfV2.tagAlign.gz
 grant Crawford
@@ -7087,6 +7447,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2Pol2.tagAlign.gz
 grant Crawford
@@ -7108,6 +7469,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
+dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeUtaChIPseqAlignmentsRep2HuvecCtcf.tagAlign.gz
 grant Crawford
@@ -7129,6 +7491,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeUtaChIPseqAlignmentsRep2HuvecPol2.tagAlign.gz
 grant Crawford
@@ -7151,6 +7514,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqAlignmentsRep2K562CmycV2.tagAlign.gz
 grant Crawford
@@ -7174,6 +7538,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqAlignmentsRep2K562CtcfV2.tagAlign.gz
 grant Crawford
@@ -7196,6 +7561,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeUtaChIPseqAlignmentsRep2K562Pol2.tagAlign.gz
 grant Crawford
@@ -7217,6 +7583,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000599
 expId 599
 fileName wgEncodeUtaChIPseqAlignmentsRep2Mcf7Cmyc.tagAlign.gz
 grant Crawford
@@ -7238,6 +7605,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeUtaChIPseqAlignmentsRep2Mcf7Ctcf.tagAlign.gz
 grant Crawford
@@ -7259,6 +7627,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeUtaChIPseqAlignmentsRep2NhekCtcf.tagAlign.gz
 grant Crawford
@@ -7280,6 +7649,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
+dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeUtaChIPseqAlignmentsRep2ProgfibCtcf.tagAlign.gz
 grant Crawford
@@ -7301,6 +7671,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeUtaChIPseqAlignmentsRep2ProgfibPol2.tagAlign.gz
 grant Crawford
@@ -7323,6 +7694,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqAlignmentsRep3Gm12878CtcfV2.tagAlign.gz
 grant Crawford
@@ -7346,6 +7718,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqAlignmentsRep3Hepg2CmycV2.tagAlign.gz
 grant Crawford
@@ -7368,6 +7741,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqAlignmentsRep3Hepg2Pol2.tagAlign.gz
 grant Crawford
@@ -7390,6 +7764,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqAlignmentsRep3K562CmycV2.tagAlign.gz
 grant Crawford
@@ -7413,6 +7788,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqAlignmentsRep3K562CtcfV2.tagAlign.gz
 grant Crawford
@@ -7436,6 +7812,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
+dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeUtaChIPseqBaseOverlapSignalGm12878Cmyc.wig.gz
 grant Crawford
@@ -7458,6 +7835,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2.wig.gz
 grant Crawford
@@ -7480,6 +7858,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeUtaChIPseqBaseOverlapSignalGm12878Pol2.wig.gz
 grant Crawford
@@ -7502,6 +7881,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeUtaChIPseqBaseOverlapSignalGm12891Ctcf.wig.gz
 grant Crawford
@@ -7524,6 +7904,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-07
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf.wig.gz
 grant Crawford
@@ -7546,6 +7927,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeUtaChIPseqBaseOverlapSignalGm19238Ctcf.wig.gz
 grant Crawford
@@ -7568,6 +7950,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeUtaChIPseqBaseOverlapSignalGm19239Ctcf.wig.gz
 grant Crawford
@@ -7590,6 +7973,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeUtaChIPseqBaseOverlapSignalGm19240Ctcf.wig.gz
 grant Crawford
@@ -7611,6 +7995,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeUtaChIPseqBaseOverlapSignalH1hescCmyc.wig.gz
 grant Crawford
@@ -7633,6 +8018,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeUtaChIPseqBaseOverlapSignalH1hescCtcf.wig.gz
 grant Crawford
@@ -7655,6 +8041,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeUtaChIPseqBaseOverlapSignalH1hescPol2.wig.gz
 grant Crawford
@@ -7677,6 +8064,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2.wig.gz
 grant Crawford
@@ -7700,6 +8088,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2.wig.gz
 grant Crawford
@@ -7722,6 +8111,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHelas3Pol2.wig.gz
 grant Crawford
@@ -7744,6 +8134,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2.wig.gz
 grant Crawford
@@ -7767,6 +8158,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2.wig.gz
 grant Crawford
@@ -7790,6 +8182,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-07
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHepg2Pol2.wig.gz
 grant Crawford
@@ -7812,6 +8205,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHuvecCmyc.wig.gz
 grant Crawford
@@ -7834,6 +8228,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
+dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHuvecCtcf.wig.gz
 grant Crawford
@@ -7856,6 +8251,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeUtaChIPseqBaseOverlapSignalHuvecPol2.wig.gz
 grant Crawford
@@ -7878,6 +8274,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2.wig.gz
 grant Crawford
@@ -7901,6 +8298,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2.wig.gz
 grant Crawford
@@ -7924,6 +8322,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeUtaChIPseqBaseOverlapSignalK562Pol2.wig.gz
 grant Crawford
@@ -7945,6 +8344,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000599
 expId 599
 fileName wgEncodeUtaChIPseqBaseOverlapSignalMcf7Cmyc.wig.gz
 grant Crawford
@@ -7966,6 +8366,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeUtaChIPseqBaseOverlapSignalMcf7Ctcf.wig.gz
 grant Crawford
@@ -7988,6 +8389,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeUtaChIPseqBaseOverlapSignalNhekCtcf.wig.gz
 grant Crawford
@@ -8009,6 +8411,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
+dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeUtaChIPseqBaseOverlapSignalProgfibCtcf.wig.gz
 grant Crawford
@@ -8030,6 +8433,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeUtaChIPseqBaseOverlapSignalProgfibPol2.wig.gz
 grant Crawford
@@ -8052,6 +8456,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
+dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeUtaChIPseqPeaksGm12878CmycV2.narrowPeak.gz
 grant Crawford
@@ -8075,6 +8480,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqPeaksGm12878CtcfV3.narrowPeak.gz
 grant Crawford
@@ -8097,6 +8503,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeUtaChIPseqPeaksGm12878Pol2.narrowPeak.gz
 grant Crawford
@@ -8119,6 +8526,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeUtaChIPseqPeaksGm12891CtcfV2.narrowPeak.gz
 grant Crawford
@@ -8142,6 +8550,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeUtaChIPseqPeaksGm12892CtcfV2.narrowPeak.gz
 grant Crawford
@@ -8165,6 +8574,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeUtaChIPseqPeaksGm19238CtcfV2.narrowPeak.gz
 grant Crawford
@@ -8188,6 +8598,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeUtaChIPseqPeaksGm19239CtcfV2.narrowPeak.gz
 grant Crawford
@@ -8211,6 +8622,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeUtaChIPseqPeaksGm19240CtcfV2.narrowPeak.gz
 grant Crawford
@@ -8233,6 +8645,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeUtaChIPseqPeaksH1hescCmyc.narrowPeak.gz
 grant Crawford
@@ -8255,6 +8668,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeUtaChIPseqPeaksH1hescCtcfV2.narrowPeak.gz
 grant Crawford
@@ -8278,6 +8692,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeUtaChIPseqPeaksH1hescPol2V2.narrowPeak.gz
 grant Crawford
@@ -8301,6 +8716,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeUtaChIPseqPeaksHelas3CmycV3.narrowPeak.gz
 grant Crawford
@@ -8324,6 +8740,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeUtaChIPseqPeaksHelas3CtcfV3.narrowPeak.gz
 grant Crawford
@@ -8346,6 +8763,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeUtaChIPseqPeaksHelas3Pol2.narrowPeak.gz
 grant Crawford
@@ -8368,6 +8786,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqPeaksHepg2CmycV3.narrowPeak.gz
 grant Crawford
@@ -8391,6 +8810,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeUtaChIPseqPeaksHepg2CtcfV3.narrowPeak.gz
 grant Crawford
@@ -8414,6 +8834,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqPeaksHepg2Pol2V2.narrowPeak.gz
 grant Crawford
@@ -8437,6 +8858,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeUtaChIPseqPeaksHuvecCmycV2.narrowPeak.gz
 grant Crawford
@@ -8460,6 +8882,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
+dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeUtaChIPseqPeaksHuvecCtcfV2.narrowPeak.gz
 grant Crawford
@@ -8483,6 +8906,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeUtaChIPseqPeaksHuvecPol2V2.narrowPeak.gz
 grant Crawford
@@ -8506,6 +8930,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqPeaksK562CmycV3.narrowPeak.gz
 grant Crawford
@@ -8529,6 +8954,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqPeaksK562CtcfV3.narrowPeak.gz
 grant Crawford
@@ -8552,6 +8978,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeUtaChIPseqPeaksK562Pol2V2.narrowPeak.gz
 grant Crawford
@@ -8574,6 +9001,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000599
 expId 599
 fileName wgEncodeUtaChIPseqPeaksMcf7Cmyc.narrowPeak.gz
 grant Crawford
@@ -8595,6 +9023,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeUtaChIPseqPeaksMcf7Ctcf.narrowPeak.gz
 grant Crawford
@@ -8617,6 +9046,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeUtaChIPseqPeaksNhekCtcfV2.narrowPeak.gz
 grant Crawford
@@ -8639,6 +9069,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
+dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeUtaChIPseqPeaksProgfibCtcf.narrowPeak.gz
 grant Crawford
@@ -8660,6 +9091,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeUtaChIPseqPeaksProgfibPol2.narrowPeak.gz
 grant Crawford
@@ -8681,6 +9113,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeUtaChIPseqRawDataH1hescCmyc.fastq.gz
 grant Crawford
@@ -8700,6 +9133,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeUtaChIPseqRawDataH1hescCtcf.fastq.gz
 grant Crawford
@@ -8719,6 +9153,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeUtaChIPseqRawDataH1hescPol2.fastq.gz
 grant Crawford
@@ -8738,6 +9173,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeUtaChIPseqRawDataHuvecCmyc.fastq.gz
 grant Crawford
@@ -8757,6 +9193,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
+dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12878Cmyc.fastq.gz
 grant Crawford
@@ -8778,6 +9215,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12878CtcfV2.fastq.gz
 grant Crawford
@@ -8799,6 +9237,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12878Pol2.fastq.gz
 grant Crawford
@@ -8819,6 +9258,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12891Ctcf.fastq.gz
 grant Crawford
@@ -8839,6 +9279,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12892Ctcf.fastq.gz
 grant Crawford
@@ -8859,6 +9300,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeUtaChIPseqRawDataRep1Gm19238Ctcf.fastq.gz
 grant Crawford
@@ -8879,6 +9321,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeUtaChIPseqRawDataRep1Gm19239Ctcf.fastq.gz
 grant Crawford
@@ -8899,6 +9342,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeUtaChIPseqRawDataRep1Gm19240Ctcf.fastq.gz
 grant Crawford
@@ -8920,6 +9364,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeUtaChIPseqRawDataRep1Helas3CmycV2.fastq.gz
 grant Crawford
@@ -8942,6 +9387,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeUtaChIPseqRawDataRep1Helas3CtcfV2.fastq.gz
 grant Crawford
@@ -8963,6 +9409,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeUtaChIPseqRawDataRep1Helas3Pol2.fastq.gz
 grant Crawford
@@ -8984,6 +9431,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqRawDataRep1Hepg2CmycV2.fastq.gz
 grant Crawford
@@ -9006,6 +9454,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeUtaChIPseqRawDataRep1Hepg2CtcfV2.fastq.gz
 grant Crawford
@@ -9027,6 +9476,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqRawDataRep1Hepg2Pol2.fastq.gz
 grant Crawford
@@ -9047,6 +9497,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
+dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeUtaChIPseqRawDataRep1HuvecCtcf.fastq.gz
 grant Crawford
@@ -9067,6 +9518,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeUtaChIPseqRawDataRep1HuvecPol2.fastq.gz
 grant Crawford
@@ -9088,6 +9540,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqRawDataRep1K562CmycV2.fastq.gz
 grant Crawford
@@ -9110,6 +9563,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqRawDataRep1K562CtcfV2.fastq.gz
 grant Crawford
@@ -9131,6 +9585,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeUtaChIPseqRawDataRep1K562Pol2.fastq.gz
 grant Crawford
@@ -9151,6 +9606,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000599
 expId 599
 fileName wgEncodeUtaChIPseqRawDataRep1Mcf7Cmyc.fastq.gz
 grant Crawford
@@ -9171,6 +9627,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeUtaChIPseqRawDataRep1Mcf7Ctcf.fastq.gz
 grant Crawford
@@ -9191,6 +9648,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeUtaChIPseqRawDataRep1NhekCtcf.fastq.gz
 grant Crawford
@@ -9211,6 +9669,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
+dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12878Cmyc.fastq.gz
 grant Crawford
@@ -9232,6 +9691,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12878CtcfV2.fastq.gz
 grant Crawford
@@ -9253,6 +9713,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12878Pol2.fastq.gz
 grant Crawford
@@ -9273,6 +9734,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12891Ctcf.fastq.gz
 grant Crawford
@@ -9293,6 +9755,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12892Ctcf.fastq.gz
 grant Crawford
@@ -9313,6 +9776,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeUtaChIPseqRawDataRep2Gm19238Ctcf.fastq.gz
 grant Crawford
@@ -9333,6 +9797,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeUtaChIPseqRawDataRep2Gm19239Ctcf.fastq.gz
 grant Crawford
@@ -9353,6 +9818,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeUtaChIPseqRawDataRep2Gm19240Ctcf.fastq.gz
 grant Crawford
@@ -9374,6 +9840,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeUtaChIPseqRawDataRep2Helas3CmycV2.fastq.gz
 grant Crawford
@@ -9396,6 +9863,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeUtaChIPseqRawDataRep2Helas3CtcfV2.fastq.gz
 grant Crawford
@@ -9417,6 +9885,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeUtaChIPseqRawDataRep2Helas3Pol2.fastq.gz
 grant Crawford
@@ -9438,6 +9907,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqRawDataRep2Hepg2CmycV2.fastq.gz
 grant Crawford
@@ -9460,6 +9930,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeUtaChIPseqRawDataRep2Hepg2CtcfV2.fastq.gz
 grant Crawford
@@ -9481,6 +9952,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqRawDataRep2Hepg2Pol2.fastq.gz
 grant Crawford
@@ -9501,6 +9973,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
+dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeUtaChIPseqRawDataRep2HuvecCtcf.fastq.gz
 grant Crawford
@@ -9521,6 +9994,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeUtaChIPseqRawDataRep2HuvecPol2.fastq.gz
 grant Crawford
@@ -9542,6 +10016,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqRawDataRep2K562CmycV2.fastq.gz
 grant Crawford
@@ -9564,6 +10039,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqRawDataRep2K562CtcfV2.fastq.gz
 grant Crawford
@@ -9585,6 +10061,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeUtaChIPseqRawDataRep2K562Pol2.fastq.gz
 grant Crawford
@@ -9605,6 +10082,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000599
 expId 599
 fileName wgEncodeUtaChIPseqRawDataRep2Mcf7Cmyc.fastq.gz
 grant Crawford
@@ -9625,6 +10103,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeUtaChIPseqRawDataRep2Mcf7Ctcf.fastq.gz
 grant Crawford
@@ -9645,6 +10124,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeUtaChIPseqRawDataRep2NhekCtcf.fastq.gz
 grant Crawford
@@ -9666,6 +10146,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqRawDataRep3Gm12878CtcfV2.fastq.gz
 grant Crawford
@@ -9688,6 +10169,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqRawDataRep3Hepg2CmycV2.fastq.gz
 grant Crawford
@@ -9709,6 +10191,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqRawDataRep3Hepg2Pol2.fastq.gz
 grant Crawford
@@ -9730,6 +10213,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqRawDataRep3K562CmycV2.fastq.gz
 grant Crawford
@@ -9752,6 +10236,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqRawDataRep3K562CtcfV2.fastq.gz
 grant Crawford
@@ -9773,6 +10258,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
+dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeUtaChIPseqSignalGm12878Cmyc.wig.gz
 grant Crawford
@@ -9795,6 +10281,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
+dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeUtaChIPseqSignalGm12878CtcfV2.wig.gz
 grant Crawford
@@ -9817,6 +10304,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeUtaChIPseqSignalGm12878Pol2.wig.gz
 grant Crawford
@@ -9838,6 +10326,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeUtaChIPseqSignalGm12891Ctcf.wig.gz
 grant Crawford
@@ -9859,6 +10348,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeUtaChIPseqSignalGm12892Ctcf.wig.gz
 grant Crawford
@@ -9880,6 +10370,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeUtaChIPseqSignalGm19238Ctcf.wig.gz
 grant Crawford
@@ -9901,6 +10392,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeUtaChIPseqSignalGm19239Ctcf.wig.gz
 grant Crawford
@@ -9922,6 +10414,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeUtaChIPseqSignalGm19240Ctcf.wig.gz
 grant Crawford
@@ -9943,6 +10436,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
+dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeUtaChIPseqSignalH1hescCmyc.wig.gz
 grant Crawford
@@ -9964,6 +10458,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeUtaChIPseqSignalH1hescCtcf.wig.gz
 grant Crawford
@@ -9985,6 +10480,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeUtaChIPseqSignalH1hescPol2.wig.gz
 grant Crawford
@@ -10007,6 +10503,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeUtaChIPseqSignalHelas3CmycV2.wig.gz
 grant Crawford
@@ -10030,6 +10527,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeUtaChIPseqSignalHelas3CtcfV2.wig.gz
 grant Crawford
@@ -10052,6 +10550,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeUtaChIPseqSignalHelas3Pol2.wig.gz
 grant Crawford
@@ -10074,6 +10573,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeUtaChIPseqSignalHepg2CmycV2.wig.gz
 grant Crawford
@@ -10097,6 +10597,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
+dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeUtaChIPseqSignalHepg2CtcfV2.wig.gz
 grant Crawford
@@ -10119,6 +10620,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeUtaChIPseqSignalHepg2Pol2.wig.gz
 grant Crawford
@@ -10140,6 +10642,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
+dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeUtaChIPseqSignalHuvecCmyc.wig.gz
 grant Crawford
@@ -10161,6 +10664,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
+dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeUtaChIPseqSignalHuvecCtcf.wig.gz
 grant Crawford
@@ -10182,6 +10686,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
+dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeUtaChIPseqSignalHuvecPol2.wig.gz
 grant Crawford
@@ -10204,6 +10709,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeUtaChIPseqSignalK562CmycV2.wig.gz
 grant Crawford
@@ -10227,6 +10733,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
+dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeUtaChIPseqSignalK562CtcfV2.wig.gz
 grant Crawford
@@ -10249,6 +10756,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
+dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeUtaChIPseqSignalK562Pol2.wig.gz
 grant Crawford
@@ -10270,6 +10778,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000599
 expId 599
 fileName wgEncodeUtaChIPseqSignalMcf7Cmyc.wig.gz
 grant Crawford
@@ -10291,6 +10800,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
+dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeUtaChIPseqSignalMcf7Ctcf.wig.gz
 grant Crawford
@@ -10312,6 +10822,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeUtaChIPseqSignalNhekCtcf.wig.gz
 grant Crawford
@@ -10333,6 +10844,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
+dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeUtaChIPseqSignalProgfibCtcf.wig.gz
 grant Crawford
@@ -10354,6 +10866,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeUtaChIPseqSignalProgfibPol2.wig.gz
 grant Crawford
@@ -10375,6 +10888,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
+dccAccession wgEncodeEH000528
 expId 528
 fileName wgEncodeUtaustinChIPseqAlignmentsGm12878Input.tagAlign.gz
 grant Crawford
@@ -10394,6 +10908,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
+dccAccession wgEncodeEH000539
 expId 539
 fileName wgEncodeUtaustinChIPseqAlignmentsHelas3Input.tagAlign.gz
 grant Crawford
@@ -10414,6 +10929,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
+dccAccession wgEncodeEH000538
 expId 538
 fileName wgEncodeUtaustinChIPseqAlignmentsHepg2Input.tagAlign.gz
 grant Crawford
@@ -10434,6 +10950,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000550
 expId 550
 fileName wgEncodeUtaustinChIPseqAlignmentsHuvecInput.tagAlign.gz
 grant Crawford
@@ -10454,6 +10971,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
+dccAccession wgEncodeEH000529
 expId 529
 fileName wgEncodeUtaustinChIPseqAlignmentsK562Input.tagAlign.gz
 grant Crawford
@@ -10474,6 +10992,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000589
 expId 589
 fileName wgEncodeUtaustinChIPseqAlignmentsMcf7.tagAlign.gz
 grant Crawford
@@ -10494,6 +11013,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000593
 expId 593
 fileName wgEncodeUtaustinChIPseqAlignmentsProgfib.tagAlign.gz
 grant Crawford
@@ -10514,6 +11034,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
+dccAccession wgEncodeEH000528
 expId 528
 fileName wgEncodeUtaustinChIPseqRawDataGm12878Input.fastq.gz
 grant Crawford
@@ -10533,6 +11054,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
+dccAccession wgEncodeEH000539
 expId 539
 fileName wgEncodeUtaustinChIPseqRawDataHelas3Input.fastq.gz
 grant Crawford
@@ -10553,6 +11075,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
+dccAccession wgEncodeEH000538
 expId 538
 fileName wgEncodeUtaustinChIPseqRawDataHepg2Input.fastq.gz
 grant Crawford
@@ -10573,6 +11096,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000550
 expId 550
 fileName wgEncodeUtaustinChIPseqRawDataHuvecInput.fastq.gz
 grant Crawford
@@ -10592,6 +11116,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
+dccAccession wgEncodeEH000529
 expId 529
 fileName wgEncodeUtaustinChIPseqRawDataK562Input.fastq.gz
 grant Crawford
@@ -10612,6 +11137,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000589
 expId 589
 fileName wgEncodeUtaustinChIPseqRawDataMcf7.fastq.gz
 grant Crawford
@@ -10631,6 +11157,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
+dccAccession wgEncodeEH000528
 expId 528
 fileName wgEncodeUtaustinChIPseqSignalGm12878Input.wig.gz
 grant Crawford
@@ -10652,6 +11179,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
+dccAccession wgEncodeEH000539
 expId 539
 fileName wgEncodeUtaustinChIPseqSignalHelas3Input.wig.gz
 grant Crawford
@@ -10673,6 +11201,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
+dccAccession wgEncodeEH000538
 expId 538
 fileName wgEncodeUtaustinChIPseqSignalHepg2Input.wig.gz
 grant Crawford
@@ -10694,6 +11223,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000550
 expId 550
 fileName wgEncodeUtaustinChIPseqSignalHuvecInput.wig.gz
 grant Crawford
@@ -10715,6 +11245,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
+dccAccession wgEncodeEH000529
 expId 529
 fileName wgEncodeUtaustinChIPseqSignalK562Input.wig.gz
 grant Crawford
@@ -10736,6 +11267,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000589
 expId 589
 fileName wgEncodeUtaustinChIPseqSignalMcf7.wig.gz
 grant Crawford
@@ -10757,6 +11289,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
+dccAccession wgEncodeEH000593
 expId 593
 fileName wgEncodeUtaustinChIPseqSignalProgfib.wig.gz
 grant Crawford
@@ -10768,4 +11301,4 @@ subId 871
 tableName wgEncodeUtaustinChIPseqSignalProgfib
 view Signal
 
-# MAGIC: 328655411
+# MAGIC: -582760441

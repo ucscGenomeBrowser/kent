@@ -11,6 +11,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
 expId 269
 fileName wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya.tagAlign.gz
 grant Gingeras
@@ -31,6 +32,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
 expId 270
 fileName wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya.tagAlign.gz
 grant Gingeras
@@ -51,6 +53,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 fileName wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya.tagAlign.gz
 grant Gingeras
@@ -71,6 +74,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 fileName wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya.tagAlign.gz
 grant Gingeras
@@ -91,6 +95,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
 expId 269
 grant Gingeras
 lab GIS
@@ -110,6 +115,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
 expId 270
 grant Gingeras
 lab GIS
@@ -129,6 +135,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 grant Gingeras
 lab GIS
@@ -148,6 +155,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 grant Gingeras
 lab GIS
@@ -167,6 +175,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
 expId 269
 grant Gingeras
 lab GIS
@@ -186,6 +195,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
 expId 270
 grant Gingeras
 lab GIS
@@ -205,6 +215,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 grant Gingeras
 lab GIS
@@ -224,6 +235,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 grant Gingeras
 lab GIS
@@ -243,6 +255,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
 expId 269
 grant Gingeras
 lab GIS
@@ -262,6 +275,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
 expId 270
 grant Gingeras
 lab GIS
@@ -281,6 +295,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 grant Gingeras
 lab GIS
@@ -300,6 +315,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 grant Gingeras
 lab GIS
@@ -319,6 +335,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
 expId 269
 fileName wgEncodeGisRnaSeqRawData2Rep1Gm12878CytosolLongpolya.csqual.gz
 grant Gingeras
@@ -338,6 +355,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 fileName wgEncodeGisRnaSeqRawData2Rep2K562CytosolLongpolya.csqual.gz
 grant Gingeras
@@ -357,6 +375,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
 expId 270
 fileName wgEncodeGisRnaSeqRawData3Rep1H1hescCellLongpolya.fastq.gz
 grant Gingeras
@@ -376,6 +395,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 fileName wgEncodeGisRnaSeqRawData3Rep1K562CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -395,6 +415,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
 expId 269
 fileName wgEncodeGisRnaSeqRawDataRep1Gm12878CytosolLongpolya.csfasta.gz
 grant Gingeras
@@ -414,6 +435,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 fileName wgEncodeGisRnaSeqRawDataRep2K562CytosolLongpolya.csfasta.gz
 grant Gingeras
@@ -433,6 +455,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
 expId 270
 fileName wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -453,6 +476,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
 expId 271
 fileName wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -465,4 +489,4 @@ subId 758
 tableName wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
 view SplitAlign
 
-# MAGIC: 1936031801
+# MAGIC: 1741887375

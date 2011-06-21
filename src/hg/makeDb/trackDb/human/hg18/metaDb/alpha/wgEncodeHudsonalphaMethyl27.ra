@@ -11,6 +11,7 @@ dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+dccAccession wgEncodeEH000276
 expId 276
 fileName wgEncodeHudsonalphaMethyl27GM12878r1.bed.gz
 grant Myers
@@ -29,6 +30,7 @@ dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+dccAccession wgEncodeEH000276
 expId 276
 fileName wgEncodeHudsonalphaMethyl27GM12878r2.bed.gz
 grant Myers
@@ -47,6 +49,7 @@ dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+dccAccession wgEncodeEH000277
 expId 277
 fileName wgEncodeHudsonalphaMethyl27HepG2r1.bed.gz
 grant Myers
@@ -65,6 +68,7 @@ dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+dccAccession wgEncodeEH000277
 expId 277
 fileName wgEncodeHudsonalphaMethyl27HepG2r2.bed.gz
 grant Myers
@@ -83,6 +87,7 @@ dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+dccAccession wgEncodeEH000278
 expId 278
 fileName wgEncodeHudsonalphaMethyl27K562r1.bed.gz
 grant Myers
@@ -101,6 +106,7 @@ dataType MethylArray
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
+dccAccession wgEncodeEH000278
 expId 278
 fileName wgEncodeHudsonalphaMethyl27K562r2.bed.gz
 grant Myers
@@ -111,4 +117,4 @@ replicate 2
 subId 685
 tableName wgEncodeHudsonalphaMethyl27K562r2
 
-# MAGIC: -1965493348
+# MAGIC: 1207196076

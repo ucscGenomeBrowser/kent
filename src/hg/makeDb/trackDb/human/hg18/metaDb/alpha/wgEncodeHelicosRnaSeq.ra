@@ -11,6 +11,7 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+dccAccession wgEncodeEH000272
 expId 272
 fileName wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 grant Gingeras
@@ -30,6 +31,7 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+dccAccession wgEncodeEH000272
 expId 272
 fileName wgEncodeHelicosRnaSeqRawDataK562CytosolLongpolya.fasta.gz
 grant Gingeras
@@ -48,6 +50,7 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+dccAccession wgEncodeEH000272
 expId 272
 fileName wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya.wig.gz
 grant Gingeras
@@ -59,4 +62,4 @@ subId 249
 tableName wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
 view RawSignal
 
-# MAGIC: 19277694
+# MAGIC: -541861272

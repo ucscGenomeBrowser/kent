@@ -11,6 +11,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000784
 expId 784
 fileName wgEncodeBroadHmmGm12878HMM.bed.gz
 grant Bernstein
@@ -29,6 +30,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000785
 expId 785
 fileName wgEncodeBroadHmmH1hescHMM.bed.gz
 grant Bernstein
@@ -47,6 +49,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000789
 expId 789
 fileName wgEncodeBroadHmmHepg2HMM.bed.gz
 grant Bernstein
@@ -65,6 +68,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000786
 expId 786
 fileName wgEncodeBroadHmmHmecHMM.bed.gz
 grant Bernstein
@@ -83,6 +87,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000787
 expId 787
 fileName wgEncodeBroadHmmHsmmHMM.bed.gz
 grant Bernstein
@@ -101,6 +106,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000788
 expId 788
 fileName wgEncodeBroadHmmHuvecHMM.bed.gz
 grant Bernstein
@@ -119,6 +125,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000790
 expId 790
 fileName wgEncodeBroadHmmK562HMM.bed.gz
 grant Bernstein
@@ -137,6 +144,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000791
 expId 791
 fileName wgEncodeBroadHmmNhekHMM.bed.gz
 grant Bernstein
@@ -155,6 +163,7 @@ dataType Combined
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-01-21
+dccAccession wgEncodeEH000792
 expId 792
 fileName wgEncodeBroadHmmNhlfHMM.bed.gz
 grant Bernstein
@@ -165,4 +174,4 @@ subId 3446
 tableName wgEncodeBroadHmmNhlfHMM
 view HMM
 
-# MAGIC: -1539151089
+# MAGIC: 1072400182

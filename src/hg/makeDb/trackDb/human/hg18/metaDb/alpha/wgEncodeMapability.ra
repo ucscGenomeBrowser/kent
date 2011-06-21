@@ -3,6 +3,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE July 2009 Freeze
+dccAccession wgEncodeEH000316
 expId 316
 fileName wgEncodeBroadMapabilityAlign36mer.wig.gz
 grant Bernstein
@@ -19,6 +20,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+dccAccession wgEncodeEH000317
 expId 317
 fileName wgEncodeCrgMapabilityAlign100mer.bw.gz
 grant Gingeras
@@ -34,6 +36,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+dccAccession wgEncodeEH000318
 expId 318
 fileName wgEncodeCrgMapabilityAlign36mer.bw.gz
 grant Gingeras
@@ -49,6 +52,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+dccAccession wgEncodeEH000319
 expId 319
 fileName wgEncodeCrgMapabilityAlign40mer.bw.gz
 grant Gingeras
@@ -64,6 +68,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+dccAccession wgEncodeEH000320
 expId 320
 fileName wgEncodeCrgMapabilityAlign50mer.bw.gz
 grant Gingeras
@@ -79,6 +84,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+dccAccession wgEncodeEH000321
 expId 321
 fileName wgEncodeCrgMapabilityAlign75mer.bw.gz
 grant Gingeras
@@ -94,6 +100,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE Nov 2008 Freeze
+dccAccession wgEncodeEH000322
 expId 322
 fileName wgEncodeDukeRegionsExcluded.bed6.gz
 grant Crawford
@@ -109,6 +116,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE Nov 2008 Freeze
+dccAccession wgEncodeEH000323
 expId 323
 fileName wgEncodeDukeUniqueness20bp.wig.gz
 grant Crawford
@@ -126,6 +134,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE Nov 2008 Freeze
+dccAccession wgEncodeEH000324
 expId 324
 fileName wgEncodeDukeUniqueness24bp.wig.gz
 grant Crawford
@@ -143,6 +152,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE Nov 2008 Freeze
+dccAccession wgEncodeEH000325
 expId 325
 fileName wgEncodeDukeUniqueness35bp.wig.gz
 grant Crawford
@@ -165,6 +175,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE July 2009 Freeze
+dccAccession wgEncodeEH000326
 expId 326
 fileName wgEncodeUmassMapabilityUniq15.wig.gz
 grant Dekker
@@ -175,4 +186,4 @@ subId 345
 tableName wgEncodeUmassMapabilityUniq15
 view Uniqueness
 
-# MAGIC: 1265492559
+# MAGIC: -792017033
