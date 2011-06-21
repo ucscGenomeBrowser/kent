@@ -1671,8 +1671,10 @@ for(;item!=NULL;item=item->next)
         {
         if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s",item->linkVar);
-	else
-            hPrintf(" HREF='%s'",item->linkVar);
+	else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
+                 hPrintf(" HREF='..%s'",item->linkVar);
+             else 
+                 hPrintf(" HREF='%s'",item->linkVar);
         }
     else
         warn("map item has no url!");
