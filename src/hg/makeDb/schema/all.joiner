@@ -2310,14 +2310,6 @@ identifier omimAvId external=OMIM
     $hg.omimAvRepl.avId minCheck=0.90
     $hg.omimAvSnp.name minCheck=0.90
 
-identifier omimGeneId
-"omimGene ID"
-    $hg.omimGene.name dupeOk
-    $hg.omimGeneMap.omimId minCheck=0.80
-    $hg.refLink.omimId exclude=0 minCheck=0.95
-    $hg.omimMorbidMap.omimId minCheck=0.75
-    $hg.omimToKnownCanonical.omimId
-
 identifier omimGene2Id
 "omimGene2 ID"
     $hg.omimGene2.name dupeOk
