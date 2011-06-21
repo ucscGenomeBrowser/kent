@@ -11,6 +11,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000313
+expId 313
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -35,6 +37,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000313
+expId 313
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -59,6 +63,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000313
+expId 313
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -82,6 +88,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000313
+expId 313
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -105,6 +113,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000313
+expId 313
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -129,6 +139,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000313
+expId 313
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -153,6 +165,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000313
+expId 313
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -176,6 +190,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000313
+expId 313
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -199,6 +215,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001237
+expId 1237
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -223,6 +241,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001237
+expId 1237
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -247,6 +267,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001237
+expId 1237
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -270,6 +292,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001237
+expId 1237
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -293,6 +317,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001237
+expId 1237
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -317,6 +343,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001237
+expId 1237
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -341,6 +369,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001237
+expId 1237
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -364,6 +394,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001237
+expId 1237
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -387,6 +419,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001246
+expId 1246
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -411,6 +445,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001246
+expId 1246
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -435,6 +471,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001246
+expId 1246
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -458,6 +496,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001246
+expId 1246
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -481,6 +521,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001246
+expId 1246
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -505,6 +547,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001246
+expId 1246
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -529,6 +573,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001246
+expId 1246
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -552,6 +598,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001246
+expId 1246
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -575,6 +623,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001247
+expId 1247
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -599,6 +649,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001247
+expId 1247
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -623,6 +675,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001247
+expId 1247
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -646,6 +700,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001247
+expId 1247
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -669,6 +725,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001247
+expId 1247
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -693,6 +751,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001247
+expId 1247
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -717,6 +777,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001247
+expId 1247
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -740,6 +802,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001247
+expId 1247
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -763,6 +827,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001248
+expId 1248
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -787,6 +853,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001248
+expId 1248
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -811,6 +879,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001248
+expId 1248
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -834,6 +904,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001248
+expId 1248
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -857,6 +929,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001248
+expId 1248
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -881,6 +955,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001248
+expId 1248
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -905,6 +981,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001248
+expId 1248
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -928,6 +1006,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001248
+expId 1248
 fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -951,6 +1031,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -975,6 +1057,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -999,6 +1083,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3.bam
 grant Myers
 lab HudsonAlpha
@@ -1023,6 +1109,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4.bam
 grant Myers
 lab HudsonAlpha
@@ -1047,6 +1135,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1070,6 +1160,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1093,6 +1185,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1116,6 +1210,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep4.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1139,6 +1235,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1163,6 +1261,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1187,6 +1287,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep3.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1211,6 +1313,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep4.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1235,6 +1339,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -1258,6 +1364,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -1281,6 +1389,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep3.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -1304,6 +1414,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000314
+expId 314
 fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep4.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -1327,6 +1439,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001249
+expId 1249
 fileName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1351,6 +1465,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001249
+expId 1249
 fileName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1375,6 +1491,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001249
+expId 1249
 fileName wgEncodeHaibRnaSeqBe2cShortpolyaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1398,6 +1516,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001249
+expId 1249
 fileName wgEncodeHaibRnaSeqBe2cShortpolyaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1421,6 +1541,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001249
+expId 1249
 fileName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1445,6 +1567,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001249
+expId 1249
 fileName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1461,7 +1585,7 @@ tableName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1
 objType table
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1469,7 +1593,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1.gtf.gz
+dccAccession wgEncodeEH001249
+expId 1249
+fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1481,11 +1607,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
 objType table
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1493,7 +1619,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2.gtf.gz
+dccAccession wgEncodeEH001249
+expId 1249
+fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1505,7 +1633,7 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
 
@@ -1517,6 +1645,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001238
+expId 1238
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1541,6 +1671,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001238
+expId 1238
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1565,6 +1697,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001238
+expId 1238
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1588,6 +1722,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001238
+expId 1238
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1611,6 +1747,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001238
+expId 1238
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1635,6 +1773,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001238
+expId 1238
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1659,6 +1799,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001238
+expId 1238
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -1682,6 +1824,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001238
+expId 1238
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -1705,6 +1849,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001239
+expId 1239
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1729,6 +1875,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001239
+expId 1239
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1753,6 +1901,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001239
+expId 1239
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1776,6 +1926,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001239
+expId 1239
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1799,6 +1951,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001239
+expId 1239
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1823,6 +1977,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001239
+expId 1239
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -1847,6 +2003,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001239
+expId 1239
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -1870,6 +2028,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001239
+expId 1239
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -1893,6 +2053,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001240
+expId 1240
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1917,6 +2079,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001240
+expId 1240
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1941,6 +2105,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001240
+expId 1240
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1964,6 +2130,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001240
+expId 1240
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1987,6 +2155,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001240
+expId 1240
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2011,6 +2181,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001240
+expId 1240
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2035,6 +2207,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001240
+expId 1240
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -2058,6 +2232,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001240
+expId 1240
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -2081,6 +2257,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001241
+expId 1241
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2105,6 +2283,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001241
+expId 1241
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -2129,6 +2309,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001241
+expId 1241
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2152,6 +2334,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001241
+expId 1241
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2175,6 +2359,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001241
+expId 1241
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2199,6 +2385,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001241
+expId 1241
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2223,6 +2411,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001241
+expId 1241
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -2246,6 +2436,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001241
+expId 1241
 fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -2269,6 +2461,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
+dccAccession wgEncodeEH000315
+expId 315
 fileName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2293,6 +2487,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
+dccAccession wgEncodeEH000315
+expId 315
 fileName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -2317,6 +2513,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
+dccAccession wgEncodeEH000315
+expId 315
 fileName wgEncodeHaibRnaSeqJurkatShortpolyaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2340,6 +2538,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
+dccAccession wgEncodeEH000315
+expId 315
 fileName wgEncodeHaibRnaSeqJurkatShortpolyaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2363,6 +2563,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
+dccAccession wgEncodeEH000315
+expId 315
 fileName wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2379,7 +2581,7 @@ tableName wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1
 objType table
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2387,7 +2589,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1.gtf.gz
+dccAccession wgEncodeEH000315
+expId 315
+fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL316
@@ -2399,11 +2603,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
 objType table
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2411,7 +2615,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2.gtf.gz
+dccAccession wgEncodeEH000315
+expId 315
+fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2423,7 +2629,7 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
 
@@ -2435,6 +2641,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001251
+expId 1251
 fileName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2459,6 +2667,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001251
+expId 1251
 fileName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -2483,6 +2693,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001251
+expId 1251
 fileName wgEncodeHaibRnaSeqPanc1ShortpolyaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2506,6 +2718,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001251
+expId 1251
 fileName wgEncodeHaibRnaSeqPanc1ShortpolyaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2529,6 +2743,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001251
+expId 1251
 fileName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2553,6 +2769,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001251
+expId 1251
 fileName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2569,7 +2787,7 @@ tableName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1
 objType table
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2577,7 +2795,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1.gtf.gz
+dccAccession wgEncodeEH001251
+expId 1251
+fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2589,11 +2809,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
 objType table
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2601,7 +2821,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2.gtf.gz
+dccAccession wgEncodeEH001251
+expId 1251
+fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -2613,7 +2835,7 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
 
@@ -2625,6 +2847,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001252
+expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2649,6 +2873,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001252
+expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -2673,6 +2899,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001252
+expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2696,6 +2924,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001252
+expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2719,6 +2949,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001252
+expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2743,6 +2975,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001252
+expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2759,7 +2993,7 @@ tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1
 objType table
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -2767,7 +3001,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1.gtf.gz
+dccAccession wgEncodeEH001252
+expId 1252
+fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -2779,11 +3015,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
 objType table
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -2791,7 +3027,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2.gtf.gz
+dccAccession wgEncodeEH001252
+expId 1252
+fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -2803,7 +3041,7 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
 
@@ -2815,6 +3053,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001250
+expId 1250
 fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2839,6 +3079,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001250
+expId 1250
 fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -2863,6 +3105,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001250
+expId 1250
 fileName wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2886,6 +3130,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001250
+expId 1250
 fileName wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2909,6 +3155,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001250
+expId 1250
 fileName wgEncodeHaibRnaSeqSknshShortpolyaRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2933,6 +3181,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001250
+expId 1250
 fileName wgEncodeHaibRnaSeqSknshShortpolyaRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -2949,7 +3199,7 @@ tableName wgEncodeHaibRnaSeqSknshShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1
 objType table
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -2957,7 +3207,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1.gtf.gz
+dccAccession wgEncodeEH001250
+expId 1250
+fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -2969,11 +3221,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
 objType table
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -2981,7 +3233,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2.gtf.gz
+dccAccession wgEncodeEH001250
+expId 1250
+fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -2993,7 +3247,7 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
 
@@ -3005,6 +3259,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001242
+expId 1242
 fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -3029,6 +3285,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001242
+expId 1242
 fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -3053,6 +3311,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001242
+expId 1242
 fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3076,6 +3336,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001242
+expId 1242
 fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3099,6 +3361,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001242
+expId 1242
 fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3123,6 +3387,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001242
+expId 1242
 fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3147,6 +3413,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001242
+expId 1242
 fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -3170,6 +3438,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001242
+expId 1242
 fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -3193,6 +3463,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001243
+expId 1243
 fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -3217,6 +3489,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001243
+expId 1243
 fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -3241,6 +3515,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001243
+expId 1243
 fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3264,6 +3540,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001243
+expId 1243
 fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3287,6 +3565,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001243
+expId 1243
 fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3311,6 +3591,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001243
+expId 1243
 fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3335,6 +3617,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001243
+expId 1243
 fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -3358,6 +3642,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001243
+expId 1243
 fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -3381,6 +3667,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001244
+expId 1244
 fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -3405,6 +3693,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001244
+expId 1244
 fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -3429,6 +3719,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001244
+expId 1244
 fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3452,6 +3744,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001244
+expId 1244
 fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3475,6 +3769,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001244
+expId 1244
 fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3499,6 +3795,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001244
+expId 1244
 fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3523,6 +3821,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001244
+expId 1244
 fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -3546,6 +3846,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001244
+expId 1244
 fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -3569,6 +3871,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001245
+expId 1245
 fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -3593,6 +3897,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001245
+expId 1245
 fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -3617,6 +3923,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001245
+expId 1245
 fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3640,6 +3948,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001245
+expId 1245
 fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3663,6 +3973,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001245
+expId 1245
 fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3687,6 +3999,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001245
+expId 1245
 fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3711,6 +4025,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001245
+expId 1245
 fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -3734,6 +4050,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001245
+expId 1245
 fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -3757,6 +4075,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -3781,6 +4101,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -3805,6 +4127,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87ShortpolyaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3828,6 +4152,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87ShortpolyaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -3851,6 +4177,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87ShortpolyaRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3875,6 +4203,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87ShortpolyaRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -3891,7 +4221,7 @@ tableName wgEncodeHaibRnaSeqU87ShortpolyaRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1
 objType table
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -3899,7 +4229,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1.gtf.gz
+dccAccession wgEncodeEH001253
+expId 1253
+fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -3911,11 +4243,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1
+tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
 objType table
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -3923,7 +4255,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2.gtf.gz
+dccAccession wgEncodeEH001253
+expId 1253
+fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -3935,8 +4269,8 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2
+tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
 
-# MAGIC: 898353393
+# MAGIC: -732883830
