@@ -12,7 +12,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000212
 expId 212
 fileName wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort.tagAlign.gz
 geoSampleAccession GSM605625
@@ -33,7 +32,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000203
 expId 203
 fileName wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort.tagAlign.gz
 geoSampleAccession GSM605627
@@ -54,7 +52,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000204
 expId 204
 fileName wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort.tagAlign.gz
 geoSampleAccession GSM605633
@@ -75,7 +72,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000213
 expId 213
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562CellShort.tagAlign.gz
 geoSampleAccession GSM605630
@@ -96,7 +92,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000205
 expId 205
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort.tagAlign.gz
 geoSampleAccession GSM605632
@@ -117,7 +112,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000206
 expId 206
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort.tagAlign.gz
 geoSampleAccession GSM605629
@@ -138,7 +132,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000207
 expId 207
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort.tagAlign.gz
 geoSampleAccession GSM605628
@@ -159,7 +152,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000208
 expId 208
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort.tagAlign.gz
 geoSampleAccession GSM605634
@@ -180,7 +172,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000209
 expId 209
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort.tagAlign.gz
 geoSampleAccession GSM605635
@@ -201,7 +192,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000210
 expId 210
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort.tagAlign.gz
 geoSampleAccession GSM605631
@@ -222,7 +212,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000211
 expId 211
 fileName wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort.tagAlign.gz
 geoSampleAccession GSM605626
@@ -243,7 +232,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000212
 expId 212
 grant Gingeras
 lab CSHL
@@ -263,7 +251,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000203
 expId 203
 grant Gingeras
 lab CSHL
@@ -283,7 +270,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000204
 expId 204
 grant Gingeras
 lab CSHL
@@ -303,7 +289,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000213
 expId 213
 grant Gingeras
 lab CSHL
@@ -323,7 +308,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000205
 expId 205
 grant Gingeras
 lab CSHL
@@ -343,7 +327,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000206
 expId 206
 grant Gingeras
 lab CSHL
@@ -363,7 +346,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000207
 expId 207
 grant Gingeras
 lab CSHL
@@ -383,7 +365,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000208
 expId 208
 grant Gingeras
 lab CSHL
@@ -403,7 +384,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000209
 expId 209
 grant Gingeras
 lab CSHL
@@ -423,7 +403,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000210
 expId 210
 grant Gingeras
 lab CSHL
@@ -443,7 +422,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000211
 expId 211
 grant Gingeras
 lab CSHL
@@ -463,7 +441,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000212
 expId 212
 grant Gingeras
 lab CSHL
@@ -483,7 +460,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000203
 expId 203
 grant Gingeras
 lab CSHL
@@ -503,7 +479,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000204
 expId 204
 grant Gingeras
 lab CSHL
@@ -523,7 +498,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000213
 expId 213
 grant Gingeras
 lab CSHL
@@ -543,7 +517,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000205
 expId 205
 grant Gingeras
 lab CSHL
@@ -563,7 +536,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000206
 expId 206
 grant Gingeras
 lab CSHL
@@ -583,7 +555,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000207
 expId 207
 grant Gingeras
 lab CSHL
@@ -603,7 +574,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000208
 expId 208
 grant Gingeras
 lab CSHL
@@ -623,7 +593,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000209
 expId 209
 grant Gingeras
 lab CSHL
@@ -643,7 +612,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000210
 expId 210
 grant Gingeras
 lab CSHL
@@ -663,7 +631,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000211
 expId 211
 grant Gingeras
 lab CSHL
@@ -683,7 +650,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000212
 expId 212
 fileName wgEncodeCshlShortRnaSeqRawDataGm12878CellShort.fastq.gz
 geoSampleAccession GSM605625
@@ -703,7 +669,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000203
 expId 203
 fileName wgEncodeCshlShortRnaSeqRawDataGm12878CytosolShort.fastq.gz
 geoSampleAccession GSM605627
@@ -723,7 +688,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000204
 expId 204
 fileName wgEncodeCshlShortRnaSeqRawDataGm12878NucleusShort.fastq.gz
 geoSampleAccession GSM605633
@@ -743,7 +707,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000213
 expId 213
 fileName wgEncodeCshlShortRnaSeqRawDataK562CellShort.fastq.gz
 geoSampleAccession GSM605630
@@ -763,7 +726,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000205
 expId 205
 fileName wgEncodeCshlShortRnaSeqRawDataK562ChromatinShort.fastq.gz
 geoSampleAccession GSM605632
@@ -783,7 +745,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000206
 expId 206
 fileName wgEncodeCshlShortRnaSeqRawDataK562CytosolShort.fastq.gz
 geoSampleAccession GSM605629
@@ -803,7 +764,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000207
 expId 207
 fileName wgEncodeCshlShortRnaSeqRawDataK562NucleolusShort.fastq.gz
 geoSampleAccession GSM605628
@@ -823,7 +783,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000208
 expId 208
 fileName wgEncodeCshlShortRnaSeqRawDataK562NucleoplasmShort.fastq.gz
 geoSampleAccession GSM605634
@@ -843,7 +802,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000209
 expId 209
 fileName wgEncodeCshlShortRnaSeqRawDataK562NucleusShort.fastq.gz
 geoSampleAccession GSM605635
@@ -863,7 +821,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000210
 expId 210
 fileName wgEncodeCshlShortRnaSeqRawDataK562PolysomeShort.fastq.gz
 geoSampleAccession GSM605631
@@ -883,7 +840,6 @@ dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000211
 expId 211
 fileName wgEncodeCshlShortRnaSeqRawDataProstateCellShort.fastq.gz
 geoSampleAccession GSM605626
@@ -903,7 +859,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000212
 expId 212
 fileName wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort.broadPeak.gz
 geoSampleAccession GSM605625
@@ -924,7 +879,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000203
 expId 203
 fileName wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort.broadPeak.gz
 geoSampleAccession GSM605627
@@ -945,7 +899,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000204
 expId 204
 fileName wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort.broadPeak.gz
 geoSampleAccession GSM605633
@@ -966,7 +919,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000213
 expId 213
 fileName wgEncodeCshlShortRnaSeqTransfragsK562CellShort.broadPeak.gz
 geoSampleAccession GSM605630
@@ -987,7 +939,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000205
 expId 205
 fileName wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort.broadPeak.gz
 geoSampleAccession GSM605632
@@ -1008,7 +959,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000206
 expId 206
 fileName wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort.broadPeak.gz
 geoSampleAccession GSM605629
@@ -1029,7 +979,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000207
 expId 207
 fileName wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort.broadPeak.gz
 geoSampleAccession GSM605628
@@ -1050,7 +999,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000208
 expId 208
 fileName wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort.broadPeak.gz
 geoSampleAccession GSM605634
@@ -1071,7 +1019,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000209
 expId 209
 fileName wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort.broadPeak.gz
 geoSampleAccession GSM605635
@@ -1092,7 +1039,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000210
 expId 210
 fileName wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort.broadPeak.gz
 geoSampleAccession GSM605631
@@ -1113,7 +1059,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000211
 expId 211
 fileName wgEncodeCshlShortRnaSeqTransfragsProstateCellShort.broadPeak.gz
 geoSampleAccession GSM605626
@@ -1126,4 +1071,4 @@ subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
 view Transfrags
 
-# MAGIC: 753202017
+# MAGIC: -1844150596

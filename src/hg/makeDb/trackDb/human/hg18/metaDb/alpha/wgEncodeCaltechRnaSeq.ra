@@ -12,7 +12,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000121
 expId 121
 fileName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591674
@@ -38,7 +37,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75d.bed12.gz
 geoSample GSM591664
@@ -64,7 +62,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqAlignsRep1H1hescCellPapBb2R1x75d.bed12.gz
 geoSample GSM572173
@@ -90,7 +87,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqAlignsRep1Helas3CellPapBb2R1x75d.bed12.gz
 geoSample GSM591670
@@ -116,7 +112,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqAlignsRep1Hepg2CellPapBb2R1x75d.bed12.gz
 geoSample GSM591665
@@ -142,7 +137,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqAlignsRep1HuvecCellPapBb2R1x75d.bed12.gz
 geoSample GSM591655
@@ -168,7 +162,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000123
 expId 123
 fileName wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591675
@@ -194,7 +187,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75d.bed12.gz
 geoSample GSM591679
@@ -220,7 +212,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqAlignsRep1NhekCellPapBb2R1x75d.bed12.gz
 geoSample GSM591681
@@ -246,7 +237,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000121
 expId 121
 fileName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591657
@@ -272,7 +262,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75d.bed12.gz
 geoSample GSM591669
@@ -298,7 +287,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqAlignsRep2H1hescCellPapBb2R1x75d.bed12.gz
 geoSample GSM591680
@@ -324,7 +312,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqAlignsRep2Helas3CellPapBb2R1x75d.bed12.gz
 geoSample GSM591671
@@ -350,7 +337,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqAlignsRep2Hepg2CellPapBb2R1x75d.bed12.gz
 geoSample GSM591677
@@ -376,7 +362,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqAlignsRep2HuvecCellPapBb2R1x75d.bed12.gz
 geoSample GSM591683
@@ -402,7 +387,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000123
 expId 123
 fileName wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591667
@@ -428,7 +412,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75d.bed12.gz
 geoSample GSM591660
@@ -454,7 +437,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75.fastq.gz
 geoSample GSM591658
@@ -480,7 +462,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75Il400.fastq.gz
 geoSample GSM572172
@@ -506,7 +487,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1Helas3CellPapNaR2x75.fastq.gz
 geoSample GSM591682
@@ -532,7 +512,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1Hepg2CellPapNaR2x75.fastq.gz
 geoSample GSM591672
@@ -558,7 +537,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1HuvecCellPapNaR2x75.fastq.gz
 geoSample GSM591663
@@ -584,7 +562,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1NhekCellPapNaR2x75.fastq.gz
 geoSample GSM591656
@@ -610,7 +587,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Gm12878CellPapNaR2x75Il400.fastq.gz
 geoSample GSM591684
@@ -636,7 +612,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2H1hescCellPapNaR2x75.fastq.gz
 geoSample GSM591652
@@ -662,7 +637,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Helas3CellPapNaR2x75.fastq.gz
 geoSample GSM591659
@@ -688,7 +662,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Hepg2CellPapNaR2x75.fastq.gz
 geoSample GSM591653
@@ -714,7 +687,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2HuvecCellPapNaR2x75.fastq.gz
 geoSample GSM591678
@@ -740,7 +712,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep3H1hescCellPapNaR2x75.fastq.gz
 geoSample GSM591676
@@ -766,7 +737,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep4H1hescCellPapNaR2x75.fastq.gz
 geoSample GSM591685
@@ -792,7 +762,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep5H1hescCellPapNaR2x75.fastq.gz
 grant Myers
@@ -816,7 +785,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75.fastq.gz
 geoSample GSM591658
@@ -842,7 +810,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75Il400.fastq.gz
 geoSample GSM572172
@@ -868,7 +835,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1Helas3CellPapNaR2x75.fastq.gz
 geoSample GSM591682
@@ -894,7 +860,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1Hepg2CellPapNaR2x75.fastq.gz
 geoSample GSM591672
@@ -920,7 +885,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1HuvecCellPapNaR2x75.fastq.gz
 geoSample GSM591663
@@ -946,7 +910,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1NhekCellPapNaR2x75.fastq.gz
 geoSample GSM591656
@@ -972,7 +935,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Gm12878CellPapNaR2x75Il400.fastq.gz
 geoSample GSM591684
@@ -998,7 +960,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2H1hescCellPapNaR2x75.fastq.gz
 geoSample GSM591652
@@ -1024,7 +985,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Helas3CellPapNaR2x75.fastq.gz
 geoSample GSM591659
@@ -1050,7 +1010,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Hepg2CellPapNaR2x75.fastq.gz
 geoSample GSM591653
@@ -1076,7 +1035,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2HuvecCellPapNaR2x75.fastq.gz
 geoSample GSM591678
@@ -1102,7 +1060,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep3H1hescCellPapNaR2x75.fastq.gz
 geoSample GSM591676
@@ -1128,7 +1085,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep4H1hescCellPapNaR2x75.fastq.gz
 geoSample GSM591685
@@ -1154,7 +1110,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep5H1hescCellPapNaR2x75.fastq.gz
 grant Myers
@@ -1178,7 +1133,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqFastqRep1Gm12878CellPapNaR1x75d.fastq.gz
 geoSample GSM591664
@@ -1203,7 +1157,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqFastqRep1H1hescCellPapNaR1x75d.fastq.gz
 geoSample GSM572173
@@ -1228,7 +1181,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqFastqRep1Helas3CellPapNaR1x75d.fastq.gz
 geoSample GSM591670
@@ -1253,7 +1205,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x32.fastq.gz
 geoSample GSM591654
@@ -1278,7 +1229,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x75d.fastq.gz
 geoSample GSM591665
@@ -1303,7 +1253,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqFastqRep1HuvecCellPapNaR1x75d.fastq.gz
 geoSample GSM591655
@@ -1328,7 +1277,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqFastqRep1K562CellPapNaR1x75d.fastq.gz
 geoSample GSM591679
@@ -1353,7 +1301,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqFastqRep1NhekCellPapNaR1x75d.fastq.gz
 geoSample GSM591681
@@ -1378,7 +1325,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqFastqRep2Gm12878CellPapNaR1x75d.fastq.gz
 geoSample GSM591669
@@ -1403,7 +1349,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqFastqRep2H1hescCellPapNaR1x75d.fastq.gz
 geoSample GSM591680
@@ -1428,7 +1373,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqFastqRep2Helas3CellPapNaR1x75d.fastq.gz
 geoSample GSM591671
@@ -1453,7 +1397,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x32.fastq.gz
 geoSample GSM591662
@@ -1478,7 +1421,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x75d.fastq.gz
 geoSample GSM591677
@@ -1503,7 +1445,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqFastqRep2HuvecCellPapNaR1x75d.fastq.gz
 geoSample GSM591683
@@ -1528,7 +1469,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqFastqRep2K562CellPapNaR1x75d.fastq.gz
 geoSample GSM591660
@@ -1553,7 +1493,6 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-14
 dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
 grant Myers
@@ -1575,7 +1514,6 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-14
 dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
 grant Myers
@@ -1597,7 +1535,6 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-14
 dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
 grant Myers
@@ -1619,7 +1556,6 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-14
 dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
 grant Myers
@@ -1641,7 +1577,6 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-14
 dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
 grant Myers
@@ -1663,7 +1598,6 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-14
 dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
 grant Myers
@@ -1685,7 +1619,6 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-14
 dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
 grant Myers
@@ -1707,7 +1640,6 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-14
 dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
 grant Myers
@@ -1729,7 +1661,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Gm12878CellPapBb2R1x75d.wig.gz
 geoSample GSM591664
@@ -1755,7 +1686,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1H1hescCellPapBb2R1x75d.wig.gz
 geoSample GSM572173
@@ -1781,7 +1711,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Helas3CellPapBb2R1x75d.wig.gz
 geoSample GSM591670
@@ -1807,7 +1736,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Hepg2CellPapBb2R1x75d.wig.gz
 geoSample GSM591665
@@ -1833,7 +1761,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1HuvecCellPapBb2R1x75d.wig.gz
 geoSample GSM591655
@@ -1859,7 +1786,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1K562CellPapBb2R1x75d.wig.gz
 geoSample GSM591679
@@ -1885,7 +1811,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1NhekCellPapBb2R1x75d.wig.gz
 geoSample GSM591681
@@ -1911,7 +1836,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Gm12878CellPapBb2R1x75d.wig.gz
 geoSample GSM591669
@@ -1937,7 +1861,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2H1hescCellPapBb2R1x75d.wig.gz
 geoSample GSM591680
@@ -1963,7 +1886,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Helas3CellPapBb2R1x75d.wig.gz
 geoSample GSM591671
@@ -1989,7 +1911,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Hepg2CellPapBb2R1x75d.wig.gz
 geoSample GSM591677
@@ -2015,7 +1936,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2HuvecCellPapBb2R1x75d.wig.gz
 geoSample GSM591683
@@ -2041,7 +1961,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2K562CellPapBb2R1x75d.wig.gz
 geoSample GSM591660
@@ -2067,7 +1986,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75.bed12.gz
 geoSample GSM591661
@@ -2094,7 +2012,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75.bed12.gz
 geoSample GSM591658
@@ -2121,7 +2038,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75Il400.bed12.gz
 geoSample GSM572172
@@ -2148,7 +2064,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqPairedRep1Helas3CellPapErng32aR2x75.bed12.gz
 geoSample GSM591682
@@ -2175,7 +2090,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32.bed12.gz
 geoSample GSM591654
@@ -2201,7 +2115,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75.bed12.gz
 geoSample GSM591672
@@ -2228,7 +2141,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqPairedRep1HuvecCellPapErng32aR2x75.bed12.gz
 geoSample GSM591663
@@ -2255,7 +2167,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75.bed12.gz
 geoSample GSM591666
@@ -2282,7 +2193,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqPairedRep1NhekCellPapErng32aR2x75.bed12.gz
 geoSample GSM591656
@@ -2309,7 +2219,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75.bed12.gz
 geoSample GSM591673
@@ -2336,7 +2245,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqPairedRep2Gm12878CellPapErng32aR2x75Il400.bed12.gz
 geoSample GSM591684
@@ -2363,7 +2271,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqPairedRep2H1hescCellPapErng32aR2x75.bed12.gz
 geoSample GSM591652
@@ -2390,7 +2297,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqPairedRep2Helas3CellPapErng32aR2x75.bed12.gz
 geoSample GSM591659
@@ -2417,7 +2323,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR1x32.bed12.gz
 geoSample GSM591662
@@ -2443,7 +2348,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75.bed12.gz
 geoSample GSM591653
@@ -2470,7 +2374,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqPairedRep2HuvecCellPapErng32aR2x75.bed12.gz
 geoSample GSM591678
@@ -2497,7 +2400,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75.bed12.gz
 geoSample GSM591668
@@ -2524,7 +2426,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqPairedRep3H1hescCellPapErng32aR2x75.bed12.gz
 geoSample GSM591676
@@ -2551,7 +2452,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75.bed12.gz
 geoSample GSM591685
@@ -2578,7 +2478,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqPairedRep5H1hescCellPapErng32aR2x75.bed12.gz
 grant Myers
@@ -2603,7 +2502,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Gm12878CellPapBb2R1x75d.wig.gz
 geoSample GSM591664
@@ -2629,7 +2527,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1H1hescCellPapBb2R1x75d.wig.gz
 geoSample GSM572173
@@ -2655,7 +2552,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Helas3CellPapBb2R1x75d.wig.gz
 geoSample GSM591670
@@ -2681,7 +2577,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Hepg2CellPapBb2R1x75d.wig.gz
 geoSample GSM591665
@@ -2707,7 +2602,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1HuvecCellPapBb2R1x75d.wig.gz
 geoSample GSM591655
@@ -2733,7 +2627,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1K562CellPapBb2R1x75d.wig.gz
 geoSample GSM591679
@@ -2759,7 +2652,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1NhekCellPapBb2R1x75d.wig.gz
 geoSample GSM591681
@@ -2785,7 +2677,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Gm12878CellPapBb2R1x75d.wig.gz
 geoSample GSM591669
@@ -2811,7 +2702,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2H1hescCellPapBb2R1x75d.wig.gz
 geoSample GSM591680
@@ -2837,7 +2727,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Helas3CellPapBb2R1x75d.wig.gz
 geoSample GSM591671
@@ -2863,7 +2752,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Hepg2CellPapBb2R1x75d.wig.gz
 geoSample GSM591677
@@ -2889,7 +2777,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2HuvecCellPapBb2R1x75d.wig.gz
 geoSample GSM591683
@@ -2915,7 +2802,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2K562CellPapBb2R1x75d.wig.gz
 geoSample GSM591660
@@ -2941,7 +2827,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData2Rep1Gm12878CellLongpolyaBow0982x75.bowtie.gz
 geoSample GSM591661
@@ -2967,7 +2852,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData2Rep1K562CellLongpolyaBow0982x75.bowtie.gz
 geoSample GSM591666
@@ -2993,7 +2877,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData2Rep2Gm12878CellLongpolyaBow0982x75.bowtie.gz
 geoSample GSM591673
@@ -3019,7 +2902,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData2Rep2K562CellLongpolyaBow0982x75.bowtie.gz
 geoSample GSM591668
@@ -3045,7 +2927,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData3Rep1Gm12878CellLongpolyaBow0982x75.fasta.gz
 geoSample GSM591661
@@ -3071,7 +2952,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData3Rep1K562CellLongpolyaBow0982x75.fasta.gz
 geoSample GSM591666
@@ -3097,7 +2977,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData3Rep2Gm12878CellLongpolyaBow0982x75.fasta.gz
 geoSample GSM591673
@@ -3123,7 +3002,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData3Rep2K562CellLongpolyaBow0982x75.fasta.gz
 geoSample GSM591668
@@ -3149,7 +3027,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData4Rep1Gm12878CellLongpolyaBb12x75.psl.gz
 geoSample GSM591661
@@ -3175,7 +3052,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData4Rep1K562CellLongpolyaBb12x75.psl.gz
 geoSample GSM591666
@@ -3201,7 +3077,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData4Rep2Gm12878CellLongpolyaBb12x75.psl.gz
 geoSample GSM591673
@@ -3227,7 +3102,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData4Rep2K562CellLongpolyaBb12x75.psl.gz
 geoSample GSM591668
@@ -3253,7 +3127,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591661
@@ -3279,7 +3152,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000121
 expId 121
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng3b1x32.rpkm.gz
 geoSample GSM591674
@@ -3304,7 +3176,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591664
@@ -3329,7 +3200,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM572173
@@ -3354,7 +3224,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591658
@@ -3380,7 +3249,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR2x75Il400.rpkm.gz
 geoSample GSM572172
@@ -3406,7 +3274,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591670
@@ -3431,7 +3298,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR2x75.rpkm.gz
 geoSample GSM591682
@@ -3457,7 +3323,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x32.rpkm.gz
 geoSample GSM591654
@@ -3482,7 +3347,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591665
@@ -3507,7 +3371,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR2x75.rpkm.gz
 geoSample GSM591672
@@ -3533,7 +3396,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591655
@@ -3558,7 +3420,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591663
@@ -3584,7 +3445,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591666
@@ -3610,7 +3470,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000123
 expId 123
 fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng3b1x32.rpkm.gz
 geoSample GSM591675
@@ -3635,7 +3494,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591679
@@ -3660,7 +3518,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591681
@@ -3685,7 +3542,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591656
@@ -3711,7 +3567,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591673
@@ -3737,7 +3592,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000121
 expId 121
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng3b1x32.rpkm.gz
 geoSample GSM591657
@@ -3762,7 +3616,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591669
@@ -3787,7 +3640,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR2x75Il400.rpkm.gz
 geoSample GSM591684
@@ -3813,7 +3665,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591680
@@ -3838,7 +3689,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591652
@@ -3864,7 +3714,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591671
@@ -3889,7 +3738,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR2x75.rpkm.gz
 geoSample GSM591659
@@ -3915,7 +3763,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x32.rpkm.gz
 geoSample GSM591662
@@ -3940,7 +3787,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591677
@@ -3965,7 +3811,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR2x75.rpkm.gz
 geoSample GSM591653
@@ -3991,7 +3836,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591683
@@ -4016,7 +3860,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591678
@@ -4042,7 +3885,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591668
@@ -4068,7 +3910,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000123
 expId 123
 fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng3b1x32.rpkm.gz
 geoSample GSM591667
@@ -4093,7 +3934,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591660
@@ -4118,7 +3958,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData5Rep3H1hescCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591676
@@ -4144,7 +3983,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData5Rep4H1hescCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591685
@@ -4170,7 +4008,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData5Rep5H1hescCellPapErng32aR2x75.rpkm.gz
 grant Myers
@@ -4194,7 +4031,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591661
@@ -4220,7 +4056,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591664
@@ -4245,7 +4080,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM572173
@@ -4270,7 +4104,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591658
@@ -4296,7 +4129,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR2x75Il400.rpkm.gz
 geoSample GSM572172
@@ -4322,7 +4154,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591670
@@ -4347,7 +4178,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR2x75.rpkm.gz
 geoSample GSM591682
@@ -4373,7 +4203,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x32.rpkm.gz
 geoSample GSM591654
@@ -4398,7 +4227,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591665
@@ -4423,7 +4251,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR2x75.rpkm.gz
 geoSample GSM591672
@@ -4449,7 +4276,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591655
@@ -4474,7 +4300,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591663
@@ -4500,7 +4325,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData6Rep1K562CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591666
@@ -4526,7 +4350,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqRawData6Rep1K562CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591679
@@ -4551,7 +4374,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591681
@@ -4576,7 +4398,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591656
@@ -4602,7 +4423,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591673
@@ -4628,7 +4448,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591669
@@ -4653,7 +4472,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR2x75Il400.rpkm.gz
 geoSample GSM591684
@@ -4679,7 +4497,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591680
@@ -4704,7 +4521,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591652
@@ -4730,7 +4546,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591671
@@ -4755,7 +4570,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR2x75.rpkm.gz
 geoSample GSM591659
@@ -4781,7 +4595,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x32.rpkm.gz
 geoSample GSM591662
@@ -4806,7 +4619,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591677
@@ -4831,7 +4643,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR2x75.rpkm.gz
 geoSample GSM591653
@@ -4857,7 +4668,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591683
@@ -4882,7 +4692,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591678
@@ -4908,7 +4717,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData6Rep2K562CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591668
@@ -4934,7 +4742,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqRawData6Rep2K562CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591660
@@ -4959,7 +4766,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData6Rep3H1hescCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591676
@@ -4985,7 +4791,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData6Rep4H1hescCellPapErng32aR2x75.rpkm.gz
 geoSample GSM591685
@@ -5011,7 +4816,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawData6Rep5H1hescCellPapErng32aR2x75.rpkm.gz
 grant Myers
@@ -5035,7 +4839,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData7Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591661
@@ -5061,7 +4864,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData7Rep1K562CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591666
@@ -5087,7 +4889,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawData7Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591673
@@ -5113,7 +4914,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawData7Rep2K562CellLongpolyaErng32x75.rpkm.gz
 geoSample GSM591668
@@ -5139,7 +4939,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawDataRep1Gm12878CellLongpolyaNa2x75.fasta.gz
 geoSample GSM591661
@@ -5164,7 +4963,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawDataRep1K562CellLongpolyaNa2x75.fasta.gz
 geoSample GSM591666
@@ -5189,7 +4987,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawDataRep2Gm12878CellLongpolyaNa2x75.fasta.gz
 geoSample GSM591673
@@ -5214,7 +5011,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawDataRep2K562CellLongpolyaNa2x75.fasta.gz
 geoSample GSM591668
@@ -5239,7 +5035,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75.wig.gz
 geoSample GSM591661
@@ -5266,7 +5061,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000121
 expId 121
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32.wig.gz
 geoSample GSM591674
@@ -5292,7 +5086,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawSignalRep1H1hescCellPapBb2R2x75.wig.gz
 geoSample GSM591658
@@ -5319,7 +5112,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqRawSignalRep1H1hescCellPapBb2R2x75Il400.wig.gz
 geoSample GSM572172
@@ -5346,7 +5138,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Helas3CellPapBb2R2x75.wig.gz
 geoSample GSM591682
@@ -5373,7 +5164,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R1x32.wig.gz
 geoSample GSM591654
@@ -5399,7 +5189,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R2x75.wig.gz
 geoSample GSM591672
@@ -5426,7 +5215,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqRawSignalRep1HuvecCellPapBb2R2x75.wig.gz
 geoSample GSM591663
@@ -5453,7 +5241,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75.wig.gz
 geoSample GSM591666
@@ -5480,7 +5267,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000123
 expId 123
 fileName wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32.wig.gz
 geoSample GSM591675
@@ -5506,7 +5292,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqRawSignalRep1NhekCellPapBb2R2x75.wig.gz
 geoSample GSM591656
@@ -5533,7 +5318,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75.wig.gz
 geoSample GSM591673
@@ -5560,7 +5344,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000121
 expId 121
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32.wig.gz
 geoSample GSM591657
@@ -5586,7 +5369,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellPapBb2R2x75Il400.wig.gz
 geoSample GSM591684
@@ -5613,7 +5395,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawSignalRep2H1hescCellPapBb2R2x75.wig.gz
 geoSample GSM591652
@@ -5640,7 +5421,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Helas3CellPapBb2R2x75.wig.gz
 geoSample GSM591659
@@ -5667,7 +5447,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R1x32.wig.gz
 geoSample GSM591662
@@ -5693,7 +5472,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R2x75.wig.gz
 geoSample GSM591653
@@ -5720,7 +5498,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqRawSignalRep2HuvecCellPapBb2R2x75.wig.gz
 geoSample GSM591678
@@ -5747,7 +5524,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75.wig.gz
 geoSample GSM591668
@@ -5774,7 +5550,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000123
 expId 123
 fileName wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32.wig.gz
 geoSample GSM591667
@@ -5800,7 +5575,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawSignalRep3H1hescCellPapBb2R2x75.wig.gz
 geoSample GSM591676
@@ -5827,7 +5601,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawSignalRep4H1hescCellPapBb2R2x75.wig.gz
 geoSample GSM591685
@@ -5854,7 +5627,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqRawSignalRep5H1hescCellPapBb2R2x75.wig.gz
 grant Myers
@@ -5879,7 +5651,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75.bed12.gz
 geoSample GSM591661
@@ -5906,7 +5677,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75.bed12.gz
 geoSample GSM591661
@@ -5933,7 +5703,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000121
 expId 121
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591674
@@ -5959,7 +5728,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75d.bed12.gz
 geoSample GSM591664
@@ -5985,7 +5753,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591664
@@ -6011,7 +5778,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R1x75d.bed12.gz
 geoSample GSM572173
@@ -6037,7 +5803,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R2x75.bed12.gz
 geoSample GSM591658
@@ -6064,7 +5829,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R2x75Il400.bed12.gz
 geoSample GSM572172
@@ -6091,7 +5855,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBlat34R1x75d.bed12.gz
 geoSample GSM572173
@@ -6117,7 +5880,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBb2R1x75d.bed12.gz
 geoSample GSM591670
@@ -6143,7 +5905,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBb2R2x75.bed12.gz
 geoSample GSM591682
@@ -6170,7 +5931,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591670
@@ -6196,7 +5956,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x32.bed12.gz
 geoSample GSM591654
@@ -6222,7 +5981,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x75d.bed12.gz
 geoSample GSM591665
@@ -6248,7 +6006,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R2x75.bed12.gz
 geoSample GSM591672
@@ -6275,7 +6032,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591665
@@ -6301,7 +6057,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBb2R1x75d.bed12.gz
 geoSample GSM591655
@@ -6327,7 +6082,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBb2R2x75.bed12.gz
 geoSample GSM591663
@@ -6354,7 +6108,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBlat34R1x75d.bed12.gz
 geoSample GSM591655
@@ -6380,7 +6133,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75.bed12.gz
 geoSample GSM591666
@@ -6407,7 +6159,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75.bed12.gz
 geoSample GSM591666
@@ -6434,7 +6185,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000123
 expId 123
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591675
@@ -6460,7 +6210,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75d.bed12.gz
 geoSample GSM591679
@@ -6486,7 +6235,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591679
@@ -6512,7 +6260,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBb2R1x75d.bed12.gz
 geoSample GSM591681
@@ -6538,7 +6285,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBb2R2x75.bed12.gz
 geoSample GSM591656
@@ -6565,7 +6311,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBlat34R1x75d.bed12.gz
 geoSample GSM591681
@@ -6591,7 +6336,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75.bed12.gz
 geoSample GSM591673
@@ -6618,7 +6362,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75.bed12.gz
 geoSample GSM591673
@@ -6645,7 +6388,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000121
 expId 121
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591657
@@ -6671,7 +6413,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75d.bed12.gz
 geoSample GSM591669
@@ -6697,7 +6438,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R2x75Il400.bed12.gz
 geoSample GSM591684
@@ -6724,7 +6464,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591669
@@ -6750,7 +6489,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBb2R1x75d.bed12.gz
 geoSample GSM591680
@@ -6776,7 +6514,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBb2R2x75.bed12.gz
 geoSample GSM591652
@@ -6803,7 +6540,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBlat34R1x75d.bed12.gz
 geoSample GSM591680
@@ -6829,7 +6565,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBb2R1x75d.bed12.gz
 geoSample GSM591671
@@ -6855,7 +6590,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBb2R2x75.bed12.gz
 geoSample GSM591659
@@ -6882,7 +6616,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591671
@@ -6908,7 +6641,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000139
 expId 139
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x32.bed12.gz
 geoSample GSM591662
@@ -6934,7 +6666,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x75d.bed12.gz
 geoSample GSM591677
@@ -6960,7 +6691,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R2x75.bed12.gz
 geoSample GSM591653
@@ -6987,7 +6717,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591677
@@ -7013,7 +6742,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBb2R1x75d.bed12.gz
 geoSample GSM591683
@@ -7039,7 +6767,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBb2R2x75.bed12.gz
 geoSample GSM591678
@@ -7066,7 +6793,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBlat34R1x75d.bed12.gz
 geoSample GSM591683
@@ -7092,7 +6818,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75.bed12.gz
 geoSample GSM591668
@@ -7119,7 +6844,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75.bed12.gz
 geoSample GSM591668
@@ -7146,7 +6870,6 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
-dccAccession wgEncodeEH000123
 expId 123
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591667
@@ -7172,7 +6895,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75d.bed12.gz
 geoSample GSM591660
@@ -7198,7 +6920,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591660
@@ -7224,7 +6945,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqSplicesRep3H1hescCellPapBb2R2x75.bed12.gz
 geoSample GSM591676
@@ -7251,7 +6971,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqSplicesRep4H1hescCellPapBb2R2x75.bed12.gz
 geoSample GSM591685
@@ -7278,7 +6997,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75.bed12.gz
 grant Myers
@@ -7295,4 +7013,4 @@ subId 1065
 tableName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
 view Splices
 
-# MAGIC: -1997968875
+# MAGIC: -790503988

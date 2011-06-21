@@ -11,7 +11,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-05
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag04449.tagAlign.gz
 grant Stam
@@ -31,7 +30,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag04450.tagAlign.gz
 grant Stam
@@ -51,7 +49,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag09309.tagAlign.gz
 grant Stam
@@ -71,7 +68,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag09319.tagAlign.gz
 grant Stam
@@ -91,7 +87,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag10803.tagAlign.gz
 grant Stam
@@ -111,7 +106,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Bjtert.tagAlign.gz
 grant Stam
@@ -131,7 +125,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-24
 dateUnrestricted 2010-01-24
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Caco2.tagAlign.gz
 grant Stam
@@ -151,7 +144,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000510
 expId 510
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Cmk.tagAlign.gz
 grant Stam
@@ -171,7 +163,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Gm06990.tagAlign.gz
 grant Stam
@@ -191,7 +182,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Gm12865.tagAlign.gz
 grant Stam
@@ -211,7 +201,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Gm12878.tagAlign.gz
 grant Stam
@@ -231,7 +220,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-18
-dccAccession wgEncodeEH000496
 expId 496
 fileName wgEncodeUwDnaseSeqAlignmentsRep1H1es.tagAlign.gz
 grant Stam
@@ -251,7 +239,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000511
 expId 511
 fileName wgEncodeUwDnaseSeqAlignmentsRep1H7es.tagAlign.gz
 grant Stam
@@ -271,7 +258,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hae.tagAlign.gz
 grant Stam
@@ -291,7 +277,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hcf.tagAlign.gz
 grant Stam
@@ -311,7 +296,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hcm.tagAlign.gz
 grant Stam
@@ -331,7 +315,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hcpe.tagAlign.gz
 grant Stam
@@ -351,7 +334,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hee.tagAlign.gz
 grant Stam
@@ -371,7 +353,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Helas3.tagAlign.gz
 grant Stam
@@ -391,7 +372,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hepg2.tagAlign.gz
 grant Stam
@@ -411,7 +391,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hgf.tagAlign.gz
 grant Stam
@@ -431,7 +410,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hl60V2.tagAlign.gz
 grant Stam
@@ -452,7 +430,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000503
 expId 503
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hmec.tagAlign.gz
 grant Stam
@@ -472,7 +449,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hnpce.tagAlign.gz
 grant Stam
@@ -492,7 +468,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hrcepic.tagAlign.gz
 grant Stam
@@ -512,7 +487,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hre.tagAlign.gz
 grant Stam
@@ -532,7 +506,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Hrpe.tagAlign.gz
 grant Stam
@@ -552,7 +525,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000488
 expId 488
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Huvec.tagAlign.gz
 grant Stam
@@ -573,7 +545,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Jurkat.tagAlign.gz
 grant Stam
@@ -593,7 +564,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqAlignmentsRep1K562.tagAlign.gz
 grant Stam
@@ -613,7 +583,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Mcf7.tagAlign.gz
 grant Stam
@@ -633,7 +602,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Nb4V2.tagAlign.gz
 grant Stam
@@ -654,7 +622,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Nhdfneo.tagAlign.gz
 grant Stam
@@ -674,7 +641,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000499
 expId 499
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Nhek.tagAlign.gz
 grant Stam
@@ -694,7 +660,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Nhlf.tagAlign.gz
 grant Stam
@@ -714,7 +679,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Panc1.tagAlign.gz
 grant Stam
@@ -734,7 +698,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Saec.tagAlign.gz
 grant Stam
@@ -755,7 +718,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-27
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqAlignmentsRep1SkmcV2.tagAlign.gz
 grant Stam
@@ -776,7 +738,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Sknshra.tagAlign.gz
 grant Stam
@@ -796,7 +757,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH000483
 expId 483
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Th1.tagAlign.gz
 grant Stam
@@ -816,7 +776,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000491
 expId 491
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Th2.tagAlign.gz
 grant Stam
@@ -836,7 +795,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag04449.tagAlign.gz
 grant Stam
@@ -856,7 +814,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag04450.tagAlign.gz
 grant Stam
@@ -876,7 +833,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag09309.tagAlign.gz
 grant Stam
@@ -896,7 +852,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag09319.tagAlign.gz
 grant Stam
@@ -916,7 +871,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag10803.tagAlign.gz
 grant Stam
@@ -936,7 +890,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Bjtert.tagAlign.gz
 grant Stam
@@ -956,7 +909,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-03-30
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Caco2.tagAlign.gz
 grant Stam
@@ -976,7 +928,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Gm06990.tagAlign.gz
 grant Stam
@@ -996,7 +947,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Gm12865.tagAlign.gz
 grant Stam
@@ -1016,7 +966,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Gm12878.tagAlign.gz
 grant Stam
@@ -1036,7 +985,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hae.tagAlign.gz
 grant Stam
@@ -1056,7 +1004,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hcf.tagAlign.gz
 grant Stam
@@ -1076,7 +1023,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hcm.tagAlign.gz
 grant Stam
@@ -1096,7 +1042,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hcpe.tagAlign.gz
 grant Stam
@@ -1116,7 +1061,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hee.tagAlign.gz
 grant Stam
@@ -1136,7 +1080,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Helas3.tagAlign.gz
 grant Stam
@@ -1156,7 +1099,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hepg2.tagAlign.gz
 grant Stam
@@ -1176,7 +1118,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hgf.tagAlign.gz
 grant Stam
@@ -1196,7 +1137,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hl60.tagAlign.gz
 grant Stam
@@ -1216,7 +1156,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hnpce.tagAlign.gz
 grant Stam
@@ -1236,7 +1175,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hrcepic.tagAlign.gz
 grant Stam
@@ -1256,7 +1194,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hre.tagAlign.gz
 grant Stam
@@ -1276,7 +1213,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Hrpe.tagAlign.gz
 grant Stam
@@ -1297,7 +1233,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Jurkat.tagAlign.gz
 grant Stam
@@ -1317,7 +1252,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqAlignmentsRep2K562.tagAlign.gz
 grant Stam
@@ -1337,7 +1271,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Mcf7.tagAlign.gz
 grant Stam
@@ -1357,7 +1290,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Nb4.tagAlign.gz
 grant Stam
@@ -1377,7 +1309,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Nhdfneo.tagAlign.gz
 grant Stam
@@ -1397,7 +1328,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Nhlf.tagAlign.gz
 grant Stam
@@ -1417,7 +1347,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Panc1.tagAlign.gz
 grant Stam
@@ -1437,7 +1366,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Saec.tagAlign.gz
 grant Stam
@@ -1457,7 +1385,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqAlignmentsRep2Skmc.tagAlign.gz
 grant Stam
@@ -1477,7 +1404,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqAlignmentsRep2SknshraV2.tagAlign.gz
 grant Stam
@@ -1498,7 +1424,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-05
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqHotspotsRep1Ag04449.broadPeak.gz
 grant Stam
@@ -1519,7 +1444,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqHotspotsRep1Ag04450.broadPeak.gz
 grant Stam
@@ -1540,7 +1464,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqHotspotsRep1Ag09309.broadPeak.gz
 grant Stam
@@ -1561,7 +1484,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqHotspotsRep1Ag09319.broadPeak.gz
 grant Stam
@@ -1582,7 +1504,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqHotspotsRep1Ag10803.broadPeak.gz
 grant Stam
@@ -1603,7 +1524,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqHotspotsRep1Bjtert.broadPeak.gz
 grant Stam
@@ -1624,7 +1544,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-24
 dateUnrestricted 2010-01-24
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqHotspotsRep1Caco2.broadPeak.gz
 grant Stam
@@ -1645,7 +1564,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000510
 expId 510
 fileName wgEncodeUwDnaseSeqHotspotsRep1Cmk.broadPeak.gz
 grant Stam
@@ -1666,7 +1584,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqHotspotsRep1Gm06990.broadPeak.gz
 grant Stam
@@ -1687,7 +1604,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqHotspotsRep1Gm12865.broadPeak.gz
 grant Stam
@@ -1708,7 +1624,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqHotspotsRep1Gm12878.broadPeak.gz
 grant Stam
@@ -1729,7 +1644,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-18
-dccAccession wgEncodeEH000496
 expId 496
 fileName wgEncodeUwDnaseSeqHotspotsRep1H1es.broadPeak.gz
 grant Stam
@@ -1750,7 +1664,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000511
 expId 511
 fileName wgEncodeUwDnaseSeqHotspotsRep1H7es.broadPeak.gz
 grant Stam
@@ -1771,7 +1684,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hae.broadPeak.gz
 grant Stam
@@ -1792,7 +1704,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hcf.broadPeak.gz
 grant Stam
@@ -1813,7 +1724,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hcm.broadPeak.gz
 grant Stam
@@ -1834,7 +1744,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hcpe.broadPeak.gz
 grant Stam
@@ -1855,7 +1764,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hee.broadPeak.gz
 grant Stam
@@ -1876,7 +1784,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqHotspotsRep1Helas3.broadPeak.gz
 grant Stam
@@ -1897,7 +1804,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hepg2.broadPeak.gz
 grant Stam
@@ -1918,7 +1824,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hgf.broadPeak.gz
 grant Stam
@@ -1940,7 +1845,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hl60V2.broadPeak.gz
 grant Stam
@@ -1962,7 +1866,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000503
 expId 503
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hmec.broadPeak.gz
 grant Stam
@@ -1983,7 +1886,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hnpce.broadPeak.gz
 grant Stam
@@ -2004,7 +1906,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hrcepic.broadPeak.gz
 grant Stam
@@ -2025,7 +1926,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hre.broadPeak.gz
 grant Stam
@@ -2046,7 +1946,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqHotspotsRep1Hrpe.broadPeak.gz
 grant Stam
@@ -2067,7 +1966,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000488
 expId 488
 fileName wgEncodeUwDnaseSeqHotspotsRep1Huvec.broadPeak.gz
 grant Stam
@@ -2089,7 +1987,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqHotspotsRep1Jurkat.broadPeak.gz
 grant Stam
@@ -2110,7 +2007,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqHotspotsRep1K562.broadPeak.gz
 grant Stam
@@ -2131,7 +2027,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqHotspotsRep1Mcf7.broadPeak.gz
 grant Stam
@@ -2153,7 +2048,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-08
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqHotspotsRep1Nb4V2.broadPeak.gz
 grant Stam
@@ -2175,7 +2069,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqHotspotsRep1Nhdfneo.broadPeak.gz
 grant Stam
@@ -2196,7 +2089,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000499
 expId 499
 fileName wgEncodeUwDnaseSeqHotspotsRep1Nhek.broadPeak.gz
 grant Stam
@@ -2217,7 +2109,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqHotspotsRep1Nhlf.broadPeak.gz
 grant Stam
@@ -2238,7 +2129,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqHotspotsRep1Panc1.broadPeak.gz
 grant Stam
@@ -2259,7 +2149,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqHotspotsRep1Saec.broadPeak.gz
 grant Stam
@@ -2281,7 +2170,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-27
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqHotspotsRep1SkmcV2.broadPeak.gz
 grant Stam
@@ -2303,7 +2191,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqHotspotsRep1Sknshra.broadPeak.gz
 grant Stam
@@ -2324,7 +2211,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH000483
 expId 483
 fileName wgEncodeUwDnaseSeqHotspotsRep1Th1.broadPeak.gz
 grant Stam
@@ -2345,7 +2231,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000491
 expId 491
 fileName wgEncodeUwDnaseSeqHotspotsRep1Th2.broadPeak.gz
 grant Stam
@@ -2366,7 +2251,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqHotspotsRep2Ag04449.broadPeak.gz
 grant Stam
@@ -2387,7 +2271,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqHotspotsRep2Ag04450.broadPeak.gz
 grant Stam
@@ -2408,7 +2291,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqHotspotsRep2Ag09309.broadPeak.gz
 grant Stam
@@ -2429,7 +2311,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqHotspotsRep2Ag09319.broadPeak.gz
 grant Stam
@@ -2450,7 +2331,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqHotspotsRep2Ag10803.broadPeak.gz
 grant Stam
@@ -2471,7 +2351,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqHotspotsRep2Bjtert.broadPeak.gz
 grant Stam
@@ -2492,7 +2371,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-03-30
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqHotspotsRep2Caco2.broadPeak.gz
 grant Stam
@@ -2513,7 +2391,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqHotspotsRep2Gm06990.broadPeak.gz
 grant Stam
@@ -2534,7 +2411,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqHotspotsRep2Gm12865.broadPeak.gz
 grant Stam
@@ -2555,7 +2431,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqHotspotsRep2Gm12878.broadPeak.gz
 grant Stam
@@ -2576,7 +2451,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hae.broadPeak.gz
 grant Stam
@@ -2597,7 +2471,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hcf.broadPeak.gz
 grant Stam
@@ -2618,7 +2491,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hcm.broadPeak.gz
 grant Stam
@@ -2639,7 +2511,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hcpe.broadPeak.gz
 grant Stam
@@ -2660,7 +2531,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hee.broadPeak.gz
 grant Stam
@@ -2681,7 +2551,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqHotspotsRep2Helas3.broadPeak.gz
 grant Stam
@@ -2702,7 +2571,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hepg2.broadPeak.gz
 grant Stam
@@ -2723,7 +2591,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hgf.broadPeak.gz
 grant Stam
@@ -2744,7 +2611,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hl60.broadPeak.gz
 grant Stam
@@ -2765,7 +2631,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hnpce.broadPeak.gz
 grant Stam
@@ -2786,7 +2651,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hrcepic.broadPeak.gz
 grant Stam
@@ -2807,7 +2671,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hre.broadPeak.gz
 grant Stam
@@ -2828,7 +2691,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqHotspotsRep2Hrpe.broadPeak.gz
 grant Stam
@@ -2850,7 +2712,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqHotspotsRep2Jurkat.broadPeak.gz
 grant Stam
@@ -2871,7 +2732,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqHotspotsRep2K562.broadPeak.gz
 grant Stam
@@ -2892,7 +2752,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqHotspotsRep2Mcf7.broadPeak.gz
 grant Stam
@@ -2913,7 +2772,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqHotspotsRep2Nb4.broadPeak.gz
 grant Stam
@@ -2934,7 +2792,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqHotspotsRep2Nhdfneo.broadPeak.gz
 grant Stam
@@ -2955,7 +2812,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqHotspotsRep2Nhlf.broadPeak.gz
 grant Stam
@@ -2976,7 +2832,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqHotspotsRep2Panc1.broadPeak.gz
 grant Stam
@@ -2997,7 +2852,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqHotspotsRep2Saec.broadPeak.gz
 grant Stam
@@ -3018,7 +2872,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqHotspotsRep2Skmc.broadPeak.gz
 grant Stam
@@ -3040,7 +2893,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-22
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqHotspotsRep2SknshraV2.broadPeak.gz
 grant Stam
@@ -3062,7 +2914,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-05
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqPeaksRep1Ag04449.narrowPeak.gz
 grant Stam
@@ -3083,7 +2934,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqPeaksRep1Ag04450.narrowPeak.gz
 grant Stam
@@ -3104,7 +2954,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqPeaksRep1Ag09309.narrowPeak.gz
 grant Stam
@@ -3125,7 +2974,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqPeaksRep1Ag09319.narrowPeak.gz
 grant Stam
@@ -3146,7 +2994,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqPeaksRep1Ag10803.narrowPeak.gz
 grant Stam
@@ -3167,7 +3014,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqPeaksRep1Bjtert.narrowPeak.gz
 grant Stam
@@ -3188,7 +3034,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-24
 dateUnrestricted 2010-01-24
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqPeaksRep1Caco2.narrowPeak.gz
 grant Stam
@@ -3209,7 +3054,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000510
 expId 510
 fileName wgEncodeUwDnaseSeqPeaksRep1Cmk.narrowPeak.gz
 grant Stam
@@ -3230,7 +3074,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqPeaksRep1Gm06990.narrowPeak.gz
 grant Stam
@@ -3251,7 +3094,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqPeaksRep1Gm12865.narrowPeak.gz
 grant Stam
@@ -3272,7 +3114,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqPeaksRep1Gm12878.narrowPeak.gz
 grant Stam
@@ -3293,7 +3134,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-18
-dccAccession wgEncodeEH000496
 expId 496
 fileName wgEncodeUwDnaseSeqPeaksRep1H1es.narrowPeak.gz
 grant Stam
@@ -3314,7 +3154,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000511
 expId 511
 fileName wgEncodeUwDnaseSeqPeaksRep1H7es.narrowPeak.gz
 grant Stam
@@ -3335,7 +3174,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqPeaksRep1Hae.narrowPeak.gz
 grant Stam
@@ -3356,7 +3194,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqPeaksRep1Hcf.narrowPeak.gz
 grant Stam
@@ -3377,7 +3214,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqPeaksRep1Hcm.narrowPeak.gz
 grant Stam
@@ -3398,7 +3234,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqPeaksRep1Hcpe.narrowPeak.gz
 grant Stam
@@ -3419,7 +3254,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqPeaksRep1Hee.narrowPeak.gz
 grant Stam
@@ -3440,7 +3274,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqPeaksRep1Helas3.narrowPeak.gz
 grant Stam
@@ -3461,7 +3294,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqPeaksRep1Hepg2.narrowPeak.gz
 grant Stam
@@ -3482,7 +3314,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqPeaksRep1Hgf.narrowPeak.gz
 grant Stam
@@ -3504,7 +3335,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqPeaksRep1Hl60V2.narrowPeak.gz
 grant Stam
@@ -3526,7 +3356,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000503
 expId 503
 fileName wgEncodeUwDnaseSeqPeaksRep1Hmec.narrowPeak.gz
 grant Stam
@@ -3547,7 +3376,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqPeaksRep1Hnpce.narrowPeak.gz
 grant Stam
@@ -3568,7 +3396,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqPeaksRep1Hrcepic.narrowPeak.gz
 grant Stam
@@ -3589,7 +3416,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqPeaksRep1Hre.narrowPeak.gz
 grant Stam
@@ -3610,7 +3436,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqPeaksRep1Hrpe.narrowPeak.gz
 grant Stam
@@ -3631,7 +3456,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000488
 expId 488
 fileName wgEncodeUwDnaseSeqPeaksRep1Huvec.narrowPeak.gz
 grant Stam
@@ -3653,7 +3477,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqPeaksRep1Jurkat.narrowPeak.gz
 grant Stam
@@ -3674,7 +3497,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqPeaksRep1K562.narrowPeak.gz
 grant Stam
@@ -3695,7 +3517,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqPeaksRep1Mcf7.narrowPeak.gz
 grant Stam
@@ -3717,7 +3538,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-08
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqPeaksRep1Nb4V2.narrowPeak.gz
 grant Stam
@@ -3739,7 +3559,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqPeaksRep1Nhdfneo.narrowPeak.gz
 grant Stam
@@ -3760,7 +3579,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000499
 expId 499
 fileName wgEncodeUwDnaseSeqPeaksRep1Nhek.narrowPeak.gz
 grant Stam
@@ -3781,7 +3599,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqPeaksRep1Nhlf.narrowPeak.gz
 grant Stam
@@ -3802,7 +3619,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqPeaksRep1Panc1.narrowPeak.gz
 grant Stam
@@ -3823,7 +3639,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqPeaksRep1Saec.narrowPeak.gz
 grant Stam
@@ -3845,7 +3660,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-27
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqPeaksRep1SkmcV2.narrowPeak.gz
 grant Stam
@@ -3867,7 +3681,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqPeaksRep1Sknshra.narrowPeak.gz
 grant Stam
@@ -3888,7 +3701,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH000483
 expId 483
 fileName wgEncodeUwDnaseSeqPeaksRep1Th1.narrowPeak.gz
 grant Stam
@@ -3909,7 +3721,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000491
 expId 491
 fileName wgEncodeUwDnaseSeqPeaksRep1Th2.narrowPeak.gz
 grant Stam
@@ -3930,7 +3741,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqPeaksRep2Ag04449.narrowPeak.gz
 grant Stam
@@ -3951,7 +3761,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqPeaksRep2Ag04450.narrowPeak.gz
 grant Stam
@@ -3972,7 +3781,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqPeaksRep2Ag09309.narrowPeak.gz
 grant Stam
@@ -3993,7 +3801,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqPeaksRep2Ag09319.narrowPeak.gz
 grant Stam
@@ -4014,7 +3821,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqPeaksRep2Ag10803.narrowPeak.gz
 grant Stam
@@ -4035,7 +3841,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqPeaksRep2Bjtert.narrowPeak.gz
 grant Stam
@@ -4056,7 +3861,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-03-30
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqPeaksRep2Caco2.narrowPeak.gz
 grant Stam
@@ -4077,7 +3881,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqPeaksRep2Gm06990.narrowPeak.gz
 grant Stam
@@ -4098,7 +3901,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqPeaksRep2Gm12865.narrowPeak.gz
 grant Stam
@@ -4119,7 +3921,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqPeaksRep2Gm12878.narrowPeak.gz
 grant Stam
@@ -4140,7 +3941,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqPeaksRep2Hae.narrowPeak.gz
 grant Stam
@@ -4161,7 +3961,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqPeaksRep2Hcf.narrowPeak.gz
 grant Stam
@@ -4182,7 +3981,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqPeaksRep2Hcm.narrowPeak.gz
 grant Stam
@@ -4203,7 +4001,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqPeaksRep2Hcpe.narrowPeak.gz
 grant Stam
@@ -4224,7 +4021,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqPeaksRep2Hee.narrowPeak.gz
 grant Stam
@@ -4245,7 +4041,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqPeaksRep2Helas3.narrowPeak.gz
 grant Stam
@@ -4266,7 +4061,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqPeaksRep2Hepg2.narrowPeak.gz
 grant Stam
@@ -4287,7 +4081,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqPeaksRep2Hgf.narrowPeak.gz
 grant Stam
@@ -4308,7 +4101,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqPeaksRep2Hl60.narrowPeak.gz
 grant Stam
@@ -4329,7 +4121,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqPeaksRep2Hnpce.narrowPeak.gz
 grant Stam
@@ -4350,7 +4141,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqPeaksRep2Hrcepic.narrowPeak.gz
 grant Stam
@@ -4371,7 +4161,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqPeaksRep2Hre.narrowPeak.gz
 grant Stam
@@ -4392,7 +4181,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqPeaksRep2Hrpe.narrowPeak.gz
 grant Stam
@@ -4414,7 +4202,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqPeaksRep2Jurkat.narrowPeak.gz
 grant Stam
@@ -4435,7 +4222,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqPeaksRep2K562.narrowPeak.gz
 grant Stam
@@ -4456,7 +4242,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqPeaksRep2Mcf7.narrowPeak.gz
 grant Stam
@@ -4477,7 +4262,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqPeaksRep2Nb4.narrowPeak.gz
 grant Stam
@@ -4498,7 +4282,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqPeaksRep2Nhdfneo.narrowPeak.gz
 grant Stam
@@ -4519,7 +4302,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqPeaksRep2Nhlf.narrowPeak.gz
 grant Stam
@@ -4540,7 +4322,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqPeaksRep2Panc1.narrowPeak.gz
 grant Stam
@@ -4561,7 +4342,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqPeaksRep2Saec.narrowPeak.gz
 grant Stam
@@ -4582,7 +4362,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqPeaksRep2Skmc.narrowPeak.gz
 grant Stam
@@ -4604,7 +4383,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-22
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqPeaksRep2SknshraV2.narrowPeak.gz
 grant Stam
@@ -4626,7 +4404,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-05
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag04449.fastq.gz
 grant Stam
@@ -4645,7 +4422,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag04450.fastq.gz
 grant Stam
@@ -4664,7 +4440,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag09309.fastq.gz
 grant Stam
@@ -4683,7 +4458,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag09319.fastq.gz
 grant Stam
@@ -4702,7 +4476,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag10803.fastq.gz
 grant Stam
@@ -4721,7 +4494,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqRawDataRep1Bjtert.fastq.gz
 grant Stam
@@ -4740,7 +4512,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-24
 dateUnrestricted 2010-01-24
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqRawDataRep1Caco2.fastq.gz
 grant Stam
@@ -4759,7 +4530,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000510
 expId 510
 fileName wgEncodeUwDnaseSeqRawDataRep1Cmk.fastq.gz
 grant Stam
@@ -4778,7 +4548,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqRawDataRep1Gm06990.fastq.gz
 grant Stam
@@ -4797,7 +4566,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqRawDataRep1Gm12865.fastq.gz
 grant Stam
@@ -4816,7 +4584,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqRawDataRep1Gm12878.fastq.gz
 grant Stam
@@ -4835,7 +4602,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-18
-dccAccession wgEncodeEH000496
 expId 496
 fileName wgEncodeUwDnaseSeqRawDataRep1H1es.fastq.gz
 grant Stam
@@ -4854,7 +4620,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000511
 expId 511
 fileName wgEncodeUwDnaseSeqRawDataRep1H7es.fastq.gz
 grant Stam
@@ -4873,7 +4638,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqRawDataRep1Hae.fastq.gz
 grant Stam
@@ -4892,7 +4656,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqRawDataRep1Hcf.fastq.gz
 grant Stam
@@ -4911,7 +4674,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqRawDataRep1Hcm.fastq.gz
 grant Stam
@@ -4930,7 +4692,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqRawDataRep1Hcpe.fastq.gz
 grant Stam
@@ -4949,7 +4710,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqRawDataRep1Hee.fastq.gz
 grant Stam
@@ -4968,7 +4728,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqRawDataRep1Helas3.fastq.gz
 grant Stam
@@ -4987,7 +4746,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqRawDataRep1Hepg2.fastq.gz
 grant Stam
@@ -5006,7 +4764,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqRawDataRep1Hgf.fastq.gz
 grant Stam
@@ -5025,7 +4782,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqRawDataRep1Hl60V2.fastq.gz
 grant Stam
@@ -5045,7 +4801,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000503
 expId 503
 fileName wgEncodeUwDnaseSeqRawDataRep1Hmec.fastq.gz
 grant Stam
@@ -5064,7 +4819,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqRawDataRep1Hnpce.fastq.gz
 grant Stam
@@ -5083,7 +4837,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqRawDataRep1Hrcepic.fastq.gz
 grant Stam
@@ -5102,7 +4855,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqRawDataRep1Hre.fastq.gz
 grant Stam
@@ -5121,7 +4873,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqRawDataRep1Hrpe.fastq.gz
 grant Stam
@@ -5140,7 +4891,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000488
 expId 488
 fileName wgEncodeUwDnaseSeqRawDataRep1Huvec.fastq.gz
 grant Stam
@@ -5160,7 +4910,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqRawDataRep1Jurkat.fastq.gz
 grant Stam
@@ -5179,7 +4928,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqRawDataRep1K562.fastq.gz
 grant Stam
@@ -5198,7 +4946,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqRawDataRep1Mcf7.fastq.gz
 grant Stam
@@ -5217,7 +4964,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqRawDataRep1Nb4V2.fastq.gz
 grant Stam
@@ -5237,7 +4983,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqRawDataRep1Nhdfneo.fastq.gz
 grant Stam
@@ -5256,7 +5001,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000499
 expId 499
 fileName wgEncodeUwDnaseSeqRawDataRep1Nhek.fastq.gz
 grant Stam
@@ -5275,7 +5019,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqRawDataRep1Nhlf.fastq.gz
 grant Stam
@@ -5294,7 +5037,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqRawDataRep1Panc1.fastq.gz
 grant Stam
@@ -5313,7 +5055,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqRawDataRep1Saec.fastq.gz
 grant Stam
@@ -5333,7 +5074,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-27
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqRawDataRep1SkmcV2.fastq.gz
 grant Stam
@@ -5353,7 +5093,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqRawDataRep1Sknshra.fastq.gz
 grant Stam
@@ -5372,7 +5111,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH000483
 expId 483
 fileName wgEncodeUwDnaseSeqRawDataRep1Th1.fastq.gz
 grant Stam
@@ -5391,7 +5129,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000491
 expId 491
 fileName wgEncodeUwDnaseSeqRawDataRep1Th2.fastq.gz
 grant Stam
@@ -5410,7 +5147,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag04449.fastq.gz
 grant Stam
@@ -5429,7 +5165,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag04450.fastq.gz
 grant Stam
@@ -5448,7 +5183,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag09309.fastq.gz
 grant Stam
@@ -5467,7 +5201,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag09319.fastq.gz
 grant Stam
@@ -5486,7 +5219,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag10803.fastq.gz
 grant Stam
@@ -5505,7 +5237,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqRawDataRep2Bjtert.fastq.gz
 grant Stam
@@ -5524,7 +5255,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-03-30
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqRawDataRep2Caco2.fastq.gz
 grant Stam
@@ -5543,7 +5273,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqRawDataRep2Gm06990.fastq.gz
 grant Stam
@@ -5562,7 +5291,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqRawDataRep2Gm12865.fastq.gz
 grant Stam
@@ -5581,7 +5309,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqRawDataRep2Gm12878.fastq.gz
 grant Stam
@@ -5600,7 +5327,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqRawDataRep2Hae.fastq.gz
 grant Stam
@@ -5619,7 +5345,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqRawDataRep2Hcf.fastq.gz
 grant Stam
@@ -5638,7 +5363,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqRawDataRep2Hcm.fastq.gz
 grant Stam
@@ -5657,7 +5381,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqRawDataRep2Hcpe.fastq.gz
 grant Stam
@@ -5676,7 +5399,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqRawDataRep2Hee.fastq.gz
 grant Stam
@@ -5695,7 +5417,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqRawDataRep2Helas3.fastq.gz
 grant Stam
@@ -5714,7 +5435,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqRawDataRep2Hepg2.fastq.gz
 grant Stam
@@ -5733,7 +5453,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqRawDataRep2Hgf.fastq.gz
 grant Stam
@@ -5752,7 +5471,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqRawDataRep2Hl60.fastq.gz
 grant Stam
@@ -5771,7 +5489,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqRawDataRep2Hnpce.fastq.gz
 grant Stam
@@ -5790,7 +5507,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqRawDataRep2Hrcepic.fastq.gz
 grant Stam
@@ -5809,7 +5525,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqRawDataRep2Hre.fastq.gz
 grant Stam
@@ -5828,7 +5543,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqRawDataRep2Hrpe.fastq.gz
 grant Stam
@@ -5848,7 +5562,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqRawDataRep2Jurkat.fastq.gz
 grant Stam
@@ -5867,7 +5580,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqRawDataRep2K562.fastq.gz
 grant Stam
@@ -5886,7 +5598,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqRawDataRep2Mcf7.fastq.gz
 grant Stam
@@ -5905,7 +5616,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqRawDataRep2Nb4.fastq.gz
 grant Stam
@@ -5924,7 +5634,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqRawDataRep2Nhdfneo.fastq.gz
 grant Stam
@@ -5943,7 +5652,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqRawDataRep2Nhlf.fastq.gz
 grant Stam
@@ -5962,7 +5670,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqRawDataRep2Panc1.fastq.gz
 grant Stam
@@ -5981,7 +5688,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqRawDataRep2Saec.fastq.gz
 grant Stam
@@ -6000,7 +5706,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqRawDataRep2Skmc.fastq.gz
 grant Stam
@@ -6019,7 +5724,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqRawDataRep2SknshraV2.fastq.gz
 grant Stam
@@ -6039,7 +5743,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-05
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqRawSignalRep1Ag04449.wig.gz
 grant Stam
@@ -6060,7 +5763,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqRawSignalRep1Ag04450.wig.gz
 grant Stam
@@ -6081,7 +5783,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqRawSignalRep1Ag09309.wig.gz
 grant Stam
@@ -6102,7 +5803,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqRawSignalRep1Ag09319.wig.gz
 grant Stam
@@ -6123,7 +5823,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqRawSignalRep1Ag10803.wig.gz
 grant Stam
@@ -6144,7 +5843,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqRawSignalRep1Bjtert.wig.gz
 grant Stam
@@ -6165,7 +5863,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-24
 dateUnrestricted 2010-01-24
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqRawSignalRep1Caco2.wig.gz
 grant Stam
@@ -6186,7 +5883,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000510
 expId 510
 fileName wgEncodeUwDnaseSeqRawSignalRep1Cmk.wig.gz
 grant Stam
@@ -6207,7 +5903,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqRawSignalRep1Gm06990.wig.gz
 grant Stam
@@ -6228,7 +5923,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqRawSignalRep1Gm12865.wig.gz
 grant Stam
@@ -6249,7 +5943,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqRawSignalRep1Gm12878.wig.gz
 grant Stam
@@ -6270,7 +5963,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-18
-dccAccession wgEncodeEH000496
 expId 496
 fileName wgEncodeUwDnaseSeqRawSignalRep1H1es.wig.gz
 grant Stam
@@ -6291,7 +5983,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000511
 expId 511
 fileName wgEncodeUwDnaseSeqRawSignalRep1H7es.wig.gz
 grant Stam
@@ -6312,7 +6003,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hae.wig.gz
 grant Stam
@@ -6333,7 +6023,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hcf.wig.gz
 grant Stam
@@ -6354,7 +6043,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hcm.wig.gz
 grant Stam
@@ -6375,7 +6063,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hcpe.wig.gz
 grant Stam
@@ -6396,7 +6083,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hee.wig.gz
 grant Stam
@@ -6417,7 +6103,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqRawSignalRep1Helas3.wig.gz
 grant Stam
@@ -6438,7 +6123,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hepg2.wig.gz
 grant Stam
@@ -6459,7 +6143,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hgf.wig.gz
 grant Stam
@@ -6481,7 +6164,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hl60V2.wig.gz
 grant Stam
@@ -6503,7 +6185,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000503
 expId 503
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hmec.wig.gz
 grant Stam
@@ -6524,7 +6205,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hnpce.wig.gz
 grant Stam
@@ -6545,7 +6225,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hrcepic.wig.gz
 grant Stam
@@ -6566,7 +6245,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hre.wig.gz
 grant Stam
@@ -6587,7 +6265,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqRawSignalRep1Hrpe.wig.gz
 grant Stam
@@ -6608,7 +6285,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000488
 expId 488
 fileName wgEncodeUwDnaseSeqRawSignalRep1Huvec.wig.gz
 grant Stam
@@ -6630,7 +6306,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqRawSignalRep1Jurkat.wig.gz
 grant Stam
@@ -6651,7 +6326,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqRawSignalRep1K562.wig.gz
 grant Stam
@@ -6672,7 +6346,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqRawSignalRep1Mcf7.wig.gz
 grant Stam
@@ -6694,7 +6367,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-08
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqRawSignalRep1Nb4V2.wig.gz
 grant Stam
@@ -6716,7 +6388,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqRawSignalRep1Nhdfneo.wig.gz
 grant Stam
@@ -6737,7 +6408,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000499
 expId 499
 fileName wgEncodeUwDnaseSeqRawSignalRep1Nhek.wig.gz
 grant Stam
@@ -6758,7 +6428,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqRawSignalRep1Nhlf.wig.gz
 grant Stam
@@ -6779,7 +6448,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqRawSignalRep1Panc1.wig.gz
 grant Stam
@@ -6800,7 +6468,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqRawSignalRep1Saec.wig.gz
 grant Stam
@@ -6822,7 +6489,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-27
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqRawSignalRep1SkmcV2.wig.gz
 grant Stam
@@ -6844,7 +6510,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqRawSignalRep1Sknshra.wig.gz
 grant Stam
@@ -6865,7 +6530,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH000483
 expId 483
 fileName wgEncodeUwDnaseSeqRawSignalRep1Th1.wig.gz
 grant Stam
@@ -6886,7 +6550,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-dccAccession wgEncodeEH000491
 expId 491
 fileName wgEncodeUwDnaseSeqRawSignalRep1Th2.wig.gz
 grant Stam
@@ -6907,7 +6570,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000505
 expId 505
 fileName wgEncodeUwDnaseSeqRawSignalRep2Ag04449.wig.gz
 grant Stam
@@ -6928,7 +6590,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000506
 expId 506
 fileName wgEncodeUwDnaseSeqRawSignalRep2Ag04450.wig.gz
 grant Stam
@@ -6949,7 +6610,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000507
 expId 507
 fileName wgEncodeUwDnaseSeqRawSignalRep2Ag09309.wig.gz
 grant Stam
@@ -6970,7 +6630,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000508
 expId 508
 fileName wgEncodeUwDnaseSeqRawSignalRep2Ag09319.wig.gz
 grant Stam
@@ -6991,7 +6650,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000509
 expId 509
 fileName wgEncodeUwDnaseSeqRawSignalRep2Ag10803.wig.gz
 grant Stam
@@ -7012,7 +6670,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000487
 expId 487
 fileName wgEncodeUwDnaseSeqRawSignalRep2Bjtert.wig.gz
 grant Stam
@@ -7033,7 +6690,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-03-30
-dccAccession wgEncodeEH000486
 expId 486
 fileName wgEncodeUwDnaseSeqRawSignalRep2Caco2.wig.gz
 grant Stam
@@ -7054,7 +6710,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000481
 expId 481
 fileName wgEncodeUwDnaseSeqRawSignalRep2Gm06990.wig.gz
 grant Stam
@@ -7075,7 +6730,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000520
 expId 520
 fileName wgEncodeUwDnaseSeqRawSignalRep2Gm12865.wig.gz
 grant Stam
@@ -7096,7 +6750,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000492
 expId 492
 fileName wgEncodeUwDnaseSeqRawSignalRep2Gm12878.wig.gz
 grant Stam
@@ -7117,7 +6770,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000512
 expId 512
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hae.wig.gz
 grant Stam
@@ -7138,7 +6790,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000513
 expId 513
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hcf.wig.gz
 grant Stam
@@ -7159,7 +6810,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000519
 expId 519
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hcm.wig.gz
 grant Stam
@@ -7180,7 +6830,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000514
 expId 514
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hcpe.wig.gz
 grant Stam
@@ -7201,7 +6850,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000515
 expId 515
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hee.wig.gz
 grant Stam
@@ -7222,7 +6870,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000495
 expId 495
 fileName wgEncodeUwDnaseSeqRawSignalRep2Helas3.wig.gz
 grant Stam
@@ -7243,7 +6890,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000482
 expId 482
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hepg2.wig.gz
 grant Stam
@@ -7264,7 +6910,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000504
 expId 504
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hgf.wig.gz
 grant Stam
@@ -7285,7 +6930,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000489
 expId 489
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hl60.wig.gz
 grant Stam
@@ -7306,7 +6950,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH000516
 expId 516
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hnpce.wig.gz
 grant Stam
@@ -7327,7 +6970,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000493
 expId 493
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hrcepic.wig.gz
 grant Stam
@@ -7348,7 +6990,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH000494
 expId 494
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hre.wig.gz
 grant Stam
@@ -7369,7 +7010,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000517
 expId 517
 fileName wgEncodeUwDnaseSeqRawSignalRep2Hrpe.wig.gz
 grant Stam
@@ -7391,7 +7031,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000497
 expId 497
 fileName wgEncodeUwDnaseSeqRawSignalRep2Jurkat.wig.gz
 grant Stam
@@ -7412,7 +7051,6 @@ dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000484
 expId 484
 fileName wgEncodeUwDnaseSeqRawSignalRep2K562.wig.gz
 grant Stam
@@ -7433,7 +7071,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000502
 expId 502
 fileName wgEncodeUwDnaseSeqRawSignalRep2Mcf7.wig.gz
 grant Stam
@@ -7454,7 +7091,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000498
 expId 498
 fileName wgEncodeUwDnaseSeqRawSignalRep2Nb4.wig.gz
 grant Stam
@@ -7475,7 +7111,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH000518
 expId 518
 fileName wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo.wig.gz
 grant Stam
@@ -7496,7 +7131,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH000521
 expId 521
 fileName wgEncodeUwDnaseSeqRawSignalRep2Nhlf.wig.gz
 grant Stam
@@ -7517,7 +7151,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000500
 expId 500
 fileName wgEncodeUwDnaseSeqRawSignalRep2Panc1.wig.gz
 grant Stam
@@ -7538,7 +7171,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000501
 expId 501
 fileName wgEncodeUwDnaseSeqRawSignalRep2Saec.wig.gz
 grant Stam
@@ -7559,7 +7191,6 @@ dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH000490
 expId 490
 fileName wgEncodeUwDnaseSeqRawSignalRep2Skmc.wig.gz
 grant Stam
@@ -7581,7 +7212,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-22
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000485
 expId 485
 fileName wgEncodeUwDnaseSeqRawSignalRep2SknshraV2.wig.gz
 grant Stam
@@ -7595,4 +7225,4 @@ submittedDataVersion V2 - Improved DNA Library
 tableName wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 view RawSignal
 
-# MAGIC: 1855652194
+# MAGIC: -1951665318
