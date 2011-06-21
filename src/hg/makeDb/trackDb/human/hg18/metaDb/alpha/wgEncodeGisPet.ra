@@ -11,6 +11,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -31,6 +32,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000249
 expId 249
 fileName wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -51,6 +53,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000250
 expId 250
 fileName wgEncodeGisPetAlignmentsRep1H1hescCellLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -71,6 +74,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
+dccAccession wgEncodeEH000268
 expId 268
 fileName wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -91,6 +95,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
+dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisPetAlignmentsRep1Helas3NucleusLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -110,6 +115,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000252
 expId 252
 fileName wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -130,6 +136,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000253
 expId 253
 fileName wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -150,6 +157,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
+dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisPetAlignmentsRep1HuvecCytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -170,6 +178,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000251
 expId 251
 fileName wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -190,6 +199,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000254
 expId 254
 fileName wgEncodeGisPetAlignmentsRep1K562ChromatinTotal.pairedTagAlign.gz
 grant Gingeras
@@ -210,6 +220,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000255
 expId 255
 fileName wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -230,6 +241,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000256
 expId 256
 fileName wgEncodeGisPetAlignmentsRep1K562NucleolusTotal.pairedTagAlign.gz
 grant Gingeras
@@ -250,6 +262,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000257
 expId 257
 fileName wgEncodeGisPetAlignmentsRep1K562NucleoplasmTotal.pairedTagAlign.gz
 grant Gingeras
@@ -270,6 +283,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000258
 expId 258
 fileName wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -290,6 +304,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000259
 expId 259
 fileName wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -310,6 +325,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000260
 expId 260
 fileName wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -330,6 +346,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000261
 expId 261
 fileName wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -350,6 +367,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000262
 expId 262
 fileName wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -370,6 +388,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -390,6 +409,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000255
 expId 255
 fileName wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
@@ -410,6 +430,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisPetClustersRep1Gm12878CytosolPap.bed12.gz
 grant Gingeras
@@ -430,6 +451,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000249
 expId 249
 fileName wgEncodeGisPetClustersRep1Gm12878NucleusPap.bed12.gz
 grant Gingeras
@@ -450,6 +472,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000250
 expId 250
 fileName wgEncodeGisPetClustersRep1H1hescCellPap.bed12.gz
 grant Gingeras
@@ -470,6 +493,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000268
 expId 268
 fileName wgEncodeGisPetClustersRep1Helas3CytosolPap.bed12.gz
 grant Gingeras
@@ -490,6 +514,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisPetClustersRep1Helas3NucleusPap.bed12.gz
 grant Gingeras
@@ -510,6 +535,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000252
 expId 252
 fileName wgEncodeGisPetClustersRep1Hepg2CytosolPap.bed12.gz
 grant Gingeras
@@ -530,6 +556,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000253
 expId 253
 fileName wgEncodeGisPetClustersRep1Hepg2NucleusPap.bed12.gz
 grant Gingeras
@@ -550,6 +577,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisPetClustersRep1HuvecCytosolPap.bed12.gz
 grant Gingeras
@@ -570,6 +598,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000251
 expId 251
 fileName wgEncodeGisPetClustersRep1HuvecNucleusPap.bed12.gz
 grant Gingeras
@@ -590,6 +619,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000254
 expId 254
 fileName wgEncodeGisPetClustersRep1K562ChromatinTotal.bed12.gz
 grant Gingeras
@@ -610,6 +640,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000255
 expId 255
 fileName wgEncodeGisPetClustersRep1K562CytosolPap.bed12.gz
 grant Gingeras
@@ -630,6 +661,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000256
 expId 256
 fileName wgEncodeGisPetClustersRep1K562NucleolusTotal.bed12.gz
 grant Gingeras
@@ -650,6 +682,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000257
 expId 257
 fileName wgEncodeGisPetClustersRep1K562NucleoplasmTotal.bed12.gz
 grant Gingeras
@@ -670,6 +703,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000258
 expId 258
 fileName wgEncodeGisPetClustersRep1K562NucleusPap.bed12.gz
 grant Gingeras
@@ -690,6 +724,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000259
 expId 259
 fileName wgEncodeGisPetClustersRep1K562PolysomePap.bed12.gz
 grant Gingeras
@@ -710,6 +745,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000260
 expId 260
 fileName wgEncodeGisPetClustersRep1NhekCytosolPap.bed12.gz
 grant Gingeras
@@ -730,6 +766,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000261
 expId 261
 fileName wgEncodeGisPetClustersRep1NhekNucleusPap.bed12.gz
 grant Gingeras
@@ -750,6 +787,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000262
 expId 262
 fileName wgEncodeGisPetClustersRep1ProstateCellPap.bed12.gz
 grant Gingeras
@@ -770,6 +808,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisPetClustersRep2Gm12878CytosolPap.bed12.gz
 grant Gingeras
@@ -790,6 +829,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
+dccAccession wgEncodeEH000255
 expId 255
 fileName wgEncodeGisPetClustersRep2K562CytosolPap.bed12.gz
 grant Gingeras
@@ -810,6 +850,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-13
 dateUnrestricted 2011-01-13
+dccAccession wgEncodeEH000255
 expId 255
 fileName wgEncodeGisPetFastaRd1Rep2K562CytosolLongpolya.fasta.gz
 grant Gingeras
@@ -828,6 +869,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-13
 dateUnrestricted 2011-01-13
+dccAccession wgEncodeEH000255
 expId 255
 fileName wgEncodeGisPetFastaRd2Rep2K562CytosolLongpolya.fasta.gz
 grant Gingeras
@@ -846,6 +888,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisPetFastqRd1Rep1Gm12878CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -865,6 +908,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000249
 expId 249
 fileName wgEncodeGisPetFastqRd1Rep1Gm12878NucleusLongpolya.fastq.gz
 grant Gingeras
@@ -884,6 +928,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000250
 expId 250
 fileName wgEncodeGisPetFastqRd1Rep1H1hescCellLongpolya.fastq.gz
 grant Gingeras
@@ -903,6 +948,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
+dccAccession wgEncodeEH000268
 expId 268
 fileName wgEncodeGisPetFastqRd1Rep1Helas3CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -921,6 +967,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000252
 expId 252
 fileName wgEncodeGisPetFastqRd1Rep1Hepg2CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -940,6 +987,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000253
 expId 253
 fileName wgEncodeGisPetFastqRd1Rep1Hepg2NucleusLongpolya.fastq.gz
 grant Gingeras
@@ -959,6 +1007,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
+dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisPetFastqRd1Rep1HuvecCytosolLongpolya.fastq.gz
 grant Gingeras
@@ -977,6 +1026,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000251
 expId 251
 fileName wgEncodeGisPetFastqRd1Rep1HuvecNucleusLongpolya.fastq.gz
 grant Gingeras
@@ -996,6 +1046,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000255
 expId 255
 fileName wgEncodeGisPetFastqRd1Rep1K562CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1015,6 +1066,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
+dccAccession wgEncodeEH000256
 expId 256
 fileName wgEncodeGisPetFastqRd1Rep1K562NucleolusTotal.fastq.gz
 grant Gingeras
@@ -1033,6 +1085,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000258
 expId 258
 fileName wgEncodeGisPetFastqRd1Rep1K562NucleusLongpolya.fastq.gz
 grant Gingeras
@@ -1052,6 +1105,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000259
 expId 259
 fileName wgEncodeGisPetFastqRd1Rep1K562PolysomeLongpolya.fastq.gz
 grant Gingeras
@@ -1071,6 +1125,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000260
 expId 260
 fileName wgEncodeGisPetFastqRd1Rep1NhekCytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1090,6 +1145,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000261
 expId 261
 fileName wgEncodeGisPetFastqRd1Rep1NhekNucleusLongpolya.fastq.gz
 grant Gingeras
@@ -1109,6 +1165,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000262
 expId 262
 fileName wgEncodeGisPetFastqRd1Rep1ProstateCellLongpolya.fastq.gz
 grant Gingeras
@@ -1128,6 +1185,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisPetFastqRd1Rep2Gm12878CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1147,6 +1205,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisPetFastqRd2Rep1Gm12878CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1166,6 +1225,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000249
 expId 249
 fileName wgEncodeGisPetFastqRd2Rep1Gm12878NucleusLongpolya.fastq.gz
 grant Gingeras
@@ -1185,6 +1245,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000250
 expId 250
 fileName wgEncodeGisPetFastqRd2Rep1H1hescCellLongpolya.fastq.gz
 grant Gingeras
@@ -1204,6 +1265,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
+dccAccession wgEncodeEH000268
 expId 268
 fileName wgEncodeGisPetFastqRd2Rep1Helas3CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1222,6 +1284,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000252
 expId 252
 fileName wgEncodeGisPetFastqRd2Rep1Hepg2CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1241,6 +1304,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000253
 expId 253
 fileName wgEncodeGisPetFastqRd2Rep1Hepg2NucleusLongpolya.fastq.gz
 grant Gingeras
@@ -1260,6 +1324,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
+dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisPetFastqRd2Rep1HuvecCytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1278,6 +1343,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000251
 expId 251
 fileName wgEncodeGisPetFastqRd2Rep1HuvecNucleusLongpolya.fastq.gz
 grant Gingeras
@@ -1297,6 +1363,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000255
 expId 255
 fileName wgEncodeGisPetFastqRd2Rep1K562CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1316,6 +1383,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
+dccAccession wgEncodeEH000256
 expId 256
 fileName wgEncodeGisPetFastqRd2Rep1K562NucleolusTotal.fastq.gz
 grant Gingeras
@@ -1334,6 +1402,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000258
 expId 258
 fileName wgEncodeGisPetFastqRd2Rep1K562NucleusLongpolya.fastq.gz
 grant Gingeras
@@ -1353,6 +1422,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000259
 expId 259
 fileName wgEncodeGisPetFastqRd2Rep1K562PolysomeLongpolya.fastq.gz
 grant Gingeras
@@ -1372,6 +1442,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000260
 expId 260
 fileName wgEncodeGisPetFastqRd2Rep1NhekCytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1391,6 +1462,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000261
 expId 261
 fileName wgEncodeGisPetFastqRd2Rep1NhekNucleusLongpolya.fastq.gz
 grant Gingeras
@@ -1410,6 +1482,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000262
 expId 262
 fileName wgEncodeGisPetFastqRd2Rep1ProstateCellLongpolya.fastq.gz
 grant Gingeras
@@ -1429,6 +1502,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisPetFastqRd2Rep2Gm12878CytosolLongpolya.fastq.gz
 grant Gingeras
@@ -1448,6 +1522,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
+dccAccession wgEncodeEH000254
 expId 254
 fileName wgEncodeGisPetFastqRep1K562ChromatinTotal.fastq.gz
 grant Gingeras
@@ -1466,6 +1541,7 @@ dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
+dccAccession wgEncodeEH000257
 expId 257
 fileName wgEncodeGisPetFastqRep1K562NucleoplasmTotal.fastq.gz
 grant Gingeras
@@ -1484,6 +1560,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000248
 expId 248
 grant Gingeras
 lab GIS
@@ -1503,6 +1580,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000249
 expId 249
 grant Gingeras
 lab GIS
@@ -1522,6 +1600,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000250
 expId 250
 grant Gingeras
 lab GIS
@@ -1541,6 +1620,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000252
 expId 252
 grant Gingeras
 lab GIS
@@ -1560,6 +1640,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000253
 expId 253
 grant Gingeras
 lab GIS
@@ -1579,6 +1660,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000251
 expId 251
 grant Gingeras
 lab GIS
@@ -1598,6 +1680,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000254
 expId 254
 grant Gingeras
 lab GIS
@@ -1617,6 +1700,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000255
 expId 255
 grant Gingeras
 lab GIS
@@ -1636,6 +1720,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000256
 expId 256
 grant Gingeras
 lab GIS
@@ -1655,6 +1740,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000257
 expId 257
 grant Gingeras
 lab GIS
@@ -1674,6 +1760,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000258
 expId 258
 grant Gingeras
 lab GIS
@@ -1693,6 +1780,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000259
 expId 259
 grant Gingeras
 lab GIS
@@ -1712,6 +1800,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000260
 expId 260
 grant Gingeras
 lab GIS
@@ -1731,6 +1820,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000261
 expId 261
 grant Gingeras
 lab GIS
@@ -1750,6 +1840,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000262
 expId 262
 grant Gingeras
 lab GIS
@@ -1769,6 +1860,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000248
 expId 248
 grant Gingeras
 lab GIS
@@ -1788,6 +1880,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000255
 expId 255
 grant Gingeras
 lab GIS
@@ -1807,6 +1900,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
+dccAccession wgEncodeEH000268
 expId 268
 grant Gingeras
 lab GIS
@@ -1827,6 +1921,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
+dccAccession wgEncodeEH000267
 expId 267
 grant Gingeras
 lab GIS
@@ -1846,6 +1941,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
+dccAccession wgEncodeEH000266
 expId 266
 grant Gingeras
 lab GIS
@@ -1866,6 +1962,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000248
 expId 248
 grant Gingeras
 lab GIS
@@ -1885,6 +1982,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000249
 expId 249
 grant Gingeras
 lab GIS
@@ -1904,6 +2002,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000250
 expId 250
 grant Gingeras
 lab GIS
@@ -1923,6 +2022,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000252
 expId 252
 grant Gingeras
 lab GIS
@@ -1942,6 +2042,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000253
 expId 253
 grant Gingeras
 lab GIS
@@ -1961,6 +2062,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000251
 expId 251
 grant Gingeras
 lab GIS
@@ -1980,6 +2082,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000254
 expId 254
 grant Gingeras
 lab GIS
@@ -1999,6 +2102,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000255
 expId 255
 grant Gingeras
 lab GIS
@@ -2018,6 +2122,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000256
 expId 256
 grant Gingeras
 lab GIS
@@ -2037,6 +2142,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000257
 expId 257
 grant Gingeras
 lab GIS
@@ -2056,6 +2162,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000258
 expId 258
 grant Gingeras
 lab GIS
@@ -2075,6 +2182,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000259
 expId 259
 grant Gingeras
 lab GIS
@@ -2094,6 +2202,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000260
 expId 260
 grant Gingeras
 lab GIS
@@ -2113,6 +2222,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000261
 expId 261
 grant Gingeras
 lab GIS
@@ -2132,6 +2242,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000262
 expId 262
 grant Gingeras
 lab GIS
@@ -2151,6 +2262,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000248
 expId 248
 grant Gingeras
 lab GIS
@@ -2170,6 +2282,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000255
 expId 255
 grant Gingeras
 lab GIS
@@ -2189,6 +2302,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
+dccAccession wgEncodeEH000268
 expId 268
 grant Gingeras
 lab GIS
@@ -2209,6 +2323,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
+dccAccession wgEncodeEH000267
 expId 267
 grant Gingeras
 lab GIS
@@ -2228,6 +2343,7 @@ dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
+dccAccession wgEncodeEH000266
 expId 266
 grant Gingeras
 lab GIS
@@ -2240,4 +2356,4 @@ tableName wgEncodeGisPetPlusRawSignalRep1HuvecCytosolLongpolya
 type bedGraph
 view PlusRawSignal
 
-# MAGIC: -2008611685
+# MAGIC: 2063818333

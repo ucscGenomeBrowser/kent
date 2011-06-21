@@ -933,9 +933,9 @@ spanList 60
 viewLimits -1.5:1.5
 html laminB1Mm9
 
-track NumtSeq
+track numtSeq
 compositeTrack on
-shortLabel NumtSeq
+shortLabel NumtS Sequence
 longLabel Mouse NumtS mitochondrial sequence
 group varRep
 priority 500.5
@@ -946,7 +946,7 @@ html numtSeqMm9
 configurable on
 
     track numtS
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS
     longLabel Mouse NumtS
     color 0,60,120
@@ -956,7 +956,7 @@ configurable on
     html numtSeqMm9
     
     track numtSAssembled
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS assembled
     longLabel Mouse NumtS assembled
     color 0,60,120
@@ -966,8 +966,8 @@ configurable on
     html numtSeqMm9
     
     track numtSMitochondrion
-    parent NumtSeq
-    shortLabel NumtS on mitochondrion
+    parent numtSeq
+    shortLabel NumtS on mitochon
     longLabel Mouse NumtS on mitochondrion
     useScore 1
     color 0,60,120
@@ -977,7 +977,7 @@ configurable on
     chromosomes chrM
 
     track  bamMmsNumtSSorted
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS SNPs
     longLabel Mouse NumtS on mitochondrion SNPs
     priority 4

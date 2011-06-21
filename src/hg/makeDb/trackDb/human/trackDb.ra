@@ -2951,17 +2951,6 @@ priority 0
 track eponine override
 priority 0
 
-track omimGene
-shortLabel OMIM Genes
-longLabel OMIM-Associated Genes
-group phenDis
-priority 29.6
-visibility hide
-color 0, 0, 200
-type bed 4
-hgsid on
-url http://www.ncbi.nlm.nih.gov/omim/
-
 track omimLocation
 shortLabel OMIM Pheno Loci
 longLabel OMIM Phenotypes - Gene Unknown
@@ -3907,9 +3896,9 @@ termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 #NumtS track
-track NumtSeq
+track numtSeq
 compositeTrack on
-shortLabel NumtSeq
+shortLabel NumtS Sequence
 longLabel Human NumtS mitochondrial sequence
 group varRep
 priority 500.5
@@ -3920,7 +3909,7 @@ configurable on
 html numtSeq
 
     track numtS
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS
     longLabel Human NumtS
     color 0,60,120
@@ -3931,7 +3920,7 @@ html numtSeq
     html numtSeq
 
     track numtSAssembled
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS assembled
     longLabel Human NumtS assembled
     color 0,60,120
@@ -3941,8 +3930,8 @@ html numtSeq
     html numtSeq
 
     track numtSMitochondrion
-    parent NumtSeq
-    shortLabel NumtS on mitochondrion
+    parent numtSeq
+    shortLabel NumtS on mitochon
     longLabel Human NumtS on mitochondrion
     useScore 1
     color 0,60,120
@@ -3951,16 +3940,16 @@ html numtSeq
     html numtSeq
 
     track numtSMitochondrionChrPlacement
-    parent NumtSeq
+    parent numtSeq
     longLabel Human NumtS on mitochondrion with chromosome placement
-    shortLabel NumtS on mitochondrion with chr placement
+    shortLabel NumtS chr colored
     priority 4
     itemRgb on
     type bed 9 .
     html numtSeq
 
     track  bamAllNumtSSorted
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS SNPs
     longLabel Human NumtS on mitochondrion SNPs
     priority 5
