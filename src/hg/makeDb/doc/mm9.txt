@@ -8238,7 +8238,7 @@ see doc/builds.txt for specific details.
 
 
 ############################################################################
-# JAX/MGI TRACKS (DONE 6/20/11 angie)
+# JAX/MGI TRACKS (DONE 6/22/11 angie)
 # Previously done 9/20/10 in /hive/data/genomes/mm9/bed/jax/2010_09 (pushed)
 # Previously done 8/20/09 in /hive/data/genomes/mm9/bed/jax/2009_08 (pushed)
 # Previously done 6/11/09 in /hive/data/genomes/mm9/bed/jax/2009_06 (pushed)
@@ -8250,6 +8250,12 @@ see doc/builds.txt for specific details.
     wget --timestamping ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
     # Oops, June 2011 has a file that ends in "gff" not ".gff":
     mv MP_0010768_mortalitygff MP_0010768_mortality.gff
+    # And June 2011 got some stale files from the ftp site:
+    rm -f MP_0005393_skin_coat_nails.gff \
+      MP_0005392_touch_vibrissae.gff \
+      MP_0005374_lethality-embryonic_perinatal.gff \
+      MP_0005373_lethality-postnatal.gff \
+      MP_0005372_life_span-post-weaning_aging.gff
 
     # Jax Rep Transcript track
     # SEQ_RepTransGenomic_rpt.gff --> jaxRepTranscript{,Alias}
@@ -8326,18 +8332,13 @@ see doc/builds.txt for specific details.
                     s@HematopoieticSystem@Hematopoietic@ || \
                     s@HomeostasisMetabolism@Homeostasis@ || \
                     s@ImmuneSystem@Immune@ || \
-                    s@LethalityEmbryonicPerinatal@Embryonic Lethal@ || \
-                    s@LethalityPostnatal@Postnatal Lethal@ || \
-                    s@LifeSpanPostWeaningAging@Life Span@ || \
                     s@LimbsDigitsTail@Limbs and Tail@ || \
                     s@LiverBiliarySystem@Liver and Bile@ || \
                     s@NervousSystem@Nervous System@ || \
                     s@RenalUrinarySystem@Renal/Urinary@ || \
                     s@ReproductiveSystem@Reproductive@ || \
                     s@RespiratorySystem@Respiratory@ || \
-                    s@SkinCoatNails@Skin/Coat/Nails@ || \
                     s@TasteOlfaction@Taste/Smell@ || \
-                    s@TouchVibrissae@Touch@ || \
                     s@Tumorigenesis@Tumorigenesis@ || \
                     s@VisionEye@Vision/Eye@ || \
                     m/^Craniofacial|Cellular|Embryogenesis|Integument|Mortality|Muscle|Normal|Other|Pigmentation|Skeleton$/ || \
@@ -8415,7 +8416,7 @@ see doc/builds.txt for specific details.
     # jaxPhenotype
     hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
       -tab mm9 jaxPhenotype jaxPhenotype.bed
-#Loaded 42917 elements of size 13
+#Loaded 37122 elements of size 13
     checkTableCoords mm9 jaxPhenotype
     # fixJaxPhenotype.sql is empty so don't need to execute it.
     # hgsql mm9 < fixJaxPhenotype.sql
