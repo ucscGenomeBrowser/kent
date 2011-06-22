@@ -280,8 +280,8 @@ if (trackDbSetting(tdb, "wgEncode") != NULL)
     {
     if (hIsPreviewHost())
         {
-        printf("<P><B>WARNING</B>: This our ppreview site. Data here is unreviewed early access. For high quality reviewed annotations, see the <A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s'>Genome Browser</A>.",
-        // TOD0:  Add to supertrack as well ?   Check if it exists ?
+        printf("<P><B>WARNING</B>: This data is provided for early access via the Preview Browser -- it is unreviewed and subject to change. For high quality reviewed annotations, see the <A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTracks?db=%s'>Genome Browser</A>.",
+            "genome.ucsc.edu", db);
         }
     else
         {
@@ -289,6 +289,7 @@ if (trackDbSetting(tdb, "wgEncode") != NULL)
         printf("<P><B>NOTE</B>: Early access to additional track data may be available on the <A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s'>Preview Browser</A>.",
             "genome-preview.ucsc.edu", db, tdb->track);
         }
+    }
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
                   && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
