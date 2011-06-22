@@ -5038,3 +5038,7 @@ encodeDownloadsPage.pl -db=hg19 index.html
 cp index.html release1/
 cp files.txt release1/
 
+2011-06-14 Broad HMM is finally in QA
+=====================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3446 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3823 reviewing
