@@ -318,6 +318,15 @@ wgEncode 1
         color 86,180,233
         # subId=4004 dateSubmitted=2011-04-28
 
+        track wgEncodeSydhTfbsCh12NelfeIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel CH12 NELFe Pk
+        longLabel CH12 NELFe TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+        subGroups view=Peaks factor=NELFE cellType=CH12 control=IGGrab treatment=zNone
+        type narrowPeak
+        color 86,180,233
+        # subId=2540 dateSubmitted=2011-04-20
+
 
 		#### Submission 1153 ####
 		track wgEncodeSydhTfbsCh12E2f4IggrabPk
@@ -858,4 +867,13 @@ wgEncode 1
         color 86,180,233
         # subId=4007 dateSubmitted=2011-04-29
         # was wgEncodeSydhTfbsMelInputDmso20StdSig vsmalladi Mon Jun 13 16:46:06 2011
+
+        track wgEncodeSydhTfbsCh12NelfeIggrabSig
+        parent wgEncodeSydhTfbsViewSig off
+        shortLabel CH12 NELFe Sg
+        longLabel CH12 NELFe TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
+        subGroups view=Signal factor=NELFE cellType=CH12 control=IGGrab treatment=zNone
+        type bigWig 1.000000 127356.000000
+        color 86,180,233
+        # subId=2540 dateSubmitted=2011-04-20
 
