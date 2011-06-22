@@ -40,7 +40,8 @@ errAbort(
   "   restore <exp.ra>	restore table from .ra file\n"
   "\n"
   "   deacc <id>			  deaccession experiment (remove accession, leave in table)\n"
-  "   modify <id> <var> <old> <new>  change experiment var (must remove accession first)\n"
+  "   update <id> <var> <oldval> <newval>  change experiment var (must remove accession first)\n"
+  "                                             e.g.  update 123 treatment ifnng ifn\n"
   "   remove <id> <why>		  remove experiment (delete from table)\n"
   "\n"
   "options:\n"
@@ -345,7 +346,7 @@ if (count > 1)
 printf("%d\n", exps->ix);
 }
 
-void expModify(int id)
+void expUpdate(int id)
 /* Modify an experiment.  Changes value of one field or expVar for id specified. 
  * Aborts if experiment has an accession (must deaccession first) */
 {
@@ -391,8 +392,8 @@ else if (sameString(command, "find"))
     expFind(assembly, file);
 else if (sameString(command, "id"))
     expId();
-else if (sameString(command, "modify"))
-    expModify(id);
+else if (sameString(command, "update"))
+    expUpdate(id);
 else
     {
     errAbort("ERROR: Unknown command %s\n", command);
@@ -420,7 +421,7 @@ table = optionVal("table", (sameString(command, "copy") ||
                             sameString(command, "rename") ||
                             sameString(command, "restore") ||
                             sameString(command, "deacc") ||
-                            sameString(command, "modify") ||
+                            sameString(command, "update") ||
                             sameString(command, "remove")) ?
                         encodeExpTableNew: ENCODE_EXP_TABLE);
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
@@ -473,7 +474,7 @@ else if (sameString("id", command))
 else if ( sameString("acc", command) || 
         sameString("deacc", command) || 
         sameString("remove", command) || 
-        sameString("modify", command) ||
+        sameString("update", command) ||
         sameString("show", command))
     {
     if (argc < 3)
@@ -492,7 +493,7 @@ else if ( sameString("acc", command) ||
             else
                 why = argv[3];
             }
-        else if (sameString("modify", command))
+        else if (sameString("update", command))
             {
             if (argc < 6)
                 usage();

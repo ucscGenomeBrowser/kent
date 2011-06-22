@@ -727,8 +727,10 @@ function subtrackCfgShow(tableName)
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+tableName+"_cfg");
-    if($(divit).css('display') == 'none')
+    if(($(divit).css('display') == 'none')
+    && metadataIsVisible(tableName))
         metadataShowHide(tableName,"","");
+
     // Could have all inputs commented out, then uncommented when clicked:
     // But would need to:
     // 1) be able to find composite view level input

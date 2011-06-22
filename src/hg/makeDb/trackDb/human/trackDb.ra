@@ -3898,7 +3898,7 @@ searchPriority 20
 #NumtS track
 track numtSeq
 compositeTrack on
-shortLabel numtSeq
+shortLabel NumtS Sequence
 longLabel Human NumtS mitochondrial sequence
 group varRep
 priority 500.5

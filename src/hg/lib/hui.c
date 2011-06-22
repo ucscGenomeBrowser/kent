@@ -73,8 +73,8 @@ static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,char
 if (!nameIsFile && trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
     {
     char * link = needMem(PATH_LEN); // 512 should be enough
-    safef(link,PATH_LEN,"<A HREF='%s?g=%s' title='Downloadable Files...'>%s</A>", //  NOTE: TARGET=ucscDownloads   ??
-        hgFileUiName(), /*cartSessionVarName(), cartSessionId(cart),*/ tdb->track, name); // Note the hgsid would be needed if downloads page ever saved fileSortOrder to cart.
+    safef(link,PATH_LEN,"<A HREF='%s?db=%s&g=%s' title='Downloadable Files...'>%s</A>", //  NOTE: TARGET=ucscDownloads   ??
+        hgFileUiName(), database, /*cartSessionVarName(), cartSessionId(cart),*/ tdb->track, name); // Note the hgsid would be needed if downloads page ever saved fileSortOrder to cart.
     return link;
     }
 else if(trackDbSetting(tdb, "wgEncode") != NULL)  // Downloads directory if this is ENCODE
