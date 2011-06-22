@@ -1,6 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys
-from CvFile import *
+from cvfile.CvFile import *
 
 class validate(object):
 	"""validation script that calls cv.validate and then puts all its errors into a list"""
