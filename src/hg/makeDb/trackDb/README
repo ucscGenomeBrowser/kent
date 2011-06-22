@@ -797,9 +797,12 @@ COMPOSITE SUBTRACK CONFIGURATION - 3 ways
    trackDb cfg settings can be at composite level (noInherit off - default)
    Optionally use 'boxedCfg" to put a box around setting controls.
 2) Subtrack settings have different types.  "Multi-view" required (see below).
-   Cfg settings can be at level of composite, view, or subtrack.
+   Cfg settings can be at level of composite, view, or subtrack. 
 3) Individual subtracks configurable - used in combination with 1 or 2.
    "configurable on" setting, which can be at composite, view, or subtrack level.
+   (NOTE: it is possible to have a composite track that is not multi-view but has 
+    different types of subtracks. In this case, the subtracks should be individually 
+    configurable.)
 
 Composite Track "ClosestToHome" paradigm
 ----------------------------------------

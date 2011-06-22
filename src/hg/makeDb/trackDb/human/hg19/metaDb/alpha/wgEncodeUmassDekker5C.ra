@@ -11,6 +11,8 @@ dataType 5C
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
+dccAccession wgEncodeEH001665
+expId 1665
 fileName wgEncodeUmassDekker5CGm12878MatrixRep1.download.gz
 grant Dekker
 lab UMass-Dekker
@@ -28,6 +30,8 @@ dataType 5C
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
+dccAccession wgEncodeEH001665
+expId 1665
 fileName wgEncodeUmassDekker5CGm12878MatrixRep2.download.gz
 grant Dekker
 lab UMass-Dekker
@@ -45,6 +49,8 @@ dataType 5C
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
+dccAccession wgEncodeEH001666
+expId 1666
 fileName wgEncodeUmassDekker5CH1hescMatrixRep1.download.gz
 grant Dekker
 lab UMass-Dekker
@@ -62,6 +68,8 @@ dataType 5C
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
+dccAccession wgEncodeEH001666
+expId 1666
 fileName wgEncodeUmassDekker5CH1hescMatrixRep2.download.gz
 grant Dekker
 lab UMass-Dekker
@@ -79,6 +87,8 @@ dataType 5C
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
+dccAccession wgEncodeEH001667
+expId 1667
 fileName wgEncodeUmassDekker5CHelas3MatrixRep1.download.gz
 grant Dekker
 lab UMass-Dekker
@@ -96,6 +106,8 @@ dataType 5C
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
+dccAccession wgEncodeEH001667
+expId 1667
 fileName wgEncodeUmassDekker5CHelas3MatrixRep2.download.gz
 grant Dekker
 lab UMass-Dekker
@@ -113,6 +125,8 @@ dataType 5C
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
+dccAccession wgEncodeEH001668
+expId 1668
 fileName wgEncodeUmassDekker5CK562MatrixRep1.download.gz
 grant Dekker
 lab UMass-Dekker
@@ -130,6 +144,8 @@ dataType 5C
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
+dccAccession wgEncodeEH001668
+expId 1668
 fileName wgEncodeUmassDekker5CK562MatrixRep2.download.gz
 grant Dekker
 lab UMass-Dekker
@@ -139,4 +155,4 @@ replicate 2
 subId 3488
 view Matrix
 
-# MAGIC: -1878587271
+# MAGIC: 920336209

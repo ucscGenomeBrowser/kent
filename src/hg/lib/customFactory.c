@@ -1927,6 +1927,18 @@ if (hashLookup(settings, "viewLimits") == NULL)
     }
 }
 
+static void checkAllowedBigDataUrlProtocols(char *url)
+/* Abort if url is not using one of the allowed bigDataUrl network protocols.
+ * In particular, do not allow a local file reference. */
+{
+if (!(startsWith("http://", url)
+   || startsWith("https://", url)
+   || startsWith("ftp://", url)
+))
+    errAbort("only network protocols http, https, or ftp allowed in bigDataUrl");
+}
+
+
 static struct customTrack *bigWigLoader(struct customFactory *fac,  
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -1937,6 +1949,7 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bigWig.  Please check for case and spelling and that there is no new-line between the 'track' and the 'bigDataUrl' if you think the bigDataUrl is there.");
+checkAllowedBigDataUrlProtocols(bigDataUrl);
 
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
@@ -1984,6 +1997,7 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bigBed");
+checkAllowedBigDataUrlProtocols(bigDataUrl);
 
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
@@ -2033,6 +2047,7 @@ char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 struct dyString *dyErr = dyStringNew(0);
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bam (%s)", track->tdb->shortLabel);
+checkAllowedBigDataUrlProtocols(bigDataUrl);
 if (doExtraChecking)
     {
     /* protect against temporary network error */
@@ -2089,6 +2104,7 @@ struct dyString *dyErr = dyStringNew(0);
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=vcfTabix (%s)",
 	     track->tdb->shortLabel);
+checkAllowedBigDataUrlProtocols(bigDataUrl);
 if (doExtraChecking)
     {
     /* protect against temporary network error */

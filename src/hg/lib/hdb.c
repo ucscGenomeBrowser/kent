@@ -3935,7 +3935,6 @@ slFreeList(&tdbs);
 return NULL;
 }
 
-#ifdef UNUSED
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
 /* Look up track in database, errAbort if it's not there. */
 {
@@ -3946,6 +3945,7 @@ if (tdb == NULL)
     errAbort("Track %s not found", trackName);
 return tdb;
 }
+#ifdef UNUSED
 #endif /* UNUSED */
 
 

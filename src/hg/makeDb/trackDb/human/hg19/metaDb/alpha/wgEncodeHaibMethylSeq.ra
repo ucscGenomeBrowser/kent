@@ -11,6 +11,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000279
+expId 279
 fileName wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -30,6 +32,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000279
+expId 279
 fileName wgEncodeHaibMethylSeqBg02esHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -49,6 +53,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000279
+expId 279
 fileName wgEncodeHaibMethylSeqBg02esRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -66,6 +72,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000280
+expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -85,6 +93,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000280
+expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -104,6 +114,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000280
+expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -123,6 +135,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000280
+expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -142,6 +156,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000280
+expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -159,6 +175,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000280
+expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdRegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -176,6 +194,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -195,6 +215,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -214,6 +236,8 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878HpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -232,6 +256,8 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878HpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -250,6 +276,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -269,6 +297,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -288,6 +318,8 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878MspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -306,6 +338,8 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878MspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -324,6 +358,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -341,6 +377,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000294
+expId 294
 fileName wgEncodeHaibMethylSeqGm12878RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -358,6 +396,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -377,6 +417,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -396,6 +438,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891HpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -414,6 +458,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891HpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -432,6 +478,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -451,6 +499,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -470,6 +520,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891MspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -488,6 +540,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891MspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -506,6 +560,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -523,6 +579,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000300
+expId 300
 fileName wgEncodeHaibMethylSeqGm12891RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -540,6 +598,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -559,6 +619,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -578,6 +640,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-29
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892HpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -596,6 +660,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-29
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892HpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -614,6 +680,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -633,6 +701,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -652,6 +722,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-29
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892MspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -670,6 +742,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-29
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892MspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -688,6 +762,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -705,6 +781,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000303
+expId 303
 fileName wgEncodeHaibMethylSeqGm12892RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -722,6 +800,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -741,6 +821,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -760,6 +842,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescHpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -780,6 +864,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescHpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -800,6 +886,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -819,6 +907,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -838,6 +928,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescMspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -858,6 +950,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescMspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -878,6 +972,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -895,6 +991,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000306
+expId 306
 fileName wgEncodeHaibMethylSeqH1hescRegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -912,6 +1010,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000281
+expId 281
 fileName wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -931,6 +1031,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000281
+expId 281
 fileName wgEncodeHaibMethylSeqH9esHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -950,6 +1052,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000281
+expId 281
 fileName wgEncodeHaibMethylSeqH9esRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -967,6 +1071,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
+dccAccession wgEncodeEH000283
+expId 283
 fileName wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -986,6 +1092,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
+dccAccession wgEncodeEH000283
+expId 283
 fileName wgEncodeHaibMethylSeqH9esafpminusRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1003,6 +1111,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
+dccAccession wgEncodeEH000282
+expId 282
 fileName wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1022,6 +1132,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000282
+expId 282
 fileName wgEncodeHaibMethylSeqH9esafpplusHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1041,6 +1153,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000282
+expId 282
 fileName wgEncodeHaibMethylSeqH9esafpplusRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1058,6 +1172,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000284
+expId 284
 fileName wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1077,6 +1193,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000284
+expId 284
 fileName wgEncodeHaibMethylSeqH9escmHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1096,6 +1214,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000284
+expId 284
 fileName wgEncodeHaibMethylSeqH9escmRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1113,6 +1233,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000285
+expId 285
 fileName wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1132,6 +1254,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000285
+expId 285
 fileName wgEncodeHaibMethylSeqH9eseHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1151,6 +1275,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000285
+expId 285
 fileName wgEncodeHaibMethylSeqH9eseRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1168,6 +1294,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
+dccAccession wgEncodeEH000286
+expId 286
 fileName wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1187,6 +1315,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
+dccAccession wgEncodeEH000286
+expId 286
 fileName wgEncodeHaibMethylSeqH9esebRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1204,6 +1334,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
+dccAccession wgEncodeEH000287
+expId 287
 fileName wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1223,6 +1355,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000287
+expId 287
 fileName wgEncodeHaibMethylSeqH9esebdHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1242,6 +1376,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
+dccAccession wgEncodeEH000287
+expId 287
 fileName wgEncodeHaibMethylSeqH9esebdRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1259,6 +1395,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000288
+expId 288
 fileName wgEncodeHaibMethylSeqHalHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1278,6 +1416,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000288
+expId 288
 fileName wgEncodeHaibMethylSeqHalHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1297,6 +1437,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000288
+expId 288
 fileName wgEncodeHaibMethylSeqHalRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1314,6 +1456,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000289
+expId 289
 fileName wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1333,6 +1477,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000289
+expId 289
 fileName wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1352,6 +1498,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000289
+expId 289
 fileName wgEncodeHaibMethylSeqHct116HpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1371,6 +1519,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000289
+expId 289
 fileName wgEncodeHaibMethylSeqHct116MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1390,6 +1540,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000289
+expId 289
 fileName wgEncodeHaibMethylSeqHct116RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1407,6 +1559,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000289
+expId 289
 fileName wgEncodeHaibMethylSeqHct116RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1424,6 +1578,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1443,6 +1599,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1462,6 +1620,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3HpaPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1482,6 +1642,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3HpaPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1502,6 +1664,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1521,6 +1685,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1540,6 +1706,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3MspPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1560,6 +1728,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3MspPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1580,6 +1750,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1597,6 +1769,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000309
+expId 309
 fileName wgEncodeHaibMethylSeqHelas3RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1614,6 +1788,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1633,6 +1809,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1652,6 +1830,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2HpaPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1672,6 +1852,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2HpaPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1692,6 +1874,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1711,6 +1895,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1730,6 +1916,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2MspPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1750,6 +1938,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2MspPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1770,6 +1960,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1787,6 +1979,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000312
+expId 312
 fileName wgEncodeHaibMethylSeqHepg2RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1804,6 +1998,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-164
+dccAccession wgEncodeEH000290
+expId 290
 fileName wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1823,6 +2019,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000290
+expId 290
 fileName wgEncodeHaibMethylSeqHfl11wHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1842,6 +2040,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000290
+expId 290
 fileName wgEncodeHaibMethylSeqHfl11wRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1859,6 +2059,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000291
+expId 291
 fileName wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1878,6 +2080,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000291
+expId 291
 fileName wgEncodeHaibMethylSeqHfl24wHpaRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1897,6 +2101,8 @@ dataType MethylSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
+dccAccession wgEncodeEH000291
+expId 291
 fileName wgEncodeHaibMethylSeqHfl24wRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -1914,6 +2120,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1933,6 +2141,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1952,6 +2162,8 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562HpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1970,6 +2182,8 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562HpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -1988,6 +2202,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2007,6 +2223,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -2026,6 +2244,8 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562MspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2044,6 +2264,8 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562MspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -2062,6 +2284,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -2079,6 +2303,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000297
+expId 297
 fileName wgEncodeHaibMethylSeqK562RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
@@ -2088,4 +2314,4 @@ subId 1247
 tableName wgEncodeHaibMethylSeqK562RegionsRep2
 view Regions
 
-# MAGIC: 1808101002
+# MAGIC: -2144032009

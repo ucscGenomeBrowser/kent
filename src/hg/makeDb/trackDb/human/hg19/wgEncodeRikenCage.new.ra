@@ -1174,6 +1174,14 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 185567.000000
         # subId=4167 dateSubmitted=2011-05-31
 
+        track wgEncodeRikenCageMcf7CellPapPlusRawRep2
+        parent wgEncodeRikenCageViewPlusSignal off
+        shortLabel MCF-7 cell longPolyA PlusRaw 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in MCF-7 cell)
+        subGroups view=PlusRawSignal cellType=MCF7 localization=cell rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 244433.000000
+        # subId=4332 dateSubmitted=2011-06-17
+
 
     track wgEncodeRikenCageViewMinusSignal
     shortLabel Minus Signal  
@@ -1906,6 +1914,14 @@ superTrack wgEncodeRnaSeqSuper dense
         subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 134321.000000
         # subId=4167 dateSubmitted=2011-05-31
+
+        track wgEncodeRikenCageMcf7CellPapMinusRawRep2
+        parent wgEncodeRikenCageViewMinusSignal off
+        shortLabel MCF-7 cell longPolyA MinusRaw 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in MCF-7 cell)
+        subGroups view=MinusRawSignal cellType=MCF7 localization=cell rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 90472.000000
+        # subId=4332 dateSubmitted=2011-06-17
 
 
     track wgEncodeRikenCageViewAlignments

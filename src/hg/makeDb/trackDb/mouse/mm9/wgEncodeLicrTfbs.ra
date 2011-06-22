@@ -54,7 +54,10 @@ noInherit on
 	#viewUi on
 	subTrack wgEncodeLicrTfbs
 	signalFilter 0
-	signalFilterLimits 0:18241
+	signalFilterLimits 0:82
+    scoreFilterLimits 1:1000
+    scoreFilter 0
+    scoreMin 0
 
 		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
 		parent wgEncodeLicrTfbsViewPeaks 
