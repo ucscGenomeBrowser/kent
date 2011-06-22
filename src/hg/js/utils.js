@@ -418,11 +418,22 @@ function validateFloat(obj,min,max)
     }
 }
 
+
+function metadataIsVisible(trackName)
+{
+    var divit = $("#div_"+trackName+"_meta");
+    if (divit == undefined || divit.length == 0)
+        return false;
+    return ($(divit).css('display') != 'none');
+}
+
 function metadataShowHide(trackName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+trackName+"_meta");
+    if (divit == undefined || divit.length == 0)
+        return false;
     var img = $(divit).prev('a').find("img");
     if (img != undefined && $(img).length == 1) {
         img = $(img)[0];
