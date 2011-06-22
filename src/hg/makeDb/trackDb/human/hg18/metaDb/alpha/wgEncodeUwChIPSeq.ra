@@ -13,7 +13,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000453
 expId 453
 fileName wgEncodeUwChIPSeqAlignmentsBjInput.tagAlign.gz
 fragLength 350
@@ -35,7 +34,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000454
 expId 454
 fileName wgEncodeUwChIPSeqAlignmentsCaco2Input.tagAlign.gz
 fragLength 350
@@ -57,7 +55,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000455
 expId 455
 fileName wgEncodeUwChIPSeqAlignmentsGm06990Input.tagAlign.gz
 fragLength 350
@@ -79,7 +76,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000456
 expId 456
 fileName wgEncodeUwChIPSeqAlignmentsGm12801Input.tagAlign.gz
 fragLength 350
@@ -101,7 +97,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000457
 expId 457
 fileName wgEncodeUwChIPSeqAlignmentsGm12864Input.tagAlign.gz
 fragLength 350
@@ -123,7 +118,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000458
 expId 458
 fileName wgEncodeUwChIPSeqAlignmentsGm12865Input.tagAlign.gz
 fragLength 350
@@ -145,7 +139,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000459
 expId 459
 fileName wgEncodeUwChIPSeqAlignmentsGm12872Input.tagAlign.gz
 fragLength 350
@@ -167,7 +160,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000460
 expId 460
 fileName wgEncodeUwChIPSeqAlignmentsGm12873Input.tagAlign.gz
 fragLength 350
@@ -189,7 +181,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000461
 expId 461
 fileName wgEncodeUwChIPSeqAlignmentsGm12874Input.tagAlign.gz
 fragLength 350
@@ -211,7 +202,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000462
 expId 462
 fileName wgEncodeUwChIPSeqAlignmentsGm12875Input.tagAlign.gz
 fragLength 350
@@ -233,7 +223,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000463
 expId 463
 fileName wgEncodeUwChIPSeqAlignmentsGm12878Input.tagAlign.gz
 fragLength 350
@@ -255,7 +244,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000464
 expId 464
 fileName wgEncodeUwChIPSeqAlignmentsHek293Input.tagAlign.gz
 fragLength 350
@@ -277,7 +265,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000469
 expId 469
 fileName wgEncodeUwChIPSeqAlignmentsHelas3Input.tagAlign.gz
 fragLength 350
@@ -299,7 +286,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000470
 expId 470
 fileName wgEncodeUwChIPSeqAlignmentsHepg2Input.tagAlign.gz
 fragLength 350
@@ -321,7 +307,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000465
 expId 465
 fileName wgEncodeUwChIPSeqAlignmentsHl60Input.tagAlign.gz
 fragLength 350
@@ -343,7 +328,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000466
 expId 466
 fileName wgEncodeUwChIPSeqAlignmentsHmecInput.tagAlign.gz
 fragLength 350
@@ -365,7 +349,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000467
 expId 467
 fileName wgEncodeUwChIPSeqAlignmentsHreInput.tagAlign.gz
 fragLength 350
@@ -387,7 +370,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000468
 expId 468
 fileName wgEncodeUwChIPSeqAlignmentsHuvecInput.tagAlign.gz
 fragLength 350
@@ -409,7 +391,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000471
 expId 471
 fileName wgEncodeUwChIPSeqAlignmentsK562Input.tagAlign.gz
 fragLength 350
@@ -431,7 +412,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000472
 expId 472
 fileName wgEncodeUwChIPSeqAlignmentsNhekInput.tagAlign.gz
 fragLength 350
@@ -453,7 +433,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k27me3.tagAlign.gz
 fragLength 350
@@ -477,7 +456,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k36me3.tagAlign.gz
 fragLength 350
@@ -501,7 +479,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k4me3.tagAlign.gz
 fragLength 350
@@ -525,7 +502,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjtertCtcf.tagAlign.gz
 fragLength 350
@@ -549,7 +525,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2Ctcf.tagAlign.gz
 fragLength 350
@@ -573,7 +548,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k27me3.tagAlign.gz
 fragLength 350
@@ -597,7 +571,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k36me3.tagAlign.gz
 fragLength 350
@@ -621,7 +594,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k4me3.tagAlign.gz
 fragLength 350
@@ -646,7 +618,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990Ctcf.tagAlign.gz
 fragLength 350
@@ -670,7 +641,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k27me3.tagAlign.gz
 fragLength 350
@@ -694,7 +664,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k36me3.tagAlign.gz
 fragLength 350
@@ -718,7 +687,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k4me3.tagAlign.gz
 fragLength 350
@@ -742,7 +710,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 expId 393
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12801Ctcf.tagAlign.gz
 fragLength 350
@@ -766,7 +733,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12864Ctcf.tagAlign.gz
 fragLength 350
@@ -790,7 +756,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12865Ctcf.tagAlign.gz
 fragLength 350
@@ -814,7 +779,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12872Ctcf.tagAlign.gz
 fragLength 350
@@ -838,7 +802,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12873Ctcf.tagAlign.gz
 fragLength 350
@@ -862,7 +825,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12874Ctcf.tagAlign.gz
 fragLength 350
@@ -886,7 +848,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12875Ctcf.tagAlign.gz
 fragLength 350
@@ -911,7 +872,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878Ctcf.tagAlign.gz
 fragLength 350
@@ -935,7 +895,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k27me3.tagAlign.gz
 fragLength 350
@@ -959,7 +918,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k36me3.tagAlign.gz
 fragLength 350
@@ -984,7 +942,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k4me3.tagAlign.gz
 fragLength 350
@@ -1009,7 +966,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hek293Ctcf.tagAlign.gz
 fragLength 350
@@ -1033,7 +989,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3Ctcf.tagAlign.gz
 fragLength 350
@@ -1057,7 +1012,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k27me3.tagAlign.gz
 fragLength 350
@@ -1081,7 +1035,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k36me3.tagAlign.gz
 fragLength 350
@@ -1105,7 +1058,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k4me3.tagAlign.gz
 fragLength 350
@@ -1129,7 +1081,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
 fragLength 350
@@ -1153,7 +1104,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k27me3.tagAlign.gz
 fragLength 350
@@ -1177,7 +1127,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000446
 expId 446
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k36me3.tagAlign.gz
 fragLength 350
@@ -1201,7 +1150,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k4me3.tagAlign.gz
 fragLength 350
@@ -1225,7 +1173,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 expId 397
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hl60Ctcf.tagAlign.gz
 fragLength 350
@@ -1249,7 +1196,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hl60H3k4me3.tagAlign.gz
 fragLength 350
@@ -1273,7 +1219,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 expId 419
 fileName wgEncodeUwChIPSeqAlignmentsRep1HmecCtcf.tagAlign.gz
 fragLength 350
@@ -1298,7 +1243,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000408
 expId 408
 fileName wgEncodeUwChIPSeqAlignmentsRep1HmecH3k27me3.tagAlign.gz
 fragLength 350
@@ -1322,7 +1266,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreCtcf.tagAlign.gz
 fragLength 350
@@ -1346,7 +1289,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k27me3.tagAlign.gz
 fragLength 350
@@ -1370,7 +1312,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k36me3.tagAlign.gz
 fragLength 350
@@ -1394,7 +1335,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k4me3.tagAlign.gz
 fragLength 350
@@ -1419,7 +1359,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecCtcf.tagAlign.gz
 fragLength 350
@@ -1444,7 +1383,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k27me3.tagAlign.gz
 fragLength 350
@@ -1468,7 +1406,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k36me3.tagAlign.gz
 fragLength 350
@@ -1492,7 +1429,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k4me3.tagAlign.gz
 fragLength 350
@@ -1517,7 +1453,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562Ctcf.tagAlign.gz
 fragLength 350
@@ -1541,7 +1476,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k27me3.tagAlign.gz
 fragLength 350
@@ -1565,7 +1499,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k36me3.tagAlign.gz
 fragLength 350
@@ -1590,7 +1523,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000400
 expId 400
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k4me3.tagAlign.gz
 fragLength 350
@@ -1615,7 +1547,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekCtcf.tagAlign.gz
 fragLength 350
@@ -1639,7 +1570,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k27me3.tagAlign.gz
 fragLength 350
@@ -1663,7 +1593,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k36me3.tagAlign.gz
 fragLength 350
@@ -1687,7 +1616,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k4me3.tagAlign.gz
 fragLength 350
@@ -1711,7 +1639,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecCtcf.tagAlign.gz
 fragLength 350
@@ -1735,7 +1662,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k27me3.tagAlign.gz
 fragLength 350
@@ -1759,7 +1685,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k36me3.tagAlign.gz
 fragLength 350
@@ -1783,7 +1708,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k4me3.tagAlign.gz
 fragLength 350
@@ -1807,7 +1731,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraCtcf.tagAlign.gz
 fragLength 350
@@ -1831,7 +1754,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k27me3.tagAlign.gz
 fragLength 350
@@ -1855,7 +1777,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k36me3.tagAlign.gz
 fragLength 350
@@ -1879,7 +1800,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k4me3.tagAlign.gz
 fragLength 350
@@ -1903,7 +1823,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqAlignmentsRep1Werirb1Ctcf.tagAlign.gz
 fragLength 350
@@ -1927,7 +1846,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k27me3.tagAlign.gz
 fragLength 350
@@ -1951,7 +1869,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k36me3.tagAlign.gz
 fragLength 350
@@ -1975,7 +1892,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k4me3.tagAlign.gz
 fragLength 350
@@ -1999,7 +1915,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjtertCtcf.tagAlign.gz
 fragLength 350
@@ -2023,7 +1938,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2Ctcf.tagAlign.gz
 fragLength 350
@@ -2047,7 +1961,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k27me3.tagAlign.gz
 fragLength 350
@@ -2071,7 +1984,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k36me3.tagAlign.gz
 fragLength 350
@@ -2095,7 +2007,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k4me3.tagAlign.gz
 fragLength 350
@@ -2119,7 +2030,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990Ctcf.tagAlign.gz
 fragLength 350
@@ -2143,7 +2053,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k27me3.tagAlign.gz
 fragLength 350
@@ -2167,7 +2076,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k36me3.tagAlign.gz
 fragLength 350
@@ -2191,7 +2099,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k4me3.tagAlign.gz
 fragLength 350
@@ -2215,7 +2122,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12864Ctcf.tagAlign.gz
 fragLength 350
@@ -2239,7 +2145,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12865Ctcf.tagAlign.gz
 fragLength 350
@@ -2263,7 +2168,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12872Ctcf.tagAlign.gz
 fragLength 350
@@ -2287,7 +2191,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12873Ctcf.tagAlign.gz
 fragLength 350
@@ -2311,7 +2214,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12874Ctcf.tagAlign.gz
 fragLength 350
@@ -2335,7 +2237,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12875Ctcf.tagAlign.gz
 fragLength 350
@@ -2359,7 +2260,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
 fragLength 350
@@ -2383,7 +2283,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k27me3.tagAlign.gz
 fragLength 350
@@ -2407,7 +2306,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.gz
 fragLength 350
@@ -2431,7 +2329,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k4me3.tagAlign.gz
 fragLength 350
@@ -2455,7 +2352,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hek293Ctcf.tagAlign.gz
 fragLength 350
@@ -2479,7 +2375,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3Ctcf.tagAlign.gz
 fragLength 350
@@ -2503,7 +2398,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k27me3.tagAlign.gz
 fragLength 350
@@ -2527,7 +2421,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k36me3.tagAlign.gz
 fragLength 350
@@ -2551,7 +2444,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k4me3.tagAlign.gz
 fragLength 350
@@ -2576,7 +2468,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
 fragLength 350
@@ -2600,7 +2491,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2H3k27me3.tagAlign.gz
 fragLength 350
@@ -2624,7 +2514,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2H3k4me3.tagAlign.gz
 fragLength 350
@@ -2648,7 +2537,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hl60H3k4me3.tagAlign.gz
 fragLength 350
@@ -2672,7 +2560,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreCtcf.tagAlign.gz
 fragLength 350
@@ -2696,7 +2583,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k27me3.tagAlign.gz
 fragLength 350
@@ -2720,7 +2606,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k36me3.tagAlign.gz
 fragLength 350
@@ -2744,7 +2629,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k4me3.tagAlign.gz
 fragLength 350
@@ -2768,7 +2652,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecCtcf.tagAlign.gz
 fragLength 350
@@ -2792,7 +2675,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k27me3.tagAlign.gz
 fragLength 350
@@ -2816,7 +2698,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k36me3.tagAlign.gz
 fragLength 350
@@ -2840,7 +2721,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k4me3.tagAlign.gz
 fragLength 350
@@ -2864,7 +2744,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562Ctcf.tagAlign.gz
 fragLength 350
@@ -2888,7 +2767,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562H3k27me3.tagAlign.gz
 fragLength 350
@@ -2912,7 +2790,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562H3k36me3.tagAlign.gz
 fragLength 350
@@ -2936,7 +2813,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekCtcf.tagAlign.gz
 fragLength 350
@@ -2960,7 +2836,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k27me3.tagAlign.gz
 fragLength 350
@@ -2985,7 +2860,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k36me3.tagAlign.gz
 fragLength 350
@@ -3009,7 +2883,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k4me3.tagAlign.gz
 fragLength 350
@@ -3033,7 +2906,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecCtcf.tagAlign.gz
 fragLength 350
@@ -3057,7 +2929,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k27me3.tagAlign.gz
 fragLength 350
@@ -3081,7 +2952,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k36me3.tagAlign.gz
 fragLength 350
@@ -3105,7 +2975,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k4me3.tagAlign.gz
 fragLength 350
@@ -3129,7 +2998,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraCtcf.tagAlign.gz
 fragLength 350
@@ -3153,7 +3021,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k27me3.tagAlign.gz
 fragLength 350
@@ -3177,7 +3044,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k36me3.tagAlign.gz
 fragLength 350
@@ -3201,7 +3067,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k4me3.tagAlign.gz
 fragLength 350
@@ -3225,7 +3090,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqAlignmentsRep2Werirb1Ctcf.tagAlign.gz
 fragLength 350
@@ -3249,7 +3113,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000473
 expId 473
 fileName wgEncodeUwChIPSeqAlignmentsSaecInput.tagAlign.gz
 fragLength 350
@@ -3271,7 +3134,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000474
 expId 474
 fileName wgEncodeUwChIPSeqAlignmentsSknshraInput.tagAlign.gz
 fragLength 350
@@ -3293,7 +3155,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000475
 expId 475
 fileName wgEncodeUwChIPSeqAlignmentsWerirb1Input.tagAlign.gz
 fragLength 350
@@ -3315,7 +3176,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k27me3.broadPeak.gz
 fragLength 350
@@ -3340,7 +3200,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k36me3.broadPeak.gz
 fragLength 350
@@ -3365,7 +3224,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k4me3.broadPeak.gz
 fragLength 350
@@ -3390,7 +3248,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqHotspotsRep1BjtertCtcf.broadPeak.gz
 fragLength 350
@@ -3415,7 +3272,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2Ctcf.broadPeak.gz
 fragLength 350
@@ -3440,7 +3296,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k27me3.broadPeak.gz
 fragLength 350
@@ -3465,7 +3320,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k36me3.broadPeak.gz
 fragLength 350
@@ -3490,7 +3344,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k4me3.broadPeak.gz
 fragLength 350
@@ -3516,7 +3369,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990Ctcf.broadPeak.gz
 fragLength 350
@@ -3541,7 +3393,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k27me3.broadPeak.gz
 fragLength 350
@@ -3566,7 +3417,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k36me3.broadPeak.gz
 fragLength 350
@@ -3591,7 +3441,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k4me3.broadPeak.gz
 fragLength 350
@@ -3616,7 +3465,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 expId 393
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12801Ctcf.broadPeak.gz
 fragLength 350
@@ -3641,7 +3489,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf.broadPeak.gz
 fragLength 350
@@ -3666,7 +3513,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf.broadPeak.gz
 fragLength 350
@@ -3691,7 +3537,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf.broadPeak.gz
 fragLength 350
@@ -3716,7 +3561,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf.broadPeak.gz
 fragLength 350
@@ -3741,7 +3585,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf.broadPeak.gz
 fragLength 350
@@ -3766,7 +3609,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf.broadPeak.gz
 fragLength 350
@@ -3792,7 +3634,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878Ctcf.broadPeak.gz
 fragLength 350
@@ -3817,7 +3658,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k27me3.broadPeak.gz
 fragLength 350
@@ -3842,7 +3682,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k36me3.broadPeak.gz
 fragLength 350
@@ -3868,7 +3707,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k4me3.broadPeak.gz
 fragLength 350
@@ -3894,7 +3732,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqHotspotsRep1Hek293Ctcf.broadPeak.gz
 fragLength 350
@@ -3920,7 +3757,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf.broadPeak.gz
 fragLength 350
@@ -3945,7 +3781,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k27me3.broadPeak.gz
 fragLength 350
@@ -3970,7 +3805,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k36me3.broadPeak.gz
 fragLength 350
@@ -3995,7 +3829,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k4me3.broadPeak.gz
 fragLength 350
@@ -4020,7 +3853,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2Ctcf.broadPeak.gz
 fragLength 350
@@ -4045,7 +3877,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k27me3.broadPeak.gz
 fragLength 350
@@ -4070,7 +3901,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000446
 expId 446
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3.broadPeak.gz
 fragLength 350
@@ -4095,7 +3925,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k4me3.broadPeak.gz
 fragLength 350
@@ -4120,7 +3949,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 expId 397
 fileName wgEncodeUwChIPSeqHotspotsRep1Hl60Ctcf.broadPeak.gz
 fragLength 350
@@ -4145,7 +3973,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqHotspotsRep1Hl60H3k4me3.broadPeak.gz
 fragLength 350
@@ -4170,7 +3997,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 expId 419
 fileName wgEncodeUwChIPSeqHotspotsRep1HmecCtcf.broadPeak.gz
 fragLength 350
@@ -4196,7 +4022,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000408
 expId 408
 fileName wgEncodeUwChIPSeqHotspotsRep1HmecH3k27me3.broadPeak.gz
 fragLength 350
@@ -4221,7 +4046,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqHotspotsRep1HreCtcf.broadPeak.gz
 fragLength 350
@@ -4247,7 +4071,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-22
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k27me3.broadPeak.gz
 fragLength 350
@@ -4272,7 +4095,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k36me3.broadPeak.gz
 fragLength 350
@@ -4297,7 +4119,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k4me3.broadPeak.gz
 fragLength 350
@@ -4323,7 +4144,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecCtcf.broadPeak.gz
 fragLength 350
@@ -4349,7 +4169,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k27me3.broadPeak.gz
 fragLength 350
@@ -4374,7 +4193,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3.broadPeak.gz
 fragLength 350
@@ -4399,7 +4217,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k4me3.broadPeak.gz
 fragLength 350
@@ -4425,7 +4242,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqHotspotsRep1K562Ctcf.broadPeak.gz
 fragLength 350
@@ -4450,7 +4266,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k27me3.broadPeak.gz
 fragLength 350
@@ -4475,7 +4290,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k36me3.broadPeak.gz
 fragLength 350
@@ -4501,7 +4315,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000400
 expId 400
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k4me3.broadPeak.gz
 fragLength 350
@@ -4527,7 +4340,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekCtcf.broadPeak.gz
 fragLength 350
@@ -4552,7 +4364,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k27me3.broadPeak.gz
 fragLength 350
@@ -4577,7 +4388,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k36me3.broadPeak.gz
 fragLength 350
@@ -4602,7 +4412,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k4me3.broadPeak.gz
 fragLength 350
@@ -4627,7 +4436,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecCtcf.broadPeak.gz
 fragLength 350
@@ -4652,7 +4460,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k27me3.broadPeak.gz
 fragLength 350
@@ -4677,7 +4484,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k36me3.broadPeak.gz
 fragLength 350
@@ -4702,7 +4508,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k4me3.broadPeak.gz
 fragLength 350
@@ -4727,7 +4532,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraCtcf.broadPeak.gz
 fragLength 350
@@ -4752,7 +4556,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k27me3.broadPeak.gz
 fragLength 350
@@ -4777,7 +4580,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k36me3.broadPeak.gz
 fragLength 350
@@ -4802,7 +4604,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k4me3.broadPeak.gz
 fragLength 350
@@ -4827,7 +4628,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf.broadPeak.gz
 fragLength 350
@@ -4852,7 +4652,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k27me3.broadPeak.gz
 fragLength 350
@@ -4877,7 +4676,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k36me3.broadPeak.gz
 fragLength 350
@@ -4902,7 +4700,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k4me3.broadPeak.gz
 fragLength 350
@@ -4927,7 +4724,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqHotspotsRep2BjtertCtcf.broadPeak.gz
 fragLength 350
@@ -4952,7 +4748,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2Ctcf.broadPeak.gz
 fragLength 350
@@ -4977,7 +4772,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k27me3.broadPeak.gz
 fragLength 350
@@ -5002,7 +4796,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k36me3.broadPeak.gz
 fragLength 350
@@ -5027,7 +4820,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k4me3.broadPeak.gz
 fragLength 350
@@ -5052,7 +4844,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990Ctcf.broadPeak.gz
 fragLength 350
@@ -5077,7 +4868,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k27me3.broadPeak.gz
 fragLength 350
@@ -5102,7 +4892,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k36me3.broadPeak.gz
 fragLength 350
@@ -5127,7 +4916,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k4me3.broadPeak.gz
 fragLength 350
@@ -5152,7 +4940,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf.broadPeak.gz
 fragLength 350
@@ -5177,7 +4964,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf.broadPeak.gz
 fragLength 350
@@ -5202,7 +4988,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf.broadPeak.gz
 fragLength 350
@@ -5227,7 +5012,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf.broadPeak.gz
 fragLength 350
@@ -5252,7 +5036,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf.broadPeak.gz
 fragLength 350
@@ -5277,7 +5060,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf.broadPeak.gz
 fragLength 350
@@ -5302,7 +5084,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878Ctcf.broadPeak.gz
 fragLength 350
@@ -5327,7 +5108,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k27me3.broadPeak.gz
 fragLength 350
@@ -5352,7 +5132,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k36me3.broadPeak.gz
 fragLength 350
@@ -5377,7 +5156,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k4me3.broadPeak.gz
 fragLength 350
@@ -5402,7 +5180,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqHotspotsRep2Hek293Ctcf.broadPeak.gz
 fragLength 350
@@ -5427,7 +5204,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3Ctcf.broadPeak.gz
 fragLength 350
@@ -5452,7 +5228,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k27me3.broadPeak.gz
 fragLength 350
@@ -5477,7 +5252,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k36me3.broadPeak.gz
 fragLength 350
@@ -5502,7 +5276,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k4me3.broadPeak.gz
 fragLength 350
@@ -5528,7 +5301,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2Ctcf.broadPeak.gz
 fragLength 350
@@ -5553,7 +5325,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k27me3.broadPeak.gz
 fragLength 350
@@ -5578,7 +5349,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k4me3.broadPeak.gz
 fragLength 350
@@ -5603,7 +5373,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqHotspotsRep2Hl60H3k4me3.broadPeak.gz
 fragLength 350
@@ -5628,7 +5397,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqHotspotsRep2HreCtcf.broadPeak.gz
 fragLength 350
@@ -5653,7 +5421,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k27me3.broadPeak.gz
 fragLength 350
@@ -5678,7 +5445,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k36me3.broadPeak.gz
 fragLength 350
@@ -5703,7 +5469,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k4me3.broadPeak.gz
 fragLength 350
@@ -5728,7 +5493,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecCtcf.broadPeak.gz
 fragLength 350
@@ -5753,7 +5517,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k27me3.broadPeak.gz
 fragLength 350
@@ -5778,7 +5541,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3.broadPeak.gz
 fragLength 350
@@ -5803,7 +5565,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k4me3.broadPeak.gz
 fragLength 350
@@ -5828,7 +5589,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqHotspotsRep2K562Ctcf.broadPeak.gz
 fragLength 350
@@ -5853,7 +5613,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqHotspotsRep2K562H3k27me3.broadPeak.gz
 fragLength 350
@@ -5878,7 +5637,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqHotspotsRep2K562H3k36me3.broadPeak.gz
 fragLength 350
@@ -5903,7 +5661,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekCtcf.broadPeak.gz
 fragLength 350
@@ -5928,7 +5685,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k27me3.broadPeak.gz
 fragLength 350
@@ -5954,7 +5710,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k36me3.broadPeak.gz
 fragLength 350
@@ -5979,7 +5734,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k4me3.broadPeak.gz
 fragLength 350
@@ -6004,7 +5758,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecCtcf.broadPeak.gz
 fragLength 350
@@ -6029,7 +5782,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k27me3.broadPeak.gz
 fragLength 350
@@ -6054,7 +5806,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k36me3.broadPeak.gz
 fragLength 350
@@ -6079,7 +5830,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k4me3.broadPeak.gz
 fragLength 350
@@ -6104,7 +5854,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraCtcf.broadPeak.gz
 fragLength 350
@@ -6129,7 +5878,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k27me3.broadPeak.gz
 fragLength 350
@@ -6154,7 +5902,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k36me3.broadPeak.gz
 fragLength 350
@@ -6179,7 +5926,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k4me3.broadPeak.gz
 fragLength 350
@@ -6204,7 +5950,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf.broadPeak.gz
 fragLength 350
@@ -6229,7 +5974,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqPeaksGm06990Ctcf.narrowPeak.gz
 fragLength 350
@@ -6253,7 +5997,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 expId 393
 fileName wgEncodeUwChIPSeqPeaksGm12801Ctcf.narrowPeak.gz
 fragLength 350
@@ -6277,7 +6020,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqPeaksGm12878Ctcf.narrowPeak.gz
 fragLength 350
@@ -6301,7 +6043,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqPeaksGm12878H3k4me3.narrowPeak.gz
 fragLength 350
@@ -6325,7 +6066,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqPeaksHek293Ctcf.narrowPeak.gz
 fragLength 350
@@ -6349,7 +6089,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqPeaksHelas3Ctcf.narrowPeak.gz
 fragLength 350
@@ -6373,7 +6112,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqPeaksHepg2Ctcf.narrowPeak.gz
 fragLength 350
@@ -6397,7 +6135,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 expId 397
 fileName wgEncodeUwChIPSeqPeaksHl60Ctcf.narrowPeak.gz
 fragLength 350
@@ -6421,7 +6158,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqPeaksHreCtcf.narrowPeak.gz
 fragLength 350
@@ -6444,7 +6180,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqPeaksK562Ctcf.narrowPeak.gz
 fragLength 350
@@ -6468,7 +6203,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000400
 expId 400
 fileName wgEncodeUwChIPSeqPeaksK562H3k4me3.narrowPeak.gz
 fragLength 350
@@ -6492,7 +6226,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k27me3.narrowPeak.gz
 fragLength 350
@@ -6517,7 +6250,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k36me3.narrowPeak.gz
 fragLength 350
@@ -6542,7 +6274,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k4me3.narrowPeak.gz
 fragLength 350
@@ -6567,7 +6298,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqPeaksRep1BjtertCtcf.narrowPeak.gz
 fragLength 350
@@ -6592,7 +6322,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2Ctcf.narrowPeak.gz
 fragLength 350
@@ -6617,7 +6346,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k27me3.narrowPeak.gz
 fragLength 350
@@ -6642,7 +6370,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k36me3.narrowPeak.gz
 fragLength 350
@@ -6667,7 +6394,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k4me3.narrowPeak.gz
 fragLength 350
@@ -6693,7 +6419,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990Ctcf.narrowPeak.gz
 fragLength 350
@@ -6718,7 +6443,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k27me3.narrowPeak.gz
 fragLength 350
@@ -6743,7 +6467,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3.narrowPeak.gz
 fragLength 350
@@ -6768,7 +6491,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k4me3.narrowPeak.gz
 fragLength 350
@@ -6793,7 +6515,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf.narrowPeak.gz
 fragLength 350
@@ -6818,7 +6539,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf.narrowPeak.gz
 fragLength 350
@@ -6843,7 +6563,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf.narrowPeak.gz
 fragLength 350
@@ -6868,7 +6587,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf.narrowPeak.gz
 fragLength 350
@@ -6893,7 +6611,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf.narrowPeak.gz
 fragLength 350
@@ -6918,7 +6635,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf.narrowPeak.gz
 fragLength 350
@@ -6944,7 +6660,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878Ctcf.narrowPeak.gz
 fragLength 350
@@ -6969,7 +6684,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k27me3.narrowPeak.gz
 fragLength 350
@@ -6994,7 +6708,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3.narrowPeak.gz
 fragLength 350
@@ -7020,7 +6733,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k4me3.narrowPeak.gz
 fragLength 350
@@ -7046,7 +6758,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqPeaksRep1Hek293Ctcf.narrowPeak.gz
 fragLength 350
@@ -7072,7 +6783,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf.narrowPeak.gz
 fragLength 350
@@ -7097,7 +6807,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k27me3.narrowPeak.gz
 fragLength 350
@@ -7122,7 +6831,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k36me3.narrowPeak.gz
 fragLength 350
@@ -7147,7 +6855,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k4me3.narrowPeak.gz
 fragLength 350
@@ -7172,7 +6879,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k27me3.narrowPeak.gz
 fragLength 350
@@ -7197,7 +6903,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000446
 expId 446
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3.narrowPeak.gz
 fragLength 350
@@ -7222,7 +6927,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k4me3.narrowPeak.gz
 fragLength 350
@@ -7247,7 +6951,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqPeaksRep1Hl60H3k4me3.narrowPeak.gz
 fragLength 350
@@ -7272,7 +6975,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 expId 419
 fileName wgEncodeUwChIPSeqPeaksRep1HmecCtcf.narrowPeak.gz
 fragLength 350
@@ -7298,7 +7000,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000408
 expId 408
 fileName wgEncodeUwChIPSeqPeaksRep1HmecH3k27me3.narrowPeak.gz
 fragLength 350
@@ -7324,7 +7025,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-22
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k27me3.narrowPeak.gz
 fragLength 350
@@ -7349,7 +7049,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k36me3.narrowPeak.gz
 fragLength 350
@@ -7374,7 +7073,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k4me3.narrowPeak.gz
 fragLength 350
@@ -7400,7 +7098,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecCtcf.narrowPeak.gz
 fragLength 350
@@ -7426,7 +7123,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k27me3.narrowPeak.gz
 fragLength 350
@@ -7451,7 +7147,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3.narrowPeak.gz
 fragLength 350
@@ -7476,7 +7171,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k4me3.narrowPeak.gz
 fragLength 350
@@ -7502,7 +7196,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqPeaksRep1K562Ctcf.narrowPeak.gz
 fragLength 350
@@ -7527,7 +7220,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k27me3.narrowPeak.gz
 fragLength 350
@@ -7552,7 +7244,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k36me3.narrowPeak.gz
 fragLength 350
@@ -7578,7 +7269,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000400
 expId 400
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k4me3.narrowPeak.gz
 fragLength 350
@@ -7604,7 +7294,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqPeaksRep1NhekCtcf.narrowPeak.gz
 fragLength 350
@@ -7629,7 +7318,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k27me3.narrowPeak.gz
 fragLength 350
@@ -7654,7 +7342,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k36me3.narrowPeak.gz
 fragLength 350
@@ -7679,7 +7366,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k4me3.narrowPeak.gz
 fragLength 350
@@ -7704,7 +7390,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqPeaksRep1SaecCtcf.narrowPeak.gz
 fragLength 350
@@ -7729,7 +7414,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k27me3.narrowPeak.gz
 fragLength 350
@@ -7754,7 +7438,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k36me3.narrowPeak.gz
 fragLength 350
@@ -7779,7 +7462,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k4me3.narrowPeak.gz
 fragLength 350
@@ -7804,7 +7486,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraCtcf.narrowPeak.gz
 fragLength 350
@@ -7829,7 +7510,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k27me3.narrowPeak.gz
 fragLength 350
@@ -7854,7 +7534,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k36me3.narrowPeak.gz
 fragLength 350
@@ -7879,7 +7558,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k4me3.narrowPeak.gz
 fragLength 350
@@ -7904,7 +7582,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqPeaksWerirb1Ctcf.narrowPeak.gz
 fragLength 350
@@ -7928,7 +7605,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k27me3.fastq.gz
 fragLength 350
@@ -7951,7 +7627,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k36me3.fastq.gz
 fragLength 350
@@ -7974,7 +7649,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k4me3.fastq.gz
 fragLength 350
@@ -7997,7 +7671,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqRawDataRep1BjtertCtcf.fastq.gz
 fragLength 350
@@ -8020,7 +7693,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2Ctcf.fastq.gz
 fragLength 350
@@ -8043,7 +7715,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k27me3.fastq.gz
 fragLength 350
@@ -8066,7 +7737,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k36me3.fastq.gz
 fragLength 350
@@ -8089,7 +7759,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k4me3.fastq.gz
 fragLength 350
@@ -8113,7 +7782,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990Ctcf.fastq.gz
 fragLength 350
@@ -8136,7 +7804,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k27me3.fastq.gz
 fragLength 350
@@ -8159,7 +7826,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k36me3.fastq.gz
 fragLength 350
@@ -8182,7 +7848,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k4me3.fastq.gz
 fragLength 350
@@ -8205,7 +7870,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 expId 393
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12801Ctcf.fastq.gz
 fragLength 350
@@ -8229,7 +7893,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12864Ctcf.fastq.gz
 fragLength 350
@@ -8252,7 +7915,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12865Ctcf.fastq.gz
 fragLength 350
@@ -8275,7 +7937,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12872Ctcf.fastq.gz
 fragLength 350
@@ -8298,7 +7959,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12873Ctcf.fastq.gz
 fragLength 350
@@ -8321,7 +7981,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12874Ctcf.fastq.gz
 fragLength 350
@@ -8344,7 +8003,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12875Ctcf.fastq.gz
 fragLength 350
@@ -8368,7 +8026,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878Ctcf.fastq.gz
 fragLength 350
@@ -8391,7 +8048,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k27me3.fastq.gz
 fragLength 350
@@ -8414,7 +8070,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k36me3.fastq.gz
 fragLength 350
@@ -8438,7 +8093,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k4me3.fastq.gz
 fragLength 350
@@ -8462,7 +8116,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqRawDataRep1Hek293Ctcf.fastq.gz
 fragLength 350
@@ -8485,7 +8138,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3Ctcf.fastq.gz
 fragLength 350
@@ -8508,7 +8160,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k27me3.fastq.gz
 fragLength 350
@@ -8531,7 +8182,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k36me3.fastq.gz
 fragLength 350
@@ -8554,7 +8204,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k4me3.fastq.gz
 fragLength 350
@@ -8577,7 +8226,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2Ctcf.fastq.gz
 fragLength 350
@@ -8601,7 +8249,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k27me3.fastq.gz
 fragLength 350
@@ -8624,7 +8271,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000446
 expId 446
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k36me3.fastq.gz
 fragLength 350
@@ -8647,7 +8293,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k4me3.fastq.gz
 fragLength 350
@@ -8670,7 +8315,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 expId 397
 fileName wgEncodeUwChIPSeqRawDataRep1Hl60Ctcf.fastq.gz
 fragLength 350
@@ -8694,7 +8338,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqRawDataRep1Hl60H3k4me3.fastq.gz
 fragLength 350
@@ -8717,7 +8360,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 expId 419
 fileName wgEncodeUwChIPSeqRawDataRep1HmecCtcf.fastq.gz
 fragLength 350
@@ -8741,7 +8383,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000408
 expId 408
 fileName wgEncodeUwChIPSeqRawDataRep1HmecH3k27me3.fastq.gz
 fragLength 350
@@ -8764,7 +8405,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqRawDataRep1HreCtcf.fastq.gz
 fragLength 350
@@ -8787,7 +8427,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k27me3.fastq.gz
 fragLength 350
@@ -8810,7 +8449,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k36me3.fastq.gz
 fragLength 350
@@ -8833,7 +8471,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k4me3.fastq.gz
 fragLength 350
@@ -8857,7 +8494,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecCtcf.fastq.gz
 fragLength 350
@@ -8881,7 +8517,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k27me3.fastq.gz
 fragLength 350
@@ -8904,7 +8539,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k36me3.fastq.gz
 fragLength 350
@@ -8927,7 +8561,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k4me3.fastq.gz
 fragLength 350
@@ -8951,7 +8584,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqRawDataRep1K562Ctcf.fastq.gz
 fragLength 350
@@ -8974,7 +8606,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k27me3.fastq.gz
 fragLength 350
@@ -8997,7 +8628,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k36me3.fastq.gz
 fragLength 350
@@ -9021,7 +8651,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000400
 expId 400
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k4me3.fastq.gz
 fragLength 350
@@ -9045,7 +8674,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqRawDataRep1NhekCtcf.fastq.gz
 fragLength 350
@@ -9068,7 +8696,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k27me3.fastq.gz
 fragLength 350
@@ -9091,7 +8718,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k36me3.fastq.gz
 fragLength 350
@@ -9114,7 +8740,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k4me3.fastq.gz
 fragLength 350
@@ -9137,7 +8762,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqRawDataRep1SaecCtcf.fastq.gz
 fragLength 350
@@ -9160,7 +8784,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k27me3.fastq.gz
 fragLength 350
@@ -9183,7 +8806,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k36me3.fastq.gz
 fragLength 350
@@ -9206,7 +8828,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k4me3.fastq.gz
 fragLength 350
@@ -9229,7 +8850,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraCtcf.fastq.gz
 fragLength 350
@@ -9252,7 +8872,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k27me3.fastq.gz
 fragLength 350
@@ -9275,7 +8894,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k36me3.fastq.gz
 fragLength 350
@@ -9298,7 +8916,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k4me3.fastq.gz
 fragLength 350
@@ -9321,7 +8938,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqRawDataRep1Werirb1Ctcf.fastq.gz
 fragLength 350
@@ -9345,7 +8961,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k27me3.fastq.gz
 fragLength 350
@@ -9368,7 +8983,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k36me3.fastq.gz
 fragLength 350
@@ -9391,7 +9005,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k4me3.fastq.gz
 fragLength 350
@@ -9414,7 +9027,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqRawDataRep2BjtertCtcf.fastq.gz
 fragLength 350
@@ -9437,7 +9049,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2Ctcf.fastq.gz
 fragLength 350
@@ -9460,7 +9071,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k27me3.fastq.gz
 fragLength 350
@@ -9483,7 +9093,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k36me3.fastq.gz
 fragLength 350
@@ -9506,7 +9115,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k4me3.fastq.gz
 fragLength 350
@@ -9529,7 +9137,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990Ctcf.fastq.gz
 fragLength 350
@@ -9552,7 +9159,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k27me3.fastq.gz
 fragLength 350
@@ -9575,7 +9181,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k36me3.fastq.gz
 fragLength 350
@@ -9598,7 +9203,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k4me3.fastq.gz
 fragLength 350
@@ -9621,7 +9225,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12864Ctcf.fastq.gz
 fragLength 350
@@ -9644,7 +9247,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12865Ctcf.fastq.gz
 fragLength 350
@@ -9667,7 +9269,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12872Ctcf.fastq.gz
 fragLength 350
@@ -9690,7 +9291,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12873Ctcf.fastq.gz
 fragLength 350
@@ -9713,7 +9313,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12874Ctcf.fastq.gz
 fragLength 350
@@ -9736,7 +9335,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12875Ctcf.fastq.gz
 fragLength 350
@@ -9759,7 +9357,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878Ctcf.fastq.gz
 fragLength 350
@@ -9782,7 +9379,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k27me3.fastq.gz
 fragLength 350
@@ -9805,7 +9401,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k36me3.fastq.gz
 fragLength 350
@@ -9828,7 +9423,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k4me3.fastq.gz
 fragLength 350
@@ -9851,7 +9445,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqRawDataRep2Hek293Ctcf.fastq.gz
 fragLength 350
@@ -9874,7 +9467,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3Ctcf.fastq.gz
 fragLength 350
@@ -9897,7 +9489,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k27me3.fastq.gz
 fragLength 350
@@ -9920,7 +9511,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k36me3.fastq.gz
 fragLength 350
@@ -9943,7 +9533,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k4me3.fastq.gz
 fragLength 350
@@ -9967,7 +9556,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2Ctcf.fastq.gz
 fragLength 350
@@ -9990,7 +9578,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2H3k27me3.fastq.gz
 fragLength 350
@@ -10013,7 +9600,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2H3k4me3.fastq.gz
 fragLength 350
@@ -10036,7 +9622,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqRawDataRep2Hl60H3k4me3.fastq.gz
 fragLength 350
@@ -10059,7 +9644,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqRawDataRep2HreCtcf.fastq.gz
 fragLength 350
@@ -10082,7 +9666,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k27me3.fastq.gz
 fragLength 350
@@ -10105,7 +9688,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k36me3.fastq.gz
 fragLength 350
@@ -10128,7 +9710,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k4me3.fastq.gz
 fragLength 350
@@ -10151,7 +9732,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecCtcf.fastq.gz
 fragLength 350
@@ -10174,7 +9754,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k27me3.fastq.gz
 fragLength 350
@@ -10197,7 +9776,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k36me3.fastq.gz
 fragLength 350
@@ -10220,7 +9798,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k4me3.fastq.gz
 fragLength 350
@@ -10243,7 +9820,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqRawDataRep2K562Ctcf.fastq.gz
 fragLength 350
@@ -10266,7 +9842,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqRawDataRep2K562H3k27me3.fastq.gz
 fragLength 350
@@ -10289,7 +9864,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqRawDataRep2K562H3k36me3.fastq.gz
 fragLength 350
@@ -10312,7 +9886,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqRawDataRep2NhekCtcf.fastq.gz
 fragLength 350
@@ -10335,7 +9908,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k27me3.fastq.gz
 fragLength 350
@@ -10359,7 +9931,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k36me3.fastq.gz
 fragLength 350
@@ -10382,7 +9953,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k4me3.fastq.gz
 fragLength 350
@@ -10405,7 +9975,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqRawDataRep2SaecCtcf.fastq.gz
 fragLength 350
@@ -10428,7 +9997,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k27me3.fastq.gz
 fragLength 350
@@ -10451,7 +10019,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k36me3.fastq.gz
 fragLength 350
@@ -10474,7 +10041,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k4me3.fastq.gz
 fragLength 350
@@ -10497,7 +10063,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraCtcf.fastq.gz
 fragLength 350
@@ -10520,7 +10085,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k27me3.fastq.gz
 fragLength 350
@@ -10543,7 +10107,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k36me3.fastq.gz
 fragLength 350
@@ -10566,7 +10129,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k4me3.fastq.gz
 fragLength 350
@@ -10589,7 +10151,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqRawDataRep2Werirb1Ctcf.fastq.gz
 fragLength 350
@@ -10613,7 +10174,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3.wig.gz
 fragLength 350
@@ -10638,7 +10198,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3.wig.gz
 fragLength 350
@@ -10663,7 +10222,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3.wig.gz
 fragLength 350
@@ -10688,7 +10246,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf.wig.gz
 fragLength 350
@@ -10713,7 +10270,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf.wig.gz
 fragLength 350
@@ -10738,7 +10294,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3.wig.gz
 fragLength 350
@@ -10763,7 +10318,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3.wig.gz
 fragLength 350
@@ -10788,7 +10342,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3.wig.gz
 fragLength 350
@@ -10814,7 +10367,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf.wig.gz
 fragLength 350
@@ -10839,7 +10391,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3.wig.gz
 fragLength 350
@@ -10864,7 +10415,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3.wig.gz
 fragLength 350
@@ -10889,7 +10439,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3.wig.gz
 fragLength 350
@@ -10914,7 +10463,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 expId 393
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf.wig.gz
 fragLength 350
@@ -10939,7 +10487,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wig.gz
 fragLength 350
@@ -10964,7 +10511,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wig.gz
 fragLength 350
@@ -10989,7 +10535,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wig.gz
 fragLength 350
@@ -11014,7 +10559,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wig.gz
 fragLength 350
@@ -11039,7 +10583,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wig.gz
 fragLength 350
@@ -11064,7 +10607,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wig.gz
 fragLength 350
@@ -11090,7 +10632,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf.wig.gz
 fragLength 350
@@ -11115,7 +10656,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3.wig.gz
 fragLength 350
@@ -11140,7 +10680,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3.wig.gz
 fragLength 350
@@ -11166,7 +10705,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3.wig.gz
 fragLength 350
@@ -11192,7 +10730,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf.wig.gz
 fragLength 350
@@ -11218,7 +10755,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf.wig.gz
 fragLength 350
@@ -11243,7 +10779,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3.wig.gz
 fragLength 350
@@ -11268,7 +10803,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3.wig.gz
 fragLength 350
@@ -11293,7 +10827,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3.wig.gz
 fragLength 350
@@ -11318,7 +10851,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf.wig.gz
 fragLength 350
@@ -11343,7 +10875,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3.wig.gz
 fragLength 350
@@ -11368,7 +10899,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000446
 expId 446
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3.wig.gz
 fragLength 350
@@ -11393,7 +10923,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3.wig.gz
 fragLength 350
@@ -11418,7 +10947,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 expId 397
 fileName wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf.wig.gz
 fragLength 350
@@ -11443,7 +10971,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3.wig.gz
 fragLength 350
@@ -11468,7 +10995,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 expId 419
 fileName wgEncodeUwChIPSeqRawSignalRep1HmecCtcf.wig.gz
 fragLength 350
@@ -11494,7 +11020,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000408
 expId 408
 fileName wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3.wig.gz
 fragLength 350
@@ -11519,7 +11044,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqRawSignalRep1HreCtcf.wig.gz
 fragLength 350
@@ -11545,7 +11069,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-22
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3.wig.gz
 fragLength 350
@@ -11570,7 +11093,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3.wig.gz
 fragLength 350
@@ -11595,7 +11117,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3.wig.gz
 fragLength 350
@@ -11621,7 +11142,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf.wig.gz
 fragLength 350
@@ -11647,7 +11167,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3.wig.gz
 fragLength 350
@@ -11672,7 +11191,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3.wig.gz
 fragLength 350
@@ -11697,7 +11215,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3.wig.gz
 fragLength 350
@@ -11723,7 +11240,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqRawSignalRep1K562Ctcf.wig.gz
 fragLength 350
@@ -11748,7 +11264,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3.wig.gz
 fragLength 350
@@ -11773,7 +11288,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3.wig.gz
 fragLength 350
@@ -11799,7 +11313,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000400
 expId 400
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3.wig.gz
 fragLength 350
@@ -11825,7 +11338,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekCtcf.wig.gz
 fragLength 350
@@ -11850,7 +11362,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3.wig.gz
 fragLength 350
@@ -11875,7 +11386,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3.wig.gz
 fragLength 350
@@ -11900,7 +11410,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3.wig.gz
 fragLength 350
@@ -11925,7 +11434,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecCtcf.wig.gz
 fragLength 350
@@ -11950,7 +11458,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3.wig.gz
 fragLength 350
@@ -11975,7 +11482,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3.wig.gz
 fragLength 350
@@ -12000,7 +11506,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3.wig.gz
 fragLength 350
@@ -12025,7 +11530,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf.wig.gz
 fragLength 350
@@ -12050,7 +11554,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3.wig.gz
 fragLength 350
@@ -12075,7 +11578,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3.wig.gz
 fragLength 350
@@ -12100,7 +11602,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3.wig.gz
 fragLength 350
@@ -12125,7 +11626,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf.wig.gz
 fragLength 350
@@ -12150,7 +11650,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000424
 expId 424
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3.wig.gz
 fragLength 350
@@ -12175,7 +11674,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000443
 expId 443
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3.wig.gz
 fragLength 350
@@ -12200,7 +11698,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000416
 expId 416
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3.wig.gz
 fragLength 350
@@ -12225,7 +11722,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000403
 expId 403
 fileName wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf.wig.gz
 fragLength 350
@@ -12250,7 +11746,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 expId 404
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf.wig.gz
 fragLength 350
@@ -12275,7 +11770,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000425
 expId 425
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3.wig.gz
 fragLength 350
@@ -12300,7 +11794,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000426
 expId 426
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3.wig.gz
 fragLength 350
@@ -12325,7 +11818,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000407
 expId 407
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3.wig.gz
 fragLength 350
@@ -12350,7 +11842,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000392
 expId 392
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf.wig.gz
 fragLength 350
@@ -12375,7 +11866,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000427
 expId 427
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3.wig.gz
 fragLength 350
@@ -12400,7 +11890,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000444
 expId 444
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3.wig.gz
 fragLength 350
@@ -12425,7 +11914,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000417
 expId 417
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3.wig.gz
 fragLength 350
@@ -12450,7 +11938,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 expId 447
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wig.gz
 fragLength 350
@@ -12475,7 +11962,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 expId 448
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf.wig.gz
 fragLength 350
@@ -12500,7 +11986,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 expId 449
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wig.gz
 fragLength 350
@@ -12525,7 +12010,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 expId 450
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz
 fragLength 350
@@ -12550,7 +12034,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 expId 451
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz
 fragLength 350
@@ -12575,7 +12058,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 expId 452
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz
 fragLength 350
@@ -12600,7 +12082,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000394
 expId 394
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf.wig.gz
 fragLength 350
@@ -12625,7 +12106,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000428
 expId 428
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3.wig.gz
 fragLength 350
@@ -12650,7 +12130,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-dccAccession wgEncodeEH000445
 expId 445
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3.wig.gz
 fragLength 350
@@ -12675,7 +12154,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000395
 expId 395
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3.wig.gz
 fragLength 350
@@ -12700,7 +12178,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000396
 expId 396
 fileName wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf.wig.gz
 fragLength 350
@@ -12725,7 +12202,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-dccAccession wgEncodeEH000398
 expId 398
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf.wig.gz
 fragLength 350
@@ -12750,7 +12226,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000442
 expId 442
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3.wig.gz
 fragLength 350
@@ -12775,7 +12250,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000432
 expId 432
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3.wig.gz
 fragLength 350
@@ -12800,7 +12274,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000423
 expId 423
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3.wig.gz
 fragLength 350
@@ -12826,7 +12299,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 expId 401
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf.wig.gz
 fragLength 350
@@ -12851,7 +12323,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000433
 expId 433
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3.wig.gz
 fragLength 350
@@ -12876,7 +12347,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000413
 expId 413
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3.wig.gz
 fragLength 350
@@ -12901,7 +12371,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000418
 expId 418
 fileName wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3.wig.gz
 fragLength 350
@@ -12926,7 +12395,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000405
 expId 405
 fileName wgEncodeUwChIPSeqRawSignalRep2HreCtcf.wig.gz
 fragLength 350
@@ -12951,7 +12419,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000429
 expId 429
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3.wig.gz
 fragLength 350
@@ -12976,7 +12443,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000430
 expId 430
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3.wig.gz
 fragLength 350
@@ -13001,7 +12467,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000409
 expId 409
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3.wig.gz
 fragLength 350
@@ -13026,7 +12491,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000410
 expId 410
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf.wig.gz
 fragLength 350
@@ -13051,7 +12515,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000411
 expId 411
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3.wig.gz
 fragLength 350
@@ -13076,7 +12539,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000431
 expId 431
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3.wig.gz
 fragLength 350
@@ -13101,7 +12563,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000412
 expId 412
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3.wig.gz
 fragLength 350
@@ -13126,7 +12587,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000399
 expId 399
 fileName wgEncodeUwChIPSeqRawSignalRep2K562Ctcf.wig.gz
 fragLength 350
@@ -13151,7 +12611,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000434
 expId 434
 fileName wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3.wig.gz
 fragLength 350
@@ -13176,7 +12635,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000435
 expId 435
 fileName wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3.wig.gz
 fragLength 350
@@ -13201,7 +12659,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000406
 expId 406
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekCtcf.wig.gz
 fragLength 350
@@ -13226,7 +12683,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000436
 expId 436
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3.wig.gz
 fragLength 350
@@ -13252,7 +12708,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000414
 expId 414
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3.wig.gz
 fragLength 350
@@ -13277,7 +12732,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-dccAccession wgEncodeEH000415
 expId 415
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3.wig.gz
 fragLength 350
@@ -13302,7 +12756,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 expId 437
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecCtcf.wig.gz
 fragLength 350
@@ -13327,7 +12780,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000420
 expId 420
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3.wig.gz
 fragLength 350
@@ -13352,7 +12804,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000438
 expId 438
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3.wig.gz
 fragLength 350
@@ -13377,7 +12828,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000421
 expId 421
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3.wig.gz
 fragLength 350
@@ -13402,7 +12852,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000439
 expId 439
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf.wig.gz
 fragLength 350
@@ -13427,7 +12876,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-dccAccession wgEncodeEH000440
 expId 440
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3.wig.gz
 fragLength 350
@@ -13452,7 +12900,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000441
 expId 441
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3.wig.gz
 fragLength 350
@@ -13477,7 +12924,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000422
 expId 422
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3.wig.gz
 fragLength 350
@@ -13502,7 +12948,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 expId 402
 fileName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf.wig.gz
 fragLength 350
@@ -13517,4 +12962,4 @@ subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 view RawSignal
 
-# MAGIC: -1431503197
+# MAGIC: -700019440

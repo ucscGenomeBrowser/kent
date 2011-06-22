@@ -11,7 +11,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-10
 dateUnrestricted 2009-12-10
-dccAccession wgEncodeEH000016
 expId 16
 fileName wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal.wig.gz
 grant Gingeras
@@ -31,7 +30,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000012
 expId 12
 fileName wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya.wig.gz
 grant Gingeras
@@ -51,7 +49,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000002
 expId 2
 fileName wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya.wig.gz
 grant Gingeras
@@ -71,7 +68,6 @@ dataType RnaChip
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-08-27
 dateUnrestricted 2010-05-27
-dccAccession wgEncodeEH000026
 expId 26
 fileName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal.wig.gz
 grant Gingeras
@@ -91,7 +87,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000003
 expId 3
 fileName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya.wig.gz
 grant Gingeras
@@ -111,7 +106,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-01
 dateUnrestricted 2010-01-01
-dccAccession wgEncodeEH000017
 expId 17
 fileName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya.wig.gz
 grant Gingeras
@@ -131,7 +125,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000018
 expId 18
 fileName wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya.wig.gz
 grant Gingeras
@@ -151,7 +144,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000019
 expId 19
 fileName wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya.wig.gz
 grant Gingeras
@@ -171,7 +163,6 @@ dataType RnaChip
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-08-27
 dateUnrestricted 2010-05-27
-dccAccession wgEncodeEH000027
 expId 27
 fileName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal.wig.gz
 grant Gingeras
@@ -191,7 +182,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000024
 expId 24
 fileName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya.wig.gz
 grant Gingeras
@@ -211,7 +201,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000025
 expId 25
 fileName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya.wig.gz
 grant Gingeras
@@ -231,7 +220,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH000011
 expId 11
 fileName wgEncodeAffyRnaChipFiltRawSignalK562CellTotal.wig.gz
 grant Gingeras
@@ -251,7 +239,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
-dccAccession wgEncodeEH000013
 expId 13
 fileName wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal.wig.gz
 grant Gingeras
@@ -271,7 +258,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000005
 expId 5
 fileName wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya.wig.gz
 grant Gingeras
@@ -291,7 +277,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000006
 expId 6
 fileName wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya.wig.gz
 grant Gingeras
@@ -311,7 +296,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
-dccAccession wgEncodeEH000015
 expId 15
 fileName wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal.wig.gz
 grant Gingeras
@@ -331,7 +315,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-10
 dateUnrestricted 2009-12-10
-dccAccession wgEncodeEH000014
 expId 14
 fileName wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal.wig.gz
 grant Gingeras
@@ -351,7 +334,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000007
 expId 7
 fileName wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya.wig.gz
 grant Gingeras
@@ -371,7 +353,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000008
 expId 8
 fileName wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya.wig.gz
 grant Gingeras
@@ -391,7 +372,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000004
 expId 4
 fileName wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya.wig.gz
 grant Gingeras
@@ -411,7 +391,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000020
 expId 20
 fileName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 grant Gingeras
@@ -431,7 +410,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000021
 expId 21
 fileName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya.wig.gz
 grant Gingeras
@@ -451,7 +429,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-12
-dccAccession wgEncodeEH000022
 expId 22
 fileName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
 grant Gingeras
@@ -471,7 +448,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-12
-dccAccession wgEncodeEH000023
 expId 23
 fileName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya.wig.gz
 grant Gingeras
@@ -491,7 +467,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-24
 dateUnrestricted 2009-08-24
-dccAccession wgEncodeEH000009
 expId 9
 fileName wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya.wig.gz
 grant Gingeras
@@ -511,7 +486,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-24
 dateUnrestricted 2009-08-24
-dccAccession wgEncodeEH000010
 expId 10
 fileName wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya.wig.gz
 grant Gingeras
@@ -531,7 +505,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-10
 dateUnrestricted 2009-12-10
-dccAccession wgEncodeEH000016
 expId 16
 fileName wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal.broadPeak.gz
 grant Gingeras
@@ -551,7 +524,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000012
 expId 12
 fileName wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -571,7 +543,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000002
 expId 2
 fileName wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya.broadPeak.gz
 grant Gingeras
@@ -591,7 +562,6 @@ dataType RnaChip
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-08-27
 dateUnrestricted 2010-05-27
-dccAccession wgEncodeEH000026
 expId 26
 fileName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal.broadPeak.gz
 grant Gingeras
@@ -611,7 +581,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000003
 expId 3
 fileName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -631,7 +600,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-01
 dateUnrestricted 2010-01-01
-dccAccession wgEncodeEH000017
 expId 17
 fileName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya.broadPeak.gz
 grant Gingeras
@@ -651,7 +619,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000018
 expId 18
 fileName wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -671,7 +638,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000019
 expId 19
 fileName wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya.broadPeak.gz
 grant Gingeras
@@ -691,7 +657,6 @@ dataType RnaChip
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-08-27
 dateUnrestricted 2010-05-27
-dccAccession wgEncodeEH000027
 expId 27
 fileName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal.broadPeak.gz
 grant Gingeras
@@ -711,7 +676,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000024
 expId 24
 fileName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -731,7 +695,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000025
 expId 25
 fileName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya.broadPeak.gz
 grant Gingeras
@@ -751,7 +714,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH000011
 expId 11
 fileName wgEncodeAffyRnaChipFiltTransfragsK562CellTotal.broadPeak.gz
 grant Gingeras
@@ -771,7 +733,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
-dccAccession wgEncodeEH000013
 expId 13
 fileName wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal.broadPeak.gz
 grant Gingeras
@@ -791,7 +752,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000005
 expId 5
 fileName wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -811,7 +771,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000006
 expId 6
 fileName wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya.broadPeak.gz
 grant Gingeras
@@ -831,7 +790,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
-dccAccession wgEncodeEH000015
 expId 15
 fileName wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal.broadPeak.gz
 grant Gingeras
@@ -851,7 +809,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-10
 dateUnrestricted 2009-12-10
-dccAccession wgEncodeEH000014
 expId 14
 fileName wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal.broadPeak.gz
 grant Gingeras
@@ -871,7 +828,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000007
 expId 7
 fileName wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -891,7 +847,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000008
 expId 8
 fileName wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya.broadPeak.gz
 grant Gingeras
@@ -911,7 +866,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000004
 expId 4
 fileName wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -931,7 +885,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000020
 expId 20
 fileName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -951,7 +904,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000021
 expId 21
 fileName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 grant Gingeras
@@ -971,7 +923,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-12
-dccAccession wgEncodeEH000022
 expId 22
 fileName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -991,7 +942,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-12
-dccAccession wgEncodeEH000023
 expId 23
 fileName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
 grant Gingeras
@@ -1011,7 +961,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-24
 dateUnrestricted 2009-08-24
-dccAccession wgEncodeEH000009
 expId 9
 fileName wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1031,7 +980,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-24
 dateUnrestricted 2009-08-24
-dccAccession wgEncodeEH000010
 expId 10
 fileName wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya.broadPeak.gz
 grant Gingeras
@@ -1051,7 +999,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-10
 dateUnrestricted 2009-12-10
-dccAccession wgEncodeEH000016
 expId 16
 fileName wgEncodeAffyRnaChipRawSignalGm12878CellTotal.wig.gz
 grant Gingeras
@@ -1071,7 +1018,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000012
 expId 12
 fileName wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya.wig.gz
 grant Gingeras
@@ -1091,7 +1037,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000002
 expId 2
 fileName wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya.wig.gz
 grant Gingeras
@@ -1111,7 +1056,6 @@ dataType RnaChip
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-08-27
 dateUnrestricted 2010-05-27
-dccAccession wgEncodeEH000026
 expId 26
 fileName wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal.wig.gz
 grant Gingeras
@@ -1131,7 +1075,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000003
 expId 3
 fileName wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya.wig.gz
 grant Gingeras
@@ -1151,7 +1094,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-01
 dateUnrestricted 2010-01-01
-dccAccession wgEncodeEH000017
 expId 17
 fileName wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya.wig.gz
 grant Gingeras
@@ -1171,7 +1113,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000018
 expId 18
 fileName wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya.wig.gz
 grant Gingeras
@@ -1191,7 +1132,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000019
 expId 19
 fileName wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya.wig.gz
 grant Gingeras
@@ -1211,7 +1151,6 @@ dataType RnaChip
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-08-27
 dateUnrestricted 2010-05-27
-dccAccession wgEncodeEH000027
 expId 27
 fileName wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal.wig.gz
 grant Gingeras
@@ -1231,7 +1170,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000024
 expId 24
 fileName wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya.wig.gz
 grant Gingeras
@@ -1251,7 +1189,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000025
 expId 25
 fileName wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya.wig.gz
 grant Gingeras
@@ -1271,7 +1208,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH000011
 expId 11
 fileName wgEncodeAffyRnaChipRawSignalK562CellTotal.wig.gz
 grant Gingeras
@@ -1291,7 +1227,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
-dccAccession wgEncodeEH000013
 expId 13
 fileName wgEncodeAffyRnaChipRawSignalK562ChromatinTotal.wig.gz
 grant Gingeras
@@ -1311,7 +1246,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000005
 expId 5
 fileName wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya.wig.gz
 grant Gingeras
@@ -1331,7 +1265,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000006
 expId 6
 fileName wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya.wig.gz
 grant Gingeras
@@ -1351,7 +1284,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
-dccAccession wgEncodeEH000015
 expId 15
 fileName wgEncodeAffyRnaChipRawSignalK562NucleolusTotal.wig.gz
 grant Gingeras
@@ -1371,7 +1303,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
-dccAccession wgEncodeEH000014
 expId 14
 fileName wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal.wig.gz
 grant Gingeras
@@ -1391,7 +1322,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000007
 expId 7
 fileName wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya.wig.gz
 grant Gingeras
@@ -1411,7 +1341,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000008
 expId 8
 fileName wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya.wig.gz
 grant Gingeras
@@ -1431,7 +1360,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000004
 expId 4
 fileName wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya.wig.gz
 grant Gingeras
@@ -1451,7 +1379,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000020
 expId 20
 fileName wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 grant Gingeras
@@ -1471,7 +1398,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000021
 expId 21
 fileName wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya.wig.gz
 grant Gingeras
@@ -1491,7 +1417,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-12
-dccAccession wgEncodeEH000022
 expId 22
 fileName wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
 grant Gingeras
@@ -1511,7 +1436,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-12
-dccAccession wgEncodeEH000023
 expId 23
 fileName wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya.wig.gz
 grant Gingeras
@@ -1531,7 +1455,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-24
 dateUnrestricted 2009-08-24
-dccAccession wgEncodeEH000009
 expId 9
 fileName wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya.wig.gz
 grant Gingeras
@@ -1551,7 +1474,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-24
 dateUnrestricted 2009-08-24
-dccAccession wgEncodeEH000010
 expId 10
 fileName wgEncodeAffyRnaChipRawSignalProstateCellLongpolya.wig.gz
 grant Gingeras
@@ -1571,7 +1493,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-10
 dateUnrestricted 2009-12-10
-dccAccession wgEncodeEH000016
 expId 16
 fileName wgEncodeAffyRnaChipTransfragsGm12878CellTotal.broadPeak.gz
 grant Gingeras
@@ -1591,7 +1512,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-dccAccession wgEncodeEH000012
 expId 12
 fileName wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1611,7 +1531,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000002
 expId 2
 fileName wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya.broadPeak.gz
 grant Gingeras
@@ -1631,7 +1550,6 @@ dataType RnaChip
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-08-27
 dateUnrestricted 2010-05-27
-dccAccession wgEncodeEH000026
 expId 26
 fileName wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal.broadPeak.gz
 grant Gingeras
@@ -1651,7 +1569,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000003
 expId 3
 fileName wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1671,7 +1588,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-01
 dateUnrestricted 2010-01-01
-dccAccession wgEncodeEH000017
 expId 17
 fileName wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya.broadPeak.gz
 grant Gingeras
@@ -1691,7 +1607,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000018
 expId 18
 fileName wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1711,7 +1626,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000019
 expId 19
 fileName wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya.broadPeak.gz
 grant Gingeras
@@ -1731,7 +1645,6 @@ dataType RnaChip
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-08-27
 dateUnrestricted 2010-05-27
-dccAccession wgEncodeEH000027
 expId 27
 fileName wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal.broadPeak.gz
 grant Gingeras
@@ -1751,7 +1664,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000024
 expId 24
 fileName wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1771,7 +1683,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH000025
 expId 25
 fileName wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya.broadPeak.gz
 grant Gingeras
@@ -1791,7 +1702,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH000011
 expId 11
 fileName wgEncodeAffyRnaChipTransfragsK562CellTotal.broadPeak.gz
 grant Gingeras
@@ -1811,7 +1721,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
-dccAccession wgEncodeEH000013
 expId 13
 fileName wgEncodeAffyRnaChipTransfragsK562ChromatinTotal.broadPeak.gz
 grant Gingeras
@@ -1831,7 +1740,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000005
 expId 5
 fileName wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1851,7 +1759,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000006
 expId 6
 fileName wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya.broadPeak.gz
 grant Gingeras
@@ -1871,7 +1778,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
-dccAccession wgEncodeEH000015
 expId 15
 fileName wgEncodeAffyRnaChipTransfragsK562NucleolusTotal.broadPeak.gz
 grant Gingeras
@@ -1891,7 +1797,6 @@ dataType RnaChip
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
-dccAccession wgEncodeEH000014
 expId 14
 fileName wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal.broadPeak.gz
 grant Gingeras
@@ -1911,7 +1816,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000007
 expId 7
 fileName wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1931,7 +1835,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-22
 dateUnrestricted 2009-08-22
-dccAccession wgEncodeEH000008
 expId 8
 fileName wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya.broadPeak.gz
 grant Gingeras
@@ -1951,7 +1854,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
-dccAccession wgEncodeEH000004
 expId 4
 fileName wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1971,7 +1873,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000020
 expId 20
 fileName wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -1991,7 +1892,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-05-27
 dateUnrestricted 2010-02-27
-dccAccession wgEncodeEH000021
 expId 21
 fileName wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 grant Gingeras
@@ -2011,7 +1911,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-12
-dccAccession wgEncodeEH000022
 expId 22
 fileName wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -2031,7 +1930,6 @@ dataType RnaChip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-12
-dccAccession wgEncodeEH000023
 expId 23
 fileName wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
 grant Gingeras
@@ -2051,7 +1949,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-24
 dateUnrestricted 2009-08-24
-dccAccession wgEncodeEH000009
 expId 9
 fileName wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya.broadPeak.gz
 grant Gingeras
@@ -2071,7 +1968,6 @@ dataType RnaChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-24
 dateUnrestricted 2009-08-24
-dccAccession wgEncodeEH000010
 expId 10
 fileName wgEncodeAffyRnaChipTransfragsProstateCellLongpolya.broadPeak.gz
 grant Gingeras
@@ -2083,4 +1979,4 @@ subId 88
 tableName wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
 view Transfrags
 
-# MAGIC: -1831462140
+# MAGIC: 441492300
