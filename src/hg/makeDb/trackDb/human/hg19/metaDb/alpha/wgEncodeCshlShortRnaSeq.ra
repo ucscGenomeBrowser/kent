@@ -6491,6 +6491,28 @@ subId 3301
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2
 view Alignments
 
+metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
+objType table
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType ShortRnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID10570,LID10569
+labProtocolId 001Ns,002Ns
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract shortTotal
+subId 3861
+tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
+view Contigs
+
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalExonsGencV3c
 objType file
 bioRep 001N,002N
@@ -8145,4 +8167,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: -926010553
+# MAGIC: 1685243287
