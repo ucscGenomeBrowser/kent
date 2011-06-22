@@ -2855,7 +2855,9 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
             {
             if (!hIsPreviewHost())
                 {
-                printf("<A HREF='' TITLE='Early access to new data on the Preview Browser...'>Preview</A>");
+                // TODO: get from hui.c
+                printf("<A HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s' TITLE='Early access to unreviewed new data on the Preview Browser...'>Preview</A>",
+                    "genome-preview.ucsc.edu", database, tdb->track);
                 }
             printf("&nbsp;&nbsp;");
             makeDownloadsLink(database, tdb, trackHash);

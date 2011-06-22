@@ -278,9 +278,10 @@ void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash)
 {
 if (trackDbSetting(tdb, "wgEncode") != NULL && !hIsPreviewHost())
     {
-    printf("<P><B>NOTE</B>: Early access to additional data for this track may be available on the <A HREF=''>Preview Browser</A>");
+    // TODO: use hTrackUiName()
+    printf("<P><B>NOTE</B>: Early access to additional data for this track may be available on the <A HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s'>Preview Browser</A>",
+        "genome-preview.ucsc.edu", db, tdb->track);
     }
-
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
                   && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
