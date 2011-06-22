@@ -2752,8 +2752,12 @@ if (sameWord(tdb->track,"ensGene"))
     printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
-printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    {
+    if (trackDbSetting(tdb, "wgEncode"))
+        printf("<A HREF='/ENCODE/index.html'><IMG src='/images/logos/ENCODE_scaleup_logo.png'><A>");
+    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
+    }
 /* Print link for parent track */
 if (!ajax)
     {
@@ -2856,7 +2860,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
             if (!hIsPreviewHost())
                 {
                 // TODO: get from hui.c
-                printf("<A HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s' TITLE='Early access to unreviewed new data on the Preview Browser...'>Preview</A>",
+                printf("<A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s' TITLE='Early access to unreviewed new data on the Preview Browser...'>Preview</A>",
                     "genome-preview.ucsc.edu", database, tdb->track);
                 }
             printf("&nbsp;&nbsp;");

@@ -276,12 +276,19 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash)
 /* Show downlaods, schema and metadata links where appropriate */
 {
-if (trackDbSetting(tdb, "wgEncode") != NULL && !hIsPreviewHost())
+if (trackDbSetting(tdb, "wgEncode") != NULL)
     {
-    // TODO: use hTrackUiName()
-    printf("<P><B>NOTE</B>: Early access to additional data for this track may be available on the <A HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s'>Preview Browser</A>",
-        "genome-preview.ucsc.edu", db, tdb->track);
-    }
+    if (hIsPreviewHost())
+        {
+        printf("<P><B>WARNING</B>: This our ppreview site. Data here is unreviewed early access. For high quality reviewed annotations, see the <A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s'>Genome Browser</A>.",
+        // TOD0:  Add to supertrack as well ?   Check if it exists ?
+        }
+    else
+        {
+        // TODO: use hTrackUiName()
+        printf("<P><B>NOTE</B>: Early access to additional track data may be available on the <A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s'>Preview Browser</A>.",
+            "genome-preview.ucsc.edu", db, tdb->track);
+        }
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
                   && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
