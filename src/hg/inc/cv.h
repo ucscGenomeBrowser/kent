@@ -16,11 +16,26 @@
 #define CV_TITLE                "title"
 #define CV_DESCRIPTION          "description"
 
+// CV Less common settings
+#define CV_GEO                  "geo"
+#define CV_LINEAGE              "lineage"
+#define CV_ORDER_URL            "orderUrl"
+#define CV_ORGANISM             "organism"
+#define CV_PROTOCOL             "protocol"
+#define CV_SEX                  "sex"
+#define CV_TERM_ID              "termId"
+#define CV_TERM_URL             "termUrl"
+#define CV_TIER                 "tier"
+#define CV_TISSUE               "tissue"
+#define CV_VENDOR_ID            "vendorId"
+#define CV_VENDER_NAME          "vendorName"
+
 // Type of Terms defines
 #define CV_TOT                  "typeOfTerm"
 #define CV_TOT_HIDDEN           "hidden"
 #define CV_TOT_CV_DEFINED       "cvDefined"
 #define CV_TOT_PRIORITY         "priority"
+#define CV_TOT_SEARCHABLE       "searchable"
 
 // Validation Rules
 #define CV_VALIDATE                 "validate"
@@ -44,6 +59,7 @@
 #define CV_TERM_DATA_TYPE       "dataType"
 #define CV_TERM_LOCALIZATION    "localization"
 #define CV_TERM_VIEW            "view"
+#define CV_TERM_SEQ_PLATFORM    "seqPlatform"
 
 
 void cvFileDeclare(char *filePath);
@@ -58,6 +74,10 @@ char *cvTermNormalized(char *sloppyTerm);
 
 const struct hash *cvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
+// NOTE: in static memory: DO NOT FREE
+
+const struct hash *cvOneTermHash(char *type,char *term);
+// returns a hash for a single term of a given type
 // NOTE: in static memory: DO NOT FREE
 
 const struct hash *cvTermTypeHash();
@@ -84,6 +104,9 @@ enum cvSearchable cvSearchMethod(char *term);
 
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term
+
+const char *cvTag(char *type,char *term);
+// returns cv Tag if term found or else NULL
 
 boolean cvTermIsHidden(char *term);
 // returns TRUE if term is defined as hidden in cv.ra

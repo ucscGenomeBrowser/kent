@@ -95,7 +95,7 @@
 #include "megablastInfo.h"
 #include "geneTree.h"
 
-#define LISTUI
+/*#define LISTUI*/
 
 static char const rcsid[] = "$Id: lowelab.c,v 1.50 2010/05/11 01:43:29 kent Exp $";
 

@@ -45,7 +45,7 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
 /* A toggle bar can be seen in hgTracks, under the image groups that can be opened and closed. */
 .blueToggleBar {font-weight: bold; color:#FFFFFF; background-color:#536ED3; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap;}
-.toggleButton  {height: 16px; width: 16px; vertical-align:middle;}
+.toggleButton  {height: 20px; width: 20px; vertical-align:middle;}
 
 /* A subheading bar is the light blue bar that appears at the top of web.c section boxes */
 .subheadingBar {font-weight: bold; font-size:1.1em; color:#000000; background-color:#D9E4F8;
@@ -77,12 +77,25 @@ LI {		line-height: 1.5;
 	}
 
 
-/* used by CCDS details page in hgc */
+/*** used by CCDS details page in hgc *** */
+    
+/* give the tables some breathing room and a consistent width */
+TABLE.hgcCcds {
+    margin-bottom: 30px;
+    width: 500px;
+}
+
 TABLE.hgcCcds, TABLE.hgcCcds TH, TABLE.hgcCcds TD {
-    border: 3px gray ridge;
+    border: 1px gray ridge;
     border-collapse: collapse;
     text-align: left;
     vertical-align: top;
+}
+TABLE.hgcCcds TH {
+    white-space: nowrap;
+}
+TABLE.hgcCcds TD {
+    height: 1em;
 }
 TABLE.hgcCcds THEAD {
     background-color: #2636D1;
@@ -216,6 +229,10 @@ div.sliceDiv { overflow:hidden; }
 /* These are for dragReorder: both in imageV2 and in hgTrackUi subtrack list */
 .trDrag { background-color: #CCFFCC; }
 .dragHandle { cursor: n-resize; }
+
+/* These are duplicates of btnBlue and trDrag but allow useful highlighting to persist after hover */
+.blueButtons { background-color:#91B3E6; }
+.greenRows { background-color: #CCFFCC; }
 
 /* The are for sortable tables */
 table.subtracks { overflow: visible; white-space: nowrap; border: 1px solid #FFFEE8; }

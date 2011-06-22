@@ -1,6 +1,7 @@
 table wgEncodeGencodeTranscriptSupport
-"Gencode metadata table of features supporting Gencode transcripts"
+"GENCODE transcript support from other datasets"
    (
-    string transcriptId; "Transcript ID for Gencode gene"
-    string id; "ID of feature supporting transcript"
+    string transcriptId; "GENCODE transcript identifier"
+    string seqId; "Identifier of sequence supporting transcript"
+    string seqSrc; "Source of supporting sequence"
    )

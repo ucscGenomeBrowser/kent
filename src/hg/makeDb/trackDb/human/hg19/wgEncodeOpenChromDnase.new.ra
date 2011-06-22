@@ -1,4 +1,7 @@
 # Open Chromatin Duke DNaseI HS (wrangler: Tim, assisted by Venkat)
+# changed the METHYLT tag to METHYLT
+
+
 
 track wgEncodeOpenChromDnase
 compositeTrack on
@@ -8,7 +11,7 @@ longLabel Open Chromatin by DNaseI HS from ENCODE/OpenChrom(Duke University)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
 subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K5=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEP=HepG2&nbsp;(Tier_2) 2HUV=HUVEC&nbsp;(Tier_2) A549=A549 AOSMC=AoSMC CHORN=Chorion CLL=CLL FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC Hepatocytes=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7  HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 iPS=iPS LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK  Osteobl=Osteobl 8988T=PA-TU-8988T PANI=PanIslets PanIsD=PanIsletD pHTE=pHTE PROG=ProgFib Stellate=Stellate T47D=T-47D UROtsa=Urothelia
-subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs SERUMFREE=Serum_Free UT189=UT189_E.coli
+subGroup3 treatment Treatment AANONE=None ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs METHYLT=Methyltrienolone&nbsp;(androgen) SERUMFREE=Serum_Free UT189=UT189_E.coli
 sortOrder cellType=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dimensions dimensionY=cellType dimensionX=treatment
@@ -279,7 +282,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel LNCaP andro DN Pk
         longLabel LNCaP androgen DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=LNCaP treatment=ANDRO
+        subGroups view=Peaks cellType=LNCaP treatment=METHYLT
         type narrowPeak
         color 0,119,158
         # subId=2492 dateSubmitted=2010-10-15
@@ -420,6 +423,14 @@ dataVersion through the ENCODE Jan 2011 Freeze
         subGroups view=Peaks cellType=UROtsa treatment=UT189
         type narrowPeak
         # subId=3218 dateSubmitted=2011-01-11
+
+        track wgEncodeOpenChromDnaseMcf7HypoxlacPk
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel MCF7 HYPO DNse Pk
+        longLabel MCF-7 Hypoxia Lac DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        subGroups view=Peaks cellType=MCF7 treatment=HYPOXLAC
+        type narrowPeak
+        # subId=4155 dateSubmitted=2011-05-17
 
 
     track wgEncodeOpenChromDnaseViewSignal
@@ -680,7 +691,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel LNCaP andro DN DS
         longLabel LNCaP androgen DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=LNCaP treatment=ANDRO
+        subGroups view=SIG cellType=LNCaP treatment=METHYLT
         type bigWig 0.000000 1.231700
         color 0,119,158
         # subId=2492 dateSubmitted=2010-10-15
@@ -821,6 +832,14 @@ dataVersion through the ENCODE Jan 2011 Freeze
         subGroups view=SIG cellType=UROtsa treatment=UT189
         type bigWig 0.000000 0.981900
         # subId=3218 dateSubmitted=2011-01-11
+
+        track wgEncodeOpenChromDnaseMcf7HypoxlacSig
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel MCF7 HYPO DNse DS
+        longLabel MCF-7 Hypoxia Lac DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIG cellType=MCF7 treatment=HYPOXLAC
+        type bigWig 0.000000 0.741200
+        # subId=4155 dateSubmitted=2011-05-17
 
 
     track wgEncodeOpenChromDnaseViewSigBo
@@ -1081,7 +1100,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel LNCaP andro DN OS
         longLabel LNCaP androgen DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=LNCaP treatment=ANDRO
+        subGroups view=SIGBO cellType=LNCaP treatment=METHYLT
         type bigWig 0.000000 220.000000
         color 0,119,158
         # subId=2492 dateSubmitted=2010-10-15
@@ -1222,4 +1241,12 @@ dataVersion through the ENCODE Jan 2011 Freeze
         subGroups view=SIGBO cellType=UROtsa treatment=UT189
         type bigWig 0.000000 210.000000
         # subId=3218 dateSubmitted=2011-01-11
+
+        track wgEncodeOpenChromDnaseMcf7HypoxlacBaseOverlapSignal
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel MCF7 HYPO DNse OS
+        longLabel MCF-7 Hypoxia Lac DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIGBO cellType=MCF7 treatment=HYPOXLAC
+        type bigWig 0.000000 231.000000
+        # subId=4155 dateSubmitted=2011-05-17
 

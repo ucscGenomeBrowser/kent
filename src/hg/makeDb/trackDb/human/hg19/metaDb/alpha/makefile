@@ -24,12 +24,14 @@ wgEncodeSunyRipSeq.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhNsome.ra \
+wgEncodeSydhRnaSeq.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUmassDekker5C.ra \
 wgEncodeUncBsuProt.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwDnase.ra \
+wgEncodeUw5C.ra \
 wgEncodeCaltechRnaSeq.ra \
 wgEncodeCshlLongRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
@@ -37,7 +39,6 @@ wgEncodeRikenCage.ra \
 wgEncodeHaibMethylSeq.ra \
 wgEncodeUwTfbs.ra \
 wgEncodeGisRnaPet.ra \
-wgEncodeYaleRnaSeq.ra \
 wgEncodeMapability.ra \
 wgEncodeUwDgf.ra \
 wgEncodeDukeAffyExon.ra \

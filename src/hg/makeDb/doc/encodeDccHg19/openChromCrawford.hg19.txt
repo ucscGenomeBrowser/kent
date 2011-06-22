@@ -4184,3 +4184,40 @@ awk '{printf "%d\t%s:%d-%d\n",$3 - $2,$1,$2,$3}'  < consensusBlacklist.bed | sor
 rename table wgEncodeMapabilityDacRegionsExcluded to wgEncodeMapabilityDacConsensusBlacklist;
 mv ../wgEncodeMapabilityDac/wgEncodeMapabilityDacRegionsExcluded.bed.gz wgEncodeMapabilityDacConsensusBlacklist.bed.gz
 
+2011-05-13 More Validation Docs.  Matt doing most of the work
+=============================================================
+### problem: files marked as *.tgz.tgz in downloads dir:
+-rw-rw-r-- 2 encodeteam genecats  50556959 May 11 13:07 wgEncodeOpenChromDnaseHepg2Validation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  50519897 May 11 13:07 wgEncodeOpenChromDnaseHelas3Validation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  36246228 May 11 13:15 wgEncodeOpenChromDnaseHuvecValidation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  36062115 May 11 13:28 wgEncodeOpenChromDnaseNhekValidation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  12129291 May 11 13:37 wgEncodeOpenChromDnaseProgfibValidation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  12303817 May 11 18:07 wgEncodeOpenChromDnaseFibroblValidation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  50485890 May 11 18:18 wgEncodeOpenChromDnaseGm18507Validation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  24115935 May 11 18:35 wgEncodeOpenChromDnaseLncapValidation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  36267278 May 11 18:49 wgEncodeOpenChromDnaseHmecValidation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  12161387 May 12 05:42 wgEncodeOpenChromDnaseLncapAndroValidation.tgz.tgz
+-rw-rw-r-- 2 encodeteam genecats  12290470 May 12 05:58 wgEncodeOpenChromDnaseMcf7Validation.tgz.tgz
+
+# Where they double tarred?  NO!   They were linked.  But we must fix pipeline naming and rename these
+-rw-rw-r-- 2 encodeteam genecats  50556959 May 11 13:07 DNCT_Duke_DNaseHS_HepG2_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  50519897 May 11 13:07 DNCT_Duke_DNaseHS_HeLa-S3_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  36246228 May 11 13:15 DNCT_Duke_DNaseHS_HUVEC_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  36062115 May 11 13:28 DNCT_Duke_DNaseHS_NHEK_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  12129291 May 11 13:37 DNCT_Duke_DNaseHS_ProgFib_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  12303817 May 11 18:07 DNCT_Duke_DNaseHS_Fibrobl_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  50485890 May 11 18:18 DNCT_Duke_DNaseHS_GM18507_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  24115935 May 11 18:35 DNCT_Duke_DNaseHS_LNCaP_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  36267278 May 11 18:49 DNCT_Duke_DNaseHS_HMEC_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  12161387 May 12 05:42 DNCT_Duke_DNaseHS_LNCaP_androgen_ENCArray.tgz
+-rw-rw-r-- 2 encodeteam genecats  12290470 May 12 05:58 DNCT_Duke_DNaseHS_MCF-7_ENCArray.tgz
+
+2011-06-14 Open Chrom Synth has been released.
+==============================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 released
+
+# These shouuld be approved:
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 4107 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 4154 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 4155 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 4161 approved

@@ -30,7 +30,7 @@ variables         cell, localization
 assembly          hg19
 
 
-validationSettings none
+validationSettings allowReloads
 
 # Track/view definition
 view             Signal

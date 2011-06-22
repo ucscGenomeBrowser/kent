@@ -15,23 +15,24 @@ O = hgGene.o altSplice.o ctd.o dnaBindMotif.o domains.o gad.o\
 include ../../inc/cgi_build_rules.mk
 
 my::
-	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-${USER}/
+	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgGeneData
 
 install::
-	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData \
+	rm -fr ${DESTDIR}${CGI_BIN}/hgGeneData
+	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgGeneData \
 		${DESTDIR}${CGI_BIN}/
 	chmod -R a+rX ${DESTDIR}${CGI_BIN}/hgGeneData
 
 alpha::
 	rm -fr ${CGI_BIN}/hgGeneData
-	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}/
+	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}/
 	chmod -R g+w ${CGI_BIN}/hgGeneData
 	chmod -R a+rX ${CGI_BIN}/hgGeneData
 
 beta::
 	rm -fr ${CGI_BIN}-beta/hgGeneData
-	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-beta/
+	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-beta/
 	chmod -R g+w ${CGI_BIN}-beta/hgGeneData
 	chmod -R a+rX ${CGI_BIN}-beta/hgGeneData
 

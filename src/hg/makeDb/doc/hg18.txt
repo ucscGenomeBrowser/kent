@@ -29796,7 +29796,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 4/1/11)
+# NHGRI GWAS CATALOG (DONE 6/9/11)
+# Updated 4/1/11
 # Updated 3/1/11
 # Updated 2/1/11
 # Updated 12/7/10
@@ -29822,33 +29823,47 @@ see doc/builds.txt for specific details.
     cd /hive/data/genomes/hg18/bed/gwasCatalog/$today
     wget http://www.genome.gov/admin/gwascatalog.txt
     head -1 gwascatalog.txt | sed -re 's/\t/\n/g'
-    # Compare to original column headers:
-#  1 Date Added to Catalog
-#  2 PubMedID
-#  3 First Author
-#  4 Date
-#  5 Journal
-#  6 Link
-#  7 Study
-#  8 Disease/Trait
-#  9 Initial Sample Size
-# 10 Replication Sample Size
-# 11 Region
-# 12 Reported Gene(s)
-# 13 Strongest SNP-Risk Allele
-# 14 SNPs
-# 15 Risk Allele Frequency
-# 16 p-Value
-# 17 p-Value (text)
-# 18 OR or beta
-# 19 95% CI (text)
-# 20 Platform [SNPs passing QC]
-# 21 CNV
-    # Columns of interest: pretty much all except for Date Added to the Catalog,
+    # Compare to original column headers -- some additions in June 2011 (2nd column):
+#  1   1 Date Added to Catalog
+#  2   2 PubMedID
+#  3   3 First Author
+#  4   4 Date
+#  5   5 Journal
+#  6   6 Link
+#  7   7 Study
+#  8   8 Disease/Trait
+#  9   9 Initial Sample Size
+# 10  10 Replication Sample Size
+# 11  11 Region
+#     12 Chr_id
+#     13 Chr_pos
+# 12  14 Reported Gene(s)
+#     15 Mapped Gene
+#     16 Upstream_gene_id
+#     17 Downstream_gene_id
+#     18 Snp_gene_ids
+#     19 Upstream_gene_distance
+#     20 Downstream_gene_distance
+# 13  21 Strongest SNP-Risk Allele
+# 14  22 SNPs
+#     23 Merged
+#     24 Snp_id_current
+#     25 Context
+#     26 Intergenic
+# 15  27 Risk Allele Frequency
+# 16  28 p-Value
+#     29 Pvalue_mlog
+# 17  30 p-Value (text)
+# 18  31 OR or beta
+# 19  32 95% CI (text)
+# 20  33 Platform [SNPs passing QC]
+# 21  34 CNV
+    # Original columns of interest: pretty much all except for Date Added to the Catalog,
     # and Link which can be generated from PubMedID.  Watch out for these:
     # * Some rows don't name a SNP ("" or "NR") -- in that case, skip.
     # * Risk allele is not always just a number, may have desc
     # * Missing data may be "", "NR", "NS" or "Pending"
+    # June 2011 new columns: ignore for now; make new table format if user demand
 
     # Use SNPs (comma-sep list) to map to genome coords, and strongest SNP-Risk Allele 
     # as bed 4+ name.
@@ -29856,14 +29871,15 @@ see doc/builds.txt for specific details.
                 next if (/^\s*$/); \
                 s/\r$//; \
                 @w = split("\t"); \
-                next if ($w[13] !~ /^rs\d+/); \
+                next if ($w[21] !~ /^rs\d+/); \
                 if ($w[3] =~ /^(\d+)\/(\d+)\/(\d+)$/) { # transform to mysql DATE \
                   ($month, $day, $year) = ($1, $2, $3); \
                   $w[3] = "$year-$month-$day"; \
                 } else { die "Cant parse date ($w[3])\t" } \
-                $w[13] =~ s/ //g; \
-                my @snps = split(",", $w[13]); \
-                foreach $i (13, 5, 0) { # discard columns (use descending order) \
+                $w[21] =~ s/ //g; \
+                my @snps = split(",", $w[21]); \
+                # discard columns (use descending order): \
+                foreach $i (28, 25, 24, 23, 22, 21, 19, 18, 17, 16, 15, 14, 12, 11, 5, 0) { \
                   splice(@w, $i, 1); \
                 } \
                 foreach $s (@snps) { \
@@ -29878,7 +29894,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 5172 elements of size 22
+#Loaded 5800 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29892,7 +29908,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#275 ambigStrand.txt
+#315 ambigStrand.txt
 
 
 #############################################################################
@@ -31428,3 +31444,144 @@ checkAll >j.check
 ln -s /hive/data/genomes/gs.19/build36/bed/evofold/doEvoFold/evoFold  /gbdb/hg18/evoFold 
 ln -s /gbdb/hg18/evoFold /usr/local/apache/htdocs/evoFold/hg18
 #############################################################################
+# BUILD evoCpg TRACK (DONE, Fan, 5/23/11)
+ssh hgwdev
+cd /hive/data/genomes/gs.19/build36/bed
+mkdir evoCpg
+cd evoCpg
+# put data file, weizmann_evo_cgi.bed, here.
+
+cat weizmann_evo_cgi.bed|grep -v track >evoCpg.bed
+hgLoadBed hg18 evoCpg evoCpg.bed
+
+# create kent/src/hg/makeDb/trackDb/human/hg18/evoCpg.html.
+
+# add pushQue record
+#############################################################################
+# BUILD HG18 OMIM RELATED TRACKS (DONE, 6/3/11, Fan)
+
+ssh hgwdev
+cd /hive/data/genomes/hg18/bed
+mkdir -p omim/05172011
+cd omim/05172011
+
+# obtain the following files from OMIM and place them at this subdirectory
+
+       genemap.txt  
+       mim2gene.txt  
+       mimAV.txt
+       script1.pl  
+       script2.pl
+
+cat genemap.txt|sed -e 's/|/\t/g' > genemap.tab
+
+hgLoadSqlTab -warn hg18 omimGeneMap ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab
+
+# Load mim2gene table
+
+hgsql hg18 -e 'drop table mim2gene'
+hgsql hg18 < ~/kent/src/hg/lib/mim2gene.sql
+hgsql hg18 -e 'load data local infile "mim2gene.txt" into table mim2gene ignore 1 lines'
+
+# build omimGeneSymbol table
+
+doOmimGeneSymbols hg18 j.out
+cat j.out |sort -u >omimGeneSymbol.tab
+hgLoadSqlTab -warn hg18 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
+
+perl ./script1.pl --gene-map-file=genemap.txt >omimPhenotype.tab
+hgLoadSqlTab -warn hg18 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
+
+hgsql hg18 -e 'update omimPhenotype set phenotypeClass = -1 where phenotypeClass=0'
+hgsql hg18 -e 'update omimPhenotype set phenotypeId = -1 where phenotypeId=0'
+
+doOmimGene2 hg18 j.tmp
+cat j.tmp |sort -u > omimGene2.tab
+
+hgLoadBed hg18 omimGene2 omimGene2.tab
+
+rm j.tmp
+##############################################################
+# build the omimAvSnp track
+
+cd /hive/data/genomes/hg18/bed/omim/05172011
+mkdir av
+cd av
+
+# get the mimAV.txt data file from OMIM
+
+cut -f 1 mimAV.txt >j1
+cut -f 2 mimAV.txt >j2
+cut -f 3  mimAV.txt >j3
+cut -f 4  mimAV.txt >j4
+cut -f 5  mimAV.txt >j5
+
+cat j1 |sed -e 's/\./\t/' >j1.2
+
+cat j4 |sed -e 's/,/\t/' >j4-2
+cut -f 1 j4-2 >j4.1
+cut -f 2 j4-2 >j4.2
+
+paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
+
+hgsql hg18 -e 'drop table omimAv'
+hgsql hg18 < ~/src/hg/lib/omimAv.sql
+hgsql hg18 -e 'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
+hgsql hg18 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
+
+doOmimAv hg18 omimAvRepl.tab  2>j.err
+
+hgsql hg18 -e "drop table omimAvRepl"
+hgsql hg18 < ~/kent/src/hg/lib/omimAvRepl.sql
+hgsql hg18 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
+
+rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
+
+hgsql hg18 -N -e 'select chrom, chromStart, chromEnd, avId from omimAvRepl r, snp130 s where s.name = dbSnpId order by avId' >omimAvSnp.tab
+
+hgLoadBed -allowStartEqualEnd  hg18 omimAvSnp omimAvSnp.tab
+##############################################################
+# build the omimLocation track
+
+cd /hive/data/genomes/hg18/bed/omim/05172011
+mkdir location
+cd location
+
+doOmimLocation hg18 omimLocation.bed 2>j.err
+hgLoadBed hg18 omimLocation omimLocation.bed
+
+# Remove all gene entries in omimGene2 from omimLocation table
+
+hgsql hg18 -N -e \
+'delete from omimLocation where name  in (select name from omimGene2) '
+
+# Per OMIM request, delete all the gray entries in omimLocation table.
+
+mkdir cleanUpOmimLocation
+cd cleanUpOmimLocation
+
+hgsql hg18 -N -e \
+'select distinct name from omimLocation' |sort -u >j.all
+
+hgsql hg18 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=1' >j.1
+hgsql hg18 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=2' >j.2
+hgsql hg18 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=3' >j.3
+hgsql hg18 -N -e \
+'select distinct name from omimLocation, omimPhenotype where name=omimId and phenotypeClass=4' >j.4
+
+cat j.1 j.2 j.3 j.4 |sort -u >j.1234
+
+diff j.all j.1234 |grep "<" |sed -e 's/</do1/' >doall
+
+cat << '_EOF_' > do1
+hgsql hg18 -e "delete from omimLocation where name='${1}'"
+'_EOF_'
+
+./doall
+
+##############################################################
+
+

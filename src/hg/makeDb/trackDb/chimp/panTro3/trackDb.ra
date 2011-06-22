@@ -170,3 +170,5 @@ priority 103.29
 	showTopScorers 200
         priority 23
 
+track nscanGene override
+informant Nscan-EST on Chimp (panTro3) used Mouse (mm9) as the informant. TransMap UCSC genes are used as transcript evidence.

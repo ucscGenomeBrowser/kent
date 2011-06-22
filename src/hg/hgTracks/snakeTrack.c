@@ -1,6 +1,5 @@
-/* chainTrack - stuff to load and display chain type tracks in
- * browser.   Chains are typically from cross-species genomic
- * alignments. */
+/* snakeTrack - stuff to load and display snake type tracks in browser.  */
+/*       uses standard chains from the database */
 
 #include "common.h"
 #include "hash.h"
@@ -14,14 +13,202 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.27 2006/02/23 01:41:31 baertsch Exp $";
+struct snakeFeature
+    {
+    struct snakeFeature *next;
+    int start, end;			/* Start/end in browser coordinates. */
+    int qStart, qEnd;			/* query start/end */
+    int level;				/* level in packed snake */
+    int orientation;			/* strand... -1 is '-', 1 is '+' */
+    boolean drawn;			/* did we draw this feature? */
+    };
 
+struct level
+{
+boolean init;		/* has this level been initialized */
+int orientation;	/* strand.. see above */
+int edge;		/* the leading edge of this level */
+int adjustLevel;	/* used to compress out the unused levels */
+boolean hasBlock;	/* are there any blocks in this level */
+};
+
+static struct level Levels[1000000]; /* for packing the snake */
+static int maxLevel = 0;     	     /* deepest level */	
+
+/* blocks that make it through the min size filter */
+static struct snakeFeature *newList = NULL;   
+
+static int snakeFeatureCmpQStart(const void *va, const void *vb)
+/* sort by start position on the query sequence */
+{
+const struct snakeFeature *a = *((struct snakeFeature **)va);
+const struct snakeFeature *b = *((struct snakeFeature **)vb);
+int diff = a->qStart - b->qStart;
+
+if (diff == 0)
+    {
+    diff = a->start - b->start;
+    }
+
+return diff;
+}
+
+void clearLevels()
+/* clear out the data structure that we use to pack the snake */
+{
+int ii;
+
+for(ii=0; ii < sizeof(Levels) / sizeof(Levels[0]); ii++)
+    Levels[ii].init = FALSE;
+maxLevel = 0;
+}
+
+void calcSnake(struct snakeFeature *list, int level)
+// calculate the packed snake
+// updates global newList with unsorted blocks that pass the min
+// size filter.
+{
+struct snakeFeature *cb = list;
+struct snakeFeature *proposedList = NULL;
+
+if (level > maxLevel)
+    maxLevel = level;
+if (level > ArraySize(Levels))
+    errAbort("too many levels");
+
+if (Levels[level].init == FALSE)
+    {
+    // initialize the level if this is the first time we've seen it
+    Levels[level].init = TRUE;
+    Levels[level].orientation = list->orientation;
+    if (list->orientation == -1)
+	Levels[level].edge = 1000000000;  // bigger than the biggest chrom
+    else
+	Levels[level].edge = 0;
+    }
+
+// now we step through the blocks and assign them to levels
+struct snakeFeature *next;
+struct snakeFeature *insertHead = NULL;
+for(; cb; cb = next)
+    {
+    // we're going to add this block to a different list 
+    // so keep track of the next pointer
+    next = cb->next;
+
+    // if this block can't fit on this level add to the insert
+    // list and move on to the next block
+    if ((Levels[level].orientation != cb->orientation) ||
+	((cb->orientation == 1) && (Levels[level].edge > cb->start)) ||
+	((cb->orientation == -1) && (Levels[level].edge < cb->end)))
+	{
+	// add this to the list of an insert
+	slAddHead(&insertHead, cb);
+	continue;
+	}
+
+    // the current block will fit on this level
+    // go ahead and deal with the blocks that wouldn't 
+    if (insertHead)
+	{
+	// we had an insert, go ahead and calculate where that goes
+	slReverse(&insertHead);
+	calcSnake(insertHead, level + 1);
+	insertHead = NULL;
+	}
+
+    // assign the current block to this level
+    cb->level = level;
+
+    if (cb->orientation == 1)
+	Levels[level].edge = cb->end;
+    else
+	Levels[level].edge = cb->start;
+
+    // add this block to the list of proposed blocks for this level
+    slAddHead(&proposedList, cb);
+    }
+
+// we're at the end of the list.  Deal with any blocks
+// that didn't fit on this level
+if (insertHead)
+    {
+    slReverse(&insertHead);
+    int nextLevel = level + 1;
+    calcSnake(insertHead, nextLevel);
+    insertHead = NULL;
+    }
+
+// do we have any proposed blocks
+if (proposedList == NULL) 
+    return;
+
+// we parsed all the blocks in the list to see if they fit in our level
+// now let's see if the list of blocks for this level is big enough
+// to actually add
+
+struct snakeFeature *temp;
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+int start, end;
+
+// order the blocks so lowest start position is first
+if (Levels[level].orientation == 1)
+    slReverse(&proposedList);
+
+start=proposedList->start;
+for(temp=proposedList; temp->next; temp = temp->next)
+    ;
+end=temp->end;
+
+// calculate how big the string of blocks is in screen coordinates
+double apparentSize = scale * (end - start);
+
+if (apparentSize < 0)
+    errAbort("size of a list of blocks should not be less than zero");
+
+// check to see if the apparent size is big enough
+if (apparentSize < 1)
+    return;
+
+// transfer proposedList to new block list
+for(temp=proposedList; temp; temp = next)
+    {
+    next = temp->next;
+    temp->next = NULL;
+    slAddHead(&newList, temp);
+    }
+}
 
 struct cartOptions
     {
     enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
     int scoreFilter ; /* filter chains by score if > 0 */
     };
+
+static int linkedFeaturesCmpChrom(const void *va, const void *vb)
+/* Help sort linkedFeatures by starting pos. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+return strcmp(a->name, b->name);
+}
+
+int snakeHeight(struct track *tg, enum trackVisibility vis)
+/* calculate height of all the snakes being displayed */
+{
+int height = 0;
+struct slList *item = tg->items;
+
+slSort(&tg->items, linkedFeaturesCmpChrom);
+
+item = tg->items;
+
+for (item=tg->items;item; item = item->next)
+    {
+    height += tg->itemHeight(tg, item);
+    }
+return height;
+}
 
 static void doQuery(struct sqlConnection *conn, char *fullName, 
 			struct lm *lm, struct hash *hash, 
@@ -35,7 +222,7 @@ static void doQuery(struct sqlConnection *conn, char *fullName,
 struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lf;
-struct simpleFeature *sf;
+struct snakeFeature *sf;
 struct dyString *query = newDyString(1024);
 char *force = "";
 
@@ -78,7 +265,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    sf->qStart = pChain->qSize - sf->qEnd;
 	    sf->qEnd = pChain->qSize - temp;
 	    }
-	sf->grayIx = lf->orientation;
+	sf->orientation = lf->orientation;
 	slAddHead(&lf->components, sf);
 	}
     }
@@ -86,11 +273,111 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 }
 
-int snakeItemHeight(struct track *tg, void *item)
+struct snakeInfo
 {
-//return 40;
+int maxLevel;
+} snakeInfo;
+
+void calcPackSnake(struct track *tg, void *item)
+{
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
-struct simpleFeature  *sf;
+if (lf->components == NULL)
+    return;
+
+// we use the codons field to keep track of whether we already
+// calculated the height of this snake
+if (lf->codons == NULL)
+    {
+    clearLevels();
+    struct snakeFeature *sf;
+
+    // this will destroy lf->components, and add to newList
+    calcSnake((struct snakeFeature *)lf->components, 0);
+    lf->components = (struct simpleFeature *)newList;
+    newList = NULL;
+    slSort(&lf->components, snakeFeatureCmpQStart);
+
+    // now we're going to compress the levels that aren't used
+    // to do that, we need to see which blocks are on the screen,
+    // or connected to something on the screen
+    int oldMax = maxLevel;
+    clearLevels();
+    struct snakeFeature *prev = NULL;
+    for(sf=(struct snakeFeature *)lf->components; sf; prev = sf, sf = sf->next)
+	{
+	if (Levels[sf->level].init == FALSE)
+	    {
+	    Levels[sf->level].init = TRUE;
+	    Levels[sf->level].orientation = sf->orientation;
+	    Levels[sf->level].hasBlock = FALSE;
+	    }
+	else
+	    {
+	    if (Levels[sf->level].orientation != sf->orientation)
+		errAbort("found snakeFeature with wrong orientation");
+	    if ((sf->orientation == 1) && (Levels[sf->level].edge > sf->start)) 
+		errAbort("found snakeFeature that violates edge");
+	    if ((sf->orientation == -1) && (Levels[sf->level].edge < sf->end))
+		errAbort("found snakeFeature that violates edge");
+	    }
+	if (sf->orientation == 1)
+	    Levels[sf->level].edge = sf->end;
+	else
+	    Levels[sf->level].edge = sf->start;
+	if (sf->level > maxLevel)
+	    maxLevel = sf->level;
+	if(positiveRangeIntersection(winStart, winEnd, sf->start, sf->end))
+	    {
+	    Levels[sf->level].hasBlock = TRUE;
+	    if (sf->next != NULL)
+		Levels[sf->next->level].hasBlock = TRUE;
+	    if (prev != NULL)
+		Levels[prev->level].hasBlock = TRUE;
+
+	    }
+	}
+
+    // now figure out how to remap the blocks
+    int ii;
+    int count = 0;
+    for(ii=0; ii < oldMax + 1; ii++)
+	{
+	Levels[ii].adjustLevel = count;
+	if ((Levels[ii].init) && (Levels[ii].hasBlock))
+	    count++;
+	}
+    maxLevel = count - 1;
+
+    // remap blocks
+    for(sf=(struct snakeFeature *)lf->components; sf; sf = sf->next)
+	sf->level = Levels[sf->level].adjustLevel;
+
+    struct snakeInfo *si;
+    AllocVar(si);
+    si->maxLevel = maxLevel;
+    lf->codons = (struct simpleFeature *)si;
+    }
+}
+
+int packSnakeItemHeight(struct track *tg, void *item)
+// return height of a single packed snake 
+{
+if (item == NULL)
+    return 0;
+struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+if (lf->components == NULL)
+    return 0;
+calcPackSnake(tg, item);
+struct snakeInfo *si = (struct snakeInfo *)lf->codons;
+int lineHeight = tg->lineHeight ;
+return (si->maxLevel + 1) * (2 * lineHeight);
+}
+
+int fullSnakeItemHeight(struct track *tg, void *item)
+// return height of full snake
+{
+struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+struct snakeFeature  *sf;
 int s, e;
 int lineHeight = tg->lineHeight ;
 int oldOrient = 0;
@@ -101,9 +388,9 @@ tStart = 0;
 tEnd = 0;
 if (lf->components)
     size = lineHeight;
-for (sf =  lf->components; sf ;  sf = sf->next)
+for (sf =  (struct snakeFeature *)lf->components; sf ;  sf = sf->next)
     {
-    int orient = sf->grayIx;
+    int orient = sf->orientation;
 
     s = sf->start; e = sf->end;
     /*
@@ -125,6 +412,15 @@ for (sf =  lf->components; sf ;  sf = sf->next)
 return size;
 }
 
+int snakeItemHeight(struct track *tg, void *item)
+{
+    if (tg->visibility == tvFull)
+	return fullSnakeItemHeight(tg, item);
+    else if (tg->visibility == tvPack)
+	return packSnakeItemHeight(tg, item);
+return 0;
+}
+
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
 /* Help sort linkedFeatures by starting pos. */
 {
@@ -144,23 +440,26 @@ void snakeDraw(struct track *tg, int seqStart, int seqEnd,
 {
 struct slList *item;
 int y;
-struct linkedFeatures  *lfStart = (struct linkedFeatures *)tg->items;
 struct linkedFeatures  *lf;
 double scale = scaleForWindow(width, seqStart, seqEnd);
+int height = snakeHeight(tg, vis);
 
-for(lf = lfStart; lf; lf = lf->next)
+hvGfxSetClip(hvg, xOff, yOff, width, height);
+
+// score snakes by how many bases they cover
+for (item = tg->items; item != NULL; item = item->next)
     {
-    struct simpleFeature  *sf;
+    lf = tg->items;
+    struct snakeFeature  *sf;
 
     lf->score = 0;
-    for (sf =  lf->components; sf != NULL;  sf = sf->next)
+    for (sf =  (struct snakeFeature *)lf->components; sf != NULL;  sf = sf->next)
 	{
 	lf->score += sf->end - sf->start;
 	}
     }
 
 slSort(&tg->items, linkedFeaturesCmpScore);
-
 
 y = yOff;
 for (item = tg->items; item != NULL; item = item->next)
@@ -179,13 +478,197 @@ void snakeLeftLabels(struct track *tg, int seqStart, int seqEnd,
 {
 }
 
-void snakeDrawAt(struct track *tg, void *item,
+void packSnakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
-struct simpleFeature  *sf, *prevSf;
+calcPackSnake(tg, item);
+
+int lastE = -1;
+int offY = y;
+struct snakeFeature  *sf, *prevSf;
+int lineHeight = tg->lineHeight ;
+int tStart, tEnd, qStart;
+int  qs, qe;
+int s, e;
+int heightPer = tg->heightPer;
+int lastX = -1,lastY = y;
+int lastQEnd = 0;
+int lastLevel = -1;
+qe = lastQEnd = 0;
+for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
+    {
+    qs = sf->qStart;
+    qe = sf->qEnd;
+    y = offY + (sf->level * 2) * lineHeight;
+    s = sf->start; e = sf->end;
+    tEnd = sf->end;
+
+    int sx, ex;
+    if (!positiveRangeIntersection(winStart, winEnd, s, e))
+	continue;
+    sx = round((double)((int)s-winStart)*scale) + xOff;
+    ex = round((double)((int)e-winStart)*scale) + xOff;
+
+    // color by strand
+    color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
+
+    int w = ex - sx;
+    if (w == 0) 
+	w = 1;
+    assert(w > 0);
+    char buffer[1024];
+    safef(buffer, sizeof buffer, "%d %d",sf->qStart,sf->qEnd);
+    if (sx < insideX)
+	{
+	int olap = insideX - sx;
+	sx = insideX;
+	w -= olap;
+	}
+    mapBoxHgcOrHgGene(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
+		"blockAlign", buffer, NULL, TRUE, "boxAlignExtra=on");
+    hvGfxBox(hvg, sx, y, w, heightPer, color);
+    sf->drawn = TRUE;
+    tEnd = e;
+    tStart = s;
+    qStart = sf->qStart;
+    lastY = y;
+    lastLevel = sf->level;
+    //lastX = x;
+    }
+lastX = -1,lastY = y;
+lastQEnd = 0;
+lastLevel = 0;
+qe = lastQEnd = 0;
+prevSf = NULL;
+for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
+    {
+    int y1, y2;
+    int sx, ex;
+    qs = sf->qStart;
+    qe = sf->qEnd;
+    if (lastLevel == sf->level)
+	{
+	y1 = offY + (lastLevel * 2) * lineHeight + lineHeight/2;
+	y2 = offY + (sf->level * 2) * lineHeight + lineHeight/2;
+	}
+    else if (lastLevel > sf->level)
+	{
+	y1 = offY + (lastLevel * 2 ) * lineHeight;
+	y2 = offY + (sf->level * 2 + 1) * lineHeight + lineHeight/3;
+	}
+    else
+	{
+	y1 = offY + (lastLevel * 2 + 1) * lineHeight - 1;
+	y2 = offY + (sf->level * 2 ) * lineHeight - lineHeight/3;;
+	}
+    s = sf->start; e = sf->end;
+
+    sx = round((double)((int)s-winStart)*scale) + xOff;
+    ex = round((double)((int)e-winStart)*scale) + xOff;
+    color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
+
+    if (lastX != -1)
+	{
+	char buffer[1024];
+#define MG_ORANGE  0xff0082E6
+	int color = MG_GRAY;
+
+	if (lastQEnd != qs)
+	    color = MG_ORANGE;
+
+#ifdef NOTNOW   // insert in query
+	if (sf->orientation == -1)
+	    {
+	    if ((lastE == e) && (qs != lastQEnd))
+		{
+		printf("%d ",qs-lastQEnd);
+		hvGfxLine(hvg, ex, y2, ex, y2 + lineHeight, MG_ORANGE);
+		}
+	    }
+	else
+	    {
+	    if ((lastE == s )) // && (qs != lastQEnd))
+		printf("%d ",qs-lastQEnd);
+	    if ((lastE == s ) && (qs != lastQEnd))
+		{
+		printf("%d ",qs-lastQEnd);
+		hvGfxLine(hvg, sx, y2, sx, y2 + lineHeight, MG_ORANGE);
+		printf("%d %d |",lastE,s);
+		}
+	    }
+#endif
+
+	if ((!((lastX == sx) && (y1 == y2))) &&
+	    (sf->drawn  || ((prevSf != NULL) && (prevSf->drawn))) &&
+	    (((lastE > winStart) && (lastE < winEnd)) || 
+	    ((s > winStart) && (s < winEnd))))
+	    {
+	    if (lastLevel == sf->level)
+		{
+		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+		if (sf->orientation == -1)
+		    {
+		    if (lastX != ex)
+			{
+			hvGfxLine(hvg, ex, y1, lastX, y2, color);
+			mapBoxHgcOrHgGene(hvg, s, e, ex, y1, lastX-ex, 1, tg->track,
+				"foo", buffer, NULL, TRUE, NULL);
+			}
+		    }
+		else
+		    {
+		    if (lastX != sx - 1)
+			{
+			hvGfxLine(hvg, lastX, y1, sx, y2, color);
+			mapBoxHgcOrHgGene(hvg, s, e, lastX, y1, sx-lastX, 1, tg->track,
+				"foo", buffer, NULL, TRUE, NULL);
+			}
+		    }
+		}
+	    else if (lastLevel > sf->level)
+		{
+		hvGfxLine(hvg, lastX, y1, sx, y2, color);
+		hvGfxLine(hvg, sx, y2, sx, y2 - lineHeight - lineHeight/3, color);
+		char buffer[1024];
+		safef(buffer, sizeof buffer, "%d-%d %dbp gap",prevSf->qStart,prevSf->qEnd, qs - lastQEnd);
+		mapBoxHgcOrHgGene(hvg, s, e, sx, y2 - lineHeight - lineHeight/3, 2, lineHeight + lineHeight/3, tg->track,
+	                    "foo", buffer, NULL, TRUE, NULL);
+
+		}
+	    else
+		{
+		hvGfxLine(hvg, lastX-1, y1, sx, y2, color);
+		hvGfxLine(hvg, sx, y2, sx, y2 + lineHeight , color);
+		char buffer[1024];
+		safef(buffer, sizeof buffer, "%d-%d %dbp gap",prevSf->qStart,prevSf->qEnd, qs - lastQEnd);
+		mapBoxHgcOrHgGene(hvg, s, e, sx-1, y2, 2, lineHeight , tg->track,
+	                    "foo", buffer, NULL, TRUE, NULL);
+		}
+	    }
+	}
+    tEnd = e;
+    tStart = s;
+    qStart = sf->qStart;
+    if (sf->orientation == -1)
+	lastX = sx;
+    else
+	lastX = ex;
+    lastE = e;
+    lastLevel = sf->level;
+    lastQEnd = qe;
+    }
+}
+
+void fullSnakeDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
+{
+struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+struct snakeFeature  *sf, *prevSf;
 int s, e;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight ;
@@ -200,9 +683,9 @@ tEnd = winEnd;
 prevSf = NULL;
 
 qe = lastQEnd = 0;
-for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
+for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
     {
-    int orient = sf->grayIx;
+    int orient = sf->orientation;
     midY = y + heightPer/2;
 
     qs = sf->qStart;
@@ -218,7 +701,7 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
 	continue;
 	*/
 
-    if (s < winStart) s = winStart;
+    //if (s < winStart) s = winStart;
     
     if (((oldOrient) && (oldOrient != orient))
 	||  ((oldOrient == 1) && (tEnd) && (s < tEnd))
@@ -364,6 +847,7 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
 	}
     color =	    lfChromColor(tg, item, hvg);
 
+color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
     drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
 			color, lf->score );
     tEnd = e;
@@ -373,135 +857,88 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
     }
 }
 
-static int simpleFeatureCmpQStart(const void *va, const void *vb)
+void snakeDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
 {
-const struct simpleFeature *a = *((struct simpleFeature **)va);
-const struct simpleFeature *b = *((struct simpleFeature **)vb);
-int diff = a->qStart - b->qStart;
-
-if (diff == 0)
-    {
-    diff = a->start - b->start;
-    }
-
-return diff;
+    
+    if (tg->visibility == tvFull)
+	fullSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
+	    font, color, vis);
+    else if (tg->visibility == tvPack)
+	packSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
+	    font, color, vis);
 }
 
-static int linkedFeaturesCmpChrom(const void *va, const void *vb)
-/* Help sort linkedFeatures by starting pos. */
+void fixItems(struct linkedFeatures *lf)
+// put all blocks from a single query chromosome into one
+// linkedFeatures structure
 {
-const struct linkedFeatures *a = *((struct linkedFeatures **)va);
-const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
-return strcmp(a->name, b->name);
-}
+struct linkedFeatures *firstLf, *next;
+struct snakeFeature  *sf,  *nextSf;
 
-int snakeHeight(struct track *tg, enum trackVisibility vis)
-{
-int height = 0;
-struct slList *item = tg->items, *nextItem;
-struct linkedFeatures *firstLf, *lf = (struct linkedFeatures *)tg->items;
-struct simpleFeature  *sf,  *nextSf;
-
-slSort(&tg->items, linkedFeaturesCmpChrom);
-
-item = tg->items;
-
-lf =  (struct linkedFeatures *)tg->items;
-if (item)
+firstLf = lf;
+for (;lf; lf = next)
     {
-    firstLf = lf;
-    for (;item; item = nextItem)
+    next = lf->next;
+    if (!sameString(firstLf->name, lf->name) && (lf->components != NULL))
 	{
-	struct linkedFeatures *lf = (struct linkedFeatures *)item;
-	nextItem = item->next;
-	if (!sameString(firstLf->name, lf->name))
+	slSort(&firstLf->components, snakeFeatureCmpQStart);
+	firstLf = lf;
+	}
+    for (sf =  (struct snakeFeature *)lf->components; sf != NULL; sf = nextSf)
+	{
+	sf->orientation = lf->orientation;
+	nextSf = sf->next;
+	if (firstLf != lf)
 	    {
-	    slSort(&firstLf->components, simpleFeatureCmpQStart);
-	    firstLf = lf;
-	    }
-	for (sf =  lf->components; sf != NULL; sf = nextSf)
-	    {
-	    sf->grayIx = lf->orientation;
-	    nextSf = sf->next;
-	    if (firstLf != lf)
-		{
-		
-		lf->components = NULL;
-		slAddHead(&firstLf->components, sf);
-		}
+	    lf->components = NULL;
+	    slAddHead(&firstLf->components, sf);
 	    }
 	}
-
-    slSort(&firstLf->components, simpleFeatureCmpQStart);
-
-    for (item=tg->items;item; item = item->next)
-	{
-	height += tg->itemHeight(tg, item);
-	}
     }
-return 3500; //height;
+
+if (firstLf != NULL)
+    {
+    slSort(&firstLf->components, snakeFeatureCmpQStart);
+    firstLf->next = 0;
+    }
 }
 
-static void chainDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw chained features. This loads up the simple features from 
- * the chainLink table, calls linkedFeaturesDraw, and then
- * frees the simple features again. */
+
+static void loadLinks(struct track *tg, int seqStart, int seqEnd,
+         enum trackVisibility vis)
+// load up the chain elements into linkedFeatures
 {
+int start, end, extra;
+char fullName[64];
+int maxOverLeft = 0, maxOverRight = 0;
+int overLeft, overRight;
 struct linkedFeatures *lf;
-struct simpleFeature *sf;
 struct lm *lm;
 struct hash *hash;	/* Hash of chain ids. */
 struct sqlConnection *conn;
-//double scale = ((double)(winEnd - winStart))/width;
-char fullName[64];
-int start, end, extra;
-//struct simpleFeature *lastSf = NULL;
-int maxOverLeft = 0, maxOverRight = 0;
-int overLeft, overRight;
-
-if (tg->items == NULL)		/*Exit Early if nothing to do */
-    return;
-
 lm = lmInit(1024*4);
 hash = newHash(0);
 conn = hAllocConn(database);
 
 /* Make up a hash of all linked features keyed by
- * id, which is held in the extras field.  To
- * avoid burning memory on full chromosome views
- * we'll just make a single simple feature and
- * exclude from hash chains less than three pixels wide, 
- * since these would always appear solid. */
+ * id, which is held in the extras field.  */
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
-    //double pixelWidth = (lf->end - lf->start) / scale;
-    if (1)//pixelWidth >= 2.5)
-	{
-	char buf[256];
-	struct chain *pChain = lf->extra;
-	safef(buf, sizeof(buf), "%d", pChain->id);
-	//hashAdd(hash, lf->extra, lf);
-	hashAdd(hash, buf, lf);
-	overRight = lf->end - seqEnd;
-	if (overRight > maxOverRight)
-	    maxOverRight = overRight;
-	overLeft = seqStart - lf->start ;
-	if (overLeft > maxOverLeft)
-	    maxOverLeft = overLeft;
-	}
-    else
-	{
-	lmAllocVar(lm, sf);
-	sf->start = lf->start;
-	sf->end = lf->end;
-	sf->grayIx = lf->grayIx;
-	lf->components = sf;
-	}
+    char buf[256];
+    struct chain *pChain = lf->extra;
+    safef(buf, sizeof(buf), "%d", pChain->id);
+    hashAdd(hash, buf, lf);
+    overRight = lf->end - seqEnd;
+    if (overRight > maxOverRight)
+	maxOverRight = overRight;
+    overLeft = seqStart - lf->start ;
+    if (overLeft > maxOverLeft)
+	maxOverLeft = overLeft;
     }
 
-/* if some chains are bigger than 3 pixels */
 if (hash->size)
     {
     boolean isSplit = TRUE;
@@ -525,7 +962,7 @@ if (hash->size)
 	 * in both directions so we know whether to draw
 	 * one or two lines to the edge of the screen.
 	 */
-#define STARTSLOP	10000
+#define STARTSLOP	0
 #define MULTIPLIER	10
 #define MAXLOOK		100000
 	extra = (STARTSLOP < maxOverLeft) ? STARTSLOP : maxOverLeft;
@@ -533,105 +970,12 @@ if (hash->size)
 	extra = (STARTSLOP < maxOverRight) ? STARTSLOP : maxOverRight;
 	end = seqEnd + extra;
 	doQuery(conn, fullName, lm,  hash, start, end,  isSplit, -1);
-
-#ifdef NOTNOW
-	for (lf = tg->items; lf != NULL; lf = lf->next)
-	    {
-	    struct chain *pChain = lf->extra;
-	    int chainId = pChain->id;
-
-	    if (lf->components == NULL)
-		continue;
-	    slSort(&lf->components, linkedFeaturesCmpStart);
-	    extra = (STARTSLOP < maxOverRight)?STARTSLOP:maxOverRight;
-	    end = seqEnd + extra;
-	    lastSf = NULL;
-	    while (lf->end > end )
-		{
-		for(lastSf=sf=lf->components;sf;lastSf=sf,sf=sf->next)
-		    ;
-
-		/* get out if we have an element off right side */
-		if (( (lastSf != NULL) &&(lastSf->end > seqEnd)) || (extra > MAXLOOK))
-		    break;
-
-		extra *= MULTIPLIER;
-		start = end;
-		end = start + extra;
-                doQuery(conn, fullName, lm,  hash, start, end,  isSplit, chainId);
-		slSort(&lf->components, linkedFeaturesCmpStart);
-		}
-
-	    /* if we didn't find an element off to the right , add one */
-	    if ((lf->end > seqEnd) && ((lastSf == NULL) ||(lastSf->end < seqEnd)))
-		{
-		lmAllocVar(lm, sf);
-		sf->start = seqEnd;
-		sf->end = seqEnd+1;
-		sf->grayIx = lf->grayIx;
-		sf->qStart = 0;
-		sf->qEnd = sf->qStart + (sf->end - sf->start);
-		sf->next = lf->components;
-		lf->components = sf;
-		slSort(&lf->components, linkedFeaturesCmpStart);
-		}
-
-	    /* we know we have a least one component off right
-	     * now look for one off left
-	     */
-	    extra = (STARTSLOP < maxOverLeft) ? STARTSLOP:maxOverLeft;
-	    start = seqStart - extra; 
-	    while((extra < MAXLOOK) && (lf->start < seqStart) && 
-		(lf->components->start > seqStart))
-		{
-		extra *= MULTIPLIER;
-		end = start;
-		start = end - extra;
-                if (start < 0)
-                    start = 0;
-		doQuery(conn, fullName, lm,  hash, start, end,  isSplit, chainId);
-		slSort(&lf->components, linkedFeaturesCmpStart);
-		}
-	    if ((lf->components->start > seqStart) && (lf->start < lf->components->start))
-		{
-		lmAllocVar(lm, sf);
-		sf->start = 0;
-		sf->end = 1;
-		sf->grayIx = lf->grayIx;
-		sf->qStart = lf->components->qStart;
-		sf->qEnd = sf->qStart + (sf->end - sf->start);
-		sf->next = lf->components;
-		lf->components = sf;
-		slSort(&lf->components, linkedFeaturesCmpStart);
-		}
-	    }
-#endif
 	}
     }
-if (1)
-{
-snakeHeight(tg, vis);
-snakeDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
-	}
-    else
-    {
-linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
-	}
-/* Cleanup time. */
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    lf->components = NULL;
-
-lmCleanup(&lm);
-freeHash(&hash);
 hFreeConn(&conn);
 }
 
 void snakeLoadItems(struct track *tg)
-/* Load up all of the chains from correct table into tg->items 
- * item list.  At this stage to conserve memory for other tracks
- * we don't load the links into the components list until draw time. */
 {
 char *track = tg->table;
 struct chain chain;
@@ -651,12 +995,19 @@ chainCart = (struct cartOptions *) tg->extraUiData;
 
 snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->table);
 optionChrStr = cartUsualString(cart, optionChr, "All");
+int ourStart = winStart;
+int ourEnd = winEnd;
+
+// we're grabbing everything now.. we really should be 
+// doing this as a preprocessing stage, rather than at run-time
+ourStart = 0;
+ourEnd = 500000000;
 if (startsWith("chr",optionChrStr)) 
     {
     snprintf(extraWhere, sizeof(extraWhere), 
             "qName = \"%s\" and score > %d",optionChrStr, 
             chainCart->scoreFilter);
-    sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+    sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
             extraWhere, &rowOffset);
     }
 else
@@ -665,19 +1016,18 @@ else
         {
         snprintf(extraWhere, sizeof(extraWhere), 
                 "score > \"%d\"",chainCart->scoreFilter);
-        sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+        sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
                 extraWhere, &rowOffset);
         }
     else
         {
         snprintf(extraWhere, sizeof(extraWhere), " ");
-        sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+        sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
                 NULL, &rowOffset);
         }
     }
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    //char buf[16];
     chainHeadStaticLoad(row + rowOffset, &chain);
     AllocVar(pChain);
     *pChain = chain;
@@ -709,19 +1059,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     char buffer[1024];
     snprintf(buffer, sizeof(buffer), "%s", chain.qName);
-    //snprintf(buffer, sizeof(buffer), "%s %c %dk", 
-    	//chain.qName, chain.qStrand, qs/1000);
     lf->name = cloneString(buffer);
-    //snprintf(lf->name, sizeof(lf->name), "%s %c %dk", 
-    //	chain.qName, chain.qStrand, qs/1000);
-    //snprintf(lf->name, sizeof(lf->name), "%s", 
-    //	chain.qName);
-    //snprintf(lf->popUp, sizeof(lf->name), "%s %c start %d size %d",
-    //	chain.qName, chain.qStrand, qs, chain.qEnd - chain.qStart);
-    //snprintf(buf, sizeof(buf), "%d", chain.id);
-    //lf->extra = cloneString(buf);
     lf->extra = pChain;
-    //printf("setting extra to %llu\n",(long long) pChain);
     slAddHead(&list, lf);
     }
 
@@ -740,6 +1079,11 @@ tg->items = list;
 /* Clean up. */
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+
+/* now load the items */
+loadLinks(tg, ourStart, ourEnd, tg->visibility);
+lf=tg->items;
+fixItems(lf);
 }	/*	chainLoadItems()	*/
 
 static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -772,22 +1116,17 @@ void snakeMethods(struct track *tg, struct trackDb *tdb,
 /* Fill in custom parts of alignment chains. */
 {
 
-//boolean normScoreAvailable = FALSE;
 struct cartOptions *chainCart;
-//char scoreOption[256];
 
 AllocVar(chainCart);
 
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
-//normScoreAvailable = chainDbNormScoreAvailable(chromName, tg->table, NULL);
 
 /*	what does the cart say about coloring option	*/
 chainCart->chainColor = chainFetchColorOption(cart, tdb, FALSE);
 
-//snprintf( scoreOption, sizeof(scoreOption), "%s.scoreFilter", tdb->tableName);
 chainCart->scoreFilter = cartUsualIntClosestToHome(cart, tdb,
 	FALSE, SCORE_FILTER, 0);
-//chainCart->scoreFilter = cartUsualInt(cart, scoreOption, 0);
 
 
 linkedFeaturesMethods(tg);
@@ -826,13 +1165,14 @@ else
 	chainCart->chainColor = chainColorChromColors;
     }
 
+tg->canPack = TRUE;
 tg->loadItems = snakeLoadItems;
-tg->drawItems = chainDraw;
+tg->drawItems = snakeDraw;
 tg->mapItemName = lfMapNameFromExtra;
 tg->subType = lfSubChain;
 tg->extraUiData = (void *) chainCart;
-//    tg->drawItems = snakeDraw;
-    tg->drawItemAt = snakeDrawAt;
-    tg->totalHeight = snakeHeight; 
-    tg->itemHeight = snakeItemHeight;
+tg->totalHeight = snakeHeight; 
+
+tg->drawItemAt = snakeDrawAt;
+tg->itemHeight = snakeItemHeight;
 }

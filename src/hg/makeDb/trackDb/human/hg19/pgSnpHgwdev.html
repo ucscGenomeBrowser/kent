@@ -1,0 +1,331 @@
+<H2>Description</H2>
+<P>
+This track displays variant base calls from the publicly released genome
+sequences of several individuals:
+<ul>
+<li>!Gubi (KB1),
+<li>G/aq'o (NB1),
+<li>!Ai (MD8),
+<li>D#kgao (TK1),
+<li>Archbishop Desmond Tutu (ABT),
+<li>Craig Venter,
+<li>James Watson,
+<li>Anonymous Yoruba individual NA18507,
+<li>Anonymous Han Chinese individual (YH, YanHaung Project),
+<li>Seong-Jim Kim (SJK),
+<li>6 individuals from the 1000 Genome Project high-coverage pilot:
+<ul>
+<li>a CEU daughter and parents (NA12878, NA12891, NA12892) 
+<li>a YRI daughter and parents (NA19240, NA19238, NA19239)
+</ul>
+<li>5 individuals from the Personal Genome Project:
+<ul>
+<li>George Church (NA20431),
+<li>Misha Angrist (NA21677),
+<li>Rosalynn Gill (NA21833),
+<li>Henry Louis Gates Sr,
+<li>Henry Louis Gates Jr
+</ul>
+<li>69 individuals from Complete Genomics:
+<ul>
+<li>a PUR daugther and parents (HG00731, HG00732, HG00733)
+<li>a YRI daughter and parents (NA19240, NA19238, NA19239)
+<li>a 17-member, 3-generation pedigree
+<li>a diversity panel representing 9 different populations
+</ul>
+<li>and independently published genomes:
+<ul>
+<li>Anonymous Korean individual (AK1),
+<li>Stephen Quake,
+<li>Anonymous Irish male,
+<li>Marjolein Kriek,
+<li>Gregory Lucier,
+<li>Extinct Palaeo-Eskimo Saqqaq individual
+</ul>
+</ul>
+Note: The Khoisan languages are characterized by clicks, denoting additional consonants. The ! is a palatal click, / is a dental click, and # is an alveolar click (Le Roux and White, 2004). 
+</P>
+<P>Most of these SNP calls have been lifted from the hg18 coordinates.  Any SNPs that
+are a match to the new reference have been removed.
+</P>
+
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+Substitutions and indels are displayed as boxes.  When read frequency data are available, they
+are displayed in the mouseover text (e.g. "T:8 G:3" means that 8 reads
+contained a T and 3 reads contained a G at that base position), and box
+colors are used to show the proportion of alleles.
+In the genome browser, when viewing the forward strand of the
+reference genome (the normal case), the displayed alleles are relative
+to the forward strand.  When viewing the reverse strand of the
+reference genome (&quot;reverse&quot; button), the displayed alleles
+are reverse-complemented to match the reverse strand.  
+</P>
+<P>
+On the details page for each variant, the alleles are given for the
+forward strand of the reference genome.  Frequency data are shown when
+available.
+</P>
+
+<H2>Sources</H2>
+<P>
+<B>KB1, NB1, MD8, TK1, ABT (<A HREF="http://www.bx.psu.edu" TARGET=_BLANK>Penn State</A>)</B>
+<A HREF="#RefPSU">(Schuster <em>et al.</em>)</A><BR>
+SNPs are from the allSNPs.txt file which can be downloaded
+from <A HREF="http://usegalaxy.org/bushman/">Galaxy</A>.  The indels are also 
+available for download from Galaxy.
+</P>
+
+<P>
+<B>CEU trio NA12878, NA12891, NA12892; YRI trio NA19240, NA19238, NA19239
+(<A HREF="http://1000genomes.org/" TARGET=_BLANK>1000 Genomes Project</A>)</B>
+<A HREF="#Ref1kG">(1000 Genomes)</A><BR>
+The variants shown are from the 1000 Genomes Project's March 2010
+release.
+The CEU variant calls were based on sequence data from the
+<A HREF="http://www.sanger.ac.uk/" TARGET=_BLANK>Wellcome Trust Sanger Insititute</A> and the
+<A HREF="http://www.broadinstitute.org/science/projects/1000-genomes"
+TARGET=_BLANK>Broad Institute</A>, using the Illumina/Solexa platform.
+The YRI variant calls were based on sequence data from the
+<A HREF="http://www.bcm.edu/" TARGET=_BLANK>Baylor College of Medicine Human Genome Sequencing Center</A> and
+<A HREF="http://www3.appliedbiosystems.com/AB_Home/index.htm"
+TARGET=_BLANK>Applied Biosystems</A>, using the SOLiD platform.
+For more information on the mapping, variant calling, filtering and
+validation, see the
+<A HREF="ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/release/2010_03/pilot2/README_pilot2_snps"
+TARGET=_BLANK>pilot 2 README</A> file.
+The variant calls are available from the March 2010 release subdirectory at
+<A HREF="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/pilot_data/release/2010_03/"
+TARGET=_BLANK>EBI</A> and at
+<A HREF="ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/release/2010_03/"
+TARGET=_BLANK>NCBI</A>.
+</P>
+
+<P><B>Complete Genomics 69 genomes <A HREF="http://www.completegenomics.com/sequence-data/download-data/">(Complete Genomics)</A></B>
+<A HREF="#refCg">(CG)</A><BR>
+There are four sets of data: a Yoruba trio; a Puerto Rican trio; a 17-member, 3-generation pedigree; and a diversity panel representing 9 different populations.  The CEPH samples within the pedigree and diversity sets are from the NIGMS Repository and the remainder  from the NHGRI Repository, both housed at the Coriell Institute for Medical Research.
+</P>
+
+<P><B>George Church, Misha Angrist, Rosalynn Gill, Henry Louis Gates Sr, Henri Louis Gates Jr <A HREF="http://www.personalgenomes.org/">(Personal Genome Project)</A></B>
+<A HREF="#refChurch">(PGP)</A><BR>
+The variants for all but Church are from <A HREF="http://snp.med.harvard.edu/">Trait-o-matic</A>.
+The numbers for Angrist are read counts, the number supporting each allele was not given.
+The variants for Church are from Complete Genomics.
+</P>
+
+<P>
+<B>Craig Venter (<A HREF="http://huref.jcvi.org/" TARGET=_BLANK>JCVI</A>)</B>
+<A HREF="#RefVenter">(Levy <em>et al.</em>)</A><BR>
+An overview is given
+<A HREF="http://www.jcvi.org/cms/research/projects/huref/overview/" TARGET=_BLANK>here</A>.
+This subtrack contains Venter's single-base variants from the file 
+<A HREF="ftp://ftp.jcvi.org/pub/data/huref/HuRef.InternalHuRef-NCBI.gff"
+TARGET=_BLANK>HuRef.InternalHuRef-NCBI.gff</A>,
+filtered to include only Method 1 variants (where each variant was kept in its original 
+form and not post-processed), and to exclude any variants that had N as an allele.
+JCVI hosts a
+<A HREF="http://huref.jcvi.org/" TARGET=_BLANK>genome browser</A>.
+</P>
+<P>
+<B>James Watson 
+(<A HREF="http://jimwatsonsequence.cshl.edu/" TARGET=_BLANK>CSHL</A>)</B>
+<A HREF="#RefWatson">(Wheeler <em>et al.</em>)</A><BR>
+These single-base variants came from the file
+<A HREF="ftp://ftp.hapmap.org/hapmap/jimwatsonsequence/watson_snp.gff.gz"
+TARGET=_BLANK>watson_snp.gff.gz</A>.
+CSHL hosts a  
+<A HREF="http://jimwatsonsequence.cshl.edu/cgi-perl/gbrowse/jwsequence/" 
+TARGET=_BLANK>genome browser</A>.
+</P>
+<P>
+<B>Yoruba NA18507 
+(<A HREF="http://www.illumina.com/" TARGET=_BLANK>Illumina Cambridge/Solexa</A>)</B>
+<A HREF="#RefNA18507">(Bentley <em>et al.</em>)</A><BR>
+Illumina released the read sequences to the 
+<A HREF="http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?study=SRP000239" 
+TARGET=_BLANK>NCBI Short Read Archive</A>.  
+Aakrosh Ratan in the <A HREF="http://www.bx.psu.edu/miller_lab/"
+TARGET=_BLANK>Miller Lab</A> at Penn State University (PSU)
+mapped the sequence reads to the reference genome and called
+single-base variants using
+<A HREF="http://maq.sourceforge.net/" TARGET=_BLANK>MAQ</A>.
+</P>
+<P>
+<B>YH (<A HREF="http://yh.genomics.org.cn/" TARGET=_BLANK>YanHuang Project</A>)</B>
+<A HREF="#RefYH">(Wang <em>et al.</em>)</A><BR>
+The YanHuang Project released these single-base variants from the
+genome of a Han Chinese individual.
+The data are available from the 
+<A HREF="http://yh.genomics.org.cn/" TARGET=_BLANK>YH database</A> in the file
+<A HREF="http://yh.genomics.org.cn/do.downServlet?file=data/snps/yhsnp_add.gff"
+TARGET=_BLANK>yhsnp_add.gff</A>.
+The YanHuang Project hosts a 
+<A HREF="http://yh.genomics.org.cn/mapview.jsp" TARGET=_BLANK>genome browser</A>.
+</P>
+<P>
+<B>SJK (<A HREF="http://eng.gachon.ac.kr/" 
+TARGET=BLANK>GUMS</A>/<A HREF="http://www.kobic.re.kr/" TARGET=_BLANK>KOBIC)</A></B>
+<A HREF="#RefSJK">(Ahn <em>et al.</em>)</A><BR>
+Researchers at Gachon University of Medicine and Science (GUMS) 
+and the Korean Bioinformation Center (KOBIC) 
+released these single-base variants from the genome of Seong-Jin Kim.
+The data are available from 
+<A HREF="ftp://ftp.kobic.kr/pub/KOBIC-KoreanGenome/" TARGET=BLANK>KOBIC</A> 
+in the file 
+<A HREF="ftp://ftp.kobic.kr/pub/KOBIC-KoreanGenome/genetic_variations/KOREF-solexa-snp-X30_Q40d4D100.gff"
+TARGET=BLANK>KOREF-solexa-snp-X30_Q40d4D100.gff</A>.
+</P>
+<P><B>AK1 <A HREF="http://common.gmi.ac.kr/paper/20090708_nature/">(Genomic Medicine Institute)</A></B> <A HREF="#RefAK1">(Kim et al.)</A><BR>
+The variants shown are from the <A HREF="http://common.gmi.ac.kr/paper/20090708_nature/AK1_SNP.tar.gz">AK1_SNP.tar.gz</A> download.
+</P>
+<P><B>Stephen Quake <A HREF="http://thebigone.stanford.edu/">(Stanford)</A></B> <A HREF="#quake">(Pushkarev et al.)</A><BR>
+The variants shown are from the Trait-o-matic
+<A HREF="http://snp.med.harvard.edu/download/genotype/16">download</A>.
+</P>
+<P><B>Anonymous Irish male</B>
+<A HREF="#refIrish">(Tong <em>et al.</em>)</A><BR/>
+The SNPs shown are from the <A HREF="http://g2.bx.psu.edu/">Galaxy</A> library,
+Irish whole genome.
+</P>
+<P>
+<B>Marjolein Kriek</B>
+<A HREF="#refKriek">(Leiden)</A><BR/>
+The SNPs shown are called by Belinda Giardine from PSU, from the BAM file 
+provided by Leiden University Medical Centre.  The reads were aligned to the
+hg19 build.  SNP calls were made using samtools, with a minimum of 4 reads 
+supporting the variant call and maximum of 45.  Also those with a quality
+score of less than 30 were filtered out.
+</P>
+<P><B>Gregory Lucier</B>
+<A HREF="#refLucier">(Life Technologies)</A><BR/>
+The SNPs shown are from <A HREF="http://ec2-184-73-14-243.compute-1.amazonaws.com/">Nimbus Informatics</A>.  Sequencing was done using the Life SOLiD platform.
+</P>
+<P><B>Palaeo-Eskimo Saqqaq individual <A HREF="http://www.ancientgenome.dk/">(Saqqaq Genome Project)</A></B> <A HREF="#RefSaqqaq">(Rasmussen et al.)</A><BR>
+The variants shown are <A HREF="http://www.ancientgenome.dk/flatfiles/saqqaq_all.snp">all the SNPs</A> found by the SNPest program, and in 
+a second track the 
+<A HREF="http://projects.binf.ku.dk/Palaeo-eskimo/highconfidence/">high confidence SNPs</A> from the first set.  
+The allele counts are not available for these tracks but read depth is available.  The read depth was put in place of the allele counts to give a measure of 
+the reliability of the call.
+</P>
+
+<H2>References</H2>
+<P><A NAME="RefPSU"></A>
+<B>KB1, NB1, MD8, TK1, ABT (Penn State)</B><BR>
+Schuster S.C., <em>et al</em>.  Complete Khoisan and Bantu genomes from southern Africa. <em>Nature</em> 463, 841-990 (18 February 2010).</P>
+<P>
+Le Roux, W., and White, A.
+The voices of the San living in Southern Africa today. Cape Town: Kwla books (2004)
+</P>
+
+<P><A NAME="Ref1kG"></A>
+<B>CEU trio NA12878, NA12891, NA12892; YRI trio NA19240, NA19238, NA19239 (1000 Genomes)</B><BR>
+Analysis is underway for a manuscript on the pilot project; until publication,
+please see
+<A HREF="http://1000genomes.org/" TARGET=_BLANK>http://1000genomes.org/</A>.
+(See also the <A HREF="http://www.sciencemag.org/cgi/content/full/319/5862/395"
+TARGET=_BLANK><em>Science</em></A> and
+<A HREF="http://www.nature.com/nbt/journal/v26/n3/full/nbt0308-256b.html"
+TARGET=_BLANK><em>Nature Biotechnology</em></A>
+news articles describing the project.)
+</P>
+
+<P><A NAME="refCg"></A>
+<B>Complete Genomics 69 genomes
+</B><BR/>
+<A HREF="http://www.completegenomics.com/sequence-data/download-data/">Complete Genomics</A><BR/>
+</P>
+
+<P><A NAME="refChurch"></A>
+<B>George Church, Misha Angrist, Rosalynn Gill, Henry Louis Gates Sr, Henry Louis Gates Jr</B><BR/>
+<A HREF="http://www.personalgenomes.org/">Personal Genome Project</A><BR/>
+Church(Complete Genomics version 1.2.0.14):
+<A HREF="http://www.sciencemag.org/cgi/content/abstract/1181498">R. Drmanac, et. al. Science, 5 November 2009</A>
+</P>
+
+<P><A NAME="RefVenter"></A>
+<B>Craig Venter (JCVI)</B><BR>
+Levy S, Sutton G, Ng PC, Feuk L, Halpern AL, Walenz BP, Axelrod N, 
+Huang J, Kirkness EF, Denisov G, <em>et al</em>.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/17803354?dopt=Abstract" 
+TARGET=_BLANK>The diploid genome sequence of an individual human.</A>
+<A HREF="http://biology.plosjournals.org/perlserv/?request=get-document&doi=10.1371%2Fjournal.pbio.0050254&ct=1"
+TARGET=_BLANK><em>PLoS Biol.</em></A> 2007 Sep 4;5(10):e254.</P>
+
+<P><A NAME="RefWatson"></A>
+<B>James Watson (CSHL)</B><BR>
+Wheeler DA, Srinivasan M, Egholm M, Shen Y, Chen L, McGuire A, He W,
+Chen YJ, Makhijani V, Roth GT, <em>et al</em>. 
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/18421352?dopt=Abstract" 
+TARGET=_BLANK>The complete genome of an individual by massively parallel 
+DNA sequencing.</A>
+<A HREF="http://www.nature.com/nature/journal/v452/n7189/full/nature06884.html"
+TARGET=_BLANK><em>Nature.</em></A> 2008 Apr 17;452(7189):872-6.</P>
+
+<P><A NAME="RefNA18507"></A>
+<B>Yoruba NA18507 (Illumina Cambridge/Solexa)</B><BR>
+Bentley DR, Balasubramanian S, Swerdlow HP, Smith GP, Milton J, Brown CG, 
+Hall KP, Evers DJ, Barnes CL, Bignell HR, <em>et al.</em>
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/18987734?dopt=AbstractPlus" 
+TARGET=_BLANK>Accurate whole human genome sequencing using reversible 
+terminator chemistry.</A>
+<A HREF="http://www.nature.com/nature/journal/v456/n7218/full/nature07517.html"
+TARGET=_BLANK><em>Nature.</em></A> 2008 Nov 6;456(7218):53-9.</P>
+
+<P><A NAME="RefYH"></A>
+<B>YH (YanHuang Project)</B><BR>
+Wang J, Wang W, Li R, Li Y, Tian G, Goodman L, Fan W, Zhang J, Li J, 
+Zhang J, <em>et al.</em>
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/18987735?dopt=AbstractPlus" 
+TARGET=_BLANK>The diploid genome sequence of an Asian individual.</A>
+<A HREF="http://www.nature.com/nature/journal/v456/n7218/full/nature07484.html"
+TARGET=_BLANK><em>Nature.</em></A> 2008 Nov 6;456(7218):60-5.</P>
+
+<P><A NAME="RefSJK"></A>
+<B>SJK (GUMS/KOBIC)</B><BR>
+Ahn SM, Kim TH, Lee S, Kim D, Ghang H, Kim DS, Kim BC, Kim SY, Kim WY, Kim C,
+<em>et al.</em>
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19470904?dopt=AbstractPlus"
+TARGET=_BLANK>The first Korean genome sequence and analysis: full genome 
+sequencing for a socio-ethnic group.</A>
+<A HREF="http://genome.cshlp.org/content/19/9/1622"
+TARGET=_BLANK><em>Genome Res.</em></A> 2009 Sep;19(9):1622-9.</P>
+
+<P><A NAME="RefAK1"></A>
+<B>AK1 (Genomic Medicine Institute)</B><BR>
+Jong-Il Kim, Young Seok Ju, Hansoo Park, Sheehyun Kim, Seonwook Lee, 
+Jae-Hyuk Yi, Joann Mudge, Neil A. Miller, Dongwan Hong, Callum J. Bell,
+<em>et al.</em>
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19587683?dopt=AbstractPlus">A highly annotated whole-genome sequence of a Korean individual.</A>
+<A HREF="http://www.nature.com/nature/journal/v460/n7258/abs/nature08211.html?lang=en"><em>Nature</em></A> 460, 1011-1015 (20 August 2009).</P>
+
+<P><A NAME="quake"></A>
+<B>Stephen Quake</B><BR>
+Pushkarev D, Neff NF, Quake SR "Single-molecule Sequencing of an Individual Human Genome" <A HREF="http://www.nature.com/nbt/journal/v27/n9/full/nbt.1561.html"><em>Nature Biotech</em></A> 27, 847-850 (10 August 2009) doi:10.1038
+<A HREF="http://thebigone.stanford.edu/quake/publications/pushkarev_nbt.pdf">PDF</A></P>
+
+<P><A NAME="refIrish"/>
+<B>Anonymous Irish male</B><BR>
+Tong <em>et al.</em>
+<A HREF="http://genomebiology.com/2010/11/9/R91/abstract"
+TARGET=_BLANK>Sequencing and analysis of an Irish human genome.</A>
+Genome Biology 2010, 11:R91.
+</P>
+
+<P><A NAME="refKriek"/>
+<B>Marjolein Kriek</B><BR/>
+Not published yet, data provided by Leiden University Medical Centre.
+</P>
+
+<P><A NAME="refLucier"/>
+<B>Gregory Lucier</B><BR/>
+Not published, data provided by Life Technologies and Nimbus Informatics.
+</P>
+
+<P><A NAME="RefSaqqaq"></A>
+<B>Palaeo-Eskimo Saqqaq individual</B><BR>
+Rasmussen M, Li Y, Lindgreen S, Pedersen JS, Albrechtsen A, Moltke I, Metspalu M, Metspalu E, Kivisild T, Gupta R, 
+<em>et al.</em>
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/20148029?dopt=AbstractPlus">Ancient Human Genome Sequence of an Extinct Palaeo-Eskimo.</A>
+<A HREF="http://www.nature.com/nature/journal/v463/n7282/abs/nature08835.html"><em>Nature</em></A> 463, 757-762 (11 February 2010).</P>
+

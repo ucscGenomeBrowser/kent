@@ -3,10 +3,10 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Gencode metadata table of associated Protein Data Bank (PDB) protein structuress
+#GENCODE tracnscript to Protein Data Bank (PDB) protein structure mapping
 CREATE TABLE wgEncodeGencodePdb (
-    transcriptId varchar(255) not null,	# Transcript ID for Gencode gene
-    PdbId varchar(255) not null,	# Protein Data Bank (PDB) ID
+    transcriptId varchar(255) not null,	# GENCODE transcript identifier
+    pdbId varchar(255) not null,	# Protein Data Bank (PDB) identifier
               #Indices
-    PRIMARY KEY(transcriptId)
+    index(transcriptId)
 );

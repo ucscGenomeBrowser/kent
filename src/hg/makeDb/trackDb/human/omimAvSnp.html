@@ -1,0 +1,52 @@
+<H2>Description</H2>
+
+<!--#insert file="omimDescriptionText.html"-->
+
+<P>
+This track shows the <B>allelic variants</B> in the Online Mendelian Inheritance in Man
+(<A HREF="http://www.omim.org/" TARGET=_blank>OMIM</A>) database that have associated
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_blank>dbSNP</A> identifiers.
+</P>
+ 
+<H2>Display Conventions and Configuration</H2>
+
+<P>Genomic positions of OMIM allelic variant SNPs are marked by solid blocks, which appear
+as tick marks when zoomed out.  
+<P> The details page for each variant displays the allelic variant description, the amino
+acid replacement, and the dbSNP identifier, with a link to that SNP's details page in the
+&quot;All SNPs (132)&quot; track.
+</P>
+<P>The descriptions of OMIM entries are shown on the main browser display when Full display
+mode is chosen.  In Pack mode, the descriptions are shown when mousing over each entry.
+</P>
+
+<H2>Methods</H2>
+<P>
+This track was constructed as follows: 
+<UL>
+<LI>The OMIM allelic variant data file <TT>mimAV.txt</TT> was obtained from OMIM and
+loaded into the MySQL table <TT>omimAv</TT>.
+<LI>The genomic position for each allelic variant SNP in <TT>omimAv</TT> with an associated
+dbSnp identifier was obtained from the <TT>snp132</TT> table. The OMIM AV identifiers and
+their corresponding genomic positions from dbSNP were then loaded into the <TT>omimAvSnp</TT>
+table.
+</UL>
+
+<H2>Credits</H2>
+<P>
+Thanks to OMIM and NCBI for the use of their data. This track was constructed by Fan Hsu,
+Robert Kuhn, and Brooke Rhead of the UCSC Genome Bioinformatics Group.</P>
+
+<H2>References</H2>
+<P>Amberger J, Bocchini CA, Scott AF, Hamosh A.
+<A HREF="http://nar.oxfordjournals.org/cgi/content/full/37/suppl_1/D793"
+TARGET=_blank>McKusick's Online Mendelian Inheritance in Man (OMIM&#174;)</A>.
+<EM>Nucleic Acids Res.</EM> 2009 Jan;37(Database issue):D793-6. Epub 2008 Oct 8.
+</P>
+<P>
+Hamosh A, Scott AF, Amberger JS, Bocchini CA, McKusick VA.
+<A HREF="http://nar.oxfordjournals.org/cgi/content/full/33/suppl_1/D514"
+TARGET=_blank>Online Mendelian Inheritance in Man (OMIM), a knowledgebase of
+human genes and genetic disorders</A>.
+<em>Nucleic Acids Res</em>. 2005 Jan 1;33(Database issue):D514-7.
+</P>

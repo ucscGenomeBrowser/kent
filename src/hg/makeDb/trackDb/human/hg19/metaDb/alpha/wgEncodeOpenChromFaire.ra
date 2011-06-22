@@ -995,6 +995,26 @@ subId 2488
 tableName wgEncodeOpenChromFaireGm12892Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireGm12892Validation
+objType file
+attic auxSup
+cell GM12892
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001117
+expId 1117
+fileName wgEncodeOpenChromFaireGm12892Validation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4154
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromFaireGm18507AlnRep1
 objType file
 cell GM18507
@@ -1151,6 +1171,26 @@ subId 1513
 tableName wgEncodeOpenChromFaireGm18507Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireGm18507Validation
+objType file
+attic auxSup
+cell GM18507
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000586
+expId 586
+fileName wgEncodeOpenChromFaireGm18507Validation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4154
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromFaireGm19239AlnRep1
 objType file
 cell GM19239
@@ -1306,6 +1346,26 @@ project wgEncode
 subId 1508
 tableName wgEncodeOpenChromFaireGm19239Sig
 view Signal
+
+metaObject wgEncodeOpenChromFaireGm19239Validation
+objType file
+attic auxSup
+cell GM19239
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000580
+expId 580
+fileName wgEncodeOpenChromFaireGm19239Validation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4154
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromFaireH1hescAlnRep1
 objType file
@@ -1939,6 +1999,26 @@ subId 1497
 tableName wgEncodeOpenChromFaireHelas3Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireHelas3Validation
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000544
+expId 544
+fileName wgEncodeOpenChromFaireHelas3Validation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4154
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromFaireHepg2AlnRep1
 objType file
 cell HepG2
@@ -2136,6 +2216,26 @@ project wgEncode
 subId 1515
 tableName wgEncodeOpenChromFaireHepg2Sig
 view Signal
+
+metaObject wgEncodeOpenChromFaireHepg2Validation
+objType file
+attic auxSup
+cell HepG2
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000546
+expId 546
+fileName wgEncodeOpenChromFaireHepg2Validation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4154
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromFaireHtr8AlnRep1
 objType file
@@ -2437,6 +2537,26 @@ project wgEncode
 subId 1529
 tableName wgEncodeOpenChromFaireHuvecSig
 view Signal
+
+metaObject wgEncodeOpenChromFaireHuvecValidation
+objType file
+attic auxSup
+cell HUVEC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000549
+expId 549
+fileName wgEncodeOpenChromFaireHuvecValidation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4154
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromFaireK562AlnRep1
 objType file
@@ -3533,6 +3653,26 @@ subId 1530
 tableName wgEncodeOpenChromFaireNhekSig
 view Signal
 
+metaObject wgEncodeOpenChromFaireNhekValidation
+objType file
+attic auxSup
+cell NHEK
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000558
+expId 558
+fileName wgEncodeOpenChromFaireNhekValidation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4154
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromFairePanisletsAlnRep1
 objType file
 cell PanIslets
@@ -3941,4 +4081,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 593376492
+# MAGIC: 576396270
