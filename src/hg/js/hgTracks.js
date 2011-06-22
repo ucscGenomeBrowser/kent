@@ -2292,7 +2292,7 @@ function handleTrackUi(response, status)
     var cssFiles = cleanHtml.match(shlurpPattern);
     cleanHtml = cleanHtml.replace(shlurpPattern,"");
 
-    $('#hgTrackUiDialog').html("<div id='pop'>" + cleanHtml + "</div>");
+    $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>" + cleanHtml + "</div>");
 
     // Strategy for poups with js:
     // - jsFiles and CSS should not be included in html.  Here they are shluped out.
@@ -2332,16 +2332,26 @@ function handleTrackUi(response, status)
             });
         }
     }
+
+    // Searching for some selblance of size suitability
+    var popMaxHeight = ($(window).height() - 40);
+    var popMaxWidth  = ($(window).width() - 40);
+    var popWidth     = 740;
+    if (popWidth > popMaxWidth)
+        popWidth > popMaxWidth;
+
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
                                    cache: true
                                },
-                               resizable: popUpTrackDescriptionOnly,
-                               height: 'auto',
-                               width: 'auto',
+                               resizable: true,
+                               height: (popUpTrackDescriptionOnly ? popMaxHeight : 'auto'), // Let description scroll vertically
+                               width: popWidth,
                                minHeight: 200,
                                minWidth: 700,
+                               maxHeight: popMaxHeight,
+                               maxWidth: popMaxWidth,
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
