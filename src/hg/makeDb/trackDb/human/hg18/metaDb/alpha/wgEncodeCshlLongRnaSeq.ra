@@ -12,7 +12,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal.bb
 geoSampleAccession GSM646522
@@ -34,7 +33,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal.bb
 geoSampleAccession GSM646523
@@ -56,7 +54,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH000140
 expId 140
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2.bb
 geoSampleAccession GSM646524
@@ -79,7 +76,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal.bb
 geoSampleAccession GSM646522
@@ -101,7 +97,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal.bb
 geoSampleAccession GSM646523
@@ -123,7 +118,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 grant Gingeras
 lab CSHL
@@ -143,7 +137,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 grant Gingeras
 lab CSHL
@@ -163,7 +156,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH000140
 expId 140
 grant Gingeras
 lab CSHL
@@ -184,7 +176,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 grant Gingeras
 lab CSHL
@@ -204,7 +195,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 grant Gingeras
 lab CSHL
@@ -224,7 +214,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 grant Gingeras
 lab CSHL
@@ -244,7 +233,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 grant Gingeras
 lab CSHL
@@ -264,7 +252,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH000140
 expId 140
 grant Gingeras
 lab CSHL
@@ -285,7 +272,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 grant Gingeras
 lab CSHL
@@ -305,7 +291,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 grant Gingeras
 lab CSHL
@@ -325,7 +310,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 grant Gingeras
 lab CSHL
@@ -345,7 +329,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 grant Gingeras
 lab CSHL
@@ -365,7 +348,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH000140
 expId 140
 grant Gingeras
 lab CSHL
@@ -386,7 +368,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 grant Gingeras
 lab CSHL
@@ -406,7 +387,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 grant Gingeras
 lab CSHL
@@ -426,7 +406,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 fileName wgEncodeCshlLongRnaSeqRawDataRep1Gm12878CellTotal.fastq.gz
 geoSampleAccession GSM646522
@@ -447,7 +426,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 fileName wgEncodeCshlLongRnaSeqRawDataRep1K562CellTotal.fastq.gz
 geoSampleAccession GSM646523
@@ -468,7 +446,6 @@ dataType RnaSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH000140
 expId 140
 fileName wgEncodeCshlLongRnaSeqRawDataRep1K562CytosolLongpolyaV2.fastq.gz
 geoSampleAccession GSM646524
@@ -489,7 +466,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000141
 expId 141
 fileName wgEncodeCshlLongRnaSeqRawDataRep2Gm12878CellTotal.fastq.gz
 geoSampleAccession GSM646522
@@ -510,7 +486,6 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000142
 expId 142
 fileName wgEncodeCshlLongRnaSeqRawDataRep2K562CellTotal.fastq.gz
 geoSampleAccession GSM646523
@@ -523,4 +498,4 @@ rnaExtract total
 subId 752
 view RawData
 
-# MAGIC: -1244109100
+# MAGIC: -862917506

@@ -14,7 +14,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000037
 expId 37
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz
 fragLength 300
@@ -39,7 +38,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000029
 expId 29
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878CtcfV2.tagAlign.gz
 fragLength 300
@@ -64,7 +62,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000030
 expId 30
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27acV2.tagAlign.gz
 fragLength 300
@@ -89,7 +86,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27me3V2.tagAlign.gz
 fragLength 300
@@ -114,7 +110,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000032
 expId 32
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k36me3V2.tagAlign.gz
 fragLength 300
@@ -139,7 +134,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me1V2.tagAlign.gz
 fragLength 300
@@ -164,7 +158,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000034
 expId 34
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me2V2.tagAlign.gz
 fragLength 300
@@ -189,7 +182,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
-dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me3V2.tagAlign.gz
 fragLength 300
@@ -214,7 +206,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000035
 expId 35
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k9acV2.tagAlign.gz
 fragLength 300
@@ -239,7 +230,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000036
 expId 36
 fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1V2.tagAlign.gz
 fragLength 300
@@ -263,7 +253,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000088
 expId 88
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescControl.tagAlign.gz
 grant Bernstein
@@ -285,7 +274,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000085
 expId 85
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescCtcf.tagAlign.gz
 grant Bernstein
@@ -307,7 +295,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000074
 expId 74
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k27me3.tagAlign.gz
 grant Bernstein
@@ -329,7 +316,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000107
 expId 107
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k36me3.tagAlign.gz
 grant Bernstein
@@ -351,7 +337,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000106
 expId 106
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k4me1.tagAlign.gz
 grant Bernstein
@@ -373,7 +358,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000108
 expId 108
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k4me2.tagAlign.gz
 grant Bernstein
@@ -395,7 +379,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000086
 expId 86
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k4me3.tagAlign.gz
 grant Bernstein
@@ -417,7 +400,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000109
 expId 109
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k9ac.tagAlign.gz
 grant Bernstein
@@ -439,7 +421,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000087
 expId 87
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH4k20me1.tagAlign.gz
 grant Bernstein
@@ -461,7 +442,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000084
 expId 84
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2Control.tagAlign.gz
 grant Bernstein
@@ -483,7 +463,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000080
 expId 80
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
 grant Bernstein
@@ -505,7 +484,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000094
 expId 94
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k27ac.tagAlign.gz
 grant Bernstein
@@ -527,7 +505,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000081
 expId 81
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k36me3.tagAlign.gz
 grant Bernstein
@@ -549,7 +526,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000082
 expId 82
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k4me2.tagAlign.gz
 grant Bernstein
@@ -571,7 +547,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000095
 expId 95
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k4me3.tagAlign.gz
 grant Bernstein
@@ -593,7 +568,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000083
 expId 83
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k9ac.tagAlign.gz
 grant Bernstein
@@ -615,7 +589,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000096
 expId 96
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H4k20me1.tagAlign.gz
 grant Bernstein
@@ -637,7 +610,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000093
 expId 93
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecControl.tagAlign.gz
 grant Bernstein
@@ -659,7 +631,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
-dccAccession wgEncodeEH000075
 expId 75
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecCtcf.tagAlign.gz
 grant Bernstein
@@ -681,7 +652,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000076
 expId 76
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k27ac.tagAlign.gz
 grant Bernstein
@@ -703,7 +673,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000077
 expId 77
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k27me3.tagAlign.gz
 grant Bernstein
@@ -725,7 +694,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000078
 expId 78
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k36me3.tagAlign.gz
 grant Bernstein
@@ -747,7 +715,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000089
 expId 89
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me1.tagAlign.gz
 grant Bernstein
@@ -769,7 +736,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000090
 expId 90
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me2.tagAlign.gz
 grant Bernstein
@@ -791,7 +757,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000091
 expId 91
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me3.tagAlign.gz
 grant Bernstein
@@ -813,7 +778,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000079
 expId 79
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k9ac.tagAlign.gz
 grant Bernstein
@@ -835,7 +799,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000092
 expId 92
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH4k20me1.tagAlign.gz
 grant Bernstein
@@ -857,7 +820,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000119
 expId 119
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmControl.tagAlign.gz
 grant Bernstein
@@ -879,7 +841,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000110
 expId 110
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmCtcf.tagAlign.gz
 grant Bernstein
@@ -901,7 +862,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000111
 expId 111
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k27ac.tagAlign.gz
 grant Bernstein
@@ -923,7 +883,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000112
 expId 112
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k27me3.tagAlign.gz
 grant Bernstein
@@ -945,7 +904,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000113
 expId 113
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k36me3.tagAlign.gz
 grant Bernstein
@@ -967,7 +925,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000114
 expId 114
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k4me1.tagAlign.gz
 grant Bernstein
@@ -989,7 +946,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000115
 expId 115
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k4me2.tagAlign.gz
 grant Bernstein
@@ -1011,7 +967,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000116
 expId 116
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k4me3.tagAlign.gz
 grant Bernstein
@@ -1033,7 +988,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000117
 expId 117
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k9ac.tagAlign.gz
 grant Bernstein
@@ -1055,7 +1009,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000118
 expId 118
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH4k20me1.tagAlign.gz
 grant Bernstein
@@ -1078,7 +1031,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000060
 expId 60
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecControlV2.tagAlign.gz
 fragLength 300
@@ -1103,7 +1055,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000054
 expId 54
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecCtcfV2.tagAlign.gz
 fragLength 300
@@ -1128,7 +1079,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000055
 expId 55
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27acV2.tagAlign.gz
 fragLength 300
@@ -1153,7 +1103,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000038
 expId 38
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27me3V2.tagAlign.gz
 fragLength 300
@@ -1178,7 +1127,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000056
 expId 56
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k36me3V2.tagAlign.gz
 fragLength 300
@@ -1203,7 +1151,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000039
 expId 39
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me1V2.tagAlign.gz
 fragLength 300
@@ -1228,7 +1175,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000040
 expId 40
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me2V2.tagAlign.gz
 fragLength 300
@@ -1253,7 +1199,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000041
 expId 41
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me3V2.tagAlign.gz
 fragLength 300
@@ -1278,7 +1223,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000057
 expId 57
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9acV2.tagAlign.gz
 fragLength 300
@@ -1303,7 +1247,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000058
 expId 58
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9me1V2.tagAlign.gz
 fragLength 300
@@ -1328,7 +1271,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000059
 expId 59
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH4k20me1V2.tagAlign.gz
 fragLength 300
@@ -1353,7 +1295,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000061
 expId 61
 fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecPol2bV2.tagAlign.gz
 fragLength 300
@@ -1378,7 +1319,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000052
 expId 52
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562ControlV2.tagAlign.gz
 fragLength 300
@@ -1403,7 +1343,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000042
 expId 42
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562CtcfV2.tagAlign.gz
 fragLength 300
@@ -1428,7 +1367,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000043
 expId 43
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k27acV2.tagAlign.gz
 fragLength 300
@@ -1453,7 +1391,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000044
 expId 44
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k27me3V2.tagAlign.gz
 fragLength 300
@@ -1478,7 +1415,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000045
 expId 45
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k36me3V2.tagAlign.gz
 fragLength 300
@@ -1503,7 +1439,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000046
 expId 46
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me1V2.tagAlign.gz
 fragLength 300
@@ -1528,7 +1463,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000047
 expId 47
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me2V2.tagAlign.gz
 fragLength 300
@@ -1553,7 +1487,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000048
 expId 48
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me3V2.tagAlign.gz
 fragLength 300
@@ -1578,7 +1511,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000049
 expId 49
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k9acV2.tagAlign.gz
 fragLength 300
@@ -1603,7 +1535,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000050
 expId 50
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k9me1V2.tagAlign.gz
 fragLength 300
@@ -1628,7 +1559,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000051
 expId 51
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562H4k20me1V2.tagAlign.gz
 fragLength 300
@@ -1653,7 +1583,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000053
 expId 53
 fileName wgEncodeBroadChipSeqAlignmentsRep1K562Pol2bV2.tagAlign.gz
 fragLength 300
@@ -1678,7 +1607,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000072
 expId 72
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteControlV2.tagAlign.gz
 fragLength 300
@@ -1703,7 +1631,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000063
 expId 63
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteCtcfV2.tagAlign.gz
 fragLength 300
@@ -1728,7 +1655,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000064
 expId 64
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27acV2.tagAlign.gz
 fragLength 300
@@ -1753,7 +1679,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000065
 expId 65
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27me3V2.tagAlign.gz
 fragLength 300
@@ -1778,7 +1703,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000066
 expId 66
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k36me3V2.tagAlign.gz
 fragLength 300
@@ -1803,7 +1727,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000062
 expId 62
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me1V2.tagAlign.gz
 fragLength 300
@@ -1828,7 +1751,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000067
 expId 67
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me2V2.tagAlign.gz
 fragLength 300
@@ -1853,7 +1775,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000068
 expId 68
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me3V2.tagAlign.gz
 fragLength 300
@@ -1878,7 +1799,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000069
 expId 69
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9acV2.tagAlign.gz
 fragLength 300
@@ -1903,7 +1823,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000070
 expId 70
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAlign.gz
 fragLength 300
@@ -1928,7 +1847,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000071
 expId 71
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagAlign.gz
 fragLength 300
@@ -1953,7 +1871,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000073
 expId 73
 fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAlign.gz
 fragLength 300
@@ -1977,7 +1894,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000105
 expId 105
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfControl.tagAlign.gz
 grant Bernstein
@@ -1999,7 +1915,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000120
 expId 120
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfCtcf.tagAlign.gz
 grant Bernstein
@@ -2021,7 +1936,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000097
 expId 97
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k27ac.tagAlign.gz
 grant Bernstein
@@ -2043,7 +1957,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000098
 expId 98
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k27me3.tagAlign.gz
 grant Bernstein
@@ -2065,7 +1978,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000099
 expId 99
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k36me3.tagAlign.gz
 grant Bernstein
@@ -2087,7 +1999,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000100
 expId 100
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me1.tagAlign.gz
 grant Bernstein
@@ -2109,7 +2020,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000101
 expId 101
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me2.tagAlign.gz
 grant Bernstein
@@ -2131,7 +2041,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000102
 expId 102
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me3.tagAlign.gz
 grant Bernstein
@@ -2153,7 +2062,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000103
 expId 103
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k9ac.tagAlign.gz
 grant Bernstein
@@ -2175,7 +2083,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000104
 expId 104
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH4k20me1.tagAlign.gz
 grant Bernstein
@@ -2198,7 +2105,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000037
 expId 37
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
 fragLength 300
@@ -2223,7 +2129,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000029
 expId 29
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz
 fragLength 300
@@ -2248,7 +2153,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000030
 expId 30
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.gz
 fragLength 300
@@ -2273,7 +2177,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign.gz
 fragLength 300
@@ -2298,7 +2201,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000032
 expId 32
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.gz
 fragLength 300
@@ -2323,7 +2225,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign.gz
 fragLength 300
@@ -2348,7 +2249,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000034
 expId 34
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign.gz
 fragLength 300
@@ -2373,7 +2273,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
-dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign.gz
 fragLength 300
@@ -2398,7 +2297,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000035
 expId 35
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.gz
 fragLength 300
@@ -2423,7 +2321,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000036
 expId 36
 fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign.gz
 fragLength 300
@@ -2447,7 +2344,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000088
 expId 88
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescControl.tagAlign.gz
 grant Bernstein
@@ -2469,7 +2365,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000085
 expId 85
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescCtcf.tagAlign.gz
 grant Bernstein
@@ -2491,7 +2386,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000074
 expId 74
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k27me3.tagAlign.gz
 grant Bernstein
@@ -2513,7 +2407,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000107
 expId 107
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k36me3.tagAlign.gz
 grant Bernstein
@@ -2535,7 +2428,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000106
 expId 106
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k4me1.tagAlign.gz
 grant Bernstein
@@ -2557,7 +2449,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000108
 expId 108
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k4me2.tagAlign.gz
 grant Bernstein
@@ -2579,7 +2470,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000086
 expId 86
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k4me3.tagAlign.gz
 grant Bernstein
@@ -2601,7 +2491,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000109
 expId 109
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k9ac.tagAlign.gz
 grant Bernstein
@@ -2623,7 +2512,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000087
 expId 87
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH4k20me1.tagAlign.gz
 grant Bernstein
@@ -2645,7 +2533,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000084
 expId 84
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2Control.tagAlign.gz
 grant Bernstein
@@ -2667,7 +2554,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000080
 expId 80
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
 grant Bernstein
@@ -2689,7 +2575,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000094
 expId 94
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k27ac.tagAlign.gz
 grant Bernstein
@@ -2711,7 +2596,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000081
 expId 81
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k36me3.tagAlign.gz
 grant Bernstein
@@ -2733,7 +2617,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000082
 expId 82
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k4me2.tagAlign.gz
 grant Bernstein
@@ -2755,7 +2638,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000095
 expId 95
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k4me3.tagAlign.gz
 grant Bernstein
@@ -2777,7 +2659,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000083
 expId 83
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k9ac.tagAlign.gz
 grant Bernstein
@@ -2799,7 +2680,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000096
 expId 96
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H4k20me1.tagAlign.gz
 grant Bernstein
@@ -2821,7 +2701,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000093
 expId 93
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecControl.tagAlign.gz
 grant Bernstein
@@ -2843,7 +2722,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
-dccAccession wgEncodeEH000075
 expId 75
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecCtcf.tagAlign.gz
 grant Bernstein
@@ -2865,7 +2743,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000076
 expId 76
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k27ac.tagAlign.gz
 grant Bernstein
@@ -2887,7 +2764,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000077
 expId 77
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k27me3.tagAlign.gz
 grant Bernstein
@@ -2909,7 +2785,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000078
 expId 78
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k36me3.tagAlign.gz
 grant Bernstein
@@ -2931,7 +2806,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000089
 expId 89
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me1.tagAlign.gz
 grant Bernstein
@@ -2953,7 +2827,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000090
 expId 90
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me2.tagAlign.gz
 grant Bernstein
@@ -2975,7 +2848,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000091
 expId 91
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me3.tagAlign.gz
 grant Bernstein
@@ -2997,7 +2869,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000079
 expId 79
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k9ac.tagAlign.gz
 grant Bernstein
@@ -3019,7 +2890,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000092
 expId 92
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH4k20me1.tagAlign.gz
 grant Bernstein
@@ -3041,7 +2911,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000119
 expId 119
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmControl.tagAlign.gz
 grant Bernstein
@@ -3063,7 +2932,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000110
 expId 110
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmCtcf.tagAlign.gz
 grant Bernstein
@@ -3085,7 +2953,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000111
 expId 111
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k27ac.tagAlign.gz
 grant Bernstein
@@ -3107,7 +2974,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000112
 expId 112
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k27me3.tagAlign.gz
 grant Bernstein
@@ -3129,7 +2995,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000113
 expId 113
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k36me3.tagAlign.gz
 grant Bernstein
@@ -3151,7 +3016,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000114
 expId 114
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k4me1.tagAlign.gz
 grant Bernstein
@@ -3173,7 +3037,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000115
 expId 115
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k4me2.tagAlign.gz
 grant Bernstein
@@ -3195,7 +3058,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000116
 expId 116
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k4me3.tagAlign.gz
 grant Bernstein
@@ -3217,7 +3079,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000117
 expId 117
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k9ac.tagAlign.gz
 grant Bernstein
@@ -3239,7 +3100,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000118
 expId 118
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH4k20me1.tagAlign.gz
 grant Bernstein
@@ -3262,7 +3122,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000060
 expId 60
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecControlV2.tagAlign.gz
 fragLength 300
@@ -3287,7 +3146,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000054
 expId 54
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcfV2.tagAlign.gz
 fragLength 300
@@ -3312,7 +3170,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000055
 expId 55
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27acV2.tagAlign.gz
 fragLength 300
@@ -3337,7 +3194,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000038
 expId 38
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.gz
 fragLength 300
@@ -3362,7 +3218,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000056
 expId 56
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign.gz
 fragLength 300
@@ -3387,7 +3242,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000039
 expId 39
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.gz
 fragLength 300
@@ -3412,7 +3266,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000040
 expId 40
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2V2.tagAlign.gz
 fragLength 300
@@ -3437,7 +3290,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000041
 expId 41
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign.gz
 fragLength 300
@@ -3462,7 +3314,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000057
 expId 57
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz
 fragLength 300
@@ -3487,7 +3338,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000058
 expId 58
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1V2.tagAlign.gz
 fragLength 300
@@ -3512,7 +3362,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000059
 expId 59
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1V2.tagAlign.gz
 fragLength 300
@@ -3537,7 +3386,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000061
 expId 61
 fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecPol2bV2.tagAlign.gz
 fragLength 300
@@ -3562,7 +3410,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000052
 expId 52
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz
 fragLength 300
@@ -3586,7 +3433,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000042
 expId 42
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562CtcfV2.tagAlign.gz
 fragLength 300
@@ -3611,7 +3457,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000043
 expId 43
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k27acV2.tagAlign.gz
 fragLength 300
@@ -3636,7 +3481,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000044
 expId 44
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k27me3V2.tagAlign.gz
 fragLength 300
@@ -3661,7 +3505,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000045
 expId 45
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k36me3V2.tagAlign.gz
 fragLength 300
@@ -3686,7 +3529,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000046
 expId 46
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me1V2.tagAlign.gz
 fragLength 300
@@ -3711,7 +3553,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000047
 expId 47
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me2V2.tagAlign.gz
 fragLength 300
@@ -3736,7 +3577,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000048
 expId 48
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me3V2.tagAlign.gz
 fragLength 300
@@ -3761,7 +3601,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000049
 expId 49
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k9acV2.tagAlign.gz
 fragLength 300
@@ -3786,7 +3625,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000050
 expId 50
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k9me1V2.tagAlign.gz
 fragLength 300
@@ -3810,7 +3648,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000051
 expId 51
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562H4k20me1V2.tagAlign.gz
 fragLength 300
@@ -3835,7 +3672,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000053
 expId 53
 fileName wgEncodeBroadChipSeqAlignmentsRep2K562Pol2bV2.tagAlign.gz
 fragLength 300
@@ -3860,7 +3696,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000072
 expId 72
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteControlV2.tagAlign.gz
 fragLength 300
@@ -3885,7 +3720,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000063
 expId 63
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteCtcfV2.tagAlign.gz
 fragLength 300
@@ -3910,7 +3744,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000064
 expId 64
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27acV2.tagAlign.gz
 fragLength 300
@@ -3935,7 +3768,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000065
 expId 65
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27me3V2.tagAlign.gz
 fragLength 300
@@ -3960,7 +3792,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000066
 expId 66
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k36me3V2.tagAlign.gz
 fragLength 300
@@ -3985,7 +3816,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000062
 expId 62
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me1V2.tagAlign.gz
 fragLength 300
@@ -4010,7 +3840,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000067
 expId 67
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me2V2.tagAlign.gz
 fragLength 300
@@ -4035,7 +3864,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000068
 expId 68
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me3V2.tagAlign.gz
 fragLength 300
@@ -4060,7 +3888,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000069
 expId 69
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9acV2.tagAlign.gz
 fragLength 300
@@ -4085,7 +3912,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000070
 expId 70
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9me1V2.tagAlign.gz
 fragLength 300
@@ -4110,7 +3936,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000071
 expId 71
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.tagAlign.gz
 fragLength 300
@@ -4135,7 +3960,6 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2009-05-15
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000073
 expId 73
 fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAlign.gz
 fragLength 300
@@ -4159,7 +3983,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000105
 expId 105
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfControl.tagAlign.gz
 grant Bernstein
@@ -4181,7 +4004,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000120
 expId 120
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfCtcf.tagAlign.gz
 grant Bernstein
@@ -4203,7 +4025,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000097
 expId 97
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k27ac.tagAlign.gz
 grant Bernstein
@@ -4225,7 +4046,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000098
 expId 98
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k27me3.tagAlign.gz
 grant Bernstein
@@ -4247,7 +4067,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000099
 expId 99
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k36me3.tagAlign.gz
 grant Bernstein
@@ -4269,7 +4088,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000100
 expId 100
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me1.tagAlign.gz
 grant Bernstein
@@ -4291,7 +4109,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000101
 expId 101
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me2.tagAlign.gz
 grant Bernstein
@@ -4313,7 +4130,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000102
 expId 102
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me3.tagAlign.gz
 grant Bernstein
@@ -4335,7 +4151,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000103
 expId 103
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k9ac.tagAlign.gz
 grant Bernstein
@@ -4357,7 +4172,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000104
 expId 104
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH4k20me1.tagAlign.gz
 grant Bernstein
@@ -4379,7 +4193,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000029
 expId 29
 fileName wgEncodeBroadChipSeqPeaksGm12878Ctcf.broadPeak.gz
 grant Bernstein
@@ -4401,7 +4214,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000030
 expId 30
 fileName wgEncodeBroadChipSeqPeaksGm12878H3k27ac.broadPeak.gz
 grant Bernstein
@@ -4423,7 +4235,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadChipSeqPeaksGm12878H3k27me3.broadPeak.gz
 grant Bernstein
@@ -4445,7 +4256,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000032
 expId 32
 fileName wgEncodeBroadChipSeqPeaksGm12878H3k36me3.broadPeak.gz
 grant Bernstein
@@ -4467,7 +4277,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadChipSeqPeaksGm12878H3k4me1.broadPeak.gz
 grant Bernstein
@@ -4489,7 +4298,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000034
 expId 34
 fileName wgEncodeBroadChipSeqPeaksGm12878H3k4me2.broadPeak.gz
 grant Bernstein
@@ -4511,7 +4319,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
-dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadChipSeqPeaksGm12878H3k4me3.broadPeak.gz
 grant Bernstein
@@ -4533,7 +4340,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000035
 expId 35
 fileName wgEncodeBroadChipSeqPeaksGm12878H3k9ac.broadPeak.gz
 grant Bernstein
@@ -4555,7 +4361,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000036
 expId 36
 fileName wgEncodeBroadChipSeqPeaksGm12878H4k20me1.broadPeak.gz
 grant Bernstein
@@ -4577,7 +4382,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000085
 expId 85
 fileName wgEncodeBroadChipSeqPeaksH1hescCtcf.broadPeak.gz
 grant Bernstein
@@ -4599,7 +4403,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000074
 expId 74
 fileName wgEncodeBroadChipSeqPeaksH1hescH3k27me3.broadPeak.gz
 grant Bernstein
@@ -4621,7 +4424,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000107
 expId 107
 fileName wgEncodeBroadChipSeqPeaksH1hescH3k36me3.broadPeak.gz
 grant Bernstein
@@ -4643,7 +4445,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000106
 expId 106
 fileName wgEncodeBroadChipSeqPeaksH1hescH3k4me1.broadPeak.gz
 grant Bernstein
@@ -4665,7 +4466,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000108
 expId 108
 fileName wgEncodeBroadChipSeqPeaksH1hescH3k4me2.broadPeak.gz
 grant Bernstein
@@ -4687,7 +4487,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000086
 expId 86
 fileName wgEncodeBroadChipSeqPeaksH1hescH3k4me3.broadPeak.gz
 grant Bernstein
@@ -4709,7 +4508,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000109
 expId 109
 fileName wgEncodeBroadChipSeqPeaksH1hescH3k9ac.broadPeak.gz
 grant Bernstein
@@ -4731,7 +4529,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000087
 expId 87
 fileName wgEncodeBroadChipSeqPeaksH1hescH4k20me1.broadPeak.gz
 grant Bernstein
@@ -4753,7 +4550,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000080
 expId 80
 fileName wgEncodeBroadChipSeqPeaksHepg2Ctcf.broadPeak.gz
 grant Bernstein
@@ -4775,7 +4571,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000094
 expId 94
 fileName wgEncodeBroadChipSeqPeaksHepg2H3k27ac.broadPeak.gz
 grant Bernstein
@@ -4797,7 +4592,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000081
 expId 81
 fileName wgEncodeBroadChipSeqPeaksHepg2H3k36me3.broadPeak.gz
 grant Bernstein
@@ -4819,7 +4613,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000082
 expId 82
 fileName wgEncodeBroadChipSeqPeaksHepg2H3k4me2.broadPeak.gz
 grant Bernstein
@@ -4841,7 +4634,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000095
 expId 95
 fileName wgEncodeBroadChipSeqPeaksHepg2H3k4me3.broadPeak.gz
 grant Bernstein
@@ -4863,7 +4655,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000083
 expId 83
 fileName wgEncodeBroadChipSeqPeaksHepg2H3k9ac.broadPeak.gz
 grant Bernstein
@@ -4885,7 +4676,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000096
 expId 96
 fileName wgEncodeBroadChipSeqPeaksHepg2H4k20me1.broadPeak.gz
 grant Bernstein
@@ -4907,7 +4697,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
-dccAccession wgEncodeEH000075
 expId 75
 fileName wgEncodeBroadChipSeqPeaksHmecCtcf.broadPeak.gz
 grant Bernstein
@@ -4929,7 +4718,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000076
 expId 76
 fileName wgEncodeBroadChipSeqPeaksHmecH3k27ac.broadPeak.gz
 grant Bernstein
@@ -4951,7 +4739,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000077
 expId 77
 fileName wgEncodeBroadChipSeqPeaksHmecH3k27me3.broadPeak.gz
 grant Bernstein
@@ -4973,7 +4760,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000078
 expId 78
 fileName wgEncodeBroadChipSeqPeaksHmecH3k36me3.broadPeak.gz
 grant Bernstein
@@ -4995,7 +4781,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000089
 expId 89
 fileName wgEncodeBroadChipSeqPeaksHmecH3k4me1.broadPeak.gz
 grant Bernstein
@@ -5017,7 +4802,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000090
 expId 90
 fileName wgEncodeBroadChipSeqPeaksHmecH3k4me2.broadPeak.gz
 grant Bernstein
@@ -5039,7 +4823,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000091
 expId 91
 fileName wgEncodeBroadChipSeqPeaksHmecH3k4me3.broadPeak.gz
 grant Bernstein
@@ -5061,7 +4844,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000079
 expId 79
 fileName wgEncodeBroadChipSeqPeaksHmecH3k9ac.broadPeak.gz
 grant Bernstein
@@ -5083,7 +4865,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000092
 expId 92
 fileName wgEncodeBroadChipSeqPeaksHmecH4k20me1.broadPeak.gz
 grant Bernstein
@@ -5105,7 +4886,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000110
 expId 110
 fileName wgEncodeBroadChipSeqPeaksHsmmCtcf.broadPeak.gz
 grant Bernstein
@@ -5127,7 +4907,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000111
 expId 111
 fileName wgEncodeBroadChipSeqPeaksHsmmH3k27ac.broadPeak.gz
 grant Bernstein
@@ -5149,7 +4928,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000112
 expId 112
 fileName wgEncodeBroadChipSeqPeaksHsmmH3k27me3.broadPeak.gz
 grant Bernstein
@@ -5171,7 +4949,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000113
 expId 113
 fileName wgEncodeBroadChipSeqPeaksHsmmH3k36me3.broadPeak.gz
 grant Bernstein
@@ -5193,7 +4970,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000114
 expId 114
 fileName wgEncodeBroadChipSeqPeaksHsmmH3k4me1.broadPeak.gz
 grant Bernstein
@@ -5215,7 +4991,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000115
 expId 115
 fileName wgEncodeBroadChipSeqPeaksHsmmH3k4me2.broadPeak.gz
 grant Bernstein
@@ -5237,7 +5012,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000116
 expId 116
 fileName wgEncodeBroadChipSeqPeaksHsmmH3k4me3.broadPeak.gz
 grant Bernstein
@@ -5259,7 +5033,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000117
 expId 117
 fileName wgEncodeBroadChipSeqPeaksHsmmH3k9ac.broadPeak.gz
 grant Bernstein
@@ -5281,7 +5054,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000118
 expId 118
 fileName wgEncodeBroadChipSeqPeaksHsmmH4k20me1.broadPeak.gz
 grant Bernstein
@@ -5303,7 +5075,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000054
 expId 54
 fileName wgEncodeBroadChipSeqPeaksHuvecCtcf.broadPeak.gz
 grant Bernstein
@@ -5325,7 +5096,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000055
 expId 55
 fileName wgEncodeBroadChipSeqPeaksHuvecH3k27ac.broadPeak.gz
 grant Bernstein
@@ -5347,7 +5117,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000038
 expId 38
 fileName wgEncodeBroadChipSeqPeaksHuvecH3k27me3.broadPeak.gz
 grant Bernstein
@@ -5369,7 +5138,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000056
 expId 56
 fileName wgEncodeBroadChipSeqPeaksHuvecH3k36me3.broadPeak.gz
 grant Bernstein
@@ -5391,7 +5159,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000039
 expId 39
 fileName wgEncodeBroadChipSeqPeaksHuvecH3k4me1.broadPeak.gz
 grant Bernstein
@@ -5413,7 +5180,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000040
 expId 40
 fileName wgEncodeBroadChipSeqPeaksHuvecH3k4me2.broadPeak.gz
 grant Bernstein
@@ -5435,7 +5201,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000041
 expId 41
 fileName wgEncodeBroadChipSeqPeaksHuvecH3k4me3.broadPeak.gz
 grant Bernstein
@@ -5457,7 +5222,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000057
 expId 57
 fileName wgEncodeBroadChipSeqPeaksHuvecH3k9ac.broadPeak.gz
 grant Bernstein
@@ -5479,7 +5243,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000058
 expId 58
 fileName wgEncodeBroadChipSeqPeaksHuvecH3k9me1.broadPeak.gz
 grant Bernstein
@@ -5501,7 +5264,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000059
 expId 59
 fileName wgEncodeBroadChipSeqPeaksHuvecH4k20me1.broadPeak.gz
 grant Bernstein
@@ -5523,7 +5285,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000061
 expId 61
 fileName wgEncodeBroadChipSeqPeaksHuvecPol2b.broadPeak.gz
 grant Bernstein
@@ -5545,7 +5306,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000042
 expId 42
 fileName wgEncodeBroadChipSeqPeaksK562Ctcf.broadPeak.gz
 grant Bernstein
@@ -5567,7 +5327,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000043
 expId 43
 fileName wgEncodeBroadChipSeqPeaksK562H3k27ac.broadPeak.gz
 grant Bernstein
@@ -5589,7 +5348,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000044
 expId 44
 fileName wgEncodeBroadChipSeqPeaksK562H3k27me3.broadPeak.gz
 grant Bernstein
@@ -5611,7 +5369,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000045
 expId 45
 fileName wgEncodeBroadChipSeqPeaksK562H3k36me3.broadPeak.gz
 grant Bernstein
@@ -5633,7 +5390,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000046
 expId 46
 fileName wgEncodeBroadChipSeqPeaksK562H3k4me1.broadPeak.gz
 grant Bernstein
@@ -5655,7 +5411,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000047
 expId 47
 fileName wgEncodeBroadChipSeqPeaksK562H3k4me2.broadPeak.gz
 grant Bernstein
@@ -5677,7 +5432,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000048
 expId 48
 fileName wgEncodeBroadChipSeqPeaksK562H3k4me3.broadPeak.gz
 grant Bernstein
@@ -5699,7 +5453,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000049
 expId 49
 fileName wgEncodeBroadChipSeqPeaksK562H3k9ac.broadPeak.gz
 grant Bernstein
@@ -5721,7 +5474,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000050
 expId 50
 fileName wgEncodeBroadChipSeqPeaksK562H3k9me1.broadPeak.gz
 grant Bernstein
@@ -5743,7 +5495,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000051
 expId 51
 fileName wgEncodeBroadChipSeqPeaksK562H4k20me1.broadPeak.gz
 grant Bernstein
@@ -5765,7 +5516,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000053
 expId 53
 fileName wgEncodeBroadChipSeqPeaksK562Pol2b.broadPeak.gz
 grant Bernstein
@@ -5787,7 +5537,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000063
 expId 63
 fileName wgEncodeBroadChipSeqPeaksNhekCtcf.broadPeak.gz
 grant Bernstein
@@ -5809,7 +5558,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000064
 expId 64
 fileName wgEncodeBroadChipSeqPeaksNhekH3k27ac.broadPeak.gz
 grant Bernstein
@@ -5831,7 +5579,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000065
 expId 65
 fileName wgEncodeBroadChipSeqPeaksNhekH3k27me3.broadPeak.gz
 grant Bernstein
@@ -5853,7 +5600,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000066
 expId 66
 fileName wgEncodeBroadChipSeqPeaksNhekH3k36me3.broadPeak.gz
 grant Bernstein
@@ -5875,7 +5621,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000062
 expId 62
 fileName wgEncodeBroadChipSeqPeaksNhekH3k4me1.broadPeak.gz
 grant Bernstein
@@ -5897,7 +5642,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000067
 expId 67
 fileName wgEncodeBroadChipSeqPeaksNhekH3k4me2.broadPeak.gz
 grant Bernstein
@@ -5919,7 +5663,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000068
 expId 68
 fileName wgEncodeBroadChipSeqPeaksNhekH3k4me3.broadPeak.gz
 grant Bernstein
@@ -5941,7 +5684,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000069
 expId 69
 fileName wgEncodeBroadChipSeqPeaksNhekH3k9ac.broadPeak.gz
 grant Bernstein
@@ -5963,7 +5705,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000070
 expId 70
 fileName wgEncodeBroadChipSeqPeaksNhekH3k9me1.broadPeak.gz
 grant Bernstein
@@ -5985,7 +5726,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000071
 expId 71
 fileName wgEncodeBroadChipSeqPeaksNhekH4k20me1.broadPeak.gz
 grant Bernstein
@@ -6007,7 +5747,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000073
 expId 73
 fileName wgEncodeBroadChipSeqPeaksNhekPol2b.broadPeak.gz
 grant Bernstein
@@ -6029,7 +5768,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000120
 expId 120
 fileName wgEncodeBroadChipSeqPeaksNhlfCtcf.broadPeak.gz
 grant Bernstein
@@ -6051,7 +5789,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000097
 expId 97
 fileName wgEncodeBroadChipSeqPeaksNhlfH3k27ac.broadPeak.gz
 grant Bernstein
@@ -6073,7 +5810,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000098
 expId 98
 fileName wgEncodeBroadChipSeqPeaksNhlfH3k27me3.broadPeak.gz
 grant Bernstein
@@ -6095,7 +5831,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000099
 expId 99
 fileName wgEncodeBroadChipSeqPeaksNhlfH3k36me3.broadPeak.gz
 grant Bernstein
@@ -6117,7 +5852,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000100
 expId 100
 fileName wgEncodeBroadChipSeqPeaksNhlfH3k4me1.broadPeak.gz
 grant Bernstein
@@ -6139,7 +5873,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000101
 expId 101
 fileName wgEncodeBroadChipSeqPeaksNhlfH3k4me2.broadPeak.gz
 grant Bernstein
@@ -6161,7 +5894,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000102
 expId 102
 fileName wgEncodeBroadChipSeqPeaksNhlfH3k4me3.broadPeak.gz
 grant Bernstein
@@ -6183,7 +5915,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000103
 expId 103
 fileName wgEncodeBroadChipSeqPeaksNhlfH3k9ac.broadPeak.gz
 grant Bernstein
@@ -6205,7 +5936,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000104
 expId 104
 fileName wgEncodeBroadChipSeqPeaksNhlfH4k20me1.broadPeak.gz
 grant Bernstein
@@ -6227,7 +5957,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000037
 expId 37
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878Control.fastq.gz
 grant Bernstein
@@ -6249,7 +5978,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000029
 expId 29
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878Ctcf.fastq.gz
 grant Bernstein
@@ -6271,7 +5999,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000030
 expId 30
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k27ac.fastq.gz
 grant Bernstein
@@ -6293,7 +6020,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k27me3.fastq.gz
 grant Bernstein
@@ -6315,7 +6041,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000032
 expId 32
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k36me3.fastq.gz
 grant Bernstein
@@ -6337,7 +6062,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me1.fastq.gz
 grant Bernstein
@@ -6359,7 +6083,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000034
 expId 34
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me2.fastq.gz
 grant Bernstein
@@ -6381,7 +6104,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me3.fastq.gz
 grant Bernstein
@@ -6403,7 +6125,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000035
 expId 35
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k9ac.fastq.gz
 grant Bernstein
@@ -6425,7 +6146,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000036
 expId 36
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H4k20me1.fastq.gz
 grant Bernstein
@@ -6447,7 +6167,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000088
 expId 88
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescControl.fastq.gz
 grant Bernstein
@@ -6469,7 +6188,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000085
 expId 85
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescCtcf.fastq.gz
 grant Bernstein
@@ -6491,7 +6209,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000074
 expId 74
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k27me3.fastq.gz
 grant Bernstein
@@ -6513,7 +6230,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000107
 expId 107
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k36me3.fastq.gz
 grant Bernstein
@@ -6535,7 +6251,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000106
 expId 106
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k4me1.fastq.gz
 grant Bernstein
@@ -6557,7 +6272,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000108
 expId 108
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k4me2.fastq.gz
 grant Bernstein
@@ -6579,7 +6293,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000086
 expId 86
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k4me3.fastq.gz
 grant Bernstein
@@ -6601,7 +6314,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000109
 expId 109
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k9ac.fastq.gz
 grant Bernstein
@@ -6623,7 +6335,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000087
 expId 87
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH4k20me1.fastq.gz
 grant Bernstein
@@ -6645,7 +6356,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000084
 expId 84
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2Control.fastq.gz
 grant Bernstein
@@ -6667,7 +6377,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000080
 expId 80
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2Ctcf.fastq.gz
 grant Bernstein
@@ -6689,7 +6398,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000094
 expId 94
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k27ac.fastq.gz
 grant Bernstein
@@ -6711,7 +6419,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000081
 expId 81
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k36me3.fastq.gz
 grant Bernstein
@@ -6733,7 +6440,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000082
 expId 82
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k4me2.fastq.gz
 grant Bernstein
@@ -6755,7 +6461,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000095
 expId 95
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k4me3.fastq.gz
 grant Bernstein
@@ -6777,7 +6482,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000083
 expId 83
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k9ac.fastq.gz
 grant Bernstein
@@ -6799,7 +6503,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000096
 expId 96
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H4k20me1.fastq.gz
 grant Bernstein
@@ -6821,7 +6524,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000093
 expId 93
 fileName wgEncodeBroadChipSeqRawDataRep1HmecControl.fastq.gz
 grant Bernstein
@@ -6843,7 +6545,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
-dccAccession wgEncodeEH000075
 expId 75
 fileName wgEncodeBroadChipSeqRawDataRep1HmecCtcf.fastq.gz
 grant Bernstein
@@ -6865,7 +6566,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000076
 expId 76
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k27ac.fastq.gz
 grant Bernstein
@@ -6887,7 +6587,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000077
 expId 77
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k27me3.fastq.gz
 grant Bernstein
@@ -6909,7 +6608,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000078
 expId 78
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k36me3.fastq.gz
 grant Bernstein
@@ -6931,7 +6629,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000089
 expId 89
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k4me1.fastq.gz
 grant Bernstein
@@ -6953,7 +6650,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000090
 expId 90
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k4me2.fastq.gz
 grant Bernstein
@@ -6975,7 +6671,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000091
 expId 91
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k4me3.fastq.gz
 grant Bernstein
@@ -6997,7 +6692,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000079
 expId 79
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k9ac.fastq.gz
 grant Bernstein
@@ -7019,7 +6713,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000092
 expId 92
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH4k20me1.fastq.gz
 grant Bernstein
@@ -7041,7 +6734,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000119
 expId 119
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmControl.fastq.gz
 grant Bernstein
@@ -7063,7 +6755,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000110
 expId 110
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmCtcf.fastq.gz
 grant Bernstein
@@ -7085,7 +6776,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000111
 expId 111
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k27ac.fastq.gz
 grant Bernstein
@@ -7107,7 +6797,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000112
 expId 112
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k27me3.fastq.gz
 grant Bernstein
@@ -7129,7 +6818,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000113
 expId 113
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k36me3.fastq.gz
 grant Bernstein
@@ -7151,7 +6839,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000114
 expId 114
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k4me1.fastq.gz
 grant Bernstein
@@ -7173,7 +6860,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000115
 expId 115
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k4me2.fastq.gz
 grant Bernstein
@@ -7195,7 +6881,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000116
 expId 116
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k4me3.fastq.gz
 grant Bernstein
@@ -7217,7 +6902,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000117
 expId 117
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k9ac.fastq.gz
 grant Bernstein
@@ -7239,7 +6923,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000118
 expId 118
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH4k20me1.fastq.gz
 grant Bernstein
@@ -7261,7 +6944,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000060
 expId 60
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecControl.fastq.gz
 grant Bernstein
@@ -7283,7 +6965,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000054
 expId 54
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecCtcf.fastq.gz
 grant Bernstein
@@ -7305,7 +6986,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000055
 expId 55
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k27ac.fastq.gz
 grant Bernstein
@@ -7327,7 +7007,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000038
 expId 38
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k27me3.fastq.gz
 grant Bernstein
@@ -7349,7 +7028,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000056
 expId 56
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k36me3.fastq.gz
 grant Bernstein
@@ -7371,7 +7049,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000039
 expId 39
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me1.fastq.gz
 grant Bernstein
@@ -7393,7 +7070,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000040
 expId 40
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me2.fastq.gz
 grant Bernstein
@@ -7415,7 +7091,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000041
 expId 41
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me3.fastq.gz
 grant Bernstein
@@ -7437,7 +7112,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000057
 expId 57
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k9ac.fastq.gz
 grant Bernstein
@@ -7459,7 +7133,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000058
 expId 58
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k9me1.fastq.gz
 grant Bernstein
@@ -7481,7 +7154,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000059
 expId 59
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH4k20me1.fastq.gz
 grant Bernstein
@@ -7503,7 +7175,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000061
 expId 61
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecPol2b.fastq.gz
 grant Bernstein
@@ -7525,7 +7196,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000052
 expId 52
 fileName wgEncodeBroadChipSeqRawDataRep1K562Control.fastq.gz
 grant Bernstein
@@ -7547,7 +7217,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000042
 expId 42
 fileName wgEncodeBroadChipSeqRawDataRep1K562Ctcf.fastq.gz
 grant Bernstein
@@ -7569,7 +7238,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000043
 expId 43
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k27ac.fastq.gz
 grant Bernstein
@@ -7591,7 +7259,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000044
 expId 44
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k27me3.fastq.gz
 grant Bernstein
@@ -7613,7 +7280,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000045
 expId 45
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k36me3.fastq.gz
 grant Bernstein
@@ -7635,7 +7301,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000046
 expId 46
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k4me1.fastq.gz
 grant Bernstein
@@ -7657,7 +7322,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000047
 expId 47
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k4me2.fastq.gz
 grant Bernstein
@@ -7679,7 +7343,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000048
 expId 48
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k4me3.fastq.gz
 grant Bernstein
@@ -7701,7 +7364,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000049
 expId 49
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k9ac.fastq.gz
 grant Bernstein
@@ -7723,7 +7385,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000050
 expId 50
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k9me1.fastq.gz
 grant Bernstein
@@ -7745,7 +7406,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000051
 expId 51
 fileName wgEncodeBroadChipSeqRawDataRep1K562H4k20me1.fastq.gz
 grant Bernstein
@@ -7767,7 +7427,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000053
 expId 53
 fileName wgEncodeBroadChipSeqRawDataRep1K562Pol2b.fastq.gz
 grant Bernstein
@@ -7789,7 +7448,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000072
 expId 72
 fileName wgEncodeBroadChipSeqRawDataRep1NhekControl.fastq.gz
 grant Bernstein
@@ -7811,7 +7469,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000063
 expId 63
 fileName wgEncodeBroadChipSeqRawDataRep1NhekCtcf.fastq.gz
 grant Bernstein
@@ -7833,7 +7490,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000064
 expId 64
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k27ac.fastq.gz
 grant Bernstein
@@ -7855,7 +7511,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000065
 expId 65
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k27me3.fastq.gz
 grant Bernstein
@@ -7877,7 +7532,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000066
 expId 66
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k36me3.fastq.gz
 grant Bernstein
@@ -7899,7 +7553,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000062
 expId 62
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k4me1.fastq.gz
 grant Bernstein
@@ -7921,7 +7574,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000067
 expId 67
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k4me2.fastq.gz
 grant Bernstein
@@ -7943,7 +7595,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000068
 expId 68
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k4me3.fastq.gz
 grant Bernstein
@@ -7965,7 +7616,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000069
 expId 69
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k9ac.fastq.gz
 grant Bernstein
@@ -7987,7 +7637,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000070
 expId 70
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k9me1.fastq.gz
 grant Bernstein
@@ -8009,7 +7658,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000071
 expId 71
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH4k20me1.fastq.gz
 grant Bernstein
@@ -8031,7 +7679,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000073
 expId 73
 fileName wgEncodeBroadChipSeqRawDataRep1NhekPol2b.fastq.gz
 grant Bernstein
@@ -8053,7 +7700,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000105
 expId 105
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfControl.fastq.gz
 grant Bernstein
@@ -8075,7 +7721,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000120
 expId 120
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfCtcf.fastq.gz
 grant Bernstein
@@ -8097,7 +7742,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000097
 expId 97
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k27ac.fastq.gz
 grant Bernstein
@@ -8119,7 +7763,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000098
 expId 98
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k27me3.fastq.gz
 grant Bernstein
@@ -8141,7 +7784,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000099
 expId 99
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k36me3.fastq.gz
 grant Bernstein
@@ -8163,7 +7805,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000100
 expId 100
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me1.fastq.gz
 grant Bernstein
@@ -8185,7 +7826,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000101
 expId 101
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me2.fastq.gz
 grant Bernstein
@@ -8207,7 +7847,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000102
 expId 102
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me3.fastq.gz
 grant Bernstein
@@ -8229,7 +7868,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000103
 expId 103
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k9ac.fastq.gz
 grant Bernstein
@@ -8251,7 +7889,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000104
 expId 104
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH4k20me1.fastq.gz
 grant Bernstein
@@ -8273,7 +7910,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000037
 expId 37
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878Control.fastq.gz
 grant Bernstein
@@ -8295,7 +7931,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000029
 expId 29
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878Ctcf.fastq.gz
 grant Bernstein
@@ -8317,7 +7952,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000030
 expId 30
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k27ac.fastq.gz
 grant Bernstein
@@ -8339,7 +7973,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k27me3.fastq.gz
 grant Bernstein
@@ -8361,7 +7994,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000032
 expId 32
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k36me3.fastq.gz
 grant Bernstein
@@ -8383,7 +8015,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me1.fastq.gz
 grant Bernstein
@@ -8405,7 +8036,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000034
 expId 34
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me2.fastq.gz
 grant Bernstein
@@ -8427,7 +8057,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me3.fastq.gz
 grant Bernstein
@@ -8449,7 +8078,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000035
 expId 35
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k9ac.fastq.gz
 grant Bernstein
@@ -8471,7 +8099,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000036
 expId 36
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H4k20me1.fastq.gz
 grant Bernstein
@@ -8493,7 +8120,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000088
 expId 88
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescControl.fastq.gz
 grant Bernstein
@@ -8515,7 +8141,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000085
 expId 85
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescCtcf.fastq.gz
 grant Bernstein
@@ -8537,7 +8162,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000074
 expId 74
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k27me3.fastq.gz
 grant Bernstein
@@ -8559,7 +8183,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000107
 expId 107
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k36me3.fastq.gz
 grant Bernstein
@@ -8581,7 +8204,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000106
 expId 106
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k4me1.fastq.gz
 grant Bernstein
@@ -8603,7 +8225,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000108
 expId 108
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k4me2.fastq.gz
 grant Bernstein
@@ -8625,7 +8246,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000086
 expId 86
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k4me3.fastq.gz
 grant Bernstein
@@ -8647,7 +8267,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000109
 expId 109
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k9ac.fastq.gz
 grant Bernstein
@@ -8669,7 +8288,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000087
 expId 87
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH4k20me1.fastq.gz
 grant Bernstein
@@ -8691,7 +8309,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000084
 expId 84
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2Control.fastq.gz
 grant Bernstein
@@ -8713,7 +8330,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000080
 expId 80
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2Ctcf.fastq.gz
 grant Bernstein
@@ -8735,7 +8351,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000094
 expId 94
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k27ac.fastq.gz
 grant Bernstein
@@ -8757,7 +8372,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000081
 expId 81
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k36me3.fastq.gz
 grant Bernstein
@@ -8779,7 +8393,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000082
 expId 82
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k4me2.fastq.gz
 grant Bernstein
@@ -8801,7 +8414,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000095
 expId 95
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k4me3.fastq.gz
 grant Bernstein
@@ -8823,7 +8435,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000083
 expId 83
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k9ac.fastq.gz
 grant Bernstein
@@ -8845,7 +8456,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000096
 expId 96
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H4k20me1.fastq.gz
 grant Bernstein
@@ -8867,7 +8477,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000093
 expId 93
 fileName wgEncodeBroadChipSeqRawDataRep2HmecControl.fastq.gz
 grant Bernstein
@@ -8889,7 +8498,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
-dccAccession wgEncodeEH000075
 expId 75
 fileName wgEncodeBroadChipSeqRawDataRep2HmecCtcf.fastq.gz
 grant Bernstein
@@ -8911,7 +8519,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000076
 expId 76
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k27ac.fastq.gz
 grant Bernstein
@@ -8933,7 +8540,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000077
 expId 77
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k27me3.fastq.gz
 grant Bernstein
@@ -8955,7 +8561,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000078
 expId 78
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k36me3.fastq.gz
 grant Bernstein
@@ -8977,7 +8582,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000089
 expId 89
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k4me1.fastq.gz
 grant Bernstein
@@ -8999,7 +8603,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000090
 expId 90
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k4me2.fastq.gz
 grant Bernstein
@@ -9021,7 +8624,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000091
 expId 91
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k4me3.fastq.gz
 grant Bernstein
@@ -9043,7 +8645,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000079
 expId 79
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k9ac.fastq.gz
 grant Bernstein
@@ -9065,7 +8666,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000092
 expId 92
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH4k20me1.fastq.gz
 grant Bernstein
@@ -9087,7 +8687,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000119
 expId 119
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmControl.fastq.gz
 grant Bernstein
@@ -9109,7 +8708,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000110
 expId 110
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmCtcf.fastq.gz
 grant Bernstein
@@ -9131,7 +8729,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000111
 expId 111
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k27ac.fastq.gz
 grant Bernstein
@@ -9153,7 +8750,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000112
 expId 112
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k27me3.fastq.gz
 grant Bernstein
@@ -9175,7 +8771,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000113
 expId 113
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k36me3.fastq.gz
 grant Bernstein
@@ -9197,7 +8792,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000114
 expId 114
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k4me1.fastq.gz
 grant Bernstein
@@ -9219,7 +8813,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000115
 expId 115
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k4me2.fastq.gz
 grant Bernstein
@@ -9241,7 +8834,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000116
 expId 116
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k4me3.fastq.gz
 grant Bernstein
@@ -9263,7 +8855,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000117
 expId 117
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k9ac.fastq.gz
 grant Bernstein
@@ -9285,7 +8876,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000118
 expId 118
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH4k20me1.fastq.gz
 grant Bernstein
@@ -9307,7 +8897,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000060
 expId 60
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecControl.fastq.gz
 grant Bernstein
@@ -9329,7 +8918,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000054
 expId 54
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecCtcf.fastq.gz
 grant Bernstein
@@ -9351,7 +8939,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000055
 expId 55
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k27ac.fastq.gz
 grant Bernstein
@@ -9373,7 +8960,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000038
 expId 38
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k27me3.fastq.gz
 grant Bernstein
@@ -9395,7 +8981,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000056
 expId 56
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k36me3.fastq.gz
 grant Bernstein
@@ -9417,7 +9002,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000039
 expId 39
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me1.fastq.gz
 grant Bernstein
@@ -9439,7 +9023,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000040
 expId 40
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me2.fastq.gz
 grant Bernstein
@@ -9461,7 +9044,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000041
 expId 41
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me3.fastq.gz
 grant Bernstein
@@ -9483,7 +9065,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000057
 expId 57
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k9ac.fastq.gz
 grant Bernstein
@@ -9505,7 +9086,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000058
 expId 58
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k9me1.fastq.gz
 grant Bernstein
@@ -9527,7 +9107,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000059
 expId 59
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH4k20me1.fastq.gz
 grant Bernstein
@@ -9549,7 +9128,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000061
 expId 61
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecPol2b.fastq.gz
 grant Bernstein
@@ -9571,7 +9149,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000052
 expId 52
 fileName wgEncodeBroadChipSeqRawDataRep2K562Control.fastq.gz
 grant Bernstein
@@ -9592,7 +9169,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000042
 expId 42
 fileName wgEncodeBroadChipSeqRawDataRep2K562Ctcf.fastq.gz
 grant Bernstein
@@ -9614,7 +9190,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000043
 expId 43
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k27ac.fastq.gz
 grant Bernstein
@@ -9636,7 +9211,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000044
 expId 44
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k27me3.fastq.gz
 grant Bernstein
@@ -9658,7 +9232,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000045
 expId 45
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k36me3.fastq.gz
 grant Bernstein
@@ -9680,7 +9253,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000046
 expId 46
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k4me1.fastq.gz
 grant Bernstein
@@ -9702,7 +9274,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000047
 expId 47
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k4me2.fastq.gz
 grant Bernstein
@@ -9724,7 +9295,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000048
 expId 48
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k4me3.fastq.gz
 grant Bernstein
@@ -9746,7 +9316,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000049
 expId 49
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k9ac.fastq.gz
 grant Bernstein
@@ -9768,7 +9337,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000050
 expId 50
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k9me1.fastq.gz
 grant Bernstein
@@ -9789,7 +9357,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000051
 expId 51
 fileName wgEncodeBroadChipSeqRawDataRep2K562H4k20me1.fastq.gz
 grant Bernstein
@@ -9811,7 +9378,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000053
 expId 53
 fileName wgEncodeBroadChipSeqRawDataRep2K562Pol2b.fastq.gz
 grant Bernstein
@@ -9833,7 +9399,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000072
 expId 72
 fileName wgEncodeBroadChipSeqRawDataRep2NhekControl.fastq.gz
 grant Bernstein
@@ -9855,7 +9420,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000063
 expId 63
 fileName wgEncodeBroadChipSeqRawDataRep2NhekCtcf.fastq.gz
 grant Bernstein
@@ -9877,7 +9441,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000064
 expId 64
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k27ac.fastq.gz
 grant Bernstein
@@ -9899,7 +9462,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000065
 expId 65
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k27me3.fastq.gz
 grant Bernstein
@@ -9921,7 +9483,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000066
 expId 66
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k36me3.fastq.gz
 grant Bernstein
@@ -9943,7 +9504,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000062
 expId 62
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k4me1.fastq.gz
 grant Bernstein
@@ -9965,7 +9525,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000067
 expId 67
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k4me2.fastq.gz
 grant Bernstein
@@ -9987,7 +9546,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000068
 expId 68
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k4me3.fastq.gz
 grant Bernstein
@@ -10009,7 +9567,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000069
 expId 69
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k9ac.fastq.gz
 grant Bernstein
@@ -10031,7 +9588,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000070
 expId 70
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k9me1.fastq.gz
 grant Bernstein
@@ -10053,7 +9609,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000071
 expId 71
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH4k20me1.fastq.gz
 grant Bernstein
@@ -10075,7 +9630,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000073
 expId 73
 fileName wgEncodeBroadChipSeqRawDataRep2NhekPol2b.fastq.gz
 grant Bernstein
@@ -10097,7 +9651,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000105
 expId 105
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfControl.fastq.gz
 grant Bernstein
@@ -10119,7 +9672,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000120
 expId 120
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfCtcf.fastq.gz
 grant Bernstein
@@ -10141,7 +9693,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000097
 expId 97
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k27ac.fastq.gz
 grant Bernstein
@@ -10163,7 +9714,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000098
 expId 98
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k27me3.fastq.gz
 grant Bernstein
@@ -10185,7 +9735,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000099
 expId 99
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k36me3.fastq.gz
 grant Bernstein
@@ -10207,7 +9756,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000100
 expId 100
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me1.fastq.gz
 grant Bernstein
@@ -10229,7 +9777,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000101
 expId 101
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me2.fastq.gz
 grant Bernstein
@@ -10251,7 +9798,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000102
 expId 102
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me3.fastq.gz
 grant Bernstein
@@ -10273,7 +9819,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000103
 expId 103
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k9ac.fastq.gz
 grant Bernstein
@@ -10295,7 +9840,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000104
 expId 104
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH4k20me1.fastq.gz
 grant Bernstein
@@ -10317,7 +9861,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000037
 expId 37
 fileName wgEncodeBroadChipSeqSignalGm12878Control.wig.gz
 grant Bernstein
@@ -10338,7 +9881,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000029
 expId 29
 fileName wgEncodeBroadChipSeqSignalGm12878Ctcf.wig.gz
 grant Bernstein
@@ -10359,7 +9901,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000030
 expId 30
 fileName wgEncodeBroadChipSeqSignalGm12878H3k27ac.wig.gz
 grant Bernstein
@@ -10380,7 +9921,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadChipSeqSignalGm12878H3k27me3.wig.gz
 grant Bernstein
@@ -10401,7 +9941,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000032
 expId 32
 fileName wgEncodeBroadChipSeqSignalGm12878H3k36me3.wig.gz
 grant Bernstein
@@ -10422,7 +9961,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadChipSeqSignalGm12878H3k4me1.wig.gz
 grant Bernstein
@@ -10443,7 +9981,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000034
 expId 34
 fileName wgEncodeBroadChipSeqSignalGm12878H3k4me2.wig.gz
 grant Bernstein
@@ -10464,7 +10001,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
-dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadChipSeqSignalGm12878H3k4me3.wig.gz
 grant Bernstein
@@ -10485,7 +10021,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000035
 expId 35
 fileName wgEncodeBroadChipSeqSignalGm12878H3k9ac.wig.gz
 grant Bernstein
@@ -10506,7 +10041,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000036
 expId 36
 fileName wgEncodeBroadChipSeqSignalGm12878H4k20me1.wig.gz
 grant Bernstein
@@ -10527,7 +10061,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000088
 expId 88
 fileName wgEncodeBroadChipSeqSignalH1hescControl.wig.gz
 grant Bernstein
@@ -10548,7 +10081,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000085
 expId 85
 fileName wgEncodeBroadChipSeqSignalH1hescCtcf.wig.gz
 grant Bernstein
@@ -10569,7 +10101,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000074
 expId 74
 fileName wgEncodeBroadChipSeqSignalH1hescH3k27me3.wig.gz
 grant Bernstein
@@ -10590,7 +10121,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000107
 expId 107
 fileName wgEncodeBroadChipSeqSignalH1hescH3k36me3.wig.gz
 grant Bernstein
@@ -10611,7 +10141,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000106
 expId 106
 fileName wgEncodeBroadChipSeqSignalH1hescH3k4me1.wig.gz
 grant Bernstein
@@ -10632,7 +10161,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000108
 expId 108
 fileName wgEncodeBroadChipSeqSignalH1hescH3k4me2.wig.gz
 grant Bernstein
@@ -10653,7 +10181,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000086
 expId 86
 fileName wgEncodeBroadChipSeqSignalH1hescH3k4me3.wig.gz
 grant Bernstein
@@ -10674,7 +10201,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000109
 expId 109
 fileName wgEncodeBroadChipSeqSignalH1hescH3k9ac.wig.gz
 grant Bernstein
@@ -10695,7 +10221,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000087
 expId 87
 fileName wgEncodeBroadChipSeqSignalH1hescH4k20me1.wig.gz
 grant Bernstein
@@ -10716,7 +10241,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000084
 expId 84
 fileName wgEncodeBroadChipSeqSignalHepg2Control.wig.gz
 grant Bernstein
@@ -10737,7 +10261,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000080
 expId 80
 fileName wgEncodeBroadChipSeqSignalHepg2Ctcf.wig.gz
 grant Bernstein
@@ -10758,7 +10281,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000094
 expId 94
 fileName wgEncodeBroadChipSeqSignalHepg2H3k27ac.wig.gz
 grant Bernstein
@@ -10779,7 +10301,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000081
 expId 81
 fileName wgEncodeBroadChipSeqSignalHepg2H3k36me3.wig.gz
 grant Bernstein
@@ -10800,7 +10321,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000082
 expId 82
 fileName wgEncodeBroadChipSeqSignalHepg2H3k4me2.wig.gz
 grant Bernstein
@@ -10821,7 +10341,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000095
 expId 95
 fileName wgEncodeBroadChipSeqSignalHepg2H3k4me3.wig.gz
 grant Bernstein
@@ -10842,7 +10361,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000083
 expId 83
 fileName wgEncodeBroadChipSeqSignalHepg2H3k9ac.wig.gz
 grant Bernstein
@@ -10863,7 +10381,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000096
 expId 96
 fileName wgEncodeBroadChipSeqSignalHepg2H4k20me1.wig.gz
 grant Bernstein
@@ -10884,7 +10401,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000093
 expId 93
 fileName wgEncodeBroadChipSeqSignalHmecControl.wig.gz
 grant Bernstein
@@ -10905,7 +10421,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
-dccAccession wgEncodeEH000075
 expId 75
 fileName wgEncodeBroadChipSeqSignalHmecCtcf.wig.gz
 grant Bernstein
@@ -10926,7 +10441,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000076
 expId 76
 fileName wgEncodeBroadChipSeqSignalHmecH3k27ac.wig.gz
 grant Bernstein
@@ -10947,7 +10461,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000077
 expId 77
 fileName wgEncodeBroadChipSeqSignalHmecH3k27me3.wig.gz
 grant Bernstein
@@ -10968,7 +10481,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000078
 expId 78
 fileName wgEncodeBroadChipSeqSignalHmecH3k36me3.wig.gz
 grant Bernstein
@@ -10989,7 +10501,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000089
 expId 89
 fileName wgEncodeBroadChipSeqSignalHmecH3k4me1.wig.gz
 grant Bernstein
@@ -11010,7 +10521,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000090
 expId 90
 fileName wgEncodeBroadChipSeqSignalHmecH3k4me2.wig.gz
 grant Bernstein
@@ -11031,7 +10541,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000091
 expId 91
 fileName wgEncodeBroadChipSeqSignalHmecH3k4me3.wig.gz
 grant Bernstein
@@ -11052,7 +10561,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000079
 expId 79
 fileName wgEncodeBroadChipSeqSignalHmecH3k9ac.wig.gz
 grant Bernstein
@@ -11073,7 +10581,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000092
 expId 92
 fileName wgEncodeBroadChipSeqSignalHmecH4k20me1.wig.gz
 grant Bernstein
@@ -11094,7 +10601,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000119
 expId 119
 fileName wgEncodeBroadChipSeqSignalHsmmControl.wig.gz
 grant Bernstein
@@ -11115,7 +10621,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000110
 expId 110
 fileName wgEncodeBroadChipSeqSignalHsmmCtcf.wig.gz
 grant Bernstein
@@ -11136,7 +10641,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000111
 expId 111
 fileName wgEncodeBroadChipSeqSignalHsmmH3k27ac.wig.gz
 grant Bernstein
@@ -11157,7 +10661,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000112
 expId 112
 fileName wgEncodeBroadChipSeqSignalHsmmH3k27me3.wig.gz
 grant Bernstein
@@ -11178,7 +10681,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000113
 expId 113
 fileName wgEncodeBroadChipSeqSignalHsmmH3k36me3.wig.gz
 grant Bernstein
@@ -11199,7 +10701,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000114
 expId 114
 fileName wgEncodeBroadChipSeqSignalHsmmH3k4me1.wig.gz
 grant Bernstein
@@ -11220,7 +10721,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000115
 expId 115
 fileName wgEncodeBroadChipSeqSignalHsmmH3k4me2.wig.gz
 grant Bernstein
@@ -11241,7 +10741,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000116
 expId 116
 fileName wgEncodeBroadChipSeqSignalHsmmH3k4me3.wig.gz
 grant Bernstein
@@ -11262,7 +10761,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000117
 expId 117
 fileName wgEncodeBroadChipSeqSignalHsmmH3k9ac.wig.gz
 grant Bernstein
@@ -11283,7 +10781,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000118
 expId 118
 fileName wgEncodeBroadChipSeqSignalHsmmH4k20me1.wig.gz
 grant Bernstein
@@ -11304,7 +10801,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000060
 expId 60
 fileName wgEncodeBroadChipSeqSignalHuvecControl.wig.gz
 grant Bernstein
@@ -11325,7 +10821,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000054
 expId 54
 fileName wgEncodeBroadChipSeqSignalHuvecCtcf.wig.gz
 grant Bernstein
@@ -11346,7 +10841,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000055
 expId 55
 fileName wgEncodeBroadChipSeqSignalHuvecH3k27ac.wig.gz
 grant Bernstein
@@ -11367,7 +10861,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000038
 expId 38
 fileName wgEncodeBroadChipSeqSignalHuvecH3k27me3.wig.gz
 grant Bernstein
@@ -11388,7 +10881,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000056
 expId 56
 fileName wgEncodeBroadChipSeqSignalHuvecH3k36me3.wig.gz
 grant Bernstein
@@ -11409,7 +10901,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000039
 expId 39
 fileName wgEncodeBroadChipSeqSignalHuvecH3k4me1.wig.gz
 grant Bernstein
@@ -11430,7 +10921,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000040
 expId 40
 fileName wgEncodeBroadChipSeqSignalHuvecH3k4me2.wig.gz
 grant Bernstein
@@ -11451,7 +10941,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000041
 expId 41
 fileName wgEncodeBroadChipSeqSignalHuvecH3k4me3.wig.gz
 grant Bernstein
@@ -11472,7 +10961,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000057
 expId 57
 fileName wgEncodeBroadChipSeqSignalHuvecH3k9ac.wig.gz
 grant Bernstein
@@ -11493,7 +10981,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000058
 expId 58
 fileName wgEncodeBroadChipSeqSignalHuvecH3k9me1.wig.gz
 grant Bernstein
@@ -11514,7 +11001,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000059
 expId 59
 fileName wgEncodeBroadChipSeqSignalHuvecH4k20me1.wig.gz
 grant Bernstein
@@ -11535,7 +11021,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000061
 expId 61
 fileName wgEncodeBroadChipSeqSignalHuvecPol2b.wig.gz
 grant Bernstein
@@ -11556,7 +11041,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000052
 expId 52
 fileName wgEncodeBroadChipSeqSignalK562Control.wig.gz
 grant Bernstein
@@ -11577,7 +11061,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000042
 expId 42
 fileName wgEncodeBroadChipSeqSignalK562Ctcf.wig.gz
 grant Bernstein
@@ -11598,7 +11081,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000043
 expId 43
 fileName wgEncodeBroadChipSeqSignalK562H3k27ac.wig.gz
 grant Bernstein
@@ -11619,7 +11101,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000044
 expId 44
 fileName wgEncodeBroadChipSeqSignalK562H3k27me3.wig.gz
 grant Bernstein
@@ -11640,7 +11121,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000045
 expId 45
 fileName wgEncodeBroadChipSeqSignalK562H3k36me3.wig.gz
 grant Bernstein
@@ -11661,7 +11141,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000046
 expId 46
 fileName wgEncodeBroadChipSeqSignalK562H3k4me1.wig.gz
 grant Bernstein
@@ -11682,7 +11161,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000047
 expId 47
 fileName wgEncodeBroadChipSeqSignalK562H3k4me2.wig.gz
 grant Bernstein
@@ -11703,7 +11181,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000048
 expId 48
 fileName wgEncodeBroadChipSeqSignalK562H3k4me3.wig.gz
 grant Bernstein
@@ -11724,7 +11201,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000049
 expId 49
 fileName wgEncodeBroadChipSeqSignalK562H3k9ac.wig.gz
 grant Bernstein
@@ -11745,7 +11221,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000050
 expId 50
 fileName wgEncodeBroadChipSeqSignalK562H3k9me1.wig.gz
 grant Bernstein
@@ -11766,7 +11241,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000051
 expId 51
 fileName wgEncodeBroadChipSeqSignalK562H4k20me1.wig.gz
 grant Bernstein
@@ -11787,7 +11261,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000053
 expId 53
 fileName wgEncodeBroadChipSeqSignalK562Pol2b.wig.gz
 grant Bernstein
@@ -11808,7 +11281,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000072
 expId 72
 fileName wgEncodeBroadChipSeqSignalNhekControl.wig.gz
 grant Bernstein
@@ -11829,7 +11301,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000063
 expId 63
 fileName wgEncodeBroadChipSeqSignalNhekCtcf.wig.gz
 grant Bernstein
@@ -11850,7 +11321,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000064
 expId 64
 fileName wgEncodeBroadChipSeqSignalNhekH3k27ac.wig.gz
 grant Bernstein
@@ -11871,7 +11341,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000065
 expId 65
 fileName wgEncodeBroadChipSeqSignalNhekH3k27me3.wig.gz
 grant Bernstein
@@ -11892,7 +11361,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000066
 expId 66
 fileName wgEncodeBroadChipSeqSignalNhekH3k36me3.wig.gz
 grant Bernstein
@@ -11913,7 +11381,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
-dccAccession wgEncodeEH000062
 expId 62
 fileName wgEncodeBroadChipSeqSignalNhekH3k4me1.wig.gz
 grant Bernstein
@@ -11934,7 +11401,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000067
 expId 67
 fileName wgEncodeBroadChipSeqSignalNhekH3k4me2.wig.gz
 grant Bernstein
@@ -11955,7 +11421,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000068
 expId 68
 fileName wgEncodeBroadChipSeqSignalNhekH3k4me3.wig.gz
 grant Bernstein
@@ -11976,7 +11441,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000069
 expId 69
 fileName wgEncodeBroadChipSeqSignalNhekH3k9ac.wig.gz
 grant Bernstein
@@ -11997,7 +11461,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000070
 expId 70
 fileName wgEncodeBroadChipSeqSignalNhekH3k9me1.wig.gz
 grant Bernstein
@@ -12018,7 +11481,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000071
 expId 71
 fileName wgEncodeBroadChipSeqSignalNhekH4k20me1.wig.gz
 grant Bernstein
@@ -12039,7 +11501,6 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000073
 expId 73
 fileName wgEncodeBroadChipSeqSignalNhekPol2b.wig.gz
 grant Bernstein
@@ -12060,7 +11521,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000105
 expId 105
 fileName wgEncodeBroadChipSeqSignalNhlfControl.wig.gz
 grant Bernstein
@@ -12081,7 +11541,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000120
 expId 120
 fileName wgEncodeBroadChipSeqSignalNhlfCtcf.wig.gz
 grant Bernstein
@@ -12102,7 +11561,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000097
 expId 97
 fileName wgEncodeBroadChipSeqSignalNhlfH3k27ac.wig.gz
 grant Bernstein
@@ -12123,7 +11581,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000098
 expId 98
 fileName wgEncodeBroadChipSeqSignalNhlfH3k27me3.wig.gz
 grant Bernstein
@@ -12144,7 +11601,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000099
 expId 99
 fileName wgEncodeBroadChipSeqSignalNhlfH3k36me3.wig.gz
 grant Bernstein
@@ -12165,7 +11621,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000100
 expId 100
 fileName wgEncodeBroadChipSeqSignalNhlfH3k4me1.wig.gz
 grant Bernstein
@@ -12186,7 +11641,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000101
 expId 101
 fileName wgEncodeBroadChipSeqSignalNhlfH3k4me2.wig.gz
 grant Bernstein
@@ -12207,7 +11661,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000102
 expId 102
 fileName wgEncodeBroadChipSeqSignalNhlfH3k4me3.wig.gz
 grant Bernstein
@@ -12228,7 +11681,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000103
 expId 103
 fileName wgEncodeBroadChipSeqSignalNhlfH3k9ac.wig.gz
 grant Bernstein
@@ -12249,7 +11701,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000104
 expId 104
 fileName wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
 grant Bernstein
@@ -12260,4 +11711,4 @@ subId 579
 tableName wgEncodeBroadChipSeqSignalNhlfH4k20me1
 view Signal
 
-# MAGIC: 169234140
+# MAGIC: -221530046
