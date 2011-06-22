@@ -2853,6 +2853,10 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))
             {
+            if (!hIsPreviewHost())
+                {
+                printf("<A HREF='' TITLE='Early access to new data on the Preview Browser...'>Preview</A>");
+                }
             printf("&nbsp;&nbsp;");
             makeDownloadsLink(database, tdb, trackHash);
             }

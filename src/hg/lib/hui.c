@@ -276,6 +276,11 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash)
 /* Show downlaods, schema and metadata links where appropriate */
 {
+if (trackDbSetting(tdb, "wgEncode") != NULL && !hIsPreviewHost())
+    {
+    printf("<P><B>NOTE</B>: Early access to additional data for this track may be available on the <A HREF=''>Preview Browser</A>");
+    }
+
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
                   && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
