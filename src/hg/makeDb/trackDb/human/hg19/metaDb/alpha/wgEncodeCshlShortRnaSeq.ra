@@ -14,7 +14,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
+dccAccession wgEncodeEH001740
 dccRep 1
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1.bam
 grant Gingeras
 lab CSHL
@@ -39,7 +41,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001740
 dccRep 2
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2.bam
 grant Gingeras
 lab CSHL
@@ -64,6 +68,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
+dccAccession wgEncodeEH001740
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -85,7 +91,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
+dccAccession wgEncodeEH001740
 dccRep 1
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -110,7 +118,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001740
 dccRep 2
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -135,7 +145,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
+dccAccession wgEncodeEH001740
 dccRep 1
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -160,7 +172,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001740
 dccRep 2
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -185,7 +199,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
+dccAccession wgEncodeEH001740
 dccRep 1
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -209,7 +225,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001740
 dccRep 2
+expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -3040,7 +3058,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001741
 dccRep 1
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1.bam
 grant Gingeras
 lab CSHL
@@ -3065,7 +3085,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001741
 dccRep 2
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2.bam
 grant Gingeras
 lab CSHL
@@ -3090,6 +3112,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
+dccAccession wgEncodeEH001741
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3111,7 +3135,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001741
 dccRep 1
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -3136,7 +3162,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001741
 dccRep 2
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -3161,7 +3189,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001741
 dccRep 1
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -3186,7 +3216,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001741
 dccRep 2
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -3211,7 +3243,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001741
 dccRep 1
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -3235,7 +3269,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001741
 dccRep 2
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -3259,7 +3295,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001743
 dccRep 2
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam
 grant Gingeras
 lab CSHL
@@ -3284,6 +3322,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
+dccAccession wgEncodeEH001743
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3305,7 +3345,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001743
 dccRep 2
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -3330,7 +3372,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001743
 dccRep 2
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -3355,7 +3399,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001743
 dccRep 2
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -3379,7 +3425,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001742
 dccRep 1
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam
 grant Gingeras
 lab CSHL
@@ -3404,7 +3452,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001742
 dccRep 2
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2.bam
 grant Gingeras
 lab CSHL
@@ -3429,6 +3479,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-01
 dateUnrestricted 2012-03-01
+dccAccession wgEncodeEH001742
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalExonsGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3450,7 +3502,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001742
 dccRep 1
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -3475,7 +3529,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001742
 dccRep 2
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -3500,7 +3556,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001742
 dccRep 1
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -3525,7 +3583,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001742
 dccRep 2
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -3550,7 +3610,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001742
 dccRep 1
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -3574,7 +3636,9 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001742
 dccRep 2
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -6427,6 +6491,28 @@ subId 3301
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2
 view Alignments
 
+metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
+objType table
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType ShortRnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID10570,LID10569
+labProtocolId 001Ns,002Ns
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract shortTotal
+subId 3861
+tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
+view Contigs
+
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalExonsGencV3c
 objType file
 bioRep 001N,002N
@@ -8081,4 +8167,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: 763197631
+# MAGIC: 1685243287

@@ -39,16 +39,6 @@ static char *targetOpt = NULL;
 static char *labelOpt = NULL;
 static char *organismOpt = NULL; // we default to human if nothing else is set
 static char *organismOptLower = NULL; //  version of above used for path names
-static char *cv_file()
-{
-/* return default location of cv.ra (can specify as cgi var: ra=cv.ra) */
-
-static char filePath[PATH_LEN];
-safef(filePath, sizeof(filePath), "%s/encode/cv.ra", hCgiRoot());
-if(!fileExists(filePath))
-    errAbort("Error: can't locate cv.ra; %s doesn't exist\n", filePath);
-return filePath;
-}
 
 void documentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
 /* Compare controlled vocab based on term value */
@@ -131,7 +121,7 @@ boolean doTypeDefinition(char *type,boolean inTable,boolean showType)
 {
 struct hash *typeHash = (struct hash *)cvTermTypeHash();
 
-struct hash *ra = hashFindVal(typeHash,cvTermNormalized(type)); // Find by term
+struct hash *ra = hashFindVal(typeHash,(char *)cvTermNormalized(type)); // Find by term
 if (ra == NULL)
     return FALSE;
 
@@ -227,7 +217,7 @@ puts("</TR>");
 boolean doTypeRow(struct hash *ra, char *org)
 {
 char *term = (char *)hashMustFindVal(ra, CV_TERM);
-char *type = cvTermNormalized(hashMustFindVal(ra, CV_TYPE));
+char *type = (char *)cvTermNormalized(hashMustFindVal(ra, CV_TYPE));
 char *s, *t, *u;
 
 if (sameWord(type,CV_TERM_CELL))
@@ -684,7 +674,7 @@ return normalizeType(type);
 
 void doMiddle()
 {
-struct hash *cvHash = raReadAll(cv_file(), CV_TERM);  // cv_file is no longer passed as an option
+struct hash *cvHash = raReadAll((char *)cvFile(), CV_TERM);
 struct hashCookie hc = hashFirst(cvHash);
 struct hashEl *hEl;
 struct slList *termList = NULL;
@@ -751,7 +741,7 @@ if (differentWord(type,CV_TOT) || typeOpt != NULL )  // If type resolves to type
     while ((hEl = hashNext(&hc)) != NULL)
         {
         ra = (struct hash *)hEl->val;
-        char *thisType = cvTermNormalized(hashMustFindVal(ra,CV_TYPE));
+        char *thisType = (char *)cvTermNormalized(hashMustFindVal(ra,CV_TYPE));
         if(differentWord(thisType,type) && (requested == NULL || differentWord(thisType,CV_TERM_CONTROL)))
             continue;
         // Skip all rows that do not match queryBy param if specified
