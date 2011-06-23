@@ -2030,8 +2030,8 @@ function filterByMaxHeight(multiSel)
     var selHeight = $(multiSel).children().length * 21;
     if (maxHeight > selHeight)
         maxHeight = null;
-    else if($.browser.msie && maxHeight > 500)  // DDCL bug on IE only.
-        maxHeight = 500;
+    //else if($.browser.msie && maxHeight > 500)  // DDCL bug on IE only.
+    //    maxHeight = 500;          // Seems to be solved by disbling DDCL's window.resize event for IE
 
     return maxHeight;
 }

@@ -213,14 +213,14 @@
             wrapper.insertAfter(sourceSelect);
 
 			// Watch for a window resize and adjust the control if open
-            $(window).resize(function() {
-                if ($.browser.msie) ///// UCSC Stop ugly bug in IE where onChange gets called on every selection.
-                    return;         ///// UCSC
-                if (!self.disabled && self.dropWrapper.isOpen) {
-                	// Reopen yourself to get the position right
-                    self._toggleDropContainer(true);
-                }
-            });
+            if ($.browser.msie != true) { ///// UCSC Stop ugly bug in IE where onChange gets called on every selection.
+                $(window).resize(function() {
+                    if (!self.disabled && self.dropWrapper.isOpen) {
+                            // Reopen yourself to get the position right
+                        self._toggleDropContainer(true);
+                    }
+                });
+            } ///// UCSC
             return wrapper;
         },
         // Creates a drop item that coresponds to an option element in the source select
