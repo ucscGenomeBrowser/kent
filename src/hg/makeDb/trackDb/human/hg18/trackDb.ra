@@ -3908,7 +3908,7 @@ longLabel Weizmann Evolutionary CpG Islands
 visibility hide
 group compGeno
 type bed 9 .
-scoreFilterByRange on
+noScoreFilter .
 itemRgb on
 color 0,0,0
 priority 111
