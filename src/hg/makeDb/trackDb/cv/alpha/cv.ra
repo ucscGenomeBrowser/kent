@@ -7688,6 +7688,21 @@ tag CONTROLNR4A1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
 
+term Control_32bp
+tag CONTROL32BP
+type control
+description This data represents a control being compared to experiments using read length of 32 bp PROVISIONAL
+
+term Control_36bp
+tag CONTROL36BP
+type control
+description This data represents a control being compared to experiments using read length of 36 bp PROVISIONAL
+
+term Control_50bp
+tag CONTROL50BP
+type control
+description This data represents a control being compared to experiments using read length of 50 bp PROVISIONAL
+
 term Input
 tag INPUT
 type control
@@ -7837,11 +7852,6 @@ tag DM002P4H
 description 4 hr with 0.02% DMSO (Myers)
 type treatment
 
-term DIFF_7d
-tag DIFF7D
-description Grown for 7 days in differentiation medium (Wold)
-type treatment
-
 term Estradiol_10nM
 tag EST10NM1H
 description  1 h with 10 nM Estradiol  (Myers)
@@ -7949,6 +7959,34 @@ tag MNASED
 description Fragmented using micrococcal nuclease digestion
 type treatment
 label MNase
+
+term Myoblast
+tag MYOBLAST
+description Grown differentiation medium undifferediated (Wold) PROVISIONAL
+type treatment
+
+term Myocyte_24h
+tag MYOCYTE24H
+description Grown for 24 hours in differentiation medium (Wold) PROVISIONAL
+type treatment
+
+term Myocyte_60h
+tag MYOCYTE60H
+description Grown for 60 hours in differentiation medium (Wold) PROVISIONAL
+type treatment
+
+term Myocyte_5d
+tag MYOCYTE5D
+description Grown for 5 days in differentiation medium (Wold) PROVISIONAL
+type treatment
+
+term Myocyte_7d
+tag MYOCYTE7D
+description Grown for 7 days in differentiation medium (Wold) PROVISIONAL
+type treatment
+
+
+
 
 term NaBut
 tag NABUT
