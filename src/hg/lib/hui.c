@@ -3261,6 +3261,7 @@ if( name == NULL )
 
 setting = cloneString(setting);
 char *filters[10];
+// multiple filterBys are delimited by space but spaces inside filter can be protected "by quotes"
 int filterCount = chopByWhiteRespectDoubleQuotes(setting, filters, ArraySize(filters));
 int ix;
 for(ix=0;ix<filterCount;ix++)
@@ -3268,68 +3269,82 @@ for(ix=0;ix<filterCount;ix++)
     char *filter = cloneString(filters[ix]);
     filterBy_t *filterBy;
     AllocVar(filterBy);
-    strSwapChar(filter,':',0);
+    char *first = strchr(filter,':');
+    if (first != NULL)
+        *first = '\0';
+    else
+        errAbort("filterBySetGet() expected ':' divider between table column and label.");
     filterBy->column = filter;
     filter += strlen(filter) + 1;
-    strSwapChar(filter,'=',0);
+    first = strchr(filter,'=');
+    if (first != NULL)
+        *first = '\0';
+    else
+        errAbort("filterBySetGet() expected '=' divider between table column and options list.");
     filterBy->title = strSwapChar(filter,'_',' '); // Title does not have underscores
     filter += strlen(filter) + 1;
-    if(filter[0] == '+') // values are indexes to the string titles
+
+    // Are values indexes to the string titles?
+    if(filter[0] == '+')
         {
         filter += 1;
         filterBy->useIndex = TRUE;
         }
-    filterBy->valueAndLabel = (strchr(filter,'|') != NULL);
-    filterBy->colorFollows  = FALSE; // A color could be declared at the end of a filter value like "Level_2{#FF0099}"
-    char *color = strchr(filter,'{');
-    if (color != NULL)
-        filterBy->colorFollows = (*(color + 1) == '#');
-    // Remove any double quotes now and rely upon commmas for delimiting
-    stripString(filter, "\"");
-    filterBy->slValues = slNameListFromComma(filter);
-    if (filterBy->valueAndLabel || filterBy->colorFollows)
-        {
-        struct slName *val = filterBy->slValues;
-        for(;val!=NULL;val=val->next)
-            {
-            // chip the color off the end of value name
-            color = strchr(val->name,'{');
-            if (color == NULL && filterBy->colorFollows)
-                {
-                warn("Using filterBy but only some values contain colors in form of value{#color} or value|label{#color}.");
-                filterBy->colorFollows = FALSE;
-                break;
-                }
-            else if (color != NULL && filterBy->colorFollows)
-                {
-                assert(*(color + 1) == '#');
-                *color++ = 0;  // The color is found inside the filters->svValues as the next string beyond value or label
-                color = strchr(color,'}'); // There could be a closing '}'
-                if (color != NULL)
-                    *color = 0;
-                }
 
-            // now chip the label off the end of value name
-            char * lab =strchr(val->name,'|');
-            if (lab == NULL && filterBy->valueAndLabel)
+    // Now set up each of the values which may have 1-3 parts (value|label{style})
+    // the slName list will have the 3 parts delimited by null value\0label\0style\0
+    stripString(filter, "\"");  // Remove any double quotes now and chop by commmas
+    filterBy->slValues = slNameListFromComma(filter);
+    struct slName *val = filterBy->slValues;
+    for(;val!=NULL;val=val->next)
+        {
+        // chip the style off the end of value or value|label
+        char *chipper = strrchr(val->name,'{');
+        if (chipper != NULL)
+            {
+            if (val == filterBy->slValues) // First one
                 {
-                warn("Using filterBy but only some values contain labels in form of value|label.");
-                filterBy->valueAndLabel = FALSE;
-                break;
+                filterBy->styleFollows = (lastChar(chipper) == '}');
+                if (filterBy->styleFollows == FALSE) // Must be closed at the end of the string or
+                    filterBy->styleFollows = (*(chipper + 1) == '#'); // Legacy: color only
                 }
-            if (lab != NULL && filterBy->valueAndLabel)
-                {
-                *lab++ = 0;  // The label is found inside the filters->svValues as the next string
-                strSwapChar(lab,'_',' '); // Title does not have underscores
-                }
+            if (filterBy->styleFollows == FALSE)
+                errAbort("filterBy values either all end in {CSS style} or none do.");
+            *chipper++ = 0;  // delimit by null
+            char *end = chipper + (strlen(chipper) - 1);
+            if (*end == '}')
+                *end = 0;
+            else if (*(chipper + 1) != '#') // Legacy: Could be color only definition
+                errAbort("filterBy values ending in style must be enclosed in {curly brackets}.");
             }
+        else if (filterBy->styleFollows)
+            errAbort("filterBy values either all end in {CSS style} or none do.");
+
+        if (filterBy->useIndex)
+            strSwapChar(val->name,'_',' '); // value is a label so swap underscores
+        else
+            {
+            // now chip the label off the end of value name
+            chipper =strchr(val->name,'|');
+            if (chipper != NULL)
+                {
+                if (val == filterBy->slValues) // First one
+                    filterBy->valueAndLabel = TRUE;
+                if (filterBy->valueAndLabel == FALSE)
+                    errAbort("filterBy values either all have labels (as value|label) or none do.");
+                *chipper++ = 0;  // The label is found inside the filters->svValues as the next string
+                strSwapChar(chipper,'_',' '); // Title does not have underscores
+                }
+            else if (filterBy->valueAndLabel)
+                errAbort("filterBy values either all have labels in form of value|label or none do.");
+        }
         }
 
     slAddTail(&filterBySet,filterBy); // Keep them in order (only a few)
 
     if(cart != NULL)
         {
-        char suffix[64];
+        char suffix[256];
         safef(suffix, sizeof(suffix), "filterBy.%s", filterBy->column);
         boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
         if(cartLookUpVariableClosestToHome(cart,tdb,compositeLevel,suffix,&(filterBy->htmlName)))
@@ -3497,19 +3512,55 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         printf("<B>Filter by %s</B> (select multiple items - %s)",filterBy->title,FILTERBY_HELP_LINK);
     else
         printf("<B>%s</B>",filterBy->title);
+    printf("<BR>\n");
 
-    //if (onOneLine && count > 1) // NOTE: onOneLine doesn't work because filterBy with multiple selected will align above title!
-        printf("<BR>\n");
-    //else
-    //    printf(":\n");
-    // TODO: Scroll long lists
-    //#define FILTER_COMPOSITE_OPEN_SIZE 16
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
+    //#define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple><BR>\n"
     #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
-    printf("<OPTION%s%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""),(filterBy->colorFollows?" style='color: #000000;'":"") );
+    //printf("<OPTION%s%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""),(filterBy->styleFollows?" style='color: #000000;'":"") );
+    printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""));
     struct slName *slValue;
+
+    int ix=1;
+    for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next,ix++)
+        {
+        char varName[32];
+        char *label = NULL;
+        char *name = NULL;
+        if (filterBy->useIndex)
+            {
+            safef(varName, sizeof(varName), "%d",ix);
+            name = varName;
+            label = slValue->name;
+            }
+        else
+            {
+            label = (filterBy->valueAndLabel? slValue->name + strlen(slValue->name)+1: slValue->name);
+            name = slValue->name;
+            }
+        printf("<OPTION");
+        if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,name))
+            printf(" SELECTED");
+        if (filterBy->useIndex || filterBy->valueAndLabel)
+            printf(" value='%s'",name);
+        if (filterBy->styleFollows)
+            {
+            char *styler = label + strlen(label)+1;
+            if (*styler != '\0')
+                {
+                if (*styler == '#') // Legacy: just the color that follows
+                    printf(" style='color: %s;'",styler);
+                else
+                    printf(" style='%s'",styler);
+                }
+            }
+        printf(">%s</OPTION>\n",label);
+        //freeMem(name);
+        }
+
+     /*
     if(filterBy->useIndex)
         {
         int ix=1;
@@ -3522,8 +3573,17 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName))
                 printf(" SELECTED");
             printf(" value='%s'",varName);
-            if (filterBy->colorFollows)
-                printf(" style='color: %s;'",slValue->name + strlen(slValue->name)+1);
+            if (filterBy->styleFollows)
+                {
+                char *styler = slValue->name + strlen(slValue->name)+1;
+                if (*styler != '\0')
+                    {
+                    if (*styler == '#') // Legacy: just the color that follows
+                        printf(" style='color: %s;'",styler);
+                    else
+                        printf(" style='%s'",styler);
+                    }
+                }
             printf(">%s</OPTION>\n",name);
             freeMem(name);
             }
@@ -3538,11 +3598,22 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
                 printf(" SELECTED");
             if (filterBy->valueAndLabel)
                 printf(" value='%s'",slValue->name);
-            if (filterBy->colorFollows)
-                printf(" style='color: %s;'",label + strlen(label)+1);
+            // Style could follow a label
+            if (filterBy->styleFollows)
+                {
+                char *styler = label + strlen(label)+1;
+                if (*styler != '\0')
+                    {
+                    if (*styler == '#') // Legacy: just the color that follows
+                        printf(" style='color: %s;'",styler);
+                    else
+                        printf(" style='%s'",styler);
+                    }
+                }
             printf(">%s</OPTION>\n",label);
             }
         }
+      */
     }
     printf("</SELECT>\n");
 
