@@ -430,7 +430,7 @@ int loadStart = winStart, loadEnd = winEnd;
 #ifndef GBROWSE
 struct customTrack *ct = NULL;
 /*	custom tracks have different database	*/
-if (tg->customPt != (void *)NULL)
+if (isCustomTrack(tg->table) && tg->customPt)
     {
     hFreeConn(&conn);
     conn = hAllocConn(CUSTOM_TRASH);
@@ -1079,7 +1079,7 @@ if (tg->mapsSelf)
     {
     char *itemName;
 #ifndef GBROWSE
-    if (tg->customPt)
+    if (isCustomTrack(tg->table) && tg->customPt)
 	{
 	struct customTrack *ct = tg->customPt;
 	itemName = (char *)needMem(LARGEBUF * sizeof(char));
