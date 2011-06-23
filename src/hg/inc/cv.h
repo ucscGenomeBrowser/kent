@@ -62,21 +62,24 @@
 #define CV_TERM_SEQ_PLATFORM    "seqPlatform"
 
 
-void cvFileDeclare(char *filePath);
+void cvFileDeclare(const char *filePath);
 // Declare an altername cv.ra file to use
 // (The cv.ra file is normally discovered based upon CGI/Tool and envirnment)
 
-char *cvTypeNormalized(char *sloppyTerm);
-// returns (on stack) the proper term to use when requesting a typeOfTerm
+const char *cvFile();
+// return default location of cv.ra
 
-char *cvTermNormalized(char *sloppyTerm);
-// returns (on stack) the proper term to use when requesting a cvTerm hash
+const char *cvTypeNormalized(const char *sloppyTerm);
+// returns the proper term to use when requesting a typeOfTerm
 
-const struct hash *cvTermHash(char *term);
+const char *cvTermNormalized(const char *sloppyTerm);
+// returns the proper term to use when requesting a cvTerm hash
+
+const struct hash *cvTermHash(const char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
 // NOTE: in static memory: DO NOT FREE
 
-const struct hash *cvOneTermHash(char *type,char *term);
+const struct hash *cvOneTermHash(const char *type,const char *term);
 // returns a hash for a single term of a given type
 // NOTE: in static memory: DO NOT FREE
 
@@ -99,22 +102,22 @@ enum cvSearchable
     cvSearchByIntegerRange =5   // Search by discovered integer range (NOT YET IMPLEMENTED)
     };
 
-enum cvSearchable cvSearchMethod(char *term);
+enum cvSearchable cvSearchMethod(const char *term);
 // returns whether the term is searchable
 
-const char *cvLabel(char *term);
+const char *cvLabel(const char *term);
 // returns cv label if term found or else just term
 
-const char *cvTag(char *type,char *term);
+const char *cvTag(const char *type,const char *term);
 // returns cv Tag if term found or else NULL
 
-boolean cvTermIsHidden(char *term);
+boolean cvTermIsHidden(const char *term);
 // returns TRUE if term is defined as hidden in cv.ra
 
-boolean cvTermIsEmpty(char *term,char *val);
+boolean cvTermIsEmpty(const char *term,const char *val);
 // returns TRUE if term has validation of "cv or None" and the val is None
 
-char *cvLabNormalize(char *sloppyTerm);
+char *cvLabNormalize(const char *sloppyTerm);
 /* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing
  * info (a few ENCODE labs have this in metaDb and/or in CV term --
  * PI name embedded in parens in the CV term).  Also fixes other problems until

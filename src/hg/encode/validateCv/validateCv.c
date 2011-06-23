@@ -132,18 +132,18 @@ while ((el = hashNext(&brownie)) != NULL)
 return cvTypes;
 }
 
-int cvTypeMustHaveSettings(struct slName **cvTypes,char *type,char *mustHaveSettings)
+int cvTypeMustHaveSettings(struct slName **cvTypes,const char *type,const char *mustHaveSettings)
 // checks that each memeber of the cvHash for the term has all settings required.
 // returns count of errors and removes type from list of types
 {
 int count = 0;
 char *settings = cloneString(mustHaveSettings); // will spill this memory
-int ix = slNameFindIx(*cvTypes, type);
+int ix = slNameFindIx(*cvTypes, (char *)type);
 if (ix > -1)
     {
     struct slName *cvType = slElementFromIx(*cvTypes,ix);
     assert(cvType != NULL);
-    char *normalizedTerm = cvTermNormalized(cvType->name);
+    char *normalizedTerm = (char *)cvTermNormalized(cvType->name);
 
     const struct hash *termHash = cvTermHash(normalizedTerm);
     if (termHash != NULL)
@@ -197,8 +197,8 @@ if (type == NULL)
 else
     {
     if (sameWord(type,CV_TERM_ANTIBODY))
-        cvTypes = slNameNew(cvTypeNormalized(CV_TERM_ANTIBODY));
-    else if (sameWord(cvTermNormalized(type),CV_TERM_CELL))
+        cvTypes = slNameNew((char *)cvTypeNormalized(CV_TERM_ANTIBODY));
+    else if (sameWord((char *)cvTermNormalized(type),CV_TERM_CELL))
         {
         // Curretly this is shielded in the lib and there is no code to get it
         #define CV_UGLY_TERM_CELL_LINE  "Cell Line"
@@ -262,7 +262,7 @@ if (type == NULL || sameWord(type,CV_TERM_ANTIBODY))
     }
 
 // "Cell Line" is very special
-if (type == NULL || sameWord(cvTermNormalized(type),CV_TERM_CELL))
+if (type == NULL || sameWord((char *)cvTermNormalized(type),CV_TERM_CELL))
     {
     dyStringClear(dySettings);
     if (setting != NULL)
