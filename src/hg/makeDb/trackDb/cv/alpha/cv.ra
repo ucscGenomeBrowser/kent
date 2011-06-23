@@ -8710,6 +8710,13 @@ type age
 stage Embryonic
 description Embryonic day 18
 
+term E18.5
+tag E18HALF
+type age
+stage Embryonic
+description Embryonic day 18.5 (PROVISIONAL)
+
+
 term adult-8wks
 tag ADULT8WKS
 type age
