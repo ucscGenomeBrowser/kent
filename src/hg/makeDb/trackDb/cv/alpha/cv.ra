@@ -9267,17 +9267,26 @@ labPiFull Kevin Struhl
 grantPi Snyder
 organism human
 
-term UCD
-tag UCD
+#This is being depricated to be replaced by USC
+#term UCD
+#tag UCD
+#type lab
+#label Farnham - University of California at Davis
+#description Farnham - University of California at Davis
+#labPi Farnham
+#labPiFull Peggy Farnham
+#grantPi Snyder
+#organism human
+
+term USC
+tag USC
 type lab
-label Farnham - University of California at Davis
-description Farnham - University of California at Davis
-#labName UCD
+label Farnham - University of Southern California
+description Farnham - University of Southern California
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
 organism human
-
 
 ### ARRA human labs
 ###
