@@ -2491,6 +2491,13 @@ function ddclOnOpen(event)
     }
     catch (err) {} // OK if filterCompositeExcludeOptions is not defined.
 
+    // Show only first as selected if it is selected
+    if (allCheckboxes[0].checked == true) {
+        allCheckboxes.each(function(index) {
+            if (index > 0)
+                $(this).attr('checked',false);
+        });
+    }
 }
 
 function ddclOnComplete(selector)
@@ -2510,9 +2517,14 @@ function ddclOnComplete(selector)
             // How to check the first item?
             var dropWrapper = $('#ddcl-' + id + '-ddw');
             $(dropWrapper).find("input").first().attr("checked",true);
+        } else if (chosen.length == $(selector).find('option').length) {
+            // If all are chosen then select only the first!
+            $(chosen).each(function(index) {
+                if (index > 0)
+                    $(this).attr('selected',false);
+            });
         }
     }
-
 
     var msg = ddclTextOfCurrentSelections(selector.options);
 
