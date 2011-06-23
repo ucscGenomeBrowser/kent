@@ -1935,7 +1935,7 @@ if (!(startsWith("http://", url)
    || startsWith("https://", url)
    || startsWith("ftp://", url)
 ))
-    errAbort("only network protocols http, https, or ftp allowed in bigDataUrl");
+    errAbort("only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
 }
 
 
