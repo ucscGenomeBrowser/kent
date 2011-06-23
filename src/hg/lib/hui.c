@@ -3519,7 +3519,6 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
-    //printf("<OPTION%s%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""),(filterBy->styleFollows?" style='color: #000000;'":"") );
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""));
     struct slName *slValue;
 
@@ -3557,63 +3556,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
                 }
             }
         printf(">%s</OPTION>\n",label);
-        //freeMem(name);
         }
-
-     /*
-    if(filterBy->useIndex)
-        {
-        int ix=1;
-        for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next,ix++)
-            {
-            char varName[32];
-            safef(varName, sizeof(varName), "%d",ix);
-            char *name = strSwapChar(cloneString(slValue->name),'_',' ');
-            printf("<OPTION");
-            if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName))
-                printf(" SELECTED");
-            printf(" value='%s'",varName);
-            if (filterBy->styleFollows)
-                {
-                char *styler = slValue->name + strlen(slValue->name)+1;
-                if (*styler != '\0')
-                    {
-                    if (*styler == '#') // Legacy: just the color that follows
-                        printf(" style='color: %s;'",styler);
-                    else
-                        printf(" style='%s'",styler);
-                    }
-                }
-            printf(">%s</OPTION>\n",name);
-            freeMem(name);
-            }
-        }
-    else
-        {
-        for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next)
-            {
-            char *label = (filterBy->valueAndLabel? slValue->name + strlen(slValue->name)+1: slValue->name);
-            printf("<OPTION");
-            if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name))
-                printf(" SELECTED");
-            if (filterBy->valueAndLabel)
-                printf(" value='%s'",slValue->name);
-            // Style could follow a label
-            if (filterBy->styleFollows)
-                {
-                char *styler = label + strlen(label)+1;
-                if (*styler != '\0')
-                    {
-                    if (*styler == '#') // Legacy: just the color that follows
-                        printf(" style='color: %s;'",styler);
-                    else
-                        printf(" style='%s'",styler);
-                    }
-                }
-            printf(">%s</OPTION>\n",label);
-            }
-        }
-      */
     }
     printf("</SELECT>\n");
 
