@@ -16,24 +16,29 @@ static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp
 
 boolean allParts = FALSE;
 boolean female = FALSE;
+boolean noComma = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "checkCoverageGaps - Check for biggest gap in coverage for a list of tracks.\n"
+  "For most tracks coverage of 10,000,000 or more will indicate that there was\n"
+  "a mistake in generating the track.\n"
   "usage:\n"
   "   checkCoverageGaps database track1 ... trackN\n"
   "Note: for bigWig and bigBeds, the biggest gap is rounded to the nearest 10,000 or so\n"
   "options:\n"
   "   -allParts  If set then include _hap and _random and other wierd chroms\n"
   "   -female If set then don't check chrY\n"
+  "   -noComma - Don't put commas in biggest gap output\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"allParts", OPTION_BOOLEAN},
    {"female", OPTION_BOOLEAN},
+   {"noComma", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -191,7 +196,10 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     rangeTreeFree(&rt);
     }
 printf("%s\t%s:%d-%d\t", track, biggestChrom, biggestStart+1, biggestEnd);
-printLongWithCommas(stdout, biggestSize);
+if (noComma)
+    printf("%d", biggestSize);
+else
+    printLongWithCommas(stdout, biggestSize);
 putchar('\n');
 freez(&typeWord);
 bbiFileClose(&bbi);
@@ -204,6 +212,7 @@ struct slName *chromList = hChromList(database);
 struct hash *chromHash = hChromSizeHash(database);
 struct sqlConnection *conn = sqlConnect(database);
 int i;
+printf("#table\tbiggest gap position      \tbiggest gap size\n");
 for (i=0; i<trackCount; ++i)
     {
     char *track = tracks[i];
@@ -218,6 +227,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 allParts = optionExists("allParts");
 female = optionExists("female");
+noComma = optionExists("noComma");
 if (argc < 3)
     usage();
 checkCoverageGaps(argv[1], argc-2, argv+2);
