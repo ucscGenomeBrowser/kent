@@ -391,6 +391,7 @@ static void monitorPrintInfo(struct sqlConnection *sc, char *name)
 {
 fprintf(stderr, "%.*s%s %ld %s\n", traceIndent, indentStr, name,
         sc->conn->thread_id, scConnDb(sc));
+fflush(stderr);
 }
 
 static void monitorPrint(struct sqlConnection *sc, char *name,
@@ -405,6 +406,7 @@ va_start(args, format);
 vfprintf(stderr, format, args);
 va_end(args);
 fputc('\n', stderr);
+fflush(stderr);
 }
 
 static void monitorPrintTime(void)
@@ -417,6 +419,7 @@ if (monitorFlags & JKSQL_PROF)
             ((double)sqlTotalTime)/1000.0);
     fprintf(stderr, "%.*sSQL_TOTAL_QUERIES %ld\n", traceIndent, indentStr,
             sqlTotalQueries);
+    fflush(stderr);
     }
 }
 

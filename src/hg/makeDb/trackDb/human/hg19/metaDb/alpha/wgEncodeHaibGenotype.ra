@@ -11,7 +11,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001282
 dccRep 1
+expId 1282
 fileName wgEncodeHaibGenotypeA549RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -33,7 +35,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001283
 dccRep 1
+expId 1283
 fileName wgEncodeHaibGenotypeAg04449RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -55,7 +59,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001284
 dccRep 1
+expId 1284
 fileName wgEncodeHaibGenotypeAg04450RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -77,7 +83,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001285
 dccRep 1
+expId 1285
 fileName wgEncodeHaibGenotypeAg09309RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -99,7 +107,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001286
 dccRep 1
+expId 1286
 fileName wgEncodeHaibGenotypeAg09319RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -121,7 +131,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001287
 dccRep 1
+expId 1287
 fileName wgEncodeHaibGenotypeAg10803RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -143,7 +155,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001288
 dccRep 1
+expId 1288
 fileName wgEncodeHaibGenotypeAosmcRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -165,7 +179,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001289
 dccRep 1
+expId 1289
 fileName wgEncodeHaibGenotypeAstrocyRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -202,7 +218,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001290
 dccRep 1
+expId 1290
 fileName wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -224,7 +242,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001291
 dccRep 1
+expId 1291
 fileName wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -246,7 +266,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001292
 dccRep 1
+expId 1292
 fileName wgEncodeHaibGenotypeBjRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -268,7 +290,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001294
 dccRep 1
+expId 1294
 fileName wgEncodeHaibGenotypeCaco2RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -290,7 +314,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001295
 dccRep 1
+expId 1295
 fileName wgEncodeHaibGenotypeChorionRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -312,7 +338,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001293
 dccRep 1
+expId 1293
 fileName wgEncodeHaibGenotypeCmkRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -334,7 +362,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001296
 dccRep 1
+expId 1296
 fileName wgEncodeHaibGenotypeGm06990RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -379,7 +409,9 @@ dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-17
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000273
 dccRep 2
+expId 273
 fileName wgEncodeHaibGenotypeGm12878RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -401,7 +433,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001297
 dccRep 1
+expId 1297
 fileName wgEncodeHaibGenotypeGm12891RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -423,7 +457,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001298
 dccRep 1
+expId 1298
 fileName wgEncodeHaibGenotypeGm12892RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -445,7 +481,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001299
 dccRep 1
+expId 1299
 fileName wgEncodeHaibGenotypeGm19239RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -482,7 +520,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001300
 dccRep 1
+expId 1300
 fileName wgEncodeHaibGenotypeH1hescRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -504,7 +544,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001301
 dccRep 1
+expId 1301
 fileName wgEncodeHaibGenotypeHaeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -526,7 +568,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001301
 dccRep 2
+expId 1301
 fileName wgEncodeHaibGenotypeHaeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -548,7 +592,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001302
 dccRep 1
+expId 1302
 fileName wgEncodeHaibGenotypeHcfRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -570,7 +616,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001302
 dccRep 2
+expId 1302
 fileName wgEncodeHaibGenotypeHcfRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -592,7 +640,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001303
 dccRep 1
+expId 1303
 fileName wgEncodeHaibGenotypeHcmRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -614,7 +664,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001303
 dccRep 2
+expId 1303
 fileName wgEncodeHaibGenotypeHcmRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -636,7 +688,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001304
 dccRep 1
+expId 1304
 fileName wgEncodeHaibGenotypeHcpeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -658,7 +712,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001304
 dccRep 2
+expId 1304
 fileName wgEncodeHaibGenotypeHcpeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -680,7 +736,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001305
 dccRep 1
+expId 1305
 fileName wgEncodeHaibGenotypeHeeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -702,7 +760,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001306
 dccRep 1
+expId 1306
 fileName wgEncodeHaibGenotypeHek293RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -724,7 +784,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001316
 dccRep 1
+expId 1316
 fileName wgEncodeHaibGenotypeHelas3RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -746,7 +808,9 @@ dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-17
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000274
 dccRep 1
+expId 274
 fileName wgEncodeHaibGenotypeHepg2RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -768,7 +832,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001307
 dccRep 1
+expId 1307
 fileName wgEncodeHaibGenotypeHipeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -790,7 +856,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001307
 dccRep 2
+expId 1307
 fileName wgEncodeHaibGenotypeHipeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -812,7 +880,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001308
 dccRep 1
+expId 1308
 fileName wgEncodeHaibGenotypeHl60RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -834,7 +904,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001309
 dccRep 1
+expId 1309
 fileName wgEncodeHaibGenotypeHmecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -856,7 +928,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001310
 dccRep 1
+expId 1310
 fileName wgEncodeHaibGenotypeHnpceRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -878,7 +952,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001311
 dccRep 1
+expId 1311
 fileName wgEncodeHaibGenotypeHpaeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -900,7 +976,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001311
 dccRep 2
+expId 1311
 fileName wgEncodeHaibGenotypeHpaeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -922,7 +1000,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001262
 dccRep 1
+expId 1262
 fileName wgEncodeHaibGenotypeHrceRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -944,7 +1024,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001262
 dccRep 2
+expId 1262
 fileName wgEncodeHaibGenotypeHrceRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -966,7 +1048,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001263
 dccRep 1
+expId 1263
 fileName wgEncodeHaibGenotypeHreRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -988,7 +1072,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001263
 dccRep 2
+expId 1263
 fileName wgEncodeHaibGenotypeHreRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1010,7 +1096,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001264
 dccRep 1
+expId 1264
 fileName wgEncodeHaibGenotypeHrpeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1032,7 +1120,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001264
 dccRep 2
+expId 1264
 fileName wgEncodeHaibGenotypeHrpeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1054,7 +1144,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001312
 dccRep 1
+expId 1312
 fileName wgEncodeHaibGenotypeHsmmRegionsRep3.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1076,7 +1168,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001313
 dccRep 1
+expId 1313
 fileName wgEncodeHaibGenotypeHsmmtRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1098,7 +1192,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001314
 dccRep 1
+expId 1314
 fileName wgEncodeHaibGenotypeHtr8RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1120,7 +1216,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001315
 dccRep 1
+expId 1315
 fileName wgEncodeHaibGenotypeHuvecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1142,7 +1240,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001265
 dccRep 1
+expId 1265
 fileName wgEncodeHaibGenotypeImr90RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1164,7 +1264,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001265
 dccRep 2
+expId 1265
 fileName wgEncodeHaibGenotypeImr90RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1186,7 +1288,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001266
 dccRep 1
+expId 1266
 fileName wgEncodeHaibGenotypeJurkatRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1208,7 +1312,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001266
 dccRep 2
+expId 1266
 fileName wgEncodeHaibGenotypeJurkatRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1230,7 +1336,9 @@ dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-17
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000275
 dccRep 1
+expId 275
 fileName wgEncodeHaibGenotypeK562RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1252,7 +1360,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001267
 dccRep 1
+expId 1267
 fileName wgEncodeHaibGenotypeLncapRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1274,7 +1384,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001269
 dccRep 1
+expId 1269
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1296,7 +1408,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001269
 dccRep 2
+expId 1269
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1318,7 +1432,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001269
 dccRep 3
+expId 1269
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep3.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1340,7 +1456,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001270
 dccRep 1
+expId 1270
 fileName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1362,7 +1480,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001268
 dccRep 1
+expId 1268
 fileName wgEncodeHaibGenotypeMcf7RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1384,7 +1504,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001268
 dccRep 2
+expId 1268
 fileName wgEncodeHaibGenotypeMcf7RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1406,7 +1528,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001317
 dccRep 1
+expId 1317
 fileName wgEncodeHaibGenotypeMelanoRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1428,7 +1552,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001317
 dccRep 2
+expId 1317
 fileName wgEncodeHaibGenotypeMelanoRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1450,7 +1576,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001318
 dccRep 1
+expId 1318
 fileName wgEncodeHaibGenotypeMyometrRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1472,7 +1600,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001271
 dccRep 1
+expId 1271
 fileName wgEncodeHaibGenotypeNb4RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1494,7 +1624,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001271
 dccRep 2
+expId 1271
 fileName wgEncodeHaibGenotypeNb4RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1516,7 +1648,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001272
 dccRep 1
+expId 1272
 fileName wgEncodeHaibGenotypeNhaRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1538,7 +1672,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001272
 dccRep 2
+expId 1272
 fileName wgEncodeHaibGenotypeNhaRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1560,7 +1696,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001273
 dccRep 1
+expId 1273
 fileName wgEncodeHaibGenotypeNhbeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1582,7 +1720,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001273
 dccRep 2
+expId 1273
 fileName wgEncodeHaibGenotypeNhbeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1604,7 +1744,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001274
 dccRep 1
+expId 1274
 fileName wgEncodeHaibGenotypeNhdfneoRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1626,7 +1768,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001275
 dccRep 1
+expId 1275
 fileName wgEncodeHaibGenotypeNt2d1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1648,7 +1792,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001322
 dccRep 1
+expId 1322
 fileName wgEncodeHaibGenotypeOvcar3RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1670,7 +1816,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001276
 dccRep 1
+expId 1276
 fileName wgEncodeHaibGenotypePanc1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1692,7 +1840,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001276
 dccRep 2
+expId 1276
 fileName wgEncodeHaibGenotypePanc1RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1714,7 +1864,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001319
 dccRep 1
+expId 1319
 fileName wgEncodeHaibGenotypePfsk1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1736,7 +1888,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001277
 dccRep 1
+expId 1277
 fileName wgEncodeHaibGenotypePrecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1758,7 +1912,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001278
 dccRep 1
+expId 1278
 fileName wgEncodeHaibGenotypeRptecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1780,7 +1936,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001278
 dccRep 2
+expId 1278
 fileName wgEncodeHaibGenotypeRptecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1802,7 +1960,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001279
 dccRep 1
+expId 1279
 fileName wgEncodeHaibGenotypeSaecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1824,7 +1984,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001279
 dccRep 2
+expId 1279
 fileName wgEncodeHaibGenotypeSaecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1846,7 +2008,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001281
 dccRep 1
+expId 1281
 fileName wgEncodeHaibGenotypeSkmcRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1868,7 +2032,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001281
 dccRep 2
+expId 1281
 fileName wgEncodeHaibGenotypeSkmcRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1890,7 +2056,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001280
 dccRep 1
+expId 1280
 fileName wgEncodeHaibGenotypeSknshraRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1912,7 +2080,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001280
 dccRep 2
+expId 1280
 fileName wgEncodeHaibGenotypeSknshraRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1934,7 +2104,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001320
 dccRep 1
+expId 1320
 fileName wgEncodeHaibGenotypeT47dRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1956,7 +2128,9 @@ dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001321
 dccRep 1
+expId 1321
 fileName wgEncodeHaibGenotypeU87RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1970,4 +2144,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -2124694221
+# MAGIC: -1214323710

@@ -1,3 +1,8 @@
+metaObject wgEncodeUw5C
+objType composite
+composite wgEncodeUw5C
+expVars lab,cell
+
 metaObject wgEncodeUw5CBjUw5cgeneMatrixRep1
 objType file
 cell BJ
@@ -610,4 +615,4 @@ replicate 2
 subId 3813
 view RawData
 
-# MAGIC: -1215518316
+# MAGIC: 75019551

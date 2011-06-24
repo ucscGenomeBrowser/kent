@@ -3,8 +3,8 @@ setenv TODAY 2011-06-07          # v252 final
 setenv LASTWEEK 2011-05-10          # v251 final
 setenv REVIEWDAY 2011-06-14      # v253 preview
 setenv LASTREVIEWDAY 2011-05-17      # v252 preview
-setenv REVIEW2DAY 2011-05-31      # v252 preview2
-setenv LASTREVIEW2DAY 2011-05-03      # v251 preview2
+setenv REVIEW2DAY 2011-06-21      # v253 preview2
+setenv LASTREVIEW2DAY 2011-05-31      # v252 preview2
 
 setenv BUILDHOME /cluster/bin/build
 setenv WEEKLYBLD ${BUILDHOME}/build-kent/src/utils/qa/weeklybld

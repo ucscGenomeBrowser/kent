@@ -12,6 +12,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000524
+expId 524
 fileName wgEncodeSydhRnaSeqK562Ifna30PolyaAln.bam
 grant Snyder
 lab Yale
@@ -31,6 +33,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-17
 dateUnrestricted 2011-09-17
+dccAccession wgEncodeEH000524
+expId 524
 fileName wgEncodeSydhRnaSeqK562Ifna30PolyaRaw.bigWig
 grant Snyder
 lab Yale
@@ -50,6 +54,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000524
+expId 524
 fileName wgEncodeSydhRnaSeqK562Ifna30PolyaRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -69,6 +75,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000525
+expId 525
 fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaAln.bam
 grant Snyder
 lab Yale
@@ -88,6 +96,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-17
 dateUnrestricted 2011-09-17
+dccAccession wgEncodeEH000525
+expId 525
 fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaRaw.bigWig
 grant Snyder
 lab Yale
@@ -107,6 +117,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000525
+expId 525
 fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -126,6 +138,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000526
+expId 526
 fileName wgEncodeSydhRnaSeqK562Ifng30PolyaAln.bam
 grant Snyder
 lab Yale
@@ -145,6 +159,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-17
 dateUnrestricted 2011-09-17
+dccAccession wgEncodeEH000526
+expId 526
 fileName wgEncodeSydhRnaSeqK562Ifng30PolyaRaw.bigWig
 grant Snyder
 lab Yale
@@ -164,6 +180,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000526
+expId 526
 fileName wgEncodeSydhRnaSeqK562Ifng30PolyaRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -183,6 +201,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000527
+expId 527
 fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaAln.bam
 grant Snyder
 lab Yale
@@ -202,6 +222,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-17
 dateUnrestricted 2011-09-17
+dccAccession wgEncodeEH000527
+expId 527
 fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw.bigWig
 grant Snyder
 lab Yale
@@ -221,6 +243,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000527
+expId 527
 fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaRawData.fastq.gz
 grant Snyder
 lab Yale
@@ -231,4 +255,4 @@ subId 543
 treatment IFNg6h
 view RawData
 
-# MAGIC: 553062985
+# MAGIC: -1691042675
