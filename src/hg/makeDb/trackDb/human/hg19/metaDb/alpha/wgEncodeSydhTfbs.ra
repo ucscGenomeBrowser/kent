@@ -885,7 +885,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Brca1cIggmusAlnRep1
 project wgEncode
 replicate 1
@@ -907,7 +907,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Brca1cIggmusAlnRep2
 project wgEncode
 replicate 2
@@ -929,7 +929,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -951,7 +951,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Brca1cIggmusRawSignalRep1
 project wgEncode
 replicate 1
@@ -973,7 +973,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Brca1cIggmusRawSignalRep2
 project wgEncode
 replicate 2
@@ -995,7 +995,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1213,7 +1213,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Chd2ab68301IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -1234,7 +1234,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Chd2ab68301IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -1255,7 +1255,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Chd2ab68301IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1277,7 +1277,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Chd2ab68301IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -1298,7 +1298,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Chd2ab68301IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -1319,7 +1319,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Chd2ab68301IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1341,7 +1341,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -1362,7 +1362,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -1383,7 +1383,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1405,7 +1405,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -1426,7 +1426,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -1447,7 +1447,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1469,7 +1469,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -1490,7 +1490,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -1511,7 +1511,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1533,7 +1533,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -1554,7 +1554,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -1575,7 +1575,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2035,7 +2035,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Irf3StdAlnRep1
 project wgEncode
 replicate 1
@@ -2057,7 +2057,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Irf3StdAlnRep2
 project wgEncode
 replicate 2
@@ -2079,7 +2079,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0.  Because of the common difficulty in achieving strong signal with the GM12878 cell line, we submit this dataset, although it narrowly misses the peak concordance standard.
 project wgEncode
 setType exp
@@ -2101,7 +2101,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Irf3StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -2123,7 +2123,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Irf3StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -2145,7 +2145,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2459,7 +2459,7 @@ dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep1
 project wgEncode
 replicate 1
@@ -2481,7 +2481,7 @@ dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep2
 project wgEncode
 replicate 2
@@ -2503,7 +2503,7 @@ dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2525,7 +2525,7 @@ dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
 parentTable wgEncodeSydhTfbsGm12878Nfe2hStdRawSignalRep1
 project wgEncode
@@ -2548,7 +2548,7 @@ dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
 parentTable wgEncodeSydhTfbsGm12878Nfe2hStdRawSignalRep2
 project wgEncode
@@ -2571,7 +2571,7 @@ dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3081,7 +3081,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -3102,7 +3102,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -3123,7 +3123,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Nrf1IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3145,7 +3145,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Nrf1IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -3166,7 +3166,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Nrf1IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -3187,7 +3187,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Nrf1IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3209,7 +3209,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300sc584sc584StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878P300n15StdAlnRep1
 project wgEncode
 replicate 1
@@ -3231,7 +3231,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300sc584sc584StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878P300n15StdAlnRep2
 project wgEncode
 replicate 2
@@ -3253,7 +3253,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300sc584sc584StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3275,7 +3275,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300sc584sc584StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878P300n15StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -3297,7 +3297,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300sc584sc584StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878P300n15StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -3319,7 +3319,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300sc584sc584StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3874,7 +3874,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -3895,7 +3895,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -3916,7 +3916,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsGm12878Pol2s2IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3938,7 +3938,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsGm12878Pol2s2IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -3959,7 +3959,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsGm12878Pol2s2IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -3980,7 +3980,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsGm12878Pol2s2IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4290,7 +4290,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Rfx5n494IggmusAlnRep1
 project wgEncode
 replicate 1
@@ -4312,7 +4312,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Rfx5n494IggmusAlnRep2
 project wgEncode
 replicate 2
@@ -4334,7 +4334,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4356,7 +4356,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Rfx5n494IggmusRawSignalRep1
 project wgEncode
 replicate 1
@@ -4378,7 +4378,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Rfx5n494IggmusRawSignalRep2
 project wgEncode
 replicate 2
@@ -4400,7 +4400,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4422,7 +4422,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Smc3ab9263IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -4443,7 +4443,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Smc3ab9263IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -4464,7 +4464,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Smc3ab9263IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4486,7 +4486,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Smc3ab9263IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -4507,7 +4507,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Smc3ab9263IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -4528,7 +4528,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsGm12878Smc3ab9263IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4678,7 +4678,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Stat1StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -4699,7 +4699,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Stat1StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -4720,7 +4720,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Stat1StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4742,7 +4742,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Stat1StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -4763,7 +4763,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Stat1StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -4784,7 +4784,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Stat1StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4806,7 +4806,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep1
 project wgEncode
 replicate 1
@@ -4828,7 +4828,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep2
 project wgEncode
 replicate 2
@@ -4850,7 +4850,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0.  Because of the common difficulty in achieving good signal strength with the GM12878 cell line, we submit this dataset although it narrowly missed the peak concordance standard.
 project wgEncode
 setType exp
@@ -4872,7 +4872,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Stat3IggmusRawSignalRep1
 project wgEncode
 replicate 1
@@ -4894,7 +4894,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Stat3IggmusRawSignalRep2
 project wgEncode
 replicate 2
@@ -4916,7 +4916,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4938,7 +4938,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsGm12878TbpIggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -4959,7 +4959,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsGm12878TbpIggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -4980,7 +4980,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsGm12878TbpIggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5002,7 +5002,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsGm12878TbpIggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -5023,7 +5023,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsGm12878TbpIggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -5044,7 +5044,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsGm12878TbpIggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5214,7 +5214,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep1
 project wgEncode
 replicate 1
@@ -5236,7 +5236,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep2
 project wgEncode
 replicate 2
@@ -5258,7 +5258,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5280,7 +5280,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Usf2IggmusRawSignalRep1
 project wgEncode
 replicate 1
@@ -5302,7 +5302,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsGm12878Usf2IggmusRawSignalRep2
 project wgEncode
 replicate 2
@@ -5324,7 +5324,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5346,7 +5346,7 @@ dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsGm12878WhipIggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -5367,7 +5367,7 @@ dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsGm12878WhipIggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -5388,7 +5388,7 @@ dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsGm12878WhipIggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0. Although this dataset barely misses the establish ENCODE standard for data agreement with 77% agreement between replicates instead of 80%, we have submitted it because it appears to be of high quality and because it is from the GM12878 cell line where we and others have generally observed weaker ChIP signal.
 project wgEncode
 setType exp
@@ -5410,7 +5410,7 @@ dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsGm12878WhipIggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -5431,7 +5431,7 @@ dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsGm12878WhipIggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -5453,7 +5453,7 @@ dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsGm12878WhipIggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5625,7 +5625,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Znf143166181apStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -5646,7 +5646,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Znf143166181apStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -5667,7 +5667,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Znf143166181apStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5689,7 +5689,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Znf143166181apStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -5710,7 +5710,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Znf143166181apStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -5731,7 +5731,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Znf143166181apStdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5890,7 +5890,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeSydhTfbsGm12878Zzz3RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5912,7 +5912,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeSydhTfbsGm12878Zzz3RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5935,7 +5935,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeSydhTfbsGm12878Zzz3StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -5959,7 +5959,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeSydhTfbsGm12878Zzz3StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -5982,7 +5982,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsGm12878Zzz3StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -6003,7 +6003,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsGm12878Zzz3StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3053
@@ -11525,7 +11525,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescCjunIggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -11546,7 +11546,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescCjunIggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -11567,7 +11567,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescCjunIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11589,7 +11589,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescCjunIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -11610,7 +11610,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescCjunIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -11631,7 +11631,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescCjunIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11792,7 +11792,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescInputIggrabAln.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 setType input
 subId 3325
@@ -11812,7 +11812,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescInputIggrabRawData.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 setType input
 subId 3325
@@ -11832,7 +11832,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescInputIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -11854,7 +11854,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsH1hescInputStdAln.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 setType input
 subId 3501
@@ -11874,7 +11874,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsH1hescInputStdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 setType input
 subId 3501
@@ -11894,7 +11894,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsH1hescInputStdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -12115,7 +12115,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescNrf1IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12136,7 +12136,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescNrf1IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12157,7 +12157,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescNrf1IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12179,7 +12179,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescNrf1IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12200,7 +12200,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescNrf1IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12221,7 +12221,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescNrf1IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12243,7 +12243,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRad21IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12264,7 +12264,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRad21IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12285,7 +12285,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRad21IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12307,7 +12307,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRad21IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12328,7 +12328,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRad21IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12349,7 +12349,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRad21IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12371,7 +12371,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRfx5200401194IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12392,7 +12392,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRfx5200401194IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12413,7 +12413,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRfx5200401194IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12435,7 +12435,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRfx5200401194IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12456,7 +12456,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRfx5200401194IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12477,7 +12477,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescRfx5200401194IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12635,7 +12635,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescTbpStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12656,7 +12656,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescTbpStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12677,7 +12677,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescTbpStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12699,7 +12699,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescTbpStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12720,7 +12720,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescTbpStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12741,7 +12741,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsH1hescTbpStdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12763,7 +12763,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescUsf2IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12784,7 +12784,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescUsf2IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12805,7 +12805,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescUsf2IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12827,7 +12827,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescUsf2IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -12848,7 +12848,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescUsf2IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -12869,7 +12869,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsH1hescUsf2IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -14692,7 +14692,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Brca1cIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -14714,7 +14714,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Brca1cIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -14736,7 +14736,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -14758,7 +14758,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Brca1cIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -14780,7 +14780,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Brca1cIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -14802,7 +14802,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15315,7 +15315,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -15337,7 +15337,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -15359,7 +15359,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15381,7 +15381,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3CebpbIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -15403,7 +15403,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3CebpbIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -15425,7 +15425,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -16467,7 +16467,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHelas3Gcn5StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -16488,7 +16488,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHelas3Gcn5StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -16509,7 +16509,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHelas3Gcn5StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -16531,7 +16531,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHelas3Gcn5StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -16552,7 +16552,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHelas3Gcn5StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -16573,7 +16573,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHelas3Gcn5StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -16595,7 +16595,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -16617,7 +16617,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -16639,7 +16639,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -16661,7 +16661,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -16683,7 +16683,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -16705,7 +16705,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -17628,7 +17628,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -17649,7 +17649,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -17670,7 +17670,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -17692,7 +17692,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -17713,7 +17713,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -17734,7 +17734,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18188,7 +18188,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -18210,7 +18210,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -18232,7 +18232,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18254,7 +18254,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -18276,7 +18276,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -18298,7 +18298,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18534,7 +18534,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3P300n15IggrabAlnRep1
 project wgEncode
 replicate 1
@@ -18556,7 +18556,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3P300n15IggrabAlnRep2
 project wgEncode
 replicate 2
@@ -18578,7 +18578,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18600,7 +18600,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3P300n15IggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -18622,7 +18622,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3P300n15IggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -18644,7 +18644,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18865,7 +18865,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Pol2s2IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -18886,7 +18886,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Pol2s2IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -18907,7 +18907,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Pol2s2IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18929,7 +18929,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Pol2s2IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -18950,7 +18950,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Pol2s2IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -18971,7 +18971,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Pol2s2IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18993,7 +18993,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -19015,7 +19015,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -19037,7 +19037,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19059,7 +19059,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Prdm1vIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -19081,7 +19081,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Prdm1vIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -19103,7 +19103,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19149,7 +19149,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -19170,7 +19170,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -19191,7 +19191,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19213,7 +19213,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -19234,7 +19234,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -19255,7 +19255,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19277,7 +19277,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Rfx5n494IggrabAlnRep1
 project wgEncode
 replicate 1
@@ -19299,7 +19299,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Rfx5n494IggrabAlnRep2
 project wgEncode
 replicate 2
@@ -19321,7 +19321,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19343,7 +19343,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Rfx5n494IggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -19365,7 +19365,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Rfx5n494IggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -19387,7 +19387,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19555,7 +19555,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Smc3ab9263IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -19576,7 +19576,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Smc3ab9263IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -19597,7 +19597,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Smc3ab9263IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19619,7 +19619,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Smc3ab9263IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -19640,7 +19640,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Smc3ab9263IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -19661,7 +19661,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHelas3Smc3ab9263IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19683,7 +19683,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsHelas3Spt20StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -19704,7 +19704,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsHelas3Spt20StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -19725,7 +19725,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsHelas3Spt20StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19747,7 +19747,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsHelas3Spt20StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -19768,7 +19768,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsHelas3Spt20StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -19789,7 +19789,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsHelas3Spt20StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19909,7 +19909,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -19930,7 +19930,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -19951,7 +19951,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19973,7 +19973,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -19994,7 +19994,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -20015,7 +20015,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -20037,7 +20037,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3TbpIggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -20058,7 +20058,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3TbpIggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -20079,7 +20079,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3TbpIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -20101,7 +20101,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3TbpIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -20122,7 +20122,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3TbpIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -20143,7 +20143,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHelas3TbpIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -20461,7 +20461,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep1
 project wgEncode
 replicate 1
@@ -20483,7 +20483,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep2
 project wgEncode
 replicate 2
@@ -20505,7 +20505,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0: We submit this dataset because of its high signal quality, although it narrowly missed the cut-off for replicate peak concordance
 project wgEncode
 setType exp
@@ -20527,7 +20527,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Usf2IggmusRawSignalRep1
 project wgEncode
 replicate 1
@@ -20549,7 +20549,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsHelas3Usf2IggmusRawSignalRep2
 project wgEncode
 replicate 2
@@ -20571,7 +20571,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -20933,7 +20933,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Brca1a300IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -20954,7 +20954,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Brca1a300IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -20975,7 +20975,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Brca1a300IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0.  Although this dataset narrowly misses the ENCODE standard for peak concordance, we submit this data because we feel it is of good quality and will be particularly valuable for comparison to BRCA1 datasets in other cell lines.
 project wgEncode
 setType exp
@@ -20997,7 +20997,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Brca1a300IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -21018,7 +21018,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Brca1a300IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -21039,7 +21039,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Brca1a300IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21204,7 +21204,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -21226,7 +21226,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -21248,7 +21248,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21271,7 +21271,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -21293,7 +21293,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -21315,7 +21315,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21337,7 +21337,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Chd2ab68301IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -21358,7 +21358,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Chd2ab68301IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -21379,7 +21379,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Chd2ab68301IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21401,7 +21401,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Chd2ab68301IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -21422,7 +21422,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Chd2ab68301IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -21443,7 +21443,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Chd2ab68301IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21465,7 +21465,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2CjunIggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -21486,7 +21486,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2CjunIggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -21507,7 +21507,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2CjunIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21529,7 +21529,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2CjunIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -21550,7 +21550,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2CjunIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -21571,7 +21571,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2CjunIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22329,7 +22329,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2InputIggrabAln.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 setType input
 subId 1136
@@ -22349,7 +22349,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2InputIggrabRawData.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 setType input
 subId 1136
@@ -22369,7 +22369,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2InputIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -22636,7 +22636,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -22657,7 +22657,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -22678,7 +22678,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22700,7 +22700,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -22721,7 +22721,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -22742,7 +22742,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22764,7 +22764,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2JundIggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -22785,7 +22785,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2JundIggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -22806,7 +22806,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2JundIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22828,7 +22828,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2JundIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -22849,7 +22849,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2JundIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -22870,7 +22870,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2JundIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22892,7 +22892,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Maffm8194IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -22913,7 +22913,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Maffm8194IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -22934,7 +22934,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Maffm8194IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22956,7 +22956,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Maffm8194IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -22977,7 +22977,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Maffm8194IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -22998,7 +22998,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Maffm8194IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23020,7 +23020,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafkab50322IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23041,7 +23041,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafkab50322IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23062,7 +23062,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafkab50322IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23084,7 +23084,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafkab50322IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23105,7 +23105,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafkab50322IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23126,7 +23126,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafkab50322IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23148,7 +23148,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafksc477IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23169,7 +23169,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafksc477IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23190,7 +23190,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafksc477IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23212,7 +23212,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafksc477IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23233,7 +23233,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafksc477IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23254,7 +23254,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Mafksc477IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23276,7 +23276,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23297,7 +23297,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23318,7 +23318,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23340,7 +23340,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23361,7 +23361,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23382,7 +23382,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23404,7 +23404,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2P300sc582IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23425,7 +23425,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2P300sc582IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23446,7 +23446,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2P300sc582IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23468,7 +23468,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2P300sc582IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23489,7 +23489,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2P300sc582IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23510,7 +23510,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2P300sc582IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23816,7 +23816,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23837,7 +23837,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23858,7 +23858,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -23880,7 +23880,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -23901,7 +23901,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -23922,7 +23922,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24140,7 +24140,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Pol2s2IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -24161,7 +24161,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Pol2s2IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -24182,7 +24182,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Pol2s2IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24204,7 +24204,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Pol2s2IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -24225,7 +24225,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Pol2s2IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -24246,7 +24246,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Pol2s2IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24268,7 +24268,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -24289,7 +24289,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -24310,7 +24310,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24332,7 +24332,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -24353,7 +24353,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -24374,7 +24374,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24396,7 +24396,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Rfx5200401194IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -24417,7 +24417,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Rfx5200401194IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -24438,7 +24438,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Rfx5200401194IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24460,7 +24460,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Rfx5200401194IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -24481,7 +24481,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Rfx5200401194IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -24502,7 +24502,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHepg2Rfx5200401194IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24524,7 +24524,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Smc3ab9263IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -24545,7 +24545,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Smc3ab9263IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -24566,7 +24566,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Smc3ab9263IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24588,7 +24588,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Smc3ab9263IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -24609,7 +24609,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Smc3ab9263IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -24630,7 +24630,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 fileName wgEncodeSydhTfbsHepg2Smc3ab9263IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -25235,7 +25235,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2TbpIggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -25256,7 +25256,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2TbpIggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -25277,7 +25277,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2TbpIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -25299,7 +25299,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2TbpIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -25320,7 +25320,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2TbpIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -25341,7 +25341,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2TbpIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -25497,7 +25497,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -25518,7 +25518,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -25539,7 +25539,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -25561,7 +25561,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -25582,7 +25582,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -25603,7 +25603,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -27259,7 +27259,7 @@ dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -27280,7 +27280,7 @@ dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -27301,7 +27301,7 @@ dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -27323,7 +27323,7 @@ dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -27344,7 +27344,7 @@ dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -27365,7 +27365,7 @@ dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -27924,7 +27924,7 @@ dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 fileName wgEncodeSydhTfbsK562Ccnt2StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -27945,7 +27945,7 @@ dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 fileName wgEncodeSydhTfbsK562Ccnt2StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -27966,7 +27966,7 @@ dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 fileName wgEncodeSydhTfbsK562Ccnt2StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -27988,7 +27988,7 @@ dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 fileName wgEncodeSydhTfbsK562Ccnt2StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -28009,7 +28009,7 @@ dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 fileName wgEncodeSydhTfbsK562Ccnt2StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -28030,7 +28030,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsK562Ccnt2StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -28052,7 +28052,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562CebpbIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -28074,7 +28074,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562CebpbIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -28096,7 +28096,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -28118,7 +28118,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562CebpbIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -28140,7 +28140,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562CebpbIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -28162,7 +28162,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -28380,7 +28380,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Chd21250IggrabAlnRep1
 project wgEncode
 replicate 1
@@ -28402,7 +28402,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Chd21250IggrabAlnRep2
 project wgEncode
 replicate 2
@@ -28424,7 +28424,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -28446,7 +28446,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Chd21250IggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -28468,7 +28468,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Chd21250IggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -28490,7 +28490,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -29148,7 +29148,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -29169,7 +29169,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -29190,7 +29190,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -29212,7 +29212,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -29233,7 +29233,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -29254,7 +29254,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -29520,7 +29520,7 @@ dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -29542,7 +29542,7 @@ dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -29565,7 +29565,7 @@ dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -29589,7 +29589,7 @@ dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -29613,7 +29613,7 @@ dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -29636,7 +29636,7 @@ dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -29658,7 +29658,7 @@ dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -29680,7 +29680,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsK562Gtf2bStdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -29702,7 +29702,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Gtf2f1rapIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -29724,7 +29724,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Gtf2f1rapIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -29746,7 +29746,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -29768,7 +29768,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Gtf2f1rapIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -29790,7 +29790,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Gtf2f1rapIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -29812,7 +29812,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -29834,7 +29834,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Hmgn3StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -29855,7 +29855,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Hmgn3StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -29876,7 +29876,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Hmgn3StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -29898,7 +29898,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Hmgn3StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -29919,7 +29919,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Hmgn3StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -29940,7 +29940,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsK562Hmgn3StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -31189,7 +31189,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562InputIggrabAln.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 setType input
 subId 1132
@@ -31209,7 +31209,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562InputIggrabRawData.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 setType input
 subId 1132
@@ -31229,7 +31229,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsK562InputIggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -31379,7 +31379,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -31400,7 +31400,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -31421,7 +31421,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -31443,7 +31443,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -31464,7 +31464,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion low-quality reads excluded
 project wgEncode
 replicate 2
@@ -31486,7 +31486,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -31508,7 +31508,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -31529,7 +31529,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -31550,7 +31550,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -31572,7 +31572,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -31593,7 +31593,7 @@ dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion low quality reads excluded
 project wgEncode
 replicate 2
@@ -31615,7 +31615,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -31783,7 +31783,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Mafkab50322IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -31804,7 +31804,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Mafkab50322IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -31825,7 +31825,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Mafkab50322IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -31847,7 +31847,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Mafkab50322IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -31868,7 +31868,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Mafkab50322IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -31889,7 +31889,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Mafkab50322IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -32057,7 +32057,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -32079,7 +32079,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -32101,7 +32101,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -32123,7 +32123,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Mxi1bhlhIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -32145,7 +32145,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Mxi1bhlhIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -32167,7 +32167,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -32481,7 +32481,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Nrf1IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -32502,7 +32502,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Nrf1IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -32523,7 +32523,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Nrf1IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -32545,7 +32545,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Nrf1IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -32566,7 +32566,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Nrf1IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -32587,7 +32587,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsK562Nrf1IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -32609,7 +32609,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562P300f4IggrabAlnRep1
 project wgEncode
 replicate 1
@@ -32631,7 +32631,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562P300f4IggrabAlnRep2
 project wgEncode
 replicate 2
@@ -32653,7 +32653,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -32675,7 +32675,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562P300f4IggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -32697,7 +32697,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562P300f4IggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -32719,7 +32719,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -33418,7 +33418,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -33440,7 +33440,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -33461,7 +33461,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -33483,7 +33483,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion Early pipeline version.  Low quality reads excluded.
 project wgEncode
 replicate 1
@@ -33505,7 +33505,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion Early pipeline version.  Low quality reads excluded.
 project wgEncode
 replicate 2
@@ -33527,7 +33527,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34135,7 +34135,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Smc3ab9263IggrabAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -34156,7 +34156,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Smc3ab9263IggrabAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -34177,7 +34177,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Smc3ab9263IggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34199,7 +34199,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Smc3ab9263IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -34220,7 +34220,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Smc3ab9263IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -34241,7 +34241,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsK562Smc3ab9263IggrabSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34936,7 +34936,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep1
 project wgEncode
 replicate 1
@@ -34958,7 +34958,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep2
 project wgEncode
 replicate 2
@@ -34980,7 +34980,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35002,7 +35002,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Tal1sc12984IggmusRawSignalRep1
 project wgEncode
 replicate 1
@@ -35024,7 +35024,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562Tal1sc12984IggmusRawSignalRep2
 project wgEncode
 replicate 2
@@ -35046,7 +35046,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35068,7 +35068,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562TbpIggmusAlnRep1
 project wgEncode
 replicate 1
@@ -35090,7 +35090,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562TbpIggmusAlnRep2
 project wgEncode
 replicate 2
@@ -35112,7 +35112,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35134,7 +35134,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562TbpIggmusRawSignalRep1
 project wgEncode
 replicate 1
@@ -35156,7 +35156,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 parentTable wgEncodeSydhTfbsK562TbpIggmusRawSignalRep2
 project wgEncode
 replicate 2
@@ -35178,7 +35178,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35399,7 +35399,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Usf2StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -35420,7 +35420,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Usf2StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -35441,7 +35441,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Usf2StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35463,7 +35463,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Usf2StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -35484,7 +35484,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Usf2StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -35505,7 +35505,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsK562Usf2StdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38112,7 +38112,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -38133,7 +38133,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -38154,7 +38154,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38176,7 +38176,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -38197,7 +38197,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -38218,7 +38218,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38655,7 +38655,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -38676,7 +38676,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -38697,7 +38697,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38719,7 +38719,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -38740,7 +38740,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -38761,7 +38761,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38855,7 +38855,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 1
 setType exp
@@ -38876,7 +38876,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 2
 setType exp
@@ -38897,7 +38897,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38919,7 +38919,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
 project wgEncode
 replicate 1
@@ -38941,7 +38941,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
 project wgEncode
 replicate 2
@@ -38963,7 +38963,7 @@ dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdSig.bigWig
 grant Snyder
-lab Yale
+lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -40964,4 +40964,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1507809392
+# MAGIC: -577585188
