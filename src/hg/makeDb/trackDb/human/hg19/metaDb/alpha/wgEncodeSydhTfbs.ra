@@ -5888,6 +5888,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
+expId 698
 fileName wgEncodeSydhTfbsGm12878Zzz3RawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -5910,6 +5911,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
+expId 698
 fileName wgEncodeSydhTfbsGm12878Zzz3RawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -5933,6 +5935,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
+expId 698
 fileName wgEncodeSydhTfbsGm12878Zzz3StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -5957,6 +5960,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
+expId 698
 fileName wgEncodeSydhTfbsGm12878Zzz3StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -5980,6 +5984,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+expId 698
 fileName wgEncodeSydhTfbsGm12878Zzz3StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -6001,6 +6006,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
+expId 698
 fileName wgEncodeSydhTfbsGm12878Zzz3StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -29518,6 +29524,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -29540,6 +29547,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -29563,6 +29571,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bStdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -29587,6 +29596,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bStdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -29611,6 +29621,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bStdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -29634,6 +29645,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bStdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -29656,6 +29668,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bStdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -29678,6 +29691,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bStdSig.bigWig
 grant Snyder
 lab Harvard
@@ -40964,4 +40978,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -577585188
+# MAGIC: -577059918
