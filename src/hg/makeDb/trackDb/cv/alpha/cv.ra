@@ -1853,7 +1853,7 @@ vendorName ScienCell
 vendorId 1000
 orderUrl http://www.sciencellonline.com/site/products/1000.php
 sex U
-protocol UW_Stam:HBMEC_Myers_protocol.pdf
+protocol UW_Stam:HBMEC_Stam_protocol.pdf
 
 term HCFaa
 tag HCFAA
@@ -3234,22 +3234,24 @@ sex F
 tier 3
 protocol UW_Stam:Stam_15_protocols.pdf
 
-term SK-SY5Y
-tag SKSY5Y
-type Cell Line
-organism human
-description neuroblastoma, parental cell line: SK-N-SH 
-tissue bone marrow
-vendorName ATCC
-vendorId bone marrow
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
-lineage ectoderm 
-karyotype The cells possess a unique marker comprised of a chromosome 1 with a complex insertion of an additional copy of a 1q segment into the long arm, resulting in trisomy of 1q
-termId BTO:0000793
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
-sex F
-tier 3
-protocol SYDH_TFBS(Farnham):SK-SY5Y_Farnham_protocol.pdf
+# This cell line may not exist...  -Jeff
+# See http://redmine.soe.ucsc.edu/issues/4408
+#term SK-SY5Y
+#tag SKSY5Y
+#type Cell Line
+#organism human
+#description neuroblastoma, parental cell line: SK-N-SH 
+#tissue bone marrow
+#vendorName ATCC
+#vendorId bone marrow
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
+#lineage ectoderm 
+#karyotype The cells possess a unique marker comprised of a chromosome 1 with a complex insertion of an additional copy of a 1q segment into the long arm, resulting in trisomy of 1q
+#termId BTO:0000793
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
+#sex F
+#tier 3
+#protocol SYDH_TFBS(Farnham):SK-SY5Y_Farnham_protocol.pdf
 
 term SKMC
 tag SKMC

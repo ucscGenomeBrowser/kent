@@ -23502,8 +23502,8 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
             firstTime = FALSE;
         printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
 
-            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
-            printf("--------|--------------------------------------------------------------------------------------------\n");
+            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    STRAND \n");
+            printf("--------|-----------------------------------------------------------------------------------\n");
 
             }
         bed = bedLoad6(row);
@@ -23511,9 +23511,9 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
                hgTracksPathAndSettings(), database,
                bed->chrom, bed->chromStart+1, bed->chromEnd);
 
-        printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
+        printf("%-20s %-10s %9d  %9d    %5d       %1s",
             bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
-            (bed->chromEnd - bed->chromStart),bed->score, bed->strand);
+            (bed->chromEnd - bed->chromStart), bed->strand);
 
         printf("</TT></PRE>");
         }
@@ -23581,8 +23581,8 @@ else if (sameString("numtSMitochondrion", table))
             firstTime = FALSE;
         printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
 
-            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
-            printf("--------|--------------------------------------------------------------------------------------------\n");
+            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    STRAND \n");
+            printf("--------|-----------------------------------------------------------------------------------\n");
 
             }
         bed = bedLoad6(row);
@@ -23590,9 +23590,9 @@ else if (sameString("numtSMitochondrion", table))
                hgTracksPathAndSettings(), database,
                bed->chrom, bed->chromStart+1, bed->chromEnd);
 
-        printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
+        printf("%-20s %-10s %9d  %9d    %5d       %1s",
             bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
-            (bed->chromEnd - bed->chromStart),bed->score, bed->strand);
+            (bed->chromEnd - bed->chromStart), bed->strand);
 
         printf("</TT></PRE>");
         }
@@ -23697,8 +23697,8 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
         tdb = hashFindVal(trackHash, track);
 	if (tdb == NULL)
 	    {
-	    if (startsWith("all_mrna", track))       /* redmine #1232 */
-		tdb = hashFindVal(trackHash, "mrna");/* redmine #1232 */
+	    if (startsWith("all_mrna", track))       
+		tdb = hashFindVal(trackHash, "mrna");
                   /* Oh what a tangled web we weave. */
 	    }
 	}
