@@ -23697,8 +23697,9 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
         tdb = hashFindVal(trackHash, track);
 	if (tdb == NULL)
 	    {
-	    if (sameString(track, "mrna"))
-		tdb = hashFindVal(trackHash, "all_mrna");/* Oh what a tangled web we weave. */
+	    if (startsWith("all_mrna", track))       /* redmine #1232 */
+		tdb = hashFindVal(trackHash, "mrna");/* redmine #1232 */
+                  /* Oh what a tangled web we weave. */
 	    }
 	}
     }
