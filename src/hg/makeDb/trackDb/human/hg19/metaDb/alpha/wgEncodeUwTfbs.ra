@@ -3,6 +3,72 @@ objType composite
 composite wgEncodeUwTfbs
 expVars lab,dataType,cell,antibody
 
+metaObject wgEncodeUwTfbsA549InputStdAlnRep1
+objType file
+antibody Input
+cell A549
+composite wgEncodeUwTfbs
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-24
+dateUnrestricted 2012-03-24
+fileName wgEncodeUwTfbsA549InputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4349
+view Alignments
+
+metaObject wgEncodeUwTfbsA549InputStdRawDataRep1
+objType file
+antibody Input
+cell A549
+composite wgEncodeUwTfbs
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-24
+dateUnrestricted 2012-03-24
+fileName wgEncodeUwTfbsA549InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4349
+view RawData
+
+metaObject wgEncodeUwTfbsA549InputStdRawRep1
+objType table
+antibody Input
+cell A549
+composite wgEncodeUwTfbs
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-24
+dateUnrestricted 2012-03-24
+fileName wgEncodeUwTfbsA549InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4349
+tableName wgEncodeUwTfbsA549InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwTfbsAg04449CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -11923,4 +11989,4 @@ subId 1320
 tableName wgEncodeUwTfbsWerirb1InputStdRawRep1
 view RawSignal
 
-# MAGIC: -78122045
+# MAGIC: 1294079463
