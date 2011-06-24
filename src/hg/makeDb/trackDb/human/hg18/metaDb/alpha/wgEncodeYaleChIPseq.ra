@@ -20682,10 +20682,10 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-expId 691
+expId 690
 fileName wgEncodeYaleChIPseqRawDataRep4Gm12878NfkbTnfa.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 4
 setType exp
@@ -25122,4 +25122,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 1206924716
+# MAGIC: 1208888727
