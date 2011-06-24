@@ -6,9 +6,13 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "wgEncodeGencodeUniProt.h"
+#include "encode/wgEncodeGencodeUniProt.h"
 
 static char const rcsid[] = "$Id:$";
+
+/* definitions for dataset column */
+static char *values_dataset[] = {"SwissProt", "TrEMBL", NULL};
+static struct hash *valhash_dataset = NULL;
 
 void wgEncodeGencodeUniProtStaticLoad(char **row, struct wgEncodeGencodeUniProt *ret)
 /* Load a row from wgEncodeGencodeUniProt table into ret.  The contents of ret will
@@ -16,7 +20,9 @@ void wgEncodeGencodeUniProtStaticLoad(char **row, struct wgEncodeGencodeUniProt 
 {
 
 ret->transcriptId = row[0];
-ret->uniProtId = row[1];
+ret->acc = row[1];
+ret->name = row[2];
+ret->dataset = sqlEnumParse(row[3], values_dataset, &valhash_dataset);
 }
 
 struct wgEncodeGencodeUniProt *wgEncodeGencodeUniProtLoad(char **row)
@@ -27,7 +33,9 @@ struct wgEncodeGencodeUniProt *ret;
 
 AllocVar(ret);
 ret->transcriptId = cloneString(row[0]);
-ret->uniProtId = cloneString(row[1]);
+ret->acc = cloneString(row[1]);
+ret->name = cloneString(row[2]);
+ret->dataset = sqlEnumParse(row[3], values_dataset, &valhash_dataset);
 return ret;
 }
 
@@ -37,7 +45,7 @@ struct wgEncodeGencodeUniProt *wgEncodeGencodeUniProtLoadAll(char *fileName)
 {
 struct wgEncodeGencodeUniProt *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[4];
 
 while (lineFileRow(lf, row))
     {
@@ -55,7 +63,7 @@ struct wgEncodeGencodeUniProt *wgEncodeGencodeUniProtLoadAllByChar(char *fileNam
 {
 struct wgEncodeGencodeUniProt *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[4];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -77,7 +85,9 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->transcriptId = sqlStringComma(&s);
-ret->uniProtId = sqlStringComma(&s);
+ret->acc = sqlStringComma(&s);
+ret->name = sqlStringComma(&s);
+ret->dataset = sqlEnumComma(&s, values_dataset, &valhash_dataset);
 *pS = s;
 return ret;
 }
@@ -90,7 +100,8 @@ struct wgEncodeGencodeUniProt *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->transcriptId);
-freeMem(el->uniProtId);
+freeMem(el->acc);
+freeMem(el->name);
 freez(pEl);
 }
 
@@ -115,7 +126,15 @@ fprintf(f, "%s", el->transcriptId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->uniProtId);
+fprintf(f, "%s", el->acc);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+sqlEnumPrint(f, el->dataset, values_dataset);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

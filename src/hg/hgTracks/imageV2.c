@@ -1671,8 +1671,10 @@ for(;item!=NULL;item=item->next)
         {
         if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s",item->linkVar);
-	else
-            hPrintf(" HREF='%s'",item->linkVar);
+	else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
+                 hPrintf(" HREF='..%s'",item->linkVar);
+             else 
+                 hPrintf(" HREF='%s'",item->linkVar);
         }
     else
         warn("map item has no url!");
@@ -1809,7 +1811,7 @@ else if(slice->link != NULL)
             char *ellipsis = ELLIPSIS_TO_USE(browser);
             if(imgTrack->reorderable)
                 hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
-                    ellipsis, newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
+                    ellipsis, newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtracks":"") );
             else
                 hPrintf(" TITLE='%s%sclick or right click to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
             }

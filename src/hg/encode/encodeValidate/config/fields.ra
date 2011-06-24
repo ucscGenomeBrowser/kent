@@ -71,6 +71,19 @@ file ddf
 type string
 required no
 
+# This specifies sex of a tissue
+# Used by Mouse and Human labs
+field sex
+file ddf
+type string
+required no
+
+#The spikeInPool associated for the bam file.
+field spikeInPool
+file ddf
+type int
+required no
+
 # This is replicate number as you would expect
 # It would be nice to verify that you have a rep 1 if you have a rep 2. etc
 field replicate
@@ -366,6 +379,18 @@ required yes
 # This specifies if the view is download only
 # It is used by ????
 field downloadOnly
+file dafList
+type bool
+required no
+
+# This specifies if the view is going to be supplemental
+field supplemental
+file dafList
+type bool
+required no
+
+# This specifies if the view is going to be auxiliary
+field auxiliary
 file dafList
 type bool
 required no

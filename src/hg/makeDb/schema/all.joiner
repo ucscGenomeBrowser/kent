@@ -644,6 +644,91 @@ identifier wgEncodeGencodeYalePseudoV4
     hg19.wgEncodeGencodePolyaV4.name unique
     panTro2.wgEncodeNhgriBip.name unique
 
+# begin Gencode V7
+
+#  = gencode genepreds with joining through wgEncodeGencodeAttrsV7
+# wgEncodeGencodeBasicV7
+# wgEncodeGencodeCompV7
+# wgEncodeGencodePseudoGeneV7
+
+#  = gencode genepreds with no associations
+# wgEncodeGencodePolyaV7
+# wgEncodeGencode2wayConsPseudoV7
+
+# gencode association tables (joined through wgEncodeGencodeAttrsV7)
+#wgEncodeGencodeAttrsV7
+#wgEncodeGencodeExonSupportV7
+#wgEncodeGencodeGeneSourceV7
+#wgEncodeGencodePdbV7
+#wgEncodeGencodePubMedV7
+#wgEncodeGencodeRefSeqV7
+#wgEncodeGencodeTagV7
+#wgEncodeGencodeTranscriptSourceV7
+#wgEncodeGencodeTranscriptSupportV7
+#wgEncodeGencodeUniProtV7
+
+identifier wgEncodeGencodeBasicAttrsV7
+"Link together Gencode Basic Table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeAttrsV7.transcriptId
+    hg19.wgEncodeGencodeBasicV7.name
+
+identifier wgEncodeGencodeCompAttrsV7
+"Link together Gencode Comprehensive Table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeAttrsV7.transcriptId
+    hg19.wgEncodeGencodeCompV7.name
+
+identifier wgEncodeGencodePseudoGeneAttrsV7
+"Link together Gencode PseudoGene Table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeAttrsV7.transcriptId
+    hg19.wgEncodeGencodePseudoGeneV7.name
+
+identifier wgEncodeGencodeExonSupportV7
+"Link together Gencode Exon Support table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeExonSupportV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.98202
+
+identifier wgEncodeGencodeGeneSourceV7
+"Link together Gencode Gene Source table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeGeneSourceV7.geneId
+    hg19.wgEncodeGencodeAttrsV7.geneId
+
+identifier wgEncodeGencodePdbV7
+"Link together Gencode Pdb table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodePdbV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.0397575
+
+identifier wgEncodeGencodePubMedV7
+"Link together Gencode Pubmed table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodePubMedV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId  minCheck=0.635488
+
+identifier wgEncodeGencodeRefSeqV7
+"Link together Gencode RefSeq table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeRefSeqV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.185827
+
+identifier wgEncodeGencodeTagV7
+"Link together Gencode Tag table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeTagV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.373378
+
+identifier wgEncodeGencodeTranscriptSourceV7
+"Link together Gencode Transcript Source table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeTranscriptSourceV7.transcriptId
+    hg19.wgEncodeGencodeAttrsV7.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportV7
+"Link together Gencode Transcript Support table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeTranscriptSupportV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.333503
+
+identifier wgEncodeGencodeUniProtV7
+"Link together Gencode UniProt Support table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeUniProtV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.358209
+
+# end Gencode V7
+
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
     hg19.wgEncodeGencodeClassesV3.name
@@ -2257,9 +2342,6 @@ identifier snpName131
     hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
     hg18.snpArrayIlluminaHumanCytoSNP_12.name minCheck=0.95
     hg18.snpArrayIlluminaHumanOmni1_Quad.name minCheck=0.85
-    # gwasCatalog SNPs were mapped to hg19 using snp131.  Move this and update trackDb
-    # settings if we remap to new dbSNP version:
-    hg19.gwasCatalog.name minCheck=0.99
 
 identifier snpExceptions131
 "Annotations of unusual conditions in dbSNP version 131"
@@ -2276,6 +2358,9 @@ identifier snpName132
     $gbd.snp132Seq.acc minCheck=.98
     $gbd.snp132CodingDbSnp.name minCheck=.90
     $hg.snp132OrthoPt2Pa2Rm2.name
+    # gwasCatalog SNPs were mapped to hg19 using snp132.  Move this and update trackDb
+    # settings if we remap to new dbSNP version:
+    hg19.gwasCatalog.name minCheck=0.99
 
 # Other NCBI Identifiers
 
@@ -2290,7 +2375,7 @@ identifier locusLinkId external=LocusLink
 identifier omimLocationId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) Location ID"
     $hg.omimLocation.name dupeOk exclude=0
-    $hg.omimGeneMap.omimId minCheck=0.10
+    $hg.omimGeneMap.omimId full minCheck=0.08 
 
 identifier omimAvSnpId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) AV SNP ID"
@@ -2309,14 +2394,6 @@ identifier omimAvId external=OMIM
     $hg.omimAv.avId dupeOk exclude=0
     $hg.omimAvRepl.avId minCheck=0.90
     $hg.omimAvSnp.name minCheck=0.90
-
-identifier omimGeneId
-"omimGene ID"
-    $hg.omimGene.name dupeOk
-    $hg.omimGeneMap.omimId minCheck=0.85
-    $hg.refLink.omimId exclude=0 minCheck=0.98
-    $hg.omimMorbidMap.omimId minCheck=0.75
-    $hg.omimToKnownCanonical.omimId
 
 identifier omimGene2Id
 "omimGene2 ID"
@@ -2515,6 +2592,7 @@ identifier blastHg18KGPep04Id
      danRer5.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
+     felCat4.blastHg18KG.qName
      dm2.blastHg18KG.qName
      fr2.blastHg18KG.qName
      mm8.blastHg18KG.qName
@@ -2550,6 +2628,7 @@ identifier blastHg18KGRef04Id
      danRer5.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
+     felCat4.blastHg18KG.qName
      dm2.blastHg18KG.qName
      fr2.blastHg18KG.qName
      mm8.blastHg18KG.qName
@@ -2650,8 +2729,6 @@ identifier jaxAlleleName external=MGI
     $mm.jaxAllelePheno.allele dupeOk
     $mm.jaxAlleleInfo.name minCheck=0.9
     $mm.jaxAllele.name minCheck=0.9
-    $mm.jaxGeneTrapInfo.name minCheck=0.000001
-    $mm.jaxGeneTrap.name minCheck=0.000001
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
@@ -2902,6 +2979,10 @@ identifier text2GenomeSequence
 "Article to sequence relationship as mapped from publications"
     $gbd.t2gArticle.pmcId
     $gbd.t2gSequence.pmcId minCheck=0.99
+
+identifier ceuBcellRNASeqId
+"ID of ceuBcellRNASeq"
+    $hg.ceuBcellRNASeq.name dupeOk
 
 # Dependencies not already captured in identifiers
 
@@ -3472,6 +3553,7 @@ tablesIgnored $hg
     cccTrendPvalRa
     cccTrendPvalT1d
     cccTrendPvalT2d
+    ceuBcellRNASeqBW
     cnpFosmid
     cnpIafrate
     cnpIafrate2

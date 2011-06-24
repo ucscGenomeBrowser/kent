@@ -418,11 +418,30 @@ function validateFloat(obj,min,max)
     }
 }
 
+
+function metadataIsVisible(trackName)
+{
+    var divit = $("#div_"+trackName+"_meta");
+    if (divit == undefined || divit.length == 0)
+        return false;
+    return ($(divit).css('display') != 'none');
+}
+
 function metadataShowHide(trackName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+trackName+"_meta");
+    if (divit == undefined || divit.length == 0)
+        return false;
+    var img = $(divit).prev('a').find("img");
+    if (img != undefined && $(img).length == 1) {
+        img = $(img)[0];
+        if ($(divit).css('display') == 'none')
+            $(img).attr('src','../images/upBlue.png');
+        else
+            $(img).attr('src','../images/downBlue.png');
+    }
     if($(divit).css('display') == 'none') {
         $("#div_"+trackName+"_cfg").hide();  // Hide any configuration when opening metadata
 
@@ -433,12 +452,16 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
     }
     var tr = $(divit).parents('tr');
     if (tr.length > 0) {
-        if ($(tr).hasClass("bgLevel2")) {
-            $(divit).children('table').removeClass('bgLevel1');
-            $(divit).children('table').addClass('bgLevel2');
-        } else {
-            $(divit).children('table').removeClass('bgLevel2');
-            $(divit).children('table').addClass('bgLevel1');
+        tr = tr[0];
+        var bgClass = null;
+        var classes = $( tr ).attr("class").split(" ");
+        for (var ix=0;ix<classes.length;ix++) {
+            if (classes[ix].substring(0,'bgLevel'.length) == 'bgLevel')
+                bgClass = classes[ix];
+        }
+        if (bgClass) {
+            $(divit).children('table').removeClass('bgLevel1 bgLevel2 bgLevel3 bgLevel4');
+            $(divit).children('table').addClass(bgClass);
         }
     }
     $(divit).toggle();  // jQuery hide/show

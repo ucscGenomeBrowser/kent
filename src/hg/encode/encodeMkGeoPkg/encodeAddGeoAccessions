@@ -12,9 +12,9 @@ import subprocess
 
 def mdb_update(db, obj, var, val, mdb_table=None):
     if mdb_table:
-        print "mdbUpdate %s -table=%s -obj=%s -var=%s -val=%s" % (db, mdb_table, obj, var, val)
+        print "mdbUpdate %s -table=%s -obj=%s -setVar=%s -setVal=%s" % (db, mdb_table, obj, var, val)
     else:
-        print "mdbUpdate %s -obj=%s -var=%s -val=%s" % (db, obj, var, val)
+        print "mdbUpdate %s -obj=%s -setVar=%s -setVal=%s" % (db, obj, var, val)
 
 def get_obj_for_file(db, file, mdb_table=None):
     if mdb_table:

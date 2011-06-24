@@ -36,7 +36,7 @@ struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
 char *empty = NULL;
 int rowOffset = 0;
-char **row;
+// char **row;
 // int count = 0;
 long startTime = 0;
 long deltaTime = 0;

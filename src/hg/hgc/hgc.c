@@ -213,6 +213,7 @@
 #include "retroClick.h"
 #include "mgcClick.h"
 #include "ccdsClick.h"
+#include "gencodeClick.h"
 #include "memalloc.h"
 #include "trashDir.h"
 #include "kg1ToKg2.h"
@@ -382,6 +383,12 @@ snprintf(buf, sizeof(buf), "%d", id);
 fprintf(f, entrezFormat, "OMIM", buf, "Detailed");
 }
 
+void printSwissProtAccUrl(FILE *f, char *accession)
+/* Print URL for Swiss-Prot protein accession. */
+{
+fprintf(f, uniprotFormat, accession);
+}
+
 static void printSwissProtProteinUrl(FILE *f, char *accession)
 /* Print URL for Swiss-Prot NiceProt on a protein. */
 {
@@ -390,7 +397,7 @@ char *spAcc;
 spAcc = uniProtFindPrimAcc(accession);
 if (spAcc != NULL)
     {
-    fprintf(f, uniprotFormat , spAcc);
+    printSwissProtAccUrl(f, accession);
     }
 else
     {
@@ -683,7 +690,7 @@ printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
 /* printBand(chrom, (start + end)/2, 0, FALSE); */
 printBand(chrom, start, end, FALSE);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
-if (strand != NULL)
+if (strand != NULL && differentString(strand,"."))
     printf("<B>Strand:</B> %s<BR>\n", strand);
 else
     strand = "?";
@@ -9475,7 +9482,7 @@ if (url != NULL && url[0] != 0)
 	if (disorderShown) printf("</UL>\n");
     	sqlFreeResult(&sr);
 	}
-    
+
     // show RefSeq Gene link(s)
     safef(query, sizeof(query),
           "select distinct r.name from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
@@ -9847,8 +9854,16 @@ if (url != NULL && url[0] != 0)
     if (!sameWord(dbSnpId, "-"))
     	{
     	printf("<B>dbSNP:</B> \n");
-    	printf("<A HREF=\"%s%s\" target=_blank>",
+    	if (sameWord(database, "hg18"))
+	    {
+	    printf("<A HREF=\"%s%s\" >",
+	       "../cgi-bin/hgc?g=snp130&i=", dbSnpId);
+	    }
+	else
+	    {
+    	    printf("<A HREF=\"%s%s\" >",
 	       "../cgi-bin/hgc?g=snp132&i=", dbSnpId);
+	    }
     	printf("%s</A></B>", dbSnpId);
 	fflush(stdout);
 	}
@@ -17133,7 +17148,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Publication:</B> %s <em>et al.</em> "
 	   "<A HREF=\"", gc->author);
     printEntrezPubMedUidAbstractUrl(stdout, gc->pubMedID);
-    printf("\" TARGET=_BLANK>%s</A>. <em>%s.</em> %s<BR>\n", gc->title, gc->journal, gc->pubDate);
+    printf("\" TARGET=_BLANK>%s</A>%s <em>%s.</em> %s<BR>\n",
+	   gc->title, (endsWith(gc->title, ".") ? "" : "."), gc->journal, gc->pubDate);
     printf("<B>Disease or trait:</B> %s<BR>\n", subNrNs(gc->trait));
     printf("<B>Initial sample size:</B> %s<BR>\n", subNrNs(gc->initSample));
     printf("<B>Replication sample size:</B> %s<BR>\n", subNrNs(gc->replSample));
@@ -23408,7 +23424,7 @@ char itemNameDash[64]; /* itenName appended with a "_" */
 char itemNameTrimmed[64]; /* itemName trimed at last "_" */
 int sDiff = 30; /* acceptable difference of genomics size */
 /* message strings */
-char clickMsg[128];
+char *clickMsg = NULL;
 char *openMsg1 = "Click 'browser' link below to open Genome Browser at genomic position where";
 char *openMsg2 = "maps\n";
 char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochondrial position where";
@@ -23434,47 +23450,65 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 
+if (sameString("hg18", database))
+{
+  if (sameString("numtS", table))
+      {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtSMitochondrionChrPlacement where ( "
+          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
+      clickMsg = openMsgM;
+      }
+    else if (sameString("numtSAssembled", table))
+      {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtSMitochondrionChrPlacement where ( "
+          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
+      clickMsg = openMsgM;
+      }
+    else if (sameString("numtSMitochondrion", table))
+      {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtS where ( "
+          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
+      clickMsg = openMsg1;
+      } 
+    else if (sameString("numtSMitochondrionChrPlacement", table))
+      {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtS where ( "
+          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
+      clickMsg = openMsg1;
+      }
+} else {
+  if (sameString("numtS", table) || sameString("numtSAssembled", table))
+     {
+     safef(query, sizeof(query),
+         "select  chrom, chromStart, chromEnd, name, score, strand "
+         "from numtSMitochondrion where name = '%s'  ", itemName);
+     clickMsg = openMsgM;
+     }
+  else if (sameString("numtSMitochondrion", table))
+     {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtS where name = '%s'", itemName);
+      clickMsg = openMsg1;
+     }
+}
 
-if (sameString("numtS", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtSMitochondrionChrPlacement where ( "
-        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    strcpy(clickMsg, openMsgM);
-    }
-else if (sameString("numtSAssembled", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtSMitochondrionChrPlacement where ( "
-        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    strcpy(clickMsg, openMsgM);
-    }
-else if (sameString("numtSMitochondrion", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtS where ( "
-        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    strcpy(clickMsg, openMsg1);
-    }
-else if (sameString("numtSMitochondrionChrPlacement", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtS where ( "
-        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    strcpy(clickMsg, openMsg1);
-    }
     sr = sqlGetResult(conn, query);
     firstTime = TRUE;
 
@@ -23486,8 +23520,8 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
             firstTime = FALSE;
         printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
 
-            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
-            printf("--------|--------------------------------------------------------------------------------------------\n");
+            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    STRAND \n");
+            printf("--------|-----------------------------------------------------------------------------------\n");
 
             }
         bed = bedLoad6(row);
@@ -23495,9 +23529,9 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
                hgTracksPathAndSettings(), database,
                bed->chrom, bed->chromStart+1, bed->chromEnd);
 
-        printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
+        printf("%-20s %-10s %9d  %9d    %5d       %1s",
             bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
-            (bed->chromEnd - bed->chromStart),bed->score, bed->strand);
+            (bed->chromEnd - bed->chromStart), bed->strand);
 
         printf("</TT></PRE>");
         }
@@ -23506,7 +23540,6 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
  printTrackHtml(tdb);
  hFreeConn(&conn);
 }
-
 
 
 void doMiddle()
@@ -23603,8 +23636,9 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
         tdb = hashFindVal(trackHash, track);
 	if (tdb == NULL)
 	    {
-	    if (sameString(track, "mrna"))
-		tdb = hashFindVal(trackHash, "all_mrna");/* Oh what a tangled web we weave. */
+	    if (startsWith("all_mrna", track))       
+		tdb = hashFindVal(trackHash, "mrna");
+                  /* Oh what a tangled web we weave. */
 	    }
 	}
     }
@@ -23857,6 +23891,10 @@ else if (sameWord(table, "refGene"))
 else if (sameWord(table, "ccdsGene"))
     {
     doCcdsGene(tdb, item);
+    }
+else if (isNewGencodeGene(tdb))
+    {
+    doGencodeGene(tdb, item);
     }
 else if (sameWord(table, "mappedRefSeq"))
     /* human refseqs on chimp browser */
@@ -24709,10 +24747,7 @@ else if (tdb != NULL && startsWith("bedDetail", tdb->type))
     doBedDetail(tdb, NULL, item);
     }
 else if (startsWith("numtS", table))
-       //  && (!sameString("numtSAssembled", table)))
     {
-    //genericHeader(tdb, item);
-    //genericClickHandler(tdb, item, NULL);
     doNumtS(tdb, item);
     }
 else if (tdb != NULL)

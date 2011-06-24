@@ -586,6 +586,8 @@ trackLabels[0] = "Browser tracks";
 trackNames[0] = "Choose table";
 for (t = trackList, i=1; t != NULL; t = t->next, ++i)
     {
+    if (tdbIsDownloadsOnly(tdb) || tdb->table == NULL)  // Don't bother with downloadsOnly for now
+        continue;
     trackLabels[i] = t->shortLabel;
     safef(chrN_track, sizeof(chrN_track), "%s_%s", hDefaultChrom(),
 	  t->table);

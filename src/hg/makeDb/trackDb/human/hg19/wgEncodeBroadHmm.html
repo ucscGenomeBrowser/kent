@@ -2,7 +2,7 @@
 
 <h2>Description</h2>
 
-<P>The track displays a chromatin state segmentation for each of
+<P>This track displays a chromatin state segmentation for each of
 <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?term=GM12878,H1-hESC,HepG2,HUVEC,HMEC,HSMM,K562,NHEK,NHLF">nine human cell types</a>.
 A common set of states across the cell types were learned by
 computationally integrating ChIP-seq data for
@@ -19,7 +19,7 @@ computationally integrating ChIP-seq data for
 <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?term=H3K27me3">H3K27me3</a>,
 and <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?target=Input">Input Control</a>
 -->
-using a Hidden Markov Model (HMM). In total fifteen states were used to
+using a Hidden Markov Model (HMM). In total, fifteen states were used to
 segment the genome, and these states were then grouped and colored to
 highlight predicted functional elements.
 <!-- The nine cell types are:
@@ -38,12 +38,12 @@ highlight predicted functional elements.
 
 
 <H2> Display Conventions and Configuration </H2>
-<P>This track contains multiple subtracks representing different cell types
-that display individually on the browser. Instructions for configuring tracks
+<P>This track is a composite track that contains multiple subtracks. Each subtrack represents data
+for a different cell type and displays individually on the browser. Instructions for configuring tracks
 with multiple subtracks are
 <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 The fifteen states of the HMM, their associated segment color, and the
-candidate annotations are as follows.
+candidate annotations are as follows:
 <ul>
 <li>State 1 - <span  style='border: 2px inset #000000; background-color:#FF0000;'>&nbsp;Bright Red&nbsp;</span> - Active Promoter
 <li>State 2 - <span  style='border: 2px inset #000000; background-color:#FF6969;'>&nbsp;Light Red&nbsp;</span> -Weak Promoter
@@ -63,29 +63,28 @@ candidate annotations are as follows.
 </ul>
 
 <h2>Methods</h2>
-<P>The ChIP-seq data was generated based on the procedures described under
-the <A HREF="/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeBroadChipSeq">Broad Histone Modification</A>
-data. The data for
+<P>ChIP-seq data from the <A HREF="/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeBroadChipSeq">Broad Histone</A>
+track was used to generate this track. Data for
 <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Input">nine factors plus input</a>
 and <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?term=GM12878,H1-hESC,HepG2,HUVEC,HMEC,HSMM,K562,NHEK,NHLF">nine cell types</a>
 was binarized separately at a 200 base pair resolution based on a Poisson
 background model. The chromatin states were learned from this binarized data
 using a multivariate Hidden Markov Model (HMM) that explicitly models the
 combinatorial patterns of observed modifications (Ernst and Kellis, 2010).
-To learn a common set of states across the nine cell types we first
-concatenated the genomes across the cell types. Each 200-base pair interval
-was then assigned to its most likely state under the model in each of the nine
-cell types. Detailed information about the model parameters and state
-enrichments can be found in (Ernst et al, accepted)
+To learn a common set of states across the nine cell types, first the genomes were concatenated
+across the cell types. For each of the nine cell types, each 200 base pair interval
+was then assigned to its most likely state under the model. Detailed information about the model
+parameters and state enrichments can be found in (Ernst et al, accepted).
 
 <h2>Release Notes</h2>
 <P>
-This is release 1 (Mar 2011) of this track and is lifted over from
-<B>NCBI36/hg18</B> and is therefore based upon the <B>NCBI36/hg18</B>
-release of the <A HREF="/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeBroadChipSeq">Broad Histone Modification</A>
-tracks.  It is anticipated that the HMM methods will be run on the newer
-datasets found <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeBroadHistone">here</A>
-and those <B>GRCh37/hg19</B> results, when available, will replace this liftOver.
+This is release 1 (Jun 2011) of this track. It was lifted over from the
+<B>NCBI36/hg18</B> version of the track, and is therefore based on the <B>NCBI36/hg18</B>
+release of the <A HREF="/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeBroadChipSeq">Broad Histone</A>
+track.  It is anticipated that the HMM methods will be run on the newer
+datasets in the <B>GRCh37/hg19</B> version of the
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeBroadHistone">Broad Histone</A> track, and, once that
+happens, the new data will replace this liftOver.
 
 <h2>Credits</h2>
 
@@ -94,7 +93,7 @@ and those <B>GRCh37/hg19</B> results, when available, will replace this liftOver
  Broad Institute</a> and in the
  <a href="http://csb.mgh.harvard.edu/bradley_bernstein" title="http://csb.mgh.harvard.edu/bradley_bernstein" rel="nofollow" TARGET = _BLANK>
  Bradley E. Bernstein lab</a> at the Massachusetts General Hospital/Harvard Medical School,
- and the chromatin state segmentation produced in
+ and the chromatin state segmentation was produced in
  <a href="http://compbio.mit.edu/" title="http://compbio.mit.edu/" rel="nofollow" TARGET = _BLANK>
  Manolis Kellis's Computational Biology group</a> at the Massachusetts Institute of Technology.
  Contact: <A HREF="mailto:&#106;e&#114;n&#115;&#116;&#64;&#109;it.&#101;&#100;&#117;"
@@ -114,10 +113,10 @@ and those <B>GRCh37/hg19</B> results, when available, will replace this liftOver
  </p>
 
 <p>Ernst J, Kheradpour P, Mikkelsen TS, Shoresh N, Ward LD, Epstein CB,
- Zhang X, Wang L, Issner R, Coyne M, Ku M, Durham T, Kellis M and Bernstein BE.
- Systematic analysis of chromatin state dynamics in nine human cell types.
- <em>accepted</em>.
- </p>
+Zhang X, Wang L, Issner R, Coyne M, <span style="font-style: italic;">et al</span>.
+<a href="http://www.nature.com/nature/journal/v473/n7345/full/nature09906.html" title="http://www.nature.com/nature/journal/v473/n7345/full/nature09906.html" rel="nofollow" TARGET = _BLANK>
+Mapping and analysis of chromatin state dynamics in nine human cell types</a>.
+<em>Nature</em> 2011 May 5;473:43-49.
 
 <H2> Data Release Policy </H2>
 

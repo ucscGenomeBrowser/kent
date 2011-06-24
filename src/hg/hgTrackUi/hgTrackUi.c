@@ -1433,15 +1433,17 @@ geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
-labelMakeCheckBox(tdb, "class1", "Class 1: the disorder is placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
+labelMakeCheckBox(tdb, "class1", "Class 1: the disorder has been placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
 printf("<LI>");
 labelMakeCheckBox(tdb, "class2", "Class 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
 printf("<LI>");
 labelMakeCheckBox(tdb, "class3", "Class 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
 printf("<LI>");
 labelMakeCheckBox(tdb, "class4", "Class 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
-printf("<LI>");
-labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype class info available.", TRUE);
+
+// removed the "others" option for the time being
+//printf("<LI>");
+//labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype class info available.", TRUE);
 printf("</UL>");
 }
 
@@ -1455,7 +1457,7 @@ geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
-labelMakeCheckBox(tdb, "class1", "Class 1: the disorder is placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
+labelMakeCheckBox(tdb, "class1", "Class 1: the disorder has been placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
 printf("<LI>");
 labelMakeCheckBox(tdb, "class2", "Class 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
 printf("<LI>");
@@ -1535,9 +1537,19 @@ void omimLocationUI(struct trackDb *tdb)
 omimLocationConfig(tdb);
 }
 
+void omimGene2IdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+printf("<B>Label:</B> ");
+labelMakeCheckBox(tdb, "omimId", "OMIM ID", FALSE);
+labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
+
+printf("<BR>\n");
+}
 void omimGene2UI(struct trackDb *tdb)
 /* Put up omimGene2-specific controls */
 {
+omimGene2IdConfig(tdb);
 omimGene2Config(tdb);
 }
 

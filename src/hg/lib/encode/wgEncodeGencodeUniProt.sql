@@ -3,10 +3,12 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Gencode metadata table of associated UniProt peptide IDs
+#GENCODE transcript to UniProt peptide mapping
 CREATE TABLE wgEncodeGencodeUniProt (
-    transcriptId varchar(255) not null,	# Transcript ID for Gencode gene
-    uniProtId varchar(255) not null,	# UniProt/Swiss-Prot ID
+    transcriptId varchar(255) not null,	# GENCODE transcript identifier
+    acc varchar(255) not null,	# UniProt/Swiss-Prot accession
+    name varchar(255) not null,	# UniProt/Swiss-Prot entry name
+    dataset enum("SwissProt", "TrEMBL")  not null,	# UniProt dataset
               #Indices
-    PRIMARY KEY(transcriptId)
+    index(transcriptId)
 );

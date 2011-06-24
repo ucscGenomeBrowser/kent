@@ -27,7 +27,7 @@ subGroup1 view Views Peaks=Peaks  Signal=Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) K562b=K562b&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HepG2b=HepG2(b)&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) FetalPBDE=FetalPBDE GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HEK293b=HEK293(b) HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE PBMC=PBMC Raji=Raji SHSY5Y=SH-SY5Y tHEK293=T-REx-HEK293  U2OS=U2OS 
 subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800)  BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS  CHD2AB68301=CHD2_(AB68301) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179)  HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3  JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max  Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC582=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>)  zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGmus=IgG_mus IGGrab=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
-subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=TAM TNFa=TNFa
+subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=4-hydroxytamoxifen TNFa=TNFa
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
 dimensionZchecked aNone
 dimensionAchecked std,IGGmus,IGGrab,UCD
@@ -68,7 +68,7 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HeLa-S3 Rad21  Pk
 	    longLabel HeLa-S3 Rad21 IgG-rab ChIP-seq Peaks from ENCODE/SYDH
-	    subGroups view=Peaks factor=RAD21 cellType=HeLaS3 control=IGGrab treatment=aNone 
+	    subGroups view=Peaks factor=RAD21 cellType=HeLaS3 control=IGGrab treatment=aNone
 	    type narrowPeak
 	    color 0,119,158
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=Rad21 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1134 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Rad21IggrabPk fileName=wgEncodeSydhTfbsHelas3Rad21IggrabPk.narrowPeak.gz
@@ -1038,6 +1038,1088 @@ wgEncode 1
         type narrowPeak
         # subId=4120 dateSubmitted=2011-05-13
 
+        track wgEncodeSydhTfbsGm12878JundStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 JunD Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (JunD in GM12878 cells)
+        subGroups view=Peaks factor=JUND cellType=GM12878 control=std treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878MaxStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 Max Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Max in GM12878 cells)
+        subGroups view=Peaks factor=MAX cellType=GM12878 control=std treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878Pol2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM12878 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12878 control=std treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878Pol3StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 Pol3 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol3 in GM12878 cells)
+        subGroups view=Peaks factor=POL3 cellType=GM12878 control=std treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878Rad21IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 Rad21 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Rad21 in GM12878 cells)
+        subGroups view=Peaks factor=RAD21 cellType=GM12878 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878Tr4StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 TR4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TR4 in GM12878 cells)
+        subGroups view=Peaks factor=TR4 cellType=GM12878 control=std treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878Yy1StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 YY1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (YY1 in GM12878 cells)
+        subGroups view=Peaks factor=YY1 cellType=GM12878 control=std treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878Zzz3StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 ZZZ3 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZZZ3 in GM12878 cells)
+        subGroups view=Peaks factor=ZZZ3 cellType=GM12878 control=std treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHct116Pol2UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HCT-116 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in HCT-116 cells)
+        subGroups view=Peaks factor=POL2 cellType=HCT116 control=UCD treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHct116Tcf4UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HCT-116 TCF4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TCF4 in HCT-116 cells)
+        subGroups view=Peaks factor=TCF4 cellType=HCT116 control=UCD treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHuvecMaxStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HUVEC Max Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Max in HUVEC cells)
+        subGroups view=Peaks factor=MAX cellType=HUVEC control=std treatment=aNone
+        type narrowPeak
+        color 224,75,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHuvecCjunStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HUVEC c-Jun Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Jun in HUVEC cells)
+        subGroups view=Peaks factor=cJUN cellType=HUVEC control=std treatment=aNone
+        type narrowPeak
+        color 224,75,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Ap2alphaStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 AP-2alpha Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (AP-2alpha in HeLa-S3 cells)
+        subGroups view=Peaks factor=AP2alpha cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Ap2gammaStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 AP-2gamma Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (AP-2gamma in HeLa-S3 cells)
+        subGroups view=Peaks factor=AP2gamma cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Bdp1StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 BDP1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BDP1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BDP1 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Brf1StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 BRF1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRF1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BRF1 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Brf2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 BRF2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRF2 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BRF2 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3E2f1StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 E2F1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (E2F1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=E2F1 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3E2f4StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 E2F4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (E2F4 in HeLa-S3 cells)
+        subGroups view=Peaks factor=E2F4 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3E2f6StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 E2F6 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (E2F6 in HeLa-S3 cells)
+        subGroups view=Peaks factor=E2F6 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Hae2f1StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 HA-E2F1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (HA-E2F1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=HAE2F1 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3JundIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 JunD Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (JunD in HeLa-S3 cells)
+        subGroups view=Peaks factor=JUND cellType=HeLaS3 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3MaxStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 Max Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Max in HeLa-S3 cells)
+        subGroups view=Peaks factor=MAX cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Nrf1IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 Nrf1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Nrf1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=NRF1 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Rpc155StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 RPC155 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RPC155 in HeLa-S3 cells)
+        subGroups view=Peaks factor=RPC155 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Stat1Ifng30StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 STAT1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=STAT1 cellType=HeLaS3 control=std treatment=IFNg30
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Tf3c110StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 TFIIIC-110 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TFIIIC-110 in HeLa-S3 cells)
+        subGroups view=Peaks factor=TF3C110 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Tr4StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 TR4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TR4 in HeLa-S3 cells)
+        subGroups view=Peaks factor=TR4 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3CfosStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 c-Fos Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Fos in HeLa-S3 cells)
+        subGroups view=Peaks factor=cFOS cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3CjunIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 c-Jun Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Jun in HeLa-S3 cells)
+        subGroups view=Peaks factor=cJUN cellType=HeLaS3 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3CmycStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 c-Myc Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in HeLa-S3 cells)
+        subGroups view=Peaks factor=cMYC cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2CebpbForsklnStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 CEBPB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HepG2 cells)
+        subGroups view=Peaks factor=CEBPB cellType=HepG2 control=std treatment=FORSKLN
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2ErraForsklnStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 ERRA Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ERRA in HepG2 cells)
+        subGroups view=Peaks factor=ERRA cellType=HepG2 control=std treatment=FORSKLN
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Grp20ForsklnStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 GRp20 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GRp20 in HepG2 cells)
+        subGroups view=Peaks factor=GRP20 cellType=HepG2 control=std treatment=FORSKLN
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Hnf4aForsklnStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 HNF4A Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (HNF4A in HepG2 cells)
+        subGroups view=Peaks factor=HNF4A cellType=HepG2 control=std treatment=FORSKLN
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Hsf1ForsklnStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 HSF1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (HSF1 in HepG2 cells)
+        subGroups view=Peaks factor=HSF1 cellType=HepG2 control=std treatment=FORSKLN
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Pgc1aForsklnStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 PGC1A Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (PGC1A in HepG2 cells)
+        subGroups view=Peaks factor=PGC1A cellType=HepG2 control=std treatment=FORSKLN
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Pol2ForsklnStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in HepG2 cells)
+        subGroups view=Peaks factor=POL2 cellType=HepG2 control=std treatment=FORSKLN
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2bTr4UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2b TR4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TR4 in HepG2b cells)
+        subGroups view=Peaks factor=TR4 cellType=HepG2b control=UCD treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Atf3StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 ATF3 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ATF3 in K562 cells)
+        subGroups view=Peaks factor=ATF3 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Brg1IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Brg1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Brg1 in K562 cells)
+        subGroups view=Peaks factor=BRG1 cellType=K562 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Ini1IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Ini1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Ini1 in K562 cells)
+        subGroups view=Peaks factor=INI1 cellType=K562 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562JundStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 JunD Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (JunD in K562 cells)
+        subGroups view=Peaks factor=JUND cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562MaxStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Max Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Max in K562 cells)
+        subGroups view=Peaks factor=MAX cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562NelfeStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 NELFe Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NELFe in K562 cells)
+        subGroups view=Peaks factor=NELFE cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Nfe2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 NF-E2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NF-E2 in K562 cells)
+        subGroups view=Peaks factor=NFE2 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Pol2Ifna30StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in K562 cells)
+        subGroups view=Peaks factor=POL2 cellType=K562 control=std treatment=IFNa30
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Pol2Ifna6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in K562 cells)
+        subGroups view=Peaks factor=POL2 cellType=K562 control=std treatment=IFNa6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Pol2Ifng30StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in K562 cells)
+        subGroups view=Peaks factor=POL2 cellType=K562 control=std treatment=IFNg30
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Pol2Ifng6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in K562 cells)
+        subGroups view=Peaks factor=POL2 cellType=K562 control=std treatment=IFNg6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in K562 cells)
+        subGroups view=Peaks factor=POL2 cellType=K562 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Pol2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in K562 cells)
+        subGroups view=Peaks factor=POL2 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Pol3StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Pol3 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol3 in K562 cells)
+        subGroups view=Peaks factor=POL3 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Rpc155StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 RPC155 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RPC155 in K562 cells)
+        subGroups view=Peaks factor=RPC155 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Rad21StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 Rad21 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Rad21 in K562 cells)
+        subGroups view=Peaks factor=RAD21 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Sirt6StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 SIRT6 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SIRT6 in K562 cells)
+        subGroups view=Peaks factor=SIRT6 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Stat1Ifna30StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 STAT1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT1 in K562 cells)
+        subGroups view=Peaks factor=STAT1 cellType=K562 control=std treatment=IFNa30
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Stat1Ifna6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 STAT1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT1 in K562 cells)
+        subGroups view=Peaks factor=STAT1 cellType=K562 control=std treatment=IFNa6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Stat1Ifng30StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 STAT1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT1 in K562 cells)
+        subGroups view=Peaks factor=STAT1 cellType=K562 control=std treatment=IFNg30
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Stat1Ifng6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 STAT1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT1 in K562 cells)
+        subGroups view=Peaks factor=STAT1 cellType=K562 control=std treatment=IFNg6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Stat2Ifna30StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 STAT2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT2 in K562 cells)
+        subGroups view=Peaks factor=STAT2 cellType=K562 control=std treatment=IFNa30
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Stat2Ifna6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 STAT2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT2 in K562 cells)
+        subGroups view=Peaks factor=STAT2 cellType=K562 control=std treatment=IFNa6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Xrcc4StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 XRCC4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (XRCC4 in K562 cells)
+        subGroups view=Peaks factor=XRCC4 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562CjunIfna6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Jun Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Jun in K562 cells)
+        subGroups view=Peaks factor=cJUN cellType=K562 control=std treatment=IFNa6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562CjunIfng30StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Jun Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Jun in K562 cells)
+        subGroups view=Peaks factor=cJUN cellType=K562 control=std treatment=IFNg30
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562CjunIfng6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Jun Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Jun in K562 cells)
+        subGroups view=Peaks factor=cJUN cellType=K562 control=std treatment=IFNg6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562CjunStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Jun Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Jun in K562 cells)
+        subGroups view=Peaks factor=cJUN cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562CmycIfna30StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Myc Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in K562 cells)
+        subGroups view=Peaks factor=cMYC cellType=K562 control=std treatment=IFNa30
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562CmycIfna6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Myc Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in K562 cells)
+        subGroups view=Peaks factor=cMYC cellType=K562 control=std treatment=IFNa6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562CmycIfng6hStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Myc Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in K562 cells)
+        subGroups view=Peaks factor=cMYC cellType=K562 control=std treatment=IFNg6h
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562CmycStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Myc Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in K562 cells)
+        subGroups view=Peaks factor=cMYC cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bE2f4UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b E2F4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (E2F4 in K562b cells)
+        subGroups view=Peaks factor=E2F4 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bE2f6UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b E2F6 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (E2F6 in K562b cells)
+        subGroups view=Peaks factor=E2F6 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bGata1UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b GATA-1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GATA-1 in K562b cells)
+        subGroups view=Peaks factor=GATA1 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bGata2UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b GATA-2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GATA-2 in K562b cells)
+        subGroups view=Peaks factor=GATA2 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bSetdb1MnasedUcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b SETDB1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SETDB1 in K562b cells)
+        subGroups view=Peaks factor=SETDB1 cellType=K562b control=UCD treatment=MNaseD
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bSetdb1UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b SETDB1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SETDB1 in K562b cells)
+        subGroups view=Peaks factor=SETDB1 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bTr4UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b TR4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TR4 in K562b cells)
+        subGroups view=Peaks factor=TR4 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bYy1UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b YY1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (YY1 in K562b cells)
+        subGroups view=Peaks factor=YY1 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bZnf263UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b ZNF263 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZNF263 in K562b cells)
+        subGroups view=Peaks factor=ZNF263 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562bZnf274UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562b ZNF274 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZNF274 in K562b cells)
+        subGroups view=Peaks factor=ZNF274 cellType=K562b control=UCD treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsMcf7Hae2f1UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel MCF-7 HA-E2F1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (HA-E2F1 in MCF-7 cells)
+        subGroups view=Peaks factor=HAE2F1 cellType=MCF7 control=UCD treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsNt2d1Suz12UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel NT2-D1 SUZ12 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SUZ12 in NT2-D1 cells)
+        subGroups view=Peaks factor=SUZ12 cellType=NT2D1 control=UCD treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsNt2d1Yy1UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel NT2-D1 YY1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (YY1 in NT2-D1 cells)
+        subGroups view=Peaks factor=YY1 cellType=NT2D1 control=UCD treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm10847NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM10847 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM10847 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM10847 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm15510NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM15510 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM15510 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM15510 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm18505NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM18505 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM18505 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM18505 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12891Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12891 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM12891 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12891 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM12878 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12878 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM12878 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM12878 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878NfkbTnfaStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM12878 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM12878 control=std treatment=TNFa
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm18951NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM18951 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM18951 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM18951 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm18951Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM18951 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM18951 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM18951 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm19193Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM19193 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM19193 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM19193 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12878CfosStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 c-Fos Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Fos in GM12878 cells)
+        subGroups view=Peaks factor=cFOS cellType=GM12878 control=std treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12891NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12891 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM12891 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM12891 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12892NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12892 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM12892 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM12892 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm12892Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12892 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM12892 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12892 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm15510Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM15510 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM15510 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM15510 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm18526NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM18526 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM18526 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM18526 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm18526Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM18526 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM18526 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM18526 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm19099NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM19099 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM19099 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM19099 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm19099Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM19099 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM19099 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM19099 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm19193NfkbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM19193 NFKB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NFKB in GM19193 cells)
+        subGroups view=Peaks factor=NFKB cellType=GM19193 control=IGGrab treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHek293bPol2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HEK293(b) Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in HEK293(b) cells)
+        subGroups view=Peaks factor=POL2 cellType=HEK293b control=std treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHuvecPol2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HUVEC Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in HUVEC cells)
+        subGroups view=Peaks factor=POL2 cellType=HUVEC control=std treatment=aNone
+        type narrowPeak
+        color 224,75,0
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Baf155IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 BAF155 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BAF155 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BAF155 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Baf170IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 BAF170 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BAF170 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BAF170 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Brg1IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 Brg1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Brg1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BRG1 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Ini1IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 Ini1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Ini1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=INI1 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHelas3Pol2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in HeLa-S3 cells)
+        subGroups view=Peaks factor=POL2 cellType=HeLaS3 control=std treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Pol2PravastStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in HepG2 cells)
+        subGroups view=Peaks factor=POL2 cellType=HepG2 control=std treatment=PRAVAST
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Srebp1InslnStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 SREBP1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SREBP1 in HepG2 cells)
+        subGroups view=Peaks factor=SREBP1 cellType=HepG2 control=std treatment=INSLN
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Srebp1PravastStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 SREBP1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SREBP1 in HepG2 cells)
+        subGroups view=Peaks factor=SREBP1 cellType=HepG2 control=std treatment=PRAVAST
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsHepg2Srebp2PravastStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 SREBP2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SREBP2 in HepG2 cells)
+        subGroups view=Peaks factor=SREBP2 cellType=HepG2 control=std treatment=PRAVAST
+        type narrowPeak
+        color 189,0,157
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Bdp1StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 BDP1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BDP1 in K562 cells)
+        subGroups view=Peaks factor=BDP1 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Brf1StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 BRF1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRF1 in K562 cells)
+        subGroups view=Peaks factor=BRF1 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Brf2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 BRF2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRF2 in K562 cells)
+        subGroups view=Peaks factor=BRF2 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsK562Tf3c110StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 TFIIIC-110 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TFIIIC-110 in K562 cells)
+        subGroups view=Peaks factor=TF3C110 cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsNb4Pol2StdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel NB4 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in NB4 cells)
+        subGroups view=Peaks factor=POL2 cellType=NB4 control=std treatment=aNone
+        type narrowPeak
+        # subId=4165 dateSubmitted=2011-06-03
+
+        track wgEncodeSydhTfbsGm10847Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM10847 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM10847 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM10847 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4313 dateSubmitted=2011-06-09
+
+        track wgEncodeSydhTfbsGm18505Pol2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM18505 Pol2 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in GM18505 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM18505 control=IGGmus treatment=aNone
+        type narrowPeak
+        # subId=4313 dateSubmitted=2011-06-09
+
+        track wgEncodeSydhTfbsK562CfosStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 c-Fos Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Fos in K562 cells)
+        subGroups view=Peaks factor=cFOS cellType=K562 control=std treatment=aNone
+        type narrowPeak
+        color 46,0,184
+        # subId=4313 dateSubmitted=2011-06-09
+
     #Signal Track SYDH TFBS#
     #Short Labels for signal =Sg # 
     track wgEncodeSydhTfbsViewSignal
@@ -1053,15 +2135,6 @@ wgEncode 1
     maxHeightPixels 100:32:16
     windowingFunction mean
    
-
-	    track wgEncodeSydhTfbsGm12878WhipIggmusSig
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel GM12878 WHIP   Sg
-	    longLabel GM12878 WHIP IgG mus ChIP-seq Signal from ENCODE/SYDH
-	    subGroups view=Signal factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
-	    type bigWig 1 8218
-	    color 153,38,0
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=GM12878 antibody=WHIP treatment=None control=IgG-mus setType=exp inputType=GM12878/None/Input/IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1178 dateSubmitted=2010-04-26 dateUnrestricted=2011-01-26 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878WhipIggmusSig fileName=wgEncodeSydhTfbsGm12878WhipIggmusSig.bigWig.gz
 
 #	    track wgEncodeSydhTfbsHelas3Rad21IggrabSig
 #	    subTrack wgEncodeSydhTfbsViewSignal off
@@ -2165,7 +3238,7 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878Xrcc4IggmusSig
+        track wgEncodeSydhTfbsGm12878WhipIggmusSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 WHIP Sig
         longLabel GM12878 WHIP IgG mus ChIP-seq Signal from ENCODE/SYDH

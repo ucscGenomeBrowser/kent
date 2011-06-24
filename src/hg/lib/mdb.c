@@ -2974,8 +2974,7 @@ while(mdbObjs != NULL)
                 {
                 mdbObjSetVarInt(obj,MDB_VAR_ENCODE_EXP_ID,expId);
                 struct mdbObj *newObj = mdbObjCreate(obj->obj,MDB_VAR_ENCODE_EXP_ID, experimentId);
-                assert(exp != NULL);
-                if (exp->accession != NULL && updateAccession)
+                if (updateAccession && exp != NULL && exp->accession != NULL)
                     mdbObjSetVar(newObj,MDB_VAR_DCC_ACCESSION,exp->accession);
                 slAddHead(&mdbUpdateObjs,newObj);
                 }
@@ -3108,7 +3107,7 @@ if(setting == NULL)
     return NULL;
 struct mdbObj *mdbObj;
 AllocVar(mdbObj);
-mdbObj->obj     = cloneString(tdb->table);
+mdbObj->obj     = cloneString(tdb->table?tdb->table:tdb->track);
 AllocVar(mdbObj->vars);
 mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
 mdbObj->vars->val = cloneString(MDB_OBJ_TYPE_TABLE);

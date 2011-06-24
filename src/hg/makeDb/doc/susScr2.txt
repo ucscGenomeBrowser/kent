@@ -823,4 +823,24 @@ chainOne $(path1)
 
     # veryify top-level search spec, should produce no results:
     hgsql -Ne 'select name from nscanGene' susScr2 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
+
+#########################################################################
+#  SWAP bosTau6  lastz (DONE - 2011-05-26 - Chin)
+    cd /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+    cat fb.bosTau6.chainSusScr2Link.txt
+    #   1306738899 bases of 2649682029 (49.317%) in intersection
+    #   and the swap
+    mkdir /hive/data/genomes/susScr2/bed/blastz.bosTau6.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.bosTau6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #  real    380m53.612s
+
+    cat fb.susScr2.chainBosTau6Link.txt
+    # 1475323050 bases of 2231298548 (66.119%) in intersection
+
+
 ############################################################################

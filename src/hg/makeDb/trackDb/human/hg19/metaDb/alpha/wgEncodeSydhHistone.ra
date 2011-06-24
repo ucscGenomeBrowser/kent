@@ -1574,9 +1574,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001746
+expId 1746
 fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -1595,9 +1597,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001746
+expId 1746
 fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -1616,9 +1620,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001746
+expId 1746
 fileName wgEncodeSydhHistonePbmcH3k27me3bUcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1638,9 +1644,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001746
+expId 1746
 fileName wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -1659,9 +1667,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001746
+expId 1746
 fileName wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -1680,9 +1690,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001746
+expId 1746
 fileName wgEncodeSydhHistonePbmcH3k27me3bUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1702,9 +1714,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001747
+expId 1747
 fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -1723,9 +1737,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001747
+expId 1747
 fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -1744,9 +1760,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001747
+expId 1747
 fileName wgEncodeSydhHistonePbmcH3k4me1UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1766,9 +1784,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001747
+expId 1747
 fileName wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -1787,9 +1807,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001747
+expId 1747
 fileName wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -1808,9 +1830,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001747
+expId 1747
 fileName wgEncodeSydhHistonePbmcH3k4me1UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1830,9 +1854,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001748
+expId 1748
 fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -1851,9 +1877,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001748
+expId 1748
 fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -1872,9 +1900,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001748
+expId 1748
 fileName wgEncodeSydhHistonePbmcH3k9me3UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1894,9 +1924,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001748
+expId 1748
 fileName wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -1915,9 +1947,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001748
+expId 1748
 fileName wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep2.fastq.tgz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -1936,9 +1970,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
+dccAccession wgEncodeEH001748
+expId 1748
 fileName wgEncodeSydhHistonePbmcH3k9me3UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2305,4 +2341,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: -191472479
+# MAGIC: 1246869697

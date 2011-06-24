@@ -14,6 +14,10 @@ priority 540.3
 chainMinScore 5000
 chainLinearGap loose
 
+track chainNetBosTau6 override
+priority 450.3
+shortLabel $o_db Chain/Net
+
 track chainNetBosTau4 override
 visibility pack
 

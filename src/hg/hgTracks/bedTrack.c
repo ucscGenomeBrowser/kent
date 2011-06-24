@@ -864,6 +864,10 @@ else if (fieldCount < 12)
     {
     linkedFeaturesMethods(track);
     track->loadItems = loadBed8;
+    if (trackDbSetting(tdb, "colorByStrand"))
+	{
+	track->itemColor = lfItemColorByStrand;
+	}
     }
 else
     {

@@ -1,9 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
-# Caenorhabditis brenneri
-#	Washington University School of Medicine GSC and Sanger Institute
+# Caenorhabditis sp. 11 JU1373
+#	Washington University School of Medicine GSC
 #
-#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEKS01
 
 ###########################################################################
 ## Download sequence (DONE - 2011-05-27 - Hiram)
@@ -88,7 +88,7 @@ close (FA);
     #	All AGP and FASTA entries agree - both files are valid
 
 ###########################################################################
-## Initial sequence (DONE - 2011-05-27 - Hiram)
+## Initial sequence (DONE - 2011-05-31 - Hiram)
     cd /hive/data/genomes/caeSp111
     cat << '_EOF_' > caeSp111.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -112,27 +112,27 @@ taxId 886184
 
     mkdir jkStuff
     #	run just to AGP to make sure things are sane first
-    time nice -n +19 makeGenomeDb.pl caeSp111.config.ra -stop=agp \
-      > jkStuff/makeGenomeDb.agp.log 2>&1
-    #	real    0m16.607s
+    time nice -n +19 makeGenomeDb.pl -noGoldGapSplit caeSp111.config.ra \
+	-stop=agp > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	real    0m24.865s
     #	check that log to verify it has no errors
     #	now, continuing to make the Db and all
-    time nice -n +19 makeGenomeDb.pl caeSp111.config.ra -continue=db \
-      > jkStuff/makeGenomeDb.db.log 2>&1
-    #	real    0m58.853s
+    time nice -n +19 makeGenomeDb.pl -noGoldGapSplit caeSp111.config.ra \
+	-continue=db > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    0m48.250s
     #	check that log to verify it has no errors
 
     #	take the trackDb business there and check it into the source tree
     #	fixup the description, gap and gold html page descriptions
 
 ###########################################################################
-## RepeatMasker (DONE - 2011-05-27 - Hiram)
+## RepeatMasker (DONE - 2011-05-31 - Hiram)
     mkdir /hive/data/genomes/caeSp111/bed/repeatMasker
     cd /hive/data/genomes/caeSp111/bed/repeatMasker
     # need the -species option since RM doesn't recognize this one
     time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
 	-species "caenorhabditis" -buildDir=`pwd` caeSp111 > do.log 2>&1 &
-    #	real    48m20.177s
+    #	real    48m15.660s
 
     #	from the do.log:
 # RepeatMasker version development-$Id: RepeatMasker,v
@@ -145,50 +145,49 @@ taxId 886184
 # %3.68 masked total, %3.82 masked real
 
 ###########################################################################
-## Simple Repeats (DONE - 2011-05-27 - Hiram)
+## Simple Repeats (DONE - 2011-05-31 - Hiram)
     mkdir /cluster/data/caeSp111/bed/simpleRepeat
     cd /cluster/data/caeSp111/bed/simpleRepeat
     time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
 	-workhorse=hgwdev -buildDir=`pwd` caeSp111 > do.log 2>&1 &
-    #	real    5m15.346s
+    #	real    5m14.567s
     cat fb.simpleRepeat 
     #	1492954 bases of 76497192 (1.952%) in intersection
 
 ###########################################################################
-## WindowMasker (DONE - 2011-05-27 - Hiram)
+## WindowMasker (DONE - 2011-05-31 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/caeSp111/bed/windowMasker
     cd /hive/data/genomes/caeSp111/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -verbose=2 -buildDir=`pwd` \
 	-workhorse=hgwdev caeSp111 > do.log 2>&1 &
-    #	real    2m25.093s
+    #	real    2m21.275s
 
-XXX
     twoBitToFa caeSp111.wmsk.sdust.2bit stdout | faSize stdin
-# 196410749 bases (18804958 N's 177605791 real 121743101 upper 55862690 lower)
-#	in 52546 sequences in 1 files
-# %28.44 masked total, %31.45 masked real
+# 79321433 bases (2824241 N's 76497192 real 54224862 upper 22272330 lower)
+#	in 665 sequences in 1 files
+# %28.08 masked total, %29.12 masked real
 
     #	load this initial data to get ready to clean it
     cd /hive/data/genomes/caeSp111/bed/windowMasker
     hgLoadBed caeSp111 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 1382017 elements of size 3
+    #	Loaded 654009 elements of size 3
     featureBits -countGaps caeSp111 windowmaskerSdust
-    #	74667648 bases of 196410749 (38.016%) in intersection
+    #	25096571 bases of 79321433 (31.639%) in intersection
 
     #	eliminate the gaps from the masking
     featureBits caeSp111 -not gap -bed=notGap.bed
-    #	177605791 bases of 177605791 (100.000%) in intersection
+    #	76497192 bases of 76497192 (100.000%) in intersection
+
     time nice -n +19 featureBits caeSp111 windowmaskerSdust notGap.bed \
 	-bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	55862690 bases of 177605791 (31.453%) in intersection
-    #	real    11m1.814s
+    #	22272330 bases of 76497192 (29.115%) in intersection
 
     #	reload track to get it clean
     hgLoadBed caeSp111 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 1379702 elements of size 4
+    #	Loaded 654646 elements of size 4
     featureBits -countGaps caeSp111 windowmaskerSdust
-    #	55862690 bases of 196410749 (28.442%) in intersection
+    #	22272330 bases of 79321433 (28.079%) in intersection
 
     #	mask the sequence with this clean mask
     zcat cleanWMask.bed.gz \
@@ -197,20 +196,21 @@ XXX
     twoBitToFa caeSp111.cleanWMSdust.2bit stdout | faSize stdin \
         > caeSp111.cleanWMSdust.faSize.txt
     cat caeSp111.cleanWMSdust.faSize.txt
-# 196410749 bases (18804958 N's 177605791 real 121743101 upper 55862690 lower) in 52546 sequences in 1 files
-# %28.44 masked total, %31.45 masked real
+# 79321433 bases (2824241 N's 76497192 real 54224862 upper 22272330 lower)
+#	in 665 sequences in 1 files
+# %28.08 masked total, %29.12 masked real
 
 ########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-27 - Hiram)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-31 - Hiram)
     cd /hive/data/genomes/caeSp111
     twoBitMask -add bed/windowMasker/caeSp111.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed caeSp111.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa caeSp111.2bit stdout | faSize stdin > faSize.caeSp111.txt
     cat faSize.caeSp111.txt
-# 190374847 bases (20277419 N's 170097428 real 120262496 upper 49834932 lower)
-#	in 3307 sequences in 1 files
-# %26.18 masked total, %29.30 masked real
+# 79321433 bases (2824241 N's 76497192 real 54195724 upper 22301468 lower)
+#	in 665 sequences in 1 files
+# %28.12 masked total, %29.15 masked real
 
     #	create symlink to gbdb
     ssh hgwdev
@@ -218,18 +218,18 @@ XXX
     ln -s `pwd`/caeSp111.2bit /gbdb/caeSp111/caeSp111.2bit
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-27 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-31 - Hiram)
     # numerator is caeSp111 gapless bases "real" as reported by faSize 
     # denominator is hg19 gapless bases "real" as reported by faSize
     # 1024 is threshold used for human -repMatch:
-    calc \( 170097428  / 2897310462 \) \* 1024
-    #	( 170097428 / 2897310462 ) * 1024 = 60.117743
+    calc \( 76497192  / 2897310462 \) \* 1024
+    #	( 76497192 / 2897310462 ) * 1024 = 27.036497
 
     # Round up to use -repMatch=100 since 60 would result in too many
     cd /hive/data/genomes/caeSp111
     blat caeSp111.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=jkStuff/caeSp111.11.ooc -repMatch=100
-    #	Wrote 12775 overused 11-mers to jkStuff/caeSp111.11.ooc
+    #	Wrote 2509 overused 11-mers to jkStuff/caeSp111.11.ooc
     # there are no non-bridged gaps here to make a lift file from
     # cd jkStuff
     # gapToLift -verbose=2 caeSp111 caeSp111.nonBridged.lift -bedFile=caeSp111.nonBridged.bed
@@ -239,7 +239,7 @@ XXX
 	/hive/data/staging/data/caeSp111
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2011-05-27 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2011-05-31 - Hiram)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -296,4 +296,33 @@ caeSp111.perChromTables = no
     make etc-update
 
 #########################################################################
+# lastz swap ce10 to caeSp111 (DONE - 2011-06-07 - Hiram)
+    #	original alignment on ce10
+    cd /hive/data/genomes/ce10/bed/lastzCaeSp111.2011-06-07
+    cat fb.ce10.chainCaeSp111Link.txt 
+    #	37984756 bases of 100286070 (37.876%) in intersection
 
+    mkdir /hive/data/genomes/caeSp111/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeSp111/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeSp111.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    2m3.304s
+
+    cat fb.caeSp111.chainCe10Link.txt 
+    #	36237719 bases of 76497192 (47.371%) in intersection
+
+############################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caeSp111
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caeSp111 \
+	 > downloads.log 2>&1
+    #	real    0m44.465s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################

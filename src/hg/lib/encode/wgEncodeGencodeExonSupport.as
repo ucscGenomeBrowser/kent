@@ -1,6 +1,11 @@
 table wgEncodeGencodeExonSupport
-"Gencode metadata table of features supporting exons of Gencode transcripts"
+"GENCODE exon support from other datasets"
    (
-    string transcriptId; "Transcript ID for Gencode gene"
-    string id; "ID of feature supporting exon"
+    string transcriptId; "GENCODE transcript identifier"
+    string seqId; "Identifier of sequence supporting transcript"
+    string seqSrc; "Source of supporting sequence"
+    string exonId; "GENCODE exon identifier (not stable)"
+    string chrom;  "chromosome"
+    int chromStart; "start in chromosome"
+    int endStart; "end in chromosome"
    )

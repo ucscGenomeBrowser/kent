@@ -130,6 +130,14 @@ The format of the type fields:
    Optional fields to be defined elsewhere in the trackDb.ra record:
 	itemAttrTbl - table used to color individual items in a track,
                       selected by name and locations.
+        itemClassTbl - table use to associate a given genePred name with
+                       a arbitrary class name, use in picking a color.
+        itemClassNameColumn - name of column that is joined with the genePred
+                              name column, default is `name'.
+        itemClassClassColumn - name of column that contains the class, default
+                               is `class'.
+        geneClasses - white space separated list of valid gene classes.
+        gClass_XXX - color to use for items that map to class XXX.
 
 8. type maf
     A type of multiple alignment track, becoming obsolete,
@@ -632,7 +640,7 @@ Some settings used by various tracks:
     o inputTrackTable - for tracks that are type factorSource or otherwise created
       by clustering or aggregating data found in other tracks.  This names a table
       that includes in it's first column the input track name.  For factorSource
-      the second column should be the the source name (cell line etc) if any, 
+      the second column should be the the source name (cell line etc) if any,
       and the third should be the factor name if any.  The second and third columns
       are optional for other track types. In general though the most important few
       metadata fields should be included as columns, and these should be listed in
@@ -697,23 +705,32 @@ Likewise
 sets up a filter on score with limits of from 200 to 1000, but offers from 500 to 700 as default.
 NOTE: Filtering by range has so far only been tested in the 'score' filter.
 
-Category
---------
-Using the 'filterBy' setting you can set up a filter by 1 or more categories.
-Categories are simply a list of values that appear in a drop down list box ("DD").  One or more
-of these categories may be selected, to set up the filter.  The setting format:
-   filterBy {field1}:{Title1}=[+]category1a,category1b,...  [{field2}:{Title2}=[+]category2a,category2b,...]...
+Options
+-------
+Using the 'filterBy' setting you can set up a filter on a table column by 1 or more options.
+Options are simply a list of values that appear in a drop down list box ("DD").  One or more
+of these options may be selected, to set up the filter.  The setting format:
+   filterBy {field1}:{Title1}=[+]option1a,option1b,... [{field2}:{Title2}=[+]option2a,...]...
 Here {field1} must be the name of a field in the table,
      {title1} is what the user will see as the title of the drop-down list box
-     [+] can be added to say that the table has numerical values (1,2,3...), while words are seen in the DD.
-     category1a,... a comma separated list of values that appear in the DD.
-                    These values are found in the table unless the '+' is used.
+     [+] can be added to say that the table has numerical values (1,2,3...), 1-based
+     option1a,... a comma separated list of values that appear in the DD.
+                  These values are found in the table unless the '+' is used.
+                  Values can have labels (value|label) and can even end in {CSS style} settings
+     option formats: value, value|title, "valueA|State A", value|label{background-color:#FFFC04;}
+     NOTE: any spaces (even in style) must be in quotes. Try one set of quotes around all options!
+     NOTE: labels and/or style must be given to all optons or no options.  value| and value{} work.
 Example:
-     filterBy level:Level=+Validated,Manual,Automatic class:Class=coding,snRNA,...
-This sets up 2 filter by category drop downs.  The first is on the table field 'level'.  If the user selects
-both 'Validated' and 'Manual', then an item must have a 1 or 2 in the level field in order to be seen.
-And if the user also selects 'coding' in the second filter, an item would have to have level 1 or 2 and
-class='coding'.
+     filterBy level:Level=+Validated,Manual,Auto class:Class=coding{},"si RNA"{color:red},...
+This sets up 2 filters by category drop downs.  The first is on the table field 'level'.  If the
+user selects both 'Validated' and 'Manual', then an item must have a 1 or 2 in the level field in
+order to be seen.  And if the user also selects 'coding' in the second filter, an item would have
+to have level 1 or 2 and class='coding'.  NOTE: 'si RNA' option will be in red.
+
+Unless special coding is done, both filter by score and filter by options will generate a "where"
+clause that gets applied to the SQL select on the track's table when loading in hgTracks.
+
+For genePred tables, the itemClass table, as described with the genePred track type is used.
 
 
 COMPOSITE TRACKS
@@ -787,6 +804,9 @@ COMPOSITE SUBTRACK CONFIGURATION - 3 ways
    Cfg settings can be at level of composite, view, or subtrack.
 3) Individual subtracks configurable - used in combination with 1 or 2.
    "configurable on" setting, which can be at composite, view, or subtrack level.
+   (NOTE: it is possible to have a composite track that is not multi-view but has
+    different types of subtracks. In this case, the subtracks should be individually
+    configurable.)
 
 Composite Track "ClosestToHome" paradigm
 ----------------------------------------

@@ -6,28 +6,93 @@
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02
 
 ###########################################################################
-## Download sequence (DONE - 2011-05-26 - Hiram)
+## Download sequence (DONE - 2011-06-08 - Hiram)
     mkdir /hive/data/genomes/caePb3
     cd /hive/data/genomes/caePb3
-    mkdir ws220
-    cd ws220
-    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
-        ftp://ftp.sanger.ac.uk/pub/wormbase/WS220/genomes/c_brenneri/
+    mkdir genbank
+    cd genbank
+    wget --no-parent --timestamping -m -nH --cut-dirs=7 \
+	ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/invertebrates/Caenorhabditis_brenneri/C_brenneri-6.0.1b/
 
-    # no AGP, make one from the fasta file, the sed changes type D to type W
-    # the seeming blanks in the sed are tabs via ctrl-V I
-    hgFakeAgp -minContigGap=1 \
-/hive/data/genomes/caePb3/ws220/sequences/dna/c_brenneri.WS220.dna.fa.gz \
-	stdout | sed -e "s/	D	/	W	/" \
-	> caePb3.ws220.fake.agp
+    faSize unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 190369721 bases (20276083 N's 170093638 real 170093638 upper 0 lower)
+#	in 3305 sequences in 1 files
+# Total size: mean 57600.5 sd 184147.9 min 1224 (gi|312146942|gb|GL542919.1|)
+#	max 4147112 (gi|301517217|gb|GL379786.1|) median 8358
 
-    faSize sequences/dna/c_brenneri.WS220.dna.fa.gz
-# 190374847 bases (20277419 N's 170097428 real 0 upper 170097428 lower)
-#	in 3307 sequences in 1 files
-# %89.35 masked total, %100.00 masked real
+    cat << '_EOF_' > scafNames.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: scafNames.pl makeItSo\n";
+    printf STDERR "via the scaffold_localID2acc file translate names\n";
+    printf STDERR "in the AGP and FASTA files to construct UCSC versions.\n";
+    exit 255
+}
+
+my %scafName;	# index is GL name, value is scaffold name
+
+open (FH, "<scaffold_localID2acc") or die "can not read scaffold_localID2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($scaf, $glName) = split('\s+', $line);
+    die "ERROR: duplicate glName: $glName" if (exists($scafName{$glName}));
+    $scafName{$glName} = $scaf;
+}
+close (FH);
+
+open (FA, "|gzip -c > caePb3.scaf.agp.gz") or die "can not write to gzip -c > caePb3.scaf.agp.gz";
+open (FH, "zcat unplaced_scaffolds/AGP/unplaced.scaf.agp.gz|") or
+    die "can not read unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^GL/) {
+	chomp $line;
+	my ($glName, $rest) = split('\s+', $line, 2);
+	printf FA "%s\t%s\n", $scafName{$glName}, $rest;
+    } else {
+	printf FA "%s", $line;
+    }
+}
+close (FH);
+close (FA);
+
+open (FA, "|gzip -c > caePb3.scaf.fa.gz") or die "can not write to gzip -c > caePb3.scaf.fa.gz";
+open (FH, "zcat unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz|") or
+	die "can not read unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+	chomp $line;
+	$line =~ s/.*gb.GL/GL/;
+	$line =~ s/. Caeno.*//;
+	printf FA ">%s\n", $scafName{$line};
+	
+    } else {
+	printf FA "%s", $line;
+    }
+}
+close (FH);
+close (FA);
+'_EOF_'
+    # << happy emacs
+    chmod +x scafNames.pl
+    ./scafNames.pl
+
+    faSize caePb3.scaf.fa.gz
+# 190369721 bases (20276083 N's 170093638 real 170093638 upper 0 lower)
+#	in 3305 sequences in 1 files
+# Total size: mean 57600.5 sd 184147.9 min 1224 (Scfld02_8404)
+#	max 4147112 (Scfld02_0) median 8358
+
+    checkAgpAndFa  caePb3.scaf.agp.gz caePb3.scaf.fa.gz 2>&1 | tail -1
+    #	All AGP and FASTA entries agree - both files are valid
 
 ###########################################################################
-## Initial sequence (DONE - 2011-05-26 - Hiram)
+## Initial sequence (DONE - 2011-06-08 - Hiram)
     cd /hive/data/genomes/caePb3
     cat << '_EOF_' > caePb3.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -37,12 +102,12 @@ db caePb3
 scientificName Caenorhabditis brenneri
 commonName C. brenneri
 assemblyDate Nov. 2010
-assemblyShortLabel WS220
-assemblyLabel Washington University School of Medicine GSC Caenorhabditis brenneri(PB2801) 6.0.1b
+assemblyShortLabel C. brenneri 6.0.1b
+assemblyLabel The Caenorhabditis brenneri Sequencing and Analysis Consortium (GCA_000143925.2)
 orderKey 838
 mitoAcc none
-fastaFiles /hive/data/genomes/caePb3/ws220/sequences/dna/c_brenneri.WS220.dna.fa.gz
-agpFiles /hive/data/genomes/caePb3/ws220/caePb3.ws220.fake.agp
+fastaFiles /hive/data/genomes/caePb3/genbank/caePb3.scaf.fa.gz
+agpFiles /hive/data/genomes/caePb3/genbank/caePb3.scaf.agp.gz
 # qualFiles none
 dbDbSpeciesDir worm
 taxId 135651
@@ -52,24 +117,24 @@ taxId 135651
     #	run just to AGP to make sure things are sane first
     time nice -n +19 makeGenomeDb.pl caePb3.config.ra -stop=agp \
       > jkStuff/makeGenomeDb.agp.log 2>&1
-    #	real    0m25.144s
+    #	real    0m30.686s
     #	check that log to verify it has no errors
     #	now, continuing to make the Db and all
     time nice -n +19 makeGenomeDb.pl caePb3.config.ra -continue=db \
       > jkStuff/makeGenomeDb.db.log 2>&1
-    #	real    1m36.277s
+    #	real    1m32.106s
     #	check that log to verify it has no errors
 
     #	take the trackDb business there and check it into the source tree
     #	fixup the description, gap and gold html page descriptions
 
 ###########################################################################
-## RepeatMasker (DONE - 2011-05-26 - Hiram)
+## RepeatMasker (DONE - 2011-06-08 - Hiram)
     mkdir /hive/data/genomes/caePb3/bed/repeatMasker
     cd /hive/data/genomes/caePb3/bed/repeatMasker
     time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
 	-buildDir=`pwd` caePb3 > do.log 2>&1 &
-    #	real    14m59.518s
+    #	real    12m33.966s
 
     #	from the do.log:
 # RepeatMasker version development-$Id: RepeatMasker,v
@@ -77,52 +142,57 @@ taxId 135651
 #	CC   RELEASE 20090604; 
 
     cat faSize.rmsk.txt
-# 190374847 bases (20277419 N's 170097428 real 167780413 upper 2317015 lower)
-#	in 3307 sequences in 1 files
+# 190369721 bases (20276083 N's 170093638 real 167776623 upper 2317015 lower)
+#	in 3305 sequences in 1 files
+# Total size: mean 57600.5 sd 184147.9 min 1224 (Scfld02_8404)
+#	max 4147112 (Scfld02_0) median 8358
 # %1.22 masked total, %1.36 masked real
 
 ###########################################################################
-## Simple Repeats (DONE - 2011-05-26 - Hiram)
+## Simple Repeats (DONE - 2011-06-08 - Hiram)
     mkdir /cluster/data/caePb3/bed/simpleRepeat
     cd /cluster/data/caePb3/bed/simpleRepeat
     time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
 	-workhorse=hgwdev -buildDir=`pwd` caePb3 > do.log 2>&1 &
-    #	real    13m21.481s
+    #	real    13m42.591s
     cat fb.simpleRepeat 
-    #	5049667 bases of 170097428 (2.969%) in intersection
+    #	5049667 bases of 170093652 (2.969%) in intersection
 
 ###########################################################################
-## WindowMasker (DONE - 2011-05-26 - Hiram)
+## WindowMasker (DONE - 2011-06-08 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/caePb3/bed/windowMasker
     cd /hive/data/genomes/caePb3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -verbose=2 -buildDir=`pwd` \
 	-workhorse=hgwdev caePb3 > do.log 2>&1 &
-    #	real    9m20.767s
+    #	real    10m1.986s
 
     twoBitToFa caePb3.wmsk.sdust.2bit stdout | faSize stdin
-# 190374847 bases (20277419 N's 170097428 real 120358123 upper 49739305 lower)
-#	in 3307 sequences in 1 files
+# 190369721 bases (20276083 N's 170093638 real 120354485 upper 49739153 lower)
+#	in 3305 sequences in 1 files
+# Total size: mean 57600.5 sd 184147.9 min 1224 (Scfld02_8404)
+#	 max 4147112 (Scfld02_0) median 8358
 # %26.13 masked total, %29.24 masked real
+
 
     #	load this initial data to get ready to clean it
     cd /hive/data/genomes/caePb3/bed/windowMasker
     hgLoadBed caePb3 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 1354976 elements of size 3
+    #	Loaded 1354970 elements of size 3
     featureBits -countGaps caePb3 windowmaskerSdust
-    #	70016710 bases of 190374847 (36.778%) in intersection
+    #	70015222 bases of 190369721 (36.779%) in intersection
 
     #	eliminate the gaps from the masking
     featureBits caePb3 -not gap -bed=notGap.bed
-    #	170097428 bases of 170097428 (100.000%) in intersection
+    #	170093652 bases of 170093652 (100.000%) in intersection
     time nice -n +19 featureBits caePb3 windowmaskerSdust notGap.bed \
 	-bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	49739305 bases of 170097428 (29.242%) in intersection
+    #	49739153 bases of 170093652 (29.242%) in intersection
     #	reload track to get it clean
     hgLoadBed caePb3 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 1353272 elements of size 4
+    #	Loaded 1353265 elements of size 4
     featureBits -countGaps caePb3 windowmaskerSdust
-    #	49739305 bases of 190374847 (26.127%) in intersection
+    #	49739153 bases of 190369721 (26.128%) in intersection
 
     #	mask the sequence with this clean mask
     zcat cleanWMask.bed.gz \
@@ -131,20 +201,24 @@ taxId 135651
     twoBitToFa caePb3.cleanWMSdust.2bit stdout | faSize stdin \
         > caePb3.cleanWMSdust.faSize.txt
     cat caePb3.cleanWMSdust.faSize.txt
-# 190374847 bases (20277419 N's 170097428 real 120358123 upper 49739305 lower)
-#	in 3307 sequences in 1 files
+# 190369721 bases (20276083 N's 170093638 real 120354485 upper 49739153 lower)
+#	in 3305 sequences in 1 files
+# Total size: mean 57600.5 sd 184147.9 min 1224 (Scfld02_8404)
+#	max 4147112 (Scfld02_0) median 8358
 # %26.13 masked total, %29.24 masked real
 
 ########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-26 - Hiram)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-06-08 - Hiram)
     cd /hive/data/genomes/caePb3
     twoBitMask -add bed/windowMasker/caePb3.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed caePb3.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa caePb3.2bit stdout | faSize stdin > faSize.caePb3.txt
     cat faSize.caePb3.txt
-# 190374847 bases (20277419 N's 170097428 real 120262496 upper 49834932 lower)
-#	in 3307 sequences in 1 files
+# 190369721 bases (20276083 N's 170093638 real 120258858 upper 49834780 lower)
+#	in 3305 sequences in 1 files
+# Total size: mean 57600.5 sd 184147.9 min 1224 (Scfld02_8404)
+#	max 4147112 (Scfld02_0) median 8358
 # %26.18 masked total, %29.30 masked real
 
     #	create symlink to gbdb
@@ -153,12 +227,12 @@ taxId 135651
     ln -s `pwd`/caePb3.2bit /gbdb/caePb3/caePb3.2bit
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-26 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-06-08 - Hiram)
     # numerator is caePb3 gapless bases "real" as reported by faSize 
     # denominator is hg19 gapless bases "real" as reported by faSize
     # 1024 is threshold used for human -repMatch:
-    calc \( 170097428  / 2897310462 \) \* 1024
-    #	( 170097428 / 2897310462 ) * 1024 = 60.117743
+    calc \( 170093638  / 2897310462 \) \* 1024
+    #	( 170093638 / 2897310462 ) * 1024 = 60.116404
 
     # Round up to use -repMatch=100 since 60 would result in too many
     cd /hive/data/genomes/caePb3
@@ -231,3 +305,34 @@ caePb3.perChromTables = no
     make etc-update
 
 #########################################################################
+# lastz swap ce10 to caePb3 (DONE - 2011-06-08 - Hiram)
+    # original alignment on ce10
+    cd /hive/data/genomes/ce10/bed/lastzCaePb3.2011-06-08
+    cat fb.ce10.chainCaePb3Link.txt 
+    #	40760690 bases of 100286070 (40.644%) in intersection
+
+    #	swap, this is also in caePb3.txt
+    mkdir /hive/data/genomes/caePb3/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caePb3/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaePb3.2011-06-08/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    3m19.450s
+
+    cat fb.caePb3.chainCe10Link.txt 
+    #	55006703 bases of 170093652 (32.339%) in intersection
+
+############################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caePb3
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caePb3 \
+	 > downloads.log 2>&1
+    #	real    1m31.489s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################

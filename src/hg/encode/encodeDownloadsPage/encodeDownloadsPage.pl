@@ -437,7 +437,7 @@ my $ok = GetOptions("checksum",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
-my $fileMask = "*.gz *.bb *.bigWig *.bam *.bai";
+my $fileMask = "*.gz *.bb *.bigWig *.bam *.bai *.tgz";
    $fileMask = $opt_fileType if(defined $opt_fileType);
 
 my $preamble = "preamble.html";
