@@ -1084,7 +1084,7 @@ karyotype cancer
 sex F
 tissue lymphocyte
 vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
-vendorId N/A
+vendorId CLL
 orderUrl http://www.dfhcc.harvard.edu/membership/profile/member/669/0/
 termId BTO:0001546
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001546
@@ -1165,7 +1165,7 @@ karyotype cancer
 sex M
 tissue Blood
 vendorName DSMZ
-vendorId N/A
+vendorId Dnd41
 orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002104
@@ -1199,7 +1199,7 @@ karyotype normal
 sex U
 tissue Liver
 vendorName Bouhassira Lab
-vendorId N/A
+vendorId FetalPBDE
 orderUrl http://www.einstein.yu.edu/cellbiology/Lab/Bouhassira/default.htm
 termId BTO:0000553
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000553
@@ -1229,7 +1229,7 @@ description normal fibroblasts taken from individuals with Parkinson's disease
 tissue Skin
 karyotype normal
 vendorName Paul Tesar (Case Western)
-vendorId N/A
+vendorId FibroP
 orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 termId BTO:0000452
@@ -1412,7 +1412,7 @@ organism human
 description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue Blood
 vendorName Hunt Willard at Duke University
-vendorId N/A
+vendorId GM12878-XiMat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
 karyotype unknown
 lineage mesoderm
@@ -1429,7 +1429,7 @@ organism human
 description lymphoblastoid, cloned for paternal X inactivation, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 tissue Blood
 vendorName Hunt Willard at Duke University
-vendorId N/A
+vendorId GM12878-XiPat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
 karyotype unknown
 lineage mesoderm
@@ -2018,7 +2018,7 @@ karyotype normal
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
-vendorId N/A
+vendorId HFF
 orderUrl http://myprofile.cos.com/torokstorb
 termId BTO:0002245
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002245
@@ -2035,7 +2035,7 @@ karyotype normal (cMyc)
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
-vendorId N/A
+vendorId HFF-Myc
 orderUrl http://myprofile.cos.com/torokstorb
 termId BTO:0002245
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002245
@@ -2050,7 +2050,7 @@ description Human Fetal Liver 11 weeks, consented fetal liver samples were isola
 tier 3
 lineage endoderm
 vendorName Unknown
-vendorId N/A
+vendorId HFL11W
 orderUrl http://www.hudsonalpha.org/myers-lab
 color 189,0,157
 sex U
@@ -2064,7 +2064,7 @@ tissue Liver
 description Human Fetal Liver 24 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
 tier 3
 vendorName Unknown
-vendorId N/A
+vendorId HFL24W
 orderUrl http://www.hudsonalpha.org/myers-lab
 lineage endoderm
 color 189,0,157
@@ -2314,7 +2314,7 @@ karyotype  Unknown
 sex F
 tissue  Pancreatic Duct
 vendorName  Dr. Ming-Sound Tsao, Ontario Cancer Institute
-vendorId N/A
+vendorId HPDE6-E6E7
 orderUrl http://www.uhnresearch.ca/researchers/profile.php?lookup=6118
 termId BTO:0002362
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002362
@@ -2419,7 +2419,7 @@ description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
 vendorName Refer to the protocol documents for differing sources
-#vendorId (missing)
+vendorId HSMM
 #orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
@@ -2508,7 +2508,7 @@ karyotype cancer
 sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
-vendorId N/A
+vendorId Huh-7
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001950
@@ -2525,7 +2525,7 @@ karyotype cancer
 sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
-vendorId N/A
+vendorId Huh-7.5
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001950
@@ -2572,7 +2572,7 @@ karyotype  Unknown
 sex B
 tissue  iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
-vendorId N/A
+vendorId iPS
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
 termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -2658,7 +2658,7 @@ karyotype cancer
 sex F
 tissue Blood
 vendorName DSMZ
-vendorId N/A
+vendorId Loucy
 orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002104
@@ -2782,7 +2782,7 @@ karyotype normal
 sex F
 tissue monocytes
 vendorName S. Heimfeld Laboratory, FHCRC
-vendorId N/A
+vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
@@ -2811,7 +2811,7 @@ lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 #put universities in for Stam and Snyder
-vendorId (see protocol documents)
+vendorId NB4
 #orderUrl 
 karyotype cancer
 termId BTO:0002489
@@ -2974,7 +2974,7 @@ description Dedifferentiated human pancreatic islets
 tissue Pancreas
 lineage endoderm
 vendorName National Disease Research Interchange (NDRI).
-vendorId N/A
+vendorId PanIsletD
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
@@ -2990,7 +2990,7 @@ description human pancreatic islets
 tissue Pancreas
 lineage endoderm
 vendorName Refer to protocol documents for differing sources
-#vendorId
+vendorId PanIslets
 #orderUrl
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
@@ -3006,7 +3006,7 @@ description Human peripheral blood-derived erythroblasts
 tissue Blood
 lineage mesoderm
 #vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
-vendorId N/A
+vendorId PBDE
 vendorName Farnham lab
 orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 termId BTO:0000574 (non-specific)
@@ -3023,7 +3023,7 @@ description Peripheral blood mononuclear cells
 tissue Blood
 lineage mesoderm
 vendorName PBMC cells provided by E. Bresnick, UW Madison
-vendorId N/A
+vendorId PBMC
 orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
@@ -3279,7 +3279,7 @@ karyotype  normal
 sex F
 tissue  Liver
 vendorName  Steve Choi, Duke University
-vendorId N/A
+vendorId Stellate
 orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
@@ -3468,7 +3468,7 @@ karyotype normal (RAF)
 sex F
 tissue embryonic lung
 vendorName Dr. Carl Mann, SBIGeM
-vendorId N/A
+vendorId WI-38
 orderUrl http://www-dsv.cea.fr/dsv/instituts/institut-de-biologie-et-de-technologies-de-saclay-ibitec-s/unites/service-de-biologie-integrative-et-genetique-moleculaire-sbigem/laboratoire-stress-oxydants-et-cancer-lsoc/equipe-mecanismes-de-stabilite-genomique-c.-mann
 termId BTO:0001958
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001958
@@ -3510,7 +3510,7 @@ description Mammary
 age immortalized
 strain RIII
 vendorName Stam lab
-vendorId N/A
+vendorId 3134
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7035
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
@@ -3528,7 +3528,7 @@ description myeloid progenitor cells, CD34+
 age immortalized
 strain B6D2F1/J
 vendorName UW lab
-vendorId N/A
+vendorId 416B
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7043
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
@@ -3582,7 +3582,7 @@ description B Cell , CD19+
 age adult-8wks
 strain C57BL/6
 vendorName Stam lab
-vendorId N/A
+vendorId B-cell_(CD19+)
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
@@ -3600,7 +3600,7 @@ description mouse spleen B cells, CD43-,CD11b-
 age adult-8wks
 strain C57BL/6
 vendorName M. Bender (FHCRC)
-vendorId N/A
+vendorId B-cell_(CD43-)
 orderUrl http://www.seattlechildrens.org/medical-staff/michael-a-bender/
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
@@ -3618,7 +3618,7 @@ age ageUnknown
 strain Unknown
 description Bone Marrow
 vendorName LICR lab
-vendorId N/A
+vendorId BoneMarrow
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
@@ -3636,7 +3636,7 @@ age ageUnknown
 strain Unknown
 description Cerebellum
 vendorName LICR lab
-vendorId N/A
+vendorId Cerebellum
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
@@ -3654,7 +3654,7 @@ age ageUnknown
 strain Unknown
 description Cerebrum
 vendorName UW Lab
-vendorId N/A
+vendorId Cerebrum
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
@@ -3672,7 +3672,7 @@ description B-cell lymphoma (GM12878 analog)
 age immortalized
 strain B10.H-2aH-4bp/Wts
 vendorName Weissman lab
-vendorId N/A
+vendorId CH12
 orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
@@ -3690,7 +3690,7 @@ description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek 
 age E0
 strain 129
 vendorName Uw lab
-vendorId N/A
+vendorId ES-CJ7
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
@@ -3709,7 +3709,7 @@ age ageUnknown
 strain Unknown
 description Colon
 vendorName LICR lab
-vendorId N/A
+vendorId Colon
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
@@ -3727,7 +3727,7 @@ age ageUnknown
 strain Unknown
 description Cortex
 vendorName LICR lab
-vendorId N/A
+vendorId Cortex
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
@@ -3744,7 +3744,7 @@ description mouse embryonic stem cells
 age E0
 strain C57BL/6
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
-vendorId N/A
+vendorId ES-Bruce4
 orderUrl http://cancer.ucsd.edu/research-training/shared-resources/transgenic-core/Pages/default.aspx
 #termId
 #termUrl
@@ -3763,7 +3763,7 @@ age ageUnknown
 strain Unknown
 description Adipose tissue
 vendorName UW lab
-vendorId N/A
+vendorId FatPad
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7108
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
@@ -3781,7 +3781,7 @@ age ageUnknown
 strain Unknown
 description Fibroblast
 vendorName UW lab
-vendorId N/A
+vendorId Fibroblast
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
@@ -3832,7 +3832,7 @@ age ageUnknown
 strain Unknown
 description Heart
 vendorName LICR lab
-vendorId N/A
+vendorId Heart
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
@@ -3850,7 +3850,7 @@ age ageUnknown
 strain Unknown
 description Kidney
 vendorName UW lab
-vendorId N/A
+vendorId Kidney
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 #termId
 #termUrl
@@ -3868,7 +3868,7 @@ age ageUnknown
 strain Unknown
 description Limb
 vendorName LICR lab
-vendorId N/A
+vendorId Limb
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
@@ -3887,7 +3887,7 @@ age ageUnknown
 strain Unknown
 description Liver
 vendorName LICR lab
-vendorId N/A
+vendorId Liver
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
@@ -3905,7 +3905,7 @@ age ageUnknown
 strain Unknown
 description Lung
 vendorName LICR lab
-vendorId N/A
+vendorId Lung
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
@@ -3923,7 +3923,7 @@ strain Unknown
 category primaryCells
 description Mouse Embryonic Fibroblast
 vendorName LICR lab
-vendorId N/A
+vendorId MEF
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
@@ -3961,7 +3961,7 @@ age immortalized
 strain Unknown
 tissue Blood
 vendorName Weissman lab
-vendorId N/A
+vendorId MEL
 orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 color 86,180,233
 sex M
@@ -4032,7 +4032,7 @@ age ageUnknown
 strain Unknown
 description Olfactory Bulb
 vendorName LICR lab
-vendorId N/A
+vendorId Olfactory Bulb
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
@@ -4050,7 +4050,7 @@ strain Unknown
 category Tissue
 description Pancreas
 vendorName LICR lab
-vendorId N/A
+vendorId Pancreas
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
@@ -4068,7 +4068,7 @@ description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et a
 age immortalized
 strain C57BL/6J
 vendorName Dr. Christine Disteche (University of Washington)
-vendorId N/A
+vendorId Patski
 orderUrl http://depts.washington.edu/chdd/iddrc/res_aff/disteche.html
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
@@ -4086,7 +4086,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 vendorName LICR lab
-vendorId N/A
+vendorId Placenta
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
@@ -4106,7 +4106,7 @@ age ageUnknown
 strain Unknown
 description Small Intestine
 vendorName LICR lab
-vendorId N/A
+vendorId Small Intestine
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
@@ -4124,7 +4124,7 @@ age ageUnknown
 strain Unknown
 description Spleen
 vendorName LICR lab
-vendorId N/A
+vendorId Spleen
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
@@ -4142,7 +4142,7 @@ age ageUnknown
 strain Unknown
 description Testis
 vendorName LICR lab
-vendorId N/A
+vendorId Testis
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
@@ -4160,7 +4160,7 @@ age ageUnknown
 strain Unknown
 description Thymus
 vendorName LICR lab
-vendorId N/A
+vendorId Thymus
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
@@ -4178,7 +4178,7 @@ strain Unknown
 category primaryCells
 description Naive T cells: CD4+, CD25-
 vendorName UW lab
-vendorId N/A
+vendorId T-Naive
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
@@ -4196,7 +4196,7 @@ strain Unknown
 category primaryCells
 description Regulatory T cells CD4+,CD25+
 vendorName UW lab
-vendorId N/A
+vendorId TReg
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
@@ -4214,7 +4214,7 @@ age ageUnknown
 strain Unknown
 description Whole Brain
 vendorName UW lab
-vendorId N/A
+vendorId Whole Brain
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
@@ -4232,7 +4232,7 @@ age E0
 strain 129/Ola
 description Undifferentiated mouse embryonic stem cells
 vendorName Dr. Levasseur (University of Iowa)
-vendorId N/A
+vendorId ZhBTc4
 orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 #termId
 #termUrl
@@ -4753,7 +4753,7 @@ lab Myers
 lots D1206
 targetId E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
-validation E2F6_(SC-22823)(Immunoblot,MassSpec):human_E2F6_SC-22823_validation_Myers.pdf
+validation E2F6_(SC-22823)(WesternBlot,IP-MassSpec):human_E2F6_SC-22823_validation_Myers.pdf
 
 
 term EBF1_(SC-137065)
@@ -4874,7 +4874,7 @@ lab Myers
 lots L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation ELF1_(SC-631)(Immunoprecipitation-WesternBlot,MassSpec):human_ELF1_SC-631_validation_Myers.pdf
+validation ELF1_(SC-631)(WesternBlot,IP-MassSpec):human_ELF1_SC-631_validation_Myers.pdf
 
 term ELK4
 tag ELK4
@@ -4975,7 +4975,7 @@ lab Myers
 lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation FOSL1_(SC-183)(Immunoprecipitation-Western_blot,MassSpec):human_FOSL1-SC183_validation_Myers.pdf
+validation FOSL1_(SC-183)(Western_blot,IP-MassSpec):human_FOSL1-SC183_validation_Myers.pdf
 
 
 
@@ -5073,7 +5073,7 @@ target GATA1
 targetDescription GATA-1 is a transcriptional activator which probably serves as a general switch factor for erythroid development. It binds to DNA sites with the consensus sequence [AT]GATA[AG} within regulatory regions of globin genes and of other genes expressed in erythroid cells.
 antibodyDescription Anti-GATA-1 rabbit polyclonal antibody was generated by using a purified GST fusion to amino acids 1-89 of mouse GATA-1.
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId N/A
+vendorId GATA-1
 orderUrl http://stemcells.wisc.edu/faculty/bresnick.html
 targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
@@ -5152,6 +5152,23 @@ lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
 validation GATA3_SC-268(ChIP,MassSpec):human_GATA3-SC268_validation_Myers.pdf
+
+term GATA3_(SC-269)
+tag GATA3SC269SC269
+type Antibody
+antibodyDescription Mouse monoclonal IgG raised against human recombinant GATA-3 (amino acids 1-264)
+target GATA3
+targetDescription This gene encodes a protein which belongs to the GATA family of transcription factors. The protein contains two GATA-type zinc fingers and is a n important regulator of T-cell development and plays an important role in endothelial cell biology. Defects in this gene are the cause of hypoparathyroidism with sensorineural deafness and renal dysplasia (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-269
+orderUrl http://www.scbt.com/datasheet-269-gata-3-hg3-35-antibody.html
+lab Farnham
+lots A1404
+targetId GeneCards:Genecard:GATA3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:GATA3
+validation GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
+
+
 
 term GCN5
 tag GCN5
@@ -5839,7 +5856,7 @@ lab Myers
 lots C0909
 targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
-validation NANOG_(SC-33759)(Immunoprecipitation-Western_blot,MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
+validation NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 
 
 
@@ -6184,7 +6201,7 @@ lab Myers
 lots F2609
 targetId GeneCards:POU5F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
-validation POU5F1_(SC-9081)(Immunoprecipitation-WesternBlot,MassSpec):human_POU5F1_SC-9081_validation_Myers.pdf
+validation POU5F1_(SC-9081)(WesternBlot,IP-MassSpec):human_POU5F1_SC-9081_validation_Myers.pdf
 
 term POU2F2
 tag POU2F2
@@ -6528,7 +6545,7 @@ orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 lab Farnham
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
-validation missing
+validation SUZ12_(WesternBlot,ChIP):human_SUZ12_validation_Farnham.pdf
 
 term TAF1
 tag TAF1
@@ -6710,7 +6727,7 @@ target TR4
 antibodyDescription Rabbit polyclonal
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 vendorName Donated by Dr. J.D.Engel, University of Michigan
-vendorId N/A
+vendorId TR4
 orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname=engel
 lab Farnham
 targetId GeneCard:nr2c2
@@ -6858,7 +6875,7 @@ orderUrl http://www.scbt.com/datasheet-23871-kaiso-6f8-antibody.html
 lab Myers
 targetId GeneCard:ZBTB33
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB33
-validation ZBTB33(Immunoblot):human_ZBTB33_6F8_validation_Myers.pdf
+validation ZBTB33(WesternBlot,IP-MassSpec):human_ZBTB33_6F8_validation_Myers.pdf
 
 term ZBTB7A_(SC-34508)
 tag ZBTB7A
@@ -6888,7 +6905,7 @@ lab Myers
 lots D2010
 targetId GeneCards:ZEB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
-validation ZEB1_(SC-25388)(Immunoprecipitation-WesternBlot,MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
+validation ZEB1_(SC-25388)(WesternBlot,IP-MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
 
 term Znf143_(16618-1-AP)
 tag ZNF143
@@ -6904,6 +6921,21 @@ lab Snyder
 targetId GeneCards:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
 validation missing
+
+term ZNF217
+tag ZNF217
+type Antibody
+antibodyDescription A rabbit polyclonal antibody raised against a recombinant ZNF217 protein corresponding to the 1562-2207 nucleotides from a human ZNF217 cDNA
+target ZNF217
+targetDescription ZNF217 is an important oncogene based on the high frequency of amplification and overexpression in many cancer types, but its molecular mode of gene regulation is poorly understood. ZNF217 has been purified in complexes that contain repressor proteins such as CtBP2, suggesting that it acts as a transcriptional repressor. ZNF217 contains seven C2H2 zinc finger domains and has been shown to bind to gene promoters
+vendorName From the lab of Dr. Paul Yaswen
+vendorId ZNF217
+orderUrl http://stemcellcenter.berkeley.edu/PIs/yaswen.html
+lab Farnham
+lots N/A
+targetId GeneCards:Genecard:ZNF217
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:ZNF217
+validation ZNF217_(WesternBlot,SiRNA):human_ZNF217_validation_Farnham.pdf
 
 term ZNF263
 tag ZNF263
@@ -8678,6 +8710,13 @@ type age
 stage Embryonic
 description Embryonic day 18
 
+term E18.5
+tag E18HALF
+type age
+stage Embryonic
+description Embryonic day 18.5 (PROVISIONAL)
+
+
 term adult-8wks
 tag ADULT8WKS
 type age
@@ -8685,7 +8724,7 @@ stage Adult
 description Adult 8 weeks
 
 term immortalized
-tag IMMPORTAL
+tag IMMORTAL
 type age
 stage Cell Line
 description Immortal cells
@@ -8805,7 +8844,7 @@ type tissueSourceType
 description Tissue analyzed using replicate samples obtained from and individual and by pooling.
 
 term Individual
-tag INDIC
+tag INDIV
 type tissueSourceType
 description Tissue obtained from an individual
 
@@ -8838,7 +8877,7 @@ type seqPlatform
 description Illumina Genome Analyzer II
 
 term Illumina_GA2e
-tag ILLUMINAGA2e
+tag ILLUMINAGA2E
 geo Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
@@ -8852,7 +8891,7 @@ description Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
-tag ILLUMINAHISEQ2
+tag ILLUMINAHISEQ2000
 geo Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
@@ -8888,7 +8927,7 @@ type seqPlatform
 description Applied Biosystems SOLiD System 2.0
 
 term AB_SOLiD_3.5
-tag ABSOLID3Plus
+tag ABSOLID3PLUS
 geo AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
@@ -8915,7 +8954,7 @@ label BioChain
 description The BioChain subset of HudsonAlpha
 labInst BioChain
 labPi Myers
-labPiFull RIchard Myers
+labPiFull Richard Myers
 grantPi Myers
 organism human
 
@@ -9228,17 +9267,26 @@ labPiFull Kevin Struhl
 grantPi Snyder
 organism human
 
-term UCD
-tag UCD
+#This is being depricated to be replaced by USC
+#term UCD
+#tag UCD
+#type lab
+#label Farnham - University of California at Davis
+#description Farnham - University of California at Davis
+#labPi Farnham
+#labPiFull Peggy Farnham
+#grantPi Snyder
+#organism human
+
+term USC
+tag USC
 type lab
-label Farnham - University of California at Davis
-description Farnham - University of California at Davis
-#labName UCD
+label Farnham - University of Southern California
+description Farnham - University of Southern California
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
 organism human
-
 
 ### ARRA human labs
 ###
@@ -9392,8 +9440,8 @@ description Birney
 grantInst ENCODE Data Analysis Center (DAC)
 projectName DAC
 
-term Tullius
-tag TULLIUS
+term Tullis
+tag TULLIS
 type grant
 description Tullis
 grantInst Boston University
