@@ -37,7 +37,7 @@ subGroup7 age Age adult8wks=adult-8wks E0=E0
 subGroup8 strain Strain C57BL6=C57BL/6 
 dimensions dimensionX=cellType dimensionY=rep 
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+ rep=+
-fileSortOrder cell=Cell_Line treatment=treatment rnaExtract=RNA<BR>Extract view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line rnaExtract=RNA<BR>Extract view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract sex=sex age=age strain=strain
 dragAndDrop subTracks
 priority 0
@@ -254,7 +254,7 @@ noInherit on
 	maxWindowToDraw 1000000
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off 
         shortLabel BM Aln 1
         longLabel Bone Marrow RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -263,7 +263,7 @@ noInherit on
         # subId=4094 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel BM Aln 2
         longLabel Bone Marrow RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -272,7 +272,7 @@ noInherit on
         # subId=4094 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Crbellum Aln 1
         longLabel Cerebellum RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -281,7 +281,7 @@ noInherit on
         # subId=4095 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Crbellum Aln 2
         longLabel Cerebellum RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -290,7 +290,7 @@ noInherit on
         # subId=4095 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Cortex Aln 1
         longLabel Cortex RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cortex localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -299,7 +299,7 @@ noInherit on
         # subId=4096 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Cortex Aln 2
         longLabel Cortex RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cortex localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -308,7 +308,7 @@ noInherit on
         # subId=4096 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Heart Aln 1
         longLabel Heart RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Heart localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -317,7 +317,7 @@ noInherit on
         # subId=4097 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Heart Aln 2
         longLabel Heart RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Heart localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -326,7 +326,7 @@ noInherit on
         # subId=4097 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Kidney Aln 1
         longLabel Kidney RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Kidney localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -335,7 +335,7 @@ noInherit on
         # subId=4098 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Kidney Aln 2
         longLabel Kidney RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Kidney localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -344,7 +344,7 @@ noInherit on
         # subId=4098 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Liver Aln 1
         longLabel Liver RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Liver localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -353,7 +353,7 @@ noInherit on
         # subId=4099 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Liver Aln 2
         longLabel Liver RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Liver localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -362,7 +362,7 @@ noInherit on
         # subId=4099 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Lung Aln 1
         longLabel Lung RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Lung localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -370,7 +370,7 @@ noInherit on
         # subId=4100 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Lung Aln 2
         longLabel Lung RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Lung localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -378,7 +378,7 @@ noInherit on
         # subId=4100 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel MEF Aln 1
         longLabel MEF RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=MEF localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -387,7 +387,7 @@ noInherit on
         # subId=4101 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel MEF Aln 2
         longLabel MEF RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=MEF localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -396,7 +396,7 @@ noInherit on
         # subId=4101 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel ES-Bruce4 Aln 1
         longLabel ES-Bruce4 RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=E0 cellType=ESB4 localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -405,7 +405,7 @@ noInherit on
         # subId=4102 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel ES-Bruce4 Aln 2
         longLabel ES-Bruce4 RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=E0 cellType=ESB4 localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
@@ -414,7 +414,7 @@ noInherit on
         # subId=4102 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Spleen Aln 1
         longLabel Spleen RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Spleen localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
@@ -423,7 +423,7 @@ noInherit on
         # subId=4103 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2
-        parent wgEncodeLicrRnaSeqViewAlignments 
+        parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel Spleen Aln 2
         longLabel Spleen RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Spleen localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
