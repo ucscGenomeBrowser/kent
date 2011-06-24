@@ -3905,7 +3905,7 @@ priority 500.5
 visibility hide
 noInherit on
 type bed 3 .
-configurable on
+#configurable on
 html numtSeq
 
     track numtS
@@ -3954,12 +3954,13 @@ html numtSeq
     longLabel Human NumtS on mitochondrion SNPs
     priority 5
     visibility pack
+    configurable on
     type bam
     chromosomes chrM
     pairEndsByName on
     showNames on
     noColorTag .
-    bamColorMode gray
+    bamColorMode strand
     bamGrayMode aliQual
     aliQualRange 0:255
     baseColorDefault diffBases
