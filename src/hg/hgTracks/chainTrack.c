@@ -136,7 +136,7 @@ if (hash->size)
     {
     boolean isSplit = TRUE;
     /* Make up range query. */
-    sprintf(fullName, "%s_%s", chromName, tg->table);
+    safef(fullName, sizeof fullName, "%s_%s", chromName, tg->table);
     if (!hTableExists(database, fullName))
 	{
 	strcpy(fullName, tg->table);
