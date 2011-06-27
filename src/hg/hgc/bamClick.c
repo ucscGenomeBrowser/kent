@@ -37,7 +37,8 @@ int tLength = bamGetTargetLength(bam);
 int tStart = core->pos, tEnd = tStart+tLength;
 boolean isRc = useStrand && bamIsRc(bam);
 printPosOnChrom(seqName, tStart, tEnd, NULL, FALSE, itemName);
-printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
+if (!skipQualityScore)
+   printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
 printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
 bamShowCigarEnglish(bam);
 printf(")<BR>\n");
