@@ -8185,7 +8185,7 @@ term FastqRd2
 tag FASTQRD2
 type view
 label FastqRd2
-description Raw sequence with phred33 quality scores Read 1
+description Raw sequence with phred33 quality scores Read 2
 
 term FiltTransfrags
 tag FILTTRANSFRAGS
@@ -8294,7 +8294,7 @@ term RbpAssocRna
 tag RBPASSOCRNA
 type view
 label Rbp Associated RNA
-description Rbp Associated RNA
+description Ribosome binding protein associated RNA
 
 term Regions
 tag REGIONS
