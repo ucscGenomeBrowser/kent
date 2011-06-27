@@ -23520,8 +23520,8 @@ if (sameString("hg18", database))
             firstTime = FALSE;
         printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
 
-            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    STRAND \n");
-            printf("--------|-----------------------------------------------------------------------------------\n");
+            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
+            printf("--------|--------------------------------------------------------------------------------------------\n");
 
             }
         bed = bedLoad6(row);
@@ -23529,9 +23529,9 @@ if (sameString("hg18", database))
                hgTracksPathAndSettings(), database,
                bed->chrom, bed->chromStart+1, bed->chromEnd);
 
-        printf("%-20s %-10s %9d  %9d    %5d       %1s",
+        printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
             bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
-            (bed->chromEnd - bed->chromStart), bed->strand);
+            (bed->chromEnd - bed->chromStart),bed->score, bed->strand);
 
         printf("</TT></PRE>");
         }
