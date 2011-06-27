@@ -986,6 +986,7 @@ html numtSeqMm9
     visibility pack
     configurable on
     type bam
+    noScoreFilter .
     chromosomes chrM
     pairEndsByName on
     showNames on
