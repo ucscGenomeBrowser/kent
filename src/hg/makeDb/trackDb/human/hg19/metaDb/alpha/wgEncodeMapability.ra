@@ -94,13 +94,7 @@ tableName wgEncodeCrgMapabilityAlign75mer
 uniqueness no more than 2 mismatches
 view Alignability
 
-metaObject wgEncodeMapability
-objType composite
-composite wgEncodeMapability
-expVars lab,dataType,view,size
-
 metaObject wgEncodeDacMapabilityConsensusExcludable
-#changed from wgEncodeMapabilityDacConsensusBlacklist to wgEncodeDacMapabilityConsensusExcludable by wong in June 15
 objType table
 composite wgEncodeMapability
 dataType Mapability
@@ -109,18 +103,15 @@ dateSubmitted 2011-05-04
 dccAccession wgEncodeEH001432
 expId 1432
 fileName wgEncodeDacMapabilityConsensusExcludable.bed.gz
-#changed from wgEncodeMapabilityDacConsensusBlacklist to wgEncodeDacMapabilityConsensusExcludable by wong in June 15
 grant Birney
 lab DAC-Stanford
 labVersion consensus: Duke Excluded and DAC UltraHighSignal blacklist
 project wgEncode
 subId 4039
 tableName wgEncodeDacMapabilityConsensusExcludable
-#changed from wgEncodeMapabilityDacConsensusBlacklist to wgEncodeDacMapabilityConsensusExcludable by wong in June 15
 view Excludable
 
 metaObject wgEncodeDukeMapabilityRegionsExcludable
-#changed from wgEncodeMapabilityDukeRegionsExcluded to wgEncodeDukeMapabilityRegionsExcludable by wong in June 15
 objType table
 composite wgEncodeMapability
 dataType Mapability
@@ -129,18 +120,15 @@ dateSubmitted 2011-03-28
 dccAccession wgEncodeEH000322
 expId 322
 fileName wgEncodeDukeMapabilityRegionsExcludable.bed.gz
-#changed from wgEncodeMapabilityDukeRegionsExcluded to wgEncodeDukeMapabilityRegionsExcludable by wong in June 15
 grant Crawford
 lab Duke
 labVersion satellite_rna_chrM_500.bed.20080925
 project wgEncode
 subId 3840
 tableName wgEncodeDukeMapabilityRegionsExcludable
-#changed from wgEncodeMapabilityDukeRegionsExcluded to wgEncodeDukeMapabilityRegionsExcludable by wong in June 15
 view Excludable
 
 metaObject wgEncodeDukeMapabilityUniqueness20bp
-#changed from wgEncodeMapabilityDukeUniqueness20bp to wgEncodeDukeMapabilityUniqueness20bp by wong in June 15
 objType table
 composite wgEncodeMapability
 dataType Mapability
@@ -149,7 +137,6 @@ dateSubmitted 2011-03-28
 dccAccession wgEncodeEH000323
 expId 323
 fileName wgEncodeDukeMapabilityUniqueness20bp.bigWig
-#changed from wgEncodeMapabilityDukeUniqueness20bp to wgEncodeDukeMapabilityUniqueness20bp by wong in June 15
 grant Crawford
 lab Duke
 labVersion 1.0 - 4 or less
@@ -157,11 +144,9 @@ project wgEncode
 size 20mer
 subId 3840
 tableName wgEncodeDukeMapabilityUniqueness20bp
-#changed from wgEncodeMapabilityDukeUniqueness20bp to wgEncodeDukeMapabilityUniqueness20bp by wong in June 15
 view Uniqueness
 
 metaObject wgEncodeDukeMapabilityUniqueness35bp
-#changed from wgEncodeMapabilityDukeUniqueness35bp to wgEncodeDukeMapabilityUniqueness35bp by wong in June 15
 objType table
 composite wgEncodeMapability
 dataType Mapability
@@ -170,7 +155,6 @@ dateSubmitted 2011-03-28
 dccAccession wgEncodeEH000325
 expId 325
 fileName wgEncodeDukeMapabilityUniqueness35bp.bigWig
-#changed from wgEncodeMapabilityDukeUniqueness35bp to wgEncodeDukeMapabilityUniqueness35bp by wong in June 15
 grant Crawford
 lab Duke
 labVersion 1.0 - 4 or less
@@ -178,7 +162,11 @@ project wgEncode
 size 35mer
 subId 3840
 tableName wgEncodeDukeMapabilityUniqueness35bp
-#changed from wgEncodeMapabilityDukeUniqueness35bp to wgEncodeDukeMapabilityUniqueness35bp by wong in June 15
 view Uniqueness
 
-# MAGIC: -786629480
+metaObject wgEncodeMapability
+objType composite
+composite wgEncodeMapability
+expVars lab,dataType,view,size
+
+# MAGIC: -556871331

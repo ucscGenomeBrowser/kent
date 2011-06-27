@@ -1038,7 +1038,7 @@ termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
 sex M
 tier 3
-protocol Yale_TFBS(Struhl):BJ-tert-T_Struhl_protocol.pdf
+protocol Yale_TFBS(Struhl):BJ_5ta_Struhl_protocol.pdf
 
 term BJ-HRas
 tag BJHRAS
@@ -1853,7 +1853,7 @@ vendorName ScienCell
 vendorId 1000
 orderUrl http://www.sciencellonline.com/site/products/1000.php
 sex U
-protocol UW_Stam:HBMEC_Myers_protocol.pdf
+protocol UW_Stam:HBMEC_Stam_protocol.pdf
 
 term HCFaa
 tag HCFAA
@@ -3234,22 +3234,24 @@ sex F
 tier 3
 protocol UW_Stam:Stam_15_protocols.pdf
 
-term SK-SY5Y
-tag SKSY5Y
-type Cell Line
-organism human
-description neuroblastoma, parental cell line: SK-N-SH 
-tissue bone marrow
-vendorName ATCC
-vendorId bone marrow
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
-lineage ectoderm 
-karyotype The cells possess a unique marker comprised of a chromosome 1 with a complex insertion of an additional copy of a 1q segment into the long arm, resulting in trisomy of 1q
-termId BTO:0000793
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
-sex F
-tier 3
-protocol SYDH_TFBS(Farnham):SK-SY5Y_Farnham_protocol.pdf
+# This cell line may not exist...  -Jeff
+# See http://redmine.soe.ucsc.edu/issues/4408
+#term SK-SY5Y
+#tag SKSY5Y
+#type Cell Line
+#organism human
+#description neuroblastoma, parental cell line: SK-N-SH 
+#tissue bone marrow
+#vendorName ATCC
+#vendorId bone marrow
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
+#lineage ectoderm 
+#karyotype The cells possess a unique marker comprised of a chromosome 1 with a complex insertion of an additional copy of a 1q segment into the long arm, resulting in trisomy of 1q
+#termId BTO:0000793
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
+#sex F
+#tier 3
+#protocol SYDH_TFBS(Farnham):SK-SY5Y_Farnham_protocol.pdf
 
 term SKMC
 tag SKMC
@@ -4667,7 +4669,7 @@ antibodyDescription Goal polyclonal. Raised against an internal region of human 
 targetDescription CycT2 is one of three cyclins that can form a heterodimer with cyclin-dependent kinase 9 (CDK9). The heterodimer is known as positive elongation factor b (P-TEFb) and is responsible for the phosphophorylation of Ser2 of the heptad repeat in the C-terminal domain of RNA polymerase II as well as the negative elongation factors DSIF (hSpt4/hSpt5) and NELF. Phosphorylation of RNA polymerase II and the negative elongation factors by P-TEFb promotes elongation. CycT2 contains a leucine rich domain capable of binding to the C-terminal domain of RNA polymerase II.
 vendorName Santa Cruz Biotechnology
 vendorId sc-12419
-orderUrl http://www.scbt.com/jp/datasheet-12419-cyclin-t2a-b-a-20-antibody.html
+orderUrl http://www.scbt.com/datasheet-12419-cyclin-t2a-b-a-20-antibody.html
 lab Struhl
 lots H2306
 targetId GeneCard:CCNT2
@@ -6222,7 +6224,7 @@ lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
 targetId GeneCard:POL2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Pol2(Immunoblot):human_Pol2_validation_Synder.pdf
+validation Pol2(Immunoblot):human_Pol2_validation_Snyder.pdf
 
 term Pol2(b)
 tag POL2b
@@ -6403,7 +6405,7 @@ antibodyDescription Rabbit polyclonal
 targetDescription SET domain, bifurcated 1, the SET domain is a highly conserved, approximately 150-amino acid motif implicated in the modulation of chromatin structure
 vendorName Proteintech Group
 vendorId  11231-1-AP
-orderUrl http://www.ptglab.com/data/image/pdf/E__web_pdf_11231-1-AP.pdf
+orderUrl http://www.ptglab.com/Products/SETDB1-Antibody-11231-1-AP.htm
 lab Farnham
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
@@ -6595,7 +6597,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=345
 lab Snyder
 lots G2406 and K2106
 targetId GeneCard:STAT1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=STAT1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1&search=STAT1
 validation missing
 
 term STAT2
@@ -7182,8 +7184,8 @@ target ELAVL1
 targetDescription  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
 antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin.
 vendorName 1) Santa Cruz Biotech; 2) Millipore
-vendorId SC-5261; Mil ab5831
-orderUrl http://www.santacruzbiotech.com ; http://www.millipore.com/catalogue/item/ab5831
+vendorId SC-5261; 07-1735 is recommended replacement for AB5831
+orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html ; http://www.millipore.com/catalogue/item/07-1735
 lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId Gene:1994
@@ -8192,25 +8194,25 @@ term Alignability
 tag ALIGNABI
 type view
 label Alignability
-description Alignability
+description Displays how uniquely k-mer sequences align to a region of the genome 
 
 term Alignments
 tag ALN
 type view
 label Alignments
-description Aligned sequence tags
+description Shows individual reads mapped to the genome and indicates where bases may mismatch
 
 term Base_Overlap_Signal
 tag  SIGBO
 type view
 label Base_Overlap_Signal
-description Base Overlap Signal
+description An alternative version of the F-Seq Density Signal track annotation that provides a higher resolution view of the raw sequence data. This track also includes the combined set of sequences from all replicates. For each sequence, the aligned read is extended 5 bp in both directions from its 5' aligned end where DNase cut the DNA. The score at each base pair represents the number of extended fragments that overlap the base pair.
 
 term Clusters
 tag CLUSTERS
 type view
 label Clusters
-description Clusters
+description Clusters built from the alignments
 
 term CNV
 tag CNV
@@ -8228,13 +8230,13 @@ term Excludable
 tag EXCLU
 type view
 label Excludable
-description Excludable
+description Genomic regions for which mapped sequence tags were filtered out before signal generation and peak calling, problematic regions for short sequence tag signal detection (such as satellites and rRNA genes)
 
 term ExonsGencV3c
 tag EXONGENCV3C
 type view
 label Exons Gencode V3c
-description ExonsGencV3c
+description Expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
 term Fasta3p
 tag FASTA3P
@@ -8252,49 +8254,49 @@ term FastaRd1
 tag FASTARD1
 type view
 label FastaRd1
-description FastaRd1
+description Fasta Read 1
 
 term FastaRd2
 tag FASTARD2
 type view
 label FastaRd2
-description FastaRd2
+description Fasta Read 2
 
 term Fastq
 tag FASTQ
 type view
 label Fastq
-description Fastq
+decription Raw sequence with Phred33 quality scores
 
 term FastqRd1
 tag FASTQRD1
 type view
 label FastqRd1
-description FastqRd1
+description Raw sequence with phred33 quality scores Read 1
 
 term FastqRd2
 tag FASTQRD2
 type view
 label FastqRd2
-description FastqRd2
+description Raw sequence with phred33 quality scores Read 1
 
 term FiltTransfrags
 tag FILTTRANSFRAGS
 type view
 label Filtered Transfrags
-description FilteredTransfrags
+description Filtered transcript fragments
 
 term GeneDeNovo
 tag GENEDENO
 type view
 label Genes DeNovo
-description GeneDeNovo
+description Expression estimates for genes defined by Cufflinks in de novo mode in gtf format
 
 term GeneGencV3c
 tag GENEGENCV3C
 type view
 label Genes Gencode V3c
-description Gencode release V3c
+description Expression level estimates at the gene level for the GENCODE CRCh37.v3c annotation in gtf format
 
 term HMM
 tag HMM
@@ -8306,20 +8308,21 @@ term Hotspots
 tag HOTSPOTS
 type view
 label Hotspots
-description Hotspots
+description ChIP-seq affinity zones identified using the HotSpot algorithm
 
 term Interactions
 tag INTERACTIONS
 type view
 label Interactions
-description Interactions
+description ChIA-PET Chromatin Interaction PET clusters: Two different genomic regions in the chromatin are genomically far from each other or in different chromosomes, but are spatially close to each other in the nucleus and interact with each other for regulatory functions. BED12 format is used to represent the data.
 
 term Junctions
 tag JUNCTIONS
 type view
 label Junctions
-description Junctions
+description TopHat-defined splice junctions
 
+# Interactions may be a better view for this
 term Matrix
 tag MATRIX
 type view
@@ -8330,13 +8333,13 @@ term MinusRawSignal
 tag MUNUSRAWSIG
 type view
 label Minus Raw Signal
-description Minus Raw Signal
+description Graphs the base-by-base density of tags on the minus strand
 
 term Peaks
 tag PKS
 type view
 label Peaks
-description Peaks called
+description Regions of enriched signal in experiment
 
 term PeptideMapping
 tag PEPTIDEMAP
@@ -8348,7 +8351,7 @@ term PlusRawSignal
 tag PLUSRAWSIG
 type view
 label Plus Raw Signal
-description Plus Raw Signal
+description Graphs the base-by-base density of tags on the plus strand
 
 term Qual3p
 tag QUAL3P
@@ -8378,7 +8381,7 @@ term RawSignal
 tag RAWSIG
 type view
 label Raw Signal
-description Raw Signal
+description Shows the density of mapped reads on the plus and minus strands (wiggle format)
 
 term RbpAssocRna
 tag RBPASSOCRNA
@@ -8432,13 +8435,13 @@ term TranscriptDeNovo
 tag TRANSDENOVO
 type view
 label TranscriptDeNovo
-description TranscriptDeNovo
+description Transcript models and expression estimates in FPKM produced by Cufflinks in de novo mode
 
 term TranscriptGencV3c
 tag TRANSGENCV3C
 type view
 label Transcript Gencode V3c
-description Transcript Gencode V3c
+description Expression level estimates at the transcript level for the GENCODE CRCh37.v3c annotation in gtf format 
 
 term Transfrags
 tag TRANSFRAGS
@@ -8450,7 +8453,7 @@ term TSS
 tag TSS
 type view
 label TSS
-description TSS
+description Expression level estimates for GENCODE CRCh37.v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
 
 term Uniqueness
 tag UNQ
