@@ -37857,7 +37857,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdAln.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType input
 subId 3256
@@ -37877,7 +37877,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType input
 subId 3256
@@ -37897,7 +37897,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -37919,7 +37919,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdAln.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType input
 subId 3255
@@ -37939,7 +37939,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType input
 subId 3255
@@ -37959,7 +37959,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -38460,7 +38460,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -38481,7 +38481,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -38502,7 +38502,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38524,7 +38524,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -38545,7 +38545,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -38566,7 +38566,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38588,7 +38588,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep1.bam
 grant Snyder
-lab Stanford
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -38609,7 +38609,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep2.bam
 grant Snyder
-lab Stanford
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -38630,7 +38630,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38652,7 +38652,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -38673,7 +38673,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -38694,7 +38694,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig.bigWig
 grant Snyder
-lab Stanford
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41452,4 +41452,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -557756538
+# MAGIC: -561879456

@@ -950,7 +950,7 @@ html numtSeqMm9
     longLabel Mouse NumtS
     color 0,60,120
     useScore 1
-    noScoreFilter .
+    #noScoreFilter .
     priority 1
     type bed 6 .
     html numtSeqMm9
@@ -962,7 +962,7 @@ html numtSeqMm9
     color 0,60,120
     priority 2
     useScore 1
-    noScoreFilter .
+    #noScoreFilter .
     type bed 12 .
     html numtSeqMm9
     
@@ -971,7 +971,7 @@ html numtSeqMm9
     shortLabel NumtS on mitochon
     longLabel Mouse NumtS on mitochondrion
     useScore 1
-    noScoreFilter .
+    #noScoreFilter .
     color 0,60,120
     priority 3
     type bed 6 .
@@ -986,6 +986,7 @@ html numtSeqMm9
     visibility pack
     configurable on
     type bam
+    noScoreFilter .
     chromosomes chrM
     pairEndsByName on
     showNames on
