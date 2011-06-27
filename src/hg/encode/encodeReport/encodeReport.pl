@@ -3,11 +3,11 @@
 # encodeReport.pl - use metaDb tables to generate report of submitted and released experiments
 #
 # Reporting formats:
-# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment);
-# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession
+# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID);
+# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID
 # Briefly was:
 # DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Submission Ids, Accession, Assembly
-# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly
+# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly, Exp_ID
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the git source at:
@@ -35,15 +35,17 @@ use SafePipe;
 
 use vars qw/
     $opt_configDir
+    $opt_expTable
     $opt_verbose
     /;
 
 # Global variables
 our $pipeline = "encpipeline_prod";
 our $pipelinePath = "/hive/groups/encode/dcc/pipeline/" . $pipeline;
-#our $configPath = $pipelinePath . "/config";
-our $configPath = "/cluster/home/kate/kent/src/hg/encode/encodeReport/config";
+our $configPath = $pipelinePath . "/config";
+#our $configPath = "/cluster/home/kate/kent.reporting/src/hg/encode/encodeReport/config";
 our $assembly;  # required command-line arg
+our $expTable = "encodeExp";
 
 sub usage {
     print STDERR <<END;
@@ -52,6 +54,7 @@ usage: encodeReport.pl <assembly>
 options:
     -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
+    -expTable=table     Alternate experiment table to use for fishing experiment ID's
     -verbose=num        Set verbose level to num (default 1).
 END
 exit 1;
@@ -63,6 +66,7 @@ exit 1;
 my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
+                    "expTable=s",
                     "verbose=i",
                     );
 usage() if (!$ok);
@@ -81,6 +85,10 @@ if (defined $opt_configDir) {
     }
 }
 
+if (defined $opt_expTable) {
+    $expTable = $opt_expTable;
+}
+
 if(!(-d $configPath)) {
     die "configPath '$configPath' is invalid; Can't find the config directory\n";
 }
@@ -90,22 +98,21 @@ my %terms = Encode::getControlledVocab($configPath);
 my %tags = Encode::getControlledVocabTags($configPath);
 my @termTypes = (keys %terms);
 
-# use pi.ra file to map pi/lab/institution/grant/project
-my $labRef = Encode::getLabs($configPath);
-my %labs = %{$labRef};
+my %labs = %{$terms{"lab"}};
+my %grants = %{$terms{"grant"}};
 my $dataType;
 my %dataTypes = %{$terms{"dataType"}};
 my $var;
 my $termType;
 my $subId;
 
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs", "Accession", "Assembly", 
-        "Strain", "Age", "Treatment");
+        "Strain", "Age", "Treatment", "Exp_ID");
 my %metaLines = ();
 
 # print metadata from table in 'lines' format
@@ -141,22 +148,23 @@ foreach my $objName (keys %metaLines) {
     my $lab = "unknown";
     if (defined($metadata{"lab"})) {
         $lab = $metadata{"lab"};
-        # strip off PI name in parens
         $lab =~ s/\(\w+\)//;
         # TODO: Fix 'lab=' metadata for UT-A to be consistent
         $lab = "UT-A" if ($lab eq "UT-Austin");
     }
     foreach $var (keys %labs) {
+        #my $strippedVar = $var;
+        #$strippedVar =~ s/\(\w+\)//;
         if (lc($var) eq lc($lab)) {
-            $lab = $var;
-            $experiment{"labPi"} = $labs{$lab}->{"pi"};
-            $experiment{"project"} = $labs{$lab}->{"project"};
-            $experiment{"projectPi"} = $labs{$lab}->{"grant"};
+            $experiment{"lab"} = $lab;
+            $experiment{"labPi"} = $labs{$var}->{"labPi"};
+            my $grantPi = $labs{$var}->{"grantPi"};
+            $experiment{"projectPi"} = $grantPi;
+            $experiment{"project"} = $grants{$grantPi}->{"projectName"};
             warn "lab/project mismatch in settings $settings" 
                     unless ($metadata{"grant"} eq $experiment{"projectPi"});
         }
     }
-    $experiment{"lab"} = $lab;
     if ($experiment{"project"} eq "unknown") {
         warn "lab $lab not found in pi.ra, from settings $settings";
     }
@@ -165,24 +173,18 @@ foreach my $objName (keys %metaLines) {
         #$experiment{"lab"} = "Yale";
     #}
 
-    # look up dataType case-insensitive, as tag or term, save as tag
+    # look up dataType case-insensitive, as tag or term, save as tag, term and label
     my $dType = $metadata{"dataType"};
     $dataType = $dType;
+    my $dataTypeTerm;
     foreach $var (keys %dataTypes) {
         if (lc($dType) eq lc($var) || lc($dType) eq lc($dataTypes{$var}->{"tag"})) {
             $dataType = $dataTypes{$var}->{"tag"};
+            $dataTypeTerm = $dataTypes{$var}->{"term"};
         }
     }
-    #$dataType = $metadata{"dataType"};
-    #if (!defined($tags{"dataType"}{$dataType})) {
-        # get tag if term was used
-        #foreach $var (keys %dataTypes) {
-            #if ($var eq $dataType) {
-                #$dataType = $terms{"dataType"}{$var}->{"tag"};
-            #}
-        #}
-    #}
     $experiment{"dataType"} = $dataType;
+    $experiment{"dataTypeTerm"} = $dataTypeTerm;
 
     $experiment{"cell"} = "none";
     if (defined($metadata{"cell"})) {
@@ -193,17 +195,15 @@ foreach my $objName (keys %metaLines) {
     # determine term type for experiment parameters 
     my %vars = ();
 
+    my @varTermTypes = qw (age antibody insertLength localization 
+                       protocol readType restrictionEnzyme
+                       ripTgtProtein rnaExtract treatment);
+
     foreach $var (keys %metadata) {
-        foreach $termType (@termTypes) {
-            # skip special terms
-            next if ($termType eq "Cell Line");
-            next if ($termType eq "dataType");
-            next if ($termType eq "project");
-            next if ($termType eq "seqPlatform");
-            next if ($termType eq "grant");
-            next if ($termType eq "lab");
-            #next if ($termType eq "control");
-            if (lc($termType) eq lc($var) && defined($terms{$termType}{$metadata{$var}})) {
+        next if ($var eq "treatment" && $metadata{$var} eq "None");
+        next if ($var eq "age" && $metadata{$var} eq "immortalized");
+        foreach $termType (@varTermTypes) {
+            if (lc($termType) eq lc($var)) {
                 $vars{$termType} = $metadata{$var};
             }
         }
@@ -232,21 +232,26 @@ foreach my $objName (keys %metaLines) {
 
     # experimental params -- iterate through all tags, lookup in cv.ra, 
      $experiment{"vars"} = "none";
+     $experiment{"expVars"} = "none";
      $experiment{"varLabels"} = "none";
      $experiment{"factorLabels"} = "none";
      $experiment{"treatment"} = "none";
      $experiment{"age"} = "n/a";
      $experiment{"strain"} = "n/a";
-    if (scalar(keys %vars) > 0) {
+     if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
         # TODO: define explicit ordering for term type in cv.ra
         # construct vars as list, semi-colon separated
         $experiment{"vars"} = "";
+        $experiment{"expVars"} = "";
         $experiment{"varLabels"} = "";
         $experiment{"factorLabels"} = "";
         foreach $termType (sort keys %vars) {
             $var = $vars{$termType};
-            $experiment{"vars"} = $experiment{"vars"} .  $var . ";";
+            $experiment{"vars"} = $experiment{"vars"} .  $termType . "=" . $var . " ";
+            if ($termType ne "version" && $var ne "None") {
+                $experiment{"expVars"} = $experiment{"expVars"} .  $termType . "=" . $var . " ";
+            }
             my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                 $terms{$termType}{$var}->{"label"} : $var;
             # special handling of treatment, age, strain for NHGRI -- they have specific columns
@@ -303,15 +308,17 @@ foreach my $objName (keys %metaLines) {
     #die "undefined releaseDate" unless defined($experiment{"releaseDate"});
     #die "undefined status" unless defined($experiment{"status"});
 
-    # create key for experiment: lab+dataType+cell+vars
-    my $expKey = $experiment{"lab"} . "+" . $experiment{"dataType"} . "+" . 
-                                $experiment{"cell"} . "+" . 
-                                $experiment{"vars"};
-
+    # create key for experiments (lab:%s dataType:%s cellType:%s vars:<var=val> <var2=val>)
+    my $expKey = "lab:" . $lab .
+                " dataType:" . $dataType .
+                " cellType:" . $experiment{"cell"};
+    if (defined $experiment{"vars"}) {
+        $expKey = $expKey . 
+                " vars:" .  $experiment{"vars"};
+    }
     print STDERR "KEY: " . $expKey . "\n";
 
     # save in a hash of experiments, 
-    #   keyed by lab+dataType+cell+vars
     # (include version in vars)
     # subId -- lookup, add to list if exists
     if (defined($experiments{$expKey})) {
@@ -416,13 +423,23 @@ foreach my $key (keys %experiments) {
                 $tags{"dataType"}{$dataType}->{"label"} :
                 $tags{"dataType"}{$dataType}->{"term"};
     }
-    # map lab to label in pi.ra
-    my $lab = $experiment{"lab"};
-    if (defined($labs{$lab}->{"label"})) {
-        $experiment{"lab"} = $labs{$lab}->{"label"};
+
+    my $id = 0;
+    if ($assembly eq "hg19" || $assembly eq "hg18" || $assembly eq "mm9") {
+        # transform var=val to var:val so utility doesn't think these are command-line options
+        # and remove version 
+        my $organism;
+        if ($assembly eq "mm9") {
+            $organism = "mouse"
+        } else {
+            $organism = "human"
+        }
+        my $varArgs = $experiment{"expVars"};
+        $varArgs =~ s/=/:/g;
+        $id = scalar(`encodeExp -table=$expTable id $organism $experiment{"lab"} $experiment{"dataTypeTerm"} $experiment{"cell"} "$varArgs"`);
     }
 
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\n", 
                 $experiment{"project"}, $experiment{"projectPi"}, 
                 $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
@@ -432,7 +449,8 @@ foreach my $key (keys %experiments) {
                 join(",", sort keys %ids), 
                 $experiment{"accession"}, $assembly,
                 # nhgri report only
-                $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"});
+                $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"}, 
+                $id);
 }
 
 exit 0;
