@@ -3788,6 +3788,25 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
 protocol UW(Stam):Fibroblast_Stam_protocol.pdf
 
+term ForelimbBud
+tag FLBUD
+type Cell Line
+organism mouse
+tissue Limb
+category Tissue
+age ageUnknown
+strain Unknown
+description embryo forelimb buds (PROVISIONAL)
+vendorName Selleri lab, Cornell
+vendorId ForelimbBud
+orderUrl http://weill.cornell.edu/research/researcher/lselleri/
+termId 3883
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3883
+color 102,50,200
+sex U
+protocol UW(Stam):ForelimbBuds_Stam_protocol.pdf
+
+
 term G1E
 tag G1E
 type Cell Line
@@ -3822,6 +3841,24 @@ color 153,38,0
 sex U
 protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
 
+term GenitalFatPad
+tag GFAT
+type Cell Line
+organism mouse
+tissue Adipose
+category Tissue
+age ageUnknown
+strain Unknown
+description Genital Adipose tissue (PROVISIONAL)
+vendorName UW lab
+vendorId GeneitalFatPad
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 16230
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=16230
+color 189,0,157
+sex U
+protocol UW(Stam):GenitalFatPad_Stam_protocol.pdf
+
 term Heart
 tag HEART
 type Cell Line
@@ -3839,6 +3876,42 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
 protocol LICR(Ren):Heart_Ren_protocol.pdf
+
+term HeadlessEmbryo
+tag HLEMBRYO
+type Cell Line
+organism mouse
+tissue Embryo
+category Tissue
+age ageUnknown
+strain Unknown
+description Whole embryos with heads removed (PROVISIONAL)
+vendorName Selleri lab, Cornell
+vendorId HeadlessEmbryo
+orderUrl http://weill.cornell.edu/research/researcher/lselleri/
+termId 3341
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3341
+color 65,105,225
+sex U
+protocol UW(Stam):HeadlessEmbryo_Stam_protocol.pdf
+
+term HindlimbBud
+tag HLBUD
+type Cell Line
+organism mouse
+tissue Limb
+category Tissue
+age ageUnknown
+strain Unknown
+description embryo hindlimb buds (PROVISIONAL)
+vendorName Selleri lab, Cornell
+vendorId HindlimbBud
+orderUrl http://weill.cornell.edu/research/researcher/lselleri/
+termId 3891
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3891
+color 102,50,200
+sex U
+protocol UW(Stam):HindlimbBuds_Stam_protocol.pdf
 
 term Kidney
 tag KIDNEY
@@ -3966,6 +4039,26 @@ orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 color 86,180,233
 sex M
 protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
+
+term Mesoderm
+tag MESODERM
+type Cell Line
+organism mouse
+tissue Mesoderm
+category Tissue
+age ageUnknown
+strain Unknown
+description axial somatic and lateral plate mesoderm from eviscerated headless, limbless embryos  (PROVISIONAL)
+vendorName Selleri lab, Cornell
+vendorId Mesoderm
+orderUrl http://weill.cornell.edu/research/researcher/lselleri/
+termId 3342
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3342
+color 65,105,225
+sex U
+protocol UW(Stam):Mesoderm_Stam_protocol.pdf
+
+
 
 #Missing VendorName and termId
 term Myocyte
@@ -8634,6 +8727,11 @@ tag C57BL6J
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
 
+term CD-1
+tag CD1
+type strain
+description Multipurpose mouse used for safety and efficacy testing, aging, surgical model, pseudopregnancy (PROVISIONAL)
+
 term NIH/Swiss
 tag NIHS
 type strain
@@ -8716,6 +8814,17 @@ type age
 stage Embryonic
 description Embryonic day 18.5 (PROVISIONAL)
 
+term adult-4wks
+tag ADULT4WKS
+type age
+stage Adult
+description Adult 4 weeks (PROVISIONAL)
+
+term adult-5wks
+tag ADULT5WKS
+type age
+stage Adult
+description Adult 5 weeks (PROVISIONAL)
 
 term adult-8wks
 tag ADULT8WKS
