@@ -657,6 +657,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscAlnRep1.bam
 grant Snyder
 lab USC
@@ -679,6 +680,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscAlnRep2.bam
 grant Snyder
 lab USC
@@ -701,6 +703,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscPk.narrowPeak.gz
 grant Snyder
 lab USC
@@ -724,6 +727,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -747,6 +751,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
@@ -770,6 +775,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscSig.bigWig
 grant Snyder
 lab USC
@@ -2335,4 +2341,4 @@ tableName wgEncodeSydhHistoneU2osInputUscSig
 treatment None
 view Signal
 
-# MAGIC: -31997334
+# MAGIC: -31772022
