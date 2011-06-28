@@ -1617,6 +1617,152 @@ tableName wgEncodeSydhTfbsCh12Mxi1af4185IggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabAlnRep1
+objType file
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhTfbsCh12NelfeIggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabAlnRep2
+objType file
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhTfbsCh12NelfeIggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabPk
+objType table
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhTfbsCh12NelfeIggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+tableName wgEncodeSydhTfbsCh12NelfeIggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep1
+objType file
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep2
+objType file
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabSig
+objType table
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhTfbsCh12NelfeIggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+tableName wgEncodeSydhTfbsCh12NelfeIggrabSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep1
 objType file
 age immortalized
@@ -6184,4 +6330,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 1999820626
+# MAGIC: -1853285656
