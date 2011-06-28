@@ -170,8 +170,6 @@ tg->loadItems = loadRetroGene;
 tg->itemName = retroName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = retroGeneColor;
-tg->exonArrows = TRUE;
-tg->exonArrowsAlways = TRUE;
 }
 
 static unsigned getLabelTypes(struct track *tg)

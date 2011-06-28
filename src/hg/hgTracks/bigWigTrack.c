@@ -73,13 +73,22 @@ static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
-struct preDrawContainer *pre = bigWigLoadPreDraw(tg, seqStart, seqEnd, width);
+boolean canCloseHere = FALSE;
+struct preDrawContainer *pre = tg->customPt; // populated by bigWigLoadItems
+if (! pre)	// custom tracks could not do this at their load time
+    {
+    pre = bigWigLoadPreDraw(tg, seqStart, seqEnd, width);
+    canCloseHere = TRUE;
+    }
+
 if (tg->networkErrMsg == NULL)
     {
     /* Call actual graphing routine. */
     wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
 		   pre, pre->preDrawZero, pre->preDrawSize, 
 		   &tg->graphUpperLimit, &tg->graphLowerLimit);
+    if (canCloseHere)
+	bigWigFileClose(&tg->bbiFile);
     }
 else
     bigDrawWarning(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
@@ -125,6 +134,8 @@ if (tg->bbiFile == NULL)
         bigWigOpenCatch(tg, fileName);
 	}
     hFreeConn(&conn);
+    tg->customPt = (void *)bigWigLoadPreDraw(tg, winStart, winEnd, insideWidth);
+    bigWigFileClose(&tg->bbiFile);
     }
 }
 

@@ -1537,9 +1537,19 @@ void omimLocationUI(struct trackDb *tdb)
 omimLocationConfig(tdb);
 }
 
+void omimGene2IdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+printf("<B>Label:</B> ");
+labelMakeCheckBox(tdb, "omimId", "OMIM ID", FALSE);
+labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
+
+printf("<BR>\n");
+}
 void omimGene2UI(struct trackDb *tdb)
 /* Put up omimGene2-specific controls */
 {
+omimGene2IdConfig(tdb);
 omimGene2Config(tdb);
 }
 
@@ -2752,8 +2762,12 @@ if (sameWord(tdb->track,"ensGene"))
     printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
-printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    {
+    if (trackDbSetting(tdb, "wgEncode"))
+        printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' width=100 src='/images/logos/ENCODE_scaleup_logo.png'><A>");
+    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
+    }
 /* Print link for parent track */
 if (!ajax)
     {
@@ -2853,6 +2867,12 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))
             {
+            if (!hIsPreviewHost())
+                {
+                // TODO: get from hui.c
+                printf("<A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s' TITLE='Early access to unreviewed new data on the Preview Browser...'>Preview</A>",
+                    "genome-preview.ucsc.edu", database, tdb->track);
+                }
             printf("&nbsp;&nbsp;");
             makeDownloadsLink(database, tdb, trackHash);
             }

@@ -382,7 +382,7 @@ metaObject wgEncodeHaibGenotypeGm12878RegionsRep1
 objType table
 cell GM12878
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
@@ -2144,4 +2144,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -1214323710
+# MAGIC: -1212596867
