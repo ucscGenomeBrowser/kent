@@ -3,7 +3,7 @@ objType composite
 composite wgEncodeSydhHistone
 expVars lab,dataType,cell,treatment,antibody,control
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUscAlnRep1
 objType file
 antibody H3K27me3B
 cell K562b
@@ -16,9 +16,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneK562bH3k27me3bUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -26,7 +26,7 @@ subId 1352
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUscAlnRep2
 objType file
 antibody H3K27me3B
 cell K562b
@@ -39,9 +39,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneK562bH3k27me3bUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -49,7 +49,7 @@ subId 1352
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdPk
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUscPk
 objType table
 antibody H3K27me3B
 cell K562b
@@ -62,18 +62,18 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneK562bH3k27me3bUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1352
-tableName wgEncodeSydhHistoneK562bH3k27me3bUcdPk
+tableName wgEncodeSydhHistoneK562bH3k27me3bUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep1
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUscRawDataRep1
 objType file
 antibody H3K27me3B
 cell K562b
@@ -86,9 +86,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k27me3bUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
 project wgEncode
 replicate 1
@@ -97,7 +97,7 @@ subId 1352
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep2
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUscRawDataRep2
 objType file
 antibody H3K27me3B
 cell K562b
@@ -110,9 +110,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k27me3bUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
 project wgEncode
 replicate 2
@@ -121,7 +121,7 @@ subId 1352
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdSig
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUscSig
 objType table
 antibody H3K27me3B
 cell K562b
@@ -134,18 +134,18 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUcdSig.bigWig
+fileName wgEncodeSydhHistoneK562bH3k27me3bUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1352
-tableName wgEncodeSydhHistoneK562bH3k27me3bUcdSig
+tableName wgEncodeSydhHistoneK562bH3k27me3bUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1
+metaObject wgEncodeSydhHistoneK562bH3k4me1UscAlnRep1
 objType file
 antibody H3K4me1
 cell K562b
@@ -158,9 +158,9 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam
+fileName wgEncodeSydhHistoneK562bH3k4me1UscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -168,7 +168,7 @@ subId 1205
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2
+metaObject wgEncodeSydhHistoneK562bH3k4me1UscAlnRep2
 objType file
 antibody H3K4me1
 cell K562b
@@ -181,9 +181,9 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam
+fileName wgEncodeSydhHistoneK562bH3k4me1UscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -191,7 +191,7 @@ subId 1205
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UcdPk
+metaObject wgEncodeSydhHistoneK562bH3k4me1UscPk
 objType table
 antibody H3K4me1
 cell K562b
@@ -204,18 +204,18 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneK562bH3k4me1UscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1205
-tableName wgEncodeSydhHistoneK562bH3k4me1UcdPk
+tableName wgEncodeSydhHistoneK562bH3k4me1UscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep1
+metaObject wgEncodeSydhHistoneK562bH3k4me1UscRawDataRep1
 objType file
 antibody H3K4me1
 cell K562b
@@ -228,9 +228,9 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k4me1UscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -238,7 +238,7 @@ subId 1205
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep2
+metaObject wgEncodeSydhHistoneK562bH3k4me1UscRawDataRep2
 objType file
 antibody H3K4me1
 cell K562b
@@ -251,9 +251,9 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k4me1UscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -261,7 +261,7 @@ subId 1205
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UcdSig
+metaObject wgEncodeSydhHistoneK562bH3k4me1UscSig
 objType table
 antibody H3K4me1
 cell K562b
@@ -274,18 +274,18 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UcdSig.bigWig
+fileName wgEncodeSydhHistoneK562bH3k4me1UscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1205
-tableName wgEncodeSydhHistoneK562bH3k4me1UcdSig
+tableName wgEncodeSydhHistoneK562bH3k4me1UscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUscAlnRep1
 objType file
 antibody H3K4me3B
 cell K562b
@@ -298,9 +298,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneK562bH3k4me3bUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -308,7 +308,7 @@ subId 1350
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUscAlnRep2
 objType file
 antibody H3K4me3B
 cell K562b
@@ -321,9 +321,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneK562bH3k4me3bUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -331,7 +331,7 @@ subId 1350
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdPk
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUscPk
 objType table
 antibody H3K4me3B
 cell K562b
@@ -344,18 +344,18 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneK562bH3k4me3bUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1350
-tableName wgEncodeSydhHistoneK562bH3k4me3bUcdPk
+tableName wgEncodeSydhHistoneK562bH3k4me3bUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep1
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUscRawDataRep1
 objType file
 antibody H3K4me3B
 cell K562b
@@ -368,9 +368,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k4me3bUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
 project wgEncode
 replicate 1
@@ -379,7 +379,7 @@ subId 1350
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep2
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUscRawDataRep2
 objType file
 antibody H3K4me3B
 cell K562b
@@ -392,9 +392,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k4me3bUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
 project wgEncode
 replicate 2
@@ -403,7 +403,7 @@ subId 1350
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdSig
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUscSig
 objType table
 antibody H3K4me3B
 cell K562b
@@ -416,18 +416,18 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUcdSig.bigWig
+fileName wgEncodeSydhHistoneK562bH3k4me3bUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1350
-tableName wgEncodeSydhHistoneK562bH3k4me3bUcdSig
+tableName wgEncodeSydhHistoneK562bH3k4me3bUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1
+metaObject wgEncodeSydhHistoneK562bH3k9acbUscAlnRep1
 objType file
 antibody H3K9acB
 cell K562b
@@ -440,9 +440,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneK562bH3k9acbUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -450,7 +450,7 @@ subId 1351
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2
+metaObject wgEncodeSydhHistoneK562bH3k9acbUscAlnRep2
 objType file
 antibody H3K9acB
 cell K562b
@@ -463,9 +463,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneK562bH3k9acbUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -473,7 +473,7 @@ subId 1351
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUcdPk
+metaObject wgEncodeSydhHistoneK562bH3k9acbUscPk
 objType table
 antibody H3K9acB
 cell K562b
@@ -486,18 +486,18 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneK562bH3k9acbUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1351
-tableName wgEncodeSydhHistoneK562bH3k9acbUcdPk
+tableName wgEncodeSydhHistoneK562bH3k9acbUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep1
+metaObject wgEncodeSydhHistoneK562bH3k9acbUscRawDataRep1
 objType file
 antibody H3K9acB
 cell K562b
@@ -510,9 +510,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k9acbUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
 project wgEncode
 replicate 1
@@ -521,7 +521,7 @@ subId 1351
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep2
+metaObject wgEncodeSydhHistoneK562bH3k9acbUscRawDataRep2
 objType file
 antibody H3K9acB
 cell K562b
@@ -534,9 +534,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k9acbUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
 project wgEncode
 replicate 2
@@ -545,7 +545,7 @@ subId 1351
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUcdSig
+metaObject wgEncodeSydhHistoneK562bH3k9acbUscSig
 objType table
 antibody H3K9acB
 cell K562b
@@ -558,18 +558,18 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUcdSig.bigWig
+fileName wgEncodeSydhHistoneK562bH3k9acbUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1351
-tableName wgEncodeSydhHistoneK562bH3k9acbUcdSig
+tableName wgEncodeSydhHistoneK562bH3k9acbUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneK562bInputUcdAln
+metaObject wgEncodeSydhHistoneK562bInputUscAln
 objType file
 antibody Input
 cell K562b
@@ -583,9 +583,9 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
 expId 672
-fileName wgEncodeSydhHistoneK562bInputUcdAln.bam
+fileName wgEncodeSydhHistoneK562bInputUscAln.bam
 grant Snyder
-lab UCD
+lab USC
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -594,7 +594,7 @@ subId 3839
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bInputUcdRawData
+metaObject wgEncodeSydhHistoneK562bInputUscRawData
 objType file
 antibody Input
 cell K562b
@@ -608,9 +608,9 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
 expId 672
-fileName wgEncodeSydhHistoneK562bInputUcdRawData.fastq.gz
+fileName wgEncodeSydhHistoneK562bInputUscRawData.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -619,7 +619,7 @@ subId 3839
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bInputUcdSig
+metaObject wgEncodeSydhHistoneK562bInputUscSig
 objType table
 antibody Input
 cell K562b
@@ -634,18 +634,18 @@ dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
 dccInternalNotes Signal file generated by AWG Uniform Signal Calls: June 2010 Freeze
 expId 672
-fileName wgEncodeSydhHistoneK562bInputUcdSig.bigWig
+fileName wgEncodeSydhHistoneK562bInputUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 origAssembly hg18
 project wgEncode
 setType input
 subId 3839
-tableName wgEncodeSydhHistoneK562bInputUcdSig
+tableName wgEncodeSydhHistoneK562bInputUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscAlnRep1
 objType file
 antibody H3K27me3B
 cell NT2-D1
@@ -658,9 +658,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -668,7 +668,7 @@ subId 1137
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscAlnRep2
 objType file
 antibody H3K27me3B
 cell NT2-D1
@@ -681,9 +681,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -691,7 +691,7 @@ subId 1137
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscPk
 objType table
 antibody H3K27me3B
 cell NT2-D1
@@ -704,18 +704,18 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1137
-tableName wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk
+tableName wgEncodeSydhHistoneNt2d1H3k27me3bUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscRawDataRep1
 objType file
 antibody H3K27me3B
 cell NT2-D1
@@ -728,9 +728,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 project wgEncode
 replicate 1
@@ -739,7 +739,7 @@ subId 1137
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscRawDataRep2
 objType file
 antibody H3K27me3B
 cell NT2-D1
@@ -752,9 +752,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 project wgEncode
 replicate 2
@@ -763,7 +763,7 @@ subId 1137
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscSig
 objType table
 antibody H3K27me3B
 cell NT2-D1
@@ -776,18 +776,18 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1137
-tableName wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig
+tableName wgEncodeSydhHistoneNt2d1H3k27me3bUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscAlnRep1
 objType file
 antibody H3K36me3B
 cell NT2-D1
@@ -800,9 +800,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -810,7 +810,7 @@ subId 1354
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscAlnRep2
 objType file
 antibody H3K36me3B
 cell NT2-D1
@@ -823,9 +823,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -833,7 +833,7 @@ subId 1354
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscPk
 objType table
 antibody H3K36me3B
 cell NT2-D1
@@ -846,18 +846,18 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1354
-tableName wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
+tableName wgEncodeSydhHistoneNt2d1H3k36me3bUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscRawDataRep1
 objType file
 antibody H3K36me3B
 cell NT2-D1
@@ -870,9 +870,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
 project wgEncode
 replicate 1
@@ -881,7 +881,7 @@ subId 1354
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscRawDataRep2
 objType file
 antibody H3K36me3B
 cell NT2-D1
@@ -894,9 +894,9 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
 project wgEncode
 replicate 2
@@ -905,7 +905,7 @@ subId 1354
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscSig
 objType table
 antibody H3K36me3B
 cell NT2-D1
@@ -918,18 +918,18 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1354
-tableName wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig
+tableName wgEncodeSydhHistoneNt2d1H3k36me3bUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscAlnRep1
 objType file
 antibody H3K4me1
 cell NT2-D1
@@ -942,9 +942,9 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -952,7 +952,7 @@ subId 1830
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscAlnRep2
 objType file
 antibody H3K4me1
 cell NT2-D1
@@ -965,9 +965,9 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -975,7 +975,7 @@ subId 1830
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscPk
 objType table
 antibody H3K4me1
 cell NT2-D1
@@ -988,18 +988,18 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1830
-tableName wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
+tableName wgEncodeSydhHistoneNt2d1H3k4me1UscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscRawDataRep1
 objType file
 antibody H3K4me1
 cell NT2-D1
@@ -1012,9 +1012,9 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1022,7 +1022,7 @@ subId 1830
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscRawDataRep2
 objType file
 antibody H3K4me1
 cell NT2-D1
@@ -1035,9 +1035,9 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1045,7 +1045,7 @@ subId 1830
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdSig
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscSig
 objType table
 antibody H3K4me1
 cell NT2-D1
@@ -1058,18 +1058,18 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1830
-tableName wgEncodeSydhHistoneNt2d1H3k4me1UcdSig
+tableName wgEncodeSydhHistoneNt2d1H3k4me1UscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscAlnRep1
 objType file
 antibody H3K4me3B
 cell NT2-D1
@@ -1082,9 +1082,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1092,7 +1092,7 @@ subId 1122
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscAlnRep2
 objType file
 antibody H3K4me3B
 cell NT2-D1
@@ -1105,9 +1105,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1115,7 +1115,7 @@ subId 1122
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscPk
 objType table
 antibody H3K4me3B
 cell NT2-D1
@@ -1128,18 +1128,18 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1122
-tableName wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk
+tableName wgEncodeSydhHistoneNt2d1H3k4me3bUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscRawDataRep1
 objType file
 antibody H3K4me3B
 cell NT2-D1
@@ -1152,9 +1152,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein. G magnetic beads.
 project wgEncode
 replicate 1
@@ -1163,7 +1163,7 @@ subId 1122
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscRawDataRep2
 objType file
 antibody H3K4me3B
 cell NT2-D1
@@ -1176,9 +1176,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation:Protein.G magnetic beads.
 project wgEncode
 replicate 2
@@ -1187,7 +1187,7 @@ subId 1122
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscSig
 objType table
 antibody H3K4me3B
 cell NT2-D1
@@ -1200,18 +1200,18 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1122
-tableName wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig
+tableName wgEncodeSydhHistoneNt2d1H3k4me3bUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscAlnRep1
 objType file
 antibody H3K9acB
 cell NT2-D1
@@ -1224,9 +1224,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1234,7 +1234,7 @@ subId 1173
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscAlnRep2
 objType file
 antibody H3K9acB
 cell NT2-D1
@@ -1247,9 +1247,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1257,7 +1257,7 @@ subId 1173
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdPk
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscPk
 objType table
 antibody H3K9acB
 cell NT2-D1
@@ -1270,18 +1270,18 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1173
-tableName wgEncodeSydhHistoneNt2d1H3k9acbUcdPk
+tableName wgEncodeSydhHistoneNt2d1H3k9acbUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscRawDataRep1
 objType file
 antibody H3K9acB
 cell NT2-D1
@@ -1294,9 +1294,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation: Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 project wgEncode
 replicate 1
@@ -1305,7 +1305,7 @@ subId 1173
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscRawDataRep2
 objType file
 antibody H3K9acB
 cell NT2-D1
@@ -1318,9 +1318,9 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation: Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
 project wgEncode
 replicate 2
@@ -1329,7 +1329,7 @@ subId 1173
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdSig
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscSig
 objType table
 antibody H3K9acB
 cell NT2-D1
@@ -1342,14 +1342,14 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1173
-tableName wgEncodeSydhHistoneNt2d1H3k9acbUcdSig
+tableName wgEncodeSydhHistoneNt2d1H3k9acbUscSig
 treatment None
 view Signal
 
@@ -1368,7 +1368,7 @@ dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1391,7 +1391,7 @@ dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1414,7 +1414,7 @@ dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1438,7 +1438,7 @@ dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein G magnetic beads.
 project wgEncode
 replicate 1
@@ -1462,7 +1462,7 @@ dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein G magnetic beads.
 project wgEncode
 replicate 2
@@ -1486,7 +1486,7 @@ dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1495,7 +1495,7 @@ tableName wgEncodeSydhHistoneNt2d1H3k9me3UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1InputUcdAln
+metaObject wgEncodeSydhHistoneNt2d1InputUscAln
 objType file
 antibody Input
 cell NT2-D1
@@ -1508,16 +1508,16 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000654
 expId 654
-fileName wgEncodeSydhHistoneNt2d1InputUcdAln.bam
+fileName wgEncodeSydhHistoneNt2d1InputUscAln.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 1123
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1InputUcdRawData
+metaObject wgEncodeSydhHistoneNt2d1InputUscRawData
 objType file
 antibody Input
 cell NT2-D1
@@ -1530,16 +1530,16 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000654
 expId 654
-fileName wgEncodeSydhHistoneNt2d1InputUcdRawData.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1InputUscRawData.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 1123
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1InputUcdSig
+metaObject wgEncodeSydhHistoneNt2d1InputUscSig
 objType table
 antibody Input
 cell NT2-D1
@@ -1552,18 +1552,18 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000654
 expId 654
-fileName wgEncodeSydhHistoneNt2d1InputUcdSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1InputUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType input
 subId 1123
-tableName wgEncodeSydhHistoneNt2d1InputUcdSig
+tableName wgEncodeSydhHistoneNt2d1InputUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep1
 objType file
 antibody H3K27me3B
 cell PBMC
@@ -1576,9 +1576,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1586,7 +1586,7 @@ subId 4118
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep2
 objType file
 antibody H3K27me3B
 cell PBMC
@@ -1599,9 +1599,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1609,7 +1609,7 @@ subId 4118
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdPk
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUscPk
 objType table
 antibody H3K27me3B
 cell PBMC
@@ -1622,18 +1622,18 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistonePbmcH3k27me3bUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4118
-tableName wgEncodeSydhHistonePbmcH3k27me3bUcdPk
+tableName wgEncodeSydhHistonePbmcH3k27me3bUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep1
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUscRawDataRep1
 objType file
 antibody H3K27me3B
 cell PBMC
@@ -1646,9 +1646,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k27me3bUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1656,7 +1656,7 @@ subId 4118
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep2
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUscRawDataRep2
 objType file
 antibody H3K27me3B
 cell PBMC
@@ -1669,9 +1669,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k27me3bUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1679,7 +1679,7 @@ subId 4118
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdSig
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUscSig
 objType table
 antibody H3K27me3B
 cell PBMC
@@ -1692,18 +1692,18 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUcdSig.bigWig
+fileName wgEncodeSydhHistonePbmcH3k27me3bUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4118
-tableName wgEncodeSydhHistonePbmcH3k27me3bUcdSig
+tableName wgEncodeSydhHistonePbmcH3k27me3bUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1
+metaObject wgEncodeSydhHistonePbmcH3k4me1UscAlnRep1
 objType file
 antibody H3K4me1
 cell PBMC
@@ -1716,9 +1716,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k4me1UscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1726,7 +1726,7 @@ subId 4117
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2
+metaObject wgEncodeSydhHistonePbmcH3k4me1UscAlnRep2
 objType file
 antibody H3K4me1
 cell PBMC
@@ -1739,9 +1739,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k4me1UscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1749,7 +1749,7 @@ subId 4117
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UcdPk
+metaObject wgEncodeSydhHistonePbmcH3k4me1UscPk
 objType table
 antibody H3K4me1
 cell PBMC
@@ -1762,18 +1762,18 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistonePbmcH3k4me1UscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4117
-tableName wgEncodeSydhHistonePbmcH3k4me1UcdPk
+tableName wgEncodeSydhHistonePbmcH3k4me1UscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep1
+metaObject wgEncodeSydhHistonePbmcH3k4me1UscRawDataRep1
 objType file
 antibody H3K4me1
 cell PBMC
@@ -1786,9 +1786,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k4me1UscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1796,7 +1796,7 @@ subId 4117
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep2
+metaObject wgEncodeSydhHistonePbmcH3k4me1UscRawDataRep2
 objType file
 antibody H3K4me1
 cell PBMC
@@ -1809,9 +1809,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k4me1UscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1819,7 +1819,7 @@ subId 4117
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UcdSig
+metaObject wgEncodeSydhHistonePbmcH3k4me1UscSig
 objType table
 antibody H3K4me1
 cell PBMC
@@ -1832,18 +1832,18 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UcdSig.bigWig
+fileName wgEncodeSydhHistonePbmcH3k4me1UscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4117
-tableName wgEncodeSydhHistonePbmcH3k4me1UcdSig
+tableName wgEncodeSydhHistonePbmcH3k4me1UscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1
+metaObject wgEncodeSydhHistonePbmcH3k9me3UscAlnRep1
 objType file
 antibody H3K9me3
 cell PBMC
@@ -1856,9 +1856,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k9me3UscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1866,7 +1866,7 @@ subId 4116
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2
+metaObject wgEncodeSydhHistonePbmcH3k9me3UscAlnRep2
 objType file
 antibody H3K9me3
 cell PBMC
@@ -1879,9 +1879,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k9me3UscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1889,7 +1889,7 @@ subId 4116
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UcdPk
+metaObject wgEncodeSydhHistonePbmcH3k9me3UscPk
 objType table
 antibody H3K9me3
 cell PBMC
@@ -1902,18 +1902,18 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistonePbmcH3k9me3UscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4116
-tableName wgEncodeSydhHistonePbmcH3k9me3UcdPk
+tableName wgEncodeSydhHistonePbmcH3k9me3UscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep1
+metaObject wgEncodeSydhHistonePbmcH3k9me3UscRawDataRep1
 objType file
 antibody H3K9me3
 cell PBMC
@@ -1926,9 +1926,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k9me3UscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -1936,7 +1936,7 @@ subId 4116
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep2
+metaObject wgEncodeSydhHistonePbmcH3k9me3UscRawDataRep2
 objType file
 antibody H3K9me3
 cell PBMC
@@ -1949,9 +1949,9 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhHistonePbmcH3k9me3UscRawDataRep2.fastq.tgz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -1959,7 +1959,7 @@ subId 4116
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UcdSig
+metaObject wgEncodeSydhHistonePbmcH3k9me3UscSig
 objType table
 antibody H3K9me3
 cell PBMC
@@ -1972,18 +1972,18 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UcdSig.bigWig
+fileName wgEncodeSydhHistonePbmcH3k9me3UscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4116
-tableName wgEncodeSydhHistonePbmcH3k9me3UcdSig
+tableName wgEncodeSydhHistonePbmcH3k9me3UscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep1
 objType file
 antibody H3K36me3B
 cell U2OS
@@ -1996,9 +1996,9 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
 project wgEncode
 replicate 1
@@ -2007,7 +2007,7 @@ subId 2763
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep2
 objType file
 antibody H3K36me3B
 cell U2OS
@@ -2020,9 +2020,9 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
 project wgEncode
 replicate 2
@@ -2031,7 +2031,7 @@ subId 2763
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdPk
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUscPk
 objType table
 antibody H3K36me3B
 cell U2OS
@@ -2044,18 +2044,18 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneU2osH3k36me3bUscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2763
-tableName wgEncodeSydhHistoneU2osH3k36me3bUcdPk
+tableName wgEncodeSydhHistoneU2osH3k36me3bUscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUscRawDataRep1
 objType file
 antibody H3K36me3B
 cell U2OS
@@ -2068,9 +2068,9 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneU2osH3k36me3bUscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -2079,7 +2079,7 @@ subId 2763
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUscRawDataRep2
 objType file
 antibody H3K36me3B
 cell U2OS
@@ -2092,9 +2092,9 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneU2osH3k36me3bUscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -2103,7 +2103,7 @@ subId 2763
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdSig
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUscSig
 objType table
 antibody H3K36me3B
 cell U2OS
@@ -2116,18 +2116,18 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
+fileName wgEncodeSydhHistoneU2osH3k36me3bUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2763
-tableName wgEncodeSydhHistoneU2osH3k36me3bUcdSig
+tableName wgEncodeSydhHistoneU2osH3k36me3bUscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1
+metaObject wgEncodeSydhHistoneU2osH3k9me3UscAlnRep1
 objType file
 antibody H3K9me3
 cell U2OS
@@ -2140,9 +2140,9 @@ dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
+fileName wgEncodeSydhHistoneU2osH3k9me3UscAlnRep1.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType exp
@@ -2150,7 +2150,7 @@ subId 2108
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2
+metaObject wgEncodeSydhHistoneU2osH3k9me3UscAlnRep2
 objType file
 antibody H3K9me3
 cell U2OS
@@ -2163,9 +2163,9 @@ dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
+fileName wgEncodeSydhHistoneU2osH3k9me3UscAlnRep2.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType exp
@@ -2173,7 +2173,7 @@ subId 2108
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UcdPk
+metaObject wgEncodeSydhHistoneU2osH3k9me3UscPk
 objType table
 antibody H3K9me3
 cell U2OS
@@ -2186,18 +2186,18 @@ dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UcdPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneU2osH3k9me3UscPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0.  Submitted even though replicate peak overlap below threshold because data visually looks good, but calling peaks for H3K9me3 is very difficult due to the nature of the signal and not the quality of the data.  When we call peaks using our program that has been modified for histones, we get a ~60% overlap. That's about as good as it gets with H3K9me3 peak calling.
 project wgEncode
 setType exp
 subId 2108
-tableName wgEncodeSydhHistoneU2osH3k9me3UcdPk
+tableName wgEncodeSydhHistoneU2osH3k9me3UscPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1
+metaObject wgEncodeSydhHistoneU2osH3k9me3UscRawDataRep1
 objType file
 antibody H3K9me3
 cell U2OS
@@ -2210,9 +2210,9 @@ dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneU2osH3k9me3UscRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Staph A.
 project wgEncode
 replicate 1
@@ -2221,7 +2221,7 @@ subId 2108
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2
+metaObject wgEncodeSydhHistoneU2osH3k9me3UscRawDataRep2
 objType file
 antibody H3K9me3
 cell U2OS
@@ -2234,9 +2234,9 @@ dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneU2osH3k9me3UscRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Staph A.
 project wgEncode
 replicate 2
@@ -2245,7 +2245,7 @@ subId 2108
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UcdSig
+metaObject wgEncodeSydhHistoneU2osH3k9me3UscSig
 objType table
 antibody H3K9me3
 cell U2OS
@@ -2258,18 +2258,18 @@ dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UcdSig.bigWig
+fileName wgEncodeSydhHistoneU2osH3k9me3UscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2108
-tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
+tableName wgEncodeSydhHistoneU2osH3k9me3UscSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneU2osInputUcdAln
+metaObject wgEncodeSydhHistoneU2osInputUscAln
 objType file
 antibody Input
 cell U2OS
@@ -2283,16 +2283,16 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
 expId 916
-fileName wgEncodeSydhHistoneU2osInputUcdAln.bam
+fileName wgEncodeSydhHistoneU2osInputUscAln.bam
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 3839
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osInputUcdRawData
+metaObject wgEncodeSydhHistoneU2osInputUscRawData
 objType file
 antibody Input
 cell U2OS
@@ -2306,16 +2306,16 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
 expId 916
-fileName wgEncodeSydhHistoneU2osInputUcdRawData.fastq.gz
+fileName wgEncodeSydhHistoneU2osInputUscRawData.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 3839
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osInputUcdSig
+metaObject wgEncodeSydhHistoneU2osInputUscSig
 objType table
 antibody Input
 cell U2OS
@@ -2330,15 +2330,15 @@ dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
 dccInternalNotes Signal file generated by AWG Uniform Signal Calls: June 2010 Freeze
 expId 916
-fileName wgEncodeSydhHistoneU2osInputUcdSig.bigWig
+fileName wgEncodeSydhHistoneU2osInputUscSig.bigWig
 grant Snyder
-lab UCD
+lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType input
 subId 3839
-tableName wgEncodeSydhHistoneU2osInputUcdSig
+tableName wgEncodeSydhHistoneU2osInputUscSig
 treatment None
 view Signal
 
-# MAGIC: 1246869697
+# MAGIC: 22812834
