@@ -9682,10 +9682,10 @@ description Birney
 grantInst ENCODE Data Analysis Center (DAC)
 projectName DAC
 
-term Tullis
-tag TULLIS
+term Tullius
+tag TULLIUS
 type grant
-description Tullis
+description Tullius
 grantInst Boston University
 projectName BU
 
