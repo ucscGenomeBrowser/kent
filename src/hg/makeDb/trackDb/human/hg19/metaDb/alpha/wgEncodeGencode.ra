@@ -1,98 +1,321 @@
+metaObject gencode.v7.2wayconspseudos
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.2wayconspseudos.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode.v7.README.txt
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.README.txt.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode.v7.annotation.gtf
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.annotation.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode.v7.noncoding_RNAs.fa
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.noncoding_RNAs.fa.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode.v7.noncoding_RNAs.gtf
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.noncoding_RNAs.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode.v7.pc_transcripts.fa
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.pc_transcripts.fa.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode.v7.pc_translations.fa
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.pc_translations.fa.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode.v7.polyAs.gtf
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.polyAs.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode.v7.tRNAs.gtf
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode.v7.tRNAs.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
+metaObject gencode7_GRCh37.tgz
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName gencode7_GRCh37.tgz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+
 metaObject wgEncodeGencode
 objType composite
 composite wgEncodeGencode
 expVars lab,dataType,annotation,level,labExpId
 
-metaObject wgEncodeGencode2wayConsPseudoV4
-objType table
-annotation Automatic
+metaObject wgEncodeGencode2wayConsPseudoV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-fileName wgEncodeGencode2wayConsPseudoV4.gtf.gz
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencode2wayConsPseudoV7.gp.gz
 grant Hubbard
 lab Sanger
-labExpId V4
-level 3
+labExpId V7
 project wgEncode
-subId 2094
-tableName wgEncodeGencode2wayConsPseudoV4
+subId 4347
+tableName wgEncodeGencode2wayConsPseudoV7
 
-metaObject wgEncodeGencodeAutoV4
-objType table
-annotation Automatic
+metaObject wgEncodeGencodeAttrsV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-fileName wgEncodeGencodeAutoV4.gtf.gz
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeAttrsV7.tab.gz
 grant Hubbard
 lab Sanger
-labExpId V4
-level 3
+labExpId V7
 project wgEncode
-subId 2094
-tableName wgEncodeGencodeAutoV4
+subId 4347
+tableName wgEncodeGencodeAttrsV7
 
-metaObject wgEncodeGencodeClassesV4
-objType table
+metaObject wgEncodeGencodeBasicV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-fileName wgEncodeGencodeClassesV4.tab.gz
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeBasicV7.gp.gz
 grant Hubbard
 lab Sanger
-labExpId V4
+labExpId V7
 project wgEncode
-subId 2094
-tableName wgEncodeGencodeClassesV4
+subId 4347
+tableName wgEncodeGencodeBasicV7
 
-metaObject wgEncodeGencodeManualV4
-objType table
-annotation Manual
+metaObject wgEncodeGencodeCompV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-fileName wgEncodeGencodeManualV4.gtf.gz
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeCompV7.gp.gz
 grant Hubbard
 lab Sanger
-labExpId V4
-level 1-2
+labExpId V7
 project wgEncode
-subId 2094
-tableName wgEncodeGencodeManualV4
+subId 4347
+tableName wgEncodeGencodeCompV7
 
-metaObject wgEncodeGencodePolyAV4
-objType table
-annotation Manual
+metaObject wgEncodeGencodeExonSupportV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-fileName wgEncodeGencodePolyAV4.gtf.gz
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeExonSupportV7.tab.gz
 grant Hubbard
 lab Sanger
-labExpId V4
-level 2
+labExpId V7
 project wgEncode
-subId 2094
-tableName wgEncodeGencodePolyAV4
+subId 4347
+tableName wgEncodeGencodeExonSupportV7
 
-metaObject wgEncodeGencodeYalePseudoV4
-objType table
+metaObject wgEncodeGencodeGeneSourceV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-fileName wgEncodeGencodeYalePseudoV4.gtf.gz
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeGeneSourceV7.tab.gz
 grant Hubbard
 lab Sanger
-labExpId V4
+labExpId V7
 project wgEncode
-subId 2094
-tableName wgEncodeGencodeYalePseudoV4
+subId 4347
+tableName wgEncodeGencodeGeneSourceV7
 
-# MAGIC: -1240141396
+metaObject wgEncodeGencodePdbV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodePdbV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodePdbV7
+
+metaObject wgEncodeGencodePolyaV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodePolyaV7.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodePolyaV7
+
+metaObject wgEncodeGencodePseudoGeneV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodePseudoGeneV7.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodePseudoGeneV7
+
+metaObject wgEncodeGencodePubMedV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodePubMedV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodePubMedV7
+
+metaObject wgEncodeGencodeRefSeqV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeRefSeqV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeRefSeqV7
+
+metaObject wgEncodeGencodeTagV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeTagV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeTagV7
+
+metaObject wgEncodeGencodeTranscriptSourceV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeTranscriptSourceV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeTranscriptSourceV7
+
+metaObject wgEncodeGencodeTranscriptSupportV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeTranscriptSupportV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeTranscriptSupportV7
+
+metaObject wgEncodeGencodeUniProtV7
+composite wgEncodeGencode
+dataType Gencode
+dataVersion ENCODE May 2011 Freeze
+dateSubmitted 2011-05-01
+fileName wgEncodeGencodeUniProtV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeUniProtV7
+
+# MAGIC: -929877233

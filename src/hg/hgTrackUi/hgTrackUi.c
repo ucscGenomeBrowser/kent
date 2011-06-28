@@ -1537,9 +1537,19 @@ void omimLocationUI(struct trackDb *tdb)
 omimLocationConfig(tdb);
 }
 
+void omimGene2IdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+printf("<B>Label:</B> ");
+labelMakeCheckBox(tdb, "omimId", "OMIM ID", FALSE);
+labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
+
+printf("<BR>\n");
+}
 void omimGene2UI(struct trackDb *tdb)
 /* Put up omimGene2-specific controls */
 {
+omimGene2IdConfig(tdb);
 omimGene2Config(tdb);
 }
 

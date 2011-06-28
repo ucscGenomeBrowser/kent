@@ -1,0 +1,168 @@
+metaObject wgEncodeBroadHmm
+objType composite
+composite wgEncodeBroadHmm
+expVars lab,dataType,cell
+
+metaObject wgEncodeBroadHmmGm12878HMM
+objType table
+cell GM12878
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 784
+fileName wgEncodeBroadHmmGm12878HMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicsPaper
+subId 3446
+tableName wgEncodeBroadHmmGm12878HMM
+view HMM
+
+metaObject wgEncodeBroadHmmH1hescHMM
+objType table
+cell H1-hESC
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 785
+fileName wgEncodeBroadHmmH1hescHMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicsPaper
+subId 3446
+tableName wgEncodeBroadHmmH1hescHMM
+view HMM
+
+metaObject wgEncodeBroadHmmHepg2HMM
+objType table
+cell HepG2
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 789
+fileName wgEncodeBroadHmmHepg2HMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicsPaper
+subId 3446
+tableName wgEncodeBroadHmmHepg2HMM
+view HMM
+
+metaObject wgEncodeBroadHmmHmecHMM
+objType table
+cell HMEC
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 786
+fileName wgEncodeBroadHmmHmecHMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicsPaper
+subId 3446
+tableName wgEncodeBroadHmmHmecHMM
+view HMM
+
+metaObject wgEncodeBroadHmmHsmmHMM
+objType table
+cell HSMM
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 787
+fileName wgEncodeBroadHmmHsmmHMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicsPaper
+subId 3446
+tableName wgEncodeBroadHmmHsmmHMM
+view HMM
+
+metaObject wgEncodeBroadHmmHuvecHMM
+objType table
+cell HUVEC
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 788
+fileName wgEncodeBroadHmmHuvecHMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicsPaper
+subId 3446
+tableName wgEncodeBroadHmmHuvecHMM
+view HMM
+
+metaObject wgEncodeBroadHmmK562HMM
+objType table
+cell K562
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 790
+fileName wgEncodeBroadHmmK562HMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicsPaper
+subId 3446
+tableName wgEncodeBroadHmmK562HMM
+view HMM
+
+metaObject wgEncodeBroadHmmNhekHMM
+objType table
+cell NHEK
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 791
+fileName wgEncodeBroadHmmNhekHMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicsPaper
+subId 3446
+tableName wgEncodeBroadHmmNhekHMM
+view HMM
+
+metaObject wgEncodeBroadHmmNhlfHMM
+objType table
+cell NHLF
+composite wgEncodeBroadHmm
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-01-21
+expId 792
+fileName wgEncodeBroadHmmNhlfHMM.bed.gz
+grant Bernstein
+lab Broad
+project wgEncode
+softwareVersion ChromHMM_ENCODEDynamicPaper
+subId 3446
+tableName wgEncodeBroadHmmNhlfHMM
+view HMM
+
+# MAGIC: -1539151089

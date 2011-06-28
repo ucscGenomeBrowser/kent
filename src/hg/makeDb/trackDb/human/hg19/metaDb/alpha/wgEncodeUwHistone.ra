@@ -3,6 +3,72 @@ objType composite
 composite wgEncodeUwHistone
 expVars lab,dataType,cell,antibody
 
+metaObject wgEncodeUwHistoneA549InputStdAlnRep1
+objType file
+antibody Input
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-24
+dateUnrestricted 2012-03-24
+fileName wgEncodeUwHistoneA549InputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4350
+view Alignments
+
+metaObject wgEncodeUwHistoneA549InputStdRawDataRep1
+objType file
+antibody Input
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-24
+dateUnrestricted 2012-03-24
+fileName wgEncodeUwHistoneA549InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4350
+view RawData
+
+metaObject wgEncodeUwHistoneA549InputStdRawRep1
+objType table
+antibody Input
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-24
+dateUnrestricted 2012-03-24
+fileName wgEncodeUwHistoneA549InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4350
+tableName wgEncodeUwHistoneA549InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -18783,4 +18849,4 @@ subId 1319
 tableName wgEncodeUwHistoneSknshraInputStdRawRep1
 view RawSignal
 
-# MAGIC: -779173116
+# MAGIC: -120799227

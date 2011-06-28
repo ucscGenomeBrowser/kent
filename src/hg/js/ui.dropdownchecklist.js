@@ -208,11 +208,17 @@
             sourceSelect.children().each(function(index) { // when the select has groups
                 var opt = $(this);
                 if (opt.is("option")) {
-                    if (self.options.supportColors == false
-                    && $(opt).css("color") != "rgb(0, 0, 0)"
-                    && $(opt).css("color") != "rgb(255, 255, 255)") {
-                        self.options.supportColors = true;
-                        //warn("supporting colors :"+$(opt).css("color"));
+                    var txtColor = $(opt).css("color");
+                    var backColor = $(opt).css('backgroundColor');
+                    if (self.options.supportColors == false) {
+                        if (txtColor != "rgb(0, 0, 0)"          // black
+                        &&  txtColor != "rgb(255, 255, 255)") { // white
+                            self.options.supportColors = true;
+                        } else if (index != 0                       // all or Any
+                               && backColor != "transparent"
+                               && backColor != "rgb(255, 255, 255)") { // white
+                            self.options.supportColors = true;
+                        }
                     }
                     self._appendOption(opt, dropContainerDiv, index, false);
                 } else {
@@ -257,10 +263,18 @@
             var excluded = option.hasClass("excluded");
             var item = self._createDropItem(index, value, text, selected, disabled, excluded, indent);
             if (self.options.supportColors && item != undefined) {
-                if (option.css('background-color') != "transparent")
-                    item.css('background-color',"transparent");
+                //if (option.length == 1)
+                //    option = option[0];
+                item.css('backgroundColor',"transparent");
+                var backColor = $(option).css('backgroundColor');
+                if (backColor != undefined
+                &&  backColor != "transparent") {
+                    //item.css('backgroundColor',"transparent");
+                    item.css('backgroundColor',backColor);
+                }
                 var txtColor = option.css('color');
-                if (txtColor != undefined)
+                if (txtColor != undefined
+                &&  txtColor != "rgb(255, 255, 255)") // white
                     item.css('color',txtColor);
             }
             container.append(item);
@@ -392,7 +406,8 @@
                     if ($(this).attr("selected")) {
                         if (self.options.supportColors) {
                             var txtColor = $(this).css("color");
-                            if (txtColor == undefined)
+                            if (txtColor == undefined
+                            ||  txtColor == "rgb(255, 255, 255)") // white
                                 txtColor = "rgb(0,0,0)"; // black
                             formattedText += "<span style='color:"+txtColor+";'>" + $(this).text() + '</span><BR>';
                         } else
