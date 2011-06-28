@@ -5503,10 +5503,12 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001745
+expId 1745
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 4155
@@ -5521,10 +5523,12 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001745
+expId 1745
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 4155
@@ -5539,6 +5543,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001745
+expId 1745
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -5557,6 +5563,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001745
+expId 1745
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -5575,6 +5583,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001745
+expId 1745
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -5592,6 +5602,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001745
+expId 1745
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -5609,6 +5621,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001745
+expId 1745
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacSig.bigWig
 grant Crawford
 lab Duke
@@ -7655,4 +7669,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1618383365
+# MAGIC: 1367545584
