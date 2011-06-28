@@ -14,8 +14,6 @@ extern struct trackLayout tl;
 
 static char const rcsid[] = "$Id: encode.c,v 1.24 2010/05/11 01:43:27 kent Exp $";
 
-#define SMALLBUF 128
-
 char *encodeErgeName(struct track *tg, void *item)
 /* return the actual data name, in form xx/yyyy cut off xx/ return yyyy */
 {
