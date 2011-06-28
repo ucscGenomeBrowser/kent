@@ -1073,6 +1073,40 @@ sex M
 tier 3
 protocol Yale_TFBS(Struhl):BJ-5ta_Struhl_protocol.pdf
 
+term CD20+
+tag CD20+
+type Cell Line
+tier 3
+organism human
+description Human B cells.
+lineage missing
+karyotype missing
+sex F
+tissue Blood
+vendorName Heimfeld Lab, FHCRC
+vendorId CD20+
+orderUrl http://labs.fhcrc.org/heimfeld/index.html
+termId BTO:0000776
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
+protocol UW_Stam:CD20+_Stam_protocol.pdf
+
+term CD34+_Mobilized
+tag CD34+MOBILIZED
+type Cell Line
+tier 3
+organism human
+description Hematopoietic progenitor cells - Mobilized.
+lineage missing
+karyotype missing
+sex M
+tissue Blood
+vendorName Heimfeld Lab,
+vendorId FHCRC
+orderUrl http://labs.fhcrc.org/heimfeld/index.html
+termId BTO:0000725
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000725
+protocol UW_Stam:CD34+Mobilized_Stam_protocol.pdf
+
 term CLL
 tag CLL
 type Cell Line
@@ -1855,6 +1889,42 @@ orderUrl http://www.sciencellonline.com/site/products/1000.php
 sex U
 protocol UW_Stam:HBMEC_Stam_protocol.pdf
 
+term HBVP
+tag HBVP
+type Cell Line
+tier 3
+organism human
+description Human Brain Vascular Pericytes.
+lineage missing
+karyotype missing
+sex U
+tissue Brain
+vendorName ScienCell
+vendorId 1200
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1200
+termId BTO:0002441
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002441
+tag HBVP
+protocol UW_Stam:HBVP_Stam_protocol.pdf
+
+term HBVSMC
+tag HBVSMC
+type Cell Line
+tier 3
+organism human
+description Human Brain Vascular Smooth Muscle Cells.
+lineage missing
+karyotype missing
+sex F
+tissue Brain
+vendorName ScienCell
+vendorId 1100
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1100
+termId BTO:0002488
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002488
+tag HBVSMC
+protocol UW_Stam:HBVSMC_Stam_protocol.pdf
+
 term HCFaa
 tag HCFAA
 type Cell Line
@@ -2165,6 +2235,24 @@ sex F
 tier 3
 protocol UW_Stam:HMF_Stam_protocol.pdf
 
+term HMVEC_dAd
+tag HMVECDAD
+type Cell Line
+tier 3
+organism human
+description Adult Human Dermal Microvascular Endothelial Cells.
+lineage missing
+karyotype missing
+sex F
+tissue Skin
+vendorName Lonza 
+vendorId CC-2543,CC-3202
+orderUrl http://www.lonza.com
+termId BTO:0001854
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001854
+protocol UW_Stam:HMVECdAd_Stam_protocol.pdf
+
+
 term HMVEC-LLy
 tag HMVECb
 type Cell Line
@@ -2275,6 +2363,24 @@ orderUrl http://www.sciencellonline.com/site/products/6580.php
 sex U
 tier 3
 protocol UW_Stam:HNPCEpiC_Stam_protocol.pdf
+
+term HPAEC
+tag HPAEC
+type Cell Line
+tier 3
+organism human
+description Human Pulmonary Artery Endothelial Cells.
+lineage missing
+karyotype missing
+sex F
+tissue Heart
+vendorName Lonza 
+vendorId CC-2530,CC-3162
+orderUrl http://www.lonza.com
+termId BTO:0001141
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001141
+tag HPAEC
+protocol UW_Stam:HPAEC_Stam_protocol.pdf
 
 term HPAEpiC
 tag HPAE
@@ -2852,6 +2958,30 @@ sex F
 tier 3
 termId BTO:0002022
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:NHBE_Crawford_protocol.pdf
+
+#
+# Note from Melissa: this is a new submission from UW.  NHBE is already registered.  This
+# is apparently NHBE with a retinoic acid treatment.  Propose to the lab that they submit
+# their experiments as NHBE with a retinoic acid treatment, and we save their protocol as
+# an appendix of the NHBE protocol.  Remove this stanza if it's not needed by 8/31/11.
+#
+#term NHBE
+#tag NHBE
+#type Cell Line
+#tier 3
+#organism human
+#description Normal Human Bronchial Epithelial Cells w/RA.
+#lineage missing
+#karyotype missing
+#sex F
+#tissue Bronchial Epithelium
+#vendorName Lonza 
+#vendorId CC-2540, CC3170
+#orderUrl http://www.lonza.com
+#termId BTO:0001845
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001845
+#protocol UW_Stam:NHBE_Stam_protocol.pdf
+
 
 term NHDF-Ad
 tag NHDFAD
@@ -3790,6 +3920,25 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
 protocol UW(Stam):Fibroblast_Stam_protocol.pdf
 
+term ForelimbBud
+tag FLBUD
+type Cell Line
+organism mouse
+tissue Limb
+category Tissue
+age ageUnknown
+strain Unknown
+description embryo forelimb buds (PROVISIONAL)
+vendorName Selleri lab, Cornell
+vendorId ForelimbBud
+orderUrl http://weill.cornell.edu/research/researcher/lselleri/
+termId 3883
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3883
+color 102,50,200
+sex U
+protocol UW(Stam):ForelimbBuds_Stam_protocol.pdf
+
+
 term G1E
 tag G1E
 type Cell Line
@@ -3824,6 +3973,24 @@ color 153,38,0
 sex U
 protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
 
+term GenitalFatPad
+tag GFAT
+type Cell Line
+organism mouse
+tissue Adipose
+category Tissue
+age ageUnknown
+strain Unknown
+description Genital Adipose tissue (PROVISIONAL)
+vendorName UW lab
+vendorId GeneitalFatPad
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 16230
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=16230
+color 189,0,157
+sex U
+protocol UW(Stam):GenitalFatPad_Stam_protocol.pdf
+
 term Heart
 tag HEART
 type Cell Line
@@ -3841,6 +4008,42 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
 protocol LICR(Ren):Heart_Ren_protocol.pdf
+
+term HeadlessEmbryo
+tag HLEMBRYO
+type Cell Line
+organism mouse
+tissue Embryo
+category Tissue
+age ageUnknown
+strain Unknown
+description Whole embryos with heads removed (PROVISIONAL)
+vendorName Selleri lab, Cornell
+vendorId HeadlessEmbryo
+orderUrl http://weill.cornell.edu/research/researcher/lselleri/
+termId 3341
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3341
+color 65,105,225
+sex U
+protocol UW(Stam):HeadlessEmbryo_Stam_protocol.pdf
+
+term HindlimbBud
+tag HLBUD
+type Cell Line
+organism mouse
+tissue Limb
+category Tissue
+age ageUnknown
+strain Unknown
+description embryo hindlimb buds (PROVISIONAL)
+vendorName Selleri lab, Cornell
+vendorId HindlimbBud
+orderUrl http://weill.cornell.edu/research/researcher/lselleri/
+termId 3891
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3891
+color 102,50,200
+sex U
+protocol UW(Stam):HindlimbBuds_Stam_protocol.pdf
 
 term Kidney
 tag KIDNEY
@@ -3968,6 +4171,26 @@ orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 color 86,180,233
 sex M
 protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
+
+term Mesoderm
+tag MESODERM
+type Cell Line
+organism mouse
+tissue Mesoderm
+category Tissue
+age ageUnknown
+strain Unknown
+description axial somatic and lateral plate mesoderm from eviscerated headless, limbless embryos  (PROVISIONAL)
+vendorName Selleri lab, Cornell
+vendorId Mesoderm
+orderUrl http://weill.cornell.edu/research/researcher/lselleri/
+termId 3342
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3342
+color 65,105,225
+sex U
+protocol UW(Stam):Mesoderm_Stam_protocol.pdf
+
+
 
 #Missing VendorName and termId
 term Myocyte
@@ -4168,7 +4391,7 @@ termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 86,180,233
 sex U
-protocol LICR(Ren):Thymus_Ren_protocol.pdf
+protocol LICR(Ren):Thymus_Ren_protocol.pdf UW(Stam):Thymus_Stam_protocol.pdf
 
 term T-Naive
 tag TNAIVE
@@ -8173,7 +8396,7 @@ term Fastq
 tag FASTQ
 type view
 label Fastq
-decription Raw sequence with Phred33 quality scores
+description Raw sequence with Phred33 quality scores
 
 term FastqRd1
 tag FASTQRD1
@@ -8185,7 +8408,7 @@ term FastqRd2
 tag FASTQRD2
 type view
 label FastqRd2
-description Raw sequence with phred33 quality scores Read 1
+description Raw sequence with phred33 quality scores Read 2
 
 term FiltTransfrags
 tag FILTTRANSFRAGS
@@ -8294,7 +8517,7 @@ term RbpAssocRna
 tag RBPASSOCRNA
 type view
 label Rbp Associated RNA
-description Rbp Associated RNA
+description Ribosome binding protein associated RNA
 
 term Regions
 tag REGIONS
@@ -8637,6 +8860,11 @@ tag C57BL6J
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
 
+term CD-1
+tag CD1
+type strain
+description Multipurpose mouse used for safety and efficacy testing, aging, surgical model, pseudopregnancy (PROVISIONAL)
+
 term NIH/Swiss
 tag NIHS
 type strain
@@ -8719,6 +8947,17 @@ type age
 stage Embryonic
 description Embryonic day 18.5 (PROVISIONAL)
 
+term adult-4wks
+tag ADULT4WKS
+type age
+stage Adult
+description Adult 4 weeks (PROVISIONAL)
+
+term adult-5wks
+tag ADULT5WKS
+type age
+stage Adult
+description Adult 5 weeks (PROVISIONAL)
 
 term adult-8wks
 tag ADULT8WKS
@@ -9443,10 +9682,10 @@ description Birney
 grantInst ENCODE Data Analysis Center (DAC)
 projectName DAC
 
-term Tullis
-tag TULLIS
+term Tullius
+tag TULLIUS
 type grant
-description Tullis
+description Tullius
 grantInst Boston University
 projectName BU
 

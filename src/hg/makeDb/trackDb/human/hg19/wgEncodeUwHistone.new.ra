@@ -55,8 +55,8 @@ shortLabel UW Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ Caco2=Caco-2 HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCM=HCM HCF=HCF HCPE=HCPEpiC HCT116=HCT-116 H7es=H7-hESC HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
-subGroup3 factor Factor H3K04me3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3K36me3 zInput=Input
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2c BJ=BJ Caco2=Caco-2 HAC=HAc HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCM=HCM HCF=HCF HCPE=HCPEpiC HCT116=HCT-116 H7es=H7-hESC HEE=HEEpIC HEK293=HEK293 HFFMYC=HFFMyc HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat LNCAP=LNCaP MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA WI38=WI-38 WERIRB1=WERI-Rb-1
+subGroup3 factor Factor H3K04ME3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3K36me3 zInput=Input
 subGroup4 rep Replicate 1=1 2=2
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
 dimensionZchecked 1,2
@@ -91,7 +91,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K4m3 Ht 1
         longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=BJ rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=BJ rep=1
         type broadPeak
         origAssembly hg18
         # subId=1329 dateSubmitted=2010-06-10
@@ -109,7 +109,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K4m3 Ht 1
         longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=Caco2 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=Caco2 rep=1
         type broadPeak
         origAssembly hg18
         # subId=1332 dateSubmitted=2010-06-11
@@ -136,7 +136,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel GM06 H3K4m3 Ht 1
         longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=GM06990 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=GM06990 rep=1
         type broadPeak
         origAssembly hg18
         # subId=1338 dateSubmitted=2010-06-11
@@ -163,7 +163,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K4m3 Ht 2
         longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=BJ rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=BJ rep=2
         type broadPeak
         origAssembly hg18
         # subId=1328 dateSubmitted=2010-06-10
@@ -190,7 +190,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel GM06 H3K4m3 Ht 2
         longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=GM06990 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=GM06990 rep=2
         type broadPeak
         origAssembly hg18
         # subId=1337 dateSubmitted=2010-06-11
@@ -226,7 +226,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot
         shortLabel GM12 H3K4m3 Ht 1
         longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=1GM12878 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=1GM12878 rep=1
         type broadPeak
         origAssembly hg18
         color 153,38,0
@@ -256,7 +256,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K4m3 Ht 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=2HELA rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=2HELA rep=1
         type broadPeak
         origAssembly hg18
         color 0,119,158
@@ -286,7 +286,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K4m3 Ht 1
         longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=2HEPG2 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=2HEPG2 rep=1
         type broadPeak
         origAssembly hg18
         color 189,0,157
@@ -316,7 +316,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HL60 H3K4m3 Ht 1
         longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HL60 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HL60 rep=1
         type broadPeak
         origAssembly hg18
         # subId=1436 dateSubmitted=2010-06-15
@@ -352,7 +352,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K4m3 Ht 1
         longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=2HUVEC rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=2HUVEC rep=1
         type broadPeak
         origAssembly hg18
         color 224,75,0
@@ -382,7 +382,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot
         shortLabel K562 H3K4m3 Ht 1
         longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=1K562 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=1K562 rep=1
         type broadPeak
         origAssembly hg18
         color 46,0,184
@@ -412,7 +412,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K4m3 Ht 1
         longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=NHEK rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=NHEK rep=1
         type broadPeak
         origAssembly hg18
         color 179,0,134
@@ -442,7 +442,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K4m3 Ht 1
         longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=SAEC rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=SAEC rep=1
         type broadPeak
         origAssembly hg18
         # subId=1466 dateSubmitted=2010-06-15
@@ -469,7 +469,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K4m3 Ht 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=SKNSHRA rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=SKNSHRA rep=1
         type broadPeak
         origAssembly hg18
         # subId=1472 dateSubmitted=2010-06-15
@@ -496,7 +496,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K4m3 Ht 2
         longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=Caco2 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=Caco2 rep=2
         type broadPeak
         origAssembly hg18
         # subId=1333 dateSubmitted=2010-06-11
@@ -514,7 +514,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot 
         shortLabel GM12 H3K4m3 Ht 2
         longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=1GM12878 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=1GM12878 rep=2
         type broadPeak
         origAssembly hg18
         color 153,38,0
@@ -544,7 +544,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K4m3 Ht 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=2HELA rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=2HELA rep=2
         type broadPeak
         origAssembly hg18
         color 0,119,158
@@ -574,7 +574,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K4m3 Ht 2
         longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=2HEPG2 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=2HEPG2 rep=2
         type broadPeak
         origAssembly hg18
         color 189,0,157
@@ -594,7 +594,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HL60 H3K4m3 Ht 2
         longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HL60 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HL60 rep=2
         type broadPeak
         origAssembly hg18
         # subId=1437 dateSubmitted=2010-06-15
@@ -603,7 +603,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K4m3 Ht 2
         longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HRE rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HRE rep=2
         type broadPeak
         origAssembly hg18
         # subId=1440 dateSubmitted=2010-06-15
@@ -630,7 +630,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K4m3 Ht 2
         longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=2HUVEC rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=2HUVEC rep=2
         type broadPeak
         origAssembly hg18
         color 224,75,0
@@ -660,7 +660,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot 
         shortLabel K562 H3K4m3 Ht 2
         longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=1K562 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=1K562 rep=2
         type broadPeak
         origAssembly hg18
         color 46,0,184
@@ -690,7 +690,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K4m3 Ht 2
         longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=NHEK rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=NHEK rep=2
         type broadPeak
         origAssembly hg18
         color 179,0,134
@@ -710,7 +710,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K4m3 Ht 2
         longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=SAEC rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=SAEC rep=2
         type broadPeak
         origAssembly hg18
         # subId=1467 dateSubmitted=2010-06-15
@@ -737,7 +737,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K4m3 Ht 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=SKNSHRA rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=SKNSHRA rep=2
         type broadPeak
         origAssembly hg18
         # subId=1473 dateSubmitted=2010-06-15
@@ -764,7 +764,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K4m3 Ht 1
         longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HRE rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HRE rep=1
         type broadPeak
         origAssembly hg18
         # subId=1441 dateSubmitted=2010-06-16
@@ -783,7 +783,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K4m3 Ht 1
         longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=H7es rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=H7es rep=1
         type broadPeak
         origAssembly hg19
         # subId=2029 dateSubmitted=2010-07-24
@@ -819,7 +819,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K4m3 Ht 2
         longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=H7es rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=H7es rep=2
         type broadPeak
         origAssembly hg19
         # subId=2034 dateSubmitted=2010-07-24
@@ -847,7 +847,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG49 H3K4m3 Ht 1
         longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG04449 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=AG04449 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2592 dateSubmitted=2010-10-22
@@ -856,7 +856,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG49 H3K4m3 Ht 2
         longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG04449 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=AG04449 rep=2
         type broadPeak
         origAssembly hg19
         # subId=2593 dateSubmitted=2010-10-22
@@ -865,7 +865,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG50 H3K4m3 Ht 1
         longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG04450 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=AG04450 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2598 dateSubmitted=2010-10-23
@@ -874,7 +874,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG50 H3K4m3 Ht 2
         longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG04450 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=AG04450 rep=2
         type broadPeak
         origAssembly hg19
         # subId=2599 dateSubmitted=2010-10-23
@@ -883,7 +883,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG09 H3K4m3 Ht 2
         longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG09309 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=AG09309 rep=2
         type broadPeak
         origAssembly hg19
         # subId=2602 dateSubmitted=2010-10-23
@@ -892,7 +892,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG09 H3K4m3 Ht 1
         longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG09309 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=AG09309 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2603 dateSubmitted=2010-10-23
@@ -901,7 +901,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG19 H3K4m3 Ht 1
         longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG09319 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=AG09319 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2604 dateSubmitted=2010-10-23
@@ -910,7 +910,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG19 H3K4m3 Ht 2
         longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG09319 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=AG09319 rep=2
         type broadPeak
         origAssembly hg19
         # subId=2605 dateSubmitted=2010-10-23
@@ -919,7 +919,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG03 H3K4m3 Ht 1
         longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG10803 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=AG10803 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2607 dateSubmitted=2010-10-23
@@ -928,7 +928,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG03 H3K4m3 Ht 2
         longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AG10803 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=AG10803 rep=2
         type broadPeak
         origAssembly hg19
         # subId=2608 dateSubmitted=2010-10-23
@@ -937,7 +937,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AoAF H3K4m3 Ht 2
         longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AOAF rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=AOAF rep=2
         type broadPeak
         origAssembly hg19
         # subId=2611 dateSubmitted=2010-10-23
@@ -946,7 +946,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel AoAF H3K4m3 Ht 1
         longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=AOAF rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=AOAF rep=1
         type broadPeak
         origAssembly hg19
         # subId=2610 dateSubmitted=2010-10-23
@@ -955,7 +955,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCM H3K4m3 Ht 1
         longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCM rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HCM rep=1
         type broadPeak
         origAssembly hg19
         # subId=2621 dateSubmitted=2010-10-23
@@ -964,7 +964,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HBMEC H3K4m3 Ht 2
         longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HBMEC rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HBMEC rep=2
         type broadPeak
         origAssembly hg19
         # subId=2613 dateSubmitted=2010-10-23
@@ -973,7 +973,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HBMEC H3K4m3 Ht 1
         longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HBMEC rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HBMEC rep=1
         type broadPeak
         origAssembly hg19
         # subId=2614 dateSubmitted=2010-10-23
@@ -982,7 +982,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCFaa H3K4m3 Ht 1
         longLabel HCFaa H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCFaa rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HCFaa rep=1
         type broadPeak
         origAssembly hg19
         # subId=2616 dateSubmitted=2010-10-23
@@ -991,7 +991,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCF H3K4m3 Ht 1
         longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCF rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HCF rep=1
         type broadPeak
         origAssembly hg19
         # subId=2618 dateSubmitted=2010-10-23
@@ -1000,7 +1000,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCF H3K4m3 Ht 2
         longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCF rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HCF rep=2
         type broadPeak
         origAssembly hg19
         # subId=2619 dateSubmitted=2010-10-23
@@ -1009,7 +1009,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCM H3K4m3 Ht 2
         longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCM rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HCM rep=2
         type broadPeak
         origAssembly hg19
         # subId=2622 dateSubmitted=2010-10-23
@@ -1018,7 +1018,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCPE H3K4m3 Ht 2
         longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCPE rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HCPE rep=2
         type broadPeak
         origAssembly hg19
         # subId=2624 dateSubmitted=2010-10-23
@@ -1027,7 +1027,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCPE H3K4m3 Ht 1
         longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCPE rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HCPE rep=1
         type broadPeak
         origAssembly hg19
         # subId=2625 dateSubmitted=2010-10-23
@@ -1036,7 +1036,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCT16 H3K4m3 Ht 2
         longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCT116 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HCT116 rep=2
         type broadPeak
         origAssembly hg19
         # subId=2628 dateSubmitted=2010-10-23
@@ -1045,7 +1045,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCT16 H3K4m3 Ht 1
         longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HCT116 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HCT116 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2629 dateSubmitted=2010-10-23
@@ -1054,7 +1054,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEE H3K4m3 Ht 1
         longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HEE rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HEE rep=1
         type broadPeak
         origAssembly hg19
         # subId=2631 dateSubmitted=2010-10-23
@@ -1063,7 +1063,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEE H3K4m3 Ht 2
         longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HEE rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HEE rep=2
         type broadPeak
         origAssembly hg19
         # subId=2632 dateSubmitted=2010-10-23
@@ -1072,7 +1072,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEK H3K4m3 Ht 2
         longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HEK293 rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HEK293 rep=2
         type broadPeak
         origAssembly hg19
         # subId=2633 dateSubmitted=2010-10-23
@@ -1081,7 +1081,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEK H3K4m3 Ht 1
         longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HEK293 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HEK293 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2634 dateSubmitted=2010-10-23
@@ -1090,7 +1090,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMEC H3K4m3 Ht 2
         longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HMEC rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HMEC rep=2
         type broadPeak
         origAssembly hg19
         # subId=2635 dateSubmitted=2010-10-23
@@ -1099,7 +1099,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMEC H3K4m3 Ht 1
         longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HMEC rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HMEC rep=1
         type broadPeak
         origAssembly hg19
         # subId=2636 dateSubmitted=2010-10-23
@@ -1108,7 +1108,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMF H3K4m3 Ht 1
         longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HMF rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HMF rep=1
         type broadPeak
         origAssembly hg19
         # subId=2637 dateSubmitted=2010-10-23
@@ -1117,7 +1117,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMF H3K4m3 Ht 2
         longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HMF rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HMF rep=2
         type broadPeak
         origAssembly hg19
         # subId=2638 dateSubmitted=2010-10-23
@@ -1126,7 +1126,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPAF H3K4m3 Ht 1
         longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HPAF rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HPAF rep=1
         type broadPeak
         origAssembly hg19
         # subId=2640 dateSubmitted=2010-10-23
@@ -1135,7 +1135,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPAF H3K4m3 Ht 2
         longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HPAF rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HPAF rep=2
         type broadPeak
         origAssembly hg19
         # subId=2641 dateSubmitted=2010-10-23
@@ -1144,7 +1144,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPF H3K4m3 Ht 2
         longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HPF rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HPF rep=2
         type broadPeak
         origAssembly hg19
         # subId=2644 dateSubmitted=2010-10-23
@@ -1153,7 +1153,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPF H3K4m3 Ht 1
         longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HPF rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HPF rep=1
         type broadPeak
         origAssembly hg19
         # subId=2645 dateSubmitted=2010-10-23
@@ -1162,7 +1162,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRPE H3K4m3 Ht 2
         longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HRPE rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HRPE rep=2
         type broadPeak
         origAssembly hg19
         # subId=2647 dateSubmitted=2010-10-23
@@ -1171,7 +1171,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRPE H3K4m3 Ht 1
         longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HRPE rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HRPE rep=1
         type broadPeak
         origAssembly hg19
         # subId=2648 dateSubmitted=2010-10-23
@@ -1180,7 +1180,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HVMF H3K4m3 Ht 2
         longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HVMF rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HVMF rep=2
         type broadPeak
         origAssembly hg19
         # subId=2649 dateSubmitted=2010-10-23
@@ -1189,7 +1189,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HVMF H3K4m3 Ht 1
         longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HVMF rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HVMF rep=1
         type broadPeak
         origAssembly hg19
         # subId=2650 dateSubmitted=2010-10-23
@@ -1198,7 +1198,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel Jurk H3K4m3 Ht 2
         longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=Jurkat rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=Jurkat rep=2
         type broadPeak
         origAssembly hg19
         # subId=2653 dateSubmitted=2010-10-23
@@ -1207,7 +1207,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel Jurk H3K4m3 Ht 1
         longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=Jurkat rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=Jurkat rep=1
         type broadPeak
         origAssembly hg19
         # subId=2654 dateSubmitted=2010-10-23
@@ -1216,7 +1216,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel MCF-7 H3K4m3 Ht 1
         longLabel MCF-7 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=MCF7 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=MCF7 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2656 dateSubmitted=2010-10-23
@@ -1225,7 +1225,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel NB4 H3K4m3 Ht 1
         longLabel NB4 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=NB4 rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=NB4 rep=1
         type broadPeak
         origAssembly hg19
         # subId=2658 dateSubmitted=2010-10-23
@@ -1234,7 +1234,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHDFn H3K4m3 Ht 1
         longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=NHDF-neo rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=NHDF-neo rep=1
         type broadPeak
         origAssembly hg19
         # subId=2660 dateSubmitted=2010-10-23
@@ -1243,7 +1243,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHDFn H3K4m3 Ht 2
         longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=NHDF-neo rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=NHDF-neo rep=2
         type broadPeak
         origAssembly hg19
         # subId=2661 dateSubmitted=2010-10-23
@@ -1252,7 +1252,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HAsp H3K4m3 Ht 1
         longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HA-sp rep=1
+        subGroups view=Hot factor=H3K04ME3 cellType=HA-sp rep=1
         type broadPeak
         origAssembly hg19
         # subId=2778 dateSubmitted=2010-10-28
@@ -1261,7 +1261,7 @@ noInherit on
         parent wgEncodeUwHistoneViewHot off
         shortLabel HAsp H3K4m3 Ht 2
         longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04me3 cellType=HA-sp  rep=2
+        subGroups view=Hot factor=H3K04ME3 cellType=HA-sp  rep=2
         type broadPeak
         origAssembly hg19
         # subId=2779 dateSubmitted=2010-10-28
@@ -1288,7 +1288,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K4m3 Pk 1
         longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=BJ rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=BJ rep=1
         type narrowPeak
         origAssembly hg18
         # subId=1329 dateSubmitted=2010-06-10
@@ -1306,7 +1306,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco H3K4m3 Pk 1
         longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=Caco2 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=Caco2 rep=1
         type narrowPeak
         origAssembly hg18
         # subId=1332 dateSubmitted=2010-06-11
@@ -1333,7 +1333,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06 H3K4m3 Pk 1
         longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=GM06990 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=GM06990 rep=1
         type narrowPeak
         origAssembly hg18
         # subId=1338 dateSubmitted=2010-06-11
@@ -1360,7 +1360,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K4m3 Pk 2
         longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=BJ rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=BJ rep=2
         type narrowPeak
         origAssembly hg18
         # subId=1328 dateSubmitted=2010-06-10
@@ -1387,7 +1387,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06 H3K4m3 Pk 2
         longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=GM06990 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=GM06990 rep=2
         type narrowPeak
         origAssembly hg18
         # subId=1337 dateSubmitted=2010-06-11
@@ -1423,7 +1423,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks
         shortLabel GM12 H3K4m3 Pk 1
         longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=1GM12878 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=1GM12878 rep=1
         type narrowPeak
         origAssembly hg18
         color 153,38,0
@@ -1453,7 +1453,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa H3K4m3 Pk 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=2HELA rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HELA rep=1
         type narrowPeak
         origAssembly hg18
         color 0,119,158
@@ -1483,7 +1483,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG H3K4m3 Pk 1
         longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=2HEPG2 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HEPG2 rep=1
         type narrowPeak
         origAssembly hg18
         color 189,0,157
@@ -1513,7 +1513,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HL60 H3K4m3 Pk 1
         longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HL60 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HL60 rep=1
         type narrowPeak
         origAssembly hg18
         # subId=1436 dateSubmitted=2010-06-15
@@ -1549,7 +1549,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVE H3K4m3 Pk 1
         longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=2HUVEC rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HUVEC rep=1
         type narrowPeak
         origAssembly hg18
         color 224,75,0
@@ -1579,7 +1579,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks
         shortLabel K562 H3K4m3 Pk 1
         longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=1K562 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=1K562 rep=1
         type narrowPeak
         origAssembly hg18
         color 46,0,184
@@ -1609,7 +1609,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K4m3 Pk 1
         longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=NHEK rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=NHEK rep=1
         type narrowPeak
         origAssembly hg18
         color 179,0,134
@@ -1639,7 +1639,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K4m3 Pk 1
         longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=SAEC rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=SAEC rep=1
         type narrowPeak
         origAssembly hg18
         # subId=1466 dateSubmitted=2010-06-15
@@ -1666,7 +1666,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K4m3 Pk 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=SKNSHRA rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=SKNSHRA rep=1
         type narrowPeak
         origAssembly hg18
         # subId=1472 dateSubmitted=2010-06-15
@@ -1693,7 +1693,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco H3K4m3 Pk 2
         longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=Caco2 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=Caco2 rep=2
         type narrowPeak
         origAssembly hg18
         # subId=1333 dateSubmitted=2010-06-11
@@ -1711,7 +1711,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks 
         shortLabel GM12 H3K4m3 Pk 2
         longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=1GM12878 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=1GM12878 rep=2
         type narrowPeak
         origAssembly hg18
         color 153,38,0
@@ -1741,7 +1741,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa H3K4m3 Pk 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=2HELA rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HELA rep=2
         type narrowPeak
         origAssembly hg18
         color 0,119,158
@@ -1771,7 +1771,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG H3K4m3 Pk 2
         longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=2HEPG2 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HEPG2 rep=2
         type narrowPeak
         origAssembly hg18
         color 189,0,157
@@ -1791,7 +1791,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HL60 H3K4m3 Pk 2
         longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HL60 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HL60 rep=2
         type narrowPeak
         origAssembly hg18
         # subId=1437 dateSubmitted=2010-06-15
@@ -1800,7 +1800,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K4m3 Pk 2
         longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HRE rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HRE rep=2
         type narrowPeak
         origAssembly hg18
         # subId=1440 dateSubmitted=2010-06-15
@@ -1827,7 +1827,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVE H3K4m3 Pk 2
         longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=2HUVEC rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HUVEC rep=2
         type narrowPeak
         origAssembly hg18
         color 224,75,0
@@ -1857,7 +1857,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks 
         shortLabel K562 H3K4m3 Pk 2
         longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=1K562 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=1K562 rep=2
         type narrowPeak
         origAssembly hg18
         color 46,0,184
@@ -1887,7 +1887,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K4m3 Pk 2
         longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=NHEK rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=NHEK rep=2
         type narrowPeak
         origAssembly hg18
         color 179,0,134
@@ -1907,7 +1907,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K4m3 Pk 2
         longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=SAEC rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=SAEC rep=2
         type narrowPeak
         origAssembly hg18
         # subId=1467 dateSubmitted=2010-06-15
@@ -1934,7 +1934,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K4m3 Pk 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=SKNSHRA rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=SKNSHRA rep=2
         type narrowPeak
         origAssembly hg18
         # subId=1473 dateSubmitted=2010-06-15
@@ -1961,7 +1961,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K4m3 Pk 1
         longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HRE rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HRE rep=1
         type narrowPeak
         origAssembly hg18
         # subId=1441 dateSubmitted=2010-06-16
@@ -1980,7 +1980,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel H7ES H3K4m3 Pk 1
         longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=H7es rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=H7es rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2029 dateSubmitted=2010-07-24
@@ -2016,7 +2016,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel H7ES H3K4m3 Pk 2
         longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=H7es rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=H7es rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2034 dateSubmitted=2010-07-24
@@ -2044,7 +2044,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG49 H3K4m3 Pk 1
         longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG04449 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG04449 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2592 dateSubmitted=2010-10-22
@@ -2053,7 +2053,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG49 H3K4m3 Pk 2
         longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG04449 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG04449 rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2593 dateSubmitted=2010-10-22
@@ -2062,7 +2062,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG50 H3K4m3 Pk 1
         longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG04450 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG04450 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2598 dateSubmitted=2010-10-23
@@ -2071,7 +2071,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG50 H3K4m3 Pk 2
         longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG04450 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG04450 rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2599 dateSubmitted=2010-10-23
@@ -2080,7 +2080,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG09 H3K4m3 Pk 2
         longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG09309 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG09309 rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2602 dateSubmitted=2010-10-23
@@ -2089,7 +2089,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG09 H3K4m3 Pk 1
         longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG09309 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG09309 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2603 dateSubmitted=2010-10-23
@@ -2098,7 +2098,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG19 H3K4m3 Pk 1
         longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG09319 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG09319 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2604 dateSubmitted=2010-10-23
@@ -2107,7 +2107,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG19 H3K4m3 Pk 2
         longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG09319 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG09319 rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2605 dateSubmitted=2010-10-23
@@ -2116,7 +2116,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG03 H3K4m3 Pk 1
         longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG10803 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG10803 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2607 dateSubmitted=2010-10-23
@@ -2125,7 +2125,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG03 H3K4m3 Pk 2
         longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AG10803 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=AG10803 rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2608 dateSubmitted=2010-10-23
@@ -2134,7 +2134,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AoAF H3K4m3 Pk 2
         longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AOAF rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=AOAF rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2611 dateSubmitted=2010-10-23
@@ -2143,7 +2143,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AoAF H3K4m3 Pk 1
         longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=AOAF rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=AOAF rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2610 dateSubmitted=2010-10-23
@@ -2152,7 +2152,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCM H3K4m3 Pk 1
         longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCM rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCM rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2621 dateSubmitted=2010-10-23
@@ -2161,7 +2161,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HBMEC H3K4m3 Pk 2
         longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HBMEC rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HBMEC rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2613 dateSubmitted=2010-10-23
@@ -2170,7 +2170,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HBMEC H3K4m3 Pk 1
         longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HBMEC rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HBMEC rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2614 dateSubmitted=2010-10-23
@@ -2179,7 +2179,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCFaa H3K4m3 Pk 1
         longLabel HCFaa H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCFaa rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCFaa rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2616 dateSubmitted=2010-10-23
@@ -2188,7 +2188,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCF H3K4m3 Pk 1
         longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCF rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCF rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2618 dateSubmitted=2010-10-23
@@ -2197,7 +2197,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCF H3K4m3 Pk 2
         longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCF rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCF rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2619 dateSubmitted=2010-10-23
@@ -2206,7 +2206,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCM H3K4m3 Pk 2
         longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCM rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCM rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2622 dateSubmitted=2010-10-23
@@ -2215,7 +2215,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCPE H3K4m3 Pk 2
         longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCPE rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCPE rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2624 dateSubmitted=2010-10-23
@@ -2224,7 +2224,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCPE H3K4m3 Pk 1
         longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCPE rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCPE rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2625 dateSubmitted=2010-10-23
@@ -2233,7 +2233,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCT16 H3K4m3 Pk 2
         longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCT116 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCT116 rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2628 dateSubmitted=2010-10-23
@@ -2242,7 +2242,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCT16 H3K4m3 Pk 1
         longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HCT116 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HCT116 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2629 dateSubmitted=2010-10-23
@@ -2251,7 +2251,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEE H3K4m3 Pk 1
         longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HEE rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HEE rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2631 dateSubmitted=2010-10-23
@@ -2260,7 +2260,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEE H3K4m3 Pk 2
         longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HEE rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HEE rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2632 dateSubmitted=2010-10-23
@@ -2269,7 +2269,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEK H3K4m3 Pk 2
         longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HEK293 rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HEK293 rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2633 dateSubmitted=2010-10-23
@@ -2278,7 +2278,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEK H3K4m3 Pk 1
         longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HEK293 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HEK293 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2634 dateSubmitted=2010-10-23
@@ -2287,7 +2287,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMEC H3K4m3 Pk 2
         longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HMEC rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HMEC rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2635 dateSubmitted=2010-10-23
@@ -2296,7 +2296,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMEC H3K4m3 Pk 1
         longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HMEC rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HMEC rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2636 dateSubmitted=2010-10-23
@@ -2305,7 +2305,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMF H3K4m3 Pk 1
         longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HMF rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HMF rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2637 dateSubmitted=2010-10-23
@@ -2314,7 +2314,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMF H3K4m3 Pk 2
         longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HMF rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HMF rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2638 dateSubmitted=2010-10-23
@@ -2323,7 +2323,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HPAF H3K4m3 Pk 1
         longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HPAF rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HPAF rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2640 dateSubmitted=2010-10-23
@@ -2332,7 +2332,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HPAF H3K4m3 Pk 2
         longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HPAF rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HPAF rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2641 dateSubmitted=2010-10-23
@@ -2341,7 +2341,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HPF H3K4m3 Pk 2
         longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HPF rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HPF rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2644 dateSubmitted=2010-10-23
@@ -2350,7 +2350,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HPF H3K4m3 Pk 1
         longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HPF rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HPF rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2645 dateSubmitted=2010-10-23
@@ -2359,7 +2359,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRPE H3K4m3 Pk 2
         longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HRPE rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HRPE rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2647 dateSubmitted=2010-10-23
@@ -2368,7 +2368,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRPE H3K4m3 Pk 1
         longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HRPE rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HRPE rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2648 dateSubmitted=2010-10-23
@@ -2377,7 +2377,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HVMF H3K4m3 Pk 2
         longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HVMF rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HVMF rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2649 dateSubmitted=2010-10-23
@@ -2386,7 +2386,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HVMF H3K4m3 Pk 1
         longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HVMF rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HVMF rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2650 dateSubmitted=2010-10-23
@@ -2395,7 +2395,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Jurk H3K4m3 Pk 2
         longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=Jurkat rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=Jurkat rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2653 dateSubmitted=2010-10-23
@@ -2404,7 +2404,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Jurk H3K4m3 Pk 1
         longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=Jurkat rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=Jurkat rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2654 dateSubmitted=2010-10-23
@@ -2413,7 +2413,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel MCF-7 H3K4m3 Pk 1
         longLabel MCF-7 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=MCF7 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=MCF7 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2656 dateSubmitted=2010-10-23
@@ -2422,7 +2422,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NB4 H3K4m3 Pk 1
         longLabel NB4 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=NB4 rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=NB4 rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2658 dateSubmitted=2010-10-23
@@ -2431,7 +2431,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHDFn H3K4m3 Pk 1
         longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=NHDF-neo rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=NHDF-neo rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2660 dateSubmitted=2010-10-23
@@ -2440,7 +2440,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHDFn H3K4m3 Pk 2
         longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=NHDF-neo rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=NHDF-neo rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2661 dateSubmitted=2010-10-23
@@ -2449,7 +2449,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HAsp H3K4m3 Pk 1
         longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HA-sp rep=1
+        subGroups view=Peaks factor=H3K04ME3 cellType=HA-sp rep=1
         type narrowPeak
         origAssembly hg19
         # subId=2778 dateSubmitted=2010-10-28
@@ -2458,7 +2458,7 @@ noInherit on
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HAsp H3K4m3 Pk 2
         longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04me3 cellType=HA-sp rep=2
+        subGroups view=Peaks factor=H3K04ME3 cellType=HA-sp rep=2
         type narrowPeak
         origAssembly hg19
         # subId=2779 dateSubmitted=2010-10-28
@@ -2603,7 +2603,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K4m3 Sg 1
         longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=BJ rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=BJ rep=1
         type bigWig 1.000000 2259.000000
         origAssembly hg18
         # subId=1329 dateSubmitted=2010-06-10
@@ -2621,7 +2621,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K4m3 Sg 1
         longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=Caco2 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=Caco2 rep=1
         type bigWig 1.000000 1551.000000
         origAssembly hg18
         # subId=1332 dateSubmitted=2010-06-11
@@ -2648,7 +2648,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 H3K4m3 Sg 1
         longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=GM06990 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=GM06990 rep=1
         type bigWig 1.000000 1362.000000
         origAssembly hg18
         # subId=1338 dateSubmitted=2010-06-11
@@ -2675,7 +2675,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K4m3 Sg 2
         longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=BJ rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=BJ rep=2
         type bigWig 1.000000 2701.000000
         origAssembly hg18
         # subId=1328 dateSubmitted=2010-06-10
@@ -2702,7 +2702,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 H3K4m3 Sg 2
         longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=GM06990 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=GM06990 rep=2
         type bigWig 1.000000 2227.000000
         origAssembly hg18
         # subId=1337 dateSubmitted=2010-06-11
@@ -2739,7 +2739,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig
         shortLabel GM12 H3K4m3 Sg 1
         longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=1GM12878 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=1GM12878 rep=1
         type bigWig 1.000000 2525.000000
         origAssembly hg18
         color 153,38,0
@@ -2779,7 +2779,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K4m3 Sg 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=2HELA rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=2HELA rep=1
         type bigWig 1.000000 3307.000000
         origAssembly hg18
         color 0,119,158
@@ -2809,7 +2809,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K4m3 Sg 1
         longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=2HEPG2 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=2HEPG2 rep=1
         type bigWig 1.000000 1372.000000
         origAssembly hg18
         color 189,0,157
@@ -2849,7 +2849,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HL60 H3K4m3 Sg 1
         longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HL60 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HL60 rep=1
         type bigWig 1.000000 1515.000000
         origAssembly hg18
         # subId=1436 dateSubmitted=2010-06-15
@@ -2894,7 +2894,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K4m3 Sg 1
         longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=2HUVEC rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=2HUVEC rep=1
         type bigWig 1.000000 3357.000000
         origAssembly hg18
         color 224,75,0
@@ -2924,7 +2924,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig
         shortLabel K562 H3K4m3 Sg 1
         longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=1K562 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=1K562 rep=1
         type bigWig 1.000000 4646.000000
         origAssembly hg18
         color 46,0,184
@@ -2954,7 +2954,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K4m3 Sg 1
         longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=NHEK rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=NHEK rep=1
         type bigWig 1.000000 1796.000000
         origAssembly hg18
         color 179,0,134
@@ -2984,7 +2984,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K4m3 Sg 1
         longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=SAEC rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=SAEC rep=1
         type bigWig 1.000000 1353.000000
         origAssembly hg18
         # subId=1466 dateSubmitted=2010-06-15
@@ -3011,7 +3011,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K4m3 Sg 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=SKNSHRA rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=SKNSHRA rep=1
         type bigWig 1.000000 1354.000000
         origAssembly hg18
         # subId=1472 dateSubmitted=2010-06-15
@@ -3038,7 +3038,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K4m3 Sg 2
         longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=Caco2 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=Caco2 rep=2
         type bigWig 1.000000 2008.000000
         origAssembly hg18
         # subId=1333 dateSubmitted=2010-06-11
@@ -3056,7 +3056,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig f
         shortLabel GM12 H3K4m3 Sg 2
         longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=1GM12878 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=1GM12878 rep=2
         type bigWig 1.000000 2040.000000
         origAssembly hg18
         color 153,38,0
@@ -3086,7 +3086,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K4m3 Sg 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=2HELA rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=2HELA rep=2
         type bigWig 1.000000 4978.000000
         origAssembly hg18
         color 0,119,158
@@ -3116,7 +3116,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K4m3 Sg 2
         longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=2HEPG2 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=2HEPG2 rep=2
         type bigWig 1.000000 1522.000000
         origAssembly hg18
         color 189,0,157
@@ -3136,7 +3136,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HL60 H3K4m3 Sg 2
         longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HL60 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HL60 rep=2
         type bigWig 1.000000 1752.000000
         origAssembly hg18
         # subId=1437 dateSubmitted=2010-06-15
@@ -3145,7 +3145,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K4m3 Sg 2
         longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HRE rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HRE rep=2
         type bigWig 1.000000 1485.000000
         origAssembly hg18
         # subId=1440 dateSubmitted=2010-06-15
@@ -3172,7 +3172,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K4m3 Sg 2
         longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=2HUVEC rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=2HUVEC rep=2
         type bigWig 1.000000 2673.000000
         origAssembly hg18
         color 224,75,0
@@ -3202,7 +3202,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel K562 H3K4m3 Sg 2
         longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=1K562 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=1K562 rep=2
         type bigWig 1.000000 4241.000000
         origAssembly hg18
         color 46,0,184
@@ -3232,7 +3232,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K4m3 Sg 2
         longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=NHEK rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=NHEK rep=2
         type bigWig 1.000000 1956.000000
         origAssembly hg18
         color 179,0,134
@@ -3252,7 +3252,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K4m3 Sg 2
         longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=SAEC rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=SAEC rep=2
         type bigWig 1.000000 1651.000000
         origAssembly hg18
         # subId=1467 dateSubmitted=2010-06-15
@@ -3279,7 +3279,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K4m3 Sg 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=SKNSHRA rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=SKNSHRA rep=2
         type bigWig 1.000000 1287.000000
         origAssembly hg18
         # subId=1473 dateSubmitted=2010-06-15
@@ -3307,7 +3307,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K4m3 Sg 1
         longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HRE rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HRE rep=1
         type bigWig 1.000000 997.000000
         origAssembly hg18
         # subId=1441 dateSubmitted=2010-06-16
@@ -3326,7 +3326,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K4m3 Sg 1
         longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=H7es rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=H7es rep=1
         type bigWig 1.000000 1089.000000
         origAssembly hg19
         # subId=2029 dateSubmitted=2010-07-24
@@ -3371,7 +3371,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K4m3 Sg 2
         longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=H7es rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=H7es rep=2
         type bigWig 1.000000 2759.000000
         origAssembly hg19
         # subId=2034 dateSubmitted=2010-07-24
@@ -3399,7 +3399,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG49 H3K4m3 Sg 1
         longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG04449 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG04449 rep=1
         type bigWig 1.000000 4247.000000
         origAssembly hg19
         # subId=2592 dateSubmitted=2010-10-22
@@ -3408,7 +3408,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG49 H3K4m3 Sg 2
         longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG04449 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG04449 rep=2
         type bigWig 1.000000 5567.000000
         origAssembly hg19
         # subId=2593 dateSubmitted=2010-10-22
@@ -3426,7 +3426,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG50 H3K4m3 Sg 1
         longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG04450 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG04450 rep=1
         type bigWig 1.000000 4594.000000
         origAssembly hg19
         # subId=2598 dateSubmitted=2010-10-23
@@ -3435,7 +3435,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG50 H3K4m3 Sg 2
         longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG04450 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG04450 rep=2
         type bigWig 1.000000 4459.000000
         origAssembly hg19
         # subId=2599 dateSubmitted=2010-10-23
@@ -3462,7 +3462,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG09 H3K4m3 Sg 2
         longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG09309 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG09309 rep=2
         type bigWig 1.000000 2062.000000
         origAssembly hg19
         # subId=2602 dateSubmitted=2010-10-23
@@ -3471,7 +3471,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG09 H3K4m3 Sg 1
         longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG09309 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG09309 rep=1
         type bigWig 1.000000 2329.000000
         origAssembly hg19
         # subId=2603 dateSubmitted=2010-10-23
@@ -3480,7 +3480,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG19 H3K4m3 Sg 1
         longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG09319 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG09319 rep=1
         type bigWig 1.000000 3182.000000
         origAssembly hg19
         # subId=2604 dateSubmitted=2010-10-23
@@ -3489,7 +3489,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG19 H3K4m3 Sg 2
         longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG09319 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG09319 rep=2
         type bigWig 1.000000 2278.000000
         origAssembly hg19
         # subId=2605 dateSubmitted=2010-10-23
@@ -3507,7 +3507,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG03 H3K4m3 Sg 1
         longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG10803 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG10803 rep=1
         type bigWig 1.000000 6328.000000
         origAssembly hg19
         # subId=2607 dateSubmitted=2010-10-23
@@ -3516,7 +3516,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG03 H3K4m3 Sg 2
         longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AG10803 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=AG10803 rep=2
         type bigWig 1.000000 6842.000000
         origAssembly hg19
         # subId=2608 dateSubmitted=2010-10-23
@@ -3534,7 +3534,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AoAF H3K4m3 Sg 2
         longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AOAF rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=AOAF rep=2
         type bigWig 1.000000 4590.000000
         origAssembly hg19
         # subId=2611 dateSubmitted=2010-10-23
@@ -3543,7 +3543,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AoAF H3K4m3 Sg 1
         longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=AOAF rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=AOAF rep=1
         type bigWig 1.000000 3446.000000
         origAssembly hg19
         # subId=2610 dateSubmitted=2010-10-23
@@ -3561,7 +3561,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCM H3K4m3 Sg 1
         longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCM rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCM rep=1
         type bigWig 1.000000 1509.000000
         origAssembly hg19
         # subId=2621 dateSubmitted=2010-10-23
@@ -3570,7 +3570,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HBMEC H3K4m3 Sg 2
         longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HBMEC rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HBMEC rep=2
         type bigWig 1.000000 2812.000000
         origAssembly hg19
         # subId=2613 dateSubmitted=2010-10-23
@@ -3579,7 +3579,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HBMEC H3K4m3 Sg 1
         longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HBMEC rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HBMEC rep=1
         type bigWig 1.000000 2636.000000
         origAssembly hg19
         # subId=2614 dateSubmitted=2010-10-23
@@ -3597,7 +3597,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCFaa H3K4m3 Sg 1
         longLabel HCFaa H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCFaa rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCFaa rep=1
         type bigWig 1.000000 1905.000000
         origAssembly hg19
         # subId=2616 dateSubmitted=2010-10-23
@@ -3615,7 +3615,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCF H3K4m3 Sg 1
         longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCF rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCF rep=1
         type bigWig 1.000000 5505.000000
         origAssembly hg19
         # subId=2618 dateSubmitted=2010-10-23
@@ -3624,7 +3624,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCF H3K4m3 Sg 2
         longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCF rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCF rep=2
         type bigWig 1.000000 8744.000000
         origAssembly hg19
         # subId=2619 dateSubmitted=2010-10-23
@@ -3642,7 +3642,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCM H3K4m3 Sg 2
         longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCM rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCM rep=2
         type bigWig 1.000000 2482.000000
         origAssembly hg19
         # subId=2622 dateSubmitted=2010-10-23
@@ -3660,7 +3660,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCPE H3K4m3 Sg 2
         longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCPE rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCPE rep=2
         type bigWig 1.000000 3567.000000
         origAssembly hg19
         # subId=2624 dateSubmitted=2010-10-23
@@ -3669,7 +3669,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCPE H3K4m3 Sg 1
         longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCPE rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCPE rep=1
         type bigWig 1.000000 2335.000000
         origAssembly hg19
         # subId=2625 dateSubmitted=2010-10-23
@@ -3696,7 +3696,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCT16 H3K4m3 Sg 2
         longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCT116 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCT116 rep=2
         type bigWig 1.000000 7182.000000
         origAssembly hg19
         # subId=2628 dateSubmitted=2010-10-23
@@ -3705,7 +3705,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCT16 H3K4m3 Sg 1
         longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HCT116 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HCT116 rep=1
         type bigWig 1.000000 4897.000000
         origAssembly hg19
         # subId=2629 dateSubmitted=2010-10-23
@@ -3723,7 +3723,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEE H3K4m3 Sg 1
         longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HEE rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HEE rep=1
         type bigWig 1.000000 5315.000000
         origAssembly hg19
         # subId=2631 dateSubmitted=2010-10-23
@@ -3732,7 +3732,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEE H3K4m3 Sg 2
         longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HEE rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HEE rep=2
         type bigWig 1.000000 6106.000000
         origAssembly hg19
         # subId=2632 dateSubmitted=2010-10-23
@@ -3741,7 +3741,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEK H3K4m3 Sg 2
         longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HEK293 rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HEK293 rep=2
         type bigWig 1.000000 3272.000000
         origAssembly hg19
         # subId=2633 dateSubmitted=2010-10-23
@@ -3750,7 +3750,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEK H3K4m3 Sg 1
         longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HEK293 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HEK293 rep=1
         type bigWig 1.000000 5296.000000
         origAssembly hg19
         # subId=2634 dateSubmitted=2010-10-23
@@ -3759,7 +3759,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC H3K4m3 Sg 2
         longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HMEC rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HMEC rep=2
         type bigWig 1.000000 3376.000000
         origAssembly hg19
         # subId=2635 dateSubmitted=2010-10-23
@@ -3768,7 +3768,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC H3K4m3 Sg 1
         longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HMEC rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HMEC rep=1
         type bigWig 1.000000 2345.000000
         origAssembly hg19
         # subId=2636 dateSubmitted=2010-10-23
@@ -3777,7 +3777,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMF H3K4m3 Sg 1
         longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HMF rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HMF rep=1
         type bigWig 1.000000 4301.000000
         origAssembly hg19
         # subId=2637 dateSubmitted=2010-10-23
@@ -3786,7 +3786,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMF H3K4m3 Sg 2
         longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HMF rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HMF rep=2
         type bigWig 1.000000 3836.000000
         origAssembly hg19
         # subId=2638 dateSubmitted=2010-10-23
@@ -3813,7 +3813,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPAF H3K4m3 Sg 1
         longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HPAF rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HPAF rep=1
         type bigWig 1.000000 2892.000000
         origAssembly hg19
         # subId=2640 dateSubmitted=2010-10-23
@@ -3822,7 +3822,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPAF H3K4m3 Sg 2
         longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HPAF rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HPAF rep=2
         type bigWig 1.000000 3521.000000
         origAssembly hg19
         # subId=2641 dateSubmitted=2010-10-23
@@ -3849,7 +3849,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPF H3K4m3 Sg 2
         longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HPF rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HPF rep=2
         type bigWig 1.000000 4481.000000
         origAssembly hg19
         # subId=2644 dateSubmitted=2010-10-23
@@ -3858,7 +3858,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPF H3K4m3 Sg 1
         longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HPF rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HPF rep=1
         type bigWig 1.000000 5458.000000
         origAssembly hg19
         # subId=2645 dateSubmitted=2010-10-23
@@ -3876,7 +3876,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRPE H3K4m3 Sg 2
         longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HRPE rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HRPE rep=2
         type bigWig 1.000000 5740.000000
         origAssembly hg19
         # subId=2647 dateSubmitted=2010-10-23
@@ -3885,7 +3885,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRPE H3K4m3 Sg 1
         longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HRPE rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HRPE rep=1
         type bigWig 1.000000 4170.000000
         origAssembly hg19
         # subId=2648 dateSubmitted=2010-10-23
@@ -3894,7 +3894,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HVMF H3K4m3 Sg 2
         longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HVMF rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HVMF rep=2
         type bigWig 1.000000 6381.000000
         origAssembly hg19
         # subId=2649 dateSubmitted=2010-10-23
@@ -3903,7 +3903,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HVMF H3K4m3 Sg 1
         longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HVMF rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HVMF rep=1
         type bigWig 1.000000 4571.000000
         origAssembly hg19
         # subId=2650 dateSubmitted=2010-10-23
@@ -3921,7 +3921,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Jurk H3K4m3 Sg 2
         longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=Jurkat rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=Jurkat rep=2
         type bigWig 1.000000 6095.000000
         origAssembly hg19
         # subId=2653 dateSubmitted=2010-10-23
@@ -3930,7 +3930,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Jurk H3K4m3 Sg 1
         longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=Jurkat rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=Jurkat rep=1
         type bigWig 1.000000 7505.000000
         origAssembly hg19
         # subId=2654 dateSubmitted=2010-10-23
@@ -3948,7 +3948,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel MCF-7 H3K4m3 Sg 1
         longLabel MCF-7 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=MCF7 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=MCF7 rep=1
         type bigWig 1.000000 12643.000000
         origAssembly hg19
         # subId=2656 dateSubmitted=2010-10-23
@@ -3966,7 +3966,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NB4 H3K4m3 Sg 1
         longLabel NB4 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=NB4 rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=NB4 rep=1
         type bigWig 1.000000 3916.000000
         origAssembly hg19
         # subId=2658 dateSubmitted=2010-10-23
@@ -3984,7 +3984,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHDFn H3K4m3 Sg 1
         longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=NHDF-neo rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=NHDF-neo rep=1
         type bigWig 1.000000 8338.000000
         origAssembly hg19
         # subId=2660 dateSubmitted=2010-10-23
@@ -3993,7 +3993,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHDFn H3K4m3 Sg 2
         longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=NHDF-neo rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=NHDF-neo rep=2
         type bigWig 1.000000 9369.000000
         origAssembly hg19
         # subId=2661 dateSubmitted=2010-10-23
@@ -4011,7 +4011,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HAsp H3K4m3 Sg 1
         longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HA-sp rep=1
+        subGroups view=zRSig factor=H3K04ME3 cellType=HA-sp rep=1
         type bigWig 1.000000 5096.000000
         origAssembly hg19
         # subId=2778 dateSubmitted=2010-10-28
@@ -4020,7 +4020,7 @@ noInherit on
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HAsp H3K4m3 Sg 2
         longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04me3 cellType=HA-sp rep=2
+        subGroups view=zRSig factor=H3K04ME3 cellType=HA-sp rep=2
         type bigWig 1.000000 7657.000000
         origAssembly hg19
         # subId=2779 dateSubmitted=2010-10-28
