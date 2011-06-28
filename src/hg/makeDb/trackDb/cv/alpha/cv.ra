@@ -8396,7 +8396,7 @@ term Fastq
 tag FASTQ
 type view
 label Fastq
-decription Raw sequence with Phred33 quality scores
+description Raw sequence with Phred33 quality scores
 
 term FastqRd1
 tag FASTQRD1
