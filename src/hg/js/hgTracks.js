@@ -1261,6 +1261,18 @@ $(document).ready(function()
                                                 delay: 500,
                                                 minLength: 2,
                                                 source: ajaxGet(function () {return db;}, new Object, true),
+                                                open: function(event, ui) {
+                                                    var pos = $(this).offset().top + $(this).height();
+                                                    if (!isNaN(pos)) {
+                                                        var maxHeight = $(window).height() - pos - 30;  // take off a little more because IE needs it
+                                                        var auto = $('.ui-autocomplete');
+                                                        var curHeight = $(auto).children().length * 21;
+                                                        if (curHeight > maxHeight)
+                                                            $(auto).css({maxHeight: maxHeight+'px',overflow:'scroll'});
+                                                        else
+                                                            $(auto).css({maxHeight: 'none',overflow:'hidden'});
+                                                    }
+                                                },
                                                 select: function (event, ui) {
                                                         setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
                                                         makeSureSuggestTrackIsVisible();

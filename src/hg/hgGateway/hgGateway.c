@@ -55,13 +55,13 @@ char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainFo
 if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
-webIncludeResourceFile("autocomplete.css");
 jsIncludeFile("jquery.js", NULL);
 #ifdef NEW_JQUERY
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
 printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 #else///ifndef NEW_JQUERY
+webIncludeResourceFile("autocomplete.css");
 jsIncludeFile("jquery.autocomplete.js", NULL);
 printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
 #endif///ndef NEW_JQUERY

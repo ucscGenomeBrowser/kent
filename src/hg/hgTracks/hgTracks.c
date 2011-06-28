@@ -5603,9 +5603,7 @@ boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0")
 if(dragZooming && !searching)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
-#ifdef NEW_JQUERY
-    webIncludeResourceFile("jquery.ui.autocomplete.css");
-#else///ifndef NEW_JQUERY
+#ifndef NEW_JQUERY
     webIncludeResourceFile("autocomplete.css");
     jsIncludeFile("jquery.autocomplete.js", NULL);
 #endif///ndef NEW_JQUERY
