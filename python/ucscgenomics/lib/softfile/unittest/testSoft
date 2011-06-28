@@ -1,0 +1,10 @@
+#!/hive/groups/encode/dcc/bin/python
+
+import sys
+from SoftFile import *
+
+
+print sys.argv[1]
+soft = SoftFile(sys.argv[1])
+print soft
+
