@@ -59,8 +59,7 @@ class SoftFile(OrderedDict):
 		elif stanza[0].startswith('^PLATFORM'):
 			entry = PlatformStanza()
 		else:
-			# GOTTA FIX THIS ERROR
-			raise KeyError(stanza[0], 'type')
+			raise KeyError(stanza[0])
 
 		val = entry.readStanza(stanza)
 		return val, entry
@@ -112,6 +111,12 @@ class KeyZeroPlusNumbered(object):
 class KeyOnePlusNumbered(object):
 	pass
 	
+class KeyZeroPlusChannel(object):
+	pass
+	
+class KeyOnePlusChannel(object):
+	pass
+	
 
 class SoftStanza(OrderedDict):
 	"""
@@ -161,8 +166,13 @@ class SoftStanza(OrderedDict):
 		
 		#split on the last underscore to determine if we're using a numbered key or not
 		splitkey = key.rsplit('_', 1)[0]
+		channelkey = splitkey + '_ch'
 		#if the key is a numbered key
 		if splitkey in self.keys and (self.keys[splitkey] == KeyZeroPlusNumbered or self.keys[splitkey] == KeyOnePlusNumbered):
+			self[key] = val
+		
+		#this is for channel data in MicroArraySamples
+		if channelkey in self.keys and (self.keys[channelkey] == KeyZeroPlusChannel or self.keys[channelkey] == KeyOnePlusChannel):
 			self[key] = val
 		
 		#if its a single value (ie 0 or 1 allowed entries)
@@ -219,81 +229,150 @@ class SoftStanza(OrderedDict):
 		file.close()
 
 
-class PlatformStanza(SoftStanza):
+class MicroArrayPlatformStanza(SoftStanza):
 
 	def __init__(self):
-		keys = { '^PLATFORM': KeyRequired,
-					'!Platform_title': KeyRequired,
-					'!Platform_distribution': KeyRequired,
-					'!Platform_technology': KeyRequired,
-					'!Platform_organism': KeyOnePlus,
-					'!Platform_manufacturer': KeyRequired,
-					'!Platform_manufacture_protocol': KeyOnePlus,
-					'!Platform_catalog_number': KeyZeroPlus,
-					'!Platform_web_link': KeyZeroPlus,
-					'!Platform_support': KeyOptional,
-					'!Platform_coating': KeyOptional,
-					'!Platform_description': KeyZeroPlus,
-					'!Platform_contributor': KeyZeroPlus,
-					'!Platform_pubmed_id': KeyZeroPlus,
-					'!Platform_geo_accession': KeyOptional,
-					'!Platform_table_begin': KeyRequired,
-					'!Platform_table_end': KeyRequired }
+	
+		keys = { 
+			'^PLATFORM': KeyRequired,
+			'!Platform_title': KeyRequired,
+			'!Platform_distribution': KeyRequired,
+			'!Platform_technology': KeyRequired,
+			'!Platform_organism': KeyOnePlus,
+			'!Platform_manufacturer': KeyRequired,
+			'!Platform_manufacture_protocol': KeyOnePlus,
+			'!Platform_catalog_number': KeyZeroPlus,
+			'!Platform_web_link': KeyZeroPlus,
+			'!Platform_support': KeyOptional,
+			'!Platform_coating': KeyOptional,
+			'!Platform_description': KeyZeroPlus,
+			'!Platform_contributor': KeyZeroPlus,
+			'!Platform_pubmed_id': KeyZeroPlus,
+			'!Platform_geo_accession': KeyOptional,
+			'!Platform_table_begin': KeyRequired,
+			'!Platform_table_end': KeyRequired
+		}
 		
 		SoftStanza.__init__(self, keys)
 		
 		
-class SampleStanza(SoftStanza):
+class MicroArraySampleStanza(SoftStanza):
 
 	def __init__(self):
-		keys = { '^SAMPLE': KeyRequired,
-					'!Sample_type': KeyRequired,
-					'!Sample_title': KeyRequired,
-					'!Sample_supplementary_file': KeyOnePlusNumbered,
-					'!Sample_supplementary_file_checksum': KeyZeroPlusNumbered,
-					'!Sample_supplementary_file_build': KeyZeroPlusNumbered,
-					'!Sample_raw_file': KeyOnePlusNumbered,
-					'!Sample_raw_file_type': KeyOnePlusNumbered,
-					'!Sample_raw_file_checksum': KeyZeroPlusNumbered,
-					'!Sample_source_name': KeyRequired,
-					'!Sample_organism': KeyOnePlus,
-					'!Sample_characteristics': KeyOnePlus,
-					'!Sample_biomaterial_provider': KeyZeroPlus,
-					'!Sample_treatment_protocol': KeyZeroPlus,
-					'!Sample_growth_protocol': KeyZeroPlus,
-					'!Sample_molecule': KeyRequired,
-					'!Sample_extract_protocol': KeyOnePlus,
-					'!Sample_library_strategy': KeyOnePlus,
-					'!Sample_library_source': KeyOnePlus,
-					'!Sample_library_selection': KeyOnePlus,
-					'!Sample_instrument_model': KeyOnePlus,
-					'!Sample_data_processing': KeyRequired,
-					'!Sample_barcode': KeyOptional,
-					'!Sample_description': KeyZeroPlus,
-					'!Sample_geo_accession': KeyOptional,
-					'!Sample_table_begin': KeyOptional,
-					'!Sample_table': KeyOptional,
-					'!Sample_table_end': KeyOptional }
-		#print 'Sample!'
-		SoftStanza.__init__(self, keys)
+	
+		keys = { 
+			'^SAMPLE': KeyRequired,
+			'!Sample_title': KeyRequired,
+			'!Sample_supplementary_file': KeyOnePlus,
+			'!Sample_table': KeyOptional,
+			'!Sample_source_name_ch': KeyOnePlusNumbered,
+			'!Sample_organism_ch': KeyOnePlusNumbered,
+			'!Sample_characteristics_ch': KeyOnePlusNumbered,
+			'!Sample_biomaterial_provider_ch': KeyZeroPlusNumbered,
+			'!Sample_treatment_protocol_ch': KeyZeroPlusNumbered,
+			'!Sample_growth_protocol_ch': KeyZeroPlusNumbered,
+			'!Sample_molecule_ch': KeyOnePlusNumbered,
+			'!Sample_extract_protocol_ch': KeyOnePlusNumbered,
+			'!Sample_label_ch': KeyOnePlusNumbered,
+			'!Sample_label_protocol_ch': KeyOnePlusNumbered,
+			'!Sample_hyb_protocol': KeyOnePlus,
+			'!Sample_scan_protocol': KeyOnePlus,
+			'!Sample_data_processing': KeyOnePlus,
+			'!Sample_description': KeyZeroPlus,
+			'!Sample_platform_id': KeyRequired,
+			'!Sample_geo_accession': KeyOptional,
+			'!Sample_anchor': KeyRequired,
+			'!Sample_type': KeyRequired,
+			'!Sample_tag_count': KeyRequired,
+			'!Sample_tag_length': KeyRequired,
+			'!Sample_table_begin': KeyRequired,
+			'!Sample_table_end': KeyRequired
+		}
 		
-
-class SeriesStanza(SoftStanza):
+		SoftStanza.__init__(self, keys)		
+		
+		
+class MicroArraySeriesStanza(SoftStanza):
 	
 	def __init__(self):
-		keys = { '^SERIES': KeyRequired,
-					'!Series_title': KeyRequired,
-					'!Series_summary': KeyOnePlus,
-					'!Series_overall_design': KeyRequired,
-					'!Series_pubmed_id': KeyZeroPlus,
-					'!Series_web_link': KeyZeroPlus,
-					'!Series_contributor': KeyZeroPlus,
-					'!Series_variable': KeyZeroPlusNumbered,
-					'!Series_variable_description': KeyZeroPlusNumbered,
-					'!Series_variable_sample_list': KeyZeroPlusNumbered,
-					'!Series_repeats': KeyZeroPlusNumbered,
-					'!Series_repeats_sample_list': KeyZeroPlusNumbered,
-					'!Series_sample_id': KeyOnePlus,
-					'!Series_geo_accession': KeyOptional }
+	
+		keys = { 
+			'^SERIES': KeyRequired,
+			'!Series_title': KeyRequired,
+			'!Series_summary': KeyOnePlus,
+			'!Series_overall_design': KeyRequired,
+			'!Series_pubmed_id': KeyZeroPlus,
+			'!Series_web_link': KeyZeroPlus,
+			'!Series_contributor': KeyZeroPlus,
+			'!Series_variable': KeyZeroPlusNumbered,
+			'!Series_variable_description': KeyZeroPlusNumbered,
+			'!Series_variable_sample_list': KeyZeroPlusNumbered,
+			'!Series_repeats': KeyZeroPlusNumbered,
+			'!Series_repeats_sample_list': KeyZeroPlusNumbered,
+			'!Series_sample_id': KeyOnePlus,
+			'!Series_geo_accession': KeyOptional
+		}
+				
+		SoftStanza.__init__(self, keys)
+
+		
+class HighThroughputSampleStanza(SoftStanza):
+
+	def __init__(self):
+	
+		keys = {
+			'^SAMPLE': KeyRequired,
+			'!Sample_type': KeyRequired,
+			'!Sample_title': KeyRequired,
+			'!Sample_supplementary_file': KeyOnePlusNumbered,
+			'!Sample_supplementary_file_checksum': KeyZeroPlusNumbered,
+			'!Sample_supplementary_file_build': KeyZeroPlusNumbered,
+			'!Sample_raw_file': KeyOnePlusNumbered,
+			'!Sample_raw_file_type': KeyOnePlusNumbered,
+			'!Sample_raw_file_checksum': KeyZeroPlusNumbered,
+			'!Sample_source_name': KeyRequired,
+			'!Sample_organism': KeyOnePlus,
+			'!Sample_characteristics': KeyOnePlus,
+			'!Sample_biomaterial_provider': KeyZeroPlus,
+			'!Sample_treatment_protocol': KeyZeroPlus,
+			'!Sample_growth_protocol': KeyZeroPlus,
+			'!Sample_molecule': KeyRequired,
+			'!Sample_extract_protocol': KeyOnePlus,
+			'!Sample_library_strategy': KeyOnePlus,
+			'!Sample_library_source': KeyOnePlus,
+			'!Sample_library_selection': KeyOnePlus,
+			'!Sample_instrument_model': KeyOnePlus,
+			'!Sample_data_processing': KeyRequired,
+			'!Sample_barcode': KeyOptional,
+			'!Sample_description': KeyZeroPlus,
+			'!Sample_geo_accession': KeyOptional,
+			'!Sample_table_begin': KeyOptional,
+			'!Sample_table': KeyOptional,
+			'!Sample_table_end': KeyOptional
+		}
+		
+		SoftStanza.__init__(self, keys)
+		
+
+class HighThroughputSeriesStanza(SoftStanza):
+	
+	def __init__(self):
+	
+		keys = {
+			'^SERIES': KeyRequired,
+			'!Series_title': KeyRequired,
+			'!Series_summary': KeyOnePlus,
+			'!Series_overall_design': KeyRequired,
+			'!Series_pubmed_id': KeyZeroPlus,
+			'!Series_web_link': KeyZeroPlus,
+			'!Series_contributor': KeyZeroPlus,
+			'!Series_variable': KeyZeroPlusNumbered,
+			'!Series_variable_description': KeyZeroPlusNumbered,
+			'!Series_variable_sample_list': KeyZeroPlusNumbered,
+			'!Series_repeats': KeyZeroPlusNumbered,
+			'!Series_repeats_sample_list': KeyZeroPlusNumbered,
+			'!Series_sample_id': KeyOnePlus,
+			'!Series_geo_accession': KeyOptional
+		}
 				
 		SoftStanza.__init__(self, keys)

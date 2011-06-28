@@ -18,13 +18,5 @@ class validate(object):
 
 if __name__ == '__main__':
     val = validate()
-	
-	
-#for entry in cv.itervalues():
-#    try:
-##        entry.validate(cv)
-#   except CvError as e:
-#        errors.append(e)
-	
 
 
