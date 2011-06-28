@@ -1324,18 +1324,19 @@ include wgEncodeUwDGF.ra
 include wgEncodeUwDnaseSeq.ra
 
 
-# UW DNAase-seq southerns
-
-track wgEncodeUwSoutherns
-shortLabel UW Southerns
-longLabel ENCODE Univ. Washington Southern Blot Verifications
-group regulation
-visibility hide
-priority 100
-itemImagePath /goldenPath/hg18/encode/images/UwSoutherns/jpg jpg
-itemBigImagePath /goldenPath/hg18/encode/images/UwSoutherns/gel gel
-type bed 4 .
-wgEncode 1
+# UW DNAase-seq southerns - has been made obsolete
+# The jpg images will instead be made available as experiment level "attic" data in UW Dnase.
+# rename table wgEncodeUwSoutherns to wgEncodeUwSoutherns_obsoloete
+#track wgEncodeUwSoutherns
+#shortLabel UW Southerns
+#longLabel ENCODE Univ. Washington Southern Blot Verifications
+#group regulation
+#visibility hide
+#priority 100
+#itemImagePath /goldenPath/hg18/encode/images/UwSoutherns/jpg jpg
+#itemBigImagePath /goldenPath/hg18/encode/images/UwSoutherns/gel gel
+#type bed 4 .
+#wgEncode 1
 
 # 5C super track  (wrangler: braney)
       track encodeUw5cSuper

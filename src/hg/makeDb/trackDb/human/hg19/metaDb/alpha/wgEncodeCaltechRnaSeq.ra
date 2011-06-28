@@ -9528,7 +9528,7 @@ submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view TSS
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptDeNovoRep1V3
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3
 objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9538,7 +9538,7 @@ dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptDeNovoRep1V3.gtf.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -9554,7 +9554,7 @@ submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view TranscriptDeNovo
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptGencV3cRep1V3
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3
 objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9564,7 +9564,7 @@ dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptGencV3cRep1V3.gtf.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -12130,4 +12130,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: 996512465
+# MAGIC: 1264947113

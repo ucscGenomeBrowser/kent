@@ -4,9 +4,11 @@ source `which qaConfig.csh`
 ####################
 #  05-03-04 Bob Kuhn
 #
-#  Script to process use featureBits to get yield and enrichment
+#  Script to use featureBits to get yield and enrichment
 #
 ####################
+# note:  output words "union" changed to "intersection" 
+#   but internal variable not changed
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
@@ -25,7 +27,8 @@ if ($#argv < 2 || $#argv > 3) then
   echo
   echo "  uses featureBits to get yield and enrichment."
   echo
-  echo "    usage:  database, trackname, [reference track] defaults to refGene"
+  echo "    usage:  database trackname [reference track]"
+  echo "              refTrack defaults to refGene"
   echo
   exit
 else
@@ -64,12 +67,12 @@ echo "$track"
 featureBits $db $track >& thisTrack
 cat thisTrack
 echo
-echo "${refTrack}:cds"
-featureBits $db ${refTrack}:cds >& $refTrack 
+echo "${refTrack}"
+featureBits $db ${refTrack} >& $refTrack 
 cat $refTrack
 echo
-echo "intersection of $track with ${refTrack}:cds"
-featureBits $db ${refTrack}:cds $track >& union
+echo "intersection of $track with ${refTrack}"
+featureBits $db ${refTrack} $track >& union
 cat union
 echo
 
@@ -91,11 +94,11 @@ set enrichment=`echo $union $thisTrack $ref $genome \
 
 echo "thisTrack = $thisTrack"
 echo "refTrack  = $ref"
-echo "union     = $union"
+echo "intersection = $union"
 echo "genome  = $genome"
 echo
-echo "yield       = ${yield}% (union / $refTrack)"
-echo "enrichment  = ${enrichment}x ((union / $track) / ($refTrack / genome))"
+echo "yield       = ${yield}% (intersection / $refTrack)"
+echo "enrichment  = ${enrichment}x ((intersection / $track) / ($refTrack / genome))"
 echo
 
 rm union
