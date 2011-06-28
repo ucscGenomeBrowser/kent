@@ -2867,7 +2867,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep1.fastq.gz
 grant Snyder
@@ -2892,7 +2891,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep2.fastq.gz
 grant Snyder
@@ -2917,7 +2915,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep3.fastq.gz
 grant Snyder
@@ -2941,7 +2938,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep4.fastq.gz
 grant Snyder
@@ -2966,7 +2962,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep1.bam
 grant Snyder
@@ -2992,7 +2987,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep2.bam
 grant Snyder
@@ -3018,7 +3012,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep3.bam
 grant Snyder
@@ -3044,7 +3037,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep4.bam
 grant Snyder
@@ -3069,7 +3061,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdPk.narrowPeak.gz
 grant Snyder
@@ -3092,7 +3083,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdSig.bigWig
 grant Snyder
