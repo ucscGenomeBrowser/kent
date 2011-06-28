@@ -2509,21 +2509,21 @@ function ddclOnComplete(selector)
     var id = $(selector).attr('id');
 
     // If no  options are selected, may have to force all
-    if ($(selector).attr('noneIsAll') == 'true') {
-        var chosen = $(selector).find('option:selected');
-        if (chosen.length == 0) {
+    var chosen = $(selector).find('option:selected');
+    if (chosen.length == 0) {
+        if ($(selector).hasClass('noneIsAll')) {
             //$(selector).first('option').first().attr('selected',true);
             selector.options[0].selected = true;
             // How to check the first item?
             var dropWrapper = $('#ddcl-' + id + '-ddw');
             $(dropWrapper).find("input").first().attr("checked",true);
-        } else if (chosen.length == $(selector).find('option').length) {
-            // If all are chosen then select only the first!
-            $(chosen).each(function(index) {
-                if (index > 0)
-                    $(this).attr('selected',false);
-            });
         }
+    } else if (chosen.length == $(selector).find('option').length) {
+        // If all are chosen then select only the first!
+        $(chosen).each(function(index) {
+            if (index > 0)
+                $(this).attr('selected',false);
+        });
     }
 
     var msg = ddclTextOfCurrentSelections(selector.options);
@@ -2635,7 +2635,8 @@ function ddclSetup(obj)
                         textFormatFunction: function () { return 'selecting...'; } ,
                         onComplete: ddclOnComplete
     });
-    $(obj).attr('noneIsAll',myNoneIsAll); // Declare this as none selected same as all selected
+    if (myNoneIsAll)
+        $(obj).addClass('noneIsAll'); // Declare this as none selected same as all selected
     ddclOnComplete(obj); // shows selected items in multiple lines
 
     // Set up the selector (control seen always and replacing select)
