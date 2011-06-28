@@ -2235,7 +2235,7 @@ sex F
 tier 3
 protocol UW_Stam:HMF_Stam_protocol.pdf
 
-term HMVEC_dAd
+term HMVEC-dAd
 tag HMVECDAD
 type Cell Line
 tier 3
