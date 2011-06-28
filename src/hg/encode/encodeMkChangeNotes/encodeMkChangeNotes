@@ -52,6 +52,7 @@ def next_version(name, version):
 
 def get_gbdb_pathname(database, table_name):
     """extract the gbdb pathaname of a gbdb table"""
+	print '/gbdb/' + database + '/bbi/' + table_name + '.bigWig'
     query = "SELECT file FROM %s LIMIT 1;" % table_name
     command = "hgsql %s --skip-column-names -e \"%s;\"" % (database, query)
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
