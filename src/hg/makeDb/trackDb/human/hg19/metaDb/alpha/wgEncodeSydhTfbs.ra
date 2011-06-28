@@ -1621,7 +1621,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -1642,7 +1642,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -1663,7 +1663,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1685,7 +1685,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -1706,7 +1706,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -1727,7 +1727,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4616,7 +4616,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -4637,7 +4637,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -4658,7 +4658,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4680,7 +4680,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -4701,7 +4701,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -4722,7 +4722,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -20975,7 +20975,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -20996,7 +20996,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -21017,7 +21017,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21039,7 +21039,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
 project wgEncode
 replicate 1
@@ -21061,7 +21061,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
 project wgEncode
 replicate 2
@@ -21083,7 +21083,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41452,4 +41452,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -561879456
+# MAGIC: -554218296
