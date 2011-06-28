@@ -1,5 +1,5 @@
 import re
-from RaFile import *
+from rafile.RaFile import *
 
 class CvFile(RaFile):
 	"""cv.ra representation. Mainly adds CV-specific validation to the RaFile"""
@@ -127,6 +127,12 @@ class CvStanza(RaStanza):
 			if not key in self.keys():
 				ra.handler(MissingKeyError(self.name, key))
 			elif self[key] == '':
+				ra.handler(BlankKeyError(self.name, key))
+				
+	def checkOptional(self, ra, keys):
+		"""ensure that all keys are present and not blank in the stanza"""
+		for key in keys:
+			if key in self and self[key] == '':
 				ra.handler(BlankKeyError(self.name, key))
 		
 	def checkExtraneous(self, ra, keys):
@@ -312,6 +318,7 @@ class LabStanza(CvStanza):
 		optional = {'label', 'labInst', 'labPiFull', 'grantPi'}
 
 		self.checkMandatory(ra, necessary)
+		self.checkOptional(ra, optional)
 		self.checkExtraneous(ra, necessary | optional)
 		self.checkRelational(ra, 'organism', 'term')
 
@@ -368,6 +375,7 @@ class CellLineStanza(CvStanza):
 		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category', 'lots'}
 
 		self.checkMandatory(ra, necessary)
+		self.checkOptional(ra, optional)
 		self.checkExtraneous(ra, necessary | optional)
 		self.checkRelational(ra, 'organism', 'term')
 		self.checkRelational(ra, 'sex', 'term')
@@ -439,6 +447,7 @@ class SeqPlatformStanza(CvStanza):
 		optional = {'geo'}
 
 		self.checkMandatory(ra, necessary)
+		self.checkOptional(ra, optional)
 		self.checkExtraneous(ra, necessary | optional)
 
 
@@ -452,6 +461,7 @@ class AntibodyStanza(CvStanza):
 		optional = {'validation', 'targetUrl', 'lots', 'displayName'}
 
 		self.checkMandatory(ra, necessary)
+		self.checkOptional(ra, optional)
 		self.checkExtraneous(ra, necessary | optional)
 		self.checkListRelational(ra, 'lab', 'labPi')
 
@@ -532,6 +542,7 @@ class MouseStanza(CvStanza):
 		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category', 'vendorId', 'lots'}
 		
 		self.checkMandatory(ra, necessary)
+		self.checkOptional(ra, optional)
 		self.checkExtraneous(ra, necessary | optional)
 		self.checkRelational(ra, 'organism', 'term')
 		self.checkRelational(ra, 'sex', 'term')
