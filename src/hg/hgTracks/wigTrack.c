@@ -20,9 +20,6 @@
 
 static char const rcsid[] = "$Id: wigTrack.c,v 1.113 2010/05/25 17:50:51 kent Exp $";
 
-#define SMALLBUF 128
-#define LARGEBUF 256
-
 struct wigItem
 /* A wig track item. */
     {

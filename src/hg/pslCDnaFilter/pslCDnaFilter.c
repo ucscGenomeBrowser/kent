@@ -57,6 +57,7 @@ static struct optionSpec optionSpecs[] =
     {"hapRefMapped", OPTION_STRING},
     {"hapRefCDnaAlns", OPTION_STRING},
     {"alnIdQNameMode", OPTION_BOOLEAN},
+    {"uniqueMapped", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -88,6 +89,8 @@ static char *gHapRefMapped = NULL;    /* PSLs of haplotype to reference chromoso
                                        * mappings */
 static char *gHapRefCDnaAlns = NULL;  /* PSLs of haplotype cDNA to reference
                                        * cDNA alignments */
+static boolean gUniqueMapped = FALSE; /* keep only cDNAs that are uniquely
+                                       * aligned after filtering */
 
 struct outFiles
 /* open output files */
@@ -235,6 +238,26 @@ for (aln = findMaxAlign(cdna); aln != NULL; aln = aln->next)
     {
     if (!aln->drop)
         cDnaAlignDrop(aln, &cdna->stats->maxAlignsDropCnts, "max aligns");
+    }
+}
+
+static void uniqueMappedFilter(struct cDnaQuery *cdna)
+/* filter for uniquely mapped alignments */
+{
+struct cDnaAlign *aln;
+int cnt = 0;
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    if (!aln->drop)
+        cnt++;
+    }
+if (cnt > 1)
+    {
+    for (aln = cdna->alns; aln != NULL; aln = aln->next)
+        {
+        if (!aln->drop)
+            cDnaAlignDrop(aln, &cdna->stats->nonUniqueMap, "non-uniquely mapped");
+        }
     }
 }
 
@@ -487,6 +510,8 @@ if (gGlobalNearBest >= 0.0)
     globalNearBestFilter(cdna);
 if (gMaxAligns >= 0)
     maxAlignFilter(cdna);
+if (gUniqueMapped)
+    uniqueMappedFilter(cdna);
 cDnaQueryWriteKept(cdna, outFiles->passFh);
 if (outFiles->dropFh != NULL)
     cDnaQueryWriteDrop(cdna, outFiles->dropFh);
@@ -575,7 +600,7 @@ if (optionExists("noValidate"))
 alnIdQNameMode = optionExists("alnIdQNameMode");
 if (optionExists("ignoreNs"))
     gCDnaOpts |= cDnaIgnoreNs;
-
+gUniqueMapped = optionExists("uniqueMapped");
 
 pslCDnaFilter(argv[1], argv[2]);
 return 0;

@@ -983,7 +983,7 @@ struct chain *pChain;
 
 chainCart = (struct cartOptions *) tg->extraUiData;
 
-snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->table);
+safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->table);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 int ourStart = winStart;
 int ourEnd = winEnd;
@@ -994,7 +994,7 @@ ourStart = 0;
 ourEnd = 500000000;
 if (startsWith("chr",optionChrStr)) 
     {
-    snprintf(extraWhere, sizeof(extraWhere), 
+    safef(extraWhere, sizeof(extraWhere), 
             "qName = \"%s\" and score > %d",optionChrStr, 
             chainCart->scoreFilter);
     sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
@@ -1004,14 +1004,14 @@ else
     {
     if (chainCart->scoreFilter > 0)
         {
-        snprintf(extraWhere, sizeof(extraWhere), 
+        safef(extraWhere, sizeof(extraWhere), 
                 "score > \"%d\"",chainCart->scoreFilter);
         sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
                 extraWhere, &rowOffset);
         }
     else
         {
-        snprintf(extraWhere, sizeof(extraWhere), " ");
+        safef(extraWhere, sizeof(extraWhere), " ");
         sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
                 NULL, &rowOffset);
         }
@@ -1048,7 +1048,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	qs = chain.qStart;
 	}
     char buffer[1024];
-    snprintf(buffer, sizeof(buffer), "%s", chain.qName);
+    safef(buffer, sizeof(buffer), "%s", chain.qName);
     lf->name = cloneString(buffer);
     lf->extra = pChain;
     slAddHead(&list, lf);
@@ -1144,7 +1144,7 @@ else
     char option[128]; /* Option -  rainbow chromosome color */
     char *optionStr;	/* this old option was broken before */
 
-    snprintf(option, sizeof(option), "%s.color", tg->table);
+    safef(option, sizeof(option), "%s.color", tg->table);
     optionStr = cartUsualString(cart, option, "on");
     if (differentWord("on",optionStr))
 	{
