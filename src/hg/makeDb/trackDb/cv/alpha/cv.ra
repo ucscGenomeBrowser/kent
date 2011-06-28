@@ -9532,6 +9532,7 @@ type lab
 label Farnham - University of Southern California
 description Farnham - University of Southern California
 labPi Farnham
+labInst USC
 labPiFull Peggy Farnham
 grantPi Snyder
 organism human
