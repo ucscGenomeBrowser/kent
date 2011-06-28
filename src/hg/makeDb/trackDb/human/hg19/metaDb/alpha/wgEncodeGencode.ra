@@ -1,7 +1,6 @@
 metaObject gencode.v7.2wayconspseudos
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.2wayconspseudos.gtf.gz
 grant Hubbard
@@ -13,7 +12,6 @@ subId 4347
 metaObject gencode.v7.README.txt
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.README.txt.gz
 grant Hubbard
@@ -25,7 +23,6 @@ subId 4347
 metaObject gencode.v7.annotation.gtf
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.annotation.gtf.gz
 grant Hubbard
@@ -37,7 +34,6 @@ subId 4347
 metaObject gencode.v7.noncoding_RNAs.fa
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.noncoding_RNAs.fa.gz
 grant Hubbard
@@ -49,7 +45,6 @@ subId 4347
 metaObject gencode.v7.noncoding_RNAs.gtf
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.noncoding_RNAs.gtf.gz
 grant Hubbard
@@ -61,7 +56,6 @@ subId 4347
 metaObject gencode.v7.pc_transcripts.fa
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.pc_transcripts.fa.gz
 grant Hubbard
@@ -73,7 +67,6 @@ subId 4347
 metaObject gencode.v7.pc_translations.fa
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.pc_translations.fa.gz
 grant Hubbard
@@ -85,7 +78,6 @@ subId 4347
 metaObject gencode.v7.polyAs.gtf
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.polyAs.gtf.gz
 grant Hubbard
@@ -97,7 +89,6 @@ subId 4347
 metaObject gencode.v7.tRNAs.gtf
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode.v7.tRNAs.gtf.gz
 grant Hubbard
@@ -109,7 +100,6 @@ subId 4347
 metaObject gencode7_GRCh37.tgz
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName gencode7_GRCh37.tgz
 grant Hubbard
@@ -126,7 +116,6 @@ expVars lab,dataType,annotation,level,labExpId
 metaObject wgEncodeGencode2wayConsPseudoV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencode2wayConsPseudoV7.gp.gz
 grant Hubbard
@@ -139,7 +128,6 @@ tableName wgEncodeGencode2wayConsPseudoV7
 metaObject wgEncodeGencodeAttrsV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeAttrsV7.tab.gz
 grant Hubbard
@@ -152,7 +140,6 @@ tableName wgEncodeGencodeAttrsV7
 metaObject wgEncodeGencodeBasicV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeBasicV7.gp.gz
 grant Hubbard
@@ -165,7 +152,6 @@ tableName wgEncodeGencodeBasicV7
 metaObject wgEncodeGencodeCompV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeCompV7.gp.gz
 grant Hubbard
@@ -178,7 +164,6 @@ tableName wgEncodeGencodeCompV7
 metaObject wgEncodeGencodeExonSupportV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeExonSupportV7.tab.gz
 grant Hubbard
@@ -191,7 +176,6 @@ tableName wgEncodeGencodeExonSupportV7
 metaObject wgEncodeGencodeGeneSourceV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeGeneSourceV7.tab.gz
 grant Hubbard
@@ -204,7 +188,6 @@ tableName wgEncodeGencodeGeneSourceV7
 metaObject wgEncodeGencodePdbV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodePdbV7.tab.gz
 grant Hubbard
@@ -217,7 +200,6 @@ tableName wgEncodeGencodePdbV7
 metaObject wgEncodeGencodePolyaV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodePolyaV7.gp.gz
 grant Hubbard
@@ -230,7 +212,6 @@ tableName wgEncodeGencodePolyaV7
 metaObject wgEncodeGencodePseudoGeneV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodePseudoGeneV7.gp.gz
 grant Hubbard
@@ -243,7 +224,6 @@ tableName wgEncodeGencodePseudoGeneV7
 metaObject wgEncodeGencodePubMedV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodePubMedV7.tab.gz
 grant Hubbard
@@ -256,7 +236,6 @@ tableName wgEncodeGencodePubMedV7
 metaObject wgEncodeGencodeRefSeqV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeRefSeqV7.tab.gz
 grant Hubbard
@@ -269,7 +248,6 @@ tableName wgEncodeGencodeRefSeqV7
 metaObject wgEncodeGencodeTagV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeTagV7.tab.gz
 grant Hubbard
@@ -282,7 +260,6 @@ tableName wgEncodeGencodeTagV7
 metaObject wgEncodeGencodeTranscriptSourceV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeTranscriptSourceV7.tab.gz
 grant Hubbard
@@ -295,7 +272,6 @@ tableName wgEncodeGencodeTranscriptSourceV7
 metaObject wgEncodeGencodeTranscriptSupportV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeTranscriptSupportV7.tab.gz
 grant Hubbard
@@ -308,7 +284,6 @@ tableName wgEncodeGencodeTranscriptSupportV7
 metaObject wgEncodeGencodeUniProtV7
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
 fileName wgEncodeGencodeUniProtV7.tab.gz
 grant Hubbard
@@ -318,4 +293,4 @@ project wgEncode
 subId 4347
 tableName wgEncodeGencodeUniProtV7
 
-# MAGIC: -929877233
+# MAGIC: -1010287546
