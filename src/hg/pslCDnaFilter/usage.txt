@@ -108,6 +108,9 @@ Options:
     on output.  Useful for debugging, as they are include in the verbose
     tracing as [#1], etc.  Will make a mess of normal production usage.
 
+   -uniqueMapped - keep only cDNAs that are uniquely aligned after all
+    other filters have been applied.
+
    -noValidate - don't run pslCheck validation.
 
    -verbose=1 - 0: quite
