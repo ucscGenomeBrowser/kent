@@ -1,4 +1,5 @@
 metaObject gencode.v7.2wayconspseudos
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -10,6 +11,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode.v7.README.txt
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -21,6 +23,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode.v7.annotation.gtf
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -32,6 +35,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode.v7.noncoding_RNAs.fa
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -43,6 +47,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode.v7.noncoding_RNAs.gtf
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -54,6 +59,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode.v7.pc_transcripts.fa
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -65,6 +71,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode.v7.pc_translations.fa
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -76,6 +83,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode.v7.polyAs.gtf
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -87,6 +95,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode.v7.tRNAs.gtf
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -98,6 +107,7 @@ project wgEncode
 subId 4347
 
 metaObject gencode7_GRCh37.tgz
+objType file
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -114,6 +124,7 @@ composite wgEncodeGencode
 expVars lab,dataType,annotation,level,labExpId
 
 metaObject wgEncodeGencode2wayConsPseudoV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -126,6 +137,7 @@ subId 4347
 tableName wgEncodeGencode2wayConsPseudoV7
 
 metaObject wgEncodeGencodeAttrsV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -138,6 +150,7 @@ subId 4347
 tableName wgEncodeGencodeAttrsV7
 
 metaObject wgEncodeGencodeBasicV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -150,6 +163,7 @@ subId 4347
 tableName wgEncodeGencodeBasicV7
 
 metaObject wgEncodeGencodeCompV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -162,6 +176,7 @@ subId 4347
 tableName wgEncodeGencodeCompV7
 
 metaObject wgEncodeGencodeExonSupportV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -174,6 +189,7 @@ subId 4347
 tableName wgEncodeGencodeExonSupportV7
 
 metaObject wgEncodeGencodeGeneSourceV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -186,6 +202,7 @@ subId 4347
 tableName wgEncodeGencodeGeneSourceV7
 
 metaObject wgEncodeGencodePdbV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -198,6 +215,7 @@ subId 4347
 tableName wgEncodeGencodePdbV7
 
 metaObject wgEncodeGencodePolyaV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -210,6 +228,7 @@ subId 4347
 tableName wgEncodeGencodePolyaV7
 
 metaObject wgEncodeGencodePseudoGeneV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -222,6 +241,7 @@ subId 4347
 tableName wgEncodeGencodePseudoGeneV7
 
 metaObject wgEncodeGencodePubMedV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -234,6 +254,7 @@ subId 4347
 tableName wgEncodeGencodePubMedV7
 
 metaObject wgEncodeGencodeRefSeqV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -246,6 +267,7 @@ subId 4347
 tableName wgEncodeGencodeRefSeqV7
 
 metaObject wgEncodeGencodeTagV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -258,6 +280,7 @@ subId 4347
 tableName wgEncodeGencodeTagV7
 
 metaObject wgEncodeGencodeTranscriptSourceV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -270,6 +293,7 @@ subId 4347
 tableName wgEncodeGencodeTranscriptSourceV7
 
 metaObject wgEncodeGencodeTranscriptSupportV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -282,6 +306,7 @@ subId 4347
 tableName wgEncodeGencodeTranscriptSupportV7
 
 metaObject wgEncodeGencodeUniProtV7
+objType table
 composite wgEncodeGencode
 dataType Gencode
 dateSubmitted 2011-05-01
@@ -293,4 +318,4 @@ project wgEncode
 subId 4347
 tableName wgEncodeGencodeUniProtV7
 
-# MAGIC: -1010287546
+# MAGIC: -994849651
