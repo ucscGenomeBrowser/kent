@@ -2,7 +2,9 @@ metaObject gencode.v7.2wayconspseudos
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.2wayconspseudos.gtf.gz
 grant Hubbard
 lab Sanger
@@ -14,7 +16,9 @@ metaObject gencode.v7.README.txt
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.README.txt.gz
 grant Hubbard
 lab Sanger
@@ -26,7 +30,9 @@ metaObject gencode.v7.annotation.gtf
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.annotation.gtf.gz
 grant Hubbard
 lab Sanger
@@ -38,7 +44,9 @@ metaObject gencode.v7.noncoding_RNAs.fa
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.noncoding_RNAs.fa.gz
 grant Hubbard
 lab Sanger
@@ -50,7 +58,9 @@ metaObject gencode.v7.noncoding_RNAs.gtf
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.noncoding_RNAs.gtf.gz
 grant Hubbard
 lab Sanger
@@ -62,7 +72,9 @@ metaObject gencode.v7.pc_transcripts.fa
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.pc_transcripts.fa.gz
 grant Hubbard
 lab Sanger
@@ -74,7 +86,9 @@ metaObject gencode.v7.pc_translations.fa
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.pc_translations.fa.gz
 grant Hubbard
 lab Sanger
@@ -86,7 +100,9 @@ metaObject gencode.v7.polyAs.gtf
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.polyAs.gtf.gz
 grant Hubbard
 lab Sanger
@@ -98,7 +114,9 @@ metaObject gencode.v7.tRNAs.gtf
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode.v7.tRNAs.gtf.gz
 grant Hubbard
 lab Sanger
@@ -110,7 +128,9 @@ metaObject gencode7_GRCh37.tgz
 objType file
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName gencode7_GRCh37.tgz
 grant Hubbard
 lab Sanger
@@ -121,13 +141,15 @@ subId 4347
 metaObject wgEncodeGencode
 objType composite
 composite wgEncodeGencode
-expVars lab,dataType,annotation,level,labExpId
+expVars lab,dataType,labExpId
 
 metaObject wgEncodeGencode2wayConsPseudoV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencode2wayConsPseudoV7.gp.gz
 grant Hubbard
 lab Sanger
@@ -140,7 +162,9 @@ metaObject wgEncodeGencodeAttrsV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeAttrsV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -153,7 +177,9 @@ metaObject wgEncodeGencodeBasicV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeBasicV7.gp.gz
 grant Hubbard
 lab Sanger
@@ -166,7 +192,9 @@ metaObject wgEncodeGencodeCompV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeCompV7.gp.gz
 grant Hubbard
 lab Sanger
@@ -179,7 +207,9 @@ metaObject wgEncodeGencodeExonSupportV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeExonSupportV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -192,7 +222,9 @@ metaObject wgEncodeGencodeGeneSourceV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeGeneSourceV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -205,7 +237,9 @@ metaObject wgEncodeGencodePdbV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodePdbV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -218,7 +252,9 @@ metaObject wgEncodeGencodePolyaV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodePolyaV7.gp.gz
 grant Hubbard
 lab Sanger
@@ -231,7 +267,9 @@ metaObject wgEncodeGencodePseudoGeneV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodePseudoGeneV7.gp.gz
 grant Hubbard
 lab Sanger
@@ -244,7 +282,9 @@ metaObject wgEncodeGencodePubMedV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodePubMedV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -257,7 +297,9 @@ metaObject wgEncodeGencodeRefSeqV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeRefSeqV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -270,7 +312,9 @@ metaObject wgEncodeGencodeTagV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeTagV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -283,7 +327,9 @@ metaObject wgEncodeGencodeTranscriptSourceV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeTranscriptSourceV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -296,7 +342,9 @@ metaObject wgEncodeGencodeTranscriptSupportV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeTranscriptSupportV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -309,7 +357,9 @@ metaObject wgEncodeGencodeUniProtV7
 objType table
 composite wgEncodeGencode
 dataType Gencode
+dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+expId 1881
 fileName wgEncodeGencodeUniProtV7.tab.gz
 grant Hubbard
 lab Sanger
@@ -318,4 +368,4 @@ project wgEncode
 subId 4347
 tableName wgEncodeGencodeUniProtV7
 
-# MAGIC: -994849651
+# MAGIC: -840808632
