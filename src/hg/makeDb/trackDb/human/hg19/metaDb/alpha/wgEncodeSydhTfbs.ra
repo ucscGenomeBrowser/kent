@@ -1621,7 +1621,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -1642,7 +1642,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -1663,7 +1663,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1685,7 +1685,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -1706,7 +1706,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -1727,7 +1727,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2867,7 +2867,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep1.fastq.gz
 grant Snyder
@@ -2892,7 +2891,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep2.fastq.gz
 grant Snyder
@@ -2917,7 +2915,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep3.fastq.gz
 grant Snyder
@@ -2941,7 +2938,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep4.fastq.gz
 grant Snyder
@@ -2966,7 +2962,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep1.bam
 grant Snyder
@@ -2992,7 +2987,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep2.bam
 grant Snyder
@@ -3018,7 +3012,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep3.bam
 grant Snyder
@@ -3044,7 +3037,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep4.bam
 grant Snyder
@@ -3069,7 +3061,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdPk.narrowPeak.gz
 grant Snyder
@@ -3092,7 +3083,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000691
 expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdSig.bigWig
 grant Snyder
@@ -4616,7 +4606,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -4637,7 +4627,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -4658,7 +4648,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4680,7 +4670,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -4701,7 +4691,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -4722,7 +4712,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -20975,7 +20965,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -20996,7 +20986,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -21017,7 +21007,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21039,7 +21029,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
 project wgEncode
 replicate 1
@@ -21061,7 +21051,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
 project wgEncode
 replicate 2
@@ -21083,7 +21073,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -28285,6 +28275,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
+expId 1864
 fileName wgEncodeSydhTfbsK562Ccnt2StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -28306,6 +28297,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
+expId 1864
 fileName wgEncodeSydhTfbsK562Ccnt2StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -28327,6 +28319,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
+expId 1864
 fileName wgEncodeSydhTfbsK562Ccnt2StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -28349,6 +28342,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
+expId 1864
 fileName wgEncodeSydhTfbsK562Ccnt2StdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -28370,6 +28364,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
+expId 1864
 fileName wgEncodeSydhTfbsK562Ccnt2StdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -28391,6 +28386,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+expId 1864
 fileName wgEncodeSydhTfbsK562Ccnt2StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -29521,6 +29517,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
+expId 1867
 fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1.bam
 grant Snyder
 lab Stanford
@@ -29542,6 +29539,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
+expId 1867
 fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2.bam
 grant Snyder
 lab Stanford
@@ -29563,6 +29561,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
+expId 1867
 fileName wgEncodeSydhTfbsK562CmycIfng30StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -29585,6 +29584,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
+expId 1867
 fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
@@ -29606,6 +29606,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
+expId 1867
 fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
@@ -29627,6 +29628,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
+expId 1867
 fileName wgEncodeSydhTfbsK562CmycIfng30StdSig.bigWig
 grant Snyder
 lab Stanford
@@ -30221,6 +30223,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
+expId 1863
 fileName wgEncodeSydhTfbsK562Hmgn3StdAlnRep1.bam
 grant Snyder
 lab Harvard
@@ -30242,6 +30245,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
+expId 1863
 fileName wgEncodeSydhTfbsK562Hmgn3StdAlnRep2.bam
 grant Snyder
 lab Harvard
@@ -30263,6 +30267,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
+expId 1863
 fileName wgEncodeSydhTfbsK562Hmgn3StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
@@ -30285,6 +30290,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
+expId 1863
 fileName wgEncodeSydhTfbsK562Hmgn3StdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
@@ -30306,6 +30312,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
+expId 1863
 fileName wgEncodeSydhTfbsK562Hmgn3StdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
@@ -30327,6 +30334,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+expId 1863
 fileName wgEncodeSydhTfbsK562Hmgn3StdSig.bigWig
 grant Snyder
 lab Harvard
@@ -31769,6 +31777,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1865
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep1.bam
 grant Snyder
 lab Stanford
@@ -31790,6 +31799,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1865
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep2.bam
 grant Snyder
 lab Stanford
@@ -31811,6 +31821,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1865
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -31833,6 +31844,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1865
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
@@ -31854,6 +31866,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1865
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
@@ -31876,6 +31889,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+expId 1865
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdSig.bigWig
 grant Snyder
 lab Stanford
@@ -31898,6 +31912,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1866
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep1.bam
 grant Snyder
 lab Stanford
@@ -31919,6 +31934,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1866
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep2.bam
 grant Snyder
 lab Stanford
@@ -31940,6 +31956,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1866
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -31962,6 +31979,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1866
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
@@ -31983,6 +32001,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
+expId 1866
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
@@ -32005,6 +32024,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+expId 1866
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdSig.bigWig
 grant Snyder
 lab Stanford
@@ -37827,7 +37847,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdAln.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType input
 subId 3256
@@ -37847,7 +37867,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType input
 subId 3256
@@ -37867,7 +37887,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -37889,7 +37909,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdAln.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType input
 subId 3255
@@ -37909,7 +37929,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType input
 subId 3255
@@ -37929,7 +37949,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -38430,7 +38450,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -38451,7 +38471,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -38472,7 +38492,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38494,7 +38514,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -38515,7 +38535,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -38536,7 +38556,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38558,7 +38578,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep1.bam
 grant Snyder
-lab Stanford
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -38579,7 +38599,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep2.bam
 grant Snyder
-lab Stanford
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -38600,7 +38620,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38622,7 +38642,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Harvard
 project wgEncode
 replicate 1
 setType exp
@@ -38643,7 +38663,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Harvard
 project wgEncode
 replicate 2
 setType exp
@@ -38664,7 +38684,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig.bigWig
 grant Snyder
-lab Stanford
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41422,4 +41442,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -558978708
+# MAGIC: -554218296

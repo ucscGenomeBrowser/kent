@@ -548,7 +548,8 @@ objType table
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-24
 dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 dccAccession wgEncodeEH000922
@@ -559,7 +560,7 @@ lab Stanford
 origAssembly hg19
 project wgEncode
 seqPlatform AB_SOLiD_3.5
-subId 3329
+subId 4351
 tableName wgEncodeSydhNsomeGm12878Sig
 view Signal
 
@@ -1228,7 +1229,8 @@ objType table
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-24
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000921
@@ -1239,8 +1241,8 @@ lab Stanford
 origAssembly hg19
 project wgEncode
 seqPlatform AB_SOLiD_3.5
-subId 3431
+subId 4351
 tableName wgEncodeSydhNsomeK562Sig
 view Signal
 
-# MAGIC: -1578070944
+# MAGIC: 1427796430
