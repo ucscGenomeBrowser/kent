@@ -1406,13 +1406,13 @@ wgEncode 1
         origAssembly hg19
         # subId=3210 dateSubmitted=2011-01-11
 
-        track wgEncodeUwDnaseMonocd14HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel Mono-CD14+ Hspt 1
-        longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=MONOCD14 treatment=None rep=1
-        type broadPeak
-        origAssembly hg19
+        #track wgEncodeUwDnaseMonocd14HotspotsRep1
+        #parent wgEncodeUwDnaseViewHot off
+        #shortLabel Mono-CD14+ Hspt 1
+        #longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        #subGroups view=Hot cellType=MONOCD14 treatment=None rep=1
+        #type broadPeak
+        #origAssembly hg19
         # subId=3211 dateSubmitted=2011-01-11
 
         track wgEncodeUwDnaseWi38HotspotsRep1
@@ -2826,13 +2826,13 @@ wgEncode 1
         origAssembly hg19
         # subId=3210 dateSubmitted=2011-01-11
 
-        track wgEncodeUwDnaseMonocd14PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Mono-CD14+ Pk 1
-        longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=MONOCD14 treatment=None rep=1
-        type narrowPeak
-        origAssembly hg19
+        #track wgEncodeUwDnaseMonocd14PkRep1
+        #parent wgEncodeUwDnaseViewaPeaks off
+        #shortLabel Mono-CD14+ Pk 1
+        #longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 1 from ENCODE/UW
+        #subGroups view=Peaks cellType=MONOCD14 treatment=None rep=1
+        #type narrowPeak
+        #origAssembly hg19
         # subId=3211 dateSubmitted=2011-01-11
 
         track wgEncodeUwDnaseWi38PkRep1
@@ -4394,13 +4394,13 @@ wgEncode 1
         origAssembly hg19
         # subId=3210 dateSubmitted=2011-01-11
 
-        track wgEncodeUwDnaseMonocd14RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Mono-CD14+ Sig 1
-        longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=MONOCD14 treatment=None rep=1
-        type bigWig 1.000000 24864.000000
-        origAssembly hg19
+        #track wgEncodeUwDnaseMonocd14RawRep1
+        #parent wgEncodeUwDnaseViewzRaw off
+        #shortLabel Mono-CD14+ Sig 1
+        #longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 1 from ENCODE/UW
+        #subGroups view=zRSig cellType=MONOCD14 treatment=None rep=1
+        #type bigWig 1.000000 24864.000000
+        #origAssembly hg19
         # subId=3211 dateSubmitted=2011-01-11
 
         track wgEncodeUwDnaseWi38RawRep1

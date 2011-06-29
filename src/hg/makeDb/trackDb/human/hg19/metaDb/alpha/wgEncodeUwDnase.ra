@@ -2069,48 +2069,6 @@ tableName wgEncodeUwDnaseBjRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeUwDnaseBjtertRawDataRep1
-objType file
-cell BJ
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-27
-dateUnrestricted 2010-01-27
-dccAccession wgEncodeEH000487
-expId 487
-fileName wgEncodeUwDnaseBjtertRawDataRep1.fastq.gz
-geoSampleAccession GSM736518
-grant Stam
-lab UW
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 295
-treatment None
-view RawData
-
-metaObject wgEncodeUwDnaseBjtertRawDataRep2
-objType file
-cell BJ
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-30
-dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000487
-expId 487
-fileName wgEncodeUwDnaseBjtertRawDataRep2.fastq.gz
-geoSampleAccession GSM736596
-grant Stam
-lab UW
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 393
-treatment None
-view RawData
-
 metaObject wgEncodeUwDnaseCaco2AlnRep1
 objType file
 cell Caco-2
@@ -2351,6 +2309,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001884
+expId 1884
 fileName wgEncodeUwDnaseCd20PosAlnRep2.bam
 grant Stam
 lab UW
@@ -2370,6 +2330,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001884
+expId 1884
 fileName wgEncodeUwDnaseCd20PosHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -2390,6 +2352,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001884
+expId 1884
 fileName wgEncodeUwDnaseCd20PosPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -2410,6 +2374,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001884
+expId 1884
 fileName wgEncodeUwDnaseCd20PosRawDataRep2.fastq.tgz
 grant Stam
 lab UW
@@ -2428,6 +2394,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001884
+expId 1884
 fileName wgEncodeUwDnaseCd20PosRawRep2.bigWig
 grant Stam
 lab UW
@@ -2448,6 +2416,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001885
+expId 1885
 fileName wgEncodeUwDnaseCd34mobilizedAlnRep1.bam
 grant Stam
 lab UW
@@ -2467,6 +2437,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001885
+expId 1885
 fileName wgEncodeUwDnaseCd34mobilizedHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -2487,6 +2459,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001885
+expId 1885
 fileName wgEncodeUwDnaseCd34mobilizedPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -2507,6 +2481,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001885
+expId 1885
 fileName wgEncodeUwDnaseCd34mobilizedRawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -2525,6 +2501,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001885
+expId 1885
 fileName wgEncodeUwDnaseCd34mobilizedRawRep1.bigWig
 grant Stam
 lab UW
@@ -8594,6 +8572,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadAlnRep1.bam
 grant Stam
 lab UW
@@ -8613,6 +8593,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadAlnRep2.bam
 grant Stam
 lab UW
@@ -8632,6 +8614,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -8652,6 +8636,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -8672,6 +8658,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -8692,6 +8680,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -8712,6 +8702,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadRawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -8730,6 +8722,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadRawDataRep2.fastq.tgz
 grant Stam
 lab UW
@@ -8748,6 +8742,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadRawRep1.bigWig
 grant Stam
 lab UW
@@ -8768,6 +8764,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001889
+expId 1889
 fileName wgEncodeUwDnaseHmvecdadRawRep2.bigWig
 grant Stam
 lab UW
@@ -10588,6 +10586,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001886
+expId 1886
 fileName wgEncodeUwDnaseHpaecAlnRep1.bam
 grant Stam
 lab UW
@@ -10607,6 +10607,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001886
+expId 1886
 fileName wgEncodeUwDnaseHpaecHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -10627,6 +10629,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001886
+expId 1886
 fileName wgEncodeUwDnaseHpaecPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -10647,6 +10651,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001886
+expId 1886
 fileName wgEncodeUwDnaseHpaecRawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -10665,6 +10671,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001886
+expId 1886
 fileName wgEncodeUwDnaseHpaecRawRep1.bigWig
 grant Stam
 lab UW
@@ -12523,6 +12531,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001186
+expId 1186
 fileName wgEncodeUwDnaseHsmmtAlnRep2.bam
 grant Stam
 lab UW
@@ -12565,6 +12575,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001186
+expId 1186
 fileName wgEncodeUwDnaseHsmmtHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -12608,6 +12620,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001186
+expId 1186
 fileName wgEncodeUwDnaseHsmmtPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -12649,6 +12663,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001186
+expId 1186
 fileName wgEncodeUwDnaseHsmmtRawDataRep2.fastq.tgz
 grant Stam
 lab UW
@@ -12690,6 +12706,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001186
+expId 1186
 fileName wgEncodeUwDnaseHsmmtRawRep2.bigWig
 grant Stam
 lab UW
@@ -14068,28 +14086,6 @@ tableName wgEncodeUwDnaseMcf7RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeUwDnaseMonocd14AlnRep1
-objType file
-cell Monocytes-CD14+
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-11
-dateUnrestricted 2011-10-10
-dccAccession wgEncodeEH001196
-expId 1196
-fileName wgEncodeUwDnaseMonocd14AlnRep1.bam
-geoSampleAccession GSM736513
-grant Stam
-lab UW
-labVersion Bowtie 0.12.7
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 3211
-treatment None
-view Alignments
-
 metaObject wgEncodeUwDnaseMonocd14AlnRep1V2
 objType file
 cell Monocytes-CD14+
@@ -14097,7 +14093,10 @@ composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
-dateUnrestricted 2012-03-25
+dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH001196
+dccInternalNotes 'oldGEO=GSM736513'
+expId 1196
 fileName wgEncodeUwDnaseMonocd14AlnRep1V2.bam
 grant Stam
 lab UW
@@ -14118,6 +14117,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001196
+expId 1196
 fileName wgEncodeUwDnaseMonocd14AlnRep2.bam
 grant Stam
 lab UW
@@ -14129,29 +14130,6 @@ subId 4399
 treatment None
 view Alignments
 
-metaObject wgEncodeUwDnaseMonocd14HotspotsRep1
-objType table
-cell Monocytes-CD14+
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-11
-dateUnrestricted 2011-10-10
-dccAccession wgEncodeEH001196
-expId 1196
-fileName wgEncodeUwDnaseMonocd14HotspotsRep1.broadPeak.gz
-geoSampleAccession GSM736513
-grant Stam
-lab UW
-labVersion Hotspot-v5.1
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 3211
-tableName wgEncodeUwDnaseMonocd14HotspotsRep1
-treatment None
-view Hotspots
-
 metaObject wgEncodeUwDnaseMonocd14HotspotsRep1V2
 objType table
 cell Monocytes-CD14+
@@ -14159,7 +14137,10 @@ composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
-dateUnrestricted 2012-03-25
+dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH001196
+dccInternalNotes 'oldGEO=GSM736513'
+expId 1196
 fileName wgEncodeUwDnaseMonocd14HotspotsRep1V2.broadPeak.gz
 grant Stam
 lab UW
@@ -14181,6 +14162,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001196
+expId 1196
 fileName wgEncodeUwDnaseMonocd14HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -14193,29 +14176,6 @@ tableName wgEncodeUwDnaseMonocd14HotspotsRep2
 treatment None
 view Hotspots
 
-metaObject wgEncodeUwDnaseMonocd14PkRep1
-objType table
-cell Monocytes-CD14+
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-11
-dateUnrestricted 2011-10-10
-dccAccession wgEncodeEH001196
-expId 1196
-fileName wgEncodeUwDnaseMonocd14PkRep1.narrowPeak.gz
-geoSampleAccession GSM736513
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 3211
-tableName wgEncodeUwDnaseMonocd14PkRep1
-treatment None
-view Peaks
-
 metaObject wgEncodeUwDnaseMonocd14PkRep1V2
 objType table
 cell Monocytes-CD14+
@@ -14223,7 +14183,10 @@ composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
-dateUnrestricted 2012-03-25
+dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH001196
+dccInternalNotes 'oldGEO=GSM736513'
+expId 1196
 fileName wgEncodeUwDnaseMonocd14PkRep1V2.narrowPeak.gz
 grant Stam
 lab UW
@@ -14245,6 +14208,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001196
+expId 1196
 fileName wgEncodeUwDnaseMonocd14PkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -14257,27 +14222,6 @@ tableName wgEncodeUwDnaseMonocd14PkRep2
 treatment None
 view Peaks
 
-metaObject wgEncodeUwDnaseMonocd14RawDataRep1
-objType file
-cell Monocytes-CD14+
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-11
-dateUnrestricted 2011-10-10
-dccAccession wgEncodeEH001196
-expId 1196
-fileName wgEncodeUwDnaseMonocd14RawDataRep1.fastq.gz
-geoSampleAccession GSM736513
-grant Stam
-lab UW
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 3211
-treatment None
-view RawData
-
 metaObject wgEncodeUwDnaseMonocd14RawDataRep1V2
 objType file
 cell Monocytes-CD14+
@@ -14285,7 +14229,10 @@ composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
-dateUnrestricted 2012-03-25
+dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH001196
+dccInternalNotes 'oldGEO=GSM736513'
+expId 1196
 fileName wgEncodeUwDnaseMonocd14RawDataRep1V2.fastq.tgz
 grant Stam
 lab UW
@@ -14305,6 +14252,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001196
+expId 1196
 fileName wgEncodeUwDnaseMonocd14RawDataRep2.fastq.tgz
 grant Stam
 lab UW
@@ -14315,29 +14264,6 @@ subId 4399
 treatment None
 view RawData
 
-metaObject wgEncodeUwDnaseMonocd14RawRep1
-objType table
-cell Monocytes-CD14+
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-11
-dateUnrestricted 2011-10-10
-dccAccession wgEncodeEH001196
-expId 1196
-fileName wgEncodeUwDnaseMonocd14RawRep1.bigWig
-geoSampleAccession GSM736513
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 3211
-tableName wgEncodeUwDnaseMonocd14RawRep1
-treatment None
-view RawSignal
-
 metaObject wgEncodeUwDnaseMonocd14RawRep1V2
 objType table
 cell Monocytes-CD14+
@@ -14345,7 +14271,10 @@ composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
-dateUnrestricted 2012-03-25
+dateUnrestricted 2011-10-10
+dccAccession wgEncodeEH001196
+dccInternalNotes 'oldGEO=GSM736513'
+expId 1196
 fileName wgEncodeUwDnaseMonocd14RawRep1V2.bigWig
 grant Stam
 lab UW
@@ -14367,6 +14296,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001196
+expId 1196
 fileName wgEncodeUwDnaseMonocd14RawRep2.bigWig
 grant Stam
 lab UW
@@ -15760,6 +15691,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1AlnRep1.bam
 grant Stam
 lab UW
@@ -15779,6 +15712,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1AlnRep2.bam
 grant Stam
 lab UW
@@ -15798,6 +15733,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -15818,6 +15755,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -15838,6 +15777,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1PkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -15858,6 +15799,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1PkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -15878,6 +15821,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -15896,6 +15841,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1RawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -15914,6 +15861,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1RawRep1.bigWig
 grant Stam
 lab UW
@@ -15934,6 +15883,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001887
+expId 1887
 fileName wgEncodeUwDnaseNt2d1RawRep2.bigWig
 grant Stam
 lab UW
@@ -16186,6 +16137,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecAlnRep1.bam
 grant Stam
 lab UW
@@ -16205,6 +16158,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecAlnRep2.bam
 grant Stam
 lab UW
@@ -16224,6 +16179,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -16244,6 +16201,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -16264,6 +16223,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -16284,6 +16245,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -16304,6 +16267,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecRawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -16322,6 +16287,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecRawDataRep2.fastq.tgz
 grant Stam
 lab UW
@@ -16340,6 +16307,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecRawRep1.bigWig
 grant Stam
 lab UW
@@ -16360,6 +16329,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
+dccAccession wgEncodeEH001888
+expId 1888
 fileName wgEncodeUwDnasePrecRawRep2.bigWig
 grant Stam
 lab UW
@@ -18423,4 +18394,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 1461259551
+# MAGIC: 1305925875
