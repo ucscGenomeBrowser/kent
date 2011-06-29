@@ -2235,7 +2235,7 @@ sex F
 tier 3
 protocol UW_Stam:HMF_Stam_protocol.pdf
 
-term HMVEC_dAd
+term HMVEC-dAd
 tag HMVECDAD
 type Cell Line
 tier 3
@@ -3928,7 +3928,7 @@ tissue Limb
 category Tissue
 age ageUnknown
 strain Unknown
-description embryo forelimb buds (PROVISIONAL)
+description embryo forelimb buds 
 vendorName Selleri lab, Cornell
 vendorId ForelimbBud
 orderUrl http://weill.cornell.edu/research/researcher/lselleri/
@@ -3981,9 +3981,9 @@ tissue Adipose
 category Tissue
 age ageUnknown
 strain Unknown
-description Genital Adipose tissue (PROVISIONAL)
+description Genital Adipose tissue
 vendorName UW lab
-vendorId GeneitalFatPad
+vendorId GenitalFatPad
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 16230
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=16230
@@ -4017,7 +4017,7 @@ tissue Embryo
 category Tissue
 age ageUnknown
 strain Unknown
-description Whole embryos with heads removed (PROVISIONAL)
+description Whole embryos with heads removed
 vendorName Selleri lab, Cornell
 vendorId HeadlessEmbryo
 orderUrl http://weill.cornell.edu/research/researcher/lselleri/
@@ -4035,7 +4035,7 @@ tissue Limb
 category Tissue
 age ageUnknown
 strain Unknown
-description embryo hindlimb buds (PROVISIONAL)
+description embryo hindlimb buds 
 vendorName Selleri lab, Cornell
 vendorId HindlimbBud
 orderUrl http://weill.cornell.edu/research/researcher/lselleri/
@@ -4180,7 +4180,7 @@ tissue Mesoderm
 category Tissue
 age ageUnknown
 strain Unknown
-description axial somatic and lateral plate mesoderm from eviscerated headless, limbless embryos  (PROVISIONAL)
+description axial somatic and lateral plate mesoderm from eviscerated headless, limbless embryos 
 vendorName Selleri lab, Cornell
 vendorId Mesoderm
 orderUrl http://weill.cornell.edu/research/researcher/lselleri/
@@ -7773,13 +7773,6 @@ type rnaExtract
 description Total RNA extract (longer than 200 nt)
 label Total_RNA
 
-# Short should be retired turning into short total
-#term short
-#tag SHORT
-#type rnaExtract
-#description RNA shorter than 200 nt PROVISIONAL TO RETIRE  (1/20/2011)
-#label (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
-
 term shortPolyA
 tag SHORTPOLYA
 type rnaExtract
@@ -8260,12 +8253,12 @@ type protocol
 
 term v042211.1
 tag V0422111
-description Faster ChIP protocol & AMpure XP size selection for ChIP-seq (Myers) PROVISIONAL
+description Faster ChIP protocol & AMpure XP size selection for ChIP-seq (Myers) 
 type protocol
 
 term v042211.2
 tag V0422112
-description Faster ChIP protocol & gel size selection for ChIP-seq (Myers) PROVISIONAL
+description Faster ChIP protocol & gel size selection for ChIP-seq (Myers) 
 type protocol
 
 
@@ -8869,7 +8862,7 @@ description C57 black 6, the most common inbred strain of laboratory mouse
 term CD-1
 tag CD1
 type strain
-description Multipurpose mouse used for safety and efficacy testing, aging, surgical model, pseudopregnancy (PROVISIONAL)
+description Multipurpose mouse used for safety and efficacy testing, aging, surgical model, pseudopregnancy 
 
 term NIH/Swiss
 tag NIHS
@@ -8951,19 +8944,19 @@ term E18.5
 tag E18HALF
 type age
 stage Embryonic
-description Embryonic day 18.5 (PROVISIONAL)
+description Embryonic day 18.5 
 
 term adult-4wks
 tag ADULT4WKS
 type age
 stage Adult
-description Adult 4 weeks (PROVISIONAL)
+description Adult 4 weeks
 
 term adult-5wks
 tag ADULT5WKS
 type age
 stage Adult
-description Adult 5 weeks (PROVISIONAL)
+description Adult 5 weeks
 
 term adult-8wks
 tag ADULT8WKS
@@ -9532,6 +9525,7 @@ type lab
 label Farnham - University of Southern California
 description Farnham - University of Southern California
 labPi Farnham
+labInst USC
 labPiFull Peggy Farnham
 grantPi Snyder
 organism human
@@ -10487,7 +10481,7 @@ term spikeInPool
 tag SPIKEINPOOL
 type typeOfTerm
 label Spike-In Pool   
-description (Provisional) The spike-in pool that was used.
+description The spike-in pool that was used.
 searchable no
 cvDefined no
 validate none   

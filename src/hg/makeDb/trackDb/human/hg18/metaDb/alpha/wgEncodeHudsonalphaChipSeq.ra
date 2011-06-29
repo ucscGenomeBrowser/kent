@@ -1,7 +1,7 @@
 metaObject wgEncodeHudsonalphaChipSeq
 objType composite
 composite wgEncodeHudsonalphaChipSeq
-expVars lab,dataType,cell,antibody,protocol,treatment
+expVars lab,dataType,cell,antibody,treatment,protocol
 
 metaObject wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmAlnRep1
 objType file
@@ -3733,6 +3733,29 @@ protocol PCR2x
 replicate 2
 setType exp
 subId 435
+treatment None
+view Alignments
+
+metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Control
+objType file
+antibody Input
+cell PFSK-1
+composite wgEncodeHudsonalphaChipSeq
+controlId SL412
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-17
+dateUnrestricted 2010-04-17
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Control.tagAlign.gz
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL412
+project wgEncode
+protocol PCR2x
+replicate 2
+setType input
+subId 436
 treatment None
 view Alignments
 
@@ -13821,6 +13844,29 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Nrsf
 treatment None
 view RawSignal
 
+metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
+objType table
+antibody Input
+cell PFSK-1
+composite wgEncodeHudsonalphaChipSeq
+controlId SL412
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-17
+dateUnrestricted 2010-04-17
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL412
+project wgEncode
+protocol PCR2x
+replicate 2
+setType input
+subId 436
+tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
+treatment None
+view RawSignal
+
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
 objType table
 antibody FOXP2
@@ -14010,4 +14056,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: 2010966936
+# MAGIC: -541757313
