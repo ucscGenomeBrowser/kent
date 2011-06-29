@@ -336,6 +336,8 @@ The format of the type fields:
     bamColorMode    strand|gray|tag|off         # coloring method, default is strand
     bamGrayMode     aliQual|baseQual|unpaired   # grayscale metric, default is aliQual
     bamColorTag     <XX>                        # optional tag for RGB color, default is "YC"
+    bamSkipPrintQualScore .                     # Skip printing quality score in bam item details page, 
+                                                # no default, always use "." to skip printing.
     minAliQual      <N>                         # display only items with alignment quality
                                                 #   at least N, default 0
     aliQualRange    <min:max>			# shade alignment qualities within this range

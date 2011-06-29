@@ -315,6 +315,7 @@ expId 728
 fileName wgEncodeSydhTfbsGm10847InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -435,6 +436,7 @@ expId 770
 fileName wgEncodeSydhTfbsGm10847InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -582,6 +584,7 @@ expId 734
 fileName wgEncodeSydhTfbsGm10847NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -724,6 +727,7 @@ expId 734
 fileName wgEncodeSydhTfbsGm10847NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -795,6 +799,7 @@ expId 705
 fileName wgEncodeSydhTfbsGm10847Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4313
@@ -865,6 +870,7 @@ expId 705
 fileName wgEncodeSydhTfbsGm10847Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -1176,6 +1182,7 @@ expId 622
 fileName wgEncodeSydhTfbsGm12878CfosStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -1199,6 +1206,7 @@ expId 622
 fileName wgEncodeSydhTfbsGm12878CfosStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -1849,6 +1857,7 @@ expId 706
 fileName wgEncodeSydhTfbsGm12878InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -1967,6 +1976,7 @@ expId 771
 fileName wgEncodeSydhTfbsGm12878InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -2039,6 +2049,7 @@ expId 625
 fileName wgEncodeSydhTfbsGm12878InputStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -2300,6 +2311,7 @@ expId 639
 fileName wgEncodeSydhTfbsGm12878JundStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -2323,6 +2335,7 @@ expId 639
 fileName wgEncodeSydhTfbsGm12878JundStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -2446,6 +2459,7 @@ expId 623
 fileName wgEncodeSydhTfbsGm12878MaxStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -2469,6 +2483,7 @@ expId 623
 fileName wgEncodeSydhTfbsGm12878MaxStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -2731,6 +2746,7 @@ expId 707
 fileName wgEncodeSydhTfbsGm12878NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -2849,6 +2865,7 @@ expId 707
 fileName wgEncodeSydhTfbsGm12878NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -3065,6 +3082,7 @@ expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -3087,6 +3105,7 @@ expId 690
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -3556,6 +3575,7 @@ expId 708
 fileName wgEncodeSydhTfbsGm12878Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -3746,6 +3766,7 @@ expId 708
 fileName wgEncodeSydhTfbsGm12878Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -3869,6 +3890,7 @@ expId 626
 fileName wgEncodeSydhTfbsGm12878Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -3892,6 +3914,7 @@ expId 626
 fileName wgEncodeSydhTfbsGm12878Pol2StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -4151,6 +4174,7 @@ expId 645
 fileName wgEncodeSydhTfbsGm12878Pol3StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -4174,6 +4198,7 @@ expId 645
 fileName wgEncodeSydhTfbsGm12878Pol3StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -4246,6 +4271,7 @@ expId 749
 fileName wgEncodeSydhTfbsGm12878Rad21IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -4314,6 +4340,7 @@ expId 749
 fileName wgEncodeSydhTfbsGm12878Rad21IggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -5245,6 +5272,7 @@ expId 697
 fileName wgEncodeSydhTfbsGm12878Tr4StdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -5268,6 +5296,7 @@ expId 697
 fileName wgEncodeSydhTfbsGm12878Tr4StdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -5668,6 +5697,7 @@ expId 695
 fileName wgEncodeSydhTfbsGm12878Yy1StdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -5691,6 +5721,7 @@ expId 695
 fileName wgEncodeSydhTfbsGm12878Yy1StdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -6080,6 +6111,7 @@ expId 698
 fileName wgEncodeSydhTfbsGm12878Zzz3StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -6102,6 +6134,7 @@ expId 698
 fileName wgEncodeSydhTfbsGm12878Zzz3StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -6220,6 +6253,7 @@ expId 709
 fileName wgEncodeSydhTfbsGm12891InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -6338,6 +6372,7 @@ expId 772
 fileName wgEncodeSydhTfbsGm12891InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -6435,6 +6470,7 @@ expId 735
 fileName wgEncodeSydhTfbsGm12891NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -6529,6 +6565,7 @@ expId 735
 fileName wgEncodeSydhTfbsGm12891NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -6701,6 +6738,7 @@ expId 710
 fileName wgEncodeSydhTfbsGm12891Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -6867,6 +6905,7 @@ expId 710
 fileName wgEncodeSydhTfbsGm12891Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -6987,6 +7026,7 @@ expId 711
 fileName wgEncodeSydhTfbsGm12892InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -7107,6 +7147,7 @@ expId 773
 fileName wgEncodeSydhTfbsGm12892InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -7204,6 +7245,7 @@ expId 712
 fileName wgEncodeSydhTfbsGm12892NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -7298,6 +7340,7 @@ expId 712
 fileName wgEncodeSydhTfbsGm12892NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -7395,6 +7438,7 @@ expId 729
 fileName wgEncodeSydhTfbsGm12892Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -7489,6 +7533,7 @@ expId 729
 fileName wgEncodeSydhTfbsGm12892Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -7609,6 +7654,7 @@ expId 713
 fileName wgEncodeSydhTfbsGm15510InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -7729,6 +7775,7 @@ expId 774
 fileName wgEncodeSydhTfbsGm15510InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -7876,6 +7923,7 @@ expId 736
 fileName wgEncodeSydhTfbsGm15510NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -8018,6 +8066,7 @@ expId 736
 fileName wgEncodeSydhTfbsGm15510NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -8115,6 +8164,7 @@ expId 714
 fileName wgEncodeSydhTfbsGm15510Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -8209,6 +8259,7 @@ expId 714
 fileName wgEncodeSydhTfbsGm15510Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -8329,6 +8380,7 @@ expId 730
 fileName wgEncodeSydhTfbsGm18505InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -8449,6 +8501,7 @@ expId 775
 fileName wgEncodeSydhTfbsGm18505InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -8596,6 +8649,7 @@ expId 715
 fileName wgEncodeSydhTfbsGm18505NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -8738,6 +8792,7 @@ expId 715
 fileName wgEncodeSydhTfbsGm18505NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -8860,6 +8915,7 @@ expId 731
 fileName wgEncodeSydhTfbsGm18505Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4313
@@ -8978,6 +9034,7 @@ expId 731
 fileName wgEncodeSydhTfbsGm18505Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -9147,6 +9204,7 @@ expId 732
 fileName wgEncodeSydhTfbsGm18526InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -9267,6 +9325,7 @@ expId 776
 fileName wgEncodeSydhTfbsGm18526InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -9364,6 +9423,7 @@ expId 716
 fileName wgEncodeSydhTfbsGm18526NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -9458,6 +9518,7 @@ expId 716
 fileName wgEncodeSydhTfbsGm18526NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -9554,6 +9615,7 @@ expId 733
 fileName wgEncodeSydhTfbsGm18526Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -9648,6 +9710,7 @@ expId 733
 fileName wgEncodeSydhTfbsGm18526Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -9719,6 +9782,7 @@ expId 737
 fileName wgEncodeSydhTfbsGm18951InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -9838,6 +9902,7 @@ expId 777
 fileName wgEncodeSydhTfbsGm18951InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -9959,6 +10024,7 @@ expId 738
 fileName wgEncodeSydhTfbsGm18951NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -10077,6 +10143,7 @@ expId 738
 fileName wgEncodeSydhTfbsGm18951NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -10198,6 +10265,7 @@ expId 739
 fileName wgEncodeSydhTfbsGm18951Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -10316,6 +10384,7 @@ expId 739
 fileName wgEncodeSydhTfbsGm18951Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -10435,6 +10504,7 @@ expId 740
 fileName wgEncodeSydhTfbsGm19099InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -10554,6 +10624,7 @@ expId 778
 fileName wgEncodeSydhTfbsGm19099InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -10650,6 +10721,7 @@ expId 717
 fileName wgEncodeSydhTfbsGm19099NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -10744,6 +10816,7 @@ expId 717
 fileName wgEncodeSydhTfbsGm19099NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -10840,6 +10913,7 @@ expId 741
 fileName wgEncodeSydhTfbsGm19099Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -10934,6 +11008,7 @@ expId 741
 fileName wgEncodeSydhTfbsGm19099Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -11053,6 +11128,7 @@ expId 742
 fileName wgEncodeSydhTfbsGm19193InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -11172,6 +11248,7 @@ expId 779
 fileName wgEncodeSydhTfbsGm19193InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -11269,6 +11346,7 @@ expId 718
 fileName wgEncodeSydhTfbsGm19193NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -11363,6 +11441,7 @@ expId 718
 fileName wgEncodeSydhTfbsGm19193NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -11485,6 +11564,7 @@ expId 743
 fileName wgEncodeSydhTfbsGm19193Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -11603,6 +11683,7 @@ expId 743
 fileName wgEncodeSydhTfbsGm19193Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -13083,6 +13164,7 @@ expId 627
 fileName wgEncodeSydhTfbsHct116InputUcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -13208,6 +13290,7 @@ expId 651
 fileName wgEncodeSydhTfbsHct116Pol2UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -13231,6 +13314,7 @@ expId 651
 fileName wgEncodeSydhTfbsHct116Pol2UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -13358,6 +13442,7 @@ expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -13381,6 +13466,7 @@ expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -13724,6 +13810,7 @@ expId 631
 fileName wgEncodeSydhTfbsHek293bInputStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3053
@@ -13959,6 +14046,7 @@ expId 632
 fileName wgEncodeSydhTfbsHek293bPol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -13982,6 +14070,7 @@ expId 632
 fileName wgEncodeSydhTfbsHek293bPol2StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -14109,6 +14198,7 @@ expId 685
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -14132,6 +14222,7 @@ expId 685
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -14259,6 +14350,7 @@ expId 686
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -14282,6 +14374,7 @@ expId 686
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -14379,6 +14472,7 @@ expId 720
 fileName wgEncodeSydhTfbsHelas3Baf155IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -14473,6 +14567,7 @@ expId 720
 fileName wgEncodeSydhTfbsHelas3Baf155IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -14570,6 +14665,7 @@ expId 721
 fileName wgEncodeSydhTfbsHelas3Baf170IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -14664,6 +14760,7 @@ expId 721
 fileName wgEncodeSydhTfbsHelas3Baf170IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -14789,6 +14886,7 @@ expId 763
 fileName wgEncodeSydhTfbsHelas3Bdp1StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -14812,6 +14910,7 @@ expId 763
 fileName wgEncodeSydhTfbsHelas3Bdp1StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -15073,6 +15172,7 @@ expId 764
 fileName wgEncodeSydhTfbsHelas3Brf1StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -15096,6 +15196,7 @@ expId 764
 fileName wgEncodeSydhTfbsHelas3Brf1StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -15219,6 +15320,7 @@ expId 765
 fileName wgEncodeSydhTfbsHelas3Brf2StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -15242,6 +15344,7 @@ expId 765
 fileName wgEncodeSydhTfbsHelas3Brf2StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -15343,6 +15446,7 @@ expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -15441,6 +15545,7 @@ expId 781
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -15704,6 +15809,7 @@ expId 647
 fileName wgEncodeSydhTfbsHelas3CfosStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -15727,6 +15833,7 @@ expId 647
 fileName wgEncodeSydhTfbsHelas3CfosStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -15799,6 +15906,7 @@ expId 746
 fileName wgEncodeSydhTfbsHelas3CjunIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -15821,6 +15929,7 @@ expId 746
 fileName wgEncodeSydhTfbsHelas3CjunIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
@@ -15992,6 +16101,7 @@ expId 648
 fileName wgEncodeSydhTfbsHelas3CmycStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -16015,6 +16125,7 @@ expId 648
 fileName wgEncodeSydhTfbsHelas3CmycStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -16142,6 +16253,7 @@ expId 699
 fileName wgEncodeSydhTfbsHelas3E2f1StdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -16165,6 +16277,7 @@ expId 699
 fileName wgEncodeSydhTfbsHelas3E2f1StdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -16292,6 +16405,7 @@ expId 689
 fileName wgEncodeSydhTfbsHelas3E2f4StdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -16315,6 +16429,7 @@ expId 689
 fileName wgEncodeSydhTfbsHelas3E2f4StdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -16442,6 +16557,7 @@ expId 692
 fileName wgEncodeSydhTfbsHelas3E2f6StdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -16465,6 +16581,7 @@ expId 692
 fileName wgEncodeSydhTfbsHelas3E2f6StdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -16998,6 +17115,7 @@ expId 688
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -17021,6 +17139,7 @@ expId 688
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -17118,6 +17237,7 @@ expId 722
 fileName wgEncodeSydhTfbsHelas3Ini1IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -17212,6 +17332,7 @@ expId 722
 fileName wgEncodeSydhTfbsHelas3Ini1IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -17261,6 +17382,7 @@ expId 611
 fileName wgEncodeSydhTfbsHelas3InputIfng30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -17336,6 +17458,7 @@ expId 633
 fileName wgEncodeSydhTfbsHelas3InputIggmusSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -17383,6 +17506,7 @@ expId 744
 fileName wgEncodeSydhTfbsHelas3InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -17458,6 +17582,7 @@ expId 634
 fileName wgEncodeSydhTfbsHelas3InputLargefragmentSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -17533,6 +17658,7 @@ expId 635
 fileName wgEncodeSydhTfbsHelas3InputMnaseSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -17634,6 +17760,7 @@ expId 636
 fileName wgEncodeSydhTfbsHelas3InputNakeddnaSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -17707,6 +17834,7 @@ expId 612
 fileName wgEncodeSydhTfbsHelas3InputStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -17978,6 +18106,7 @@ expId 745
 fileName wgEncodeSydhTfbsHelas3JundIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -18000,6 +18129,7 @@ expId 745
 fileName wgEncodeSydhTfbsHelas3JundIggrabSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -18219,6 +18349,7 @@ expId 646
 fileName wgEncodeSydhTfbsHelas3MaxStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -18242,6 +18373,7 @@ expId 646
 fileName wgEncodeSydhTfbsHelas3MaxStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -18620,6 +18752,7 @@ expId 723
 fileName wgEncodeSydhTfbsHelas3Nrf1IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -18690,6 +18823,7 @@ expId 723
 fileName wgEncodeSydhTfbsHelas3Nrf1IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -19004,6 +19138,7 @@ expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -19027,6 +19162,7 @@ expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -19718,6 +19854,7 @@ expId 766
 fileName wgEncodeSydhTfbsHelas3Rpc155StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -19741,6 +19878,7 @@ expId 766
 fileName wgEncodeSydhTfbsHelas3Rpc155StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -20084,6 +20222,7 @@ expId 614
 fileName wgEncodeSydhTfbsHelas3Stat1Ifng30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -20107,6 +20246,7 @@ expId 614
 fileName wgEncodeSydhTfbsHelas3Stat1Ifng30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -20450,6 +20590,7 @@ expId 747
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -20473,6 +20614,7 @@ expId 747
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -20648,6 +20790,7 @@ expId 687
 fileName wgEncodeSydhTfbsHelas3Tr4StdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -20671,6 +20814,7 @@ expId 687
 fileName wgEncodeSydhTfbsHelas3Tr4StdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -21403,6 +21547,7 @@ expId 750
 fileName wgEncodeSydhTfbsHepg2CebpbForsklnStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -21425,6 +21570,7 @@ expId 750
 fileName wgEncodeSydhTfbsHepg2CebpbForsklnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -22049,6 +22195,7 @@ expId 751
 fileName wgEncodeSydhTfbsHepg2ErraForsklnStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -22071,6 +22218,7 @@ expId 751
 fileName wgEncodeSydhTfbsHepg2ErraForsklnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -22191,6 +22339,7 @@ expId 752
 fileName wgEncodeSydhTfbsHepg2Grp20ForsklnStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -22213,6 +22362,7 @@ expId 752
 fileName wgEncodeSydhTfbsHepg2Grp20ForsklnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -22333,6 +22483,7 @@ expId 753
 fileName wgEncodeSydhTfbsHepg2Hnf4aForsklnStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -22355,6 +22506,7 @@ expId 753
 fileName wgEncodeSydhTfbsHepg2Hnf4aForsklnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -22475,6 +22627,7 @@ expId 754
 fileName wgEncodeSydhTfbsHepg2Hsf1ForsklnStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -22497,6 +22650,7 @@ expId 754
 fileName wgEncodeSydhTfbsHepg2Hsf1ForsklnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -22569,6 +22723,7 @@ expId 755
 fileName wgEncodeSydhTfbsHepg2InputForsklnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -22706,6 +22861,7 @@ expId 756
 fileName wgEncodeSydhTfbsHepg2InputInslnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -22807,6 +22963,7 @@ expId 640
 fileName wgEncodeSydhTfbsHepg2InputPravastStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -23937,6 +24094,7 @@ expId 757
 fileName wgEncodeSydhTfbsHepg2Pgc1aForsklnStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -23959,6 +24117,7 @@ expId 757
 fileName wgEncodeSydhTfbsHepg2Pgc1aForsklnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -24079,6 +24238,7 @@ expId 758
 fileName wgEncodeSydhTfbsHepg2Pol2ForsklnStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -24101,6 +24261,7 @@ expId 758
 fileName wgEncodeSydhTfbsHepg2Pol2ForsklnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -24336,6 +24497,7 @@ expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2PravastStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -24359,6 +24521,7 @@ expId 641
 fileName wgEncodeSydhTfbsHepg2Pol2PravastStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -25064,6 +25227,7 @@ expId 759
 fileName wgEncodeSydhTfbsHepg2Srebp1InslnStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -25086,6 +25250,7 @@ expId 759
 fileName wgEncodeSydhTfbsHepg2Srebp1InslnStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -25187,6 +25352,7 @@ expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1PravastStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -25210,6 +25376,7 @@ expId 642
 fileName wgEncodeSydhTfbsHepg2Srebp1PravastStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -25455,6 +25622,7 @@ expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2PravastStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -25478,6 +25646,7 @@ expId 643
 fileName wgEncodeSydhTfbsHepg2Srebp2PravastStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -26024,6 +26193,7 @@ expId 674
 fileName wgEncodeSydhTfbsHepg2bInputUcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -26150,6 +26320,7 @@ expId 675
 fileName wgEncodeSydhTfbsHepg2bTr4UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -26173,6 +26344,7 @@ expId 675
 fileName wgEncodeSydhTfbsHepg2bTr4UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -26563,6 +26735,7 @@ expId 719
 fileName wgEncodeSydhTfbsHuvecCjunStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -26585,6 +26758,7 @@ expId 719
 fileName wgEncodeSydhTfbsHuvecCjunStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -26844,6 +27018,7 @@ expId 780
 fileName wgEncodeSydhTfbsHuvecInputStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3055
@@ -27031,6 +27206,7 @@ expId 768
 fileName wgEncodeSydhTfbsHuvecMaxStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -27053,6 +27229,7 @@ expId 768
 fileName wgEncodeSydhTfbsHuvecMaxStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -27219,6 +27396,7 @@ expId 702
 fileName wgEncodeSydhTfbsHuvecPol2StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -27241,6 +27419,7 @@ expId 702
 fileName wgEncodeSydhTfbsHuvecPol2StdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -27364,6 +27543,7 @@ expId 700
 fileName wgEncodeSydhTfbsK562Atf3StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -27387,6 +27567,7 @@ expId 700
 fileName wgEncodeSydhTfbsK562Atf3StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -27563,6 +27744,7 @@ expId 678
 fileName wgEncodeSydhTfbsK562Bdp1StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -27586,6 +27768,7 @@ expId 678
 fileName wgEncodeSydhTfbsK562Bdp1StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -27896,6 +28079,7 @@ expId 679
 fileName wgEncodeSydhTfbsK562Brf1StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -27919,6 +28103,7 @@ expId 679
 fileName wgEncodeSydhTfbsK562Brf1StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -28092,6 +28277,7 @@ expId 767
 fileName wgEncodeSydhTfbsK562Brf2StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -28115,6 +28301,7 @@ expId 767
 fileName wgEncodeSydhTfbsK562Brf2StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -28187,6 +28374,7 @@ expId 724
 fileName wgEncodeSydhTfbsK562Brg1IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -28257,6 +28445,7 @@ expId 724
 fileName wgEncodeSydhTfbsK562Brg1IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -28702,6 +28891,7 @@ expId 619
 fileName wgEncodeSydhTfbsK562CfosStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4313
@@ -28725,6 +28915,7 @@ expId 619
 fileName wgEncodeSydhTfbsK562CfosStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -28938,6 +29129,7 @@ expId 667
 fileName wgEncodeSydhTfbsK562CjunIfna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -28961,6 +29153,7 @@ expId 667
 fileName wgEncodeSydhTfbsK562CjunIfna6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -29036,6 +29229,7 @@ expId 673
 fileName wgEncodeSydhTfbsK562CjunIfng30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -29059,6 +29253,7 @@ expId 673
 fileName wgEncodeSydhTfbsK562CjunIfng30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -29134,6 +29329,7 @@ expId 668
 fileName wgEncodeSydhTfbsK562CjunIfng6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -29157,6 +29353,7 @@ expId 668
 fileName wgEncodeSydhTfbsK562CjunIfng6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -29280,6 +29477,7 @@ expId 620
 fileName wgEncodeSydhTfbsK562CjunStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -29303,6 +29501,7 @@ expId 620
 fileName wgEncodeSydhTfbsK562CjunStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -29378,6 +29577,7 @@ expId 659
 fileName wgEncodeSydhTfbsK562CmycIfna30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -29401,6 +29601,7 @@ expId 659
 fileName wgEncodeSydhTfbsK562CmycIfna30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -29476,6 +29677,7 @@ expId 669
 fileName wgEncodeSydhTfbsK562CmycIfna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -29499,6 +29701,7 @@ expId 669
 fileName wgEncodeSydhTfbsK562CmycIfna6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3055
@@ -29708,6 +29911,7 @@ expId 670
 fileName wgEncodeSydhTfbsK562CmycIfng6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -29731,6 +29935,7 @@ expId 670
 fileName wgEncodeSydhTfbsK562CmycIfng6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -29854,6 +30059,7 @@ expId 621
 fileName wgEncodeSydhTfbsK562CmycStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -29877,6 +30083,7 @@ expId 621
 fileName wgEncodeSydhTfbsK562CmycStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -29997,6 +30204,7 @@ fileName wgEncodeSydhTfbsK562Gtf2bStdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
+origAssembly hg18
 project wgEncode
 setType exp
 subId 1149
@@ -30020,6 +30228,7 @@ expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bStdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
@@ -30043,6 +30252,7 @@ expId 703
 fileName wgEncodeSydhTfbsK562Gtf2bStdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
@@ -30067,6 +30277,7 @@ fileName wgEncodeSydhTfbsK562Gtf2bStdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3072
@@ -31228,6 +31439,7 @@ expId 725
 fileName wgEncodeSydhTfbsK562Ini1IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -31298,6 +31510,7 @@ expId 725
 fileName wgEncodeSydhTfbsK562Ini1IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -31347,6 +31560,7 @@ expId 655
 fileName wgEncodeSydhTfbsK562InputIfna30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -31396,6 +31610,7 @@ expId 656
 fileName wgEncodeSydhTfbsK562InputIfna6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -31445,6 +31660,7 @@ expId 657
 fileName wgEncodeSydhTfbsK562InputIfng30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -31494,6 +31710,7 @@ expId 658
 fileName wgEncodeSydhTfbsK562InputIfng6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -31566,6 +31783,7 @@ expId 726
 fileName wgEncodeSydhTfbsK562InputIggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -31706,6 +31924,7 @@ expId 615
 fileName wgEncodeSydhTfbsK562InputStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -32152,6 +32371,7 @@ expId 644
 fileName wgEncodeSydhTfbsK562JundStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -32175,6 +32395,7 @@ expId 644
 fileName wgEncodeSydhTfbsK562JundStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -32432,6 +32653,7 @@ expId 637
 fileName wgEncodeSydhTfbsK562MaxStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -32455,6 +32677,7 @@ expId 637
 fileName wgEncodeSydhTfbsK562MaxStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -32716,6 +32939,7 @@ expId 701
 fileName wgEncodeSydhTfbsK562NelfeStdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -32739,6 +32963,7 @@ expId 701
 fileName wgEncodeSydhTfbsK562NelfeStdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -32862,6 +33087,7 @@ expId 624
 fileName wgEncodeSydhTfbsK562Nfe2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -32885,6 +33111,7 @@ expId 624
 fileName wgEncodeSydhTfbsK562Nfe2StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -33232,6 +33459,7 @@ expId 660
 fileName wgEncodeSydhTfbsK562Pol2Ifna30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -33255,6 +33483,7 @@ expId 660
 fileName wgEncodeSydhTfbsK562Pol2Ifna30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -33330,6 +33559,7 @@ expId 661
 fileName wgEncodeSydhTfbsK562Pol2Ifna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -33353,6 +33583,7 @@ expId 661
 fileName wgEncodeSydhTfbsK562Pol2Ifna6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -33425,6 +33656,7 @@ expId 704
 fileName wgEncodeSydhTfbsK562Pol2Ifng30StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -33447,6 +33679,7 @@ expId 704
 fileName wgEncodeSydhTfbsK562Pol2Ifng30StdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -33522,6 +33755,7 @@ expId 662
 fileName wgEncodeSydhTfbsK562Pol2Ifng6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -33545,6 +33779,7 @@ expId 662
 fileName wgEncodeSydhTfbsK562Pol2Ifng6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -33617,6 +33852,7 @@ expId 727
 fileName wgEncodeSydhTfbsK562Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -33687,6 +33923,7 @@ expId 727
 fileName wgEncodeSydhTfbsK562Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -33810,6 +34047,7 @@ expId 616
 fileName wgEncodeSydhTfbsK562Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -33833,6 +34071,7 @@ expId 616
 fileName wgEncodeSydhTfbsK562Pol2StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -34091,6 +34330,7 @@ expId 694
 fileName wgEncodeSydhTfbsK562Pol3StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -34113,6 +34353,7 @@ expId 694
 fileName wgEncodeSydhTfbsK562Pol3StdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -34238,6 +34479,7 @@ expId 649
 fileName wgEncodeSydhTfbsK562Rad21StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -34261,6 +34503,7 @@ expId 649
 fileName wgEncodeSydhTfbsK562Rad21StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -34386,6 +34629,7 @@ expId 680
 fileName wgEncodeSydhTfbsK562Rpc155StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -34409,6 +34653,7 @@ expId 680
 fileName wgEncodeSydhTfbsK562Rpc155StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -34534,6 +34779,7 @@ expId 681
 fileName wgEncodeSydhTfbsK562Sirt6StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -34557,6 +34803,7 @@ expId 681
 fileName wgEncodeSydhTfbsK562Sirt6StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -34766,6 +35013,7 @@ expId 663
 fileName wgEncodeSydhTfbsK562Stat1Ifna30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -34789,6 +35037,7 @@ expId 663
 fileName wgEncodeSydhTfbsK562Stat1Ifna30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -34864,6 +35113,7 @@ expId 664
 fileName wgEncodeSydhTfbsK562Stat1Ifna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -34887,6 +35137,7 @@ expId 664
 fileName wgEncodeSydhTfbsK562Stat1Ifna6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -35005,6 +35256,7 @@ expId 760
 fileName wgEncodeSydhTfbsK562Stat1Ifng30StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -35027,6 +35279,7 @@ expId 760
 fileName wgEncodeSydhTfbsK562Stat1Ifng30StdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -35146,6 +35399,7 @@ expId 761
 fileName wgEncodeSydhTfbsK562Stat1Ifng6hStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -35168,6 +35422,7 @@ expId 761
 fileName wgEncodeSydhTfbsK562Stat1Ifng6hStdSig.bigWig
 grant Snyder
 lab Stanford
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -35243,6 +35498,7 @@ expId 665
 fileName wgEncodeSydhTfbsK562Stat2Ifna30StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -35266,6 +35522,7 @@ expId 665
 fileName wgEncodeSydhTfbsK562Stat2Ifna30StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -35341,6 +35598,7 @@ expId 666
 fileName wgEncodeSydhTfbsK562Stat2Ifna6hStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -35364,6 +35622,7 @@ expId 666
 fileName wgEncodeSydhTfbsK562Stat2Ifna6hStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -35741,6 +36000,7 @@ expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -35764,6 +36024,7 @@ expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdSig.bigWig
 grant Snyder
 lab Harvard
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -36098,6 +36359,7 @@ expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -36121,6 +36383,7 @@ expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -36246,6 +36509,7 @@ expId 671
 fileName wgEncodeSydhTfbsK562bE2f4UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -36269,6 +36533,7 @@ expId 671
 fileName wgEncodeSydhTfbsK562bE2f4UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -36395,6 +36660,7 @@ expId 676
 fileName wgEncodeSydhTfbsK562bE2f6UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -36418,6 +36684,7 @@ expId 676
 fileName wgEncodeSydhTfbsK562bE2f6UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -36545,6 +36812,7 @@ expId 638
 fileName wgEncodeSydhTfbsK562bGata1UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -36568,6 +36836,7 @@ expId 638
 fileName wgEncodeSydhTfbsK562bGata1UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -36695,6 +36964,7 @@ expId 683
 fileName wgEncodeSydhTfbsK562bGata2UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -36718,6 +36988,7 @@ expId 683
 fileName wgEncodeSydhTfbsK562bGata2UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -36791,6 +37062,7 @@ expId 672
 fileName wgEncodeSydhTfbsK562bInputUcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -37054,6 +37326,7 @@ expId 769
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -37077,6 +37350,7 @@ expId 769
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -37204,6 +37478,7 @@ expId 677
 fileName wgEncodeSydhTfbsK562bSetdb1UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -37227,6 +37502,7 @@ expId 677
 fileName wgEncodeSydhTfbsK562bSetdb1UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -37354,6 +37630,7 @@ expId 682
 fileName wgEncodeSydhTfbsK562bTr4UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -37377,6 +37654,7 @@ expId 682
 fileName wgEncodeSydhTfbsK562bTr4UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -37504,6 +37782,7 @@ expId 684
 fileName wgEncodeSydhTfbsK562bYy1UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -37527,6 +37806,7 @@ expId 684
 fileName wgEncodeSydhTfbsK562bYy1UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -37654,6 +37934,7 @@ expId 630
 fileName wgEncodeSydhTfbsK562bZnf263UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -37677,6 +37958,7 @@ expId 630
 fileName wgEncodeSydhTfbsK562bZnf263UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -37804,6 +38086,7 @@ expId 696
 fileName wgEncodeSydhTfbsK562bZnf274UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -37827,6 +38110,7 @@ expId 696
 fileName wgEncodeSydhTfbsK562bZnf274UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -38951,6 +39235,7 @@ expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -38974,6 +39259,7 @@ expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -39101,6 +39387,7 @@ expId 762
 fileName wgEncodeSydhTfbsMcf7InputUcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -39307,6 +39594,7 @@ expId 617
 fileName wgEncodeSydhTfbsNb4InputStdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -39616,6 +39904,7 @@ expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -39639,6 +39928,7 @@ expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdSig.bigWig
 grant Snyder
 lab Yale
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -39711,6 +40001,7 @@ expId 654
 fileName wgEncodeSydhTfbsNt2d1InputUcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType input
 subId 3056
@@ -39838,6 +40129,7 @@ expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -39861,6 +40153,7 @@ expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -39988,6 +40281,7 @@ expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
@@ -40011,6 +40305,7 @@ expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdSig.bigWig
 grant Snyder
 lab USC
+origAssembly hg18
 project wgEncode
 setType exp
 subId 3056
@@ -41442,4 +41737,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -554218296
+# MAGIC: -148872874

@@ -2235,7 +2235,7 @@ sex F
 tier 3
 protocol UW_Stam:HMF_Stam_protocol.pdf
 
-term HMVEC_dAd
+term HMVEC-dAd
 tag HMVECDAD
 type Cell Line
 tier 3
@@ -8483,6 +8483,12 @@ type view
 label Plus Raw Signal
 description Graphs the base-by-base density of tags on the plus strand
 
+term Protocol
+tag PROTOCOL
+type view
+label Protocol
+description Document of experimental methods
+
 term Qual3p
 tag QUAL3P
 type view
@@ -9526,6 +9532,7 @@ type lab
 label Farnham - University of Southern California
 description Farnham - University of Southern California
 labPi Farnham
+labInst USC
 labPiFull Peggy Farnham
 grantPi Snyder
 organism human

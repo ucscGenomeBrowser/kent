@@ -1,7 +1,7 @@
 metaObject wgEncodeHaibTfbs
 objType composite
 composite wgEncodeHaibTfbs
-expVars lab,dataType,cell,treatment,antibody,protocol
+expVars lab,dataType,cell,antibody,treatment,protocol
 
 metaObject wgEncodeHaibTfbsA549ControlPcr1xDex100nmAlnRep1
 objType file
@@ -39638,4 +39638,4 @@ tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1981450348
+# MAGIC: 1324447636

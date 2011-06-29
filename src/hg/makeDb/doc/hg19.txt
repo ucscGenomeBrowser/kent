@@ -14889,6 +14889,12 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainPanTro3Link.txt 
     #	2760939621 bases of 2897316137 (95.293%) in intersection
 
+    # filter with doRecipBest.pl 
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 panTro3 > rbest.log 2>&1
+    # real    50m49.740s
+
+
 #	running the swap
     mkdir /hive/data/genomes/panTro3/bed/blastz.hg19.swap
     cd /hive/data/genomes/panTro3/bed/blastz.hg19.swap

@@ -11,6 +11,7 @@ import HTMLParser
 from optparse import OptionParser
 import re
 import shlex
+import string
 import subprocess
 import sys
 import urllib2 
