@@ -591,149 +591,155 @@ tableName wgEncodeSydhTfbsCh12CmycIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleAlnRep1
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep1
 objType file
 age immortalized
 antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep1.bam
 grant Snyder
-lab Yale-m
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
+subId 4451
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleAlnRep2
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep2
 objType file
 age immortalized
 antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep2.bam
 grant Snyder
-lab Yale-m
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
+subId 4451
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsCh12Ctcfsc15914IggyalePk
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabPk
 objType table
 age immortalized
 antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Ctcfsc15914IggyalePk.narrowPeak.gz
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale-m
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
-tableName wgEncodeSydhTfbsCh12Ctcfsc15914IggyalePk
+subId 4451
+tableName wgEncodeSydhTfbsCh12CtcfbIggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleRawDataRep1
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep1
 objType file
 age immortalized
 antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep1.fastq.tgz
 grant Snyder
-lab Yale-m
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
+subId 4451
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleRawDataRep2
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep2
 objType file
 age immortalized
 antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep2.fastq.tgz
 grant Snyder
-lab Yale-m
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
+subId 4451
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleSig
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabSig
 objType table
 age immortalized
 antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleSig.bigWig
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabSig.bigWig
 grant Snyder
-lab Yale-m
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
-tableName wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleSig
+subId 4451
+tableName wgEncodeSydhTfbsCh12CtcfbIggrabSig
 treatment None
 view Signal
 
@@ -6330,4 +6336,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -1134341082
+# MAGIC: 433151196

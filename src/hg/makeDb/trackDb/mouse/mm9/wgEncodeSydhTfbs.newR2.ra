@@ -90,16 +90,6 @@ wgEncode 1
 	        # subId=1855 dateSubmitted=2010-07-08
 	        # was wgEncodeSydhTfbsCh12P300IggrabPk cricket Tue Apr 19 11:41:13 2011
 
-	        track wgEncodeSydhTfbsCh12Ctcfsc15914IggyalePk
-	        parent wgEncodeSydhTfbsViewPeaks 
-	        shortLabel CH12 CTCF Pk
-            longLabel CH12 CTCF TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=CTCFSC15914 cellType=CH12 control=IGGYale treatment=zNone
-	        type narrowPeak
-	        color 86,180,233
-	        # subId=1858 dateSubmitted=2010-07-08
-	        # was wgEncodeSydhTfbsCh12CtcfIggyalePk cricket Tue Apr 19 11:41:12 2011
-
 	        track wgEncodeSydhTfbsCh12MaxIggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel CH12 Max Pk
@@ -332,6 +322,15 @@ wgEncode 1
         type narrowPeak
         color 86,180,233
         # subId=2540 dateSubmitted=2011-04-20
+
+        track wgEncodeSydhTfbsCh12CtcfbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks
+        shortLabel CH12 CTCF Pk
+        longLabel CH12 CTCF TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+		subGroups view=Peaks factor=CTCFSC15914 cellType=CH12 control=IGGrab treatment=zNone
+        type narrowPeak
+        color 86,180,233
+        # subId=4451 dateSubmitted=2011-06-29
 
 
 		#### Submission 1153 ####
@@ -614,16 +613,6 @@ wgEncode 1
 	        # subId=1855 dateSubmitted=2010-07-08
 	        # was wgEncodeSydhTfbsCh12P300IggrabSig cricket Tue Apr 19 11:41:13 2011
 
-	        track wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleSig
-	        parent wgEncodeSydhTfbsViewSig 
-	        shortLabel CH12 CTCF Sg
-            longLabel CH12 CTCF TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=CTCFSC15914 cellType=CH12 control=IGGYale treatment=zNone
-	        type bigWig 1.000000 94966.000000
-	        color 86,180,233
-	        # subId=1858 dateSubmitted=2010-07-08
-	        # was wgEncodeSydhTfbsCh12CtcfIggyaleSig cricket Tue Apr 19 11:41:12 2011
-
 	        track wgEncodeSydhTfbsCh12MaxIggrabSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel CH12 Max Sg
@@ -885,4 +874,13 @@ wgEncode 1
         type bigWig 1.000000 127356.000000
         color 86,180,233
         # subId=2540 dateSubmitted=2011-04-20
+
+        track wgEncodeSydhTfbsCh12CtcfbIggrabSig
+        parent wgEncodeSydhTfbsViewSig
+        shortLabel CH12 CTCF Sg
+        longLabel CH12 CTCF TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=CTCFSC15914 cellType=CH12 control=IGGrab treatment=zNone
+        type bigWig 1.000000 70041.000000
+        color 86,180,233
+        # subId=4451 dateSubmitted=2011-06-29
 
