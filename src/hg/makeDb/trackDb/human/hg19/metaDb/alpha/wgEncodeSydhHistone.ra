@@ -651,7 +651,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -675,7 +675,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -699,7 +699,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -724,7 +724,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -749,7 +749,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -774,7 +774,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -2557,4 +2557,4 @@ tableName wgEncodeSydhHistoneU2osInputUscSig
 treatment None
 view Signal
 
-# MAGIC: -139124774
+# MAGIC: -139125074
