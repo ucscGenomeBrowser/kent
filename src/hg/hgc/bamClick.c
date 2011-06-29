@@ -169,7 +169,7 @@ void doBamDetails(struct trackDb *tdb, char *item)
 if (item == NULL)
     errAbort("doBamDetails: NULL item name");
 int start = cartInt(cart, "o");
-if (!tdb || !trackDbSetting(tdb, "noScoreFilter"))
+if (!tdb || !trackDbSetting(tdb, "bamSkipPrintQualScore"))
    skipQualityScore = FALSE;
 else
    skipQualityScore = TRUE;
