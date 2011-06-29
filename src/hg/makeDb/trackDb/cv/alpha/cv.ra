@@ -8610,7 +8610,7 @@ description 5C Interactions
 term AffyExonArray
 tag AFFYEXONARRAY
 type dataType
-label Affy Exon-array
+label Exon-array
 description Affymetrix Exon Array
 
 
@@ -8731,13 +8731,13 @@ description Methyl RRBS
 term NRE
 tag NRE
 type dataType
-label Negative Regulatory Elements
+label Neg Regulatory
 description Negative Regulatory Elements
 
 term Nucleosome
 tag NUCLEOSOME
 type dataType
-label Nucleosome positioning
+label Nucleosome
 description Nucleosome positioning data
 
 term Proteogenomics
@@ -9744,7 +9744,7 @@ tag KENT
 type grant
 description Kent
 grantInst UCSC
-projectName Ucsc
+projectName UCSC
 
 term Margulies
 tag MARGULIES
@@ -9765,14 +9765,14 @@ tag DEKKER
 type grant
 description Dekker
 grantInst University of Massachusetts Amherst
-projectName
+projectName UMass-Dekker
 
 term Weng
 tag WENG
 type grant
 description Weng
 grantInst University of Massachusetts Amherst
-projectName
+projectName UMass-Weng
 
 term Snyder
 tag SNYDER
