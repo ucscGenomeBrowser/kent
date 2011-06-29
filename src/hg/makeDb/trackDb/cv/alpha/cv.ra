@@ -5379,7 +5379,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
 validation GATA3_SC-268(ChIP,MassSpec):human_GATA3-SC268_validation_Myers.pdf
 
 term GATA3_(SC-269)
-tag GATA3SC269SC269
+tag GATA3SC269
 type Antibody
 antibodyDescription Mouse monoclonal IgG raised against human recombinant GATA-3 (amino acids 1-264)
 target GATA3
