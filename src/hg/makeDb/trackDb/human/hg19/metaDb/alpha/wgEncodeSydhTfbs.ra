@@ -26731,12 +26731,13 @@ view Signal
 metaObject wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1
 objType file
 antibody TCF4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
@@ -26747,19 +26748,20 @@ lab USC
 project wgEncode
 replicate 1
 setType exp
-subId 3390
+subId 4411
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2
 objType file
 antibody TCF4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
@@ -26770,19 +26772,20 @@ lab USC
 project wgEncode
 replicate 2
 setType exp
-subId 3390
+subId 4411
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsHepg2Tcf4UcdPk
 objType table
 antibody TCF4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
@@ -26793,7 +26796,7 @@ lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
-subId 3390
+subId 4411
 tableName wgEncodeSydhTfbsHepg2Tcf4UcdPk
 treatment None
 view Peaks
@@ -26801,58 +26804,61 @@ view Peaks
 metaObject wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep1
 objType file
 antibody TCF4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
-fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
 project wgEncode
 replicate 1
 setType exp
-subId 3390
+subId 4411
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep2
 objType file
 antibody TCF4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
-fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
 project wgEncode
 replicate 2
 setType exp
-subId 3390
+subId 4411
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Tcf4UcdSig
 objType table
 antibody TCF4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
@@ -26863,7 +26869,7 @@ lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
-subId 3390
+subId 4411
 tableName wgEncodeSydhTfbsHepg2Tcf4UcdSig
 treatment None
 view Signal
@@ -42965,4 +42971,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 231819296
+# MAGIC: -213274774

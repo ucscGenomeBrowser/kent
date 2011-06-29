@@ -44,7 +44,7 @@ sortOrder cellType=+ factor=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target replicate=Rep view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
-visibilityViewDefaults Peaks=pack  Signal=full
+visibilityViewDefaults Peaks=hide  Signal=full
 noInherit on
 wgEncode 1
 
@@ -62,7 +62,7 @@ wgEncode 1
     qValueFilter 0
     qValueFilterLimits 0:300
 
-		track wgEncodeSydhHistoneNt2d1H3k27me3bUscPk
+		track wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K27me3
 		longLabel NT2-D1 H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH 
@@ -70,8 +70,9 @@ wgEncode 1
 		type narrowPeak
 		# subId=1137 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk wong Tue Jun 28 09:39:15 2011
+		# was wgEncodeSydhHistoneNt2d1H3k27me3bUscPk wong Wed Jun 29 13:34:04 2011
 
-		track wgEncodeSydhHistoneNt2d1H3k4me3bUscPk
+		track wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K4me3B
 		longLabel NT2-D1 H3K4me3B Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -79,8 +80,9 @@ wgEncode 1
 		type narrowPeak
 		# subId=1122 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk wong Tue Jun 28 09:39:16 2011
+		# was wgEncodeSydhHistoneNt2d1H3k4me3bUscPk wong Wed Jun 29 13:34:05 2011
 
-		track wgEncodeSydhHistoneNt2d1H3k9acbUscPk
+		track wgEncodeSydhHistoneNt2d1H3k9acbUcdPk
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K9ac
 		longLabel NT2-D1 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -88,8 +90,9 @@ wgEncode 1
 		type narrowPeak
 		# subId=1173 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1H3k9acbUcdPk wong Tue Jun 28 09:39:17 2011
+		# was wgEncodeSydhHistoneNt2d1H3k9acbUscPk wong Wed Jun 29 13:34:05 2011
 
-		track wgEncodeSydhHistoneK562H3k4me1UscPk
+		track wgEncodeSydhHistoneK562H3k4me1UcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562 H3K4me1
         longLabel K562 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -99,8 +102,9 @@ wgEncode 1
         # subId=1205 dateSubmitted=2010-05-20 
 		# was wgEncodeSydhHistoneK562bH3k4me1UcdPk wong Tue Jun 28 09:39:14 2011
 		# was wgEncodeSydhHistoneK562bH3k4me1UscPk wong Wed Jun 29 11:32:47 2011
+		# was wgEncodeSydhHistoneK562H3k4me1UscPk wong Wed Jun 29 13:34:02 2011
 
-        track wgEncodeSydhHistoneK562H3k4me3bUscPk
+        track wgEncodeSydhHistoneK562H3k4me3bUcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562 H3K4me3B
         longLabel K562 H3K4me3B Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -110,8 +114,9 @@ wgEncode 1
     	# subId=1350 dateSubmitted=2010-06-11
         # was wgEncodeSydhHistoneK562bH3k4me3bUcdPk wong Tue Jun 28 09:39:15 2011
         # was wgEncodeSydhHistoneK562bH3k4me3bUscPk wong Wed Jun 29 11:32:47 2011
+        # was wgEncodeSydhHistoneK562H3k4me3bUscPk wong Wed Jun 29 13:34:02 2011
 
-        track wgEncodeSydhHistoneK562H3k9acbUscPk
+        track wgEncodeSydhHistoneK562H3k9acbUcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562 H3K9ac
         longLabel K562 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -121,8 +126,9 @@ wgEncode 1
     	# subId=1351 dateSubmitted=2010-06-11
         # was wgEncodeSydhHistoneK562bH3k9acbUcdPk wong Tue Jun 28 09:39:15 2011
         # was wgEncodeSydhHistoneK562bH3k9acbUscPk wong Wed Jun 29 11:32:47 2011
+        # was wgEncodeSydhHistoneK562H3k9acbUscPk wong Wed Jun 29 13:34:02 2011
 
-        track wgEncodeSydhHistoneK562H3k27me3bUscPk
+        track wgEncodeSydhHistoneK562H3k27me3bUcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562 H3K27me3
         longLabel K562 H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -132,8 +138,9 @@ wgEncode 1
     	# subId=1352 dateSubmitted=2010-06-11
         # was wgEncodeSydhHistoneK562bH3k27me3bUcdPk wong Tue Jun 28 09:39:13 2011
         # was wgEncodeSydhHistoneK562bH3k27me3bUscPk wong Wed Jun 29 11:32:47 2011
+        # was wgEncodeSydhHistoneK562H3k27me3bUscPk wong Wed Jun 29 13:34:01 2011
 
-        track wgEncodeSydhHistoneNt2d1H3k36me3bUscPk
+        track wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel NT2-D1 H3K36me3
         longLabel NT2-D1 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -141,6 +148,7 @@ wgEncode 1
         type narrowPeak
     	# subId=1354 dateSubmitted=2010-06-11
         # was wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk wong Tue Jun 28 09:39:16 2011
+        # was wgEncodeSydhHistoneNt2d1H3k36me3bUscPk wong Wed Jun 29 13:34:04 2011
 
         #track wgEncodeSydhHistoneNt2d1H3k9me3UcdPk
         #subTrack wgEncodeSydhHistoneViewPeaks on
@@ -150,7 +158,7 @@ wgEncode 1
         #type narrowPeak
     	# subId=1831 dateSubmitted=2010-06-22
 
-   		track wgEncodeSydhHistoneNt2d1H3k4me1UscPk
+   		track wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel NT2-D1 H3K4me1
         longLabel NT2-D1 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -158,8 +166,9 @@ wgEncode 1
         type narrowPeak
     	# subId=1830 dateSubmitted=2010-06-22
    		# was wgEncodeSydhHistoneNt2d1H3k4me1UcdPk wong Tue Jun 28 09:39:16 2011
+   		# was wgEncodeSydhHistoneNt2d1H3k4me1UscPk wong Wed Jun 29 13:34:04 2011
 
-        track wgEncodeSydhHistoneU2osH3k9me3UscPk
+        track wgEncodeSydhHistoneU2osH3k9me3UcdPk
         parent wgEncodeSydhHistoneViewPeaks on
         shortLabel U2OS H3K9me3
         longLabel U2OS H3K9me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -167,8 +176,9 @@ wgEncode 1
         type narrowPeak
         # subId=2108 dateSubmitted=2010-08-16
         # was wgEncodeSydhHistoneU2osH3k9me3UcdPk wong Tue Jun 28 09:39:18 2011
+        # was wgEncodeSydhHistoneU2osH3k9me3UscPk wong Wed Jun 29 13:34:08 2011
 
-        track wgEncodeSydhHistoneU2osH3k36me3bUscPk
+        track wgEncodeSydhHistoneU2osH3k36me3bUcdPk
         parent wgEncodeSydhHistoneViewPeaks on
         shortLabel U2OS H3K36me3
         longLabel U2OS H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
@@ -176,8 +186,9 @@ wgEncode 1
         type narrowPeak
         # subId=2763 dateSubmitted=2010-11-02
         # was wgEncodeSydhHistoneU2osH3k36me3bUcdPk wong Tue Jun 28 09:39:18 2011
+        # was wgEncodeSydhHistoneU2osH3k36me3bUscPk wong Wed Jun 29 13:34:08 2011
 
-        track wgEncodeSydhHistonePbmcH3k27me3bUscPk
+        track wgEncodeSydhHistonePbmcH3k27me3bUcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel PBMC H3K27me3 Pk
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K27me3B in PBMC cells)
@@ -185,8 +196,9 @@ wgEncode 1
         type narrowPeak
         # subId=4118 dateSubmitted=2011-05-13
         # was wgEncodeSydhHistonePbmcH3k27me3bUcdPk wong Tue Jun 28 09:59:05 2011
+        # was wgEncodeSydhHistonePbmcH3k27me3bUscPk wong Wed Jun 29 13:34:06 2011
 
-        track wgEncodeSydhHistonePbmcH3k9me3UscPk
+        track wgEncodeSydhHistonePbmcH3k9me3UcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel PBMC H3K9me3 Pk
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K9me3 in PBMC cells)
@@ -194,8 +206,9 @@ wgEncode 1
         type narrowPeak
         # subId=4116 dateSubmitted=2011-05-13
         # was wgEncodeSydhHistonePbmcH3k9me3UcdPk wong Tue Jun 28 09:59:06 2011
+        # was wgEncodeSydhHistonePbmcH3k9me3UscPk wong Wed Jun 29 13:34:07 2011
 
-        track wgEncodeSydhHistonePbmcH3k4me1UscPk
+        track wgEncodeSydhHistonePbmcH3k4me1UcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel PBMC H3K4me1 Pk
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K4me1 in PBMC cells)
@@ -203,8 +216,9 @@ wgEncode 1
         type narrowPeak
         # subId=4117 dateSubmitted=2011-05-13
         # was wgEncodeSydhHistonePbmcH3k4me1UcdPk wong Tue Jun 28 09:59:06 2011
+        # was wgEncodeSydhHistonePbmcH3k4me1UscPk wong Wed Jun 29 13:34:07 2011
 
-        track wgEncodeSydhHistoneNt2d1H3k09me3UscPk
+        track wgEncodeSydhHistoneNt2d1H3k09me3UcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel NT2-D1 H3K9me3 Pk
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K9me3 in NT2-D1 cells)
@@ -212,8 +226,9 @@ wgEncode 1
         type narrowPeak
         # subId=1831 dateSubmitted=2011-06-22
         # was wgEncodeSydhHistoneNt2d1H3k09me3UcdPk wong Tue Jun 28 11:14:26 2011
+        # was wgEncodeSydhHistoneNt2d1H3k09me3UscPk wong Wed Jun 29 13:34:03 2011
 
-        track wgEncodeSydhHistonePbmcH3k04me3bUscPk
+        track wgEncodeSydhHistonePbmcH3k04me3bUcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel PBMC H3K4me3B Pk
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K4me3B in PBMC cells)
@@ -221,6 +236,7 @@ wgEncode 1
         type narrowPeak
         # subId=4445 dateSubmitted=2011-06-28
         # was wgEncodeSydhHistonePbmcH3k04me3bUcdPk wong Tue Jun 28 18:13:06 2011
+        # was wgEncodeSydhHistonePbmcH3k04me3bUscPk wong Wed Jun 29 13:34:06 2011
 
 
 
@@ -237,7 +253,7 @@ wgEncode 1
     maxHeightPixels 100:32:16
     windowingFunction mean+whiskers
 
-		track wgEncodeSydhHistoneNt2d1H3k27me3bUscSig
+		track wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K27me3
 		longLabel NT2-D1 H3K27me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -245,8 +261,9 @@ wgEncode 1
 		type bigWig 1.000000 17024.000000
 		# subId=1137 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig wong Tue Jun 28 09:39:16 2011
+		# was wgEncodeSydhHistoneNt2d1H3k27me3bUscSig wong Wed Jun 29 13:34:04 2011
 
-		track wgEncodeSydhHistoneNt2d1InputUscSig
+		track wgEncodeSydhHistoneNt2d1InputUcdSig
 		subTrack wgEncodeSydhHistoneViewSignal off
 		shortLabel NT2-D1 Input
 		longLabel NT2-D1 Input Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -254,8 +271,9 @@ wgEncode 1
 		type bigWig 1.000000 13293.000000
 		# subId=1123 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1InputUcdSig wong Tue Jun 28 09:39:17 2011
+		# was wgEncodeSydhHistoneNt2d1InputUscSig wong Wed Jun 29 13:34:06 2011
 
-		track wgEncodeSydhHistoneNt2d1H3k4me3bUscSig
+		track wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K4me3B
 		longLabel NT2-D1 H3K4me3B Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -263,8 +281,9 @@ wgEncode 1
 		type bigWig 1.000000 8678.000000
 		# subId=1122 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig wong Tue Jun 28 09:39:16 2011
+		# was wgEncodeSydhHistoneNt2d1H3k4me3bUscSig wong Wed Jun 29 13:34:05 2011
 	
-		track wgEncodeSydhHistoneNt2d1H3k9acbUscSig
+		track wgEncodeSydhHistoneNt2d1H3k9acbUcdSig
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K9ac
 		longLabel NT2-D1 H3K9ac Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -272,8 +291,9 @@ wgEncode 1
 		type bigWig 1.000000 6350.000000
 		# subId=1173 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1H3k9acbUcdSig wong Tue Jun 28 09:39:17 2011
+		# was wgEncodeSydhHistoneNt2d1H3k9acbUscSig wong Wed Jun 29 13:34:05 2011
 
-        track wgEncodeSydhHistoneK562H3k4me1UscSig
+        track wgEncodeSydhHistoneK562H3k4me1UcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562 H3K4me1
         longLabel K562 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -283,8 +303,9 @@ wgEncode 1
         # subId=1205 dateSubmitted=2010-05-20 
         # was wgEncodeSydhHistoneK562bH3k4me1UcdSig wong Tue Jun 28 09:39:14 2011
         # was wgEncodeSydhHistoneK562bH3k4me1UscSig wong Wed Jun 29 11:32:47 2011
+        # was wgEncodeSydhHistoneK562H3k4me1UscSig wong Wed Jun 29 13:34:02 2011
 
-        track wgEncodeSydhHistoneK562H3k4me3bUscSig
+        track wgEncodeSydhHistoneK562H3k4me3bUcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562 H3K4me3B
         longLabel K562 H3K4me3B Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -294,8 +315,9 @@ wgEncode 1
     	# subId=1350 dateSubmitted=2010-06-11
         # was wgEncodeSydhHistoneK562bH3k4me3bUcdSig wong Tue Jun 28 09:39:15 2011
         # was wgEncodeSydhHistoneK562bH3k4me3bUscSig wong Wed Jun 29 11:32:47 2011
+        # was wgEncodeSydhHistoneK562H3k4me3bUscSig wong Wed Jun 29 13:34:02 2011
 
-        track wgEncodeSydhHistoneK562H3k9acbUscSig
+        track wgEncodeSydhHistoneK562H3k9acbUcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562 H3K9ac
         longLabel K562 H3K9ac Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -305,8 +327,9 @@ wgEncode 1
     	# subId=1351 dateSubmitted=2010-06-11
         # was wgEncodeSydhHistoneK562bH3k9acbUcdSig wong Tue Jun 28 09:39:15 2011
         # was wgEncodeSydhHistoneK562bH3k9acbUscSig wong Wed Jun 29 11:32:47 2011
+        # was wgEncodeSydhHistoneK562H3k9acbUscSig wong Wed Jun 29 13:34:02 2011
 
-        track wgEncodeSydhHistoneK562H3k27me3bUscSig
+        track wgEncodeSydhHistoneK562H3k27me3bUcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562 H3K27me3
         longLabel K562 H3K27me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -316,8 +339,9 @@ wgEncode 1
     	# subId=1352 dateSubmitted=2010-06-11
         # was wgEncodeSydhHistoneK562bH3k27me3bUcdSig wong Tue Jun 28 09:39:14 2011
         # was wgEncodeSydhHistoneK562bH3k27me3bUscSig wong Wed Jun 29 11:32:47 2011
+        # was wgEncodeSydhHistoneK562H3k27me3bUscSig wong Wed Jun 29 13:34:01 2011
 
-        track wgEncodeSydhHistoneNt2d1H3k36me3bUscSig
+        track wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel NT2-D1 H3K36me3
         longLabel NT2-D1 H3K36me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -325,6 +349,7 @@ wgEncode 1
         type bigWig 1.000000 5119.000000
     	# subId=1354 dateSubmitted=2010-06-11
         # was wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig wong Tue Jun 28 09:39:16 2011
+        # was wgEncodeSydhHistoneNt2d1H3k36me3bUscSig wong Wed Jun 29 13:34:04 2011
 
         #track wgEncodeSydhHistoneNt2d1H3k9me3UcdSig
         #subTrack wgEncodeSydhHistoneViewSignal on
@@ -334,7 +359,7 @@ wgEncode 1
         #type bigWig 1.000000 86089.000000
     	# subId=1831 dateSubmitted=2010-06-22
 
-        track wgEncodeSydhHistoneNt2d1H3k4me1UscSig
+        track wgEncodeSydhHistoneNt2d1H3k4me1UcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel NT2-D1 H3K4me1
         longLabel NT2-D1 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -342,8 +367,9 @@ wgEncode 1
         type bigWig 1.000000 6506.000000
     	# subId=1830 dateSubmitted=2010-06-22
         # was wgEncodeSydhHistoneNt2d1H3k4me1UcdSig wong Tue Jun 28 09:39:16 2011
+        # was wgEncodeSydhHistoneNt2d1H3k4me1UscSig wong Wed Jun 29 13:34:05 2011
 
-        track wgEncodeSydhHistoneU2osH3k9me3UscSig
+        track wgEncodeSydhHistoneU2osH3k9me3UcdSig
         parent wgEncodeSydhHistoneViewSignal on
         shortLabel U2OS H3K9me3
         longLabel U2OS H3K9me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -351,8 +377,9 @@ wgEncode 1
         type bigWig 1.000000 51513.000000
         # subId=2108 dateSubmitted=2010-08-16
         # was wgEncodeSydhHistoneU2osH3k9me3UcdSig wong Tue Jun 28 09:39:18 2011
+        # was wgEncodeSydhHistoneU2osH3k9me3UscSig wong Wed Jun 29 13:34:08 2011
 
-		track wgEncodeSydhHistoneU2osH3k36me3bUscSig
+		track wgEncodeSydhHistoneU2osH3k36me3bUcdSig
         parent wgEncodeSydhHistoneViewSignal on
         shortLabel U2OS H3K36me3
         longLabel U2OS H3K36me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -360,8 +387,9 @@ wgEncode 1
         type bigWig 1.000000 12731.000000
         # subId=2763 dateSubmitted=2010-11-02
 		# was wgEncodeSydhHistoneU2osH3k36me3bUcdSig wong Tue Jun 28 09:39:18 2011
+		# was wgEncodeSydhHistoneU2osH3k36me3bUscSig wong Wed Jun 29 13:34:08 2011
 
-        track wgEncodeSydhHistoneK562InputUscSig
+        track wgEncodeSydhHistoneK562InputUcdSig
 		parent wgEncodeSydhHistoneViewSignal off
 		shortLabel K562 Input
         longLabel K562 Input Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -372,8 +400,9 @@ wgEncode 1
         # subId=3839 dateSubmitted=2011-03-22
         # was wgEncodeSydhHistoneK562bInputUcdSig wong Tue Jun 28 09:39:15 2011
         # was wgEncodeSydhHistoneK562bInputUscSig wong Wed Jun 29 11:32:47 2011
+        # was wgEncodeSydhHistoneK562InputUscSig wong Wed Jun 29 13:34:02 2011
 
-        track wgEncodeSydhHistoneU2osInputUscSig
+        track wgEncodeSydhHistoneU2osInputUcdSig
 		parent wgEncodeSydhHistoneViewSignal off
         shortLabel U2OS Input
         longLabel U2OS Input Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
@@ -382,8 +411,9 @@ wgEncode 1
         origAssembly hg18
         # subId=3839 dateSubmitted=2011-03-22
         # was wgEncodeSydhHistoneU2osInputUcdSig wong Tue Jun 28 09:39:18 2011
+        # was wgEncodeSydhHistoneU2osInputUscSig wong Wed Jun 29 13:34:08 2011
 
-        track wgEncodeSydhHistonePbmcH3k27me3bUscSig
+        track wgEncodeSydhHistonePbmcH3k27me3bUcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC H3K27me3 Sig
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K27me3B in PBMC cells)
@@ -391,8 +421,9 @@ wgEncode 1
         type bigWig 1.000000 23277.000000
         # subId=4118 dateSubmitted=2011-05-13
         # was wgEncodeSydhHistonePbmcH3k27me3bUcdSig wong Tue Jun 28 09:59:06 2011
+        # was wgEncodeSydhHistonePbmcH3k27me3bUscSig wong Wed Jun 29 13:34:06 2011
 
-        track wgEncodeSydhHistonePbmcH3k9me3UscSig
+        track wgEncodeSydhHistonePbmcH3k9me3UcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC H3K9me3 Sig
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K9me3 in PBMC cells)
@@ -400,8 +431,9 @@ wgEncode 1
         type bigWig 1.000000 155809.000000
         # subId=4116 dateSubmitted=2011-05-13
         # was wgEncodeSydhHistonePbmcH3k9me3UcdSig wong Tue Jun 28 09:59:06 2011
+        # was wgEncodeSydhHistonePbmcH3k9me3UscSig wong Wed Jun 29 13:34:07 2011
 
-        track wgEncodeSydhHistonePbmcH3k4me1UscSig
+        track wgEncodeSydhHistonePbmcH3k4me1UcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC H3K4me1 Sig
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K4me1 in PBMC cells)
@@ -409,8 +441,9 @@ wgEncode 1
         type bigWig 1.000000 16645.000000
         # subId=4117 dateSubmitted=2011-05-13
         # was wgEncodeSydhHistonePbmcH3k4me1UcdSig wong Tue Jun 28 09:59:06 2011
+        # was wgEncodeSydhHistonePbmcH3k4me1UscSig wong Wed Jun 29 13:34:07 2011
 
-        track wgEncodeSydhHistoneNt2d1H3k09me3UscSig
+        track wgEncodeSydhHistoneNt2d1H3k09me3UcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel NT2-D1 H3K9me3 Sig
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K9me3 in NT2-D1 cells)
@@ -418,8 +451,9 @@ wgEncode 1
         type bigWig 1.000000 86089.000000
         # subId=1831 dateSubmitted=2011-06-22
         # was wgEncodeSydhHistoneNt2d1H3k09me3UcdSig wong Tue Jun 28 11:14:26 2011
+        # was wgEncodeSydhHistoneNt2d1H3k09me3UscSig wong Wed Jun 29 13:34:04 2011
 
-        track wgEncodeSydhHistonePbmcInputUscSig
+        track wgEncodeSydhHistonePbmcInputUcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC Input Sig
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in PBMC cells)
@@ -427,8 +461,9 @@ wgEncode 1
         type bigWig 1.000000 10456.000000
         # subId=4446 dateSubmitted=2011-06-28
         # was wgEncodeSydhHistonePbmcInputUcdSig wong Tue Jun 28 18:13:06 2011
+        # was wgEncodeSydhHistonePbmcInputUscSig wong Wed Jun 29 13:34:07 2011
 
-        track wgEncodeSydhHistonePbmcH3k04me3bUscSig
+        track wgEncodeSydhHistonePbmcH3k04me3bUcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC H3K4me3B Sig
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K4me3B in PBMC cells)
@@ -436,4 +471,5 @@ wgEncode 1
         type bigWig 1.000000 37387.000000
         # subId=4445 dateSubmitted=2011-06-28
         # was wgEncodeSydhHistonePbmcH3k04me3bUcdSig wong Tue Jun 28 18:13:06 2011
+        # was wgEncodeSydhHistonePbmcH3k04me3bUscSig wong Wed Jun 29 13:34:06 2011
 
