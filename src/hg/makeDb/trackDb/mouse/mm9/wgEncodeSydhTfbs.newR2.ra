@@ -50,6 +50,7 @@ dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
 dimensionZchecked zNone
 filterComposite dimZ=multi
 sortOrder cellType=+ factor=+ treatment=+ control=+ view=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control treatment=Treatment replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
 #visibilityViewDefaults  Signal=full
@@ -446,7 +447,7 @@ wgEncode 1
     	viewLimits 2:20
     	autoScale off
     	maxHeightPixels 100:16:16
-    	windowingFunction mean
+    	windowingFunction mean+whiskers
 	
 		#### Submission 1125 ####
 		track wgEncodeSydhTfbsCh12InputIggrabSig
