@@ -43,11 +43,11 @@ type bed 3
 origAssembly mm9
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line CH12=CH12 MEL=MEL
-subGroup3 factor Factor BHLHE40NB100=BHLHE40 CHD2AB68301=CHD2 cJUN=c-Jun cMYBSC7874=c-Myb cMYC=c-Myc CTCF=CTCF CTCFSC15914=CTCF_(SC-15914) E2F4=E2F4 GATA1SC265=GATA-1 JUND=JunD MafKab50322=MafK  MAX=Max Mxi1AF4185=Mxi1 NELFE=NELFe P300=p300 P300SC584=p300_(SC-584) POL2=Pol2 POL2S2=Pol2(phosphoS2) RAD21=Rad21 SMC3ab9263=SMC3 TBP=TBP USF2=USF2 zInputIGGMUS=Input_(<i>IgG-mus</i>) zInputIGGRAB=Input_(<i>IgG-rab</i>) zInputIGGRAT=Input_(<i>IgG-rat</i>) zInputstd=Input_(<i>Standard</i>) zInputIGGYALE=Input_(<i>IgG-Yale</i>)
+subGroup3 factor Factor BHLHE40NB100=BHLHE40 CHD2AB68301=CHD2 cJUN=c-Jun cMYBSC7874=c-Myb cMYC=c-Myc CTCFSC15914=CTCF E2F4=E2F4 GATA1SC265=GATA-1 JUND=JunD MafKab50322=MafK  MAX=Max Mxi1AF4185=Mxi1 NELFE=NELFe P300=p300 P300SC584=p300_(SC-584) POL2=Pol2 POL2S2=Pol2(phosphoS2) RAD21=Rad21 SMC3ab9263=SMC3 TBP=TBP USF2=USF2 zInputIGGMUS=Input_(<i>IgG-mus</i>) zInputIGGRAB=Input_(<i>IgG-rab</i>) zInputIGGRAT=Input_(<i>IgG-rat</i>) zInputstd=Input_(<i>Standard</i>) zInputIGGYALE=Input_(<i>IgG-Yale</i>)
 subGroup4 control Control IGGmus=IgG-mus IGGrab=IgG-rab IGGrat=IgG-rat IGGYale=IgG-Yale std=std
 subGroup5 treatment Treatment zNone=None DM2P5d=DMSO_2.0pct 
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
-dimensionZchecked zNone,DM2P5d
+dimensionZchecked zNone
 filterComposite dimZ=multi
 sortOrder cellType=+ factor=+ treatment=+ control=+ view=+
 dragAndDrop subTracks
@@ -203,23 +203,25 @@ wgEncode 1
 	        # subId=2542 dateSubmitted=2010-10-27
 	        # was wgEncodeSydhTfbsMelCmybh141IggrabPk cricket Tue Apr 19 11:41:14 2011
 
-        track wgEncodeSydhTfbsMelP300StdPk
+        track wgEncodeSydhTfbsMelP300IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MEL p300 Pk
         longLabel MEL p300 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-        subGroups view=Peaks factor=P300 cellType=MEL control=std treatment=zNone
+        subGroups view=Peaks factor=P300 cellType=MEL control=IGGrab treatment=zNone
         type narrowPeak
         color 86,180,233
         # subId=3089 dateSubmitted=2010-12-10
+        # was wgEncodeSydhTfbsMelP300StdPk vsmalladi Wed Jun 29 08:39:09 2011
 
-        track wgEncodeSydhTfbsMelCtcfStdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        track wgEncodeSydhTfbsMelCtcfsc15914IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks
         shortLabel MEL CTCF Pk
         longLabel MEL CTCF TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-        subGroups view=Peaks factor=CTCF cellType=MEL control=std treatment=zNone
+        subGroups view=Peaks factor=CTCFSC15914 cellType=MEL control=IGGrab treatment=zNone
         type narrowPeak
         color 86,180,233
         # subId=3087 dateSubmitted=2010-12-10
+        # was wgEncodeSydhTfbsMelCtcfStdPk vsmalladi Wed Jun 29 08:54:54 2011
 
         track wgEncodeSydhTfbsCh12Chd2ab68301IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -284,14 +286,15 @@ wgEncode 1
         color 86,180,233
         # subId=3760 dateSubmitted=2011-03-16
 
-        track wgEncodeSydhTfbsMelSmc3ab9263StdPk
+        track wgEncodeSydhTfbsMelSmc3ab9263IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MEL SMC3 Pk
         longLabel MEL SMC3 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-        subGroups view=Peaks factor=SMC3ab9263 cellType=MEL control=std treatment=zNone
+        subGroups view=Peaks factor=SMC3ab9263 cellType=MEL control=IGGrab treatment=zNone
         type narrowPeak
         color 86,180,233
         # subId=3088 dateSubmitted=2011-04-20
+        # was wgEncodeSydhTfbsMelSmc3ab9263StdPk vsmalladi Wed Jun 29 08:48:00 2011
 
         track wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -734,23 +737,25 @@ wgEncode 1
 	        # subId=2542 dateSubmitted=2010-10-27
 	        # was wgEncodeSydhTfbsMelCmybh141IggrabSig cricket Tue Apr 19 11:41:15 2011
 
-        track wgEncodeSydhTfbsMelP300StdSig
+        track wgEncodeSydhTfbsMelP300IggrabSig
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL p300 Sg
         longLabel MEL p300 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=P300 cellType=MEL control=std treatment=zNone
+        subGroups view=Signal factor=P300 cellType=MEL control=IGGrab treatment=zNone
         type bigWig 1.000000 92232.000000
         color 86,180,233
         # subId=3089 dateSubmitted=2010-12-10
+        # was wgEncodeSydhTfbsMelP300StdSig vsmalladi Wed Jun 29 08:44:39 2011
 
-        track wgEncodeSydhTfbsMelCtcfStdSig
-        parent wgEncodeSydhTfbsViewSig off
+        track wgEncodeSydhTfbsMelCtcfsc15914IggrabSig
+        parent wgEncodeSydhTfbsViewSig
         shortLabel MEL CTCF Sg
         longLabel MEL CTCF TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=CTCF cellType=MEL control=std treatment=zNone
+        subGroups view=Signal factor=CTCFSC15914 cellType=MEL control=IGGrab treatment=zNone
         type bigWig 1.000000 62645.000000
         color 86,180,233
         # subId=3087 dateSubmitted=2010-12-10
+        # was wgEncodeSydhTfbsMelCtcfStdSig vsmalladi Wed Jun 29 08:56:03 2011
 
         track wgEncodeSydhTfbsCh12Chd2ab68301IggrabSig
         parent wgEncodeSydhTfbsViewSig off
@@ -815,14 +820,15 @@ wgEncode 1
         color 86,180,233
         # subId=3760 dateSubmitted=2011-03-16
 
-        track wgEncodeSydhTfbsMelSmc3ab9263StdSig
+        track wgEncodeSydhTfbsMelSmc3ab9263IggrabSig
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL SMC3 Sg
         longLabel MEL SMC3 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=SMC3ab9263 cellType=MEL control=std treatment=zNone
+        subGroups view=Signal factor=SMC3ab9263 cellType=MEL control=IGGrab treatment=zNone
         type bigWig 1.000000 102412.000000
         color 86,180,233
         # subId=3088 dateSubmitted=2011-04-20
+        # was wgEncodeSydhTfbsMelSmc3ab9263StdSig vsmalladi Wed Jun 29 08:48:36 2011
 
         track wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabSig
         parent wgEncodeSydhTfbsViewSig off
