@@ -5,7 +5,7 @@
 track wgEncodeSydhNsome
 compositeTrack on
 shortLabel Stanford Nucleosome
-longLabel ENCODE Stanford Snyder Nucleosome
+longLabel ENCODE Stanford/BYU Snyder Nucleosome
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
