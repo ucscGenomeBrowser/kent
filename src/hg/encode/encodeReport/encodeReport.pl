@@ -3,11 +3,13 @@
 # encodeReport.pl - use metaDb tables to generate report of submitted and released experiments
 #
 # Reporting formats:
-# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID);
-# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID
+# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID, DCC_Accession
+
+# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID, DCC_Accession
 # Briefly was:
 # DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Submission Ids, Accession, Assembly
-# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly, Exp_ID
+
+# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly, Exp_ID, DCC_Accession
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the git source at:
@@ -25,8 +27,7 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-#use lib "/cluster/bin/scripts";
-use lib "/cluster/home/kate/kent/src/hg/utils/automation";
+use lib "/cluster/bin/scripts";
 use Encode;
 use HgAutomate;
 use HgDb;
@@ -43,7 +44,6 @@ use vars qw/
 our $pipeline = "encpipeline_prod";
 our $pipelinePath = "/hive/groups/encode/dcc/pipeline/" . $pipeline;
 our $configPath = $pipelinePath . "/config";
-#our $configPath = "/cluster/home/kate/kent.reporting/src/hg/encode/encodeReport/config";
 our $assembly;  # required command-line arg
 our $expTable = "encodeExp";
 
@@ -106,26 +106,46 @@ my $var;
 my $termType;
 my $subId;
 
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs", "Accession", "Assembly", 
-        "Strain", "Age", "Treatment", "Exp_ID");
-my %metaLines = ();
+        "Strain", "Age", "Treatment", "Exp_ID", "DCC_Accession");
 
-# print metadata from table in 'lines' format
+# get experiment-defining variables for each composite from the metaDb
+open(MDB, "mdbPrint $assembly -table=metaDb -all -line | grep 'objType=composite' |") 
+                or die "Can't run mdbPrint\n";
+my %metaLines = ();
+while (my $line = <MDB>) {
+    chomp $line;
+    $line =~ s/^.*metadata //;  
+    (my $objName, my $settings) = split(" ", $line, 2);
+    $metaLines{$objName} = $settings;
+    print STDERR "     Composite OBJNAME: $objName   SETTINGS: $settings\n";
+}
+close MDB;
+my %composites = ();
+foreach my $objName (keys %metaLines) {
+    my $settings = $metaLines{$objName};
+    my $ref = Encode::metadataLineToHash($settings);
+    my %metadata =  %{$ref};
+    if (defined($metadata{"expVars"})) {
+        $composites{$objName} = $metadata{"expVars"};
+    }
+}
+
+# get metadata objects from metaDb and create hash of experiments
 open(MDB, "mdbPrint $assembly -table=metaDb -all -line |") or die "Can't run mdbPrint\n";
 while (my $line = <MDB>) {
     chomp $line;
     $line =~ s/^.*metadata //;  
     (my $objName, my $settings) = split(" ", $line, 2);
-    #$line =~ s/objType=table //;  
-    #$line =~ s/objType=file //;  
     $metaLines{$objName} = $settings;
     print STDERR "     OBJNAME: $objName   SETTINGS: $settings\n";
 }
+close MDB;
 
 # Create experiments hash
 my %experiments = ();
@@ -137,6 +157,7 @@ foreach my $objName (keys %metaLines) {
     my %metadata =  %{$ref};
 
     # short-circuit if this didn't come in from pipeline
+    # NOTE: this also excludes composite objects
     next unless defined($metadata{"subId"});
 
     my %experiment = ();
@@ -148,8 +169,10 @@ foreach my $objName (keys %metaLines) {
     my $lab = "unknown";
     if (defined($metadata{"lab"})) {
         $lab = $metadata{"lab"};
+        # TODO: STILL NEEDED ?
         $lab =~ s/\(\w+\)//;
         # TODO: Fix 'lab=' metadata for UT-A to be consistent
+        # TODO: STILL NEEDED ?
         $lab = "UT-A" if ($lab eq "UT-Austin");
     }
     foreach $var (keys %labs) {
@@ -166,7 +189,7 @@ foreach my $objName (keys %metaLines) {
         }
     }
     if ($experiment{"project"} eq "unknown") {
-        warn "lab $lab not found in pi.ra, from settings $settings";
+        warn "lab $lab not found, from settings $settings";
     }
     # for now, force all Yale projects to be Yale lab (until metadata in projects table can match)
     #if ($metadata{"grant"} eq "Snyder") {
@@ -174,6 +197,7 @@ foreach my $objName (keys %metaLines) {
     #}
 
     # look up dataType case-insensitive, as tag or term, save as tag, term and label
+    # TODO:  Still needed ?
     my $dType = $metadata{"dataType"};
     $dataType = $dType;
     my $dataTypeTerm;
@@ -192,17 +216,25 @@ foreach my $objName (keys %metaLines) {
     }
     print STDERR "    objName  " . $objName . "\n";
 
-    # determine term type for experiment parameters 
+    # determine term type for experiment parameters - extracted from composite expVars
+    my @varTermTypes;
+    my $composite = $metadata{"composite"};
+    if (defined($composite)) {
+        my $expVars = $composites{$composite};
+        if (defined($expVars)) {
+            @varTermTypes = split(",", $expVars);
+        }
+    }
+
     my %vars = ();
-
-    my @varTermTypes = qw (age antibody insertLength localization 
-                       protocol readType restrictionEnzyme
-                       ripTgtProtein rnaExtract treatment);
-
     foreach $var (keys %metadata) {
+        # special handling for 'treatment=None' and 'age=immortalized' which
+        # are defaults
         next if ($var eq "treatment" && $metadata{$var} eq "None");
         next if ($var eq "age" && $metadata{$var} eq "immortalized");
         foreach $termType (@varTermTypes) {
+            # exclude the 'standard' experiment-defining vars
+            next if (($termType eq "cell") or ($termType eq "lab") or ($termType eq "dataType"));
             if (lc($termType) eq lc($var)) {
                 $vars{$termType} = $metadata{$var};
             }
@@ -212,6 +244,7 @@ foreach my $objName (keys %metaLines) {
     my @varList = keys %vars;
     #print STDERR "VARS: " . "@varList" . "\n";
     # treat version like a variable
+    # TODO: How to handle now?
     if (defined($metadata{"submittedDataVersion"})) {
         my $version = $metadata{"submittedDataVersion"};
         # strip comment
@@ -220,6 +253,7 @@ foreach my $objName (keys %metaLines) {
     }
 
     # collapse multiple terms for GEO accession
+    # TODO:  Still needed ?
     if (defined($metadata{"accession"})) {
         $experiment{"accession"} = $metadata{"accession"};
     } elsif (defined($metadata{"geoSampleAccession"})) {
@@ -228,6 +262,19 @@ foreach my $objName (keys %metaLines) {
         $experiment{"accession"} = $metadata{"geoSeriesAccession"};
     } else {
         $experiment{"accession"} = "";
+    }
+
+    # experiment ID's and accessions
+    if (defined($metadata{"expId"})) {
+        $experiment{"expId"} = $metadata{"expId"};
+    } else {
+        $experiment{"expId"} = 0;
+    }
+
+    if (defined($metadata{"dccAccession"})) {
+        $experiment{"dccAccession"} = $metadata{"dccAccession"};
+    } else {
+        $experiment{"dccAccession"} = "";
     }
 
     # experimental params -- iterate through all tags, lookup in cv.ra, 
@@ -240,7 +287,6 @@ foreach my $objName (keys %metaLines) {
      $experiment{"strain"} = "n/a";
      if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
-        # TODO: define explicit ordering for term type in cv.ra
         # construct vars as list, semi-colon separated
         $experiment{"vars"} = "";
         $experiment{"expVars"} = "";
@@ -297,16 +343,6 @@ foreach my $objName (keys %metaLines) {
 
     # a few tracks are missing the subId
     my $subId = (defined($metadata{"subId"})) ? $metadata{"subId"} : 0; 
-
-    #die "undefined project" unless defined($experiment{"project"});
-    #die "undefined lab" unless defined($experiment{"lab"});
-    #die "undefined dataType" unless defined($experiment{"dataType"});
-    #die "undefined cell" unless defined($experiment{"cell"});
-    #die "undefined vars" unless defined($experiment{"vars"});
-    #die "undefined freeze" unless defined($experiment{"freeze"});
-    #die "undefined submitDate" unless defined($experiment{"submitDate"});
-    #die "undefined releaseDate" unless defined($experiment{"releaseDate"});
-    #die "undefined status" unless defined($experiment{"status"});
 
     # create key for experiments (lab:%s dataType:%s cellType:%s vars:<var=val> <var2=val>)
     my $expKey = "lab:" . $lab .
@@ -424,22 +460,7 @@ foreach my $key (keys %experiments) {
                 $tags{"dataType"}{$dataType}->{"term"};
     }
 
-    my $id = 0;
-    if ($assembly eq "hg19" || $assembly eq "hg18" || $assembly eq "mm9") {
-        # transform var=val to var:val so utility doesn't think these are command-line options
-        # and remove version 
-        my $organism;
-        if ($assembly eq "mm9") {
-            $organism = "mouse"
-        } else {
-            $organism = "human"
-        }
-        my $varArgs = $experiment{"expVars"};
-        $varArgs =~ s/=/:/g;
-        $id = scalar(`encodeExp -table=$expTable id $organism $experiment{"lab"} $experiment{"dataTypeTerm"} $experiment{"cell"} "$varArgs"`);
-    }
-
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\n", 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\n", 
                 $experiment{"project"}, $experiment{"projectPi"}, 
                 $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
@@ -450,7 +471,7 @@ foreach my $key (keys %experiments) {
                 $experiment{"accession"}, $assembly,
                 # nhgri report only
                 $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"}, 
-                $id);
+                $experiment{"expId"}, $experiment{"dccAccession"});
 }
 
 exit 0;
