@@ -54,6 +54,12 @@ file ddf
 type string
 required no
 
+# This is indicating which lab the sample originally came from
+field obtainedBy
+file ddf
+type string
+required no
+
 # GEO accession numbers for series and sample
 field geoSeries
 file ddf
