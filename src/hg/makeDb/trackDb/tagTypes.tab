@@ -22,6 +22,7 @@ autoScale *
 autoTranslate genePred
 bamColorMode bam
 bamGrayMode bam
+bamSkipPrintQualScore bam
 baseColorDefault *
 baseColorTickColor bed bigBed
 baseColorUseCds bed psl genePred
@@ -226,7 +227,7 @@ nextItemButton *
 noColorTag bam
 noInherit *
 nonBedFieldsLabel bigBed
-noScoreFilter bedGraph bed bedLogR gvf bam
+noScoreFilter bedGraph bed bedLogR gvf 
 notNCBI bed
 ococci bed
 offset customTracks

@@ -657,6 +657,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscAlnRep1.bam
 grant Snyder
@@ -680,6 +681,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscAlnRep2.bam
 grant Snyder
@@ -703,6 +705,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscPk.narrowPeak.gz
 grant Snyder
@@ -727,6 +730,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscRawDataRep1.fastq.tgz
 grant Snyder
@@ -751,6 +755,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscRawDataRep2.fastq.tgz
 grant Snyder
@@ -775,6 +780,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k09me3UscSig.bigWig
 grant Snyder
@@ -1563,6 +1569,146 @@ tableName wgEncodeSydhHistoneNt2d1InputUscSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUscAlnRep1
+objType file
+antibody H3K4me3B
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUscAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4445
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUscAlnRep2
+objType file
+antibody H3K4me3B
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUscAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4445
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUscPk
+objType table
+antibody H3K4me3B
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUscPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4445
+tableName wgEncodeSydhHistonePbmcH3k04me3bUscPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUscRawDataRep1
+objType file
+antibody H3K4me3B
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUscRawDataRep1.fastq.gz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4445
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUscRawDataRep2
+objType file
+antibody H3K4me3B
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUscRawDataRep2.fastq.gz
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4445
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUscSig
+objType table
+antibody H3K4me3B
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUscSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4445
+tableName wgEncodeSydhHistonePbmcH3k04me3bUscSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep1
 objType file
 antibody H3K27me3B
@@ -1983,6 +2129,76 @@ tableName wgEncodeSydhHistonePbmcH3k9me3UscSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistonePbmcInputUscAlnRep1
+objType file
+antibody Input
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001883
+expId 1883
+fileName wgEncodeSydhHistonePbmcInputUscAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType input
+subId 4446
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistonePbmcInputUscRawDataRep1
+objType file
+antibody Input
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001883
+expId 1883
+fileName wgEncodeSydhHistonePbmcInputUscRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType input
+subId 4446
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistonePbmcInputUscSig
+objType table
+antibody Input
+cell PBMC
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PBMC/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-28
+dateUnrestricted 2012-03-28
+dccAccession wgEncodeEH001883
+expId 1883
+fileName wgEncodeSydhHistonePbmcInputUscSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 4446
+tableName wgEncodeSydhHistonePbmcInputUscSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep1
 objType file
 antibody H3K36me3B
@@ -2341,4 +2557,4 @@ tableName wgEncodeSydhHistoneU2osInputUscSig
 treatment None
 view Signal
 
-# MAGIC: -31772022
+# MAGIC: -1883952592

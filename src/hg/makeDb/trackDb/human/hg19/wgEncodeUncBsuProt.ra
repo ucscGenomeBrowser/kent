@@ -6,8 +6,8 @@ shortLabel UNC/BSU ProtGeno
 longLabel ENCODE UNC/BSU Proteogenomics
 group expression
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup2 localization Localization nucleus=nucleus membraneFraction=membraneFraction
-subGroup3 view View Signal=Signal
+subGroup2 localization Localization cytosol=cytosol membraneFraction=membrane mito=mitochondria nucleus=nucleus 
+subGroup3 view View Signal=Signal RawSignal=RawSignal
 dimensions dimensionX=cellType dimensionY=localization
 sortOrder cellType=+ localization=+ view=+
 fileSortOrder cell=Cell_Line localization=Localization replicate=Rep labExpId=Lab<BR>Exp_ID view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -37,6 +37,16 @@ wgEncode 1
         	color 153,38,0
         	# subId=4176 dateSubmitted=2011-01-05
 
+        	track wgEncodeUncBsuProtK562CytosolSig
+        	parent wgEncodeUncBsuProtSignal
+        	shortLabel K562 cytosol
+        	longLabel K562 cytosol Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
+        	subGroups view=Signal cellType=K562 localization=cytosol
+		visibility full
+        	type peptideMapping
+        	origAssembly hg19
+        	color 46,0,184
+        	# subId=4171 dateSubmitted=2011-06-03
 
         	track wgEncodeUncBsuProtK562MembranefractionSig
         	parent wgEncodeUncBsuProtSignal
@@ -47,6 +57,28 @@ wgEncode 1
         	type peptideMapping
         	origAssembly hg19
         	color 46,0,184
-        	# subId=4171 dateSubmitted=2011-01-12
+        	# subId=3238 dateSubmitted=2011-01-12
 
+	        track wgEncodeUncBsuProtK562MitoSig
+	        parent wgEncodeUncBsuProtSignal
+	        shortLabel K562 mitochondria
+	        longLabel K562 mitochondria Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
+	        subGroups view=Signal cellType=K562 localization=mito
+		visibility full
+	        type peptideMapping
+	        origAssembly hg19
+	        color 46,0,184
+	        # subId=4178 dateSubmitted=2011-06-03
+
+	        track wgEncodeUncBsuProtK562NucleusSig
+	        parent wgEncodeUncBsuProtSignal
+	        shortLabel K562 nucleus
+	        longLabel K562 nucleus Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
+	        subGroups view=Signal cellType=K562 localization=nucleus
+		visibility full
+	        type peptideMapping
+	        origAssembly hg19
+	        color 46,0,184
+	        # subId=4176 dateSubmitted=2011-06-03
+				
 
