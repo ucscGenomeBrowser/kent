@@ -9,7 +9,7 @@ antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -33,7 +33,7 @@ antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -57,7 +57,7 @@ antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
@@ -81,7 +81,7 @@ antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
@@ -105,7 +105,7 @@ antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -129,7 +129,7 @@ antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -153,7 +153,7 @@ antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -177,7 +177,7 @@ antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -201,7 +201,7 @@ antibody Input
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -227,7 +227,7 @@ antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -250,7 +250,7 @@ antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -273,7 +273,7 @@ antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -297,7 +297,7 @@ antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -321,7 +321,7 @@ antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
@@ -344,7 +344,7 @@ antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
@@ -367,7 +367,7 @@ antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
@@ -390,7 +390,7 @@ antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
@@ -413,7 +413,7 @@ antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -436,7 +436,7 @@ antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -459,7 +459,7 @@ antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -483,7 +483,7 @@ antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -507,7 +507,7 @@ antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -530,7 +530,7 @@ antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -553,7 +553,7 @@ antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -577,7 +577,7 @@ antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -601,7 +601,7 @@ antibody Input
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -626,7 +626,7 @@ antibody Input
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -651,7 +651,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -675,7 +675,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -699,7 +699,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -724,7 +724,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -749,7 +749,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -774,7 +774,7 @@ antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
@@ -799,7 +799,7 @@ antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -822,7 +822,7 @@ antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -845,7 +845,7 @@ antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -869,7 +869,7 @@ antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -893,7 +893,7 @@ antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -917,7 +917,7 @@ antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -941,7 +941,7 @@ antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -964,7 +964,7 @@ antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -987,7 +987,7 @@ antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -1011,7 +1011,7 @@ antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -1035,7 +1035,7 @@ antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -1059,7 +1059,7 @@ antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -1083,7 +1083,7 @@ antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
@@ -1106,7 +1106,7 @@ antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
@@ -1129,7 +1129,7 @@ antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
@@ -1153,7 +1153,7 @@ antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
@@ -1176,7 +1176,7 @@ antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
@@ -1199,7 +1199,7 @@ antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
@@ -1223,7 +1223,7 @@ antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1246,7 +1246,7 @@ antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1269,7 +1269,7 @@ antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1293,7 +1293,7 @@ antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1317,7 +1317,7 @@ antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1341,7 +1341,7 @@ antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1365,7 +1365,7 @@ antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1388,7 +1388,7 @@ antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1411,7 +1411,7 @@ antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1435,7 +1435,7 @@ antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1459,7 +1459,7 @@ antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1483,7 +1483,7 @@ antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1507,7 +1507,7 @@ antibody Input
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1529,7 +1529,7 @@ antibody Input
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1551,7 +1551,7 @@ antibody Input
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
@@ -1575,7 +1575,7 @@ antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -1598,7 +1598,7 @@ antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -1621,7 +1621,7 @@ antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -1645,7 +1645,7 @@ antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -1668,7 +1668,7 @@ antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -1691,7 +1691,7 @@ antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -1715,7 +1715,7 @@ antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1738,7 +1738,7 @@ antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1761,7 +1761,7 @@ antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1785,7 +1785,7 @@ antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1808,7 +1808,7 @@ antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1831,7 +1831,7 @@ antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1855,7 +1855,7 @@ antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1878,7 +1878,7 @@ antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1901,7 +1901,7 @@ antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1925,7 +1925,7 @@ antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1948,7 +1948,7 @@ antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1971,7 +1971,7 @@ antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -1995,7 +1995,7 @@ antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -2018,7 +2018,7 @@ antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -2041,7 +2041,7 @@ antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -2065,7 +2065,7 @@ antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -2088,7 +2088,7 @@ antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -2111,7 +2111,7 @@ antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
@@ -2135,7 +2135,7 @@ antibody Input
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -2158,7 +2158,7 @@ antibody Input
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -2181,7 +2181,7 @@ antibody Input
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
@@ -2205,7 +2205,7 @@ antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
@@ -2229,7 +2229,7 @@ antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
@@ -2253,7 +2253,7 @@ antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
@@ -2277,7 +2277,7 @@ antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
@@ -2301,7 +2301,7 @@ antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
@@ -2325,7 +2325,7 @@ antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
@@ -2349,7 +2349,7 @@ antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
@@ -2372,7 +2372,7 @@ antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
@@ -2395,7 +2395,7 @@ antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
@@ -2419,7 +2419,7 @@ antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
@@ -2443,7 +2443,7 @@ antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
@@ -2467,7 +2467,7 @@ antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
@@ -2491,7 +2491,7 @@ antibody Input
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -2514,7 +2514,7 @@ antibody Input
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -2537,7 +2537,7 @@ antibody Input
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -2557,4 +2557,4 @@ tableName wgEncodeSydhHistoneU2osInputUscSig
 treatment None
 view Signal
 
-# MAGIC: -139125074
+# MAGIC: -491106652
