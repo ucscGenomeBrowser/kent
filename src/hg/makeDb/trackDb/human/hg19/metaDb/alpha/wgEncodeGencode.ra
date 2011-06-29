@@ -1,6 +1,6 @@
 metaObject gencode.v7.2wayconspseudos
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -14,7 +14,7 @@ subId 4347
 
 metaObject gencode.v7.README.txt
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -28,7 +28,7 @@ subId 4347
 
 metaObject gencode.v7.annotation.gtf
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -42,7 +42,7 @@ subId 4347
 
 metaObject gencode.v7.noncoding_RNAs.fa
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -56,7 +56,7 @@ subId 4347
 
 metaObject gencode.v7.noncoding_RNAs.gtf
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -70,7 +70,7 @@ subId 4347
 
 metaObject gencode.v7.pc_transcripts.fa
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -84,7 +84,7 @@ subId 4347
 
 metaObject gencode.v7.pc_translations.fa
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -98,7 +98,7 @@ subId 4347
 
 metaObject gencode.v7.polyAs.gtf
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -112,7 +112,7 @@ subId 4347
 
 metaObject gencode.v7.tRNAs.gtf
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -126,7 +126,7 @@ subId 4347
 
 metaObject gencode7_GRCh37.tgz
 objType file
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -138,14 +138,14 @@ labExpId V7
 project wgEncode
 subId 4347
 
-metaObject wgEncodeGencode
+metaObject wgEncodeGencodeV7
 objType composite
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 expVars lab,dataType,labExpId
 
 metaObject wgEncodeGencode2wayConsPseudoV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -160,7 +160,7 @@ tableName wgEncodeGencode2wayConsPseudoV7
 
 metaObject wgEncodeGencodeAttrsV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -175,7 +175,7 @@ tableName wgEncodeGencodeAttrsV7
 
 metaObject wgEncodeGencodeBasicV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -190,7 +190,7 @@ tableName wgEncodeGencodeBasicV7
 
 metaObject wgEncodeGencodeCompV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -205,7 +205,7 @@ tableName wgEncodeGencodeCompV7
 
 metaObject wgEncodeGencodeExonSupportV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -220,7 +220,7 @@ tableName wgEncodeGencodeExonSupportV7
 
 metaObject wgEncodeGencodeGeneSourceV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -235,7 +235,7 @@ tableName wgEncodeGencodeGeneSourceV7
 
 metaObject wgEncodeGencodePdbV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -250,7 +250,7 @@ tableName wgEncodeGencodePdbV7
 
 metaObject wgEncodeGencodePolyaV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -265,7 +265,7 @@ tableName wgEncodeGencodePolyaV7
 
 metaObject wgEncodeGencodePseudoGeneV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -280,7 +280,7 @@ tableName wgEncodeGencodePseudoGeneV7
 
 metaObject wgEncodeGencodePubMedV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -295,7 +295,7 @@ tableName wgEncodeGencodePubMedV7
 
 metaObject wgEncodeGencodeRefSeqV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -310,7 +310,7 @@ tableName wgEncodeGencodeRefSeqV7
 
 metaObject wgEncodeGencodeTagV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -325,7 +325,7 @@ tableName wgEncodeGencodeTagV7
 
 metaObject wgEncodeGencodeTranscriptSourceV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -340,7 +340,7 @@ tableName wgEncodeGencodeTranscriptSourceV7
 
 metaObject wgEncodeGencodeTranscriptSupportV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
@@ -355,7 +355,7 @@ tableName wgEncodeGencodeTranscriptSupportV7
 
 metaObject wgEncodeGencodeUniProtV7
 objType table
-composite wgEncodeGencode
+composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
