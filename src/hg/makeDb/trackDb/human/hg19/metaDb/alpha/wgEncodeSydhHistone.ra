@@ -3,90 +3,284 @@ objType composite
 composite wgEncodeSydhHistone
 expVars lab,dataType,cell,treatment,antibody,control
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUscAlnRep1
-objType file
-antibody H3K27me3B
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-11
-dateUnrestricted 2011-03-11
-dccAccession wgEncodeEH000912
-expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUscAlnRep1.bam
-grant Snyder
-lab USC
-project wgEncode
-replicate 1
-setType exp
-subId 1352
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUscAlnRep2
-objType file
-antibody H3K27me3B
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-11
-dateUnrestricted 2011-03-11
-dccAccession wgEncodeEH000912
-expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUscAlnRep2.bam
-grant Snyder
-lab USC
-project wgEncode
-replicate 2
-setType exp
-subId 1352
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUscPk
+metaObject wgEncodeSydhHistoneK562H3k27me3bUcdPk
 objType table
 antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneK562H3k27me3bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1352
-tableName wgEncodeSydhHistoneK562bH3k27me3bUscPk
+tableName wgEncodeSydhHistoneK562H3k27me3bUcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUscRawDataRep1
-objType file
+metaObject wgEncodeSydhHistoneK562H3k27me3bUcdSig
+objType table
 antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562H3k27me3bUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1352
+tableName wgEncodeSydhHistoneK562H3k27me3bUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistoneK562H3k4me1UcdPk
+objType table
+antibody H3K4me1
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+dccAccession wgEncodeEH000911
+expId 911
+fileName wgEncodeSydhHistoneK562H3k4me1UcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1205
+tableName wgEncodeSydhHistoneK562H3k4me1UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistoneK562H3k4me1UcdSig
+objType table
+antibody H3K4me1
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-20
+dateUnrestricted 2011-02-20
+dccAccession wgEncodeEH000911
+expId 911
+fileName wgEncodeSydhHistoneK562H3k4me1UcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1205
+tableName wgEncodeSydhHistoneK562H3k4me1UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistoneK562H3k4me3bUcdPk
+objType table
+antibody H3K4me3B
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-11
+dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000913
+expId 913
+fileName wgEncodeSydhHistoneK562H3k4me3bUcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1350
+tableName wgEncodeSydhHistoneK562H3k4me3bUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistoneK562H3k4me3bUcdSig
+objType table
+antibody H3K4me3B
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-11
+dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000913
+expId 913
+fileName wgEncodeSydhHistoneK562H3k4me3bUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1350
+tableName wgEncodeSydhHistoneK562H3k4me3bUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistoneK562H3k9acbUcdPk
+objType table
+antibody H3K9acB
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-11
+dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000914
+expId 914
+fileName wgEncodeSydhHistoneK562H3k9acbUcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1351
+tableName wgEncodeSydhHistoneK562H3k9acbUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistoneK562H3k9acbUcdSig
+objType table
+antibody H3K9acB
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-11
+dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000914
+expId 914
+fileName wgEncodeSydhHistoneK562H3k9acbUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1351
+tableName wgEncodeSydhHistoneK562H3k9acbUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistoneK562InputUcdSig
+objType table
+antibody Input
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateReSubmitted 2011-03-22
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000672
+dccInternalNotes Signal file generated by AWG Uniform Signal Calls: June 2010 Freeze
+expId 672
+fileName wgEncodeSydhHistoneK562InputUcdSig.bigWig
+grant Snyder
+lab USC
+origAssembly hg18
+project wgEncode
+setType input
+subId 3839
+tableName wgEncodeSydhHistoneK562InputUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1
+objType file
+antibody H3K27me3B
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-11
+dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
+expId 912
+fileName wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 1352
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2
+objType file
+antibody H3K27me3B
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-11
+dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
+expId 912
+fileName wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 1352
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep1
+objType file
+antibody H3K27me3B
+cell K562b
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000672
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-11
+dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
+expId 912
+fileName wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
@@ -97,20 +291,20 @@ subId 1352
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUscRawDataRep2
+metaObject wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep2
 objType file
 antibody H3K27me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
@@ -121,44 +315,20 @@ subId 1352
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k27me3bUscSig
-objType table
-antibody H3K27me3B
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-11
-dateUnrestricted 2011-03-11
-dccAccession wgEncodeEH000912
-expId 912
-fileName wgEncodeSydhHistoneK562bH3k27me3bUscSig.bigWig
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 1352
-tableName wgEncodeSydhHistoneK562bH3k27me3bUscSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhHistoneK562bH3k4me1UscAlnRep1
+metaObject wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1
 objType file
 antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UscAlnRep1.bam
+fileName wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -168,20 +338,20 @@ subId 1205
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UscAlnRep2
+metaObject wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2
 objType file
 antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UscAlnRep2.bam
+fileName wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -191,44 +361,20 @@ subId 1205
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UscPk
-objType table
-antibody H3K4me1
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-20
-dateUnrestricted 2011-02-20
-dccAccession wgEncodeEH000911
-expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UscPk.narrowPeak.gz
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 1205
-tableName wgEncodeSydhHistoneK562bH3k4me1UscPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhHistoneK562bH3k4me1UscRawDataRep1
+metaObject wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep1
 objType file
 antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -238,20 +384,20 @@ subId 1205
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UscRawDataRep2
+metaObject wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep2
 objType file
 antibody H3K4me1
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -261,44 +407,20 @@ subId 1205
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k4me1UscSig
-objType table
-antibody H3K4me1
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-20
-dateUnrestricted 2011-02-20
-dccAccession wgEncodeEH000911
-expId 911
-fileName wgEncodeSydhHistoneK562bH3k4me1UscSig.bigWig
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 1205
-tableName wgEncodeSydhHistoneK562bH3k4me1UscSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUscAlnRep1
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1
 objType file
 antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUscAlnRep1.bam
+fileName wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -308,20 +430,20 @@ subId 1350
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUscAlnRep2
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2
 objType file
 antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUscAlnRep2.bam
+fileName wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -331,44 +453,20 @@ subId 1350
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUscPk
-objType table
-antibody H3K4me3B
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-11
-dateUnrestricted 2011-03-11
-dccAccession wgEncodeEH000913
-expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUscPk.narrowPeak.gz
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 1350
-tableName wgEncodeSydhHistoneK562bH3k4me3bUscPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUscRawDataRep1
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep1
 objType file
 antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
@@ -379,20 +477,20 @@ subId 1350
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUscRawDataRep2
+metaObject wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep2
 objType file
 antibody H3K4me3B
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
@@ -403,44 +501,20 @@ subId 1350
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k4me3bUscSig
-objType table
-antibody H3K4me3B
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-11
-dateUnrestricted 2011-03-11
-dccAccession wgEncodeEH000913
-expId 913
-fileName wgEncodeSydhHistoneK562bH3k4me3bUscSig.bigWig
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 1350
-tableName wgEncodeSydhHistoneK562bH3k4me3bUscSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhHistoneK562bH3k9acbUscAlnRep1
+metaObject wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1
 objType file
 antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUscAlnRep1.bam
+fileName wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -450,20 +524,20 @@ subId 1351
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUscAlnRep2
+metaObject wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2
 objType file
 antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUscAlnRep2.bam
+fileName wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -473,44 +547,20 @@ subId 1351
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUscPk
-objType table
-antibody H3K9acB
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-11
-dateUnrestricted 2011-03-11
-dccAccession wgEncodeEH000914
-expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUscPk.narrowPeak.gz
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 1351
-tableName wgEncodeSydhHistoneK562bH3k9acbUscPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhHistoneK562bH3k9acbUscRawDataRep1
+metaObject wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep1
 objType file
 antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
@@ -521,20 +571,20 @@ subId 1351
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUscRawDataRep2
+metaObject wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep2
 objType file
 antibody H3K9acB
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
@@ -545,37 +595,13 @@ subId 1351
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bH3k9acbUscSig
-objType table
-antibody H3K9acB
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-11
-dateUnrestricted 2011-03-11
-dccAccession wgEncodeEH000914
-expId 914
-fileName wgEncodeSydhHistoneK562bH3k9acbUscSig.bigWig
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 1351
-tableName wgEncodeSydhHistoneK562bH3k9acbUscSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhHistoneK562bInputUscAln
+metaObject wgEncodeSydhHistoneK562bInputUcdAln
 objType file
 antibody Input
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -583,7 +609,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
 expId 672
-fileName wgEncodeSydhHistoneK562bInputUscAln.bam
+fileName wgEncodeSydhHistoneK562bInputUcdAln.bam
 grant Snyder
 lab USC
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -594,13 +620,13 @@ subId 3839
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bInputUscRawData
+metaObject wgEncodeSydhHistoneK562bInputUcdRawData
 objType file
 antibody Input
 cell K562b
 composite wgEncodeSydhHistone
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -608,7 +634,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
 expId 672
-fileName wgEncodeSydhHistoneK562bInputUscRawData.fastq.gz
+fileName wgEncodeSydhHistoneK562bInputUcdRawData.fastq.gz
 grant Snyder
 lab USC
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -619,46 +645,21 @@ subId 3839
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneK562bInputUscSig
-objType table
-antibody Input
-cell K562b
-composite wgEncodeSydhHistone
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-dccAccession wgEncodeEH000672
-dccInternalNotes Signal file generated by AWG Uniform Signal Calls: June 2010 Freeze
-expId 672
-fileName wgEncodeSydhHistoneK562bInputUscSig.bigWig
-grant Snyder
-lab USC
-origAssembly hg18
-project wgEncode
-setType input
-subId 3839
-tableName wgEncodeSydhHistoneK562bInputUscSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhHistoneNt2d1H3k09me3UscAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1
 objType file
 antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
-fileName wgEncodeSydhHistoneNt2d1H3k09me3UscAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -668,20 +669,21 @@ subId 1831
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k09me3UscAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2
 objType file
 antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
-fileName wgEncodeSydhHistoneNt2d1H3k09me3UscAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -691,44 +693,46 @@ subId 1831
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k09me3UscPk
+metaObject wgEncodeSydhHistoneNt2d1H3k09me3UcdPk
 objType table
 antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
-fileName wgEncodeSydhHistoneNt2d1H3k09me3UscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1831
-tableName wgEncodeSydhHistoneNt2d1H3k09me3UscPk
+tableName wgEncodeSydhHistoneNt2d1H3k09me3UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k09me3UscRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k09me3UcdRawDataRep1
 objType file
 antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
-fileName wgEncodeSydhHistoneNt2d1H3k09me3UscRawDataRep1.fastq.tgz
+fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein G magnetic beads.
@@ -739,20 +743,21 @@ subId 1831
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k09me3UscRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k09me3UcdRawDataRep2
 objType file
 antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
-fileName wgEncodeSydhHistoneNt2d1H3k09me3UscRawDataRep2.fastq.tgz
+fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein G magnetic beads.
@@ -763,44 +768,45 @@ subId 1831
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k09me3UscSig
+metaObject wgEncodeSydhHistoneNt2d1H3k09me3UcdSig
 objType table
 antibody H3K9me3
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2_D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
-fileName wgEncodeSydhHistoneNt2d1H3k09me3UscSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1831
-tableName wgEncodeSydhHistoneNt2d1H3k09me3UscSig
+tableName wgEncodeSydhHistoneNt2d1H3k09me3UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1
 objType file
 antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -810,20 +816,20 @@ subId 1137
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2
 objType file
 antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -833,44 +839,44 @@ subId 1137
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscPk
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk
 objType table
 antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1137
-tableName wgEncodeSydhHistoneNt2d1H3k27me3bUscPk
+tableName wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep1
 objType file
 antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
@@ -881,20 +887,20 @@ subId 1137
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep2
 objType file
 antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
@@ -905,44 +911,44 @@ subId 1137
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUscSig
+metaObject wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig
 objType table
 antibody H3K27me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUscSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1137
-tableName wgEncodeSydhHistoneNt2d1H3k27me3bUscSig
+tableName wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1
 objType file
 antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -952,20 +958,20 @@ subId 1354
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2
 objType file
 antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -975,44 +981,44 @@ subId 1354
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscPk
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
 objType table
 antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1354
-tableName wgEncodeSydhHistoneNt2d1H3k36me3bUscPk
+tableName wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep1
 objType file
 antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
@@ -1023,20 +1029,20 @@ subId 1354
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep2
 objType file
 antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
@@ -1047,44 +1053,44 @@ subId 1354
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUscSig
+metaObject wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig
 objType table
 antibody H3K36me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUscSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1354
-tableName wgEncodeSydhHistoneNt2d1H3k36me3bUscSig
+tableName wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1
 objType file
 antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UscAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1094,20 +1100,20 @@ subId 1830
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2
 objType file
 antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UscAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1117,44 +1123,44 @@ subId 1830
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscPk
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
 objType table
 antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1830
-tableName wgEncodeSydhHistoneNt2d1H3k4me1UscPk
+tableName wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep1
 objType file
 antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1164,20 +1170,20 @@ subId 1830
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep2
 objType file
 antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1187,44 +1193,44 @@ subId 1830
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me1UscSig
+metaObject wgEncodeSydhHistoneNt2d1H3k4me1UcdSig
 objType table
 antibody H3K4me1
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UscSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1830
-tableName wgEncodeSydhHistoneNt2d1H3k4me1UscSig
+tableName wgEncodeSydhHistoneNt2d1H3k4me1UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1
 objType file
 antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1234,20 +1240,20 @@ subId 1122
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2
 objType file
 antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1257,44 +1263,44 @@ subId 1122
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscPk
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk
 objType table
 antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1122
-tableName wgEncodeSydhHistoneNt2d1H3k4me3bUscPk
+tableName wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep1
 objType file
 antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein. G magnetic beads.
@@ -1305,20 +1311,20 @@ subId 1122
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep2
 objType file
 antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation:Protein.G magnetic beads.
@@ -1329,44 +1335,44 @@ subId 1122
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUscSig
+metaObject wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig
 objType table
 antibody H3K4me3B
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUscSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1122
-tableName wgEncodeSydhHistoneNt2d1H3k4me3bUscSig
+tableName wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscAlnRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1
 objType file
 antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUscAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1376,20 +1382,20 @@ subId 1173
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscAlnRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2
 objType file
 antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUscAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1399,44 +1405,44 @@ subId 1173
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscPk
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdPk
 objType table
 antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1173
-tableName wgEncodeSydhHistoneNt2d1H3k9acbUscPk
+tableName wgEncodeSydhHistoneNt2d1H3k9acbUcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscRawDataRep1
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep1
 objType file
 antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation: Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
@@ -1447,20 +1453,20 @@ subId 1173
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscRawDataRep2
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep2
 objType file
 antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation: Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
@@ -1471,44 +1477,44 @@ subId 1173
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1H3k9acbUscSig
+metaObject wgEncodeSydhHistoneNt2d1H3k9acbUcdSig
 objType table
 antibody H3K9acB
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUscSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1173
-tableName wgEncodeSydhHistoneNt2d1H3k9acbUscSig
+tableName wgEncodeSydhHistoneNt2d1H3k9acbUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneNt2d1InputUscAln
+metaObject wgEncodeSydhHistoneNt2d1InputUcdAln
 objType file
 antibody Input
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000654
 expId 654
-fileName wgEncodeSydhHistoneNt2d1InputUscAln.bam
+fileName wgEncodeSydhHistoneNt2d1InputUcdAln.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1517,20 +1523,20 @@ subId 1123
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneNt2d1InputUscRawData
+metaObject wgEncodeSydhHistoneNt2d1InputUcdRawData
 objType file
 antibody Input
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000654
 expId 654
-fileName wgEncodeSydhHistoneNt2d1InputUscRawData.fastq.gz
+fileName wgEncodeSydhHistoneNt2d1InputUcdRawData.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1539,42 +1545,44 @@ subId 1123
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneNt2d1InputUscSig
+metaObject wgEncodeSydhHistoneNt2d1InputUcdSig
 objType table
 antibody Input
 cell NT2-D1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId NT2-D1/None/Input/UCDavis
+controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000654
 expId 654
-fileName wgEncodeSydhHistoneNt2d1InputUscSig.bigWig
+fileName wgEncodeSydhHistoneNt2d1InputUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType input
 subId 1123
-tableName wgEncodeSydhHistoneNt2d1InputUscSig
+tableName wgEncodeSydhHistoneNt2d1InputUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistonePbmcH3k04me3bUscAlnRep1
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1
 objType file
 antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcH3k04me3bUscAlnRep1.bam
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1584,18 +1592,20 @@ subId 4445
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k04me3bUscAlnRep2
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2
 objType file
 antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcH3k04me3bUscAlnRep2.bam
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1605,40 +1615,44 @@ subId 4445
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k04me3bUscPk
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUcdPk
 objType table
 antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcH3k04me3bUscPk.narrowPeak.gz
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4445
-tableName wgEncodeSydhHistonePbmcH3k04me3bUscPk
+tableName wgEncodeSydhHistonePbmcH3k04me3bUcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistonePbmcH3k04me3bUscRawDataRep1
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUcdRawDataRep1
 objType file
 antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcH3k04me3bUscRawDataRep1.fastq.gz
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1648,18 +1662,20 @@ subId 4445
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k04me3bUscRawDataRep2
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUcdRawDataRep2
 objType file
 antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcH3k04me3bUscRawDataRep2.fastq.gz
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1669,42 +1685,44 @@ subId 4445
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k04me3bUscSig
+metaObject wgEncodeSydhHistonePbmcH3k04me3bUcdSig
 objType table
 antibody H3K4me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcH3k04me3bUscSig.bigWig
+dccAccession wgEncodeEH001882
+expId 1882
+fileName wgEncodeSydhHistonePbmcH3k04me3bUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4445
-tableName wgEncodeSydhHistonePbmcH3k04me3bUscSig
+tableName wgEncodeSydhHistonePbmcH3k04me3bUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep1
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1
 objType file
 antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1714,20 +1732,20 @@ subId 4118
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep2
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2
 objType file
 antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUscAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1737,44 +1755,44 @@ subId 4118
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUscPk
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdPk
 objType table
 antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUscPk.narrowPeak.gz
+fileName wgEncodeSydhHistonePbmcH3k27me3bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4118
-tableName wgEncodeSydhHistonePbmcH3k27me3bUscPk
+tableName wgEncodeSydhHistonePbmcH3k27me3bUcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUscRawDataRep1
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep1
 objType file
 antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1784,20 +1802,20 @@ subId 4118
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUscRawDataRep2
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep2
 objType file
 antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1807,44 +1825,44 @@ subId 4118
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k27me3bUscSig
+metaObject wgEncodeSydhHistonePbmcH3k27me3bUcdSig
 objType table
 antibody H3K27me3B
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUscSig.bigWig
+fileName wgEncodeSydhHistonePbmcH3k27me3bUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4118
-tableName wgEncodeSydhHistonePbmcH3k27me3bUscSig
+tableName wgEncodeSydhHistonePbmcH3k27me3bUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UscAlnRep1
+metaObject wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1
 objType file
 antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UscAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1854,20 +1872,20 @@ subId 4117
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UscAlnRep2
+metaObject wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2
 objType file
 antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UscAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1877,44 +1895,44 @@ subId 4117
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UscPk
+metaObject wgEncodeSydhHistonePbmcH3k4me1UcdPk
 objType table
 antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UscPk.narrowPeak.gz
+fileName wgEncodeSydhHistonePbmcH3k4me1UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4117
-tableName wgEncodeSydhHistonePbmcH3k4me1UscPk
+tableName wgEncodeSydhHistonePbmcH3k4me1UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UscRawDataRep1
+metaObject wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep1
 objType file
 antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1924,20 +1942,20 @@ subId 4117
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UscRawDataRep2
+metaObject wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep2
 objType file
 antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -1947,44 +1965,44 @@ subId 4117
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k4me1UscSig
+metaObject wgEncodeSydhHistonePbmcH3k4me1UcdSig
 objType table
 antibody H3K4me1
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UscSig.bigWig
+fileName wgEncodeSydhHistonePbmcH3k4me1UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4117
-tableName wgEncodeSydhHistonePbmcH3k4me1UscSig
+tableName wgEncodeSydhHistonePbmcH3k4me1UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UscAlnRep1
+metaObject wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1
 objType file
 antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UscAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -1994,20 +2012,20 @@ subId 4116
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UscAlnRep2
+metaObject wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2
 objType file
 antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UscAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -2017,44 +2035,44 @@ subId 4116
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UscPk
+metaObject wgEncodeSydhHistonePbmcH3k9me3UcdPk
 objType table
 antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UscPk.narrowPeak.gz
+fileName wgEncodeSydhHistonePbmcH3k9me3UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4116
-tableName wgEncodeSydhHistonePbmcH3k9me3UscPk
+tableName wgEncodeSydhHistonePbmcH3k9me3UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UscRawDataRep1
+metaObject wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep1
 objType file
 antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -2064,20 +2082,20 @@ subId 4116
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UscRawDataRep2
+metaObject wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep2
 objType file
 antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UscRawDataRep2.fastq.tgz
+fileName wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
 project wgEncode
@@ -2087,42 +2105,44 @@ subId 4116
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcH3k9me3UscSig
+metaObject wgEncodeSydhHistonePbmcH3k9me3UcdSig
 objType table
 antibody H3K9me3
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UscSig.bigWig
+fileName wgEncodeSydhHistonePbmcH3k9me3UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4116
-tableName wgEncodeSydhHistonePbmcH3k9me3UscSig
+tableName wgEncodeSydhHistonePbmcH3k9me3UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistonePbmcInputUscAlnRep1
+metaObject wgEncodeSydhHistonePbmcInputUcdAlnRep1
 objType file
 antibody Input
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcInputUscAlnRep1.bam
+dccAccession wgEncodeEH001883
+expId 1883
+fileName wgEncodeSydhHistonePbmcInputUcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -2132,18 +2152,20 @@ subId 4446
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistonePbmcInputUscRawDataRep1
+metaObject wgEncodeSydhHistonePbmcInputUcdRawDataRep1
 objType file
 antibody Input
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcInputUscRawDataRep1.fastq.tgz
+dccAccession wgEncodeEH001883
+expId 1883
+fileName wgEncodeSydhHistonePbmcInputUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
 project wgEncode
@@ -2153,42 +2175,44 @@ subId 4446
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistonePbmcInputUscSig
+metaObject wgEncodeSydhHistonePbmcInputUcdSig
 objType table
 antibody Input
 cell PBMC
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PBMC/None/Input/UCDavis
+controlId wgEncodeEH001883
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeSydhHistonePbmcInputUscSig.bigWig
+dccAccession wgEncodeEH001883
+expId 1883
+fileName wgEncodeSydhHistonePbmcInputUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType input
 subId 4446
-tableName wgEncodeSydhHistonePbmcInputUscSig
+tableName wgEncodeSydhHistonePbmcInputUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep1
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
 objType file
 antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep1.bam
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
 grant Snyder
 lab USC
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
@@ -2199,20 +2223,20 @@ subId 2763
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep2
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
 objType file
 antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUscAlnRep2.bam
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
 grant Snyder
 lab USC
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
@@ -2223,44 +2247,44 @@ subId 2763
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUscPk
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdPk
 objType table
 antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2763
-tableName wgEncodeSydhHistoneU2osH3k36me3bUscPk
+tableName wgEncodeSydhHistoneU2osH3k36me3bUcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUscRawDataRep1
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1
 objType file
 antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep1
@@ -2271,20 +2295,20 @@ subId 2763
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUscRawDataRep2
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2
 objType file
 antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep2
@@ -2295,44 +2319,44 @@ subId 2763
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osH3k36me3bUscSig
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdSig
 objType table
 antibody H3K36me3B
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUscSig.bigWig
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2763
-tableName wgEncodeSydhHistoneU2osH3k36me3bUscSig
+tableName wgEncodeSydhHistoneU2osH3k36me3bUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UscAlnRep1
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1
 objType file
 antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UscAlnRep1.bam
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -2342,20 +2366,20 @@ subId 2108
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UscAlnRep2
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2
 objType file
 antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UscAlnRep2.bam
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -2365,44 +2389,44 @@ subId 2108
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UscPk
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdPk
 objType table
 antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UscPk.narrowPeak.gz
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0.  Submitted even though replicate peak overlap below threshold because data visually looks good, but calling peaks for H3K9me3 is very difficult due to the nature of the signal and not the quality of the data.  When we call peaks using our program that has been modified for histones, we get a ~60% overlap. That's about as good as it gets with H3K9me3 peak calling.
 project wgEncode
 setType exp
 subId 2108
-tableName wgEncodeSydhHistoneU2osH3k9me3UscPk
+tableName wgEncodeSydhHistoneU2osH3k9me3UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UscRawDataRep1
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1
 objType file
 antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UscRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Staph A.
@@ -2413,20 +2437,20 @@ subId 2108
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UscRawDataRep2
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2
 objType file
 antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UscRawDataRep2.fastq.gz
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Staph A.
@@ -2437,37 +2461,37 @@ subId 2108
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osH3k9me3UscSig
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdSig
 objType table
 antibody H3K9me3
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UscSig.bigWig
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2108
-tableName wgEncodeSydhHistoneU2osH3k9me3UscSig
+tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneU2osInputUscAln
+metaObject wgEncodeSydhHistoneU2osInputUcdAln
 objType file
 antibody Input
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -2475,7 +2499,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
 expId 916
-fileName wgEncodeSydhHistoneU2osInputUscAln.bam
+fileName wgEncodeSydhHistoneU2osInputUcdAln.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -2484,13 +2508,13 @@ subId 3839
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osInputUscRawData
+metaObject wgEncodeSydhHistoneU2osInputUcdRawData
 objType file
 antibody Input
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -2498,7 +2522,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
 expId 916
-fileName wgEncodeSydhHistoneU2osInputUscRawData.fastq.gz
+fileName wgEncodeSydhHistoneU2osInputUcdRawData.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -2507,13 +2531,13 @@ subId 3839
 treatment None
 view RawData
 
-metaObject wgEncodeSydhHistoneU2osInputUscSig
+metaObject wgEncodeSydhHistoneU2osInputUcdSig
 objType table
 antibody Input
 cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
-controlId U2OS/None/Input/UCDavis
+controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
@@ -2522,15 +2546,15 @@ dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
 dccInternalNotes Signal file generated by AWG Uniform Signal Calls: June 2010 Freeze
 expId 916
-fileName wgEncodeSydhHistoneU2osInputUscSig.bigWig
+fileName wgEncodeSydhHistoneU2osInputUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType input
 subId 3839
-tableName wgEncodeSydhHistoneU2osInputUscSig
+tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 921373385
+# MAGIC: -2112824160

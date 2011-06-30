@@ -1,5 +1,5 @@
 
-track wgEncodeGencode
+track wgEncodeGencodeV7
 compositeTrack on
 shortLabel Gencode Genes
 longLabel Gene Annotations from ENCODE/Gencode (Version 7, May 2011)
@@ -17,7 +17,7 @@ type genePred
 fileSortOrder fileName=File_Name
 hgGene on
 hgsid on
-html wgEncodeGencodeV7
+# html wgEncodeGencodeV7
 baseColorUseCds given
 baseColorDefault genomicCodons
 wgEncode 1
@@ -49,21 +49,21 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
          attrs.transcriptType:Transcript_Type=ambiguous_orf,antisense,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_rRNA,Mt_tRNA,Mt_tRNA_pseudogene,ncrna_host,non_coding,nonsense_mediated_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,TR_C_gene,TR_J_gene,tRNA_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
 
     track wgEncodeGencodeBasicV7
-    subTrack wgEncodeGencode
+    subTrack wgEncodeGencodeV7
     shortLabel Basic
     longLabel Basic Gene Annotation Set from ENCODE/Gencode 
     type genePred
     priority 1
 
     track wgEncodeGencodeCompV7
-    subTrack wgEncodeGencode off
+    subTrack wgEncodeGencodeV7 off
     shortLabel Comprehensive
     longLabel Comprehensive Gene Annotation Set from ENCODE/Gencode 
     type genePred
     priority 2
 
     track wgEncodeGencodePseudoGeneV7
-    subTrack wgEncodeGencode off
+    subTrack wgEncodeGencodeV7 off
     shortLabel Pseudo
     longLabel Pseudogene Annotation Set from ENCODE/Gencode 
     type genePred
@@ -71,7 +71,7 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
     priority 3
 
     track wgEncodeGencode2wayConsPseudoV7
-    subTrack wgEncodeGencode off
+    subTrack wgEncodeGencodeV7 off
     shortLabel 2-Way Pseudo
     longLabel 2-way Pseudogene Annotation Set from ENCODE/Gencode 
     type genePred
@@ -79,7 +79,7 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
     priority 4
 
     track wgEncodeGencodePolyaV7
-    subTrack wgEncodeGencode off
+    subTrack wgEncodeGencodeV7 off
     shortLabel PolyA
     longLabel PolyA Transcript Annotation Set from ENCODE/Gencode 
     type genePred

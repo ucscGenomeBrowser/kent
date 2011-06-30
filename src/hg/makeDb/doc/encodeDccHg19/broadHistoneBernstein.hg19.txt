@@ -5042,3 +5042,70 @@ cp files.txt release1/
 =====================================
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3446 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3823 reviewing
+
+2011-06-24 Broad HMM is finally released
+========================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3446 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3823 released
+
+2011-06-27 Jim's Reg tracks now have broken links
+==================================================
+###### Needs to be fixed:
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/currentGenomes/Homo_sapiens/encodeDCC/wgEncodeRegMarkH3k4me1
+same as:
+cd (d19)/wgEncodeRegMarkH3k4me1
+wgEncodeBroadHistoneGm12878H3k4me1StdSig.bigWig -> ../wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k4me1StdSig.bigWig
+ln ../wgEncodeBroadHistone/release1/wgEncodeBroadHistoneGm12878H3k4me1StdSig.bigWig wgEncodeBroadHistoneGm12878H3k4me1StdSig.bigWig
+
+rm wgEncodeBroadHistoneH1hescH3k4me1StdSig.bigWig 
+rm wgEncodeBroadHistoneHsmmH3k4me1StdSig.bigWig 
+rm wgEncodeBroadHistoneHuvecH3k4me1StdSig.bigWig 
+rm wgEncodeBroadHistoneK562H3k4me1StdSig.bigWig 
+rm wgEncodeBroadHistoneNhekH3k4me1StdSig.bigWig 
+rm wgEncodeBroadHistoneNhlfH3k4me1StdSig.bigWig 
+
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneH1hescH3k4me1StdSig.bigWig wgEncodeBroadHistoneH1hescH3k4me1StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneHsmmH3k4me1StdSig.bigWig wgEncodeBroadHistoneHsmmH3k4me1StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneHuvecH3k4me1StdSig.bigWig wgEncodeBroadHistoneHuvecH3k4me1StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneK562H3k4me1StdSig.bigWig wgEncodeBroadHistoneK562H3k4me1StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneNhekH3k4me1StdSig.bigWig wgEncodeBroadHistoneNhekH3k4me1StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneNhlfH3k4me1StdSig.bigWig wgEncodeBroadHistoneNhlfH3k4me1StdSig.bigWig 
+
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/currentGenomes/Homo_sapiens/encodeDCC/wgEncodeRegMarkH3k4me3
+cd (d19)/wgEncodeRegMarkH3k4me3
+wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig -> ../wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig
+ln ../wgEncodeBroadHistone/release1/wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig
+### Answer: convert all reg download dirs to hold hard links!
+
+rm wgEncodeBroadHistoneH1hescH3k4me3StdSig.bigWig
+rm wgEncodeBroadHistoneHsmmH3k4me3StdSig.bigWig 
+rm wgEncodeBroadHistoneHuvecH3k4me3StdSig.bigWig 
+rm wgEncodeBroadHistoneK562H3k4me3StdSig.bigWig 
+rm wgEncodeBroadHistoneNhekH3k4me3StdSig.bigWig 
+rm wgEncodeBroadHistoneNhlfH3k4me3StdSig.bigWig 
+
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneH1hescH3k4me3StdSig.bigWig wgEncodeBroadHistoneH1hescH3k4me3StdSig.bigWig
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneHsmmH3k4me3StdSig.bigWig wgEncodeBroadHistoneHsmmH3k4me3StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneHuvecH3k4me3StdSig.bigWig wgEncodeBroadHistoneHuvecH3k4me3StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneK562H3k4me3StdSig.bigWig wgEncodeBroadHistoneK562H3k4me3StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneNhekH3k4me3StdSig.bigWig wgEncodeBroadHistoneNhekH3k4me3StdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneNhlfH3k4me3StdSig.bigWig wgEncodeBroadHistoneNhlfH3k4me3StdSig.bigWig 
+
+cd ../wgEncodeRegMarkH3k27ac/
+rm wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig 
+rm wgEncodeBroadHistoneH1hescH3k27acStdSig.bigWig 
+rm wgEncodeBroadHistoneHsmmH3k27acStdSig.bigWig 
+rm wgEncodeBroadHistoneHuvecH3k27acStdSig.bigWig 
+rm wgEncodeBroadHistoneK562H3k27acStdSig.bigWig 
+rm wgEncodeBroadHistoneNhekH3k27acStdSig.bigWig 
+rm wgEncodeBroadHistoneNhlfH3k27acStdSig.bigWig 
+
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneH1hescH3k27acStdSig.bigWig wgEncodeBroadHistoneH1hescH3k27acStdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneHsmmH3k27acStdSig.bigWig wgEncodeBroadHistoneHsmmH3k27acStdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneHuvecH3k27acStdSig.bigWig wgEncodeBroadHistoneHuvecH3k27acStdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneK562H3k27acStdSig.bigWig wgEncodeBroadHistoneK562H3k27acStdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneNhekH3k27acStdSig.bigWig wgEncodeBroadHistoneNhekH3k27acStdSig.bigWig 
+ln ../wgEncodeBroadHistone/wgEncodeBroadHistoneNhlfH3k27acStdSig.bigWig wgEncodeBroadHistoneNhlfH3k27acStdSig.bigWig 
+

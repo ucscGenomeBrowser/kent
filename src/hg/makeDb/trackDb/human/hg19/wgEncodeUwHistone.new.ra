@@ -1266,6 +1266,188 @@ noInherit on
         origAssembly hg19
         # subId=2779 dateSubmitted=2010-10-28
 
+        track wgEncodeUwHistoneHacH3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel HAc H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in HAc cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=HAC rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4368 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel A549 H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in A549 cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=A549 rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4366 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel A549 H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in A549 cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=A549 rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4367 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHacH3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel HAc H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in HAc cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=HAC rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4369 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel HFF-Myc H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in HFF-Myc cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=HFFMYC rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4370 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel LNCaP H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in LNCaP cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=LNCAP rep=2
+        type broadPeak
+        origAssembly hg19
+        color 0,119,158
+        # subId=4372 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel LNCaP H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in LNCaP cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=LNCAP rep=1
+        type broadPeak
+        origAssembly hg19
+        color 0,119,158
+        # subId=4373 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel NHLF H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in NHLF cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=NHLF rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4374 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel HFF-Myc H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in HFF-Myc cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=HFFMYC rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4371 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel PANC-1 H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in PANC-1 cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=PANC1 rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4376 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel NHLF H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in NHLF cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=NHLF rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4375 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel PANC-1 H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in PANC-1 cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=PANC1 rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4377 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel WERI-Rb-1 H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in WERI-Rb-1 cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=WERIRB1 rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4380 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel SK-N-MC H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in SK-N-MC cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=SKNMC rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4378 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel WERI-Rb-1 H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in WERI-Rb-1 cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=WERIRB1 rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4381 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel SK-N-MC H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in SK-N-MC cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=SKNMC rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4379 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel WI-38 H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in WI-38 cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=WI38 rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4382 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel WI-38 H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in WI-38 cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=WI38 rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4383 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel BE2_C H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in BE2_C cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=BE2C rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4396 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel BE2_C H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in BE2_C cells)
+        subGroups view=Hot factor=H3K04ME3 cellType=BE2C rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4397 dateSubmitted=2011-06-25
+
 
     track wgEncodeUwHistoneViewPeaks
     shortLabel Peaks
@@ -2462,6 +2644,188 @@ noInherit on
         type narrowPeak
         origAssembly hg19
         # subId=2779 dateSubmitted=2010-10-28
+
+        track wgEncodeUwHistoneHacH3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel HAc H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in HAc cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=HAC rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4368 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneA549H3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel A549 H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in A549 cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=A549 rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4366 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneA549H3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel A549 H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in A549 cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=A549 rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4367 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHacH3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel HAc H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in HAc cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=HAC rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4369 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHffmycH3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel HFF-Myc H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in HFF-Myc cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=HFFMYC rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4370 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneLncapH3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel LNCaP H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in LNCaP cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=LNCAP rep=2
+        type narrowPeak
+        origAssembly hg19
+        color 0,119,158
+        # subId=4372 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneLncapH3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel LNCaP H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in LNCaP cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=LNCAP rep=1
+        type narrowPeak
+        origAssembly hg19
+        color 0,119,158
+        # subId=4373 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneNhlfH3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel NHLF H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in NHLF cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=NHLF rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4374 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHffmycH3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel HFF-Myc H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in HFF-Myc cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=HFFMYC rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4371 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistonePanc1H3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel PANC-1 H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in PANC-1 cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=PANC1 rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4376 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneNhlfH3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel NHLF H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in NHLF cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=NHLF rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4375 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistonePanc1H3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel PANC-1 H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in PANC-1 cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=PANC1 rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4377 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWerirb1H3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel WERI-Rb-1 H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in WERI-Rb-1 cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=WERIRB1 rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4380 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneSknmcH3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel SK-N-MC H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in SK-N-MC cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=SKNMC rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4378 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWerirb1H3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel WERI-Rb-1 H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in WERI-Rb-1 cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=WERIRB1 rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4381 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneSknmcH3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel SK-N-MC H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in SK-N-MC cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=SKNMC rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4379 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWi38H3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel WI-38 H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in WI-38 cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=WI38 rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4382 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWi38H3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel WI-38 H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in WI-38 cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=WI38 rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4383 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneBe2cH3k04me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel BE2_C H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in BE2_C cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=BE2C rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4396 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneBe2cH3k04me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel BE2_C H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in BE2_C cells)
+        subGroups view=Peaks factor=H3K04ME3 cellType=BE2C rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4397 dateSubmitted=2011-06-25
 
 
     track wgEncodeUwHistoneViewRawSig
@@ -4025,6 +4389,252 @@ noInherit on
         origAssembly hg19
         # subId=2779 dateSubmitted=2010-10-28
 
+        track wgEncodeUwHistoneNhlfInputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel NHLF Input Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in NHLF cells)
+        subGroups view=zRSig factor=zInput cellType=NHLF rep=1
+        type bigWig 1.000000 29301.000000
+        origAssembly hg19
+        # subId=4355 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneBe2cInputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel BE2_C Input Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in BE2_C cells)
+        subGroups view=zRSig factor=zInput cellType=BE2C rep=1
+        type bigWig 1.000000 17997.000000
+        origAssembly hg19
+        # subId=4352 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHffmycInputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HFF-Myc Input Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in HFF-Myc cells)
+        subGroups view=zRSig factor=zInput cellType=HFFMYC rep=1
+        type bigWig 1.000000 18402.000000
+        origAssembly hg19
+        # subId=4353 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneLncapInputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel LNCaP Input Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in LNCaP cells)
+        subGroups view=zRSig factor=zInput cellType=LNCAP rep=1
+        type bigWig 1.000000 21185.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=4354 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistonePanc1InputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel PANC-1 Input Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in PANC-1 cells)
+        subGroups view=zRSig factor=zInput cellType=PANC1 rep=1
+        type bigWig 1.000000 22326.000000
+        origAssembly hg19
+        # subId=4356 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneSknmcInputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel SK-N-MC Input Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in SK-N-MC cells)
+        subGroups view=zRSig factor=zInput cellType=SKNMC rep=1
+        type bigWig 1.000000 15364.000000
+        origAssembly hg19
+        # subId=4357 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWi38InputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel WI-38 Input Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in WI-38 cells)
+        subGroups view=zRSig factor=zInput cellType=WI38 rep=1
+        type bigWig 1.000000 13078.000000
+        origAssembly hg19
+        # subId=4358 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHacH3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HAc H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in HAc cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=HAC rep=2
+        type bigWig 1.000000 2087.000000
+        origAssembly hg19
+        # subId=4368 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneA549H3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel A549 H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in A549 cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=A549 rep=2
+        type bigWig 1.000000 2590.000000
+        origAssembly hg19
+        # subId=4366 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneA549H3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel A549 H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in A549 cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=A549 rep=1
+        type bigWig 1.000000 2317.000000
+        origAssembly hg19
+        # subId=4367 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHacH3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HAc H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in HAc cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=HAC rep=1
+        type bigWig 1.000000 1453.000000
+        origAssembly hg19
+        # subId=4369 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHffmycH3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HFF-Myc H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in HFF-Myc cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=HFFMYC rep=1
+        type bigWig 1.000000 1382.000000
+        origAssembly hg19
+        # subId=4370 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneLncapH3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel LNCaP H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in LNCaP cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=LNCAP rep=2
+        type bigWig 1.000000 3681.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=4372 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneLncapH3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel LNCaP H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in LNCaP cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=LNCAP rep=1
+        type bigWig 1.000000 3274.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=4373 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneNhlfH3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel NHLF H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in NHLF cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=NHLF rep=2
+        type bigWig 1.000000 6814.000000
+        origAssembly hg19
+        # subId=4374 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneHffmycH3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HFF-Myc H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in HFF-Myc cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=HFFMYC rep=2
+        type bigWig 1.000000 1836.000000
+        origAssembly hg19
+        # subId=4371 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistonePanc1H3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel PANC-1 H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in PANC-1 cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=PANC1 rep=2
+        type bigWig 1.000000 8928.000000
+        origAssembly hg19
+        # subId=4376 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneNhlfH3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel NHLF H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in NHLF cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=NHLF rep=1
+        type bigWig 1.000000 3125.000000
+        origAssembly hg19
+        # subId=4375 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistonePanc1H3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel PANC-1 H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in PANC-1 cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=PANC1 rep=1
+        type bigWig 1.000000 4927.000000
+        origAssembly hg19
+        # subId=4377 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel WERI-Rb-1 H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in WERI-Rb-1 cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=WERIRB1 rep=2
+        type bigWig 1.000000 3606.000000
+        origAssembly hg19
+        # subId=4380 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneSknmcH3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel SK-N-MC H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in SK-N-MC cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=SKNMC rep=1
+        type bigWig 1.000000 2362.000000
+        origAssembly hg19
+        # subId=4378 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWerirb1H3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel WERI-Rb-1 H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in WERI-Rb-1 cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=WERIRB1 rep=1
+        type bigWig 1.000000 4012.000000
+        origAssembly hg19
+        # subId=4381 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneSknmcH3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel SK-N-MC H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in SK-N-MC cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=SKNMC rep=2
+        type bigWig 1.000000 5544.000000
+        origAssembly hg19
+        # subId=4379 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWi38H3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel WI-38 H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in WI-38 cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=WI38 rep=2
+        type bigWig 1.000000 3574.000000
+        origAssembly hg19
+        # subId=4382 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneWi38H3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel WI-38 H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in WI-38 cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=WI38 rep=1
+        type bigWig 1.000000 2490.000000
+        origAssembly hg19
+        # subId=4383 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneBe2cH3k04me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel BE2_C H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in BE2_C cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=BE2C rep=1
+        type bigWig 1.000000 29611.000000
+        origAssembly hg19
+        # subId=4396 dateSubmitted=2011-06-25
+
+        track wgEncodeUwHistoneBe2cH3k04me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel BE2_C H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in BE2_C cells)
+        subGroups view=zRSig factor=H3K04ME3 cellType=BE2C rep=2
+        type bigWig 1.000000 23372.000000
+        origAssembly hg19
+        # subId=4397 dateSubmitted=2011-06-25
+
         track wgEncodeUwHistoneA549InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel A549 Input Raw 1
@@ -4032,5 +4642,6 @@ noInherit on
         subGroups view=zRSig factor=zInput cellType=A549 rep=1
         type bigWig 1.000000 12152.000000
         origAssembly hg19
-        # subId=4350 dateSubmitted=2011-06-24
+        # subId=4349 dateSubmitted=2011-06-29
+
 
