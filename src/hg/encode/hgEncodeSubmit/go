@@ -1,0 +1,2 @@
+./pipeline_runner.rb kate >& log/runner.log &
+mongrel_rails start -p 3002 -d

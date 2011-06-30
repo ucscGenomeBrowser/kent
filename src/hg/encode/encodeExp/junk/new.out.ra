@@ -1,0 +1,4527 @@
+ix 1
+organism human
+accession encodeEH000001
+lab CRG-Guigo
+dataType Mapability
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 2
+organism human
+accession encodeEH000002
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=TCF12 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 3
+organism human
+accession encodeEH000003
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 4
+organism human
+accession encodeEH000004
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=NRSF protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 5
+organism human
+accession encodeEH000005
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 6
+organism human
+accession encodeEH000006
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=TAF1 protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 7
+organism human
+accession encodeEH000007
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=FOSL2 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 8
+organism human
+accession encodeEH000008
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=HEY1 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 9
+organism human
+accession encodeEH000009
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=FOXP2 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 10
+organism human
+accession encodeEH000010
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2
+lastUpdated 2011-03-16 21:47:05
+
+ix 11
+organism human
+accession encodeEH000011
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT1 treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 12
+organism human
+accession encodeEH000012
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Input
+lastUpdated 2011-03-16 21:47:05
+
+ix 13
+organism human
+accession encodeEH000013
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Pol2
+lastUpdated 2011-03-16 21:47:05
+
+ix 14
+organism human
+accession encodeEH000014
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 15
+organism human
+accession encodeEH000015
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=STAT1 treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 16
+organism human
+accession encodeEH000016
+lab UT-A
+dataType ChipSeq
+cellType None
+factors antibody=Input
+lastUpdated 2011-03-16 21:47:05
+
+ix 17
+organism human
+accession encodeEH000017
+lab UW
+dataType DnaseSeq
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 18
+organism human
+accession encodeEH000018
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GABP protocol=PCR2x
+lastUpdated 2011-03-16 21:47:05
+
+ix 19
+organism human
+accession encodeEH000019
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 protocol=PCR2x
+lastUpdated 2011-03-16 21:47:05
+
+ix 20
+organism human
+accession encodeEH000020
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=SRF protocol=PCR2x
+lastUpdated 2011-03-16 21:47:05
+
+ix 21
+organism human
+accession encodeEH000021
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=cytosol rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 22
+organism human
+accession encodeEH000022
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=nucleus rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 23
+organism human
+accession encodeEH000023
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=polysome rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 24
+organism human
+accession encodeEH000024
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Fos
+lastUpdated 2011-03-16 21:47:05
+
+ix 25
+organism human
+accession encodeEH000025
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Jun
+lastUpdated 2011-03-16 21:47:05
+
+ix 26
+organism human
+accession encodeEH000026
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc
+lastUpdated 2011-03-16 21:47:05
+
+ix 27
+organism human
+accession encodeEH000027
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Fos
+lastUpdated 2011-03-16 21:47:05
+
+ix 28
+organism human
+accession encodeEH000028
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Jun
+lastUpdated 2011-03-16 21:47:05
+
+ix 29
+organism human
+accession encodeEH000029
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc
+lastUpdated 2011-03-16 21:47:05
+
+ix 30
+organism human
+accession encodeEH000030
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=cytosol rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 31
+organism human
+accession encodeEH000031
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=nucleus rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 32
+organism human
+accession encodeEH000032
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=cell rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 33
+organism human
+accession encodeEH000033
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=cell rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 34
+organism human
+accession encodeEH000034
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=cell rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 35
+organism human
+accession encodeEH000035
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=NRSF protocol=PCR2x
+lastUpdated 2011-03-16 21:47:05
+
+ix 36
+organism human
+accession encodeEH000036
+lab Duke
+dataType DnaseSeq
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 37
+organism human
+accession encodeEH000037
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=nucleus rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 38
+organism human
+accession encodeEH000038
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=cytosol rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 39
+organism human
+accession encodeEH000039
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=cell rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 40
+organism human
+accession encodeEH000040
+lab UNC
+dataType FaireSeq
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 41
+organism human
+accession encodeEH000041
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 42
+organism human
+accession encodeEH000042
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K4me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 43
+organism human
+accession encodeEH000043
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=CTCF
+lastUpdated 2011-03-16 21:47:05
+
+ix 44
+organism human
+accession encodeEH000044
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=Control
+lastUpdated 2011-03-16 21:47:05
+
+ix 45
+organism human
+accession encodeEH000045
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K27ac
+lastUpdated 2011-03-16 21:47:05
+
+ix 46
+organism human
+accession encodeEH000046
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K27me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 47
+organism human
+accession encodeEH000047
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K36me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 48
+organism human
+accession encodeEH000048
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K4me1
+lastUpdated 2011-03-16 21:47:05
+
+ix 49
+organism human
+accession encodeEH000049
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K4me2
+lastUpdated 2011-03-16 21:47:05
+
+ix 50
+organism human
+accession encodeEH000050
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K9ac
+lastUpdated 2011-03-16 21:47:05
+
+ix 51
+organism human
+accession encodeEH000051
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H4K20me1
+lastUpdated 2011-03-16 21:47:05
+
+ix 52
+organism human
+accession encodeEH000052
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K9me1
+lastUpdated 2011-03-16 21:47:05
+
+ix 53
+organism human
+accession encodeEH000053
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=Pol2(b)
+lastUpdated 2011-03-16 21:47:05
+
+ix 54
+organism human
+accession encodeEH000054
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=chromatin rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 55
+organism human
+accession encodeEH000055
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=nucleoplasm rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 56
+organism human
+accession encodeEH000056
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Max
+lastUpdated 2011-03-16 21:47:05
+
+ix 57
+organism human
+accession encodeEH000057
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=NF-E2
+lastUpdated 2011-03-16 21:47:05
+
+ix 58
+organism human
+accession encodeEH000058
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Max
+lastUpdated 2011-03-16 21:47:05
+
+ix 59
+organism human
+accession encodeEH000059
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=NF-E2
+lastUpdated 2011-03-16 21:47:05
+
+ix 60
+organism human
+accession encodeEH000060
+lab Affy
+dataType RnaChip
+cellType None
+factors localization=nucleolus rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 61
+organism human
+accession encodeEH000061
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=cytosol rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 62
+organism human
+accession encodeEH000062
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=chromatin rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 63
+organism human
+accession encodeEH000063
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=nucleoplasm rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 64
+organism human
+accession encodeEH000064
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=polysome rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 65
+organism human
+accession encodeEH000065
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Input
+lastUpdated 2011-03-16 21:47:05
+
+ix 66
+organism human
+accession encodeEH000066
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 67
+organism human
+accession encodeEH000067
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=Input
+lastUpdated 2011-03-16 21:47:05
+
+ix 68
+organism human
+accession encodeEH000068
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=TCF4
+lastUpdated 2011-03-16 21:47:05
+
+ix 69
+organism human
+accession encodeEH000069
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=ZNF263
+lastUpdated 2011-03-16 21:47:05
+
+ix 70
+organism human
+accession encodeEH000070
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=JunD
+lastUpdated 2011-03-16 21:47:05
+
+ix 71
+organism human
+accession encodeEH000071
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=pravastatin
+lastUpdated 2011-03-16 21:47:05
+
+ix 72
+organism human
+accession encodeEH000072
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=pravastatin
+lastUpdated 2011-03-16 21:47:05
+
+ix 73
+organism human
+accession encodeEH000073
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SREBP1 treatment=pravastatin
+lastUpdated 2011-03-16 21:47:05
+
+ix 74
+organism human
+accession encodeEH000074
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SREBP2 treatment=pravastatin
+lastUpdated 2011-03-16 21:47:05
+
+ix 75
+organism human
+accession encodeEH000075
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=GATA-1
+lastUpdated 2011-03-16 21:47:05
+
+ix 76
+organism human
+accession encodeEH000076
+lab UT-A
+dataType ChipSeq
+cellType None
+factors antibody=CTCF
+lastUpdated 2011-03-16 21:47:05
+
+ix 77
+organism human
+accession encodeEH000077
+lab UT-A
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc
+lastUpdated 2011-03-16 21:47:05
+
+ix 78
+organism human
+accession encodeEH000078
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=JunD
+lastUpdated 2011-03-16 21:47:05
+
+ix 79
+organism human
+accession encodeEH000079
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=pravastatin
+lastUpdated 2011-03-16 21:47:05
+
+ix 80
+organism human
+accession encodeEH000080
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=pravastatin
+lastUpdated 2011-03-16 21:47:05
+
+ix 81
+organism human
+accession encodeEH000081
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=SREBP1 treatment=pravastatin
+lastUpdated 2011-03-16 21:47:05
+
+ix 82
+organism human
+accession encodeEH000082
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=SREBP2 treatment=pravastatin
+lastUpdated 2011-03-16 21:47:05
+
+ix 83
+organism human
+accession encodeEH000083
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 84
+organism human
+accession encodeEH000084
+lab GIS
+dataType DnaPet
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 85
+organism human
+accession encodeEH000085
+lab Yale
+dataType RnaSeq
+cellType None
+factors rnaExtract=polyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 86
+organism human
+accession encodeEH000086
+lab Duke
+dataType DnaseSeq
+cellType None
+factors treatment=IFNa4h
+lastUpdated 2011-03-16 21:47:05
+
+ix 87
+organism human
+accession encodeEH000087
+lab UNC
+dataType FaireSeq
+cellType None
+factors treatment=IFNa4h
+lastUpdated 2011-03-16 21:47:05
+
+ix 88
+organism human
+accession encodeEH000088
+lab UNC
+dataType FaireSeq
+cellType None
+factors treatment=IFNg4h
+lastUpdated 2011-03-16 21:47:05
+
+ix 89
+organism human
+accession encodeEH000089
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol3
+lastUpdated 2011-03-16 21:47:05
+
+ix 90
+organism human
+accession encodeEH000090
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Rad21
+lastUpdated 2011-03-16 21:47:05
+
+ix 91
+organism human
+accession encodeEH000091
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=XRCC4
+lastUpdated 2011-03-16 21:47:05
+
+ix 92
+organism human
+accession encodeEH000092
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Pol3
+lastUpdated 2011-03-16 21:47:05
+
+ix 93
+organism human
+accession encodeEH000093
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Rad21
+lastUpdated 2011-03-16 21:47:05
+
+ix 94
+organism human
+accession encodeEH000094
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=XRCC4
+lastUpdated 2011-03-16 21:47:05
+
+ix 95
+organism human
+accession encodeEH000095
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=Pol2
+lastUpdated 2011-03-16 21:47:05
+
+ix 96
+organism human
+accession encodeEH000096
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=SUZ12
+lastUpdated 2011-03-16 21:47:05
+
+ix 97
+organism human
+accession encodeEH000097
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=YY1
+lastUpdated 2011-03-16 21:47:05
+
+ix 98
+organism human
+accession encodeEH000098
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 99
+organism human
+accession encodeEH000099
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 100
+organism human
+accession encodeEH000100
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 101
+organism human
+accession encodeEH000101
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 102
+organism human
+accession encodeEH000102
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 103
+organism human
+accession encodeEH000103
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 104
+organism human
+accession encodeEH000104
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 105
+organism human
+accession encodeEH000105
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 106
+organism human
+accession encodeEH000106
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 107
+organism human
+accession encodeEH000107
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 108
+organism human
+accession encodeEH000108
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 109
+organism human
+accession encodeEH000109
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT1 treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 110
+organism human
+accession encodeEH000110
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT1 treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 111
+organism human
+accession encodeEH000111
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT2 treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 112
+organism human
+accession encodeEH000112
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT2 treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 113
+organism human
+accession encodeEH000113
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Jun treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 114
+organism human
+accession encodeEH000114
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Jun treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 115
+organism human
+accession encodeEH000115
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 116
+organism human
+accession encodeEH000116
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 117
+organism human
+accession encodeEH000117
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 118
+organism human
+accession encodeEH000118
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 119
+organism human
+accession encodeEH000119
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 120
+organism human
+accession encodeEH000120
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=STAT1 treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 121
+organism human
+accession encodeEH000121
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=STAT1 treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 122
+organism human
+accession encodeEH000122
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=STAT2 treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 123
+organism human
+accession encodeEH000123
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=STAT2 treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 124
+organism human
+accession encodeEH000124
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Jun treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 125
+organism human
+accession encodeEH000125
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Jun treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 126
+organism human
+accession encodeEH000126
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 127
+organism human
+accession encodeEH000127
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 128
+organism human
+accession encodeEH000128
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Jun treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 129
+organism human
+accession encodeEH000129
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=E2F4
+lastUpdated 2011-03-16 21:47:05
+
+ix 130
+organism human
+accession encodeEH000130
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=c-Jun treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 131
+organism human
+accession encodeEH000131
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=TR4
+lastUpdated 2011-03-16 21:47:05
+
+ix 132
+organism human
+accession encodeEH000132
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=E2F6
+lastUpdated 2011-03-16 21:47:05
+
+ix 133
+organism human
+accession encodeEH000133
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=SETDB1
+lastUpdated 2011-03-16 21:47:05
+
+ix 134
+organism human
+accession encodeEH000134
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=BDP1
+lastUpdated 2011-03-16 21:47:05
+
+ix 135
+organism human
+accession encodeEH000135
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=BRF1
+lastUpdated 2011-03-16 21:47:05
+
+ix 136
+organism human
+accession encodeEH000136
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=RPC155
+lastUpdated 2011-03-16 21:47:05
+
+ix 137
+organism human
+accession encodeEH000137
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=SIRT6
+lastUpdated 2011-03-16 21:47:05
+
+ix 138
+organism human
+accession encodeEH000138
+lab UW
+dataType AffyExonArray
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 139
+organism human
+accession encodeEH000139
+lab UW
+dataType ChipSeq
+cellType None
+factors antibody=CTCF
+lastUpdated 2011-03-16 21:47:05
+
+ix 140
+organism human
+accession encodeEH000140
+lab UW
+dataType ChipSeq
+cellType None
+factors antibody=H3K4me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 141
+organism human
+accession encodeEH000141
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=USF-1 protocol=PCR2x
+lastUpdated 2011-03-16 21:47:05
+
+ix 142
+organism human
+accession encodeEH000142
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=cytosol rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 143
+organism human
+accession encodeEH000143
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=PCR2x
+lastUpdated 2011-03-16 21:47:05
+
+ix 144
+organism human
+accession encodeEH000144
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Egr-1 protocol=PCR2x
+lastUpdated 2011-03-16 21:47:05
+
+ix 145
+organism human
+accession encodeEH000145
+lab HudsonAlpha
+dataType MethylSeq
+cellType None
+factors restrictionEnzyme=hpa
+lastUpdated 2011-03-16 21:47:05
+
+ix 146
+organism human
+accession encodeEH000146
+lab HudsonAlpha
+dataType MethylSeq
+cellType None
+factors restrictionEnzyme=msp
+lastUpdated 2011-03-16 21:47:05
+
+ix 147
+organism human
+accession encodeEH000147
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=JunD protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 148
+organism human
+accession encodeEH000148
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Sin3Ak-20 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 149
+organism human
+accession encodeEH000149
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=USF-1 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 150
+organism human
+accession encodeEH000150
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 151
+organism human
+accession encodeEH000151
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=POU2F2 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 152
+organism human
+accession encodeEH000152
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=PU.1 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 153
+organism human
+accession encodeEH000153
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pbx3 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 154
+organism human
+accession encodeEH000154
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=GATA-2
+lastUpdated 2011-03-16 21:47:05
+
+ix 155
+organism human
+accession encodeEH000155
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=cytosol rnaExtract=shortTotal
+lastUpdated 2011-03-16 21:47:05
+
+ix 156
+organism human
+accession encodeEH000156
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=nucleus rnaExtract=shortTotal
+lastUpdated 2011-03-16 21:47:05
+
+ix 157
+organism human
+accession encodeEH000157
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=chromatin rnaExtract=shortTotal
+lastUpdated 2011-03-16 21:47:05
+
+ix 158
+organism human
+accession encodeEH000158
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=nucleolus rnaExtract=shortTotal
+lastUpdated 2011-03-16 21:47:05
+
+ix 159
+organism human
+accession encodeEH000159
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=nucleoplasm rnaExtract=shortTotal
+lastUpdated 2011-03-16 21:47:05
+
+ix 160
+organism human
+accession encodeEH000160
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=polysome rnaExtract=shortTotal
+lastUpdated 2011-03-16 21:47:05
+
+ix 161
+organism human
+accession encodeEH000161
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=cell rnaExtract=shortTotal
+lastUpdated 2011-03-16 21:47:05
+
+ix 162
+organism human
+accession encodeEH000162
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=AP-2alpha
+lastUpdated 2011-03-16 21:47:05
+
+ix 163
+organism human
+accession encodeEH000163
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=AP-2gamma
+lastUpdated 2011-03-16 21:47:05
+
+ix 164
+organism human
+accession encodeEH000164
+lab Yale
+dataType RnaSeq
+cellType None
+factors rnaExtract=polyA treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 165
+organism human
+accession encodeEH000165
+lab Yale
+dataType RnaSeq
+cellType None
+factors rnaExtract=polyA treatment=IFNa6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 166
+organism human
+accession encodeEH000166
+lab Yale
+dataType RnaSeq
+cellType None
+factors rnaExtract=polyA treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 167
+organism human
+accession encodeEH000167
+lab Yale
+dataType RnaSeq
+cellType None
+factors rnaExtract=polyA treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 168
+organism human
+accession encodeEH000168
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=HA-E2F1
+lastUpdated 2011-03-16 21:47:05
+
+ix 169
+organism human
+accession encodeEH000169
+lab UT-A
+dataType ChipSeq
+cellType None
+factors antibody=Pol2
+lastUpdated 2011-03-16 21:47:05
+
+ix 170
+organism human
+accession encodeEH000170
+lab UW
+dataType ChipSeq
+cellType None
+factors antibody=H3K27me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 171
+organism human
+accession encodeEH000171
+lab UW
+dataType ChipSeq
+cellType None
+factors antibody=H3K36me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 172
+organism human
+accession encodeEH000172
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=NFKB treatment=TNFa
+lastUpdated 2011-03-16 21:47:05
+
+ix 173
+organism human
+accession encodeEH000173
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=NFKB treatment=TNFa
+lastUpdated 2011-03-16 21:47:05
+
+ix 174
+organism human
+accession encodeEH000174
+lab UW
+dataType DnaseDgf
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 175
+organism human
+accession encodeEH000175
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=cell rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 176
+organism human
+accession encodeEH000176
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=BATF protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 177
+organism human
+accession encodeEH000177
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=EBF1_(C-8) protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 178
+organism human
+accession encodeEH000178
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=HEY1 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 179
+organism human
+accession encodeEH000179
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=SIX5 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 180
+organism human
+accession encodeEH000180
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=IRF4_(M-17) protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 181
+organism human
+accession encodeEH000181
+lab GIS
+dataType RnaSeq
+cellType None
+factors localization=cytosol rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 182
+organism human
+accession encodeEH000182
+lab GIS
+dataType RnaSeq
+cellType None
+factors localization=cell rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 183
+organism human
+accession encodeEH000183
+lab GIS
+dataType RnaPet
+cellType None
+factors localization=cytosol rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 184
+organism human
+accession encodeEH000184
+lab GIS
+dataType RnaPet
+cellType None
+factors localization=nucleus rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 185
+organism human
+accession encodeEH000185
+lab GIS
+dataType RnaPet
+cellType None
+factors localization=cell rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 186
+organism human
+accession encodeEH000186
+lab GIS
+dataType RnaPet
+cellType None
+factors localization=polysome rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 187
+organism human
+accession encodeEH000187
+lab GIS
+dataType RnaPet
+cellType None
+factors localization=chromatin rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 188
+organism human
+accession encodeEH000188
+lab GIS
+dataType RnaPet
+cellType None
+factors localization=nucleolus rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 189
+organism human
+accession encodeEH000189
+lab GIS
+dataType RnaPet
+cellType None
+factors localization=nucleoplasm rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 190
+organism human
+accession encodeEH000190
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=BCL11A protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 191
+organism human
+accession encodeEH000191
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=p300 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 192
+organism human
+accession encodeEH000192
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ZBTB33 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 193
+organism human
+accession encodeEH000193
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=PAX5-C20 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 194
+organism human
+accession encodeEH000194
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GR protocol=PCR1x treatment=DEX_500pM
+lastUpdated 2011-03-16 21:47:05
+
+ix 195
+organism human
+accession encodeEH000195
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GR protocol=PCR1x treatment=DEX_50nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 196
+organism human
+accession encodeEH000196
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GR protocol=PCR1x treatment=DEX_5nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 197
+organism human
+accession encodeEH000197
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 protocol=PCR2x treatment=EtOH_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 198
+organism human
+accession encodeEH000198
+lab Duke
+dataType AffyExonArray
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 199
+organism human
+accession encodeEH000199
+lab Duke
+dataType AffyExonArray
+cellType None
+factors treatment=IFNa4h
+lastUpdated 2011-03-16 21:47:05
+
+ix 200
+organism human
+accession encodeEH000200
+lab Duke
+dataType AffyExonArray
+cellType None
+factors treatment=IFNg4h
+lastUpdated 2011-03-16 21:47:05
+
+ix 201
+organism human
+accession encodeEH000201
+lab Duke
+dataType AffyExonArray
+cellType None
+factors treatment=androgen
+lastUpdated 2011-03-16 21:47:05
+
+ix 202
+organism human
+accession encodeEH000202
+lab Duke
+dataType AffyExonArray
+cellType None
+factors treatment=estrogen
+lastUpdated 2011-03-16 21:47:05
+
+ix 203
+organism human
+accession encodeEH000203
+lab Duke
+dataType AffyExonArray
+cellType None
+factors treatment=vehicle
+lastUpdated 2011-03-16 21:47:05
+
+ix 204
+organism human
+accession encodeEH000204
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 protocol=PCR2x treatment=DEX_100nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 205
+organism human
+accession encodeEH000205
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=PAX5-N19 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 206
+organism human
+accession encodeEH000206
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=SP1 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 207
+organism human
+accession encodeEH000207
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GABP protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 208
+organism human
+accession encodeEH000208
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=TAF1 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 209
+organism human
+accession encodeEH000209
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=RXRA protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 210
+organism human
+accession encodeEH000210
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=ilNA readType=1x75D rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 211
+organism human
+accession encodeEH000211
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=ZNF274
+lastUpdated 2011-03-16 21:47:05
+
+ix 212
+organism human
+accession encodeEH000212
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=PCR1x treatment=DEX_100nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 213
+organism human
+accession encodeEH000213
+lab HudsonAlpha
+dataType MethylSeq
+cellType None
+factors protocol=PCR2x restrictionEnzyme=hpa
+lastUpdated 2011-03-16 21:47:05
+
+ix 214
+organism human
+accession encodeEH000214
+lab HudsonAlpha
+dataType MethylSeq
+cellType None
+factors protocol=PCR1x restrictionEnzyme=hpa
+lastUpdated 2011-03-16 21:47:05
+
+ix 215
+organism human
+accession encodeEH000215
+lab HudsonAlpha
+dataType MethylSeq
+cellType None
+factors protocol=PCR2x restrictionEnzyme=msp
+lastUpdated 2011-03-16 21:47:05
+
+ix 216
+organism human
+accession encodeEH000216
+lab HudsonAlpha
+dataType MethylSeq
+cellType None
+factors protocol=PCR1x restrictionEnzyme=msp
+lastUpdated 2011-03-16 21:47:05
+
+ix 217
+organism human
+accession encodeEH000217
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=ZZZ3
+lastUpdated 2011-03-16 21:47:05
+
+ix 218
+organism human
+accession encodeEH000218
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2-4H8 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 219
+organism human
+accession encodeEH000219
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=E2F1
+lastUpdated 2011-03-16 21:47:05
+
+ix 220
+organism human
+accession encodeEH000220
+lab Duke
+dataType DnaseSeq
+cellType None
+factors treatment=serum_free_media
+lastUpdated 2011-03-16 21:47:05
+
+ix 221
+organism human
+accession encodeEH000221
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=ATF3
+lastUpdated 2011-03-16 21:47:05
+
+ix 222
+organism human
+accession encodeEH000222
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=NELFe
+lastUpdated 2011-03-16 21:47:05
+
+ix 223
+organism human
+accession encodeEH000223
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 224
+organism human
+accession encodeEH000224
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=GTF2B
+lastUpdated 2011-03-16 21:47:05
+
+ix 225
+organism human
+accession encodeEH000225
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 226
+organism human
+accession encodeEH000226
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=NFKB
+lastUpdated 2011-03-16 21:47:05
+
+ix 227
+organism human
+accession encodeEH000227
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=BAF155
+lastUpdated 2011-03-16 21:47:05
+
+ix 228
+organism human
+accession encodeEH000228
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=BAF170
+lastUpdated 2011-03-16 21:47:05
+
+ix 229
+organism human
+accession encodeEH000229
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Ini1
+lastUpdated 2011-03-16 21:47:05
+
+ix 230
+organism human
+accession encodeEH000230
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Nrf1
+lastUpdated 2011-03-16 21:47:05
+
+ix 231
+organism human
+accession encodeEH000231
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Brg1
+lastUpdated 2011-03-16 21:47:05
+
+ix 232
+organism human
+accession encodeEH000232
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=400 readType=2x75 rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 233
+organism human
+accession encodeEH000233
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=nucleolus rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 234
+organism human
+accession encodeEH000234
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=ilNA localization=cell readType=1x75D rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 235
+organism human
+accession encodeEH000235
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=400 localization=cell readType=2x75 rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 236
+organism human
+accession encodeEH000236
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=TFIIIC-110
+lastUpdated 2011-03-16 21:47:05
+
+ix 237
+organism human
+accession encodeEH000237
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=CEBPB treatment=forskolin
+lastUpdated 2011-03-16 21:47:05
+
+ix 238
+organism human
+accession encodeEH000238
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=ERRA treatment=forskolin
+lastUpdated 2011-03-16 21:47:05
+
+ix 239
+organism human
+accession encodeEH000239
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=GRp20 treatment=forskolin
+lastUpdated 2011-03-16 21:47:05
+
+ix 240
+organism human
+accession encodeEH000240
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=HNF4A treatment=forskolin
+lastUpdated 2011-03-16 21:47:05
+
+ix 241
+organism human
+accession encodeEH000241
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=HSF1 treatment=forskolin
+lastUpdated 2011-03-16 21:47:05
+
+ix 242
+organism human
+accession encodeEH000242
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=forskolin
+lastUpdated 2011-03-16 21:47:05
+
+ix 243
+organism human
+accession encodeEH000243
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=insulin
+lastUpdated 2011-03-16 21:47:05
+
+ix 244
+organism human
+accession encodeEH000244
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=PGC1A treatment=forskolin
+lastUpdated 2011-03-16 21:47:05
+
+ix 245
+organism human
+accession encodeEH000245
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=forskolin
+lastUpdated 2011-03-16 21:47:05
+
+ix 246
+organism human
+accession encodeEH000246
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SREBP1 treatment=insulin
+lastUpdated 2011-03-16 21:47:05
+
+ix 247
+organism human
+accession encodeEH000247
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT1 treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 248
+organism human
+accession encodeEH000248
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=BRF2
+lastUpdated 2011-03-16 21:47:05
+
+ix 249
+organism human
+accession encodeEH000249
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=SETDB1 treatment=MNaseD
+lastUpdated 2011-03-16 21:47:05
+
+ix 250
+organism human
+accession encodeEH000250
+lab UW
+dataType ChipSeq
+cellType None
+factors antibody=Input
+lastUpdated 2011-03-16 21:47:05
+
+ix 251
+organism human
+accession encodeEH000251
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GR protocol=PCR1x treatment=EtOH_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 252
+organism human
+accession encodeEH000252
+lab Yale
+dataType ChipSeq
+cellType None
+factors antibody=Brg1
+lastUpdated 2011-03-16 21:47:05
+
+ix 253
+organism human
+accession encodeEH000253
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=WHIP
+lastUpdated 2011-03-16 21:47:05
+
+ix 254
+organism human
+accession encodeEH000254
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=HMGN3
+lastUpdated 2011-03-16 21:47:05
+
+ix 255
+organism human
+accession encodeEH000255
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=SRF protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 256
+organism human
+accession encodeEH000256
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=IRF3
+lastUpdated 2011-03-16 21:47:05
+
+ix 257
+organism human
+accession encodeEH000257
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=TBP
+lastUpdated 2011-03-16 21:47:05
+
+ix 258
+organism human
+accession encodeEH000258
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=USF2
+lastUpdated 2011-03-16 21:47:05
+
+ix 259
+organism human
+accession encodeEH000259
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=ELK4
+lastUpdated 2011-03-16 21:47:05
+
+ix 260
+organism human
+accession encodeEH000260
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=CCNT2
+lastUpdated 2011-03-16 21:47:05
+
+ix 261
+organism human
+accession encodeEH000261
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=IRF1 treatment=IFNa30
+lastUpdated 2011-03-16 21:47:05
+
+ix 262
+organism human
+accession encodeEH000262
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=IRF1 treatment=IFNg6h
+lastUpdated 2011-03-16 21:47:05
+
+ix 263
+organism human
+accession encodeEH000263
+lab Sanger
+dataType Gencode
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 264
+organism human
+accession encodeEH000264
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=H3K27me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 265
+organism human
+accession encodeEH000265
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=H3K4me3B
+lastUpdated 2011-03-16 21:47:05
+
+ix 266
+organism human
+accession encodeEH000266
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=H3K9ac
+lastUpdated 2011-03-16 21:47:05
+
+ix 267
+organism human
+accession encodeEH000267
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=H3K4me1
+lastUpdated 2011-03-16 21:47:05
+
+ix 268
+organism human
+accession encodeEH000268
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ERalpha_a protocol=v041610.2 treatment=Estradiol_10nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 269
+organism human
+accession encodeEH000269
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ERalpha_a protocol=v041610.2 treatment=DMSO_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 270
+organism human
+accession encodeEH000270
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Egr-1 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 271
+organism human
+accession encodeEH000271
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=CELF1 ripTgtProtein=CELF1
+lastUpdated 2011-03-16 21:47:05
+
+ix 272
+organism human
+accession encodeEH000272
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=ELAVL1 ripTgtProtein=ELAVL1
+lastUpdated 2011-03-16 21:47:05
+
+ix 273
+organism human
+accession encodeEH000273
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=IGF2BP1 ripTgtProtein=IGF2BP1
+lastUpdated 2011-03-16 21:47:05
+
+ix 274
+organism human
+accession encodeEH000274
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=PABPC1 ripTgtProtein=PABPC1
+lastUpdated 2011-03-16 21:47:05
+
+ix 275
+organism human
+accession encodeEH000275
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=SLBP ripTgtProtein=SLBP
+lastUpdated 2011-03-16 21:47:05
+
+ix 276
+organism human
+accession encodeEH000276
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=T7Tag ripTgtProtein=T7Tag
+lastUpdated 2011-03-16 21:47:05
+
+ix 277
+organism human
+accession encodeEH000277
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=ripInput ripTgtProtein=ripInput
+lastUpdated 2011-03-16 21:47:05
+
+ix 278
+organism human
+accession encodeEH000278
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GR protocol=v041610.2 treatment=DEX_100nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 279
+organism human
+accession encodeEH000279
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=BHLHE40 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 280
+organism human
+accession encodeEH000280
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT3
+lastUpdated 2011-03-16 21:47:05
+
+ix 281
+organism human
+accession encodeEH000281
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=H3K9acB
+lastUpdated 2011-03-16 21:47:05
+
+ix 282
+organism human
+accession encodeEH000282
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=H3K36me3B
+lastUpdated 2011-03-16 21:47:05
+
+ix 283
+organism human
+accession encodeEH000283
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=PAX5-C20 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 284
+organism human
+accession encodeEH000284
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K79me2
+lastUpdated 2011-03-16 21:47:05
+
+ix 285
+organism human
+accession encodeEH000285
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H3K9me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 286
+organism human
+accession encodeEH000286
+lab Broad
+dataType ChipSeq
+cellType None
+factors antibody=H2A.Z
+lastUpdated 2011-03-16 21:47:05
+
+ix 287
+organism human
+accession encodeEH000287
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=200 localization=cell readType=2x75 rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 288
+organism human
+accession encodeEH000288
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=TAF1 protocol=PCR2x
+lastUpdated 2011-03-16 21:47:05
+
+ix 289
+organism human
+accession encodeEH000289
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GR protocol=PCR2x treatment=DEX_100nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 290
+organism human
+accession encodeEH000290
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ERalpha_a protocol=v041610.2 treatment=Genistein_100nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 291
+organism human
+accession encodeEH000291
+lab HudsonAlpha
+dataType MethylSeq
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 292
+organism human
+accession encodeEH000292
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=H3K9me3
+lastUpdated 2011-03-16 21:47:05
+
+ix 293
+organism human
+accession encodeEH000293
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2(phosphoS2)
+lastUpdated 2011-03-16 21:47:05
+
+ix 294
+organism human
+accession encodeEH000294
+lab HudsonAlpha
+dataType MethylRrbs
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 295
+organism human
+accession encodeEH000295
+lab Yale
+dataType RnaSeq
+cellType None
+factors rnaExtract=nonPolyARRna
+lastUpdated 2011-03-16 21:47:05
+
+ix 296
+organism human
+accession encodeEH000296
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GR protocol=PCR2x treatment=EtOH_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 297
+organism human
+accession encodeEH000297
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=IFNg30
+lastUpdated 2011-03-16 21:47:05
+
+ix 298
+organism human
+accession encodeEH000298
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=KAP1
+lastUpdated 2011-03-16 21:47:05
+
+ix 299
+organism human
+accession encodeEH000299
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=NF-E2_(H-230)
+lastUpdated 2011-03-16 21:47:05
+
+ix 300
+organism human
+accession encodeEH000300
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=RXRA protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 301
+organism human
+accession encodeEH000301
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ATF3 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 302
+organism human
+accession encodeEH000302
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=BCLAF1_(M33-P5B11) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 303
+organism human
+accession encodeEH000303
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ETS1 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 304
+organism human
+accession encodeEH000304
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=MEF2A protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 305
+organism human
+accession encodeEH000305
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ATF3 protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 306
+organism human
+accession encodeEH000306
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=YY1_(C-20) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 307
+organism human
+accession encodeEH000307
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ATF3 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 308
+organism human
+accession encodeEH000308
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=BCL3 protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 309
+organism human
+accession encodeEH000309
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=BCLAF1_(M33-P5B11) protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 310
+organism human
+accession encodeEH000310
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=cell rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 311
+organism human
+accession encodeEH000311
+lab RIKEN
+dataType Cage
+cellType None
+factors localization=nucleus rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 312
+organism human
+accession encodeEH000312
+lab HudsonAlpha
+dataType MethylRrbs
+cellType None
+factors treatment=androgen
+lastUpdated 2011-03-16 21:47:05
+
+ix 313
+organism human
+accession encodeEH000313
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 protocol=v041610.2 treatment=DMSO_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 314
+organism human
+accession encodeEH000314
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=YY1_(C-20) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 315
+organism human
+accession encodeEH000315
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=p300 protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 316
+organism human
+accession encodeEH000316
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GATA2_(CG2-96) protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 317
+organism human
+accession encodeEH000317
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=cell rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 318
+organism human
+accession encodeEH000318
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=cell rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 319
+organism human
+accession encodeEH000319
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=nucleus rnaExtract=longPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 320
+organism human
+accession encodeEH000320
+lab Duke
+dataType DnaseSeq
+cellType None
+factors treatment=androgen
+lastUpdated 2011-03-16 21:47:05
+
+ix 321
+organism human
+accession encodeEH000321
+lab UT-A
+dataType ChipSeq
+cellType None
+factors antibody=CTCF treatment=estrogen
+lastUpdated 2011-03-16 21:47:05
+
+ix 322
+organism human
+accession encodeEH000322
+lab UT-A
+dataType ChipSeq
+cellType None
+factors antibody=CTCF treatment=vehicle
+lastUpdated 2011-03-16 21:47:05
+
+ix 323
+organism human
+accession encodeEH000323
+lab UT-A
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=vehicle
+lastUpdated 2011-03-16 21:47:05
+
+ix 324
+organism human
+accession encodeEH000324
+lab UT-A
+dataType ChipSeq
+cellType None
+factors antibody=c-Myc treatment=estrogen
+lastUpdated 2011-03-16 21:47:05
+
+ix 325
+organism human
+accession encodeEH000325
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=TAM_1uM_36hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 326
+organism human
+accession encodeEH000326
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=STAT3 treatment=TAM_1uM_36hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 327
+organism human
+accession encodeEH000327
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=RFX5_(N-494)
+lastUpdated 2011-03-16 21:47:05
+
+ix 328
+organism human
+accession encodeEH000328
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=p300_(N-15)
+lastUpdated 2011-03-16 21:47:05
+
+ix 329
+organism human
+accession encodeEH000329
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=BRCA1_(C-1863)
+lastUpdated 2011-03-16 21:47:05
+
+ix 330
+organism human
+accession encodeEH000330
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=CEBPB
+lastUpdated 2011-03-16 21:47:05
+
+ix 331
+organism human
+accession encodeEH000331
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=GTF2F1_(RAP-74)
+lastUpdated 2011-03-16 21:47:05
+
+ix 332
+organism human
+accession encodeEH000332
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=PRDM1_(Val90)
+lastUpdated 2011-03-16 21:47:05
+
+ix 333
+organism human
+accession encodeEH000333
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=CHD2_(N-1250)
+lastUpdated 2011-03-16 21:47:05
+
+ix 334
+organism human
+accession encodeEH000334
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=TAL1_(SC-12984)
+lastUpdated 2011-03-16 21:47:05
+
+ix 335
+organism human
+accession encodeEH000335
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=CtBP2
+lastUpdated 2011-03-16 21:47:05
+
+ix 336
+organism human
+accession encodeEH000336
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=JunD protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 337
+organism human
+accession encodeEH000337
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=chromatin rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 338
+organism human
+accession encodeEH000338
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=nucleolus rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 339
+organism human
+accession encodeEH000339
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=nucleoplasm rnaExtract=total
+lastUpdated 2011-03-16 21:47:05
+
+ix 340
+organism human
+accession encodeEH000340
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ETS1 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 341
+organism human
+accession encodeEH000341
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2-4H8 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 342
+organism human
+accession encodeEH000342
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=TAF1 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 343
+organism human
+accession encodeEH000343
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=USF-1 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 344
+organism human
+accession encodeEH000344
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=YY1 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 345
+organism human
+accession encodeEH000345
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=STAT3 treatment=EtOH_0.01pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 346
+organism human
+accession encodeEH000346
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Mxi1_(bHLH)
+lastUpdated 2011-03-16 21:47:05
+
+ix 347
+organism human
+accession encodeEH000347
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=p300_(F-4)
+lastUpdated 2011-03-16 21:47:05
+
+ix 348
+organism human
+accession encodeEH000348
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 treatment=EtOH_0.01pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 349
+organism human
+accession encodeEH000349
+lab UNC
+dataType FaireSeq
+cellType None
+factors treatment=NaBut
+lastUpdated 2011-03-16 21:47:05
+
+ix 350
+organism human
+accession encodeEH000350
+lab UNC
+dataType FaireSeq
+cellType None
+factors treatment=OHUrea
+lastUpdated 2011-03-16 21:47:05
+
+ix 351
+organism human
+accession encodeEH000351
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Rad21 protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 352
+organism human
+accession encodeEH000352
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=v041610.2 treatment=DMSO_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 353
+organism human
+accession encodeEH000353
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=FOXA1_(C-20) protocol=v041610.2 treatment=DMSO_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 354
+organism human
+accession encodeEH000354
+lab HudsonAlpha
+dataType MethylRrbs
+cellType None
+factors treatment=TAM_1uM_36hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 355
+organism human
+accession encodeEH000355
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=PCR2x treatment=EtOH_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 356
+organism human
+accession encodeEH000356
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=PCR2x treatment=DEX_100nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 357
+organism human
+accession encodeEH000357
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=USF-1 protocol=PCR1x treatment=EtOH_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 358
+organism human
+accession encodeEH000358
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=CTCF protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 359
+organism human
+accession encodeEH000359
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Egr-1 protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 360
+organism human
+accession encodeEH000360
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2-4H8 protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 361
+organism human
+accession encodeEH000361
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=FOXA1_(C-20) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 362
+organism human
+accession encodeEH000362
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=HNF4A_(H-171) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 363
+organism human
+accession encodeEH000363
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=E2F6_(H-50) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 364
+organism human
+accession encodeEH000364
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=SRF protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 365
+organism human
+accession encodeEH000365
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=CTCF protocol=v041610.2 treatment=DMSO_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 366
+organism human
+accession encodeEH000366
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=p300 protocol=v041610.2 treatment=DMSO_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 367
+organism human
+accession encodeEH000367
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=TR4
+lastUpdated 2011-03-16 21:47:05
+
+ix 368
+organism human
+accession encodeEH000368
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=YY1
+lastUpdated 2011-03-16 21:47:05
+
+ix 369
+organism human
+accession encodeEH000369
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=ZZZ3
+lastUpdated 2011-03-16 21:47:05
+
+ix 370
+organism human
+accession encodeEH000370
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=TCF4
+lastUpdated 2011-03-16 21:47:05
+
+ix 371
+organism human
+accession encodeEH000371
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=AP-2alpha
+lastUpdated 2011-03-16 21:47:05
+
+ix 372
+organism human
+accession encodeEH000372
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=AP-2gamma
+lastUpdated 2011-03-16 21:47:05
+
+ix 373
+organism human
+accession encodeEH000373
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=BDP1
+lastUpdated 2011-03-16 21:47:05
+
+ix 374
+organism human
+accession encodeEH000374
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=BRF1
+lastUpdated 2011-03-16 21:47:05
+
+ix 375
+organism human
+accession encodeEH000375
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=BRF2
+lastUpdated 2011-03-16 21:47:05
+
+ix 376
+organism human
+accession encodeEH000376
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=E2F1
+lastUpdated 2011-03-16 21:47:05
+
+ix 377
+organism human
+accession encodeEH000377
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=E2F4
+lastUpdated 2011-03-16 21:47:05
+
+ix 378
+organism human
+accession encodeEH000378
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=E2F6
+lastUpdated 2011-03-16 21:47:05
+
+ix 379
+organism human
+accession encodeEH000379
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=HA-E2F1
+lastUpdated 2011-03-16 21:47:05
+
+ix 380
+organism human
+accession encodeEH000380
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=RPC155
+lastUpdated 2011-03-16 21:47:05
+
+ix 381
+organism human
+accession encodeEH000381
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=TFIIIC-110
+lastUpdated 2011-03-16 21:47:05
+
+ix 382
+organism human
+accession encodeEH000382
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=ATF3
+lastUpdated 2011-03-16 21:47:05
+
+ix 383
+organism human
+accession encodeEH000383
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=NELFe
+lastUpdated 2011-03-16 21:47:05
+
+ix 384
+organism human
+accession encodeEH000384
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SIRT6
+lastUpdated 2011-03-16 21:47:05
+
+ix 385
+organism human
+accession encodeEH000385
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=GATA-1
+lastUpdated 2011-03-16 21:47:05
+
+ix 386
+organism human
+accession encodeEH000386
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=GATA-2
+lastUpdated 2011-03-16 21:47:05
+
+ix 387
+organism human
+accession encodeEH000387
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SETDB1 treatment=MNaseD
+lastUpdated 2011-03-16 21:47:05
+
+ix 388
+organism human
+accession encodeEH000388
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SETDB1
+lastUpdated 2011-03-16 21:47:05
+
+ix 389
+organism human
+accession encodeEH000389
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=ZNF263
+lastUpdated 2011-03-16 21:47:05
+
+ix 390
+organism human
+accession encodeEH000390
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=ZNF274
+lastUpdated 2011-03-16 21:47:05
+
+ix 391
+organism human
+accession encodeEH000391
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SUZ12
+lastUpdated 2011-03-16 21:47:05
+
+ix 392
+organism human
+accession encodeEH000392
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Sin3Ak-20 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 393
+organism human
+accession encodeEH000393
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Rad21 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 394
+organism human
+accession encodeEH000394
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=ELK4
+lastUpdated 2011-03-16 21:47:05
+
+ix 395
+organism human
+accession encodeEH000395
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=CCNT2
+lastUpdated 2011-03-16 21:47:05
+
+ix 396
+organism human
+accession encodeEH000396
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=GTF2B
+lastUpdated 2011-03-16 21:47:05
+
+ix 397
+organism human
+accession encodeEH000397
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=HMGN3
+lastUpdated 2011-03-16 21:47:05
+
+ix 398
+organism human
+accession encodeEH000398
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=ELAVL1
+lastUpdated 2011-03-16 21:47:05
+
+ix 399
+organism human
+accession encodeEH000399
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=T7Tag
+lastUpdated 2011-03-16 21:47:05
+
+ix 400
+organism human
+accession encodeEH000400
+lab SunyAlbany
+dataType RipChip
+cellType None
+factors antibody=ripInput
+lastUpdated 2011-03-16 21:47:05
+
+ix 401
+organism human
+accession encodeEH000401
+lab SunyAlbany
+dataType Switchgear
+cellType None
+factors ripTgtProtein=ELAVL1
+lastUpdated 2011-03-16 21:47:05
+
+ix 402
+organism human
+accession encodeEH000402
+lab SunyAlbany
+dataType Switchgear
+cellType None
+factors ripTgtProtein=IGF2BP1
+lastUpdated 2011-03-16 21:47:05
+
+ix 403
+organism human
+accession encodeEH000403
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=TAF7_(SQ-8) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 404
+organism human
+accession encodeEH000404
+lab Duke
+dataType AffyExonArray
+cellType None
+factors treatment=serum_free_media
+lastUpdated 2011-03-16 21:47:05
+
+ix 405
+organism human
+accession encodeEH000405
+lab Duke
+dataType AffyExonArray
+cellType None
+factors treatment=TGFb
+lastUpdated 2011-03-16 21:47:05
+
+ix 406
+organism human
+accession encodeEH000406
+lab Duke
+dataType AffyExonArray
+cellType None
+factors treatment=UT189
+lastUpdated 2011-03-16 21:47:05
+
+ix 407
+organism human
+accession encodeEH000407
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=p300 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 408
+organism human
+accession encodeEH000408
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=USF-1 protocol=PCR1x treatment=DEX_100nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 409
+organism human
+accession encodeEH000409
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ELF1_(SC-631) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 410
+organism human
+accession encodeEH000410
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=HDAC2_(SC-6296) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 411
+organism human
+accession encodeEH000411
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ELF1_(SC-631) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 412
+organism human
+accession encodeEH000412
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ZBTB7A_(SC-34508) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 413
+organism human
+accession encodeEH000413
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=USF1_(SC-8983) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 414
+organism human
+accession encodeEH000414
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=cytosol rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 415
+organism human
+accession encodeEH000415
+lab CSHL
+dataType RnaSeq
+cellType None
+factors localization=nucleus rnaExtract=longNonPolyA
+lastUpdated 2011-03-16 21:47:05
+
+ix 416
+organism human
+accession encodeEH000416
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=HDAC2_(SC-6296) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 417
+organism human
+accession encodeEH000417
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=YY1 protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 418
+organism human
+accession encodeEH000418
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=FOXA1_(SC-101058) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 419
+organism human
+accession encodeEH000419
+lab UNC/BSU
+dataType Proteogenomics
+cellType None
+factors localization=nucleus
+lastUpdated 2011-03-16 21:47:05
+
+ix 420
+organism human
+accession encodeEH000420
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Pol2 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 421
+organism human
+accession encodeEH000421
+lab HudsonAlpha
+dataType MethylRrbs
+cellType None
+factors treatment=DMSO_0.02pct_24hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 422
+organism human
+accession encodeEH000422
+lab HudsonAlpha
+dataType MethylRrbs
+cellType None
+factors treatment=Estradiol_10nM_24hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 423
+organism human
+accession encodeEH000423
+lab HudsonAlpha
+dataType Methyl27
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 424
+organism human
+accession encodeEH000424
+lab HudsonAlpha
+dataType Cnv
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 425
+organism human
+accession encodeEH000425
+lab Duke
+dataType DnaseSeq
+cellType None
+factors treatment=UT189
+lastUpdated 2011-03-16 21:47:05
+
+ix 426
+organism human
+accession encodeEH000426
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=NANOG_(SC-33759) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 427
+organism human
+accession encodeEH000427
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=POU5F1_(SC-9081) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 428
+organism human
+accession encodeEH000428
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=FOSL1_(SC-183) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 429
+organism human
+accession encodeEH000429
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GATA3_(SC-268) protocol=v041610.2 treatment=DMSO_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 430
+organism human
+accession encodeEH000430
+lab UW
+dataType AffyExonArray
+cellType None
+factors treatment=4OHTAM_20nM_72hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 431
+organism human
+accession encodeEH000431
+lab UW
+dataType DnaseSeq
+cellType None
+factors treatment=4OHTAM_20nM_72hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 432
+organism human
+accession encodeEH000432
+lab UNC/BSU
+dataType Proteogenomics
+cellType None
+factors localization=membraneFraction
+lastUpdated 2011-03-16 21:47:05
+
+ix 433
+organism human
+accession encodeEH000433
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ZBTB33 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 434
+organism human
+accession encodeEH000434
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=KAP1
+lastUpdated 2011-03-16 21:47:05
+
+ix 435
+organism human
+accession encodeEH000435
+lab UCD
+dataType ChipSeq
+cellType None
+factors antibody=c-Fos
+lastUpdated 2011-03-16 21:47:05
+
+ix 436
+organism human
+accession encodeEH000436
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=EtOH_0.01pct_12hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 437
+organism human
+accession encodeEH000437
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=Input treatment=EtOH_0.01pct_4hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 438
+organism human
+accession encodeEH000438
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=STAT3 treatment=EtOH_0.01pct_4hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 439
+organism human
+accession encodeEH000439
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT3 treatment=EtOH_0.01pct_12hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 440
+organism human
+accession encodeEH000440
+lab Duke
+dataType Combined
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 441
+organism human
+accession encodeEH000441
+lab HudsonAlpha
+dataType Cnv
+cellType None
+factors treatment=TAM_1uM_36hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 442
+organism human
+accession encodeEH000442
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=EBF
+lastUpdated 2011-03-16 21:47:05
+
+ix 443
+organism human
+accession encodeEH000443
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SMC3_(ab9263)
+lastUpdated 2011-03-16 21:47:05
+
+ix 444
+organism human
+accession encodeEH000444
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=MafF_(M8194)
+lastUpdated 2011-03-16 21:47:05
+
+ix 445
+organism human
+accession encodeEH000445
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=MafK_(ab50322)
+lastUpdated 2011-03-16 21:47:05
+
+ix 446
+organism human
+accession encodeEH000446
+lab SunyAlbany
+dataType RipSeq
+cellType None
+factors antibody=ELAVL1
+lastUpdated 2011-03-16 21:47:05
+
+ix 447
+organism human
+accession encodeEH000447
+lab SunyAlbany
+dataType RipSeq
+cellType None
+factors antibody=PABPC1
+lastUpdated 2011-03-16 21:47:05
+
+ix 448
+organism human
+accession encodeEH000448
+lab SunyAlbany
+dataType RipSeq
+cellType None
+factors antibody=ripInput
+lastUpdated 2011-03-16 21:47:05
+
+ix 449
+organism human
+accession encodeEH000449
+lab UNC
+dataType FaireSeq
+cellType None
+factors treatment=UT189
+lastUpdated 2011-03-16 21:47:05
+
+ix 450
+organism human
+accession encodeEH000450
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=SPT20
+lastUpdated 2011-03-16 21:47:05
+
+ix 451
+organism human
+accession encodeEH000451
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=Control protocol=PCR1x treatment=EtOH_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 452
+organism human
+accession encodeEH000452
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=GR protocol=v041610.2 treatment=EtOH_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 453
+organism human
+accession encodeEH000453
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=ZEB1_(SC-25388) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 454
+organism human
+accession encodeEH000454
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_100pM
+lastUpdated 2011-03-16 21:47:05
+
+ix 455
+organism human
+accession encodeEH000455
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=GCN5
+lastUpdated 2011-03-16 21:47:05
+
+ix 456
+organism human
+accession encodeEH000456
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=MafK_(SC-477)
+lastUpdated 2011-03-16 21:47:05
+
+ix 457
+organism human
+accession encodeEH000457
+lab UNC
+dataType FaireSeq
+cellType None
+factors treatment=Hypoxia_LacAcid
+lastUpdated 2011-03-16 21:47:05
+
+ix 458
+organism human
+accession encodeEH000458
+lab GIS-Ruan
+dataType ChiaPet
+cellType None
+factors antibody=Pol2
+lastUpdated 2011-03-16 21:47:05
+
+ix 459
+organism human
+accession encodeEH000459
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=CTCF_(C-20)
+lastUpdated 2011-03-16 21:47:05
+
+ix 460
+organism human
+accession encodeEH000460
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=STAT1
+lastUpdated 2011-03-16 21:47:05
+
+ix 461
+organism human
+accession encodeEH000461
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=Znf143_(16618-1-AP)
+lastUpdated 2011-03-16 21:47:05
+
+ix 462
+organism human
+accession encodeEH000462
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=SPT20
+lastUpdated 2011-03-16 21:47:05
+
+ix 463
+organism human
+accession encodeEH000463
+lab SunyAlbany
+dataType RipSeq
+cellType None
+factors antibody=T7Tag
+lastUpdated 2011-03-16 21:47:05
+
+ix 464
+organism human
+accession encodeEH000464
+lab Caltech
+dataType RnaSeq
+cellType None
+factors readType=1x75D
+lastUpdated 2011-03-16 21:47:05
+
+ix 465
+organism human
+accession encodeEH000465
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=200 readType=2x75
+lastUpdated 2011-03-16 21:47:05
+
+ix 466
+organism human
+accession encodeEH000466
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=ilNA readType=1x75D
+lastUpdated 2011-03-16 21:47:05
+
+ix 467
+organism human
+accession encodeEH000467
+lab Harvard
+dataType ChipSeq
+cellType None
+factors antibody=GCN5
+lastUpdated 2011-03-16 21:47:05
+
+ix 468
+organism human
+accession encodeEH000468
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=MEF2C_(SC-13268) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 469
+organism human
+accession encodeEH000469
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=CTCF_(SC-5916) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 470
+organism human
+accession encodeEH000470
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=NRSF protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 471
+organism human
+accession encodeEH000471
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=FOXA2_(SC-6554) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 472
+organism human
+accession encodeEH000472
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=HNF4G_(SC-6558) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 473
+organism human
+accession encodeEH000473
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=CTCFL_(SC-98982) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 474
+organism human
+accession encodeEH000474
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=SP2_(SC-643) protocol=v041610.2
+lastUpdated 2011-03-16 21:47:05
+
+ix 475
+organism human
+accession encodeEH000475
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=TAF7_(SQ-8) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 476
+organism human
+accession encodeEH000476
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=THAP1_(SC-98174) protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 477
+organism human
+accession encodeEH000477
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=CTCF_(SC-5916) protocol=v041610.2 treatment=DMSO_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 478
+organism human
+accession encodeEH000478
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_100nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 479
+organism human
+accession encodeEH000479
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=EtOH_0.02pct
+lastUpdated 2011-03-16 21:47:05
+
+ix 480
+organism human
+accession encodeEH000480
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=BPA_100nM_4hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 481
+organism human
+accession encodeEH000481
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=DMSO_4hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 482
+organism human
+accession encodeEH000482
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=Estradiol_10nM_4hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 483
+organism human
+accession encodeEH000483
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=Genistein_100nM_4hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 484
+organism human
+accession encodeEH000484
+lab Caltech
+dataType RnaSeq
+cellType None
+factors insertLength=400 readType=2x75
+lastUpdated 2011-03-16 21:47:05
+
+ix 485
+organism human
+accession encodeEH000485
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_1nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 486
+organism human
+accession encodeEH000486
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_500pM
+lastUpdated 2011-03-16 21:47:05
+
+ix 487
+organism human
+accession encodeEH000487
+lab HudsonAlpha
+dataType RnaSeq
+cellType None
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_5nM
+lastUpdated 2011-03-16 21:47:05
+
+ix 488
+organism human
+accession encodeEH000488
+lab Stanford
+dataType Nucleosome
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 489
+organism human
+accession encodeEH000489
+lab UMass-Dekker
+dataType 5C
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 490
+organism human
+accession encodeEH000490
+lab UChicago
+dataType ChipSeq
+cellType None
+factors antibody=Input
+lastUpdated 2011-03-16 21:47:05
+
+ix 491
+organism human
+accession encodeEH000491
+lab UChicago
+dataType ChipSeq
+cellType None
+factors antibody=eGFP-FOS
+lastUpdated 2011-03-16 21:47:05
+
+ix 492
+organism human
+accession encodeEH000492
+lab UChicago
+dataType ChipSeq
+cellType None
+factors antibody=eGFP-GATA2
+lastUpdated 2011-03-16 21:47:05
+
+ix 493
+organism human
+accession encodeEH000493
+lab UChicago
+dataType ChipSeq
+cellType None
+factors antibody=eGFP-HDAC8
+lastUpdated 2011-03-16 21:47:05
+
+ix 494
+organism human
+accession encodeEH000494
+lab UChicago
+dataType ChipSeq
+cellType None
+factors antibody=eGFP-JunB
+lastUpdated 2011-03-16 21:47:05
+
+ix 495
+organism human
+accession encodeEH000495
+lab UChicago
+dataType ChipSeq
+cellType None
+factors antibody=eGFP-JunD
+lastUpdated 2011-03-16 21:47:05
+
+ix 496
+organism human
+accession encodeEH000496
+lab UChicago
+dataType ChipSeq
+cellType None
+factors antibody=eGFP-NR4A1
+lastUpdated 2011-03-16 21:47:05
+
+ix 497
+organism human
+accession encodeEH000497
+lab GIS-Ruan
+dataType ChiaPet
+cellType None
+factors antibody=ERalpha_a
+lastUpdated 2011-03-16 21:47:05
+
+ix 498
+organism human
+accession encodeEH000498
+lab Yale
+dataType RnaSeq
+cellType None
+factors rnaExtract=nonPolyARRna treatment=Alpha-amanitin_50ug_9hr
+lastUpdated 2011-03-16 21:47:05
+
+ix 499
+organism human
+accession encodeEH000499
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=YY1_(C-20) protocol=PCR1x
+lastUpdated 2011-03-16 21:47:05
+
+ix 500
+organism human
+accession encodeEH000500
+lab HudsonAlpha
+dataType ChipSeq
+cellType None
+factors antibody=BCL3 protocol=v041610.1
+lastUpdated 2011-03-16 21:47:05
+
+ix 501
+organism human
+accession encodeEH000501
+lab Stanford
+dataType ChipSeq
+cellType None
+factors antibody=BHLHE40_(NB100-1800)
+lastUpdated 2011-03-16 21:47:05
+
+ix 502
+organism human
+accession encodeEH000502
+lab HudsonAlpha
+dataType Snp
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+
+ix 503
+organism human
+accession encodeEH000503
+lab Broad
+dataType Combined
+cellType None
+factors 
+lastUpdated 2011-03-16 21:47:05
+

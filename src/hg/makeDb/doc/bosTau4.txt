@@ -1957,3 +1957,20 @@ limit vmemoryuse 163840m
     popd
 
 #########################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/17/2011 Fan)
+# Original raw data file sent by email from Arthur Ko [a5ko@uw.edu]
+        
+mkdir /hive/data/genomes/bosTau4/bed/genomicSuperDups
+cd /hive/data/genomes/bosTau4/bed/genomicSuperDups
+		    
+# place the data file, bosTau4-genomicSuperDups_2008Oct02.tab.gz, here
+
+gzip -d bosTau4-genomicSuperDups_2008Oct02.tab.gz
+awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' bosTau4-genomicSuperDups_2008Oct02.tab \
+| hgLoadBed bosTau4 genomicSuperDups stdin \
+-tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+# Kayla found that the strand values were "+" and "_" -- fix:
+hgsql bosTau4 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
+#########################################################################
+

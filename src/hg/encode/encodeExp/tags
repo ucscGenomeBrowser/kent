@@ -1,0 +1,37 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+cellType	encodeExp.c	/^char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;$/;"	v
+composite	encodeExp.c	/^char *composite = NULL, *mdb = NULL, *table = NULL;$/;"	v
+connExp	encodeExp.c	/^struct sqlConnection *connExp = NULL;$/;"	v	typeref:struct:sqlConnection
+dataType	encodeExp.c	/^char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;$/;"	v
+encodeExp	encodeExp.c	/^int encodeExp(char *command, char *file, char *assembly, int id)$/;"	f
+encodeExpTableNew	encodeExp.c	/^static char *encodeExpTableNew = ENCODE_EXP_TABLE "New";$/;"	v	file:
+expAcc	encodeExp.c	/^void expAcc(int id)$/;"	f
+expAdd	encodeExp.c	/^void expAdd(char *file)$/;"	f
+expCopyTable	encodeExp.c	/^void expCopyTable()$/;"	f
+expCreateTable	encodeExp.c	/^void expCreateTable()$/;"	f
+expDeacc	encodeExp.c	/^void expDeacc(int id)$/;"	f
+expDropTable	encodeExp.c	/^void expDropTable()$/;"	f
+expDump	encodeExp.c	/^void expDump(char *file)$/;"	f
+expFind	encodeExp.c	/^void expFind(char *assembly, char *file)$/;"	f
+expHistory	encodeExp.c	/^void expHistory(int id)$/;"	f
+expId	encodeExp.c	/^void expId()$/;"	f
+expKeyHashFromTable	encodeExp.c	/^static struct hash *expKeyHashFromTable(struct sqlConnection *conn, char *table)$/;"	f	file:
+expRemove	encodeExp.c	/^void expRemove(int id, char *why)$/;"	f
+expRenameTable	encodeExp.c	/^void expRenameTable()$/;"	f
+expRestoreTable	encodeExp.c	/^void expRestoreTable(char *file)$/;"	f
+expShow	encodeExp.c	/^void expShow(int id)$/;"	f
+expVars	encodeExp.c	/^char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;$/;"	v
+lab	encodeExp.c	/^char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;$/;"	v
+main	encodeExp.c	/^int main(int argc, char *argv[])$/;"	f
+mdb	encodeExp.c	/^char *composite = NULL, *mdb = NULL, *table = NULL;$/;"	v
+newTable	encodeExp.c	/^char *newTable = NULL;$/;"	v
+options	encodeExp.c	/^static struct optionSpec options[] = {$/;"	v	typeref:struct:optionSpec	file:
+organism	encodeExp.c	/^char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;$/;"	v
+table	encodeExp.c	/^char *composite = NULL, *mdb = NULL, *table = NULL;$/;"	v
+usage	encodeExp.c	/^void usage()$/;"	f
+why	encodeExp.c	/^char *why = NULL;$/;"	v

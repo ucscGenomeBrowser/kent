@@ -35,7 +35,7 @@ void ctBedGraphLoadItems(struct track *tg)
 /*	load custom bedGraph track data	*/
 
 /*	Verify this is a custom track	*/
-if (tg->customPt == (void *)NULL)
+if (! (isCustomTrack(tg->table) && tg->customPt))
     errAbort("ctBedGraphLoadItems: did not find a custom wiggle track: %s", tg->track);
 
 errAbort("custom track bedGraph load items not yet implemented");
@@ -63,7 +63,7 @@ graphColumn = wigCart->graphColumn;
 
 
 #ifndef GBROWSE
-if (tg->customPt)
+if (isCustomTrack(tg->table) && tg->customPt)
     {
     struct customTrack *ct = (struct customTrack *) tg->customPt;
     tableName = ct->dbTableName;

@@ -873,8 +873,8 @@ char query[256];
 struct encodeExp *exp2 = encodeExpGetByIdFromTable(conn, tableName, exp->ix);
 if (encodeExpSame(exp, exp2))
     {
-    safef(query, sizeof(query), "delete from %s where %s=%d", 
-                                tableName, ENCODE_EXP_FIELD_IX, exp->ix); 
+    safef(query, sizeof(query), "delete from %s where %s=%d",
+                                tableName, ENCODE_EXP_FIELD_IX, exp->ix);
     sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
     sqlUpdate(conn, query);
     encodeExpAddUserToLatestHistory(conn, tableName, exp->ix);
@@ -918,7 +918,8 @@ void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
 char *val = NULL;
 struct dyString *dy = NULL;
 
-char *type = cvTermNormalized(var);
+/* verify new value is valid term in CV */
+char *type = (char *)cvTermNormalized(var);
 if (type == NULL)
     errAbort("Attempt to update encodeExp experiment with unknown CV type %s", var);
 if (!cvTermIsValid(type, newVal))

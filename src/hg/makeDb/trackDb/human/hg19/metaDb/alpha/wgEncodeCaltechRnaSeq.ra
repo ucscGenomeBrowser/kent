@@ -21,6 +21,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum b7d7d916256f7fbed062d62f8e638b0c
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -48,6 +49,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c25e4497f13790cfb1cb774af139f031
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -125,6 +127,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 274b28e7c78fd36d50ae235b0cdabf84
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -152,6 +155,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9fe2006c7b68c99f0754b416c011b0b8
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -179,6 +183,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 796ea64e608aa0595d2ebbe8c29c6c40
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -206,6 +211,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 931c4a6cf89825cef98e6715d0ce31f0
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -233,6 +239,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 84e858ca0735e80e3f4d7849e9c090be
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -260,6 +267,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 26293fea65f5e28d1f460fca23661171
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -288,6 +296,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 30b867ee186936262528423c7d8fecd2
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -316,6 +325,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 4e211666eebc50fed6118e7bf373b0fe
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -342,6 +352,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e9ea28c09e56c9328d75eac9e58e29b7
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -367,6 +378,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 33d5d464a6da68e31084a953bfa54d3a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -393,7 +405,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum 91940319b96d09c685f2c459bf28f007
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -419,7 +431,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum c77af49ad556e4526c24e26c65761077
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -445,7 +457,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum 2f4e28e25ecda434e76a32ac990a9414
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -471,7 +483,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum 275e6e29791a3885cdf747e72ea2c360
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -496,6 +508,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum df152c461336398592d7fa83133a02dd
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -521,6 +534,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ddd6303d91b67a0ecac01a3fc3f6f668
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -546,6 +560,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 464eb5317f74fe716a2f40b3fe3f2cc4
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -571,6 +586,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f7133ee0fad9f2a5f06510ef0a20b5bd
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -596,6 +612,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d7ea38f0edb3836eec679986728d73ad
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -621,6 +638,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 03aa6a0b3f599a3ef164bcdc27399d98
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -648,6 +666,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 5a3e592682a9ca5cdb0f56fa6a318170
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -676,6 +695,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 05b45de0139756182c45c28ce9f9c6bb
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -704,6 +724,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bc50918b17b37c531facded3671a7c94
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -732,6 +753,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum a6f8f785dc00bc13c5a56fb8330dcd6e
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -758,6 +780,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 7c0c92fb09ee3038bc951dfb54650878
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -783,6 +806,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c78567112e59917fe8bb96719b2c0777
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -808,6 +832,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 835816c2c44ab289492c392f93ae3793
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -833,6 +858,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 516d10d03988fbcdad17449127be395f
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -858,6 +884,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 8deacbcf99623d8ea677dcdb5bbc1dad
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -883,6 +910,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 458495d56ea98459e89901e42db8c7d3
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -910,6 +938,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum b795de6855f4a9a159fcd17ceb7d5901
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -936,6 +965,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bb06f65243ff5bf3e16bcbe6349a2836
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -1013,6 +1043,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 36ff265758ef436c460cd363725de257
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -1038,6 +1069,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 33484341537282222a9492797a49e82a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -1063,6 +1095,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c3e1dc7ee52b9aa843676ca4c9156a2a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -1090,6 +1123,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 3233c6f99568decaced3d0c368a6d493
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -1118,6 +1152,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 5a1ed642ee3842aa3b4618d223fea4d2
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -1144,6 +1179,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 16ecb91ad700e0e18583f8d3b212d44a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -1169,6 +1205,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum be65f3e02d6d114e4210a5e6d13b8c2f
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -1194,6 +1231,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 66a6bf88221afc958ea0ba2ccbd4a719
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -2717,6 +2755,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 3c6b6a7da491d4a6a9460bf78d20dc4e
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2744,6 +2783,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 401e74ccbcd897e7d9dd702ef2e2a8ce
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2821,6 +2861,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 1972c29a1ea829cadbde34409a9054e6
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2848,6 +2889,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 6c001d66964b67f4a4e9a227de3a84a2
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2875,6 +2917,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 02ed40a6a7e0b72ffbc8f8c439edd1fd
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2902,6 +2945,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 99f78462d0c1c7cf0c165f3ba05dd3ec
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2929,6 +2973,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 4cf4b19a3e4465dbea1f51a8216fbd95
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2956,6 +3001,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum aa23f6e532a6adbc9536a487066670ab
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2984,6 +3030,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c98813c9577fa37418f1ae5841964162
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -3012,6 +3059,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum a410a257d7a6ebeb3673e2531934e375
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -3040,6 +3088,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e776b497549eb6c7757516fadc29c3b3
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -3068,6 +3117,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 4e0a69e803e9a920c988f7bce1553a77
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -3094,6 +3144,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c71ebbad790070b73af53e3bf15b3da2
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -3119,6 +3170,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 21d698ca5ec81cd7951f23690134871e
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -3144,6 +3196,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c6c4852d82f1b2e83733c918c8f60e0e
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -3169,6 +3222,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 78d23cd1deb7b2b6b0f4f77fb6f88f5d
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -3402,6 +3456,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 3f278534f058b8131f0d53a6c10beca9
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -3427,6 +3482,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9f473801a82be23a7db0e23764021d2b
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -3452,6 +3508,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum dcbcf4566331459349abde79e40fa53c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -3477,6 +3534,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 48fa2b8532590db61eecc5ce6ba7dfc1
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -3502,6 +3560,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum b3cc1b65f392eb1dc1547b3eccfa13be
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -3527,6 +3586,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 4ad2a3d3245710d87ee268521dbc9c5c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -3552,6 +3612,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f768ed23c1f0849b108d10fe107d7ff7
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -3577,6 +3638,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 294cc526433c34406500b57803cb9b67
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -3602,6 +3664,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bd5eb97320c3039ba2c3e085938d1ebd
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -3627,6 +3690,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 29981f71e290b87aaaf1a17a12604b9a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -3652,6 +3716,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f8de9fce6cf00481983188c3519cb3a3
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -3677,6 +3742,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 22c197364264abf74864625d1c8bbbf3
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -3704,6 +3770,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9c66037fd6939d0eec272e82919844e5
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -3732,6 +3799,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum cab0e7f4fb64d26b33654673f641dbbc
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -3760,6 +3828,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f6fcb1da349c20e382cf85fc546813cc
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -3788,6 +3857,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 559320c18d02ed9b5f400970518ba648
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -3816,6 +3886,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 1d5de812ce6da76d0930148451c9df7c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -3844,6 +3915,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9639b934c03483ed79225c0a922598f0
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -3872,6 +3944,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f37195b52920dd494edb4a053f39db69
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -3900,6 +3973,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bfede33e27558171bc6e11e116225bd8
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -3926,6 +4000,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d66bd9922dcbc803610698539e6585b4
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -3951,6 +4026,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 57ea40f71ae0c22b80ba63da64e31766
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -3976,6 +4052,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ee14787e2ee0eb074f2864b26a9402fa
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -4001,6 +4078,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum cdecb80b9941704158da0f124e5ca267
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -4026,6 +4104,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 0f74f62b29d6416b825df5f94a41c764
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4051,6 +4130,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum a5a08242ed5d093aaf562e180eabc958
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -4076,6 +4156,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 90a896c3f16049132e75cd9e7942f1f0
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -4101,6 +4182,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f600becf0c7fa2fef0feb2517a2ba002
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -4126,6 +4208,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ef635317d76049af656dfb5b868c5b50
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4151,6 +4234,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum eba7c1ff6afbed007dc609a12dc52b04
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -4176,6 +4260,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 87cf50a54d7fb960f117db2950fb5f04
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
@@ -4201,6 +4286,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d40d77d4bdd953a22de9bf48d247eeeb
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
@@ -4228,6 +4314,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 66abda0e9463837f62084fb7db7f2039
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4254,6 +4341,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 33138384cdae36e64d571c15c02d7462
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4331,6 +4419,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 27e254a0d43d8adf39f259822d03d9bd
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4356,6 +4445,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 80da1eaec7237dab5aef4da84830359b
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4381,6 +4471,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 319f3480f0d353d937ed3ebb31997ee3
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4408,6 +4499,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9344f8b1b4c668c4023d1af54b890072
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4436,6 +4528,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bd17b339a2bee1732bc56cbeb38e3861
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4462,6 +4555,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 8125aebab9f97d2f2183ff2fc4c0ea02
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4487,6 +4581,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 71a915b089c18abac20d63f3ba2a1064
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -4512,6 +4607,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 1b41b37d6b84478e362458cdfe98637b
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5140,6 +5236,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 6ad12d866a26c1b6a37b310ebd788ad1
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5167,6 +5264,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 857438513e376d2558253af8387b71be
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -5244,6 +5342,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d35c6a6014b9881bfe5e7d4bd584bad6
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5271,6 +5370,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 00a530d87d7b234d7140f3e7d947b8c5
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -5298,6 +5398,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 93586c9a5eee279751814b2ce4ce6523
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5325,6 +5426,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 12fa4856564ab778bbc609cb9fee3b6d
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -5352,6 +5454,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 04eaef8ed2a4c788486752976bff1799
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5379,6 +5482,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 54d6a2a677bf445d78ffbf9f57ded488
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -5407,6 +5511,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 7aec375011d0161d6aa00cf6ef78168b
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5435,6 +5540,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 355dbee232bc44418ac302bbb8a70dbf
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5461,6 +5567,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 8ffca98591083a944ff468bc20eb2479
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5486,6 +5593,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 2d023afa308bdd5b58665d0b1a5a0544
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5615,6 +5723,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 46d0b7acf8b499a379f7e2fab9fc395f
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5640,6 +5749,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 0f3235a8ab7398e7ecc3fec2d129c6d1
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5665,6 +5775,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 3309cc796c55d9529df410a9fa125928
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5690,6 +5801,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 15c345ecc4dc756d92faf20e37f4d86c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5715,6 +5827,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 7927edfd881c30483ef04c2c42e8b5aa
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5740,6 +5853,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum fd9eb5152fbc43e43a5f5a6485726a7a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5767,6 +5881,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c0ee13a431fac2ff6b4d00aa0c574e3d
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5795,6 +5910,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e5f56f3743d2022316e23e5a5b26c457
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5823,6 +5939,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bb04716ad55e6bc1fc13908b572ecfdd
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5851,6 +5968,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 2d1393f563e27fdef545e28f105b152c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5877,6 +5995,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e95112769ef97120545e6a0b3e5a1dc3
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5902,6 +6021,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 2db29bf2a3a5768f1f282b346ca21718
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5927,6 +6047,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c4c952b6fbf79984642e7e1fcccf04e5
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -5952,6 +6073,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 1b8a54dfe72dd479bc0617389422cf73
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -5977,6 +6099,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ad57de084f12e95972bf5dd016c5b791
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6002,6 +6125,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 7ce45175462e557d550f55be34db910c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6028,6 +6152,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum b49542b9c2a6bce74fb049f8873d9022
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6055,6 +6180,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 65443cd0793f3879ebb377cb92a0fac0
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6132,6 +6258,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 52ffadb74cd1f91d06e64030ac014f52
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6159,6 +6286,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 52ffadb74cd1f91d06e64030ac014f52
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6186,6 +6314,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c59c0065156e624f25e678debf5519dd
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6213,6 +6342,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c59c0065156e624f25e678debf5519dd
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6240,6 +6370,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ecb7fb96775ccbab8033554234282f3f
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6267,6 +6398,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ec3ef47efd4e156ae096aacc5fc5369d
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6295,6 +6427,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e6027affb5310fb9175806906132ae0d
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6323,6 +6456,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum a2f89cf26fcb7d3f07bc74ba6a21e0bf
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6349,6 +6483,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 7e17e170b718706bd09635fe96dfbb1f
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6374,6 +6509,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9c592b6a65219aa33f2a7540a0a07900
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6503,6 +6639,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 307f3f0cf4f4ca3300ef5b39a9d78541
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6528,6 +6665,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f4b4b8b89bc157646933d69bfa0e5b8a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6553,6 +6691,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d2156f139cdd7b2eea47cfbde9a00c14
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6578,6 +6717,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 19ac6edfeb690e3145def6df223d6ffc
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6603,6 +6743,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 177db254d4cfb29af3c65d39c9f5ed36
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6628,6 +6769,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ac98954ca1e10557c96c713de00e6add
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6655,6 +6797,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 1448d05c49419c2e920038aa17ed92ab
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6683,6 +6826,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 0523fcec9023c565ea343480ea3aea93
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6711,6 +6855,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 716b0304c6826d6eec9f056a2a6111c9
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6739,6 +6884,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 801604e36f69354a80d22a22b3e99e00
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6765,6 +6911,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 84b098b5a0b1be586a9490d704a36c6d
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6790,6 +6937,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 060b742f4928588648943280f72afd23
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6815,6 +6963,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 3c0d1661f8a40bf821f58743e55da46e
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6840,6 +6989,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 7a395824a160f9ef1013e840f146ee9e
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -6865,6 +7015,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 618e4c8344400e48386c93f21de3eeef
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -6890,6 +7041,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 8186a27e795b042287e1148e3b1aee06
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -7518,6 +7670,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 923812c5c3a7938b2ce7a3f4eb9f8db3
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -7545,6 +7698,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d0fcf94d7d3ac10e60e1e7b7c935a876
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -7622,6 +7776,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 73ba941c3fdbde6165fb5c30a5544309
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -7649,6 +7804,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c78b4ae4c72220140d2f5142fcc0c7f0
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -7676,6 +7832,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ca26ee3657cf78405c62db7ab68ae0c8
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -7703,6 +7860,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 270fbe452be9af18347e8968ae1395f8
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -7730,6 +7888,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 667c9cacf7150649650dae4026f33d2b
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -7757,6 +7916,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bff9a47403b3b689071b49903950431b
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -7785,6 +7945,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 994c1089194c3fc735dcfb2a3e2d8aa9
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -7813,6 +7974,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 2cc9fdb535905e17682cae7efc9873a8
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -7839,6 +8001,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 26548d11c3499be60c41c645ee7259a1
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -7864,6 +8027,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 14698761eba6a3977124a24b910e2ab0
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -7993,6 +8157,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e1ccc8257ebf2a18a49f1e973b3c5bae
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8018,6 +8183,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 3308246cfc40ed06aca54621c0bca77b
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8043,6 +8209,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum dcc597f21e2267774761b2f17095c33c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8068,6 +8235,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 1b8c7c0bbf347956601d1aa054f1dbe0
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8093,6 +8261,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 18bbfa1947926eef1f7b93eb3fbe7b50
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8118,6 +8287,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 8e105876a5bdb7b3dcf1f44ca85d363a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8145,6 +8315,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 6acf3fae13efbb3c5fc7370c3a37845a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8173,6 +8344,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c36ecbfd3419222d3de11218db0890e5
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8201,6 +8373,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 5c4f0385227aa67b3bd11cdd3599687a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8229,6 +8402,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f032a8216e467cdc8e35c8cb6738f208
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8255,6 +8429,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 2d99ab7378c17f5d8f65ff1a5c55a186
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8280,6 +8455,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum dde5f274b867db5783df341c772abecf
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8305,6 +8481,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 84df76bfcd762ae97f529d8f64b24675
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8330,6 +8507,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 226a7ad94b3a347089341840bba8b9b0
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8355,6 +8533,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e9136dad28c1be3ef38891c228aa32e6
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8380,6 +8559,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 7091ee78cd8374f021f341cad16838d5
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8406,6 +8586,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 46079cae1a4f5978ff9bea2c90738ae7
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -8433,6 +8614,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 04c3bed4e84dfd806d5fe047171a357f
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -8510,6 +8692,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum fdb819265e284825df5cff86de0ed7e7
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -8537,6 +8720,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum fdb48ca7d5939f7424c66379a6b81ebe
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -8564,6 +8748,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 0d2b0934c588b1bc9a12f034edb5a25c
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -8591,6 +8776,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 0739f36a41f598b55ba3bd9b88fd20a0
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -8618,6 +8804,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 6c5fe19781edaccc7ab88b95127cf03f
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -8645,6 +8832,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum b6fcc38c93ab4cd45dcadad6b24159f4
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -8673,6 +8861,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 305076fb990e5f81e2246e72e9f6fa56
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8701,6 +8890,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum b3dda219a1abd866ed07c5f2e172077e
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8727,6 +8917,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e4c24d036dfb013e3833019f41df6aaf
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8752,6 +8943,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f24c330bdee348a4b22fc39d88848efa
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8778,7 +8970,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum a1a9d47fc5ee6f81d44b61717da20da7
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8802,7 +8994,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum b72dd6e442580c1191b25e7ffdb63f00
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8828,7 +9020,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum 17e55f115e4a4f579c6864fc9f409dd0
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8852,7 +9044,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum 3e6626f50199f1da1c699a1455e8c387
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8877,6 +9069,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 716f0e96de4468566be522a2d4c582e1
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8902,6 +9095,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 1a2ae71f8d456db33a83ba9ab95e5cac
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8927,6 +9121,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e1853cbbd73f1ecc9a4b6125d91c1c40
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -8952,6 +9147,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 81e86613a893e36ffa115b8163ead5a1
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -8977,6 +9173,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c951e0c947093b24310474ce08b3b577
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -9002,6 +9199,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9d3258dc90ab54fa5e95deb11fc4ae6a
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -9029,6 +9227,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 6eff8e54b260d433c5e76ed4c49a7be4
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -9057,6 +9256,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9c1bda38fc8905540249b4682f1782a1
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -9085,6 +9285,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 5e5f8135899518696eaaf59fb781dc83
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -9113,6 +9314,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bd3e6dbc27eac2ff24fb22e558255bf5
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -9139,6 +9341,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 291b26d4ee75667c6961f6a42cdca27b
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -9164,6 +9367,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 6cfecef0953867d157745b3d620aa123
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -9189,6 +9393,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d6a578f50c057d89204b2587f765479f
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -9214,6 +9419,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 53288a65791f700b1f187bde8b1d20f7
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -9239,6 +9445,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 869bad84d8766a22c0c4ed7026ce735d
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -9264,6 +9471,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum c196b9c1a135528f15ba5b46b47efcb3
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -9528,7 +9736,7 @@ submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view TSS
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptDeNovoRep1V3
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3
 objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9538,7 +9746,7 @@ dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptDeNovoRep1V3.gtf.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -9554,7 +9762,7 @@ submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view TranscriptDeNovo
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptGencV3cRep1V3
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3
 objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9564,7 +9772,7 @@ dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTranscriptGencV3cRep1V3.gtf.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -10801,6 +11009,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d5b78f643ccf7993a885d79c9ac8ff90
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -10853,6 +11062,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 82d92f5f5cbaa6eab722700cd7696b8e
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -10880,6 +11090,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 436e6ce59d1134369466d67c2a75a304
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -10907,6 +11118,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum f1cbc66c36963d1a4db9372eec0c4918
+origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
@@ -10935,6 +11147,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 82eaf4aa0f4474ff6123a494a4e7bc3c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -10961,6 +11174,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 102fb4b6454f275f27c3667541cefdda
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -10987,6 +11201,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum eb7e26f852c345345a397a70a5c4e730
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11012,6 +11227,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 09c00147d5dd322206bc0851cc4e636d
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11062,7 +11278,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum e25e229f9ecc72712d928c4c3898810b
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11112,7 +11328,7 @@ insertLength 200
 lab Caltech
 localization cell
 md5sum e42a7d6f918ef9fc04f42df823c1673e
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11137,6 +11353,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 245f344377962af4830d09251ca00388
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11162,6 +11379,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 96bba20ad5210fdec4a4b986fe37de66
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11187,6 +11405,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum ea075d134690d310d20aaea4d40577ab
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11212,6 +11431,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum de24189c34a6bfa67b2460f3b9c8219b
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11237,6 +11457,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9b3c9c2bb63aa1cbe64c5298e267961c
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11262,6 +11483,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 83b38b160a8514b27e37771bdb908e72
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11289,6 +11511,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 1e9e843579cee9d96de24ebad982f317
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11315,6 +11538,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 9b6df67c3c4c4d62678db0707b307634
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11343,6 +11567,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum d1419ff005feb525b8655b17c4f40e92
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11369,6 +11594,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum e6ed66ee1e9173fa83317cff531e60d7
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11395,6 +11621,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 7353a2823e928cbbaaeeb9985d480112
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11420,6 +11647,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 48365b825f50cf5fbeec908af6257a38
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11445,6 +11673,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum db571b5c530200f5dcdf9f7e12e1bfdf
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11470,6 +11699,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum a1bcc716fa6957a821a55ce405b840ff
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -11495,6 +11725,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 174a62dd640c62963ed54a5cd38b9441
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
@@ -11520,6 +11751,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 06350ab353911a2405189c55ca9091b1
+origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
@@ -12130,4 +12362,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: 996512465
+# MAGIC: -673477947

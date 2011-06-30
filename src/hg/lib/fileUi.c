@@ -407,7 +407,11 @@ if (sortOrder != NULL)
             slPairValSortCase(&tagLabelPairs); // should have a list sorted on the label
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
+        #ifdef NEW_JQUERY
+            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);' style='font-size:.9em;'");
+        #else///ifndef NEW_JQUERY
             char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);'");
+        #endif///ndef NEW_JQUERY
             // Note filterBox has classes: filterBy & {var}
             if (dropDownHtml)
                 {
@@ -432,7 +436,13 @@ if (sortOrder != NULL)
                (count >= 1 ? "categories and ":""),FILTERBY_HELP_LINK);
         printf("%s\n",dyStringContents(dyFilters));
         printf("</tr></table>\n");
+    #ifdef NEW_JQUERY
+        printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
+        printf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { ddclSetup(this,'noneIsAll') });});</script>\n");
+    #else///ifndef NEW_JQUERY
+        printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
         printf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
+    #endif///ndef NEW_JQUERY
         }
     dyStringFree(&dyFilters);
     }

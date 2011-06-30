@@ -1,0 +1,553 @@
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Input species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType K562
+expVars antibody=Input species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType K562
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12878
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType GM12878
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM12878
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType K562
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Myc species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HepG2
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Input species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HeLa-S3
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=c-Myc species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HepG2
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HeLa-S3
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HepG2
+expVars antibody=c-Myc species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HepG2
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12878
+expVars antibody=c-Myc species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HUVEC
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HUVEC
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=Input species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=Pol2 species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType NHEK
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Pol2 species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType K562
+expVars antibody=Pol2 species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType H1-hESC
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType H1-hESC
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType NHEK
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType NHEK
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=c-Myc species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12892
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=Pol2 species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM12891
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM12892
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM19238
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM19239
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM19240
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12891
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM19238
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM19239
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM19240
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType PanIslets
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Medullo
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType PanIslets
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType ProgFib
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HeLa-S3
+expVars antibody=None species=None treatment=IFNa4h
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType LHSR
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType MCF-7
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType GM19239
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM18507
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType LHSR
+expVars antibody=None species=None treatment=androgen
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Fibrobl
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HSMM
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HSMMtube
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType GM18507
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HeLa-S3
+expVars antibody=None species=None treatment=IFNa4h
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HeLa-S3
+expVars antibody=None species=None treatment=IFNg4h
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+expVars antibody=Input species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType LHSR
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType LHSR
+expVars antibody=None species=None treatment=androgen
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Pol2 species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType ProgFib
+expVars antibody=Input species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType H9ES
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Chorion
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=c-Myc species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Pol2 species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+expVars antibody=c-Myc species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType ProgFib
+expVars antibody=CTCF species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType AoSMC
+expVars antibody=None species=None treatment=serum_free_media
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Melano
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Myometr
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType NHBE
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType FibroP
+expVars antibody=None species=None treatment=None
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType ProgFib
+expVars antibody=Pol2 species=None treatment=None
+

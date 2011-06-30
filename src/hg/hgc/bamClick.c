@@ -27,7 +27,7 @@ struct bamTrackData
  * CIGAR that is anchored to positive strand while showing rc'd sequence.  I think
  * to do it right, we would need to reverse the CIGAR string for display. */
 static boolean useStrand = FALSE;
-
+static boolean skipQualityScore = FALSE;
 static void singleBamDetails(const bam1_t *bam)
 /* Print out the properties of this alignment. */
 {
@@ -37,7 +37,8 @@ int tLength = bamGetTargetLength(bam);
 int tStart = core->pos, tEnd = tStart+tLength;
 boolean isRc = useStrand && bamIsRc(bam);
 printPosOnChrom(seqName, tStart, tEnd, NULL, FALSE, itemName);
-printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
+if (!skipQualityScore)
+   printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
 printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
 bamShowCigarEnglish(bam);
 printf(")<BR>\n");
@@ -60,16 +61,19 @@ printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
        seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
 ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
 		 FALSE);
-printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
-UBYTE *quals = bamGetQueryQuals(bam, useStrand);
-int i;
-for (i = 0;  i < core->l_qseq;  i++)
+if (!skipQualityScore)
     {
-    if (i > 0 && (i % 24) == 0)
-	printf("</TR>\n<TR>");
-    printf("<TD>%c<BR>%d</TD>", qSeq[i], quals[i]);
+    printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
+    UBYTE *quals = bamGetQueryQuals(bam, useStrand);
+    int i;
+    for (i = 0;  i < core->l_qseq;  i++)
+        {
+        if (i > 0 && (i % 24) == 0)
+	    printf("</TR>\n<TR>");
+        printf("<TD>%c<BR>%d</TD>", qSeq[i], quals[i]);
+        }
+    printf("</TR></TABLE></TT>\n");
     }
-printf("</TR></TABLE></TT>\n");
 }
 
 static void showOverlap(const bam1_t *leftBam, const bam1_t *rightBam)
@@ -165,6 +169,10 @@ void doBamDetails(struct trackDb *tdb, char *item)
 if (item == NULL)
     errAbort("doBamDetails: NULL item name");
 int start = cartInt(cart, "o");
+if (!tdb || !trackDbSetting(tdb, "bamSkipPrintQualScore"))
+   skipQualityScore = FALSE;
+else
+   skipQualityScore = TRUE;
 // TODO: libify tdb settings table_pairEndsByName, stripPrefix and pairSearchRange
 
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
