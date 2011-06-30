@@ -1213,7 +1213,7 @@ struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj 
             dyStringPrintf(dy, ")");
         }
     dyStringPrintf(dy, " order by binary obj, var");    // binary forces case-sensitive sort
-    verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+    verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
     struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,buildHash);
