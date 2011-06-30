@@ -219,11 +219,12 @@ foreach my $objName (keys %metaLines) {
     # determine term type for experiment parameters - extracted from composite expVars
     my @varTermTypes;
     my $composite = $metadata{"composite"};
-    if (defined($composite)) {
-        my $expVars = $composites{$composite};
-        if (defined($expVars)) {
-            @varTermTypes = split(",", $expVars);
-        }
+
+    # can't handle if there are no expVars defined for composite (it's probably a combined or other non-production track)
+    my $expVars = $composites{$composite};
+    next if (!defined($expVars));
+    if (defined($expVars)) {
+        @varTermTypes = split(",", $expVars);
     }
 
     my %vars = ();
