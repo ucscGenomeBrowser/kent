@@ -5,7 +5,7 @@ expVars lab,dataType,cell,antibody,treatment,protocol
 
 metaObject wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmAlnRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId SL335
@@ -27,7 +27,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId SL335
@@ -49,7 +49,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmRawRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId SL335
@@ -2028,7 +2028,7 @@ view Alignments
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshControl
 objType file
 antibody Input
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL108
 dataType ChipSeq
@@ -2051,7 +2051,7 @@ view Alignments
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshNrsf
 objType file
 antibody NRSF
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL108
 dataType ChipSeq
@@ -3834,7 +3834,7 @@ view Alignments
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2SknshControl
 objType file
 antibody Input
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL410
 dataType ChipSeq
@@ -3857,7 +3857,7 @@ view Alignments
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2SknshNrsf
 objType file
 antibody NRSF
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL410
 dataType ChipSeq
@@ -3950,7 +3950,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL678
@@ -3972,7 +3972,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL678
@@ -3994,7 +3994,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xRawRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL678
@@ -4016,7 +4016,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL294
@@ -4038,7 +4038,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL295
@@ -4060,7 +4060,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL294
@@ -4082,7 +4082,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL295
@@ -4104,7 +4104,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL294
@@ -4126,7 +4126,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL295
@@ -5726,7 +5726,7 @@ view Peaks
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep1SknshNrsf
 objType table
 antibody NRSF
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL108
 dataType ChipSeq
@@ -7326,7 +7326,7 @@ view Peaks
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep2SknshNrsf
 objType table
 antibody NRSF
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL410
 dataType ChipSeq
@@ -7374,7 +7374,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL16
@@ -7397,7 +7397,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL412
@@ -7420,7 +7420,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL16
@@ -7443,7 +7443,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL412
@@ -7466,7 +7466,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xRawRep1
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL16
@@ -7489,7 +7489,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xRawRep2
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL412
@@ -12134,7 +12134,7 @@ view RawSignal
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1SknshControl
 objType table
 antibody Input
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL108
 dataType ChipSeq
@@ -12157,7 +12157,7 @@ view RawSignal
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1SknshNrsf
 objType table
 antibody NRSF
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL108
 dataType ChipSeq
@@ -13942,7 +13942,7 @@ view RawSignal
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2SknshControl
 objType table
 antibody Input
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL410
 dataType ChipSeq
@@ -13965,7 +13965,7 @@ view RawSignal
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2SknshNrsf
 objType table
 antibody NRSF
-cell HTB-11
+cell SK-N-SH
 composite wgEncodeHudsonalphaChipSeq
 controlId SL410
 dataType ChipSeq
@@ -14056,4 +14056,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -541757313
+# MAGIC: -545583221
