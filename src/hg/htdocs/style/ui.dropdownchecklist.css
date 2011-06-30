@@ -1,54 +1,60 @@
-.multiCb {
-	height: 20px;
-	border: 2px ridge gray;
-	background: white;
+/** Minimal stand-alone css for dropdownchecklist support
+    We highly recommend using JQuery ThemeRoller instead  
+*/
+.ui-dropdownchecklist {
+	border-style: none;
+    font-family: Verdana,Arial,sans-serif; 
+	font-size: .9em;
+	color: black;
 }
-.multiCb-hover, .multiCb-active {
-	border: 2px inset #000088;
+.ui-dropdownchecklist-selector {
+	background: black;
 }
-
-.multiCb-text {
-	font-size: 14px;
-	height: 20px;
-	line-height: 20px;
+.ui-state-hover, .ui-state-active {
+	border-color: #5794bf;
 }
-
-.multiCb-label {
-	font-size: 14px;
-	height: 20px;
-	line-height: 20px;
+.ui-dropdownchecklist-dropcontainer {
+	background: black;
+	border: 1px solid #000088; 
 }
-
-.multiCb-dropcontainer {
-	background-color: #fff;
-	border: 1px solid #000088;
+.ui-dropdownchecklist-item {
 }
-
-.multiCb-item {
-
+.ui-state-hover { /* Is not working... style overriding? */
+	/* border: 2px inset #000088; */
+	/* border-color: #000088; */
+	/* background: #000044; */
 }
-
-.multiCb-item-hover {
-	background-color: #39f;
+.ui-state-default {
+	color: black;
 }
-
-.multiCb-item-excluded label {
+.ui-state-disabled label {
+	color: #ccc;
+}
+.ui-state-excluded label {
 	color: #999999;
 }
 
-.multiCb-item-disabled label {
-	color: #ccc;
-}
-
-.multiCb-item-hover .multiCb-text {
-	color: #fff;
-}
-
-/*.multiCb-group {
+.ui-dropdownchecklist-group {
 	font-weight: bold;
 	font-style: italic;
 }
-
-.multiCb-indent {
-	padding-left: 20px;
-} */
+.ui-dropdownchecklist-indent {
+	padding-left: 7px;
+}
+/* Font size of 0 on the -selector and an explicit medium on -text required to eliminate 
+   descender problems within the containers and still have a valid size for the text */
+.ui-dropdownchecklist-selector-wrapper {
+	border: 2px inset gray;
+	background: black;
+	vertical-align: middle;
+}
+.ui-dropdownchecklist-selector {
+	padding: 1px 1px 1px 1px;
+}
+.ui-dropdownchecklist-text {
+	color: black;
+	line-height: 20px;
+}
+.ui-dropdownchecklist-group {
+	padding: 1px 2px 2px 2px;
+}

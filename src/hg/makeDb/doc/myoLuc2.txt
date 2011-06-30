@@ -150,6 +150,9 @@ taxId 59463
     hgsql -N -e "select ix from gap;" myoLuc2 | sort -n | tail -1
     #	2378
 
+    featureBits -countGaps myoLuc2 gap
+    # 68155432 bases of 2034575300 (3.350%) in intersection
+
 
 ########################################################################
 # Create kluster run files (DONE - 2010-11-04 - Chin)
@@ -277,7 +280,7 @@ myoLuc2.refseq.mrna.xeno.loadDesc  = yes
 # reset default position to RHO location as result from RHO gene search
 #	(DONE 2011-02-15 - Chin)
     hgsql -e \
-'update dbDb set defaultPos="GL429775:12,852,264-12,856,982" where name="myoLuc2";' \
+'update dbDb set defaultPos="GL429775:12,072,919-12,378,895" where name="myoLuc2";' \
 	hgcentraltest
 
 # NOTE - create myoLuc2 entry in all.joiner since this is a new species

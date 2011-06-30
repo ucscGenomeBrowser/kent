@@ -1782,29 +1782,6 @@ subId 1028
 treatment None
 view Alignments
 
-metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlPcr2x
-objType file
-antibody Input
-cell K562
-composite wgEncodeHudsonalphaChipSeq
-controlId SL233
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlPcr2x.tagAlign.gz
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL233
-project wgEncode
-protocol PCR2x
-replicate 1
-setType input
-subId 262
-treatment None
-view Alignments
-
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlV2
 objType file
 antibody Input
@@ -11887,30 +11864,6 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x
 treatment None
 view RawSignal
 
-metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x
-objType table
-antibody Input
-cell K562
-composite wgEncodeHudsonalphaChipSeq
-controlId SL233
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-15
-dateUnrestricted 2010-04-15
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL233
-project wgEncode
-protocol PCR2x
-replicate 1
-setType input
-softwareVersion 1
-subId 262
-tableName wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x
-treatment None
-view RawSignal
-
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2
 objType table
 antibody Input
@@ -14056,4 +14009,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -545583221
+# MAGIC: 1485803612

@@ -244,7 +244,7 @@ function filterCompositeSelectionChanged(obj)
         }
         // Filter for Matrix CBs too
         if (subCBsToSelect.length > 0) {
-            var matCb = $("input.matCb").filter(":checked");
+            var matCb = $("input.matCB").filter(":checked");
             if (matCb.length > 0) {
                 var matchClasses = "";
                 $( matCb ).each( function(i) {
@@ -923,19 +923,40 @@ function filterCompositeExcludeOptions(obj)
     });
     // Matrix CBs need to be considered too
     if (subCBs.length > 0) {
-        var matCb = $("input.matCb").filter(":checked");
+        var matCb = $("input.matCB").filter(":checked");
         if (matCb.length == 0)
             oneEmpty = true;
         else {//if (matCb.length > 0) {
-            var matchClasses = "";
-            $( matCb ).each( function(i) {
-                var filterClasses = $( this ).attr("class").split(" ");
-                filterClasses = aryRemove(filterClasses,"matCB","halfVis","abc");
-                matchClasses = matchClasses + ",." + filterClasses.join('.');
-            });
-            if (matchClasses.length > 0) {
-                matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
-                subCBs = $(subCBs).filter(matchClasses);
+            // If all selected, no additional filtering needed.
+            if (matCb.length < $("input.matCB").length) {
+                var matchClasses = "";
+                $( matCb ).each( function(i) {
+                    var filterClasses = $( this ).attr("class").split(" ");
+                    filterClasses = aryRemove(filterClasses,"matCB","halfVis","abc");
+                    matchClasses = matchClasses + ",." + filterClasses.join('.');
+                });
+                if (matchClasses.length > 0) {
+                    matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
+                    if ($.browser.msie) {   // IE was hanging on .filter(matchClasses), so do this ourselves
+                        var matchSets = matchClasses.split(',');
+                        if (matchSets < 80 && $(subCBs).length < 300) { // IE is just choking!
+                            var subsAccumulating = null;
+                            while(matchSets.length > 0) {
+                                var matchThis = matchSets.pop();
+                                var subBatch = $(subCBs).filter(matchThis);
+                                if (subBatch != undefined && subBatch.length > 0) {
+                                    //subCBs = $(subCBs).not(matchThis); // Would be nice to split the subCBs
+                                    if (subsAccumulating == null || subsAccumulating.length == 0)
+                                        subsAccumulating = subBatch;
+                                    else
+                                        subsAccumulating = subsAccumulating.add(subBatch);
+                                }
+                            }
+                            subCBs = subsAccumulating;
+                        }
+                    } else
+                        subCBs = $(subCBs).filter(matchClasses);
+                }
             }
         }
     }
@@ -1079,7 +1100,13 @@ $(document).ready(function()
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
 
     $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
+        if (newJQuery) {
+            if ($(this).hasClass('filterBy'))
+                ddclSetup(this, 'noneIsAll');
+            else
+                ddclSetup(this);
+        } else
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
     });
 
     // Put navigation links in top corner
