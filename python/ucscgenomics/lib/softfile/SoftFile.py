@@ -53,9 +53,9 @@ class SoftFile(OrderedDict):
 		#print stanza
 	
 		if stanza[0].startswith('^SAMPLE'):
-			entry = SampleStanza()
+			entry = HighThroughputSampleStanza() #WILL HAVE TO CHANGE
 		elif stanza[0].startswith('^SERIES'):
-			entry = SeriesStanza()
+			entry = HighThroughputSeriesStanza() #WILL HAVE TO CHANGE
 		elif stanza[0].startswith('^PLATFORM'):
 			entry = PlatformStanza()
 		else:
@@ -91,6 +91,17 @@ class SoftFile(OrderedDict):
 			str += self[item].__str__()
 			
 		return str
+		
+			
+class HighThroughputSoftFile(SoftFile):
+
+	def __init__(self, filePath=''):
+		SoftFile__init__(self, filePath)
+
+class MicroArraySoftFile(SoftFile):
+
+	def __init__(self, filePath=''):
+		SoftFile__init__(self, filePath)
 		
 			
 class KeyRequired(object):
@@ -172,7 +183,7 @@ class SoftStanza(OrderedDict):
 			self[key] = val
 		
 		#this is for channel data in MicroArraySamples
-		if channelkey in self.keys and (self.keys[channelkey] == KeyZeroPlusChannel or self.keys[channelkey] == KeyOnePlusChannel):
+		elif channelkey in self.keys and (self.keys[channelkey] == KeyZeroPlusChannel or self.keys[channelkey] == KeyOnePlusChannel):
 			self[key] = val
 		
 		#if its a single value (ie 0 or 1 allowed entries)
@@ -182,10 +193,11 @@ class SoftStanza(OrderedDict):
 		else:
 		
 			if key not in self.keys:
-				raise KeyError('invalid key')
+				print splitkey
+				raise KeyError(self._name + ': invalid key: ' + key)
 			
 			if (self.keys[key] == KeyRequired or self.keys[key] == KeyOptional) and key in self:
-				raise KeyError('too many of key')
+				raise KeyError(self._name + ': too many of key: ' + key)
 				
 			if key not in self:
 				self[key] = list()
