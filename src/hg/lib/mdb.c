@@ -2451,6 +2451,7 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 {
+//TODO: move CV_VALIDATE* support to cv.c and merge with validation there
 struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
 struct mdbObj *mdbObj = NULL;
 int invalids = 0;
