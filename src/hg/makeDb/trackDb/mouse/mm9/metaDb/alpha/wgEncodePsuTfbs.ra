@@ -1,7 +1,7 @@
 metaObject wgEncodePsuTfbs
 objType composite
 composite wgEncodePsuTfbs
-expVars lab,dataType,cell,antbody
+expVars lab,dataType,cell,antibody
 
 metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1
 objType file
@@ -1053,4 +1053,4 @@ strain C57BL/6
 subId 3044
 view RawData
 
-# MAGIC: 830669367
+# MAGIC: -1790894176
