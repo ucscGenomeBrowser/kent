@@ -9640,11 +9640,11 @@ organism mouse
 term Yale-m
 tag  YALE
 type lab
-label Snyder - Yale University
-description Snyder - Yale University
+label Weissman - Yale University
+description Weissman - Yale University
 labInst Yale
-labPi Snyder
-labPiFull Michael Snyder
+labPi Weissman
+labPiFull Sherman Weissman
 grantPi Snyder
 organism mouse
 

@@ -1,3 +1,8 @@
+metaObject wgEncodeSydhRnaSeq
+objType composite
+composite wgEncodeSydhRnaSeq
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeSydhRnaSeqCh12PolyaAlnRep1
 objType table
 age immortalized
@@ -193,4 +198,4 @@ tableName wgEncodeSydhRnaSeqMelPolyaSigRep1
 treatment None
 view Signal
 
-# MAGIC: 1176519385
+# MAGIC: -742947084
