@@ -11,6 +11,18 @@ $(document).ready(function()
                                             minLength: 2,
                                             // XXXX necessary still? autowidth: true,
                                             source: ajaxGet(function () {return document.orgForm.db.value;}, new Object, true),
+                                            open: function(event, ui) {
+                                                var pos = $(this).offset().top + $(this).height();
+                                                if (!isNaN(pos)) {
+                                                    var maxHeight = $(window).height() - pos - 30;  // take off a little more because IE needs it
+                                                    var auto = $('.ui-autocomplete');
+                                                    var curHeight = $(auto).children().length * 21;
+                                                    if (curHeight > maxHeight)
+                                                        $(auto).css({maxHeight: maxHeight+'px',overflow:'scroll'});
+                                                    else
+                                                        $(auto).css({maxHeight: 'none',overflow:'hidden'});
+                                                }
+                                            },
                                             select: function (event, ui) {
                                                 document.mainForm.position.value = ui.item.id;
                                                 makeSureSuggestTrackIsVisible();

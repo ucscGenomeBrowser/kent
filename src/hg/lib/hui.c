@@ -3529,8 +3529,11 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     printf("<BR>\n");
 
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-    //#define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple><BR>\n"
-    #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
+    #ifdef NEW_JQUERY
+        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none; font-size:.9em;' class='filterComp filterBy'><BR>\n"
+    #else///ifndef NEW_JQUERY
+        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
+    #endif///ndef NEW_JQUERY
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""));
@@ -6471,7 +6474,11 @@ for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
         fullSize++; // Room for "All"
     #endif///def FILTER_COMPOSITE_OPEN_SIZE
 
-#define FILTER_COMPOSITE_FORMAT "<SELECT id='fc%d' name='%s.filterComp.%s' %s onchange='filterCompositeSelectionChanged(this);' style='display: none;' class='filterComp'><BR>\n"
+#ifdef NEW_JQUERY
+    #define FILTER_COMPOSITE_FORMAT "<SELECT id='fc%d' name='%s.filterComp.%s' %s onchange='filterCompositeSelectionChanged(this);' style='display: none; font-size:.8em;' class='filterComp'><BR>\n"
+#else///ifndef NEW_JQUERY
+    #define FILTER_COMPOSITE_FORMAT "<SELECT id='fc%d' name='%s.filterComp.%s' %s onchange='filterCompositeSelectionChanged(this);' style='display: none;' class='filterComp'><BR>\n"
+#endif///ndef NEW_JQUERY
     printf(FILTER_COMPOSITE_FORMAT,dimIx,parentTdb->track,membersForAll->members[dimIx]->groupTag,"multiple");
 
     #ifdef FILTER_COMPOSITE_ONLYONE

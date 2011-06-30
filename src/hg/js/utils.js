@@ -1771,6 +1771,7 @@ function findTracksMdbVarChanged(obj)
                    type: "GET",
                    url: "../cgi-bin/hgApi",
                    data: cgiVars,
+                   dataType: 'html',
                    trueSuccess: findTracksHandleNewMdbVals,
                    success: catchErrorOrDispatch,
                    error: errorHandler,
@@ -1779,7 +1780,9 @@ function findTracksMdbVarChanged(obj)
                    num: num
                });
     }
-    //findTracksSearchButtonsEnable(true);
+    // NOTE: with newJquery, the response is getting a new error (missing ; before statement)
+    //       There were also several XML parsing errors.
+    // This error is fixed with the addition of "dataType: 'html'," above.
 }
 
 function findTracksHandleNewMdbVals(response, status)
@@ -1804,7 +1807,10 @@ function findTracksHandleNewMdbVals(response, status)
         }
         $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             if (usesFilterBy) {
-                $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+                if (newJQuery)
+                    ddclSetup(this,'noneIsAll');
+                else
+                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
             } else {
                 $(this).attr("multiple",false);
                 $(this).removeClass('filterBy');
@@ -1830,9 +1836,11 @@ function findTracksMdbValChanged(obj)
             $("select.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").each( function (i) {
                 $(this).val(newVal);
                 if ($(this).hasClass('filterBy')) {
-                    //$(this).dropdownchecklist("refresh");  // requires v1.1
                     $(this).dropdownchecklist("destroy");
-                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+                    if (newJQuery)
+                        ddclSetup(this,'noneIsAll');
+                    else
+                        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
                 }
             });
         }
@@ -2022,6 +2030,9 @@ function filterByMaxHeight(multiSel)
     var selHeight = $(multiSel).children().length * 21;
     if (maxHeight > selHeight)
         maxHeight = null;
+    //else if($.browser.msie && maxHeight > 500)  // DDCL bug on IE only.
+    //    maxHeight = 500;          // Seems to be solved by disbling DDCL's window.resize event for IE
+
     return maxHeight;
 }
 
@@ -2034,7 +2045,11 @@ function findTracksClear()
     $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
         //$(this).dropdownchecklist("refresh");  // requires v1.1
         $(this).dropdownchecklist("destroy");
-        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+        $(this).show();
+        if (newJQuery)
+            ddclSetup(this,'noneIsAll');
+        else
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
     });
 
     $('select.groupSearch').attr('selectedIndex',0);
@@ -2098,8 +2113,23 @@ function findTracksMdbSelectPlusMinus(obj, rowNum)
         if (buttons.length > 0) {
             $(buttons).each(function (i) {
                 var tr = $(this).parents('tr.mdbSelect')[0];
-                if (tr != undefined)
-                    $(tr).after( $(tr).clone() );
+                if (tr != undefined) {
+                    if(newJQuery) {
+                        var newTr = $(tr).clone();
+                        var element = $(newTr).find("select.mdbVar")[0];
+                        if (element != undefined)
+                            $(element).attr('selectedIndex',-1);
+
+                        element = $(newTr).find("td[id^='hgt_mdbVal']")[0];
+                        if (element != undefined)
+                            $(element).empty();
+                        element = $(newTr).find("td[id^='isLike']")[0];
+                        if (element != undefined)
+                            $(element).empty();
+                        $(tr).after( newTr );
+                    } else
+                        $(tr).after( $(tr).clone() );
+                }
                 findTracksMdbSelectRowsNormalize($(tr).parents('table')[0]); // magic is in this function
             });
             return false;
@@ -2182,6 +2212,10 @@ function findTracksSwitchTabs(ui)
 
     if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
         setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
+    } else if( ui.panel.id == 'advancedTab') {
+        // Advanced tab has DDCL wigets which were sized badly because the hidden width was unknown
+        // delay necessary, since select event not afterSelect event
+        setTimeout("ddclReinit($('div#advancedTab').find('select.filterBy'),false);",20);
     }
     if( $('div#filesFound').length == 1) {
         if( ui.panel.id == 'filesTab')
@@ -2363,6 +2397,314 @@ function filterTableExcludeOptions(filter)
         else
             $(this).addClass('excluded');    // add .excluded" to non-matching
     });
+
+    // If all options except "all" are included then all should nt be excluded
+    var excluded = $(filter).children('option.excluded');
+    if (excluded.length == 1) {
+        var text = $(excluded[0]).text();
+        if (text == 'All' || text == 'Any')
+            $(excluded[0]).removeClass('excluded');
+    }
     return true;
 }
 
+
+/////////// DDCL: drop-down checkbox-list wrapper code /////////////
+
+function textOfObjWrappedInStyle(obj)
+{ // returns the obj text and if there is obj style, the text gets span wrapped with it
+    var text = '';
+    var style = $(obj).attr('style');
+    if (style != undefined && style.length > 0)
+        text = "<span style='"+style+"'>";
+    text += $(obj).text();
+    if (style != undefined && style.length > 0)
+        text += "</span>";
+
+    return text;
+}
+
+function ddclTextOfCurrentSelections(options)
+{ // Generates a multi-line string of currently selected options
+    var chosen = $(options).filter(':selected');  // Works with FF and Chrome but not IE!
+    if (chosen.length == 0 && $.browser.msie)
+        chosen = $(options).find(':selected');  // Works with IE but not FF and Chrome!
+    var chosenCount = $(chosen).length;
+    var msg = '';
+    if(chosenCount == 0) {
+        msg = 'Please select...';
+    } else if(chosenCount == 1) {
+        msg = textOfObjWrappedInStyle(chosen[0]);
+    } else if(chosenCount == options.length) {
+        msg = textOfObjWrappedInStyle(options[0]);
+    } else {
+        for(var ix=0;ix<chosenCount;ix++) {
+            if (ix > 0)
+                msg += "<BR>";
+            msg += textOfObjWrappedInStyle(chosen[ix]);
+        }
+    }
+    return msg;
+}
+
+function ddclLabelSet(control,msg,newTextColor,newTitle)
+{ // Sets the label text (as opposed to the drop-down options)
+    var controlLabel    = $(control).find(".ui-dropdownchecklist-text");
+    var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
+    var newHeight = msg.split('<BR>').length * 20;
+    //$(control).css('height',newHeight + 'px');
+    $(controlSelector).css({height: newHeight + 'px', background: '#fff'});
+    $(controlLabel).attr('title',newTitle);
+    $(controlLabel).css({height: newHeight + 'px'});
+    $(controlLabel).css('color',newTextColor ); // could be empty string, thus removing the color
+    $(controlLabel).html(msg);
+}
+
+function ddclOnOpen(event)
+{ // Called by a DDCL onClick event (when the drop list is opened)
+
+    // Set the label
+    var control = $(this).parent();
+    ddclLabelSet(control,"Select multiple...",'#000088','Selecting...');
+
+    // Find the active 'items' and original 'options'
+    var id = $(control).attr('id').substring('ddcl-'.length);
+    var dropWrapper = $('#ddcl-' + id + '-ddw');//.first();
+    var selector = $('#' + id);
+    var allCheckboxes = $(dropWrapper).find("input.active");
+    var selectOptions = selector[0].options;
+
+    // Special juice to handle "exclude" options based upon competing filterBoxes
+    try {
+        if(($(selector).hasClass('filterComp')  && filterCompositeExcludeOptions(selector))
+        || ($(selector).hasClass('filterTable') && filterTableExcludeOptions(selector))) {
+
+            // "exclude" items based upon the exclude tag of the true options
+            allCheckboxes.each(function(index) {
+                var item = $(this).parent();
+                if($(selectOptions[index]).hasClass('excluded')) {
+                    $(item).addClass("ui-state-excluded");
+                } else //if($(item).hasClass("ui-state-excluded"))
+                    $(item).removeClass("ui-state-excluded");
+            });
+        }
+    }
+    catch (err) {} // OK if filterCompositeExcludeOptions is not defined.
+
+    // Show only first as selected if it is selected
+    if (allCheckboxes[0].checked == true) {
+        allCheckboxes.each(function(index) {
+            if (index > 0)
+                $(this).attr('checked',false);
+        });
+    }
+}
+
+function ddclOnComplete(selector)
+{ // Called by ui.dropdownchecklist.js when selections have been made
+  // Also called at init to fill the selector with current choices
+
+    // Warning: In IE this gets called when still selecting!
+
+    var id = $(selector).attr('id');
+
+    // If no  options are selected, may have to force all
+    var chosen = $(selector).find('option:selected');
+    if (chosen.length == 0) {
+        if ($(selector).hasClass('noneIsAll')) {
+            //$(selector).first('option').first().attr('selected',true);
+            selector.options[0].selected = true;
+            // How to check the first item?
+            var dropWrapper = $('#ddcl-' + id + '-ddw');
+            $(dropWrapper).find("input").first().attr("checked",true);
+        }
+    } else if (chosen.length == $(selector).find('option').length) {
+        // If all are chosen then select only the first!
+        $(chosen).each(function(index) {
+            if (index > 0)
+                $(this).attr('selected',false);
+        });
+    }
+
+    var msg = ddclTextOfCurrentSelections(selector.options);
+
+    var control = this.controlWrapper;
+    if (control == null || control == undefined) { // caller is not constant
+        control = $('#ddcl-' + id);
+    }
+    var newColor = '';
+    if ($(selector).find('option:selected').length == 0)
+        newColor = '#AA0000'; // red
+    //else if (msg.search(/color:/i) == -1)
+    //    newColor = 'black';
+    ddclLabelSet(control,msg,newColor,'Click to select...');
+}
+
+function ddclReinit(filterBys,force)
+{ // ReInitialize the DDCLs (drop-down checkbox-list)
+  // This is done when the track search with tabs gets switched to advanced tab
+  // because the DDCLs were setup on hidden filterBys and dimensiuons are wrong.
+  // if not force, then only reinit when the dimensions are suspect
+
+    if (filterBys.length < 1)
+        return;
+
+    $(filterBys).each( function(i) { // Do this by 'each' to set noneIsAll individually
+        if (!force) { // condition on bad dimensions
+            var id = $(this).attr('id');
+            control = $('#ddcl-' + id);
+            if (control != null && control != undefined) {
+                var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
+                if ($(controlSelector).width() > 20)
+                    return;  // Dimensions look okay
+            }
+        }
+        $(this).dropdownchecklist("destroy");
+        $(this).show(); // necessary to get dimensions
+        if (newJQuery)
+            ddclSetup(this,'noneIsAll');
+        else
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+    });
+}
+
+function ddclSetup(obj)
+{ // Initialize the multiselect as a DDCL (drop-down checkbox-list)
+
+    // Defaults
+    var myFirstIsAll = true;
+    var myNoneIsAll  = false;
+    var myIcon       = null;
+    var myEmptyText  = 'Select...';
+    var myClose      = 'close&nbsp;&nbsp;';
+    var myDropHeight = filterByMaxHeight(obj);
+    // parse optional args
+    for(var vIx=1;vIx<arguments.length;vIx++) {
+        switch(arguments[vIx]) {
+            case 'noneIsAll':   myNoneIsAll = true;
+                                break;
+            case 'firstNotAll': myFirstIsAll = false;
+                                break;
+            case 'arrows':      myIcon = {};
+                                break;
+            case 'noClose':     myClose = null;
+                                break;
+            case 'label':       vIx++;
+                                if (vIx<arguments.length)
+                                    myEmptyText  = arguments[vIx];
+                                break;
+            default:            warn('ddclSetup() unexpected argument: '+arguments[vIx]);
+                                break;
+        }
+    }
+    if (myFirstIsAll == false)
+        myNoneIsAll  = false;
+
+    // Make sure there is an id!
+    var id = $(obj).attr('id');
+    if (id == null || id.length == 0) {
+        var name = $(obj).attr('name');
+        if (name != null && name.length > 0)
+            id = 'dd-' + name;
+        else {
+            var ix = $('select').index(obj);
+            id = 'ix' + ix;
+        }
+        $(obj).attr('id',id);
+    }
+
+    // These values can only be taken from the select before it becomes a DDCL
+    var maxWidth = $(obj).width();
+    var minWidth = $(obj).css('min-width');
+    if (minWidth != undefined && minWidth.length > 0) {
+        minWidth = parseInt(maxWidth);
+        if (maxWidth < minWidth)
+            maxWidth = minWidth;
+    }
+    maxWidth = (Math.ceil(maxWidth / 10) * 10) + 10; // Makes for more even boxes
+    var style = $(obj).attr('style');
+
+    // The magic starts here:
+    $(obj).dropdownchecklist({
+                        firstItemChecksAll: true,
+                        noneIsAll: myNoneIsAll,
+                        maxDropHeight: myDropHeight,
+                        icon: myIcon,
+                        emptyText: myEmptyText,
+                        explicitClose: myClose,
+                        textFormatFunction: function () { return 'selecting...'; } ,
+                        onComplete: ddclOnComplete
+    });
+    if (myNoneIsAll)
+        $(obj).addClass('noneIsAll'); // Declare this as none selected same as all selected
+    ddclOnComplete(obj); // shows selected items in multiple lines
+
+    // Set up the selector (control seen always and replacing select)
+    control = $('#ddcl-' + id);
+    if (control == null || control == undefined) {
+        warn('ddclSetup('+id+') failed to create drop-down checkbox-list');
+        return;
+    }
+    var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
+    $(controlSelector).click(ddclOnOpen);
+    $(controlSelector).css({width:maxWidth+'px'});
+    var controlText = $(control).find(".ui-dropdownchecklist-text");
+    $(controlText).css({width:maxWidth+'px'});
+
+    // Set up the drop list (control seen only on fucus and with items to choose)
+    var dropWrapper = $('#ddcl-' + id + '-ddw');
+    if (dropWrapper == null || dropWrapper == undefined) {
+        warn('ddclSetup('+id+') failed to create drop-down checkbox-list');
+        return;
+    }
+    // Individual items need styling
+    var itemHeight = 22;
+    // Exclude the close button
+    var dropItems = $(dropWrapper).find(".ui-dropdownchecklist-item");//.not('.ui-dropdownchecklist-close');
+    $(dropItems).hover(function () {$(this).css({backgroundColor:'#CCFFCC'});},
+                       function () {$(this).css({backgroundColor:'white'});});
+    var dropItems = $(dropItems).not('.ui-dropdownchecklist-close');
+    $(dropItems).css({background:'white', borderStyle:'none', height:itemHeight+'px'});
+    var itemCount = dropItems.length;
+    if (myClose != null) {  // target the close button
+        var dropClose = $(dropWrapper).find(".ui-dropdownchecklist-close");
+        $(dropClose).css({height:(itemHeight - 1)+'px',textAlign:'center'});
+        itemCount++;
+    }
+
+    // The whole droplist needs styling
+    var dropContainerDiv = dropWrapper.find(".ui-dropdownchecklist-dropcontainer");
+    var maxHeight = (itemHeight*itemCount) + 1; // extra prevents unwanted vertical scrollbar
+    var divHeight = dropContainerDiv.outerHeight();
+    if (divHeight > maxHeight) {
+        $(dropContainerDiv).css({height:maxHeight+'px'});
+        $(dropWrapper).css({height:maxHeight+'px'});
+    }
+    maxWidth += 30; // extra avoids horizontal scrollBar when vertical one is included
+    $(dropContainerDiv).css({width:(maxWidth)+'px'});
+    $(dropWrapper).css({width:maxWidth+'px'});
+
+    // Finally we can get style from the original select and apply it to the whole control (hopefully)
+    if (style != undefined && style.length > 0) {
+        var styles = style.split(';');
+        for(var ix = 0;ix < styles.length;ix++) {
+            var aStyleDef = styles[ix].split(':');
+             aStyleDef[0] = aStyleDef[0].replace(' ',''); // no spaces
+            if (aStyleDef[0] != 'display') // WARNING: Need to see if other styles should be restricted.
+                $(control).css(aStyleDef[0],aStyleDef[1]);
+            if (aStyleDef[0].substring(0,4) == 'font')  // Fonts should be applied too
+                $(dropItems).css(aStyleDef[0],aStyleDef[1]);
+        }
+    }
+
+    // TODO:
+    // - Chrome multi-select required changing ddcl code as per issue 176.
+    // - package these changes: Could keep this in utils or could make a wrapper like DDCL itself.
+    // - test test test
+    //   Works on FF: track search, hgFileUi, hgTrackUi filterComp and filterBy, popup
+    //   Works on Chrom: track search, hgFileUi, hgTrackUi filterComp and filterBy, popup
+    //   Mostly works on IE: track search, hgFileUi, hgTrackUi filterComp and filterBy, popup
+    //   - IE needed special code to block window.resize event in DDCL.
+    //   - Have seen scripting timeouts on IE but I am not sure this is still an issue.
+    // *** v1.4 has been released which works with jquery 1.6.1 ***
+}
