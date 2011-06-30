@@ -53,7 +53,7 @@ usage: encodeReport.pl <assembly>
 
 options:
     -configDir=dir      Path of configuration directory, containing
-                        metadata .ra files (default: submission-dir/../config)
+                        cv.ra file (default: pipeline config dir)
     -expTable=table     Alternate experiment table to use for fishing experiment ID's
     -verbose=num        Set verbose level to num (default 1).
 END
@@ -89,7 +89,7 @@ if (defined $opt_expTable) {
     $expTable = $opt_expTable;
 }
 
-if(!(-d $configPath)) {
+if (!(-d $configPath)) {
     die "configPath '$configPath' is invalid; Can't find the config directory\n";
 }
 HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
@@ -418,8 +418,6 @@ foreach my $key (keys %experiments) {
     $experiment{"varLabels"} = "unknown" unless defined($experiment{"varLabels"});
     $experiment{"factorLabels"} = "unknown" unless defined($experiment{"factorLabels"});
     $experiment{"treatment"} = "unknown" unless defined($experiment{"treatment"});
-    $experiment{"strain"} = "unknown" unless defined($experiment{"strain"});
-    $experiment{"age"} = "unknown" unless defined($experiment{"age"});
     $experiment{"submitDate"} = "unknown"  unless defined($experiment{"submitDate"});
     $experiment{"releaseDate"} = "unknown" unless defined($experiment{"releaseDate"});
     my @ids = sort keys %ids;
