@@ -8,5 +8,6 @@ wgEncodePsuTfbs.ra \
 wgEncodeLicrTfbs.ra \
 wgEncodePsuHistone.ra \
 wgEncodeSydhRnaSeq.ra \
-wgEncodeLicrRnaSeq.ra
+wgEncodeLicrRnaSeq.ra \
+wgEncodeUwRnaSeq.ra
 include ../../../../makefile.metaDb
