@@ -11,6 +11,7 @@ import HTMLParser
 from optparse import OptionParser
 import re
 import shlex
+import string
 import subprocess
 import sys
 import urllib2 
@@ -20,8 +21,8 @@ from ucscgenomics.rafile.RaFile import *
 
 def stripLeadingTrailingWhitespace(text):
     """Given a string, remove any leading or trailing whitespace"""
-    text = re.sub("^( )+", "", text)
-    text = re.sub("( )+$", "", text)
+    text = re.sub("^([" + string.whitespace + "])+", "", text)
+    text = re.sub("([" + string.whitespace + "])+$", "", text)
     return(text)
 
 def getContents(field):

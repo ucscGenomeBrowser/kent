@@ -133,7 +133,6 @@
 static char const rcsid[] = "$Id: simpleTracks.c,v 1.149 2010/06/05 19:29:42 braney Exp $";
 
 #define CHROM_COLORS 26
-#define SMALLDYBUF 64
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
@@ -4299,7 +4298,9 @@ struct dyString *dyQuery = NULL;
 if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
     {
     if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
+        || startsWith("wgEncodeGencodeComp", tg->tdb->track)
         || startsWith("wgEncodeGencodeFull", tg->tdb->track)
+        || startsWith("wgEncodeGencode2wayConsPseudo", tg->tdb->track)
         || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
         dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
     }

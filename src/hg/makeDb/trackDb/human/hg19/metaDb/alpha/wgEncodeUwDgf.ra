@@ -288,27 +288,6 @@ subId 2047
 tableName wgEncodeUwDgfH7esHotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfH7esPk
-objType table
-cell H7-hESC
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-25
-dateUnrestricted 2011-04-24
-dccAccession wgEncodeEH000834
-expId 834
-fileName wgEncodeUwDgfH7esPk.narrowPeak.gz
-geoSampleAccession GSM646563
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-subId 2047
-tableName wgEncodeUwDgfH7esPk
-view Peaks
-
 metaObject wgEncodeUwDgfH7esPkV2
 objType table
 cell H7-hESC
@@ -318,6 +297,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 dccAccession wgEncodeEH000834
+dccInternalNotes geoSampleAccession GSM646563
 expId 834
 fileName wgEncodeUwDgfH7esPkV2.narrowPeak.gz
 grant Stam
@@ -431,27 +411,6 @@ subId 2048
 tableName wgEncodeUwDgfHaeHotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfHaePk
-objType table
-cell HAEpiC
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-25
-dateUnrestricted 2011-04-24
-dccAccession wgEncodeEH000835
-expId 835
-fileName wgEncodeUwDgfHaePk.narrowPeak.gz
-geoSampleAccession GSM646560
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-subId 2048
-tableName wgEncodeUwDgfHaePk
-view Peaks
-
 metaObject wgEncodeUwDgfHaePkV2
 objType table
 cell HAEpiC
@@ -461,6 +420,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 dccAccession wgEncodeEH000835
+dccInternalNotes geoSampleAccession GSM646560
 expId 835
 fileName wgEncodeUwDgfHaePkV2.narrowPeak.gz
 grant Stam
@@ -574,27 +534,6 @@ subId 2050
 tableName wgEncodeUwDgfHcpeHotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfHcpePk
-objType table
-cell HCPEpiC
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-25
-dateUnrestricted 2011-04-25
-dccAccession wgEncodeEH000836
-expId 836
-fileName wgEncodeUwDgfHcpePk.narrowPeak.gz
-geoSampleAccession GSM646565
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-subId 2050
-tableName wgEncodeUwDgfHcpePk
-view Peaks
-
 metaObject wgEncodeUwDgfHcpePkV2
 objType table
 cell HCPEpiC
@@ -604,6 +543,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 dccAccession wgEncodeEH000836
+dccInternalNotes geoSampleAccession GSM646565
 expId 836
 fileName wgEncodeUwDgfHcpePkV2.narrowPeak.gz
 grant Stam
@@ -844,27 +784,6 @@ subId 2049
 tableName wgEncodeUwDgfHmfHotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfHmfPk
-objType table
-cell HMF
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-25
-dateUnrestricted 2011-04-25
-dccAccession wgEncodeEH000837
-expId 837
-fileName wgEncodeUwDgfHmfPk.narrowPeak.gz
-geoSampleAccession GSM646561
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-subId 2049
-tableName wgEncodeUwDgfHmfPk
-view Peaks
-
 metaObject wgEncodeUwDgfHmfPkV2
 objType table
 cell HMF
@@ -874,6 +793,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 dccAccession wgEncodeEH000837
+dccInternalNotes geoSampleAccession GSM646561
 expId 837
 fileName wgEncodeUwDgfHmfPkV2.narrowPeak.gz
 grant Stam
@@ -987,27 +907,6 @@ subId 2051
 tableName wgEncodeUwDgfHmvecdbladHotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfHmvecdbladPk
-objType table
-cell HMVEC-dBl-Ad
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-25
-dateUnrestricted 2011-04-25
-dccAccession wgEncodeEH000838
-expId 838
-fileName wgEncodeUwDgfHmvecdbladPk.narrowPeak.gz
-geoSampleAccession GSM646570
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-subId 2051
-tableName wgEncodeUwDgfHmvecdbladPk
-view Peaks
-
 metaObject wgEncodeUwDgfHmvecdbladPkV2
 objType table
 cell HMVEC-dBl-Ad
@@ -1017,6 +916,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 dccAccession wgEncodeEH000838
+dccInternalNotes geoSampleAccession GSM646570
 expId 838
 fileName wgEncodeUwDgfHmvecdbladPkV2.narrowPeak.gz
 grant Stam
@@ -1837,27 +1737,6 @@ subId 2046
 tableName wgEncodeUwDgfNhdfadHotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfNhdfadPk
-objType table
-cell NHDF-Ad
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-25
-dateUnrestricted 2011-04-24
-dccAccession wgEncodeEH000839
-expId 839
-fileName wgEncodeUwDgfNhdfadPk.narrowPeak.gz
-geoSampleAccession GSM646564
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-subId 2046
-tableName wgEncodeUwDgfNhdfadPk
-view Peaks
-
 metaObject wgEncodeUwDgfNhdfadPkV2
 objType table
 cell NHDF-Ad
@@ -1867,6 +1746,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 dccAccession wgEncodeEH000839
+dccInternalNotes geoSampleAccession GSM646564
 expId 839
 fileName wgEncodeUwDgfNhdfadPkV2.narrowPeak.gz
 grant Stam
@@ -2096,27 +1976,6 @@ subId 2045
 tableName wgEncodeUwDgfSkmcHotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfSkmcPk
-objType table
-cell SKMC
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-25
-dateUnrestricted 2011-04-24
-dccAccession wgEncodeEH000840
-expId 840
-fileName wgEncodeUwDgfSkmcPk.narrowPeak.gz
-geoSampleAccession GSM646562
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-subId 2045
-tableName wgEncodeUwDgfSkmcPk
-view Peaks
-
 metaObject wgEncodeUwDgfSkmcPkV2
 objType table
 cell SKMC
@@ -2126,6 +1985,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 dccAccession wgEncodeEH000840
+dccInternalNotes geoSampleAccession GSM646562
 expId 840
 fileName wgEncodeUwDgfSkmcPkV2.narrowPeak.gz
 grant Stam
@@ -2452,4 +2312,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -1357776728
+# MAGIC: 1779389292

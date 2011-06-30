@@ -3,11 +3,13 @@
 # encodeReport.pl - use metaDb tables to generate report of submitted and released experiments
 #
 # Reporting formats:
-# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment);
-# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession
+# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID, DCC_Accession
+
+# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID, DCC_Accession
 # Briefly was:
 # DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Submission Ids, Accession, Assembly
-# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly
+
+# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly, Exp_ID, DCC_Accession
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the git source at:
@@ -25,8 +27,7 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-#use lib "/cluster/bin/scripts";
-use lib "/cluster/home/kate/kent/src/hg/utils/automation";
+use lib "/cluster/bin/scripts";
 use Encode;
 use HgAutomate;
 use HgDb;
@@ -35,15 +36,16 @@ use SafePipe;
 
 use vars qw/
     $opt_configDir
+    $opt_expTable
     $opt_verbose
     /;
 
 # Global variables
 our $pipeline = "encpipeline_prod";
 our $pipelinePath = "/hive/groups/encode/dcc/pipeline/" . $pipeline;
-#our $configPath = $pipelinePath . "/config";
-our $configPath = "/cluster/home/kate/kent/src/hg/encode/encodeReport/config";
+our $configPath = $pipelinePath . "/config";
 our $assembly;  # required command-line arg
+our $expTable = "encodeExp";
 
 sub usage {
     print STDERR <<END;
@@ -51,7 +53,8 @@ usage: encodeReport.pl <assembly>
 
 options:
     -configDir=dir      Path of configuration directory, containing
-                        metadata .ra files (default: submission-dir/../config)
+                        cv.ra file (default: pipeline config dir)
+    -expTable=table     Alternate experiment table to use for fishing experiment ID's
     -verbose=num        Set verbose level to num (default 1).
 END
 exit 1;
@@ -63,6 +66,7 @@ exit 1;
 my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
+                    "expTable=s",
                     "verbose=i",
                     );
 usage() if (!$ok);
@@ -81,7 +85,11 @@ if (defined $opt_configDir) {
     }
 }
 
-if(!(-d $configPath)) {
+if (defined $opt_expTable) {
+    $expTable = $opt_expTable;
+}
+
+if (!(-d $configPath)) {
     die "configPath '$configPath' is invalid; Can't find the config directory\n";
 }
 HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
@@ -90,35 +98,54 @@ my %terms = Encode::getControlledVocab($configPath);
 my %tags = Encode::getControlledVocabTags($configPath);
 my @termTypes = (keys %terms);
 
-# use pi.ra file to map pi/lab/institution/grant/project
-my $labRef = Encode::getLabs($configPath);
-my %labs = %{$labRef};
+my %labs = %{$terms{"lab"}};
+my %grants = %{$terms{"grant"}};
 my $dataType;
 my %dataTypes = %{$terms{"dataType"}};
 my $var;
 my $termType;
 my $subId;
 
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs", "Accession", "Assembly", 
-        "Strain", "Age", "Treatment");
-my %metaLines = ();
+        "Strain", "Age", "Treatment", "Exp_ID", "DCC_Accession");
 
-# print metadata from table in 'lines' format
+# get experiment-defining variables for each composite from the metaDb
+open(MDB, "mdbPrint $assembly -table=metaDb -all -line | grep 'objType=composite' |") 
+                or die "Can't run mdbPrint\n";
+my %metaLines = ();
+while (my $line = <MDB>) {
+    chomp $line;
+    $line =~ s/^.*metadata //;  
+    (my $objName, my $settings) = split(" ", $line, 2);
+    $metaLines{$objName} = $settings;
+    print STDERR "     Composite OBJNAME: $objName   SETTINGS: $settings\n";
+}
+close MDB;
+my %composites = ();
+foreach my $objName (keys %metaLines) {
+    my $settings = $metaLines{$objName};
+    my $ref = Encode::metadataLineToHash($settings);
+    my %metadata =  %{$ref};
+    if (defined($metadata{"expVars"})) {
+        $composites{$objName} = $metadata{"expVars"};
+    }
+}
+
+# get metadata objects from metaDb and create hash of experiments
 open(MDB, "mdbPrint $assembly -table=metaDb -all -line |") or die "Can't run mdbPrint\n";
 while (my $line = <MDB>) {
     chomp $line;
     $line =~ s/^.*metadata //;  
     (my $objName, my $settings) = split(" ", $line, 2);
-    #$line =~ s/objType=table //;  
-    #$line =~ s/objType=file //;  
     $metaLines{$objName} = $settings;
     print STDERR "     OBJNAME: $objName   SETTINGS: $settings\n";
 }
+close MDB;
 
 # Create experiments hash
 my %experiments = ();
@@ -130,6 +157,7 @@ foreach my $objName (keys %metaLines) {
     my %metadata =  %{$ref};
 
     # short-circuit if this didn't come in from pipeline
+    # NOTE: this also excludes composite objects
     next unless defined($metadata{"subId"});
 
     my %experiment = ();
@@ -141,48 +169,46 @@ foreach my $objName (keys %metaLines) {
     my $lab = "unknown";
     if (defined($metadata{"lab"})) {
         $lab = $metadata{"lab"};
-        # strip off PI name in parens
+        # TODO: STILL NEEDED ?
         $lab =~ s/\(\w+\)//;
         # TODO: Fix 'lab=' metadata for UT-A to be consistent
+        # TODO: STILL NEEDED ?
         $lab = "UT-A" if ($lab eq "UT-Austin");
     }
     foreach $var (keys %labs) {
+        #my $strippedVar = $var;
+        #$strippedVar =~ s/\(\w+\)//;
         if (lc($var) eq lc($lab)) {
-            $lab = $var;
-            $experiment{"labPi"} = $labs{$lab}->{"pi"};
-            $experiment{"project"} = $labs{$lab}->{"project"};
-            $experiment{"projectPi"} = $labs{$lab}->{"grant"};
+            $experiment{"lab"} = $lab;
+            $experiment{"labPi"} = $labs{$var}->{"labPi"};
+            my $grantPi = $labs{$var}->{"grantPi"};
+            $experiment{"projectPi"} = $grantPi;
+            $experiment{"project"} = $grants{$grantPi}->{"projectName"};
             warn "lab/project mismatch in settings $settings" 
                     unless ($metadata{"grant"} eq $experiment{"projectPi"});
         }
     }
-    $experiment{"lab"} = $lab;
     if ($experiment{"project"} eq "unknown") {
-        warn "lab $lab not found in pi.ra, from settings $settings";
+        warn "lab $lab not found, from settings $settings";
     }
     # for now, force all Yale projects to be Yale lab (until metadata in projects table can match)
     #if ($metadata{"grant"} eq "Snyder") {
         #$experiment{"lab"} = "Yale";
     #}
 
-    # look up dataType case-insensitive, as tag or term, save as tag
+    # look up dataType case-insensitive, as tag or term, save as tag, term and label
+    # TODO:  Still needed ?
     my $dType = $metadata{"dataType"};
     $dataType = $dType;
+    my $dataTypeTerm;
     foreach $var (keys %dataTypes) {
         if (lc($dType) eq lc($var) || lc($dType) eq lc($dataTypes{$var}->{"tag"})) {
             $dataType = $dataTypes{$var}->{"tag"};
+            $dataTypeTerm = $dataTypes{$var}->{"term"};
         }
     }
-    #$dataType = $metadata{"dataType"};
-    #if (!defined($tags{"dataType"}{$dataType})) {
-        # get tag if term was used
-        #foreach $var (keys %dataTypes) {
-            #if ($var eq $dataType) {
-                #$dataType = $terms{"dataType"}{$var}->{"tag"};
-            #}
-        #}
-    #}
     $experiment{"dataType"} = $dataType;
+    $experiment{"dataTypeTerm"} = $dataTypeTerm;
 
     $experiment{"cell"} = "none";
     if (defined($metadata{"cell"})) {
@@ -190,20 +216,27 @@ foreach my $objName (keys %metaLines) {
     }
     print STDERR "    objName  " . $objName . "\n";
 
-    # determine term type for experiment parameters 
-    my %vars = ();
+    # determine term type for experiment parameters - extracted from composite expVars
+    my @varTermTypes;
+    my $composite = $metadata{"composite"};
 
+    # can't handle if there are no expVars defined for composite (it's probably a combined or other non-production track)
+    my $expVars = $composites{$composite};
+    next if (!defined($expVars));
+    if (defined($expVars)) {
+        @varTermTypes = split(",", $expVars);
+    }
+
+    my %vars = ();
     foreach $var (keys %metadata) {
-        foreach $termType (@termTypes) {
-            # skip special terms
-            next if ($termType eq "Cell Line");
-            next if ($termType eq "dataType");
-            next if ($termType eq "project");
-            next if ($termType eq "seqPlatform");
-            next if ($termType eq "grant");
-            next if ($termType eq "lab");
-            #next if ($termType eq "control");
-            if (lc($termType) eq lc($var) && defined($terms{$termType}{$metadata{$var}})) {
+        # special handling for 'treatment=None' and 'age=immortalized' which
+        # are defaults
+        next if ($var eq "treatment" && $metadata{$var} eq "None");
+        next if ($var eq "age" && $metadata{$var} eq "immortalized");
+        foreach $termType (@varTermTypes) {
+            # exclude the 'standard' experiment-defining vars
+            next if (($termType eq "cell") or ($termType eq "lab") or ($termType eq "dataType"));
+            if (lc($termType) eq lc($var)) {
                 $vars{$termType} = $metadata{$var};
             }
         }
@@ -212,6 +245,7 @@ foreach my $objName (keys %metaLines) {
     my @varList = keys %vars;
     #print STDERR "VARS: " . "@varList" . "\n";
     # treat version like a variable
+    # TODO: How to handle now?
     if (defined($metadata{"submittedDataVersion"})) {
         my $version = $metadata{"submittedDataVersion"};
         # strip comment
@@ -220,6 +254,7 @@ foreach my $objName (keys %metaLines) {
     }
 
     # collapse multiple terms for GEO accession
+    # TODO:  Still needed ?
     if (defined($metadata{"accession"})) {
         $experiment{"accession"} = $metadata{"accession"};
     } elsif (defined($metadata{"geoSampleAccession"})) {
@@ -230,23 +265,40 @@ foreach my $objName (keys %metaLines) {
         $experiment{"accession"} = "";
     }
 
+    # experiment ID's and accessions
+    if (defined($metadata{"expId"})) {
+        $experiment{"expId"} = $metadata{"expId"};
+    } else {
+        $experiment{"expId"} = 0;
+    }
+
+    if (defined($metadata{"dccAccession"})) {
+        $experiment{"dccAccession"} = $metadata{"dccAccession"};
+    } else {
+        $experiment{"dccAccession"} = "";
+    }
+
     # experimental params -- iterate through all tags, lookup in cv.ra, 
      $experiment{"vars"} = "none";
+     $experiment{"expVars"} = "none";
      $experiment{"varLabels"} = "none";
      $experiment{"factorLabels"} = "none";
      $experiment{"treatment"} = "none";
      $experiment{"age"} = "n/a";
      $experiment{"strain"} = "n/a";
-    if (scalar(keys %vars) > 0) {
+     if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
-        # TODO: define explicit ordering for term type in cv.ra
         # construct vars as list, semi-colon separated
         $experiment{"vars"} = "";
+        $experiment{"expVars"} = "";
         $experiment{"varLabels"} = "";
         $experiment{"factorLabels"} = "";
         foreach $termType (sort keys %vars) {
             $var = $vars{$termType};
-            $experiment{"vars"} = $experiment{"vars"} .  $var . ";";
+            $experiment{"vars"} = $experiment{"vars"} .  $termType . "=" . $var . " ";
+            if ($termType ne "version" && $var ne "None") {
+                $experiment{"expVars"} = $experiment{"expVars"} .  $termType . "=" . $var . " ";
+            }
             my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                 $terms{$termType}{$var}->{"label"} : $var;
             # special handling of treatment, age, strain for NHGRI -- they have specific columns
@@ -293,25 +345,17 @@ foreach my $objName (keys %metaLines) {
     # a few tracks are missing the subId
     my $subId = (defined($metadata{"subId"})) ? $metadata{"subId"} : 0; 
 
-    #die "undefined project" unless defined($experiment{"project"});
-    #die "undefined lab" unless defined($experiment{"lab"});
-    #die "undefined dataType" unless defined($experiment{"dataType"});
-    #die "undefined cell" unless defined($experiment{"cell"});
-    #die "undefined vars" unless defined($experiment{"vars"});
-    #die "undefined freeze" unless defined($experiment{"freeze"});
-    #die "undefined submitDate" unless defined($experiment{"submitDate"});
-    #die "undefined releaseDate" unless defined($experiment{"releaseDate"});
-    #die "undefined status" unless defined($experiment{"status"});
-
-    # create key for experiment: lab+dataType+cell+vars
-    my $expKey = $experiment{"lab"} . "+" . $experiment{"dataType"} . "+" . 
-                                $experiment{"cell"} . "+" . 
-                                $experiment{"vars"};
-
+    # create key for experiments (lab:%s dataType:%s cellType:%s vars:<var=val> <var2=val>)
+    my $expKey = "lab:" . $lab .
+                " dataType:" . $dataType .
+                " cellType:" . $experiment{"cell"};
+    if (defined $experiment{"vars"}) {
+        $expKey = $expKey . 
+                " vars:" .  $experiment{"vars"};
+    }
     print STDERR "KEY: " . $expKey . "\n";
 
     # save in a hash of experiments, 
-    #   keyed by lab+dataType+cell+vars
     # (include version in vars)
     # subId -- lookup, add to list if exists
     if (defined($experiments{$expKey})) {
@@ -334,8 +378,8 @@ foreach my $objName (keys %metaLines) {
 # get submission status for all projects from the pipeline projects table
 my %submissionStatus = ();
 my %submissionUpdated = ();
-my $dbh = HgDb->new(DB => $pipeline);
-my $sth = $dbh->execute( 
+my $dbhPipeline = HgDb->new(DB => $pipeline);
+my $sth = $dbhPipeline->execute( 
     "select id, name, status, updated_at from projects where db=\'$assembly\' order by id");
 
 my @row;
@@ -350,13 +394,15 @@ while (@row = $sth->fetchrow_array()) {
     $submissionUpdated{$id} =~ s/ \d\d:\d\d:\d\d//;
 }
 $sth->finish;
-$dbh->{DBH}->disconnect;
 
 # open pushQ to extract release dates
 our $pushqDb = "qapushq";
 our $pushqHost = "mysqlbeta";
+our $betaHost = "mysqlbeta";
+our $dbhPushq = HgDb->new(DB => $pushqDb, HOST => $pushqHost);
+our $dbhBetaMeta = HgDb->new(DB => $assembly, HOST => $betaHost);
+
 my $releaseDate;
-$dbh = HgDb->new(DB => $pushqDb, HOST => $pushqHost);
 
 # fill in statuses for those experiments missing them, and print out results
 foreach my $key (keys %experiments) {
@@ -373,8 +419,6 @@ foreach my $key (keys %experiments) {
     $experiment{"varLabels"} = "unknown" unless defined($experiment{"varLabels"});
     $experiment{"factorLabels"} = "unknown" unless defined($experiment{"factorLabels"});
     $experiment{"treatment"} = "unknown" unless defined($experiment{"treatment"});
-    $experiment{"strain"} = "unknown" unless defined($experiment{"strain"});
-    $experiment{"age"} = "unknown" unless defined($experiment{"age"});
     $experiment{"submitDate"} = "unknown"  unless defined($experiment{"submitDate"});
     $experiment{"releaseDate"} = "unknown" unless defined($experiment{"releaseDate"});
     my @ids = sort keys %ids;
@@ -396,16 +440,41 @@ foreach my $key (keys %experiments) {
     #}
     # look in pushQ for release date
     if (defined($experiment{"objName"}) && $experiment{"status"} eq "released") {
-        print STDERR "looking up release date for object: " . $experiment{objName} . "\n";
+        print STDERR "Looking up release date for object: " . $experiment{objName} . "\n";
         $releaseDate =
-            $dbh->quickQuery("select qadate from pushQ where tbls like ? or files like ? and priority = ?",
+            $dbhPushq->quickQuery("select qadate from pushQ where tbls like ? or files like ? and priority = ?",
                 "\%$experiment{objName}\%", "\%$experiment{objName}\%", "L");
-        if (defined($releaseDate)) {
-            $experiment{"releaseDate"} = $releaseDate;
-        } else {
-            print STDERR "****  NOT FOUND\n";
+        if (!defined($releaseDate)) {
+            # fallback 1: Use experiment ID to look up related object in hgsqlbeta's metaDb and
+            #                   look that object up in pushQ
+            print STDERR "Fallback1 for release date for object: " . $experiment{objName} . "\n";
+            my $betaObj =
+                $dbhBetaMeta->quickQuery(
+                    "select obj from metaDb where var = ? and val = ? limit 1",
+                        "expId", "$experiment{expId}");
+            if (defined($betaObj)) {
+                $releaseDate =
+                    $dbhPushq->quickQuery(
+                        "select qadate from pushQ where tbls like ? or files like ? and priority = ?",
+                            "\%$betaObj\%", "\%$betaObj\%", "L");
             }
+            if (!defined($releaseDate)) {
+                print STDERR "Fallback2 for release date for object: " . $experiment{objName} . "\n";
+                # fallback 2: Use project_status_log date created_at for the ID where status=released
+                $releaseDate = $dbhPipeline->quickQuery(
+                    "select max(created_at) from project_status_logs where project_id = ? and status = ?",
+                        $lastId, "released");
+                # strip time
+                $releaseDate =~ s/ .*//;  
+            }
+        }
     }
+    if (defined($releaseDate)) {
+        $experiment{"releaseDate"} = $releaseDate;
+    } else {
+        $experiment{"releaseDate"} = "unknown";
+    }
+    print STDERR "Release date for object: " . $experiment{"objName"} . " - " . $releaseDate . "\n";
 
     # Cosmetics so that auto-generated spreadsheet matches old manual version
     # map dataType tag to term from cv.ra
@@ -416,13 +485,8 @@ foreach my $key (keys %experiments) {
                 $tags{"dataType"}{$dataType}->{"label"} :
                 $tags{"dataType"}{$dataType}->{"term"};
     }
-    # map lab to label in pi.ra
-    my $lab = $experiment{"lab"};
-    if (defined($labs{$lab}->{"label"})) {
-        $experiment{"lab"} = $labs{$lab}->{"label"};
-    }
 
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\n", 
                 $experiment{"project"}, $experiment{"projectPi"}, 
                 $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
@@ -432,7 +496,8 @@ foreach my $key (keys %experiments) {
                 join(",", sort keys %ids), 
                 $experiment{"accession"}, $assembly,
                 # nhgri report only
-                $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"});
+                $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"}, 
+                $experiment{"expId"}, $experiment{"dccAccession"});
 }
 
 exit 0;
