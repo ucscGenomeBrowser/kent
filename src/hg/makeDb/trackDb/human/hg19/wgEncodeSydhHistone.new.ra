@@ -65,7 +65,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K27me3
-		longLabel NT2-D1 H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH 
+		longLabel NT2D1 H3K27me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
 		subGroups view=Peaks factor=H3K27me3B cellType=NT2D1 control=UCD treatment=None
 		type narrowPeak
 		# subId=1137 dateSubmitted=2010-05-04 
@@ -75,7 +75,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K4me3B
-		longLabel NT2-D1 H3K4me3B Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+		longLabel NT2D1 H3K4me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
 		subGroups view=Peaks factor=H3K04me3B cellType=NT2D1 control=UCD treatment=None
 		type narrowPeak
 		# subId=1122 dateSubmitted=2010-05-04 
@@ -85,7 +85,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneNt2d1H3k9acbUcdPk
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K9ac
-		longLabel NT2-D1 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+		longLabel NT2D1 H3K9ac Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
 		subGroups view=Peaks factor=H3K9acB cellType=NT2D1 control=UCD treatment=None
 		type narrowPeak
 		# subId=1173 dateSubmitted=2010-05-04 
@@ -95,7 +95,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneK562H3k4me1UcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562 H3K4me1
-        longLabel K562 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+        longLabel K562 H3K4me1 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K4me1 cellType=K562 control=UCD treatment=None
         type narrowPeak
         color 46,0,184
@@ -107,7 +107,7 @@ wgEncode 1
         track wgEncodeSydhHistoneK562H3k4me3bUcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562 H3K4me3B
-        longLabel K562 H3K4me3B Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+        longLabel K562 H3K4me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K04me3B cellType=K562 control=UCD treatment=None
         type narrowPeak
         color 46,0,184
@@ -119,7 +119,7 @@ wgEncode 1
         track wgEncodeSydhHistoneK562H3k9acbUcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562 H3K9ac
-        longLabel K562 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+        longLabel K562 H3K9ac Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K9acB cellType=K562 control=UCD treatment=None
         type narrowPeak
         color 46,0,184
@@ -131,7 +131,7 @@ wgEncode 1
         track wgEncodeSydhHistoneK562H3k27me3bUcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562 H3K27me3
-        longLabel K562 H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+        longLabel K562 H3K27me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K27me3B cellType=K562 control=UCD treatment=None
         type narrowPeak
         color 46,0,184
@@ -143,7 +143,7 @@ wgEncode 1
         track wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel NT2-D1 H3K36me3
-        longLabel NT2-D1 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+        longLabel NT2D1 H3K36me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K36me3B cellType=NT2D1 control=UCD treatment=None
         type narrowPeak
     	# subId=1354 dateSubmitted=2010-06-11
@@ -161,7 +161,7 @@ wgEncode 1
    		track wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel NT2-D1 H3K4me1
-        longLabel NT2-D1 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+        longLabel NT2D1 H3K4me1 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K4me1 cellType=NT2D1 control=UCD treatment=None
         type narrowPeak
     	# subId=1830 dateSubmitted=2010-06-22
@@ -171,7 +171,7 @@ wgEncode 1
         track wgEncodeSydhHistoneU2osH3k9me3UcdPk
         parent wgEncodeSydhHistoneViewPeaks on
         shortLabel U2OS H3K9me3
-        longLabel U2OS H3K9me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+        longLabel U2OS H3K9me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K09ME3 cellType=U2OS control=UCD treatment=None
         type narrowPeak
         # subId=2108 dateSubmitted=2010-08-16
@@ -181,7 +181,7 @@ wgEncode 1
         track wgEncodeSydhHistoneU2osH3k36me3bUcdPk
         parent wgEncodeSydhHistoneViewPeaks on
         shortLabel U2OS H3K36me3
-        longLabel U2OS H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/SYDH
+        longLabel U2OS H3K36me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K36me3B cellType=U2OS control=UCD treatment=None
         type narrowPeak
         # subId=2763 dateSubmitted=2010-11-02
@@ -191,7 +191,7 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcH3k27me3bUcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel PBMC H3K27me3 Pk
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K27me3B in PBMC cells)
+        longLabel PBMC H3K27me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K27me3B cellType=PBMC control=UCD treatment=None
         type narrowPeak
         # subId=4118 dateSubmitted=2011-05-13
@@ -201,7 +201,7 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcH3k9me3UcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel PBMC H3K9me3 Pk
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K9me3 in PBMC cells)
+        longLabel PBMC H3K9me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K09ME3 cellType=PBMC control=UCD treatment=None
         type narrowPeak
         # subId=4116 dateSubmitted=2011-05-13
@@ -211,7 +211,7 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcH3k4me1UcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel PBMC H3K4me1 Pk
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K4me1 in PBMC cells)
+        longLabel PBMC H3K4me1 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K4me1 cellType=PBMC control=UCD treatment=None
         type narrowPeak
         # subId=4117 dateSubmitted=2011-05-13
@@ -221,7 +221,7 @@ wgEncode 1
         track wgEncodeSydhHistoneNt2d1H3k09me3UcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel NT2-D1 H3K9me3 Pk
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K9me3 in NT2-D1 cells)
+        longLabel NT2D1 H3K9me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K09ME3 cellType=NT2D1 control=UCD treatment=None
         type narrowPeak
         # subId=1831 dateSubmitted=2011-06-22
@@ -231,7 +231,7 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcH3k04me3bUcdPk
         parent wgEncodeSydhHistoneViewPeaks off
         shortLabel PBMC H3K4me3B Pk
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K4me3B in PBMC cells)
+        longLabel PBMC H3K4me3 Histone Modifications by ChIP-Seq Pk from ENCODE/SYDH
         subGroups view=Peaks factor=H3K04me3B cellType=PBMC control=UCD treatment=None
         type narrowPeak
         # subId=4445 dateSubmitted=2011-06-28
@@ -256,7 +256,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K27me3
-		longLabel NT2-D1 H3K27me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+		longLabel NT2D1 H3K27me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
 		subGroups view=Signal factor=H3K27me3B cellType=NT2D1 control=UCD treatment=None
 		type bigWig 1.000000 17024.000000
 		# subId=1137 dateSubmitted=2010-05-04 
@@ -266,7 +266,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneNt2d1InputUcdSig
 		subTrack wgEncodeSydhHistoneViewSignal off
 		shortLabel NT2-D1 Input
-		longLabel NT2-D1 Input Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+		longLabel NT2D1 Input Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
 		subGroups view=Signal factor=Input cellType=NT2D1 control=UCD treatment=None
 		type bigWig 1.000000 13293.000000
 		# subId=1123 dateSubmitted=2010-05-04 
@@ -276,7 +276,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K4me3B
-		longLabel NT2-D1 H3K4me3B Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+		longLabel NT2D1 H3K4me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
 		subGroups view=Signal factor=H3K04me3B cellType=NT2D1 control=UCD treatment=None
 		type bigWig 1.000000 8678.000000
 		# subId=1122 dateSubmitted=2010-05-04 
@@ -286,7 +286,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneNt2d1H3k9acbUcdSig
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K9ac
-		longLabel NT2-D1 H3K9ac Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+		longLabel NT2D1 H3K9ac Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
 		subGroups view=Signal factor=H3K9acB cellType=NT2D1 control=UCD treatment=None
 		type bigWig 1.000000 6350.000000
 		# subId=1173 dateSubmitted=2010-05-04 
@@ -296,7 +296,7 @@ wgEncode 1
         track wgEncodeSydhHistoneK562H3k4me1UcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562 H3K4me1
-        longLabel K562 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel K562 H3K4me1 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K4me1 cellType=K562 control=UCD treatment=None
         type bigWig 1.000000 3999.000000
         color 46,0,184
@@ -308,7 +308,7 @@ wgEncode 1
         track wgEncodeSydhHistoneK562H3k4me3bUcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562 H3K4me3B
-        longLabel K562 H3K4me3B Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel K562 H3K4me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K04me3B cellType=K562 control=UCD treatment=None
         type bigWig 1.000000 8204.000000
         color 46,0,184
@@ -320,7 +320,7 @@ wgEncode 1
         track wgEncodeSydhHistoneK562H3k9acbUcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562 H3K9ac
-        longLabel K562 H3K9ac Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel K562 H3K9ac Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K9acB cellType=K562 control=UCD treatment=None
         type bigWig 1.000000 2288.000000
         color 46,0,184
@@ -332,7 +332,7 @@ wgEncode 1
         track wgEncodeSydhHistoneK562H3k27me3bUcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562 H3K27me3
-        longLabel K562 H3K27me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel K562 H3K27me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K27me3B cellType=K562 control=UCD treatment=None
         type bigWig 1.000000 4955.000000
         color 46,0,184
@@ -344,7 +344,7 @@ wgEncode 1
         track wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel NT2-D1 H3K36me3
-        longLabel NT2-D1 H3K36me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel NT2D1 H3K36me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K36me3B cellType=NT2D1 control=UCD treatment=None
         type bigWig 1.000000 5119.000000
     	# subId=1354 dateSubmitted=2010-06-11
@@ -362,7 +362,7 @@ wgEncode 1
         track wgEncodeSydhHistoneNt2d1H3k4me1UcdSig
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel NT2-D1 H3K4me1
-        longLabel NT2-D1 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel NT2D1 H3K4me1 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K4me1 cellType=NT2D1 control=UCD treatment=None
         type bigWig 1.000000 6506.000000
     	# subId=1830 dateSubmitted=2010-06-22
@@ -372,7 +372,7 @@ wgEncode 1
         track wgEncodeSydhHistoneU2osH3k9me3UcdSig
         parent wgEncodeSydhHistoneViewSignal on
         shortLabel U2OS H3K9me3
-        longLabel U2OS H3K9me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel U2OS H3K9me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K09ME3 cellType=U2OS control=UCD treatment=None
         type bigWig 1.000000 51513.000000
         # subId=2108 dateSubmitted=2010-08-16
@@ -382,7 +382,7 @@ wgEncode 1
 		track wgEncodeSydhHistoneU2osH3k36me3bUcdSig
         parent wgEncodeSydhHistoneViewSignal on
         shortLabel U2OS H3K36me3
-        longLabel U2OS H3K36me3 Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel U2OS H3K36me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K36me3B cellType=U2OS control=UCD treatment=None
         type bigWig 1.000000 12731.000000
         # subId=2763 dateSubmitted=2010-11-02
@@ -392,7 +392,7 @@ wgEncode 1
         track wgEncodeSydhHistoneK562InputUcdSig
 		parent wgEncodeSydhHistoneViewSignal off
 		shortLabel K562 Input
-        longLabel K562 Input Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel K562 Input Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=Input cellType=K562 control=UCD treatment=None
         type bigWig 0.000000 12876.099609
         origAssembly hg18
@@ -405,7 +405,7 @@ wgEncode 1
         track wgEncodeSydhHistoneU2osInputUcdSig
 		parent wgEncodeSydhHistoneViewSignal off
         shortLabel U2OS Input
-        longLabel U2OS Input Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
+        longLabel U2OS Input Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=Input cellType=U2OS control=UCD treatment=None
         type bigWig 0.000000 11117.500000
         origAssembly hg18
@@ -416,7 +416,7 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcH3k27me3bUcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC H3K27me3 Sig
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K27me3B in PBMC cells)
+        longLabel PBMC H3K27me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K27me3B cellType=PBMC control=UCD treatment=None
         type bigWig 1.000000 23277.000000
         # subId=4118 dateSubmitted=2011-05-13
@@ -426,7 +426,7 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcH3k9me3UcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC H3K9me3 Sig
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K9me3 in PBMC cells)
+        longLabel PBMC H3K9me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K09ME3 cellType=PBMC control=UCD treatment=None
         type bigWig 1.000000 155809.000000
         # subId=4116 dateSubmitted=2011-05-13
@@ -436,7 +436,7 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcH3k4me1UcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC H3K4me1 Sig
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K4me1 in PBMC cells)
+        longLabel PBMC H3K4me1 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K4me1 cellType=PBMC control=UCD treatment=None
         type bigWig 1.000000 16645.000000
         # subId=4117 dateSubmitted=2011-05-13
@@ -446,7 +446,7 @@ wgEncode 1
         track wgEncodeSydhHistoneNt2d1H3k09me3UcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel NT2-D1 H3K9me3 Sig
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K9me3 in NT2-D1 cells)
+        longLabel NT2D1 H3K9me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K09ME3 cellType=NT2D1 control=UCD treatment=None
         type bigWig 1.000000 86089.000000
         # subId=1831 dateSubmitted=2011-06-22
@@ -456,8 +456,8 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcInputUcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC Input Sig
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in PBMC cells)
-       	subGroups view=Signal factor=Input cellType=PBMC control=UCD treatment=None
+        longLabel PBMC Input Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
+        subGroups view=Signal factor=Input cellType=PBMC control=UCD treatment=None
         type bigWig 1.000000 10456.000000
         # subId=4446 dateSubmitted=2011-06-28
         # was wgEncodeSydhHistonePbmcInputUcdSig wong Tue Jun 28 18:13:06 2011
@@ -466,7 +466,7 @@ wgEncode 1
         track wgEncodeSydhHistonePbmcH3k04me3bUcdSig
         parent wgEncodeSydhHistoneViewSignal off
         shortLabel PBMC H3K4me3B Sig
-        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K4me3B in PBMC cells)
+        longLabel PBMC H3K4me3 Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
         subGroups view=Signal factor=H3K04me3B cellType=PBMC control=UCD treatment=None
         type bigWig 1.000000 37387.000000
         # subId=4445 dateSubmitted=2011-06-28
