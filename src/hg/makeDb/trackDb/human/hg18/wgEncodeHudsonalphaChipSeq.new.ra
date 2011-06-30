@@ -1356,14 +1356,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 1482.00
         color 46,0,184
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel K562 Inp PCR2x 1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Input in K562 cells, PCR2x)
-        subGroups view=zRaw factor=zCTRL cellType=1K5 rep=rep1 prot=PCR2x treat=aNONE
-        type wig 1.00 6252.00
-        color 46,0,184
-
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Inp PCR2x 2
