@@ -52,8 +52,8 @@ wgEncode 1
     track wgEncodeSydhHistoneViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility pack
-    viewUi on
+    visibility hide
+    viewUi off
     subTrack wgEncodeSydhHistone
     signalFilter 0
     signalFilterLimits 0:18241
