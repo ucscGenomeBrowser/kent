@@ -4,6 +4,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.2wayconspseudos.gtf.gz
 grant Hubbard
@@ -18,6 +19,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.README.txt.gz
 grant Hubbard
@@ -32,6 +34,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.annotation.gtf.gz
 grant Hubbard
@@ -46,6 +49,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.noncoding_RNAs.fa.gz
 grant Hubbard
@@ -60,6 +64,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.noncoding_RNAs.gtf.gz
 grant Hubbard
@@ -74,6 +79,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.pc_transcripts.fa.gz
 grant Hubbard
@@ -88,6 +94,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.pc_translations.fa.gz
 grant Hubbard
@@ -102,6 +109,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.polyAs.gtf.gz
 grant Hubbard
@@ -116,6 +124,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode.v7.tRNAs.gtf.gz
 grant Hubbard
@@ -130,6 +139,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName gencode7_GRCh37.tgz
 grant Hubbard
@@ -138,17 +148,13 @@ labExpId V7
 project wgEncode
 subId 4347
 
-metaObject wgEncodeGencodeV7
-objType composite
-composite wgEncodeGencodeV7
-expVars lab,dataType,labExpId
-
 metaObject wgEncodeGencode2wayConsPseudoV7
 objType table
 composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencode2wayConsPseudoV7.gp.gz
 grant Hubbard
@@ -164,6 +170,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeAttrsV7.tab.gz
 grant Hubbard
@@ -179,6 +186,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeBasicV7.gp.gz
 grant Hubbard
@@ -194,6 +202,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeCompV7.gp.gz
 grant Hubbard
@@ -209,6 +218,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeExonSupportV7.tab.gz
 grant Hubbard
@@ -224,6 +234,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeGeneSourceV7.tab.gz
 grant Hubbard
@@ -239,6 +250,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodePdbV7.tab.gz
 grant Hubbard
@@ -254,6 +266,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodePolyaV7.gp.gz
 grant Hubbard
@@ -269,6 +282,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodePseudoGeneV7.gp.gz
 grant Hubbard
@@ -284,6 +298,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodePubMedV7.tab.gz
 grant Hubbard
@@ -299,6 +314,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeRefSeqV7.tab.gz
 grant Hubbard
@@ -314,6 +330,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeTagV7.tab.gz
 grant Hubbard
@@ -329,6 +346,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeTranscriptSourceV7.tab.gz
 grant Hubbard
@@ -344,6 +362,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeTranscriptSupportV7.tab.gz
 grant Hubbard
@@ -359,6 +378,7 @@ composite wgEncodeGencodeV7
 dataType Gencode
 dataVersion ENCODE May 2011 Freeze
 dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
 expId 1881
 fileName wgEncodeGencodeUniProtV7.tab.gz
 grant Hubbard
@@ -368,4 +388,9 @@ project wgEncode
 subId 4347
 tableName wgEncodeGencodeUniProtV7
 
-# MAGIC: -840808632
+metaObject wgEncodeGencodeV7
+objType composite
+composite wgEncodeGencodeV7
+expVars lab,dataType,labExpId
+
+# MAGIC: -1231822211
