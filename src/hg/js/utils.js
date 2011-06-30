@@ -2244,7 +2244,7 @@ function filterTableFilterVar(filter)
 
     // Find the var for this filter
     var classes = $(filter).attr("class").split(' ');
-    classes = aryRemove(classes,"filterBy","filterTable");
+    classes = aryRemove(classes,"filterBy","filterTable","noneIsAll");
     if (classes.length > 1 ) {
         warn('Too many classes for filterBy: ' + classes);
         return undefined;
