@@ -5379,7 +5379,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
 validation GATA3_SC-268(ChIP,MassSpec):human_GATA3-SC268_validation_Myers.pdf
 
 term GATA3_(SC-269)
-tag GATA3SC269SC269
+tag GATA3SC269
 type Antibody
 antibodyDescription Mouse monoclonal IgG raised against human recombinant GATA-3 (amino acids 1-264)
 target GATA3
@@ -8610,7 +8610,7 @@ description 5C Interactions
 term AffyExonArray
 tag AFFYEXONARRAY
 type dataType
-label Affy Exon-array
+label Exon-array
 description Affymetrix Exon Array
 
 
@@ -8731,13 +8731,13 @@ description Methyl RRBS
 term NRE
 tag NRE
 type dataType
-label Negative Regulatory Elements
+label Neg Regulatory
 description Negative Regulatory Elements
 
 term Nucleosome
 tag NUCLEOSOME
 type dataType
-label Nucleosome positioning
+label Nucleosome
 description Nucleosome positioning data
 
 term Proteogenomics
@@ -9744,7 +9744,7 @@ tag KENT
 type grant
 description Kent
 grantInst UCSC
-projectName Ucsc
+projectName UCSC
 
 term Margulies
 tag MARGULIES
@@ -9765,14 +9765,14 @@ tag DEKKER
 type grant
 description Dekker
 grantInst University of Massachusetts Amherst
-projectName
+projectName UMass-Dekker
 
 term Weng
 tag WENG
 type grant
 description Weng
 grantInst University of Massachusetts Amherst
-projectName
+projectName UMass-Weng
 
 term Snyder
 tag SNYDER
