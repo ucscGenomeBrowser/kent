@@ -23,37 +23,41 @@
 #define CV_SEARCHABLE_MULTI_SELECT  "multiSelect"
 #define CV_SEARCHABLE_FREE_TEXT     "freeText"
 
-char *cvTypeNormalized(char *sloppyTerm)
-// returns (on stack) the proper term to use when requesting a typeOfTerm
+const char *cvTypeNormalized(const char *sloppyTerm)
+// returns the proper term to use when requesting a typeOfTerm
 {
-if (sameWord(sloppyTerm,CV_TERM_CELL) || sameWord(sloppyTerm,CV_UGLY_TERM_CELL_LINE))
-    return CV_UGLY_TOT_CELLTYPE;
-if (sameWord(sloppyTerm,CV_TERM_ANTIBODY))
-    return CV_UGLY_TERM_ANTIBODY;
+static const char *badCvSpellingOfCell     = CV_UGLY_TOT_CELLTYPE;
+static const char *badCvSpellingOfAntibody = CV_UGLY_TERM_ANTIBODY;
+if (sameWord((char *)sloppyTerm,CV_TERM_CELL) || sameWord((char *)sloppyTerm,CV_UGLY_TERM_CELL_LINE))
+    return badCvSpellingOfCell;
+if (sameWord((char *)sloppyTerm,CV_TERM_ANTIBODY))
+    return badCvSpellingOfAntibody;
 
 return sloppyTerm;
 }
 
-char *cvTermNormalized(char *sloppyTerm)
-// returns (on stack) the proper term to use when requesting a cvTerm hash
+const char *cvTermNormalized(const char *sloppyTerm)
+// returns the proper term to use when requesting a cvTerm hash
 {
-if (sameWord(sloppyTerm,CV_UGLY_TOT_CELLTYPE) || sameWord(sloppyTerm,CV_UGLY_TERM_CELL_LINE))
-    return CV_TERM_CELL;
-if (sameWord(sloppyTerm,CV_UGLY_TERM_ANTIBODY))
-    return CV_TERM_ANTIBODY;
+static const char *approvedSpellingOfCell     = CV_TERM_CELL;
+static const char *approvedSpellingOfAntibody = CV_TERM_ANTIBODY;
+if (sameWord((char *)sloppyTerm,CV_UGLY_TOT_CELLTYPE) || sameWord((char *)sloppyTerm,CV_UGLY_TERM_CELL_LINE))
+    return approvedSpellingOfCell;
+if (sameWord((char *)sloppyTerm,CV_UGLY_TERM_ANTIBODY))
+    return approvedSpellingOfAntibody;
 
 return sloppyTerm;
 }
 
-char *cvLabNormalize(char *sloppyTerm)
+char *cvLabNormalize(const char *sloppyTerm)
 /* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing
  * info (a few ENCODE labs have this in metaDb and/or in CV term --
  * PI name embedded in parens in the CV term).  Also fixes other problems until
  * cleaned up in CV, metaDb and user processes.  Caller must free mem. */
 {
-char *lab = sloppyTerm;
+char *lab = (char *)sloppyTerm;
 
-if (containsStringNoCase(sloppyTerm, "Weissman"))
+if (containsStringNoCase((char *)sloppyTerm, "Weissman"))
     lab = "Yale-Weissman";
 
 char *ret = cloneString(lab);
@@ -71,14 +75,14 @@ char *cvLabDeNormalize(char *minimalTerm)
 
 static char *cvFileRequested = NULL;
 
-void cvFileDeclare(char *filePath)
+void cvFileDeclare(const char *filePath)
 // Declare an altername cv.ra file to use
 // (The cv.ra file is normally discovered based upon CGI/Tool and envirnment)
 {
 cvFileRequested = cloneString(filePath);
 }
 
-static char *cvFile()
+const char *cvFile()
 // return default location of cv.ra
 {
 static char filePath[PATH_LEN];
@@ -98,7 +102,7 @@ if(!fileExists(filePath))
 return filePath;
 }
 
-const struct hash *cvTermHash(char *term)
+const struct hash *cvTermHash(const char *term)
 // returns a hash of hashes of a term which should be defined in cv.ra
 // NOTE: in static memory: DO NOT FREE
 {
@@ -111,25 +115,25 @@ else if (sameString(term,CV_TERM_ANTIBODY))
 if (cvHashOfHashOfHashes == NULL)
     cvHashOfHashOfHashes = hashNew(0);
 
-struct hash *cvHashForTerm = hashFindVal(cvHashOfHashOfHashes,term);
+struct hash *cvHashForTerm = hashFindVal(cvHashOfHashOfHashes,(char *)term);
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashForTerm == NULL)
     {
-    cvHashForTerm = raReadWithFilter(cvFile(), CV_TERM,CV_TYPE,term);
+    cvHashForTerm = raReadWithFilter((char *)cvFile(), CV_TERM,CV_TYPE,(char *)term);
     if (cvHashForTerm != NULL)
-        hashAdd(cvHashOfHashOfHashes,term,cvHashForTerm);
+        hashAdd(cvHashOfHashOfHashes,(char *)term,cvHashForTerm);
     }
 
 return cvHashForTerm;
 }
 
-const struct hash *cvOneTermHash(char *type,char *term)
+const struct hash *cvOneTermHash(const char *type,const char *term)
 // returns a hash for a single term of a given type
 // NOTE: in static memory: DO NOT FREE
 {
 const struct hash *typeHash = cvTermHash(type);
 if (typeHash != NULL)
-    return hashFindVal((struct hash *)typeHash,term);
+    return hashFindVal((struct hash *)typeHash,(char *)term);
 return NULL;
 }
 
@@ -143,7 +147,7 @@ static struct hash *cvHashOfTermTypes = NULL;
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashOfTermTypes == NULL)
     {
-    cvHashOfTermTypes = raReadWithFilter(cvFile(), CV_TERM,CV_TYPE,CV_TOT);
+    cvHashOfTermTypes = raReadWithFilter((char *)cvFile(), CV_TERM,CV_TYPE,CV_TOT);
     // Patch up an ugly inconsistency with 'cell'
     struct hash *cellHash = hashRemove(cvHashOfTermTypes,CV_UGLY_TOT_CELLTYPE);
     if (cellHash)
@@ -162,26 +166,28 @@ if (cvHashOfTermTypes == NULL)
 return cvHashOfTermTypes;
 }
 
-static boolean cvHiddenIsTrue(char *setting)
+static boolean cvHiddenIsTrue(const char *setting)
 // returns TRUE if hidden setting passed in is true for this browser
 {
 if (setting != NULL)
     {
-    if (sameWord(setting,"yes") || sameWord(setting,"on") || sameWord(setting,"true"))
+    if (sameWord((char *)setting,"yes" )
+    ||  sameWord((char *)setting,"on"  )
+    ||  sameWord((char *)setting,"true"))
         return TRUE;
     if (hIsPrivateHost() || hIsPreviewHost())
         {
-        if (strstrNoCase(setting,"alpha"))
+        if (strstrNoCase((char *)setting,"alpha"))
             return TRUE;
         }
     else if (hIsBetaHost())
         {
-        if (strstrNoCase(setting,"beta"))
+        if (strstrNoCase((char *)setting,"beta"))
             return TRUE;
         }
     else // RR and everyone else
         {
-        if (strstrNoCase(setting,"public"))
+        if (strstrNoCase((char *)setting,"public"))
             return TRUE;
         }
     }
@@ -235,12 +241,12 @@ if (whitePairs != NULL)
 return whitePairs;
 }
 
-enum cvSearchable cvSearchMethod(char *term)
+enum cvSearchable cvSearchMethod(const char *term)
 // returns whether the term is searchable
 {
 // Get the list of term types from thew cv
 struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,term);
+struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
 if (termHash != NULL)
     {
     char *searchable = hashFindVal(termHash,CV_TOT_SEARCHABLE);
@@ -261,12 +267,12 @@ if (termHash != NULL)
 return cvNotSearchable;
 }
 
-const char *cvLabel(char *term)
+const char *cvLabel(const char *term)
 // returns cv label if term found or else just term
 {
 // Get the list of term types from thew cv
 struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,term);
+struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
 if (termHash != NULL)
     {
     char *label = hashFindVal(termHash,CV_LABEL);
@@ -276,7 +282,7 @@ if (termHash != NULL)
 return term;
 }
 
-const char *cvTag(char *type,char *term)
+const char *cvTag(const char *type,const char *term)
 // returns cv Tag if term found or else NULL
 {
 const struct hash *termHash = cvOneTermHash(type,term);
@@ -287,7 +293,7 @@ return NULL;
 
 #ifdef OMIT
 // may want this someday
-const char *cvTerm(char *tag)
+const char *cvTerm(const char *tag)
 // returns the cv Term if tag found or else NULL
 {
 // Get the list of term types from thew cv
@@ -313,11 +319,11 @@ return NULL;
 }
 #endif///def OMIT
 
-boolean cvTermIsHidden(char *term)
+boolean cvTermIsHidden(const char *term)
 // returns TRUE if term is defined as hidden in cv.ra
 {
 struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,term);
+struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
 if (termHash != NULL)
     {
     char *setting = hashFindVal(termHash,CV_TOT_HIDDEN);
@@ -326,14 +332,14 @@ if (termHash != NULL)
 return FALSE;
 }
 
-boolean cvTermIsEmpty(char *term,char *val)
+boolean cvTermIsEmpty(const char *term,const char *val)
 // returns TRUE if term has validation of "cv or None" and the val is None
 {
 if (val == NULL)
     return TRUE; // Empty whether it is supposed to be or not
 
 struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,term);
+struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
 if (termHash != NULL)
     {
     char *validationRule = hashFindVal(termHash,CV_VALIDATE);

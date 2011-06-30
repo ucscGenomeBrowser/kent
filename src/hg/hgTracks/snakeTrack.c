@@ -185,21 +185,11 @@ struct cartOptions
     int scoreFilter ; /* filter chains by score if > 0 */
     };
 
-static int linkedFeaturesCmpChrom(const void *va, const void *vb)
-/* Help sort linkedFeatures by starting pos. */
-{
-const struct linkedFeatures *a = *((struct linkedFeatures **)va);
-const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
-return strcmp(a->name, b->name);
-}
-
 int snakeHeight(struct track *tg, enum trackVisibility vis)
 /* calculate height of all the snakes being displayed */
 {
 int height = 0;
 struct slList *item = tg->items;
-
-slSort(&tg->items, linkedFeaturesCmpChrom);
 
 item = tg->items;
 
@@ -422,7 +412,7 @@ return 0;
 }
 
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
-/* Help sort linkedFeatures by starting pos. */
+/* Help sort linkedFeatures by score */
 {
 const struct linkedFeatures *a = *((struct linkedFeatures **)va);
 const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
@@ -449,7 +439,7 @@ hvGfxSetClip(hvg, xOff, yOff, width, height);
 // score snakes by how many bases they cover
 for (item = tg->items; item != NULL; item = item->next)
     {
-    lf = tg->items;
+    lf = (struct linkedFeatures *)item;
     struct snakeFeature  *sf;
 
     lf->score = 0;
@@ -943,7 +933,7 @@ if (hash->size)
     {
     boolean isSplit = TRUE;
     /* Make up range query. */
-    sprintf(fullName, "%s_%s", chromName, tg->table);
+    safef(fullName, sizeof fullName, "%s_%s", chromName, tg->table);
     if (!hTableExists(database, fullName))
 	{
 	strcpy(fullName, tg->table);
@@ -993,7 +983,7 @@ struct chain *pChain;
 
 chainCart = (struct cartOptions *) tg->extraUiData;
 
-snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->table);
+safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->table);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 int ourStart = winStart;
 int ourEnd = winEnd;
@@ -1004,7 +994,7 @@ ourStart = 0;
 ourEnd = 500000000;
 if (startsWith("chr",optionChrStr)) 
     {
-    snprintf(extraWhere, sizeof(extraWhere), 
+    safef(extraWhere, sizeof(extraWhere), 
             "qName = \"%s\" and score > %d",optionChrStr, 
             chainCart->scoreFilter);
     sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
@@ -1014,14 +1004,14 @@ else
     {
     if (chainCart->scoreFilter > 0)
         {
-        snprintf(extraWhere, sizeof(extraWhere), 
+        safef(extraWhere, sizeof(extraWhere), 
                 "score > \"%d\"",chainCart->scoreFilter);
         sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
                 extraWhere, &rowOffset);
         }
     else
         {
-        snprintf(extraWhere, sizeof(extraWhere), " ");
+        safef(extraWhere, sizeof(extraWhere), " ");
         sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
                 NULL, &rowOffset);
         }
@@ -1058,7 +1048,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	qs = chain.qStart;
 	}
     char buffer[1024];
-    snprintf(buffer, sizeof(buffer), "%s", chain.qName);
+    safef(buffer, sizeof(buffer), "%s", chain.qName);
     lf->name = cloneString(buffer);
     lf->extra = pChain;
     slAddHead(&list, lf);
@@ -1154,7 +1144,7 @@ else
     char option[128]; /* Option -  rainbow chromosome color */
     char *optionStr;	/* this old option was broken before */
 
-    snprintf(option, sizeof(option), "%s.color", tg->table);
+    safef(option, sizeof(option), "%s.color", tg->table);
     optionStr = cartUsualString(cart, option, "on");
     if (differentWord("on",optionStr))
 	{

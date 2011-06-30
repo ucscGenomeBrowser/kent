@@ -503,7 +503,7 @@ dateUnrestricted 2010-10-07
 expId 697
 fileName wgEncodeYaleChIPseqAlignmentsRep1Gm12878Tr4.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 project wgEncode
 replicate 1
@@ -526,7 +526,7 @@ dateUnrestricted 2010-09-19
 expId 695
 fileName wgEncodeYaleChIPseqAlignmentsRep1Gm12878Yy1.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with Staph A,
 project wgEncode
 replicate 1
@@ -1293,7 +1293,7 @@ expId 627
 fileName wgEncodeYaleChIPseqAlignmentsRep1Hct116InputV2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 634
@@ -1317,7 +1317,7 @@ expId 651
 fileName wgEncodeYaleChIPseqAlignmentsRep1Hct116Pol2V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 1
@@ -1344,7 +1344,7 @@ expId 628
 fileName wgEncodeYaleChIPseqAlignmentsRep1Hct116Tcf4V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 replicate 1
@@ -1418,7 +1418,7 @@ dateUnrestricted 2010-06-23
 expId 685
 fileName wgEncodeYaleChIPseqAlignmentsRep1Helas3Ap2alpha.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -1442,7 +1442,7 @@ dateUnrestricted 2010-06-23
 expId 686
 fileName wgEncodeYaleChIPseqAlignmentsRep1Helas3Ap2gamma.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -1672,7 +1672,7 @@ dateUnrestricted 2010-10-08
 expId 699
 fileName wgEncodeYaleChIPseqAlignmentsRep1Helas3E2f1.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1,
 project wgEncode
 replicate 1
@@ -1696,7 +1696,7 @@ dateUnrestricted 2010-06-29
 expId 689
 fileName wgEncodeYaleChIPseqAlignmentsRep1Helas3E2f4.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -1720,7 +1720,7 @@ dateUnrestricted 2010-07-20
 expId 692
 fileName wgEncodeYaleChIPseqAlignmentsRep1Helas3E2f6.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -1744,7 +1744,7 @@ dateUnrestricted 2010-06-28
 expId 688
 fileName wgEncodeYaleChIPseqAlignmentsRep1Helas3Ha.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 replicate 1
@@ -2076,7 +2076,7 @@ dateUnrestricted 2010-06-24
 expId 687
 fileName wgEncodeYaleChIPseqAlignmentsRep1Helas3Tr4.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 1
@@ -2430,7 +2430,7 @@ expId 674
 fileName wgEncodeYaleChIPseqAlignmentsRep1Hepg2bInputV2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 634
@@ -2454,7 +2454,7 @@ expId 675
 fileName wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 1
@@ -3636,7 +3636,7 @@ expId 671
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
 project wgEncode
 replicate 1
@@ -3663,7 +3663,7 @@ expId 676
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -3689,7 +3689,7 @@ expId 638
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bGata1.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001), uncorrected
 project wgEncode
 replicate 1
@@ -3714,7 +3714,7 @@ expId 683
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bGata2V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -3741,7 +3741,7 @@ expId 672
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bInputV2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 634
@@ -3763,7 +3763,7 @@ dateUnrestricted 2010-10-15
 expId 769
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1Mnase.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
 project wgEncode
 replicate 1
@@ -3789,7 +3789,7 @@ expId 677
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -3816,7 +3816,7 @@ expId 682
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bTr4V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 1
@@ -3843,7 +3843,7 @@ expId 684
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bYy1V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 replicate 1
@@ -3870,7 +3870,7 @@ expId 630
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -3895,7 +3895,7 @@ dateUnrestricted 2010-10-04
 expId 696
 fileName wgEncodeYaleChIPseqAlignmentsRep1K562bZnf274.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -3919,7 +3919,7 @@ dateUnrestricted 2010-07-28
 expId 693
 fileName wgEncodeYaleChIPseqAlignmentsRep1Mcf7Hae2f1.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 replicate 1
@@ -3943,7 +3943,7 @@ dateUnrestricted 2010-10-15
 expId 762
 fileName wgEncodeYaleChIPseqAlignmentsRep1Mcf7Input.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
 project wgEncode
 replicate 1
@@ -3993,7 +3993,7 @@ expId 654
 fileName wgEncodeYaleChIPseqAlignmentsRep1Nt2d1InputV2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 1
 setType input
@@ -4018,7 +4018,7 @@ expId 652
 fileName wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Suz12V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -4045,7 +4045,7 @@ expId 653
 fileName wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Yy1V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -4460,7 +4460,7 @@ dateUnrestricted 2010-10-07
 expId 697
 fileName wgEncodeYaleChIPseqAlignmentsRep2Gm12878Tr4.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 project wgEncode
 replicate 2
@@ -4483,7 +4483,7 @@ dateUnrestricted 2010-09-19
 expId 695
 fileName wgEncodeYaleChIPseqAlignmentsRep2Gm12878Yy1.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with Staph A,
 project wgEncode
 replicate 2
@@ -5228,7 +5228,7 @@ expId 651
 fileName wgEncodeYaleChIPseqAlignmentsRep2Hct116Pol2V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 2
@@ -5255,7 +5255,7 @@ expId 628
 fileName wgEncodeYaleChIPseqAlignmentsRep2Hct116Tcf4V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 replicate 2
@@ -5305,7 +5305,7 @@ dateUnrestricted 2010-06-23
 expId 685
 fileName wgEncodeYaleChIPseqAlignmentsRep2Helas3Ap2alpha.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -5329,7 +5329,7 @@ dateUnrestricted 2010-06-23
 expId 686
 fileName wgEncodeYaleChIPseqAlignmentsRep2Helas3Ap2gamma.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -5559,7 +5559,7 @@ dateUnrestricted 2010-10-08
 expId 699
 fileName wgEncodeYaleChIPseqAlignmentsRep2Helas3E2f1.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1,
 project wgEncode
 replicate 2
@@ -5583,7 +5583,7 @@ dateUnrestricted 2010-06-29
 expId 689
 fileName wgEncodeYaleChIPseqAlignmentsRep2Helas3E2f4.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -5607,7 +5607,7 @@ dateUnrestricted 2010-07-20
 expId 692
 fileName wgEncodeYaleChIPseqAlignmentsRep2Helas3E2f6.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -5631,7 +5631,7 @@ dateUnrestricted 2010-06-28
 expId 688
 fileName wgEncodeYaleChIPseqAlignmentsRep2Helas3Ha.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 replicate 2
@@ -5941,7 +5941,7 @@ dateUnrestricted 2010-06-24
 expId 687
 fileName wgEncodeYaleChIPseqAlignmentsRep2Helas3Tr4.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 2
@@ -6295,7 +6295,7 @@ expId 675
 fileName wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 2
@@ -7377,7 +7377,7 @@ expId 671
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
 project wgEncode
 replicate 2
@@ -7404,7 +7404,7 @@ expId 676
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -7430,7 +7430,7 @@ expId 638
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bGata1.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001), uncorrected
 project wgEncode
 replicate 2
@@ -7455,7 +7455,7 @@ expId 683
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bGata2V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -7480,7 +7480,7 @@ dateUnrestricted 2010-10-15
 expId 769
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1Mnase.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
 project wgEncode
 replicate 2
@@ -7506,7 +7506,7 @@ expId 677
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -7533,7 +7533,7 @@ expId 682
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bTr4V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 2
@@ -7560,7 +7560,7 @@ expId 684
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bYy1V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 replicate 2
@@ -7587,7 +7587,7 @@ expId 630
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -7612,7 +7612,7 @@ dateUnrestricted 2010-10-04
 expId 696
 fileName wgEncodeYaleChIPseqAlignmentsRep2K562bZnf274.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -7636,7 +7636,7 @@ dateUnrestricted 2010-07-28
 expId 693
 fileName wgEncodeYaleChIPseqAlignmentsRep2Mcf7Hae2f1.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 replicate 2
@@ -7660,7 +7660,7 @@ dateUnrestricted 2010-10-15
 expId 762
 fileName wgEncodeYaleChIPseqAlignmentsRep2Mcf7Input.tagAlign.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
 project wgEncode
 replicate 2
@@ -7710,7 +7710,7 @@ expId 654
 fileName wgEncodeYaleChIPseqAlignmentsRep2Nt2d1InputV2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 replicate 2
 setType input
@@ -7735,7 +7735,7 @@ expId 652
 fileName wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Suz12V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -7762,7 +7762,7 @@ expId 653
 fileName wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Yy1V2.tagAlign.gz
 fragLength 200
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -9492,7 +9492,7 @@ dateUnrestricted 2010-10-07
 expId 697
 fileName wgEncodeYaleChIPseqPeaksGm12878Tr4.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 project wgEncode
 setType exp
@@ -9515,7 +9515,7 @@ dateUnrestricted 2010-09-19
 expId 695
 fileName wgEncodeYaleChIPseqPeaksGm12878Yy1.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with Staph A,
 project wgEncode
 setType exp
@@ -9947,7 +9947,7 @@ dateUnrestricted 2010-02-15
 expId 651
 fileName wgEncodeYaleChIPseqPeaksHct116Pol2.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -9972,7 +9972,7 @@ dateUnrestricted 2009-11-25
 expId 629
 fileName wgEncodeYaleChIPseqPeaksHct116Tcf4V2.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 setType exp
@@ -10022,7 +10022,7 @@ dateUnrestricted 2010-06-23
 expId 685
 fileName wgEncodeYaleChIPseqPeaksHelas3Ap2alpha.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -10046,7 +10046,7 @@ dateUnrestricted 2010-06-23
 expId 686
 fileName wgEncodeYaleChIPseqPeaksHelas3Ap2gamma.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -10279,7 +10279,7 @@ dateUnrestricted 2010-10-08
 expId 699
 fileName wgEncodeYaleChIPseqPeaksHelas3E2f1.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1,
 project wgEncode
 setType exp
@@ -10303,7 +10303,7 @@ dateUnrestricted 2010-06-29
 expId 689
 fileName wgEncodeYaleChIPseqPeaksHelas3E2f4.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -10327,7 +10327,7 @@ dateUnrestricted 2010-07-20
 expId 692
 fileName wgEncodeYaleChIPseqPeaksHelas3E2f6.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -10351,7 +10351,7 @@ dateUnrestricted 2010-06-28
 expId 688
 fileName wgEncodeYaleChIPseqPeaksHelas3Ha.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 setType exp
@@ -10587,7 +10587,7 @@ dateUnrestricted 2010-06-24
 expId 687
 fileName wgEncodeYaleChIPseqPeaksHelas3Tr4.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -10900,7 +10900,7 @@ dateUnrestricted 2010-03-11
 expId 675
 fileName wgEncodeYaleChIPseqPeaksHepg2bTr4.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -11893,7 +11893,7 @@ dateUnrestricted 2010-03-11
 expId 671
 fileName wgEncodeYaleChIPseqPeaksK562bE2f4.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
 project wgEncode
 setType exp
@@ -11917,7 +11917,7 @@ dateUnrestricted 2010-03-15
 expId 676
 fileName wgEncodeYaleChIPseqPeaksK562bE2f6.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -11942,7 +11942,7 @@ dateUnrestricted 2009-11-27
 expId 638
 fileName wgEncodeYaleChIPseqPeaksK562bGata1V2.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -11967,7 +11967,7 @@ dateUnrestricted 2010-06-02
 expId 683
 fileName wgEncodeYaleChIPseqPeaksK562bGata2.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -11991,7 +11991,7 @@ dateUnrestricted 2010-03-15
 expId 677
 fileName wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -12015,7 +12015,7 @@ dateUnrestricted 2010-10-15
 expId 769
 fileName wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
 project wgEncode
 setType exp
@@ -12039,7 +12039,7 @@ dateUnrestricted 2010-03-22
 expId 682
 fileName wgEncodeYaleChIPseqPeaksK562bTr4.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -12063,7 +12063,7 @@ dateUnrestricted 2010-06-03
 expId 684
 fileName wgEncodeYaleChIPseqPeaksK562bYy1.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 setType exp
@@ -12088,7 +12088,7 @@ dateUnrestricted 2009-11-25
 expId 630
 fileName wgEncodeYaleChIPseqPeaksK562bZnf263V2.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -12113,7 +12113,7 @@ dateUnrestricted 2010-10-04
 expId 696
 fileName wgEncodeYaleChIPseqPeaksK562bZnf274.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -12137,7 +12137,7 @@ dateUnrestricted 2010-07-28
 expId 693
 fileName wgEncodeYaleChIPseqPeaksMcf7Hae2f1.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 setType exp
@@ -12186,7 +12186,7 @@ dateUnrestricted 2010-03-05
 expId 652
 fileName wgEncodeYaleChIPseqPeaksNt2d1Suz12.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -12210,7 +12210,7 @@ dateUnrestricted 2010-03-05
 expId 653
 fileName wgEncodeYaleChIPseqPeaksNt2d1Yy1.narrowPeak.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -12255,7 +12255,7 @@ dateUnrestricted 2009-11-25
 expId 627
 fileName wgEncodeYaleChIPseqRawDataHct116Input.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 224
@@ -12341,7 +12341,7 @@ dateUnrestricted 2010-03-11
 expId 674
 fileName wgEncodeYaleChIPseqRawDataHepg2bInput.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 374
@@ -12467,7 +12467,7 @@ dateUnrestricted 2010-03-11
 expId 672
 fileName wgEncodeYaleChIPseqRawDataK562bInput.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Illumina 2.0, low confidence sequences excluded
 project wgEncode
 setType input
@@ -12510,7 +12510,7 @@ dateUnrestricted 2010-03-08
 expId 654
 fileName wgEncodeYaleChIPseqRawDataNt2d1Input.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 subId 346
@@ -12920,7 +12920,7 @@ dateUnrestricted 2010-10-07
 expId 697
 fileName wgEncodeYaleChIPseqRawDataRep1Gm12878Tr4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 project wgEncode
 replicate 1
@@ -12943,7 +12943,7 @@ dateUnrestricted 2010-09-19
 expId 695
 fileName wgEncodeYaleChIPseqRawDataRep1Gm12878Yy1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with Staph A,
 project wgEncode
 replicate 1
@@ -13723,7 +13723,7 @@ dateUnrestricted 2010-02-15
 expId 651
 fileName wgEncodeYaleChIPseqRawDataRep1Hct116Pol2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 project wgEncode
 replicate 1
@@ -13746,7 +13746,7 @@ dateUnrestricted 2009-11-25
 expId 628
 fileName wgEncodeYaleChIPseqRawDataRep1Hct116Tcf4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 replicate 1
@@ -13792,7 +13792,7 @@ dateUnrestricted 2010-06-23
 expId 685
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3Ap2alpha.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -13816,7 +13816,7 @@ dateUnrestricted 2010-06-23
 expId 686
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3Ap2gamma.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -14044,7 +14044,7 @@ dateUnrestricted 2010-10-08
 expId 699
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3E2f1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1,
 project wgEncode
 replicate 1
@@ -14068,7 +14068,7 @@ dateUnrestricted 2010-06-29
 expId 689
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3E2f4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -14092,7 +14092,7 @@ dateUnrestricted 2010-07-20
 expId 692
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3E2f6.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -14116,7 +14116,7 @@ dateUnrestricted 2010-06-28
 expId 688
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3Ha.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 replicate 1
@@ -14409,7 +14409,7 @@ dateUnrestricted 2010-06-24
 expId 687
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3Tr4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 1
@@ -14774,7 +14774,7 @@ dateUnrestricted 2010-03-11
 expId 675
 fileName wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 project wgEncode
 replicate 1
@@ -15787,7 +15787,7 @@ dateUnrestricted 2010-03-11
 expId 671
 fileName wgEncodeYaleChIPseqRawDataRep1K562bE2f4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 project wgEncode
 replicate 1
@@ -15810,7 +15810,7 @@ dateUnrestricted 2010-03-15
 expId 676
 fileName wgEncodeYaleChIPseqRawDataRep1K562bE2f6.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
 project wgEncode
 replicate 1
@@ -15833,7 +15833,7 @@ dateUnrestricted 2009-11-27
 expId 638
 fileName wgEncodeYaleChIPseqRawDataRep1K562bGata1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 1
@@ -15857,7 +15857,7 @@ dateUnrestricted 2010-06-02
 expId 683
 fileName wgEncodeYaleChIPseqRawDataRep1K562bGata2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -15881,7 +15881,7 @@ dateUnrestricted 2010-03-15
 expId 677
 fileName wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -15905,7 +15905,7 @@ dateUnrestricted 2010-10-15
 expId 769
 fileName wgEncodeYaleChIPseqRawDataRep1K562bSetdb1Mnase.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
 project wgEncode
 replicate 1
@@ -15929,7 +15929,7 @@ dateUnrestricted 2010-03-22
 expId 682
 fileName wgEncodeYaleChIPseqRawDataRep1K562bTr4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 1
@@ -15953,7 +15953,7 @@ dateUnrestricted 2010-06-03
 expId 684
 fileName wgEncodeYaleChIPseqRawDataRep1K562bYy1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 replicate 1
@@ -15977,7 +15977,7 @@ dateUnrestricted 2009-11-25
 expId 630
 fileName wgEncodeYaleChIPseqRawDataRep1K562bZnf263.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -16001,7 +16001,7 @@ dateUnrestricted 2010-10-04
 expId 696
 fileName wgEncodeYaleChIPseqRawDataRep1K562bZnf274.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -16025,7 +16025,7 @@ dateUnrestricted 2010-07-28
 expId 693
 fileName wgEncodeYaleChIPseqRawDataRep1Mcf7Hae2f1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 replicate 1
@@ -16049,7 +16049,7 @@ dateUnrestricted 2010-10-15
 expId 762
 fileName wgEncodeYaleChIPseqRawDataRep1Mcf7Input.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
 project wgEncode
 replicate 1
@@ -16095,7 +16095,7 @@ dateUnrestricted 2010-03-05
 expId 652
 fileName wgEncodeYaleChIPseqRawDataRep1Nt2d1Suz12.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -16119,7 +16119,7 @@ dateUnrestricted 2010-03-05
 expId 653
 fileName wgEncodeYaleChIPseqRawDataRep1Nt2d1Yy1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 1
@@ -16532,7 +16532,7 @@ dateUnrestricted 2010-10-07
 expId 697
 fileName wgEncodeYaleChIPseqRawDataRep2Gm12878Tr4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 project wgEncode
 replicate 2
@@ -16555,7 +16555,7 @@ dateUnrestricted 2010-09-19
 expId 695
 fileName wgEncodeYaleChIPseqRawDataRep2Gm12878Yy1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with Staph A,
 project wgEncode
 replicate 2
@@ -17312,7 +17312,7 @@ dateUnrestricted 2010-02-15
 expId 651
 fileName wgEncodeYaleChIPseqRawDataRep2Hct116Pol2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 project wgEncode
 replicate 2
@@ -17335,7 +17335,7 @@ dateUnrestricted 2009-11-25
 expId 628
 fileName wgEncodeYaleChIPseqRawDataRep2Hct116Tcf4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 replicate 2
@@ -17381,7 +17381,7 @@ dateUnrestricted 2010-06-23
 expId 685
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3Ap2alpha.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -17405,7 +17405,7 @@ dateUnrestricted 2010-06-23
 expId 686
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3Ap2gamma.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -17633,7 +17633,7 @@ dateUnrestricted 2010-10-08
 expId 699
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3E2f1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1,
 project wgEncode
 replicate 2
@@ -17657,7 +17657,7 @@ dateUnrestricted 2010-06-29
 expId 689
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3E2f4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -17681,7 +17681,7 @@ dateUnrestricted 2010-07-20
 expId 692
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3E2f6.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -17705,7 +17705,7 @@ dateUnrestricted 2010-06-28
 expId 688
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3Ha.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 replicate 2
@@ -17975,7 +17975,7 @@ dateUnrestricted 2010-06-24
 expId 687
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3Tr4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 2
@@ -18340,7 +18340,7 @@ dateUnrestricted 2010-03-11
 expId 675
 fileName wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 2
@@ -19349,7 +19349,7 @@ dateUnrestricted 2010-03-11
 expId 671
 fileName wgEncodeYaleChIPseqRawDataRep2K562bE2f4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 project wgEncode
 replicate 2
@@ -19372,7 +19372,7 @@ dateUnrestricted 2010-03-15
 expId 676
 fileName wgEncodeYaleChIPseqRawDataRep2K562bE2f6.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -19396,7 +19396,7 @@ dateUnrestricted 2009-11-27
 expId 638
 fileName wgEncodeYaleChIPseqRawDataRep2K562bGata1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 2
@@ -19420,7 +19420,7 @@ dateUnrestricted 2010-06-02
 expId 683
 fileName wgEncodeYaleChIPseqRawDataRep2K562bGata2.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -19444,7 +19444,7 @@ dateUnrestricted 2010-03-15
 expId 677
 fileName wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -19468,7 +19468,7 @@ dateUnrestricted 2010-10-15
 expId 769
 fileName wgEncodeYaleChIPseqRawDataRep2K562bSetdb1Mnase.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
 project wgEncode
 replicate 2
@@ -19492,7 +19492,7 @@ dateUnrestricted 2010-03-22
 expId 682
 fileName wgEncodeYaleChIPseqRawDataRep2K562bTr4.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 replicate 2
@@ -19516,7 +19516,7 @@ dateUnrestricted 2010-06-03
 expId 684
 fileName wgEncodeYaleChIPseqRawDataRep2K562bYy1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 replicate 2
@@ -19540,7 +19540,7 @@ dateUnrestricted 2009-11-25
 expId 630
 fileName wgEncodeYaleChIPseqRawDataRep2K562bZnf263.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -19564,7 +19564,7 @@ dateUnrestricted 2010-10-04
 expId 696
 fileName wgEncodeYaleChIPseqRawDataRep2K562bZnf274.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -19588,7 +19588,7 @@ dateUnrestricted 2010-07-28
 expId 693
 fileName wgEncodeYaleChIPseqRawDataRep2Mcf7Hae2f1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 replicate 2
@@ -19612,7 +19612,7 @@ dateUnrestricted 2010-10-15
 expId 762
 fileName wgEncodeYaleChIPseqRawDataRep2Mcf7Input.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
 project wgEncode
 replicate 2
@@ -19658,7 +19658,7 @@ dateUnrestricted 2010-03-05
 expId 652
 fileName wgEncodeYaleChIPseqRawDataRep2Nt2d1Suz12.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -19682,7 +19682,7 @@ dateUnrestricted 2010-03-05
 expId 653
 fileName wgEncodeYaleChIPseqRawDataRep2Nt2d1Yy1.fastq.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 replicate 2
@@ -20682,10 +20682,10 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
-expId 691
+expId 690
 fileName wgEncodeYaleChIPseqRawDataRep4Gm12878NfkbTnfa.fastq.gz
 grant Snyder
-lab Yale
+lab Stanford
 project wgEncode
 replicate 4
 setType exp
@@ -21126,7 +21126,7 @@ dateUnrestricted 2009-11-25
 expId 627
 fileName wgEncodeYaleChIPseqRel2SignalHct116Input.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 softwareVersion PeakSeq1.0
@@ -21151,7 +21151,7 @@ dateUnrestricted 2009-11-25
 expId 629
 fileName wgEncodeYaleChIPseqRel2SignalHct116Tcf4.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 setType exp
@@ -21504,7 +21504,7 @@ dateUnrestricted 2009-11-27
 expId 638
 fileName wgEncodeYaleChIPseqRel2SignalK562bGata1.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -21530,7 +21530,7 @@ dateUnrestricted 2009-11-25
 expId 630
 fileName wgEncodeYaleChIPseqRel2SignalK562bZnf263.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -21983,7 +21983,7 @@ dateUnrestricted 2010-10-07
 expId 697
 fileName wgEncodeYaleChIPseqSignalGm12878Tr4.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 project wgEncode
 setType exp
@@ -22006,7 +22006,7 @@ dateUnrestricted 2010-09-19
 expId 695
 fileName wgEncodeYaleChIPseqSignalGm12878Yy1.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with Staph A,
 project wgEncode
 setType exp
@@ -22805,7 +22805,7 @@ dateUnrestricted 2010-02-15
 expId 651
 fileName wgEncodeYaleChIPseqSignalHct116Pol2.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -22829,7 +22829,7 @@ dateUnrestricted 2010-06-23
 expId 685
 fileName wgEncodeYaleChIPseqSignalHelas3Ap2alpha.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -22853,7 +22853,7 @@ dateUnrestricted 2010-06-23
 expId 686
 fileName wgEncodeYaleChIPseqSignalHelas3Ap2gamma.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -23084,7 +23084,7 @@ dateUnrestricted 2010-10-08
 expId 699
 fileName wgEncodeYaleChIPseqSignalHelas3E2f1.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1,
 project wgEncode
 setType exp
@@ -23108,7 +23108,7 @@ dateUnrestricted 2010-06-29
 expId 689
 fileName wgEncodeYaleChIPseqSignalHelas3E2f4.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -23132,7 +23132,7 @@ dateUnrestricted 2010-07-20
 expId 692
 fileName wgEncodeYaleChIPseqSignalHelas3E2f6.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -23156,7 +23156,7 @@ dateUnrestricted 2010-06-28
 expId 688
 fileName wgEncodeYaleChIPseqSignalHelas3Ha.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 setType exp
@@ -23442,7 +23442,7 @@ dateUnrestricted 2010-06-24
 expId 687
 fileName wgEncodeYaleChIPseqSignalHelas3Tr4.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -23805,7 +23805,7 @@ dateUnrestricted 2010-03-11
 expId 674
 fileName wgEncodeYaleChIPseqSignalHepg2bInput.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 softwareVersion PeakSeq1.0
@@ -23828,7 +23828,7 @@ dateUnrestricted 2010-03-11
 expId 675
 fileName wgEncodeYaleChIPseqSignalHepg2bTr4.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -24777,7 +24777,7 @@ dateUnrestricted 2010-03-11
 expId 671
 fileName wgEncodeYaleChIPseqSignalK562bE2f4.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
 project wgEncode
 setType exp
@@ -24801,7 +24801,7 @@ dateUnrestricted 2010-03-15
 expId 676
 fileName wgEncodeYaleChIPseqSignalK562bE2f6.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -24825,7 +24825,7 @@ dateUnrestricted 2010-06-02
 expId 683
 fileName wgEncodeYaleChIPseqSignalK562bGata2.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -24849,7 +24849,7 @@ dateUnrestricted 2010-03-11
 expId 672
 fileName wgEncodeYaleChIPseqSignalK562bInput.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 softwareVersion PeakSeq1.0
@@ -24872,7 +24872,7 @@ dateUnrestricted 2010-03-15
 expId 677
 fileName wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -24896,7 +24896,7 @@ dateUnrestricted 2010-10-15
 expId 769
 fileName wgEncodeYaleChIPseqSignalK562bSetdb1Mnase.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
 project wgEncode
 setType exp
@@ -24920,7 +24920,7 @@ dateUnrestricted 2010-03-22
 expId 682
 fileName wgEncodeYaleChIPseqSignalK562bTr4.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 project wgEncode
 setType exp
@@ -24944,7 +24944,7 @@ dateUnrestricted 2010-06-03
 expId 684
 fileName wgEncodeYaleChIPseqSignalK562bYy1.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 project wgEncode
 setType exp
@@ -24968,7 +24968,7 @@ dateUnrestricted 2010-10-04
 expId 696
 fileName wgEncodeYaleChIPseqSignalK562bZnf274.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -24992,7 +24992,7 @@ dateUnrestricted 2010-07-28
 expId 693
 fileName wgEncodeYaleChIPseqSignalMcf7Hae2f1.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 project wgEncode
 setType exp
@@ -25016,7 +25016,7 @@ dateUnrestricted 2010-10-15
 expId 762
 fileName wgEncodeYaleChIPseqSignalMcf7Input.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
 project wgEncode
 setType input
@@ -25040,7 +25040,7 @@ dateUnrestricted 2010-03-08
 expId 654
 fileName wgEncodeYaleChIPseqSignalNt2d1Input.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 project wgEncode
 setType input
 softwareVersion PeakSeq1.0
@@ -25063,7 +25063,7 @@ dateUnrestricted 2010-03-05
 expId 652
 fileName wgEncodeYaleChIPseqSignalNt2d1Suz12.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -25087,7 +25087,7 @@ dateUnrestricted 2010-03-05
 expId 653
 fileName wgEncodeYaleChIPseqSignalNt2d1Yy1.bedGraph4.gz
 grant Snyder
-lab UCD
+lab USC
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 project wgEncode
 setType exp
@@ -25122,4 +25122,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 1206911612
+# MAGIC: 1208888727

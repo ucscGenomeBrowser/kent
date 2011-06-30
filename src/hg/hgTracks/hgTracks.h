@@ -1269,7 +1269,11 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
 // Returns "score >= ..." extra where clause if one is needed
 
+/* useful for declaring small arrays */
 #define SMALLBUF 128
+#define LARGEBUF 256
+/* and for dyStringNew */
+#define SMALLDYBUF 64
 
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */

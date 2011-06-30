@@ -39,7 +39,7 @@ shortLabel UW CTCF Binding
 longLabel CTCF Binding Sites by ChIP-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1)  2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF  BJ=BJ Caco2=Caco-2 H7es=H7-HESC HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCPE=HCPEpIC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1)  2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2c BJ=BJ Caco2=Caco-2 H7es=H7-HESC HAC=HAc HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCPE=HCPEpIC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HFFMYC=HFF-Myc HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat LNCAP=LNCaP MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA WI38=WI-38 WERIRb1=WERI-Rb-1
 subGroup3 factor Factor CTCF=CTCF  zInput=Input
 subGroup4 rep Replicate 1=1 2=2
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
@@ -626,6 +626,114 @@ noInherit on
         type broadPeak
         # subId=2695 dateSubmitted=2010-10-23
 
+        track wgEncodeUwTfbsBe2cCtcfStdHotspotsRep1
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel BE2_C CTCF 1
+        longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in BE2_C cells)
+        subGroups view=Hot factor=CTCF cellType=BE2C rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4387 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsA549CtcfStdHotspotsRep2
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel A549 CTCF 2
+        longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in A549 cells)
+        subGroups view=Hot factor=CTCF cellType=A549 rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4384 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsBe2cCtcfStdHotspotsRep2
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel BE2_C CTCF 2
+        longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in BE2_C cells)
+        subGroups view=Hot factor=CTCF cellType=BE2C rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4388 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsAg04450CtcfStdHotspotsRep2
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel AG04450 CTCF 2
+        longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in AG04450 cells)
+        subGroups view=Hot factor=CTCF cellType=AG04450 rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4386 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsA549CtcfStdHotspotsRep1
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel A549 CTCF 1
+        longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in A549 cells)
+        subGroups view=Hot factor=CTCF cellType=A549 rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4385 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHacCtcfStdHotspotsRep1
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel HAc CTCF 1
+        longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HAc cells)
+        subGroups view=Hot factor=CTCF cellType=HAC rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4389 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHcmCtcfStdHotspotsRep1
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel HCM CTCF 1
+        longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HCM cells)
+        subGroups view=Hot factor=CTCF cellType=HCM rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4390 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHffmycCtcfStdHotspotsRep2
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel HFF-Myc CTCF 2
+        longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in HFF-Myc cells)
+        subGroups view=Hot factor=CTCF cellType=HFFMYC rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4392 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsNb4CtcfStdHotspotsRep1
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel NB4 CTCF 1
+        longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in NB4 cells)
+        subGroups view=Hot factor=CTCF cellType=NB4 rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4393 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHffmycCtcfStdHotspotsRep1
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel HFF-Myc CTCF 1
+        longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HFF-Myc cells)
+        subGroups view=Hot factor=CTCF cellType=HFFMYC rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4391 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsWi38CtcfStdHotspotsRep1
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel WI-38 CTCF 1
+        longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in WI-38 cells)
+        subGroups view=Hot factor=CTCF cellType=WI38 rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4394 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsWi38CtcfStdHotspotsRep2
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel WI-38 CTCF 2
+        longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in WI-38 cells)
+        subGroups view=Hot factor=CTCF cellType=WI38 rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4395 dateSubmitted=2011-06-25
+
     track wgEncodeUwTfbsViewPeaks
     shortLabel Peaks
     view Peaks
@@ -1197,6 +1305,114 @@ noInherit on
         subGroups view=Peaks factor=CTCF cellType=HPF  rep=2
         type narrowPeak
         # subId=2695 dateSubmitted=2010-10-23
+
+        track wgEncodeUwTfbsBe2cCtcfStdPkRep1
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel BE2_C CTCF Pk 1
+        longLabel ENCODE UW TFBS Peaks Replicate 1 (CTCF in BE2_C cells)
+        subGroups view=Peaks factor=CTCF cellType=BE2C rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4387 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsA549CtcfStdPkRep2
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel A549 CTCF Pk 2
+        longLabel ENCODE UW TFBS Peaks Replicate 2 (CTCF in A549 cells)
+        subGroups view=Peaks factor=CTCF cellType=A549 rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4384 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsBe2cCtcfStdPkRep2
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel BE2_C CTCF Pk 2
+        longLabel ENCODE UW TFBS Peaks Replicate 2 (CTCF in BE2_C cells)
+        subGroups view=Peaks factor=CTCF cellType=BE2C rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4388 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsAg04450CtcfStdPkRep2
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel AG04450 CTCF Pk 2
+        longLabel ENCODE UW TFBS Peaks Replicate 2 (CTCF in AG04450 cells)
+        subGroups view=Peaks factor=CTCF cellType=AG04450 rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4386 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsA549CtcfStdPkRep1
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel A549 CTCF Pk 1
+        longLabel ENCODE UW TFBS Peaks Replicate 1 (CTCF in A549 cells)
+        subGroups view=Peaks factor=CTCF cellType=A549 rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4385 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHacCtcfStdPkRep1
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel HAc CTCF Pk 1
+        longLabel ENCODE UW TFBS Peaks Replicate 1 (CTCF in HAc cells)
+        subGroups view=Peaks factor=CTCF cellType=HAC rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4389 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHcmCtcfStdPkRep1
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel HCM CTCF Pk 1
+        longLabel ENCODE UW TFBS Peaks Replicate 1 (CTCF in HCM cells)
+        subGroups view=Peaks factor=CTCF cellType=HCM rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4390 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHffmycCtcfStdPkRep2
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel HFF-Myc CTCF Pk 2
+        longLabel ENCODE UW TFBS Peaks Replicate 2 (CTCF in HFF-Myc cells)
+        subGroups view=Peaks factor=CTCF cellType=HFFMYC rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4392 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsNb4CtcfStdPkRep1
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel NB4 CTCF Pk 1
+        longLabel ENCODE UW TFBS Peaks Replicate 1 (CTCF in NB4 cells)
+        subGroups view=Peaks factor=CTCF cellType=NB4 rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4393 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHffmycCtcfStdPkRep1
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel HFF-Myc CTCF Pk 1
+        longLabel ENCODE UW TFBS Peaks Replicate 1 (CTCF in HFF-Myc cells)
+        subGroups view=Peaks factor=CTCF cellType=HFFMYC rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4391 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsWi38CtcfStdPkRep1
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel WI-38 CTCF Pk 1
+        longLabel ENCODE UW TFBS Peaks Replicate 1 (CTCF in WI-38 cells)
+        subGroups view=Peaks factor=CTCF cellType=WI38 rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4394 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsWi38CtcfStdPkRep2
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel WI-38 CTCF Pk 2
+        longLabel ENCODE UW TFBS Peaks Replicate 2 (CTCF in WI-38 cells)
+        subGroups view=Peaks factor=CTCF cellType=WI38 rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4395 dateSubmitted=2011-06-25
 
     track wgEncodeUwTfbsViewRawSig
     shortLabel Raw Signal
@@ -2192,4 +2408,186 @@ noInherit on
         subGroups view=zRSig factor=CTCF cellType=HPF  rep=2
         type bigWig 1.000000 17174.000000
         # subId=2695 dateSubmitted=2010-10-23
+
+        track wgEncodeUwTfbsBe2cInputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel BE2_C Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in BE2_C cells)
+        subGroups view=zRSig factor=zInput cellType=BE2C rep=1
+        type bigWig 1.000000 17997.000000
+        origAssembly hg19
+        # subId=4359 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsNhlfInputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel NHLF Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in NHLF cells)
+        subGroups view=zRSig factor=zInput cellType=NHLF rep=1
+        type bigWig 1.000000 29301.000000
+        origAssembly hg19
+        # subId=4362 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHffmycInputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel HFF-Myc Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HFF-Myc cells)
+        subGroups view=zRSig factor=zInput cellType=HFFMYC rep=1
+        type bigWig 1.000000 18402.000000
+        origAssembly hg19
+        # subId=4360 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsLncapInputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel LNCaP Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in LNCaP cells)
+        subGroups view=zRSig factor=zInput cellType=LNCAP rep=1
+        type bigWig 1.000000 21185.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=4361 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsPanc1InputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel PANC-1 Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in PANC-1 cells)
+        subGroups view=zRSig factor=zInput cellType=PANC1 rep=1
+        type bigWig 1.000000 22326.000000
+        origAssembly hg19
+        # subId=4363 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsSknmcInputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel SK-N-MC Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in SK-N-MC cells)
+        subGroups view=zRSig factor=zInput cellType=SKNMC rep=1
+        type bigWig 1.000000 15364.000000
+        origAssembly hg19
+        # subId=4364 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsWi38InputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel WI-38 Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in WI-38 cells)
+        subGroups view=zRSig factor=zInput cellType=WI38 rep=1
+        type bigWig 1.000000 13078.000000
+        origAssembly hg19
+        # subId=4365 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsBe2cCtcfStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel BE2_C CTCF Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in BE2_C cells)
+        subGroups view=zRSig factor=CTCF cellType=BE2C rep=1
+        type bigWig 1.000000 23779.000000
+        origAssembly hg19
+        # subId=4387 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsA549CtcfStdRawRep2
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel A549 CTCF Raw 2
+        longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in A549 cells)
+        subGroups view=zRSig factor=CTCF cellType=A549 rep=2
+        type bigWig 1.000000 8690.000000
+        origAssembly hg19
+        # subId=4384 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsBe2cCtcfStdRawRep2
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel BE2_C CTCF Raw 2
+        longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in BE2_C cells)
+        subGroups view=zRSig factor=CTCF cellType=BE2C rep=2
+        type bigWig 1.000000 14708.000000
+        origAssembly hg19
+        # subId=4388 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsAg04450CtcfStdRawRep2
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel AG04450 CTCF Raw 2
+        longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in AG04450 cells)
+        subGroups view=zRSig factor=CTCF cellType=AG04450 rep=2
+        type bigWig 1.000000 10438.000000
+        origAssembly hg19
+        # subId=4386 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsA549CtcfStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel A549 CTCF Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in A549 cells)
+        subGroups view=zRSig factor=CTCF cellType=A549 rep=1
+        type bigWig 1.000000 6710.000000
+        origAssembly hg19
+        # subId=4385 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHacCtcfStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel HAc CTCF Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HAc cells)
+        subGroups view=zRSig factor=CTCF cellType=HAC rep=1
+        type bigWig 1.000000 8822.000000
+        origAssembly hg19
+        # subId=4389 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHcmCtcfStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel HCM CTCF Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HCM cells)
+        subGroups view=zRSig factor=CTCF cellType=HCM rep=1
+        type bigWig 1.000000 7615.000000
+        origAssembly hg19
+        # subId=4390 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHffmycCtcfStdRawRep2
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel HFF-Myc CTCF Raw 2
+        longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in HFF-Myc cells)
+        subGroups view=zRSig factor=CTCF cellType=HFFMYC rep=2
+        type bigWig 1.000000 15556.000000
+        origAssembly hg19
+        # subId=4392 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsNb4CtcfStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel NB4 CTCF Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in NB4 cells)
+        subGroups view=zRSig factor=CTCF cellType=NB4 rep=1
+        type bigWig 1.000000 11314.000000
+        origAssembly hg19
+        # subId=4393 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsHffmycCtcfStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel HFF-Myc CTCF Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HFF-Myc cells)
+        subGroups view=zRSig factor=CTCF cellType=HFFMYC rep=1
+        type bigWig 1.000000 10059.000000
+        origAssembly hg19
+        # subId=4391 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsWi38CtcfStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel WI-38 CTCF Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in WI-38 cells)
+        subGroups view=zRSig factor=CTCF cellType=WI38 rep=1
+        type bigWig 1.000000 9025.000000
+        origAssembly hg19
+        # subId=4394 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsWi38CtcfStdRawRep2
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel WI-38 CTCF Raw 2
+        longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in WI-38 cells)
+        subGroups view=zRSig factor=CTCF cellType=WI38 rep=2
+        type bigWig 1.000000 8270.000000
+        origAssembly hg19
+        # subId=4395 dateSubmitted=2011-06-25
+
+        track wgEncodeUwTfbsA549InputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel A549 Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in A549 cells)
+        subGroups view=zRSig factor=zInput cellType=A549 rep=1
+        type bigWig 1.000000 12152.000000
+        origAssembly hg19
+        # subId=4350 dateSubmitted=2011-06-29
+
 

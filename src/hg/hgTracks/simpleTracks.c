@@ -133,7 +133,6 @@
 static char const rcsid[] = "$Id: simpleTracks.c,v 1.149 2010/06/05 19:29:42 braney Exp $";
 
 #define CHROM_COLORS 26
-#define SMALLDYBUF 64
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
@@ -4299,7 +4298,9 @@ struct dyString *dyQuery = NULL;
 if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
     {
     if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
+        || startsWith("wgEncodeGencodeComp", tg->tdb->track)
         || startsWith("wgEncodeGencodeFull", tg->tdb->track)
+        || startsWith("wgEncodeGencode2wayConsPseudo", tg->tdb->track)
         || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
         dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
     }
@@ -11091,11 +11092,79 @@ else
     }
 }
 
+char * omimGene2Name(struct track *tg, void *item)
+/* Returns a combination of OMIM ID and/or gene symbol(s) depending on user's selection */
+{
+struct bed *el = item;
+
+struct sqlConnection *conn = hAllocConn(database);
+boolean labelStarted = FALSE;
+boolean useGeneSymbol = FALSE;
+boolean useOmimId =  FALSE;
+char *geneSymbol;
+char *omimId;
+struct hashEl *omimGene2Labels = cartFindPrefix(cart, "omimGene2.label");
+struct hashEl *label;
+
+if (omimGene2Labels == NULL)
+    {
+    useOmimId = TRUE; /* default to omim ID*/
+    /* set cart to match the default set */
+    cartSetBoolean(cart, "omimGene2.label.omimId", TRUE);
+    }
+else
+    {
+    for (label = omimGene2Labels; label != NULL; label = label->next)
+    	{
+    	if (endsWith(label->name, "gene") && differentString(label->val, "0"))
+	    {
+	    useGeneSymbol = TRUE;
+	    }
+    	else if (endsWith(label->name, "omimId") && differentString(label->val, "0"))
+    	    {
+            useOmimId = TRUE;
+	    }  
+    	}	
+    }
+
+struct dyString *name = dyStringNew(SMALLDYBUF);
+labelStarted = FALSE; /* reset for each item in track */
+
+if (useOmimId)
+    {
+    omimId = strdup(el->name);
+    if (omimId != NULL)
+        {
+        dyStringAppend(name, omimId);
+        }
+    labelStarted = TRUE;
+    }
+
+if (useGeneSymbol)
+    {
+    if (labelStarted) 
+    	dyStringAppendC(name, '/');
+    else 
+    	labelStarted = TRUE;
+    // get gene symbol(s) from omimGeneMap table.
+    // Note: some entries are not in omimGeneMap and/or does not have gene symbol(s)
+    char query[256];
+    safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
+    geneSymbol = sqlQuickString(conn, query);
+    if (geneSymbol && differentString(geneSymbol, "0"))
+        dyStringAppend(name, geneSymbol);
+    }
+
+hFreeConn(&conn);
+return(name->string);
+}
+
 void omimGene2Methods (struct track *tg)
 /* Methods for version 2 of OMIM Genes track. */
 {
 tg->loadItems	  = omimGene2Load;
 tg->itemColor 	  = omimGene2Color;
+tg->itemName	  = omimGene2Name;
 tg->itemNameColor = omimGene2Color;
 tg->drawItemAt    = bedPlusLabelDrawAt;
 tg->mapItem       = bedPlusLabelMapItem;

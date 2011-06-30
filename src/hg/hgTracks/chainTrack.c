@@ -136,7 +136,7 @@ if (hash->size)
     {
     boolean isSplit = TRUE;
     /* Make up range query. */
-    sprintf(fullName, "%s_%s", chromName, tg->table);
+    safef(fullName, sizeof fullName, "%s_%s", chromName, tg->table);
     if (!hTableExists(database, fullName))
 	{
 	strcpy(fullName, tg->table);
@@ -267,7 +267,7 @@ optionChrStr = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
 	"chromFilter", "All");
 if (startsWith("chr",optionChrStr)) 
     {
-    snprintf(extraWhere, sizeof(extraWhere), 
+    safef(extraWhere, sizeof(extraWhere), 
             "qName = \"%s\" and score > %d",optionChrStr, 
             chainCart->scoreFilter);
     sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
@@ -277,14 +277,14 @@ else
     {
     if (chainCart->scoreFilter > 0)
         {
-        snprintf(extraWhere, sizeof(extraWhere), 
+        safef(extraWhere, sizeof(extraWhere), 
                 "score > \"%d\"",chainCart->scoreFilter);
         sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
                 extraWhere, &rowOffset);
         }
     else
         {
-        snprintf(extraWhere, sizeof(extraWhere), " ");
+        safef(extraWhere, sizeof(extraWhere), " ");
         sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
                 NULL, &rowOffset);
         }
