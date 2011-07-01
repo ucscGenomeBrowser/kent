@@ -10,6 +10,7 @@ wgEncodeGisChiaPet.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeHaibMethylArray.ra \
+wgEncodeHaibMethyl450.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibRnaSeq.ra\
 wgEncodeHaibTfbs.ra \

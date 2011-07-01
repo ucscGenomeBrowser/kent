@@ -1,0 +1,135 @@
+track wgEncodeHaibMethyl450  
+compositeTrack on
+superTrack wgEncodeDnaMethylSuper dense
+shortLabel HAIB Methyl450
+longLabel CpG Methylation by Illumina Methyl450 Bead Arrays from ENCODE/HAIB
+group regulation
+subGroup1 view Views Sites=Sites
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BE2C=BE2C BJ=BJ CMK=CMK ECC1=ECC-1 Fibrobl=Fibrobl GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTB11=HTB-11 Hepatocytes=Hepatocytes HTR8=HTR-8 IMR90=IMR90  JURKAT=Jurkat LNCAP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 Osteobl=Osteoblast PANC1=PANC-1 PanIslets=PanIslets PFSK1=PFSK-1 PrEC=PrEC ProgFib=ProgFib RPTEC=RPTEC SAEC=SAEC SKNSHRA=SK-N-SH_RA SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCAdiposeUHN00001=BC_Adipose_UHN00001 BCAdrenalGlandH12803N=BC_Adrenal_Gland_H12803N BCBladder0111002=BC_Bladder_01-11002 BCBrainH11058N=BC_Brain_H11058N BCBreast0203015=BC_Breast_02-03015 BCColon0111002=BC_Colon_01-11002 BCColonH12817N=BC_Colon_H12817N BCEsophagus0111002=BC_Esophagus_01-11002 BCEsophagusH12817N=BC_Esophagus_H12817N BCJejunumH12817N=BC_Jejunum_H12817N BCKidney0111002=BC_Kidney_01-11002 BCKidneyH12817N=BC_Kidney_H12817N BCLeftVentricleN41=BC_Left_Ventricle_N41 BCLeukocyteUHN00204=BC_Leukocyte_UHN00204 BCLiver0111002=BC_Liver_01-11002 BCLung0111002=BC_Lung_01-11002 BCLungH12817N=BC_Lung_H12817N BCPancreasH12817N=BC_Pancreas_H12817N BCPenisH12817N=BC_Penis_H12817N BCPericardiumH12529N=BC_Pericardium_H12529N BCPlacentaUHN00189=BC_Placenta_UHN00189 BCProstateGlandH12817N=BC_Prostate_Gland_H12817N BCRectumN29=BC_Rectum_N29 BCSkeletalMuscle0111002=BC_Skeletal_Muscle_01-11002 BCSkeletalMuscleH12817N=BC_Skeletal_Muscle_H12817N BCSkin0111002=BC_Skin_01-11002 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 
+subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
+subGroup4 treatment Treatment NONE=None ETOH02=ETOH02 DM002P24H=DM002P24H
+dimensions dimY=cellType dimX=treatment dimZ=rep
+dimensionZchecked rep1
+fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep obtainedBy=Obtained_By labVersion=Data_Type dccAccession=UCSC_Accession geoSampleAccession=GEO_Accesion fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ treatment=+ rep=+ 
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+dragAndDrop subTracks
+priority 0
+type bed 9
+wgEncode 1
+itemRgb on
+#visibility dense
+#canPack On
+scoreFilter 0
+scoreFilterLimits 0:1000
+maxWindowToQuery 10000000
+#maxWindowToDraw 1000000
+
+        track wgEncodeHaibMethyl450ViewSites
+        parent wgEncodeHaibMethyl450  
+        shortLabel Sites
+        view Sites
+        type bed 9
+        visibility full
+        viewUi on
+
+        track wgEncodeHaibMethyl450Mcf7SitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel MCF-7 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in MCF-7 cells)
+        subGroups view=Sites cellType=MCF7 treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450A549Etoh02SitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel A549 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in A549 cells)
+        subGroups view=Sites cellType=A549 treatment=ETOH02 rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450Ecc1SitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel ECC-1 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in ECC-1 cells)
+        subGroups view=Sites cellType=ECC1 treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450HuvecSitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel 2HUVEC 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in 2HUVEC cells)
+        subGroups view=Sites cellType=2HUVEC treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        color 224,75,0
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450Pfsk1SitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel PFSK-1 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in PFSK-1 cells)
+        subGroups view=Sites cellType=PFSK1 treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450SknmcSitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel SK-N-MC 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in SK-N-MC cells)
+        subGroups view=Sites cellType=SKNMC treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450T47dDm002p24hSitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel T-47D 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in T-47D cells)
+        subGroups view=Sites cellType=T47D treatment=DM002P24H rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450Hek293SitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel HEK293 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in HEK293 cells)
+        subGroups view=Sites cellType=HEK293 treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450Nt2d1SitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel NT2-D1 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in NT2-D1 cells)
+        subGroups view=Sites cellType=NT2D1 treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450JurkatSitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel Jurkat 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in Jurkat cells)
+        subGroups view=Sites cellType=JURKAT treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        # subId=4444 dateSubmitted=2011-06-29
+
+        track wgEncodeHaibMethyl450LncapSitesRep1
+        parent wgEncodeHaibMethyl450ViewSites off
+        shortLabel LNCaP 1
+        longLabel ENCODE HudsonAlpha Methylation (450K) by Illumina Bead Arrays Replicate 1 (in LNCaP cells)
+        subGroups view=Sites cellType=LNCAP treatment=NONE rep=rep1
+        type bed 9
+        origAssembly hg19
+        color 0,119,158
+        # subId=4444 dateSubmitted=2011-06-29
