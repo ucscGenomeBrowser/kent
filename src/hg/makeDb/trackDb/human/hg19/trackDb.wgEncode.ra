@@ -6,7 +6,7 @@ include wgEncodeSuper.ra
 include wgEncodeGencodeV3.ra
 include wgEncodeGencodeV4.new.ra alpha
 include wgEncodeGencodeV4.ra beta,public
-include wgEncodeGencodeV5.ra alpha
+#include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra alpha
 
 # UNC/BSU Proteogenomics (wrangler: cline)
