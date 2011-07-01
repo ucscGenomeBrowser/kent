@@ -1439,7 +1439,7 @@ project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view CNV
 
 metaObject wgEncodeHaibGenotypeMcf7RegionsRep1
