@@ -101,7 +101,8 @@ jsDropDownCarryOver(dy, hgtaNextIntersectTable);
 jsTrackedVarCarryOver(dy, hgtaNextIntersectOp, "op");
 jsTextCarryOver(dy, hgtaNextMoreThreshold);
 jsTextCarryOver(dy, hgtaNextLessThreshold);
-jsTrackedVarCarryOver(dy, hgtaNextInvertTable, "invertTable");
+if (!isBigWigTable(curTable))
+    jsTrackedVarCarryOver(dy, hgtaNextInvertTable, "invertTable");
 jsTrackedVarCarryOver(dy, hgtaNextInvertTable2, "invertTable2");
 return dy;
 }
