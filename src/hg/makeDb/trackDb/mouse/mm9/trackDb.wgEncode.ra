@@ -31,4 +31,5 @@ include wgEncodeSydhRnaSeq.ra alpha
 # Licr RNA-Seq (wrangler: Venkat)
 include wgEncodeLicrRnaSeq.ra alpha
 
-
+# Uw RNA-Seq (wrangler: Venkat)
+include wgEncodeUwRnaSeq.ra alpha

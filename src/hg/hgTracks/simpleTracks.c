@@ -4298,7 +4298,9 @@ struct dyString *dyQuery = NULL;
 if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
     {
     if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
+        || startsWith("wgEncodeGencodeComp", tg->tdb->track)
         || startsWith("wgEncodeGencodeFull", tg->tdb->track)
+        || startsWith("wgEncodeGencode2wayConsPseudo", tg->tdb->track)
         || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
         dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
     }
