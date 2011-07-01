@@ -1,6 +1,6 @@
 import sys
 import re
-from OrderedDict import *
+from ordereddict.OrderedDict import *
 
 class RaFile(OrderedDict):
 	"""

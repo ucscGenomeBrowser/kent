@@ -30,6 +30,7 @@ struct cDnaStats
     struct cDnaCnts localBestDropCnts;     /* number dropped due to local near best */
     struct cDnaCnts globalBestDropCnts;    /* number dropped due to global near best */
     struct cDnaCnts minSpanDropCnts;       /* number dropped due to under minSpan */
+    struct cDnaCnts nonUniqueMap;          /* number dropped due to non-unique mappings */
 };
 
 void cDnaStatsUpdate(struct cDnaStats *stats);

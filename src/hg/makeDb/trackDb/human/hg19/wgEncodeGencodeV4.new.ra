@@ -17,6 +17,7 @@ ensemblIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
 type genePred
 hgGene on
 hgsid on
+html wgEncodeGencode
 baseColorUseCds given
 baseColorDefault genomicCodons
 wgEncode 1

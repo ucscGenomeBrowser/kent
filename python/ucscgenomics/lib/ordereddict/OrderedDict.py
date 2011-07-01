@@ -16,7 +16,7 @@ class OrderedDict(dict):
         dict.__setitem__(self, key, value)
         self.__ordering.append(key)
 
-   
+
     def __delitem__(self, key):
         dict.__delitem__(self, key)
         self.__ordering.remove(key)

@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>UCSC Genome Browser: VCF+tabix Track Format</TITLE>
+	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+
+<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/topbar.html"--></TD></TR>
+<!--Content Tables------------------------------------------------------->
+<TR><TD COLSPAN=2 CELLPADDING=10>	
+  <!--outer table is for border purposes-->
+  <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
+      <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
+	<FONT SIZE="4"><b>&nbsp;  VCF+tabix Track Format</b></FONT>
+	</TD></TR></TABLE>
+      <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+<P>
+Variant Call Format (
+<A HREF="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-40"
+TARGET=_BLANK>VCF</A>) is a flexible and extendable line-oriented text
+format developed by the <A HREF="http://www.1000genomes.org/"
+TARGET=_BLANK>1000 Genomes Project</A> for releases of single nucleotide variants,
+indels, copy number variants and structural variants discovered by the project.
+When a VCF file is compressed and indexed using
+<A HREF="http://samtools.sourceforge.net/tabix.shtml"
+TARGET=_BLANK>tabix</A>, and made web-accesible,
+the Genome Browser can fetch only the portions of the file necessary 
+to display items in the viewed region.
+This makes it possible to display variants from files that
+are so large that the connection to UCSC would time out when
+attempting to upload the whole file to UCSC.
+Both the VCF file and its tabix index file remain on your
+web-accessible server (http, https, or ftp), not on the UCSC server.
+UCSC temporarily caches the accessed portions of the files to speed up
+interactive display.
+</P><P>
+The typical workflow for generating a VCF custom track is this:
+
+<OL>
+  <LI>If you haven't done so already,
+      <A HREF="http://sourceforge.net/projects/samtools/files/tabix/" TARGET=_BLANK>
+      download</A> and build the 
+      <A HREF="http://samtools.sourceforge.net/tabix.shtml" TARGET=_BLANK>tabix and bgzip</A>
+      programs.  Test your installation by running <TT>tabix</TT> with no
+      command line arguments; it should print a brief usage message.
+      For help with <TT>tabix</TT>, please contact the
+      <A HREF="https://lists.sourceforge.net/lists/listinfo/samtools-help" TARGET=_BLANK>
+      samtools-help mailing list</A> (tabix is part of the samtools project).
+  <LI>Create VCF or convert another format to VCF.  Items must be sorted by genomic position.</LI>
+  <LI>Compress your .vcf file using the <tt>bgzip</tt> program:
+<PRE><TT>bgzip my.vcf</TT></PRE>
+      For more information about the bgzip command, run 
+      <TT>bgzip</TT> with no other arguments.</LI>
+  <LI>Create a tabix index file for the bgzip-compressed VCF (.vcf.gz):
+<PRE><TT>tabix -p vcf my.vcf.gz</TT></PRE>
+      The tabix command appends <TT>.tbi</TT> to <TT>my.vcf.gz</TT>, creating a 
+      binary index file <tt>my.vcf.gz.tbi</tt> with which 
+      genomic coordinates can quickly be translated into file offsets in
+      <TT>my.vcf.gz</TT>.
+  <LI>Move both the compressed VCF file and tabix index file (<TT>my.vcf.gz</TT> and 
+      <TT>my.vcf.gz.tbi</TT>) to an http, https, or ftp location.</LI>
+  <LI>Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
+      using a single 
+      <A HREF="hgTracksHelp.html#TRACK">track line</A>.                            
+      The most basic version of the track line will look something 
+      like this:
+<PRE><TT>track type=vcfTabix name="My VCF" bigDataUrl=<EM>http://myorg.edu/mylab/my.vcf.gz</EM></TT></PRE>
+      Again, in addition to <EM>http://myorg.edu/mylab/my.vcf.gz</EM>, the 
+      associated index file <EM>http://myorg.edu/mylab/my.vcf.gz.tbi</EM> 
+      must also be available at the same location.</LI>
+  <LI>Paste the custom track line into the text box in the 
+      <A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track 
+      management page</A>, click submit and view in the Genome Browser.</LI>
+</OL>
+</P>
+
+<H3>Parameters for VCF custom track definition lines</H3>
+<P>
+All options are placed in a single line separated by spaces (lines are broken 
+only for readability here):
+<PRE>
+  <B>track type=vcfTabix bigDataUrl=</B><EM>http://...</EM>
+     <B>name=</B><EM>track_label</EM> <B>description=</B><EM>center_label</EM> 
+     <B>visibility=</B><EM>display_mode</EM> <B>priority=</B><EM>priority</EM>
+     <B>db=</B><EM>db</EM> <B>maxWindowToDraw=</B><EM>N</EM> 
+     <B>chromosomes=</B><EM>chr1,chr2,...</EM>
+</PRE></P>
+<P>Note if you copy/paste the above example, you must remove the line breaks.
+Click <A HREF="examples/vcfExample.txt">here</A> for a text version that you can paste 
+without editing.
+</P>
+<P>
+The track type and bigDataUrl are REQUIRED:
+<PRE>  <B>type=vcfTabix bigDataUrl=</B><EM>http://myorg.edu/mylab/my.vcf.gz</EM></B></PRE>
+
+The remaining settings are OPTIONAL.
+<PRE>
+  <B>name            </B><EM>track label                </EM> # default is "User Track"
+  <B>description     </B><EM>center label               </EM> # default is "User Supplied Track"
+  <B>visibility      </B><EM>squish|pack|full|dense|hide</EM> # default is hide (will also take numeric values 4|3|2|1|0)
+  <B>priority        </B><EM>N                          </EM> # default is 100
+  <B>db              </B><EM>genome database            </EM> # e.g. hg18 for Human Mar. 2006 (NCBI36)
+  <B>maxWindowToDraw </B><EM>N                          </EM> # don't display track when viewing more than N bases
+  <B>chromosomes     </B><EM>chr1,chr2,...              </EM> # track contains data only on listed reference assembly sequences
+</PRE>
+The <A TARGET=_BLANK HREF="hgVcfTrackHelp.html">VCF track configuration</A> help page
+describes the VCF track configuration page options.</P>
+
+<P></P>
+<H3>Example One</H3>
+<P>
+In this example, you will create a custom track for an indexed VCF file that 
+is already on a public server &mdash; variant calls generated by the 
+<A HREF="http://1000genomes.org/" TARGET=_BLANK>1000 Genomes Project</A>.  
+The line breaks inserted here for readability must be removed before submitting
+the track line:
+<PRE><TT>track type=vcfTabix name="VCF Example One" description="VCF Ex. 1: 1000 Genomes SNVs (individual NA12878)"
+    pairEndsByName=. pairSearchRange=10000 chromosomes=chr21 bamColorMode=gray maxWindowToDraw=200000
+    db=hg18 visibility=pack
+    bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz
+</TT></PRE>
+<P>Include the following &quot;browser&quot; line to view a small region of 
+chromosome 21 with variants from the .vcf.gz file:</P>
+
+<TT>browser position chr21:33,038,946-33,039,092</TT>
+
+<P>Note if you copy/paste the above example, you must remove the line breaks
+(or, click <A HREF="examples/vcfExampleOne.txt">here</A> for a text version that you 
+can paste without editing).</P>
+<P>Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
+<A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A>
+for the human assembly hg18 (May 2006), then press the <EM>submit</EM> button.
+On the following page, press the <EM>chr21</EM> link in the custom track
+listing to view the VCF track in the Genome Browser.</P>
+
+
+<H3>Example Two</H3>
+<P>
+In this example, you will create compressed, indexed VCF from an existing VCF text file.
+First, save this VCF file <A HREF="examples/vcfExample.vcf" TARGET=_BLANK>vcfExample.vcf</A> 
+to your machine.
+Perform steps 1 and 3-7 in the workflow described above, but substituting
+<TT>vcfExample.vcf</TT> for <TT>my.vcf</TT>.  On the 
+<A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A>, 
+click the &quot;add custom tracks&quot; button if necessary and 
+make sure that the genome is set to Human and the assembly is set to Mar. 
+2006 (hg18) before pasting the track line and submitting.
+This track line is a little nicer than the one shown in step 6, but remember 
+to remove the line breaks that have been added to the track line for 
+readability (or, click <A HREF="examples/vcfExampleTwo.txt">here</A> for a text version 
+that you can paste without editing):
+<PRE><TT>track type=vcfTabix name="VCF Example Two" bigDataUrl=<EM>http://myorg.edu/mylab/my.sorted.vcf.gz</EM>
+    description="VCF Ex. 2: More variants from 1000 Genomes" visibility=squish
+    db=hg18 chromosomes=chr21
+
+browser position chr21:33,037,317-33,038,137
+browser pack snp130
+</TT></PRE>
+</P>
+
+<H3>Sharing Your Data with Others</H3>
+<P>
+If you would like to share your VCF data track with a colleague, learn
+how to create a URL by looking at <B><EM>Example 11</EM></B> on
+<A HREF="customTrack.html#SHARE">this</A> page.
+</P>
+
+      </TD><TD WIDTH=15></TD></TR></TABLE>
+    <BR></TD></TR></TABLE>
+  </TD></TR></TABLE>
+</TD></TR></TABLE>
+</BODY></HTML>

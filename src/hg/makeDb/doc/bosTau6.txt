@@ -197,8 +197,8 @@ taxId 9913
     # %47.91 masked total, %48.28 masked real
 
     # double check with featureBits
-    featureBits -countGaps bosTau4 gap
-    # 186143830 bases of 2917974530 (6.379%) in intersection
+    featureBits -countGaps bosTau6 gap
+    # 20740270 bases of 2670422299 (0.777%) in intersection
 
     rm /gbdb/bosTau6/bosTau6.2bit
     ln -s `pwd`/bosTau6.2bit /gbdb/bosTau6/bosTau6.2bit

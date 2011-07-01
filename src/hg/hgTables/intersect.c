@@ -45,6 +45,10 @@ if (isCustomTrack(table) && ctLookupName(table) != NULL)
     return TRUE;
 if (isBamTable(table))
     return TRUE;
+if (isBigWigTable(table))
+    return TRUE;
+if (isBigBed(database, table, curTrack, ctLookupName))
+    return TRUE;
 if (isHubTrack(table))
     return TRUE;
 if (sameWord(table, WIKI_TRACK_TABLE))
@@ -101,7 +105,8 @@ jsDropDownCarryOver(dy, hgtaNextIntersectTable);
 jsTrackedVarCarryOver(dy, hgtaNextIntersectOp, "op");
 jsTextCarryOver(dy, hgtaNextMoreThreshold);
 jsTextCarryOver(dy, hgtaNextLessThreshold);
-jsTrackedVarCarryOver(dy, hgtaNextInvertTable, "invertTable");
+if (!isBigWigTable(curTable))
+    jsTrackedVarCarryOver(dy, hgtaNextInvertTable, "invertTable");
 jsTrackedVarCarryOver(dy, hgtaNextInvertTable2, "invertTable2");
 return dy;
 }

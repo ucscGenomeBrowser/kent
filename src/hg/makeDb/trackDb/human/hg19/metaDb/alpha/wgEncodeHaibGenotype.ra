@@ -195,21 +195,6 @@ tableName wgEncodeHaibGenotypeAstrocyRegionsRep1
 treatment None
 view CNV
 
-metaObject wgEncodeHaibGenotypeBalleleSnp
-objType file
-composite wgEncodeHaibGenotype
-dataType Genotype
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-10
-dateUnrestricted 2011-12-10
-fileName wgEncodeHaibGenotypeBalleleSnp.txt.gz
-grant Myers
-lab HudsonAlpha
-labVersion B_allele
-project wgEncode
-subId 3763
-view SNP
-
 metaObject wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1
 objType table
 cell BC_Jejunum_H12817N
@@ -382,7 +367,7 @@ metaObject wgEncodeHaibGenotypeGm12878RegionsRep1
 objType table
 cell GM12878
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
@@ -496,21 +481,6 @@ subId 3432
 tableName wgEncodeHaibGenotypeGm19239RegionsRep1
 treatment None
 view CNV
-
-metaObject wgEncodeHaibGenotypeGtypeSnp
-objType file
-composite wgEncodeHaibGenotype
-dataType Genotype
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-10
-dateUnrestricted 2011-12-10
-fileName wgEncodeHaibGenotypeGtypeSnp.txt.gz
-grant Myers
-lab HudsonAlpha
-labVersion Gtype
-project wgEncode
-subId 3763
-view SNP
 
 metaObject wgEncodeHaibGenotypeH1hescRegionsRep2
 objType table
@@ -1469,7 +1439,7 @@ project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view CNV
 
 metaObject wgEncodeHaibGenotypeMcf7RegionsRep1
@@ -2144,4 +2114,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -1214323710
+# MAGIC: -1212596867

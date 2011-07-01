@@ -28,7 +28,7 @@ struct mappingInfo
  * retroXxxInfo table */
 {
     char tblPre[64];           /* table prefix */
-    char geneSet[6];           /* source gene set abbrv used in table name */
+    char geneSet[12];           /* source gene set abbrv used in table name */
     struct ucscRetroInfo *pg;  /* general info for retro gene */
     boolean indirect;          /* an indirect mapping */
     char gbAcc[ID_BUFSZ];      /* src accession */
@@ -125,14 +125,14 @@ char *suffix = containsStringNoCase(tbl,"Info");
 int suffixLen = 4;
 AllocVar(mi);
 if (startsWith("retroAnc", tbl))
-    strcpy(mi->tblPre, "retroAnc");
+    safef(mi->tblPre, sizeof(mi->tblPre), "retroAnc");
 else if (startsWith("retroOld", tbl))
-    strcpy(mi->tblPre, "retroOld");
+    safef(mi->tblPre, sizeof(mi->tblPre), "retroOld");
 else if (startsWith("retro", tbl))
-    strcpy(mi->tblPre, "retro");
+    safef(mi->tblPre, sizeof(mi->tblPre), "retro");
 else
     {
-    strcpy(mi->tblPre, "ucsc");
+    safef(mi->tblPre, sizeof(mi->tblPre), "ucsc");
     suffix = containsStringNoCase(tbl,"Ali");
     suffixLen = 3;
     }
@@ -144,11 +144,11 @@ if (suffix != NULL)
 
 preLen = strlen(mi->tblPre);
 if (startsWith("retroAugust", tbl))
-    strcpy(mi->geneSet, "August");
+    safef(mi->geneSet, sizeof(mi->geneSet), "August");
 else if (startsWith("retro", tbl))
-    strcpy(mi->geneSet, "Mrna");
+    safef(mi->geneSet, sizeof(mi->geneSet), "Mrna");
 else
-    strcpy(mi->geneSet, "Retro");
+    safef(mi->geneSet, sizeof(mi->geneSet), "Retro");
 if (suffix != NULL && strlen(suffix) > 0)
     mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)ucscRetroInfoLoad, sqlQueryMust|sqlQuerySingle,
                       "select * from %s%sInfo%s where name='%s'", mi->tblPre, mi->geneSet, suffix,

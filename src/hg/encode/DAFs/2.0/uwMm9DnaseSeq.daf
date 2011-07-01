@@ -1,6 +1,6 @@
 # Data Agreement File for UW DNase-Seq experiments for mm9
 
-#$Revision: 1.4 $
+#$Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -49,8 +49,8 @@ type             narrowPeak
 required         yes
 hasReplicates    yes
 
-view             RawSignal
-longLabelPrefix  UW DNaseI HS Raw Signal
+view             Signal
+longLabelPrefix  UW DNaseI HS Signal
 type             bigWig
 required         yes
 hasReplicates    yes
