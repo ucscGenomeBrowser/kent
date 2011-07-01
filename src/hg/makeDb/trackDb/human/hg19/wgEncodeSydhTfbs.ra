@@ -45,7 +45,6 @@ wgEncode 1
     track wgEncodeSydhTfbsViewPeaks
     shortLabel Peaks
     view Peaks
-
     visibility pack
     viewUi on
     subTrack wgEncodeSydhTfbs
@@ -2189,7 +2188,6 @@ wgEncode 1
     track wgEncodeSydhTfbsViewSignal
     shortLabel Signal
     view Signal
-
     visibility full
     subTrack wgEncodeSydhTfbs
     # View Limits a work in progres
