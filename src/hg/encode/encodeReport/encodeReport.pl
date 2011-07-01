@@ -339,9 +339,6 @@ foreach my $objName (keys %metaLines) {
 
     $experiment{"releaseDate"} = "none";
 
-    # get release date from 'lastUpdated' field of submission dir
-    #$experiment{"status"} = "unknown";
-
     # a few tracks are missing the subId
     my $subId = (defined($metadata{"subId"})) ? $metadata{"subId"} : 0; 
 
@@ -402,8 +399,6 @@ our $betaHost = "mysqlbeta";
 our $dbhPushq = HgDb->new(DB => $pushqDb, HOST => $pushqHost);
 our $dbhBetaMeta = HgDb->new(DB => $assembly, HOST => $betaHost);
 
-my $releaseDate;
-
 # fill in statuses for those experiments missing them, and print out results
 foreach my $key (keys %experiments) {
     my %experiment = %{$experiments{$key}};
@@ -439,7 +434,9 @@ foreach my $key (keys %experiments) {
         #};
     #}
     # look in pushQ for release date
-    if (defined($experiment{"objName"}) && $experiment{"status"} eq "released") {
+    my $releaseDate;
+    #if (defined($experiment{"objName"}) && $experiment{"status"} eq "released") {
+    if ($experiment{"status"} eq "released") {
         print STDERR "Looking up release date for object: " . $experiment{objName} . "\n";
         $releaseDate =
             $dbhPushq->quickQuery("select qadate from pushQ where tbls like ? or files like ? and priority = ?",
@@ -458,23 +455,23 @@ foreach my $key (keys %experiments) {
                         "select qadate from pushQ where tbls like ? or files like ? and priority = ?",
                             "\%$betaObj\%", "\%$betaObj\%", "L");
             }
-            if (!defined($releaseDate)) {
-                print STDERR "Fallback2 for release date for object: " . $experiment{objName} . "\n";
-                # fallback 2: Use project_status_log date created_at for the ID where status=released
-                $releaseDate = $dbhPipeline->quickQuery(
-                    "select max(created_at) from project_status_logs where project_id = ? and status = ?",
-                        $lastId, "released");
-                # strip time
-                $releaseDate =~ s/ .*//;  
+        if (!defined($releaseDate)) {
+            print STDERR "Fallback2 for release date for object: " . $experiment{objName} . "\n";
+            # fallback 2: Use project_status_log date created_at for the ID where status=released
+            $releaseDate = $dbhPipeline->quickQuery(
+                "select max(created_at) from project_status_logs where project_id = ? and status = ?",
+                    $lastId, "released");
+            # strip time
+            $releaseDate =~ s/ .*//;  
             }
         }
+        if (defined($releaseDate)) {
+            $experiment{"releaseDate"} = $releaseDate;
+        } else {
+            $experiment{"releaseDate"} = "unknown";
+        }
+        print STDERR "Release date for object: " . $experiment{"objName"} . " - " . $releaseDate . "\n";
     }
-    if (defined($releaseDate)) {
-        $experiment{"releaseDate"} = $releaseDate;
-    } else {
-        $experiment{"releaseDate"} = "unknown";
-    }
-    print STDERR "Release date for object: " . $experiment{"objName"} . " - " . $releaseDate . "\n";
 
     # Cosmetics so that auto-generated spreadsheet matches old manual version
     # map dataType tag to term from cv.ra
