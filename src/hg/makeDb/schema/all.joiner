@@ -2070,6 +2070,12 @@ identifier rgdSslpId external=RGD
     $rn.rgdSslpLink.name
 
 
+# New RGD Genes Family Identifiers
+
+identifier rgdGene2Id external=RGD
+"RGD Genes ID"
+    $rn.rgdGene2.name
+
 # The Ensembl Gmish
 
 identifier ensemblGeneId external=Ensembl
