@@ -8,6 +8,7 @@
 #include "hCommon.h"
 #include "hdb.h"
 #include "hgc.h"
+#include "htmshell.h"
 #if (defined USE_TABIX && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
@@ -33,9 +34,9 @@ for (i = 0;  i < wordCount; i++)
     char *key = words[i];
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, key);
     if (def != NULL)
-	printf("%s (%s)", key, def->description);
+	printf("%s (%s)", htmlEncode(key), def->description);
     else
-	printf("%s", key);
+	printf("%s", htmlEncode(key));
     }
 printf("<BR>\n");
 }

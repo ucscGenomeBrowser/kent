@@ -27,9 +27,34 @@ static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
 {
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
+int maxLen = 33;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
+    // Insertion sequences can be quite long; abbreviate here for display.
+    int len = strlen(pgs->name);
+    if (len > maxLen)
+	{
+	if (strchr(pgs->name, '/') != NULL)
+	    {
+	    char *copy = cloneString(pgs->name);
+	    char *allele[8];
+	    int cnt = chopByChar(copy, '/', allele, pgs->alleleCount);
+	    int maxAlLen = maxLen / pgs->alleleCount;
+	    pgs->name[0] = '\0';
+	    int i;
+	    for (i = 0;  i < cnt;  i++)
+		{
+		if (i > 0)
+		    safencat(pgs->name, len+1, "/", 1);
+		if (strlen(allele[i]) > maxAlLen-3)
+		    strcpy(allele[i]+maxAlLen-3, "...");
+		safencat(pgs->name, len+1, allele[i], maxAlLen);
+		}
+	    }
+	else
+	    strcpy(pgs->name+maxLen-3, "...");
+	}
     slAddHead(&pgsList, pgs);
     }
 slReverse(&pgsList);

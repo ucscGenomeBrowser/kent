@@ -145,6 +145,19 @@ if (hvg->rc)
 vgSetClip(hvg->vg, x, y, width, height);
 }
 
+INLINE void hvGfxGetClip(struct hvGfx *hvg, int *retX, int *retY, int *retWidth, int *retHeight)
+/* Get clipping rectangle. */
+{
+if (retX != NULL)
+    *retX = hvg->clipMinX;
+if (retY != NULL)
+    *retY = hvg->clipMinY;
+if (retWidth != NULL)
+    *retWidth = (hvg->clipMaxX - hvg->clipMinX);
+if (retHeight != NULL)
+    *retHeight = (hvg->clipMaxY - hvg->clipMinY);
+}
+
 INLINE void hvGfxUnclip(struct hvGfx *hvg)
 /* Set clipping rect cover full thing. */
 {
