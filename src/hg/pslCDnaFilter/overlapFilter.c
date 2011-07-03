@@ -207,9 +207,9 @@ for (aln2 = aln->next; (aln2 != NULL) && (!aln->drop); aln2 = aln2->next)
         {
         int cmp = overlapCmp(cdna, aln, aln2);
         if (cmp < 0)
-            cDnaAlignDrop(aln2, &cdna->stats->overlapDropCnts, "overlap");
+            cDnaAlignDrop(aln2, FALSE, &cdna->stats->overlapDropCnts, "overlap");
         else if (cmp > 0)
-            cDnaAlignDrop(aln, &cdna->stats->overlapDropCnts, "overlap");
+            cDnaAlignDrop(aln, FALSE, &cdna->stats->overlapDropCnts, "overlap");
         }
     }
 }
@@ -236,7 +236,7 @@ if (aln->score < aln2->score)
     aln = aln2;
     aln2 = hold;
     }
-cDnaAlignDrop(aln2, &aln2->cdna->stats->weirdDropCnts,  "weird overlap");
+cDnaAlignDrop(aln2, FALSE, &aln2->cdna->stats->weirdDropCnts,  "weird overlap");
 return aln;
 }
 
@@ -262,9 +262,3 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
         dropWeirdOverlapped(cdna, aln);
     }
 }
-
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */

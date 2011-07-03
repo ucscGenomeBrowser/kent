@@ -17,10 +17,3 @@ void overlapFilterWeirdFilter(struct cDnaQuery *cdna);
  * highest scoring ones. */
 
 #endif
-
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */
-
