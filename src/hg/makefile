@@ -2,7 +2,7 @@
 
 # 	$Id: makefile,v 1.156 2010/03/03 02:53:30 markd Exp $
 
-BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
+BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
         hgGateway hgGene hgGenome hgPcr hgSession hgSuggest hgTables hgTracks \
 	hgTrackUi hgc hgApi cartDump near/hgNear \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
