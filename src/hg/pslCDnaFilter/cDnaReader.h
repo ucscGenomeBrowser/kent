@@ -30,9 +30,3 @@ boolean cDnaReaderNext(struct cDnaReader *reader);
 
 
 #endif
-
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */

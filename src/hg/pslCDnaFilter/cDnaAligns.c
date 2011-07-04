@@ -8,7 +8,10 @@
 #include "verbose.h"
 #include "localmem.h"
 #include "polyASize.h"
-#include "hapRegions.h"
+
+/* global control id alignment ids be added to qNames of PSLs being
+ * written. User for debugging */
+boolean cDnaAlignsAlnIdQNameMode = FALSE;
 
 static void alignInfoVerb(int level, struct cDnaAlign *aln, char *desc)
 /* print info about and alignment */
@@ -127,8 +130,7 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
 return alnSize;
 }
 
-struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna,
-                               struct psl *psl)
+struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna, struct psl *psl)
 /* construct a new object and add to the cdna list, updating the stats */
 {
 int adjMisMatch = psl->misMatch + ((cdna->opts & cDnaIgnoreNs) ? 0 : psl->nCount);
@@ -145,7 +147,7 @@ aln->score = calcScore(psl, adjMisMatch, (cdna->opts & cDnaIgnoreIntrons));
 aln->cover = calcCover(aln);
 assert(aln->alnPolyAT <= (psl->match+psl->misMatch+psl->repMatch+psl->nCount));
 
-slSafeAddHead(&cdna->alns, aln);
+slAddHead(&cdna->alns, aln);
 cdna->numAln++;
 cdna->stats->totalCnts.aligns++;
 
@@ -174,7 +176,7 @@ else
 assert(cdna->adjQStart <= cdna->adjQEnd);
 }
 
-void cDnaAlignDrop(struct cDnaAlign *aln, struct cDnaCnts *cnts, char *reasonFmt, ...)
+static void dropOne(struct cDnaAlign *aln, struct cDnaCnts *cnts, char *desc, char *reasonFmt, va_list ap)
 /* flag an alignment as dropped */
 {
 assert(!aln->drop);       /* not allowing multiple drops keeps counts sane */
@@ -185,12 +187,27 @@ assert(aln->cdna->numDrop <= aln->cdna->numAln);
 if (verboseLevel() >= 3)
     {
     char reasonBuf[512];
-    va_list ap;
-    va_start(ap, reasonFmt);
-    vasafef(reasonBuf, sizeof(reasonBuf), reasonFmt, ap);
-    va_end(ap);
-    cDnaAlignVerb(3, aln, "drop: %s", reasonBuf);
+    va_list ap2;
+    va_copy(ap2, ap);
+    vasafef(reasonBuf, sizeof(reasonBuf), reasonFmt, ap2);
+    va_end(ap2);
+    cDnaAlignVerb(3, aln, "%s: %s", desc, reasonBuf);
     }
+}
+
+void cDnaAlignDrop(struct cDnaAlign *aln, boolean dropHapSetLinked,  struct cDnaCnts *cnts, char *reasonFmt, ...)
+/* flag an alignment as dropped, optionally dropping linked in hapSet */
+{
+va_list ap;
+va_start(ap, reasonFmt);
+dropOne(aln, cnts, "drop", reasonFmt, ap);
+if (dropHapSetLinked)
+    {
+    struct cDnaAlignRef *hapAln;
+    for (hapAln = aln->hapAlns; hapAln != NULL; hapAln = hapAln->next)
+        dropOne(hapAln->ref, cnts, "drop linked", reasonFmt, ap);
+    }
+va_end(ap);
 }
 
 struct cDnaQuery *cDnaQueryNew(unsigned opts, struct cDnaStats *stats,
@@ -229,19 +246,27 @@ if (r.end > cdna->adjQEnd)
 return r;
 }
 
+
+static void cDnaQueryAlignFree(struct cDnaQuery *cdna) 
+/* free alignments associated with a cDnaQuery */
+{
+struct cDnaAlign *aln;
+while ((aln = slPopHead(&cdna->alns)) != NULL)
+    {
+    pslFree(&aln->psl);
+    slFreeList(&aln->hapAlns);
+    freeMem(aln);
+    }
+ }
+
 void cDnaQueryFree(struct cDnaQuery **cdnaPtr) 
 /* free cDnaQuery and contained data  */
 {
 struct cDnaQuery *cdna = *cdnaPtr;
 if (cdna != NULL)
     {
-    struct cDnaAlign *aln;
-    while ((aln = slPopHead(&cdna->alns)) != NULL)
-        {
-        pslFree(&aln->psl);
-        slFreeList(&aln->hapAlns);
-        freeMem(aln);
-        }
+    slFreeList(&cdna->hapSets);
+    cDnaQueryAlignFree(cdna);
     freeMem(cdna);
     *cdnaPtr = NULL;
     }
@@ -265,19 +290,7 @@ void cDnaQueryRevScoreSort(struct cDnaQuery *cdna)
 slSort(&cdna->alns, scoreRevCmp);
 }
 
-void cDnaAlnLinkHapAln(struct cDnaAlign *aln, struct cDnaAlign *hapAln, float score) 
-/* link a reference alignment to a haplotype alignment */
-{
-struct cDnaHapAln *ha;
-AllocVar(ha);
-ha->hapAln = hapAln;
-ha->score = score;
-slAddHead(&aln->hapAlns, ha);
-hapAln->refLinkCount++;
-}
-
-void cDnaQueryWriteKept(struct cDnaQuery *cdna,
-                        FILE *outFh)
+void cDnaQueryWriteKept(struct cDnaQuery *cdna, FILE *outFh)
 /* write the current set of psls that are flagged to keep */
 {
 struct cDnaAlign *aln;
@@ -295,8 +308,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     }
 }
 
-void cDnaQueryWriteDrop(struct cDnaQuery *cdna,
-                        FILE *outFh)
+void cDnaQueryWriteDrop(struct cDnaQuery *cdna, FILE *outFh)
 /* write the current set of psls that are flagged to drop */
 {
 struct cDnaAlign *aln;
@@ -307,8 +319,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     }
 }
 
-void cDnaQueryWriteWeird(struct cDnaQuery *cdna,
-                          FILE *outFh)
+void cDnaQueryWriteWeird(struct cDnaQuery *cdna, FILE *outFh)
 /* write the current set of psls that are flagged as weird overlap */
 {
 struct cDnaAlign *aln;
@@ -319,14 +330,11 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     }
 }
 
-/* should alignment ids be added to qNames? */
-boolean alnIdQNameMode = FALSE;
-
 void cDnaAlignPslOut(struct psl *psl, int alnId, FILE *fh)
 /* output a PSL to a tab file.  If alnId is non-negative and
  * aldId out mode is set, append it to qName */
 {
-if (alnIdQNameMode && (alnId >= 0))
+if (cDnaAlignsAlnIdQNameMode && (alnId >= 0))
     {
     char *qNameHold = psl->qName;
     char qNameId[512];
@@ -374,10 +382,3 @@ cDnaAlignVerbLoc(level, aln);
 verbose(level, "\n");
 va_end(ap);
 }
-
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */
-
