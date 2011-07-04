@@ -7,10 +7,9 @@
 #include "pslTransMap.h"
 #include "hash.h"
 
-/* FIXME: doesn't currently handle case where gene is deleted on reference
- * chromosome.  Probably doesn't happen in human data.
- * FIXME: could keep more
- * partial alignments in hap regions if linking was done before min cover.
+/* Note: doesn't currently handle case where gene is deleted on reference
+ * chromosome.  This would require all against all pairwise alignments
+ * of regions.
  */
 
 struct refChrom
@@ -36,6 +35,8 @@ struct hapRegions
 {
     struct hash *refMap;   /* chrom to refChrom object map */
     struct hash *hapMap;   /* hap chrom to haplotype object map */
+    FILE *hapRefMappedFh;
+    FILE *hapRefCDnaFh;
 };
 
 static struct refChrom *refChromGet(struct hapRegions *hr, char *chrom)
@@ -99,7 +100,7 @@ else
 slAddHead(&hapChrom->mappings, mapping);
 }
 
-struct hapRegions *hapRegionsNew(char *hapPslFile)
+struct hapRegions *hapRegionsNew(char *hapPslFile, FILE *hapRefMappedFh, FILE *hapRefCDnaFh)
 /* construct a new hapRegions object from PSL alignments of the haplotype
  * pseudo-chromosomes to the haplotype regions of the reference chromsomes. */
 {
@@ -108,6 +109,8 @@ struct hapRegions *hr;
 AllocVar(hr);
 hr->refMap = hashNew(12);
 hr->hapMap = hashNew(12);
+hr->hapRefMappedFh = hapRefMappedFh;
+hr->hapRefCDnaFh = hapRefCDnaFh;
 
 while ((mapping = slPopHead(&mappings)) != NULL)
     addHapMapping(hr, mapping);
@@ -133,7 +136,7 @@ boolean hapRegionsIsHapChrom(struct hapRegions *hr, char *chrom)
 return hashLookup(hr->hapMap, chrom) != NULL;
 }
 
-boolean hapRegionsInHapRegion(struct hapRegions *hr, char *chrom, int start, int end)
+static boolean inHapRegion(struct hapRegions *hr, char *chrom, int start, int end)
 /* determine if chrom range is in a haplotype region of a reference chromosome */
 {
 struct refChrom *rc = hashFindVal(hr->refMap, chrom);
@@ -149,36 +152,42 @@ if (rc != NULL)
 return FALSE;
 }
 
-static struct psl *mapToRef(struct hapChrom *hapChrom, struct cDnaAlign *hapAln,
-                            FILE *hapRefMappedFh)
+static boolean alnInHapRegion(struct hapRegions *hr, struct cDnaAlign *refAln)
+/* determine if an alignment is in a haplotype region of a reference chromosome */
+{
+return inHapRegion(hr, refAln->psl->tName, refAln->psl->tStart, refAln->psl->tEnd);
+}
+
+static void mapToRefWithMapping(struct hapRegions *hr, struct cDnaAlign *hapAln, struct psl *mapping, struct psl **mappedHaps)
+/* map an alignment on a haplotype chromosome using one mapping */
+{
+struct psl *m;
+struct psl *mapped = pslTransMap(pslTransMapNoOpts, hapAln->psl, mapping);
+while ((m = slPopHead(&mapped)) != NULL)
+    {
+    slAddHead(&mappedHaps, m);
+    if (hr->hapRefMappedFh != NULL)
+        pslTabOut(m, hr->hapRefMappedFh);
+    }
+}
+
+static struct psl *mapToRef(struct hapRegions *hr, struct refChrom *refChrom, struct cDnaAlign *hapAln, struct hapChrom *hapChrom)
 /* map an alignment on a haplotype chromosome to a list of mapped alignments.
- * Return NULL in can't be mapped.  qName of mapped will contain alnId of
- * hapAln if alnIdQNameMode is set. */
+ * Return NULL in can't be mapped. */
 {
 char qName[512];
-struct psl *mapping, *m, *mappedHaps = NULL;
+struct psl *mapping, *mappedHaps = NULL;
 safef(qName, sizeof(qName), "%s#%d", hapAln->psl->qName, hapAln->alnId);
 
 for (mapping = hapChrom->mappings; mapping != NULL; mapping = mapping->next)
     {
-    struct psl *mapped = pslTransMap(pslTransMapNoOpts, hapAln->psl, mapping);
-    while ((m = slPopHead(&mapped)) != NULL)
-        {
-        if (alnIdQNameMode)
-            {
-            freeMem(m->qName);
-            m->qName = cloneString(qName);
-            }
-        slAddHead(&mappedHaps, m);
-        if (hapRefMappedFh != NULL)
-            pslTabOut(m, hapRefMappedFh);
-        }
+    if (sameString(mapping->tName, refChrom->chrom))
+        mapToRefWithMapping(hr, hapAln, mapping, &mappedHaps);
     }
 return mappedHaps;
 }
 
-static struct psl *mapCDnaCDnaAln(struct cDnaAlign *refAln, struct psl *mappedHap,
-                                  FILE *hapRefCDnaFh)
+static struct psl *mapCDnaCDnaAln(struct hapRegions *hr, struct cDnaAlign *refAln, struct psl *mappedHap)
 /* create cdna to cdna alignments from mappedHap and refAln, return
  * NULL if can't be mapped */
 {
@@ -190,10 +199,77 @@ if (sameString(refAln->psl->tName, mappedHap->tName)
     pslSwap(mappedHap, FALSE);
     cDnaCDnaAln = pslTransMap(pslTransMapNoOpts, refAln->psl, mappedHap);
     pslSwap(mappedHap, FALSE);
-    if ((hapRefCDnaFh != NULL) && (cDnaCDnaAln != NULL))
-        cDnaAlignPslOut(cDnaCDnaAln, refAln->alnId, hapRefCDnaFh);
+    if ((hr->hapRefCDnaFh != NULL) && (cDnaCDnaAln != NULL))
+        cDnaAlignPslOut(cDnaCDnaAln, refAln->alnId, hr->hapRefCDnaFh);
     }
 return cDnaCDnaAln;
+}
+
+static int getHapQRangePartContainedStart(unsigned hapTStart, struct psl *refPsl)
+/* find starting position for hap region overlap.  hapTStart is in strand
+ * coordinates.  */
+{
+int iBlk;
+for (iBlk = 0; iBlk < refPsl->blockCount; iBlk++)
+    {
+    unsigned tEnd = refPsl->tStarts[iBlk]+refPsl->blockSizes[iBlk];
+    if (tEnd > hapTStart)
+        {
+        if (refPsl->tStarts[iBlk] >= hapTStart)
+            {
+            /* before block */
+            return refPsl->qStarts[iBlk];
+            }
+        else
+            {
+             /* in block */
+            return refPsl->qStarts[iBlk] + (hapTStart-refPsl->tStarts[iBlk]);
+            }
+        }
+    }
+assert(FALSE);  // should never happen
+return 0;
+}
+
+static int getHapQRangePartContainedEnd(unsigned hapTEnd, struct psl *refPsl)
+/* find ending position for hap region overlap.  hapTEnd is in strand
+ * coordinates.  */
+{
+int iBlk;
+for (iBlk = refPsl->blockCount-1; iBlk >= 0; iBlk--)
+    {
+    unsigned tEnd = refPsl->tStarts[iBlk]+refPsl->blockSizes[iBlk];
+    if (refPsl->tStarts[iBlk] <= hapTEnd)
+        {
+        if (tEnd <= hapTEnd)
+            {
+            /* after block */
+            return refPsl->qStarts[iBlk] + refPsl->blockSizes[iBlk];
+            }
+        else
+            {
+             /* in block */
+            return refPsl->qStarts[iBlk] + (hapTEnd-refPsl->tStarts[iBlk]);
+            }
+        }
+    }
+assert(FALSE);  // should never happen
+return 0;
+}
+
+static struct range getHapQRangePartContained(struct hapChrom *hapChrom, struct psl *refPsl)
+/* find the range of an mRNA that is aligned to a haplotype region of a ref chrom when
+ * not completely contained in haplotype range */
+{
+struct range qRange = {0, 0};
+unsigned hapTStart = hapChrom->refStart, hapTEnd = hapChrom->refEnd;
+if (refPsl->strand[1] == '-')
+    reverseUnsignedRange(&hapTStart, &hapTEnd, refPsl->tSize);
+qRange.start = getHapQRangePartContainedStart(hapTStart, refPsl);
+qRange.end = getHapQRangePartContainedEnd(hapTEnd, refPsl);
+if (refPsl->strand[0] == '-')
+    reverseIntRange(&qRange.start, &qRange.end, refPsl->qSize);
+return qRange;
 }
 
 static struct range getHapQRange(struct hapChrom *hapChrom, struct cDnaAlign *refAln)
@@ -211,52 +287,7 @@ if ((refPsl->tStart >= hapChrom->refStart) && (refPsl->tEnd <= hapChrom->refEnd)
 else
     {
     /* extends outside of region */
-    unsigned hapTStart = hapChrom->refStart, hapTEnd = hapChrom->refEnd;
-    int iBlk;
-    if (refPsl->strand[1] == '-')
-        reverseUnsignedRange(&hapTStart, &hapTEnd, refPsl->tSize);
-
-    /* find start of alignment in region */
-    for (iBlk = 0; iBlk < refPsl->blockCount; iBlk++)
-        {
-        unsigned tEnd = refPsl->tStarts[iBlk]+refPsl->blockSizes[iBlk];
-        if (tEnd > hapTStart)
-            {
-            if (refPsl->tStarts[iBlk] >= hapTStart)
-                {
-                /* before block */
-                qRange.start = refPsl->qStarts[iBlk];
-                }
-            else
-                {
-                 /* in block */
-                qRange.start = refPsl->qStarts[iBlk] + (hapTStart-refPsl->tStarts[iBlk]);
-                }
-            break;
-            }
-        }
-    
-    /* find end of alignment in region. */
-    for (iBlk = refPsl->blockCount-1; iBlk >= 0; iBlk--)
-        {
-        unsigned tEnd = refPsl->tStarts[iBlk]+refPsl->blockSizes[iBlk];
-        if (refPsl->tStarts[iBlk] <= hapTEnd)
-            {
-            if (tEnd <= hapTEnd)
-                {
-                /* after block */
-                qRange.end = refPsl->qStarts[iBlk] + refPsl->blockSizes[iBlk];
-                }
-            else
-                {
-                 /* in block */
-                qRange.end = refPsl->qStarts[iBlk] + (hapTEnd-refPsl->tStarts[iBlk]);
-                }
-            break;
-            }
-        }
-    if (refPsl->strand[0] == '-')
-        reverseIntRange(&qRange.start, &qRange.end, refPsl->qSize);
+    qRange = getHapQRangePartContained(hapChrom, refPsl);
     }
 assert(qRange.start < qRange.end);
 return qRange;
@@ -291,11 +322,11 @@ for (iBlk = 0; iBlk < cDnaCDnaAln->blockCount; iBlk++)
     }
 }
 
-static void compareHapRefPair(struct psl *mappedHap, struct cDnaAlign *refAln,
-                              UBYTE *bases, FILE *hapRefCDnaFh)
+static void compareHapRefPair(struct hapRegions *hr, struct psl *mappedHap, struct cDnaAlign *refAln,
+                              UBYTE *bases)
 /* map cDNA to cDNA alignments and flagged mapped bases in base array */
 {
-struct psl *cDnaCDnaAln = mapCDnaCDnaAln(refAln, mappedHap, hapRefCDnaFh);
+struct psl *cDnaCDnaAln = mapCDnaCDnaAln(hr, refAln, mappedHap);
 if (cDnaCDnaAln != NULL)
     {
     markMappedSameBases(cDnaCDnaAln, bases);
@@ -303,22 +334,17 @@ if (cDnaCDnaAln != NULL)
     }
 }
 
-static float scoreHapRefPair(struct cDnaAlign *hapAln, struct hapChrom *hapChrom,
-                             struct psl *mappedHaps, struct cDnaAlign *refAln,
-                             FILE *hapRefCDnaFh)
-/* Score a hapAln with refAln based on mapping a maping to the ref chrom and
- * then a mapping of the two .  An issue is that the mapping a given hapAln to
- * the reference chromosome might be fragmented into multiple alignments due
- * to multiple mapping alignments.  So we count the total number of
- * non-redundent bases that are aligned. */
+static float calcHapRefPairScore(struct hapRegions *hr, struct cDnaAlign *refAln, struct refChrom *refChrom, struct cDnaAlign *hapAln, struct hapChrom *hapChrom, struct psl *mappedHaps)
+/* Score a hapAln with resulting list of mappings refAln based on mapping a mapping to the ref chrom and
+ * then a mapping of the two. */
 {
-struct range qRange =  getHapQRange(hapChrom, refAln);
+struct range qRange = getHapQRange(hapChrom, refAln);
 struct psl *mappedHap;
 int i, cnt = 0;
 UBYTE *bases = clearBaseArray(hapAln);
 
 for (mappedHap = mappedHaps; mappedHap != NULL; mappedHap = mappedHap->next)
-    compareHapRefPair(mappedHap, refAln, bases, hapRefCDnaFh);
+    compareHapRefPair(hr, mappedHap, refAln, bases);
 for (i = 0; i < refAln->psl->qSize; i++)
     {
     if (bases[i])
@@ -327,60 +353,126 @@ for (i = 0; i < refAln->psl->qSize; i++)
 return ((float)cnt)/(float)(qRange.end-qRange.start);
 }
 
-static void linkRefToHap(struct cDnaAlign *refAln, struct cDnaAlign *hapAln,
-                         float score)
-/* link a refAln ot a hapAln */
+static float scoreHapRefPair(struct hapRegions *hr, struct cDnaAlign *refAln, struct refChrom *refChrom, struct cDnaAlign *hapAln, struct hapChrom *hapChrom)
+/* Score a hapAln with refAln based on mapping a mapping to the ref chrom and
+ * then a mapping of the two.  An issue is that the mapping a given hapAln to
+ * the reference chromosome might be fragmented into multiple alignments due
+ * to multiple mapping alignments.  So we count the total number of
+ * non-redundent bases that are aligned. */
 {
-cDnaAlnLinkHapAln(refAln, hapAln, score);
+float score = -1.0;
+struct psl *mappedHaps = mapToRef(hr, refChrom, hapAln, hapChrom);
+if (mappedHaps != NULL)
+    {
+    score = calcHapRefPairScore(hr, refAln, refChrom, hapAln, hapChrom, mappedHaps);
+    pslFreeList(&mappedHaps);
+    }
+return score;
+}
+
+
+#if UNUSED
+static boolean isHapRegionAln(struct hapRegions *hr, struct hapChrom *hapChrom, struct cDnaAlign *refAln)
+/* test if aln overlaps the hap region for the specified hapChrom */
+{
+return alnInHapRegion(hr, refAln)
+    && sameString(refAln->psl->tName, hapChrom->refChrom->chrom)
+    && positiveRangeIntersection(refAln->psl->tStart, refAln->psl->tEnd, 
+                                 hapChrom->refStart, hapChrom->refEnd);
+}
+#endif
+
+static struct cDnaAlign *getBestHapMatch(struct hapRegions *hr, struct cDnaQuery *cdna, struct cDnaAlign *refAln, struct refChrom *refChrom, struct hapChrom *hapChrom)
+/* get the best-matching haplotype for a reference region with haplotypes on a
+ * given haplotype pseudo-chrom. */
+{
+struct cDnaAlign *bestHapAln = NULL, *hapAln;
+float bestScore = 0.0;
+// scan all aligns on this hapChrom that have not been linked to another alignment
+for (hapAln = cdna->alns; hapAln != NULL; hapAln = hapAln->next)
+    {
+    if ((!hapAln->drop) && (hapAln->hapRefAln == NULL) && sameString(hapAln->psl->tName, hapChrom->chrom))
+        {
+        float score = scoreHapRefPair(hr, refAln, refChrom, hapAln, hapChrom);
+        if ((bestHapAln == NULL) || (score > bestScore))
+            {
+            bestHapAln = hapAln;
+            bestScore = score;
+            }
+        }
+    }
+return bestHapAln;
+}
+
+static void verboseLink(struct hapRegions *hr, struct cDnaAlign *refAln, struct cDnaAlign *hapAln)
+/* verbose output on linking a refAln with a hapAln */
+{
 if (verboseLevel() >= 5)
     {
     verbose(5, "link refAln ");
     cDnaAlignVerbLoc(5, refAln);
     verbose(5, " to hapAln ");
     cDnaAlignVerbLoc(5, hapAln);
-    verbose(5, " score: %0.3f\n", score);
+    verbose(5, "\n");
     }
 }
 
-static boolean isHapRegionAln(struct hapChrom *hapChrom, struct cDnaAlign *aln)
-/* test if aln overlaps the hap region for the specified hapChrom */
+static void linkRefToHapChromAln(struct hapRegions *hr, struct cDnaQuery *cdna, struct cDnaAlign *refAln, struct refChrom *refChrom,
+                                 struct hapChrom *hapChrom)
+/* link best scoring haplotype alignment from a hapChrom to a given reference
+ * chrome alignment */
 {
-return aln->isHapRegion &&
-    sameString(aln->psl->tName, hapChrom->refChrom->chrom)
-    && positiveRangeIntersection(aln->psl->tStart, aln->psl->tEnd, 
-                                 hapChrom->refStart, hapChrom->refEnd);
-}
-
-static void mapHapAlign(struct hapRegions *hr, struct cDnaAlign *hapAln,
-                        FILE *hapRefMappedFh, FILE *hapRefCDnaFh)
-/* map a haplotype chrom alignment to reference chrom alignments and link if
- * they can be mapped. */
-{
-struct hapChrom *hapChrom = hapChromGet(hr, hapAln->psl->tName);
-struct psl *mappedHaps = mapToRef(hapChrom, hapAln, hapRefMappedFh);
-struct cDnaAlign *aln;
-
-for (aln = hapAln->cdna->alns; aln != NULL; aln = aln->next)
+struct cDnaAlign *hapAln = getBestHapMatch(hr, cdna, refAln, refChrom, hapChrom);
+if (hapAln != NULL)
     {
-    if (!aln->drop && isHapRegionAln(hapChrom, aln))
-        {
-        float score = scoreHapRefPair(hapAln, hapChrom, mappedHaps, aln, hapRefCDnaFh);
-        if (score > 0)
-            linkRefToHap(aln, hapAln, score);
-        }
+    slAddHead(&refAln->hapAlns, cDnaAlignRefNew(hapAln));
+    hapAln->hapRefAln = refAln;
+    verboseLink(hr, refAln, hapAln);
     }
-pslFreeList(&mappedHaps);
 }
 
-void hapRegionsLink(struct hapRegions *hr, struct cDnaQuery *cdna,
-                    FILE *hapRefMappedFh, FILE *hapRefCDnaFh)
-/* Link a haplotype chrom alignments to reference chrom alignments if
- * they can be mapped. */
+static void linkRefToHaps(struct hapRegions *hr, struct cDnaQuery *cdna, struct cDnaAlign *refAln)
+/* link best scoring haplotype alignments to a given reference chrome
+ * alignment */
+{
+struct refChrom *refChrom = refChromGet(hr, refAln->psl->tName);
+struct hapChrom *hapChrom;
+for (hapChrom = refChrom->hapChroms; hapChrom != NULL; hapChrom = hapChrom->next)
+    linkRefToHapChromAln(hr, cdna, refAln, refChrom, hapChrom);
+}
+
+static void linkRefsToHaps(struct hapRegions *hr, struct cDnaQuery *cdna)
+/* link best scoring haplotype alignments to reference alignments */
 {
 struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
-    if (!aln->drop && aln->isHapChrom)
-        mapHapAlign(hr, aln, hapRefMappedFh, hapRefCDnaFh);
+    if (!aln->drop && alnInHapRegion(hr, aln))
+        linkRefToHaps(hr, cdna, aln);
     }
 }
+
+void hapRegionsLinkHaps(struct hapRegions *hr, struct cDnaQuery *cdna)
+/* Link a haplotype chrom alignments to reference chrom alignments if
+ * they can be mapped. */
+{
+linkRefsToHaps(hr, cdna);
+hapRegionsBuildHapSets(cdna);
+}
+
+void hapRegionsBuildHapSets(struct cDnaQuery *cdna)
+/* build links to all alignments that are not haplotypes linked to reference
+ * forming haplotype sets.  These includes unlinked haplotypes.
+ * this should also be called when there are no hapRegions alignments to build
+ * default hapSets.
+ */
+{
+struct cDnaAlign *aln;
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    // reference and unlinked haps have NULL hapRefAln
+    if (!aln->drop && (aln->hapRefAln == NULL))
+        slAddHead(&cdna->hapSets, cDnaAlignRefNew(aln));
+    }
+}
+
