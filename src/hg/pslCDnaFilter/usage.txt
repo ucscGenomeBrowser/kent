@@ -98,16 +98,6 @@ Options:
 
    -alignStats=file - output the per-alignment statistics to this file
 
-   -hapRefMapped=psl - output PSLs of haplotype to reference chromosome
-    cDNA alignments mappings (for debugging purposes).
-
-   -hapRefCDnaAlns=psl - output PSLs of haplotype cDNA to reference cDNA
-    alignments (for debugging purposes).
-
-   -alnIdQNameMode - add internal assigned alignment numbers to cDNA names
-    on output.  Useful for debugging, as they are include in the verbose
-    tracing as [#1], etc.  Will make a mess of normal production usage.
-
    -uniqueMapped - keep only cDNAs that are uniquely aligned after all
     other filters have been applied.
 
@@ -119,6 +109,17 @@ Options:
                 3: list dropped alignments and reason for dropping
                 4: list kept psl and info
                 5: info about all PSLs
+
+   -hapRefMapped=psl - output PSLs of haplotype to reference chromosome
+    cDNA alignments mappings (for debugging purposes).
+
+   -hapRefCDnaAlns=psl - output PSLs of haplotype cDNA to reference cDNA
+    alignments (for debugging purposes).
+
+   -alnIdQNameMode - add internal assigned alignment numbers to cDNA names
+    on output.  Useful for debugging, as they are include in the verbose
+    tracing as [#1], etc.  Will make a mess of normal production usage.
+
 
 The default options don't do any filtering. If no filtering
 criteria are specified, all PSLs will be passed though, except

@@ -9,7 +9,7 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
 	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest \
 	weirdOverlappedFilterTest noIgnoreIntronsTest ignoreIntronsTest \
-	uniqueMappedTest
+	uniqueMappedTest uniqueMappedHapTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -100,6 +100,8 @@ ignoreIntronsTest:
 uniqueMappedTest:
 	${MAKE} doFilter name=$@ inPsl=many.psl filtArgs='-globalNearBest=0.01 -uniqueMapped'
 
+uniqueMappedHapTest:
+	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-uniqueMapped -localNearBest=0.005 -hapRegions=input/hapMappings.psl'
 
 
 ####
