@@ -12193,15 +12193,18 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack) &&
 	( limitedVisFromComposite(subtrack) != tvHide))
 	{
-	lastTime = clock1000();
-	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
-	    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->track, track->track);
-        subtrack->loadItems(subtrack);
-	if (measureTiming)
+	if (!subtrack->parallelLoading)
 	    {
-	    thisTime = clock1000();
-	    subtrack->loadTime = thisTime - lastTime;
-	    lastTime = thisTime;
+	    lastTime = clock1000();
+	    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
+		errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->track, track->track);
+	    subtrack->loadItems(subtrack);
+	    if (measureTiming)
+		{
+		thisTime = clock1000();
+		subtrack->loadTime = thisTime - lastTime;
+		lastTime = thisTime;
+		}
 	    }
 	}
     else
