@@ -19,7 +19,7 @@
 #                       - Peaks = Pk
 #                       - Signal = Sg
 #       - Tracks On: Signals and Peaks 
-#               p300 - MEL and CH12
+#               p300 (SC-584) - MEL and CH12
 #               Pol2 - MEl and CH12
 #               CTCF - MEL and CH12 (not MEL DMSO)
 #				GATA1 - MEL
@@ -56,6 +56,7 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatm
 #visibilityViewDefaults  Signal=full
 noInherit on
 wgEncode 1
+html wgEncodeSydhTfbs.new
 
 	#####Peak Tracks###########
 	track wgEncodeSydhTfbsViewPeaks
@@ -83,7 +84,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsCh12P300sc584IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel CH12 p300 Pk
-            longLabel CH12 p300 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+            longLabel CH12 p300 (SC-584) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=P300SC584 cellType=CH12 control=IGGrab treatment=zNone
 	        type narrowPeak
 	        color 86,180,233
@@ -129,7 +130,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelP300sc584IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL p300 Pk
-            longLabel MEL p300 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+            longLabel MEL p300 (SC-584) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=P300SC584 cellType=MEL control=IGGrab treatment=zNone
 	        type narrowPeak
 	        color 86,180,233
@@ -606,7 +607,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsCh12P300sc584IggrabSig
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel CH12 p300 Sg
-            longLabel CH12 p300 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
+            longLabel CH12 p300 (SC-584) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=P300SC584 cellType=CH12 control=IGGrab treatment=zNone
 	        type bigWig 1.000000 106426.000000
 	        color 86,180,233
@@ -652,7 +653,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelP300sc584IggrabSig
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel MEL p300 Sg
-            longLabel MEL p300 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
+            longLabel MEL p300 (SC-584) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=P300SC584 cellType=MEL control=IGGrab treatment=zNone
 	        type bigWig 1.000000 93877.000000
 	        color 86,180,233
