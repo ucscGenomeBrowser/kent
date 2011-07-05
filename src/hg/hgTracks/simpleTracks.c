@@ -10912,7 +10912,7 @@ boolean doThisOmimEntry(struct track *tg, char *omimId)
 /* check if the specific class of this OMIM entry is selected by the user */
 {
 boolean doIt;
-
+boolean gotClassLabel;
 char labelName[255];
 boolean doClass1 = FALSE;
 boolean doClass2 = FALSE;
@@ -10926,8 +10926,13 @@ struct hashEl *label;
 safef(labelName, sizeof(labelName), "%s.label", tg->table);
 omimLocationLabels = cartFindPrefix(cart, labelName);
 
-/* if user has not made selection(s) from the filter, enable every item */
-if (omimLocationLabels == NULL) return(TRUE);
+gotClassLabel = FALSE;
+for (label = omimLocationLabels; label != NULL; label = label->next)
+	{
+	if (strstr(label->name, "class") != NULL) gotClassLabel = TRUE;
+	}
+/* if user has not made selection(s) from the phenotype class filter, enable every item */
+if (!gotClassLabel) return(TRUE);	
 
 /* check which classes have been selected */
 for (label = omimLocationLabels; label != NULL; label = label->next)
