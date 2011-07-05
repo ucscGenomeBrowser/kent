@@ -2041,22 +2041,22 @@ sex U
 tier 3
 protocol Stam:Stam_15_protocols.pdf
 
-term HEK293(b)
-tag HEK293b
-type Cell Line
-organism human
-description embryonic kidney (alternate protocol). (PMID: 11967234)
-tissue Kidney
-vendorName ATCC
-vendorId CRL-1573
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
-lineage mesoderm
-karyotype cancer
-termId BTO:0000007
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
-sex U
-tier 3
-protocol Snyder:HEK293b_Snyder_protocol.pdf
+#term HEK293(b)
+#tag HEK293b
+#type Cell Line
+#organism human
+#description embryonic kidney (alternate protocol). (PMID: 11967234)
+#tissue Kidney
+#vendorName ATCC
+#vendorId CRL-1573
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
+#lineage mesoderm
+#karyotype cancer
+#termId BTO:0000007
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
+#sex U
+#tier 3
+#protocol Snyder:HEK293b_Snyder_protocol.pdf
 
 term Hepatocytes
 tag HEPATO
