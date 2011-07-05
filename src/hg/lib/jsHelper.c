@@ -211,9 +211,9 @@ hPrintf("<SCRIPT>var %s=%d;</SCRIPT>\n", jsVar, oldVal);
 hPrintf("<INPUT TYPE=CHECKBOX NAME=%s VALUE=1", cgiVar);
 if (oldVal)
     hPrintf(" CHECKED");
-hPrintf(" onClick=\"%s=%d;\"", jsVar, !oldVal);
+hPrintf(" onClick=\"%s=(%s+1)%%2;\"", jsVar, jsVar);
 hPrintf(">");
-sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), cgiVar);
+safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), cgiVar);
 cgiMakeHiddenVar(buf, "0");
 }
 

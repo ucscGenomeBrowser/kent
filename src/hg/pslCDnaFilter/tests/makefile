@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PSLFILT = ../pslCDnaFilter
+PSLFILT = ${BINDIR}/pslCDnaFilter
 DIFF = diff -u --exclude CVS -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \
@@ -8,7 +8,8 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	noDropCntBugTest minSpan100Test minSpan10Test localBestTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
 	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest \
-	weirdOverlappedFilterTest noIgnoreIntronsTest ignoreIntronsTest
+	weirdOverlappedFilterTest noIgnoreIntronsTest ignoreIntronsTest \
+	uniqueMappedTest uniqueMappedHapTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -94,6 +95,13 @@ noIgnoreIntronsTest:
 
 ignoreIntronsTest:
 	${MAKE} doFilterSave name=$@ inPsl=ignoreIntrons.psl filtArgs='-maxAligns=1 -ignoreIntrons'
+
+# uniquely mapping
+uniqueMappedTest:
+	${MAKE} doFilter name=$@ inPsl=many.psl filtArgs='-globalNearBest=0.01 -uniqueMapped'
+
+uniqueMappedHapTest:
+	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-uniqueMapped -localNearBest=0.005 -hapRegions=input/hapMappings.psl'
 
 
 ####

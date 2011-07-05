@@ -97,6 +97,7 @@ static char *taeGutNames[] = {"Taeniopygia guttata", NULL};
 static char *nomLeuNames[] = {"Nomascus leucogenys", NULL};
 static char *myoLucNames[] = {"Myotis lucifugus", NULL};
 char *melGalNames[] = {"Meleagris gallopavo", NULL};
+char *allMisNames[] = {"Alligator mississippiensis", NULL};
 static char *endNames[] = {NULL};
 
 static struct dbToSpecies dbToSpeciesMap[] = {
@@ -170,6 +171,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"nomLeu", nomLeuNames},
     {"myoLuc", myoLucNames},
     {"melGal", melGalNames},
+    {"allMis", allMisNames},
     {NULL, endNames}
 };
 

@@ -150,6 +150,9 @@ taxId 59463
     hgsql -N -e "select ix from gap;" myoLuc2 | sort -n | tail -1
     #	2378
 
+    featureBits -countGaps myoLuc2 gap
+    # 68155432 bases of 2034575300 (3.350%) in intersection
+
 
 ########################################################################
 # Create kluster run files (DONE - 2010-11-04 - Chin)
@@ -277,9 +280,138 @@ myoLuc2.refseq.mrna.xeno.loadDesc  = yes
 # reset default position to RHO location as result from RHO gene search
 #	(DONE 2011-02-15 - Chin)
     hgsql -e \
-'update dbDb set defaultPos="GL429775:12,852,264-12,856,982" where name="myoLuc2";' \
+'update dbDb set defaultPos="GL429775:12,072,919-12,378,895" where name="myoLuc2";' \
 	hgcentraltest
 
 # NOTE - create myoLuc2 entry in all.joiner since this is a new species
+
+############################################################################
+# running cpgIsland business (DONE -2011-05-16 - Chin)
+    mkdir /hive/data/genomes/myoLuc2/bed/cpgIsland
+    cd /hive/data/genomes/myoLuc2/bed/cpgIsland
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    #   needed to fixup this source, adding include to readseq.c:
+#include "string.h"
+    #   and to cpg_lh.c:
+#include "unistd.h"
+#include "stdlib.h"
+    # and fixing a declaration in cpg_lh.c
+    sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
+    mv tmp.c cpg_lh.c
+    make
+    cd ../../
+    ln -s hg3rdParty/cpgIslands/cpglh.exe
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do  
+    echo ${C}
+    twoBitToFa ../../myoLuc2.2bit:$C stdout \
+        | maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/myoLuc2/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template 
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP 
+'_EOF_'
+    # << happy emacs
+    
+    #   the faCount business is to make sure there is enough sequence to
+    #   work with in the fasta.  cpglh.exe does not like files with too
+    #   many
+    #   N's - it gets stuck
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa |  grep -e ^GL -e ^AAPE | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+
+
+    chmod 775 runOne
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+    para problems
+    para status
+    # then, kick it with para push
+    # check it with plb
+    # when all are done, para time shows:
+    # Checking finished jobs
+    # Completed: 11654 of 11654 jobs
+    # CPU time in finished jobs:   145s       2.42m     0.04h    0.00d  0.000 y
+    # IO & Wait Time:            29887s     498.11m     8.30h    0.35d  0.001 y
+    # Average job time:              3s       0.04m     0.00h    0.00d
+    # Longest finished job:         10s       0.17m     0.00h    0.00d
+    # Submission to last job:      129s       2.15m     0.04h    0.00d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    ssh hgwdev
+    cd /hive/data/genomes/myoLuc2/bed/cpgIsland
+    hgLoadBed myoLuc2 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    # Loaded 53480 elements of size 10
+    # Sorted
+    # Creating table definition for cpgIslandExt
+    # Saving bed.tab
+    # Loading myoLuc2
+
+    #   cleanup
+    rm -fr hardMaskedFa
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2011-06-30 - Chin)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=myoLuc2 -all all.joiner
+
+    mkdir /hive/data/genomes/myoLuc2/goldenPath
+    cd /hive/data/genomes/myoLuc2/goldenPath
+    makeDownloads.pl myoLuc2 > do.log 2>&1
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/myoLuc2/pushQ
+    cd /hive/data/genomes/myoLuc2/pushQ
+    makePushQSql.pl myoLuc2 > myoLuc2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/myoLuc2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/myoLuc2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/myoLuc2/bbi/quality.bw
+    # WARNING: myoLuc2 does not have seq
+    # WARNING: myoLuc2 does not have extFile
+    # WARNING: myoLuc2 does not have estOrientInfo
+    # 
+    # WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+    # supporting and genbank tables) which tracks to assign these tables to:
+    #   tableList
+
+    #   copy it to hgwbeta
+    scp -p myoLuc2.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < myoLuc2.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
 
 ############################################################################

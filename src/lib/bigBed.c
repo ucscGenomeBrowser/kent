@@ -183,7 +183,7 @@ return bwiList;
 
 boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	int summarySize, struct bbiSummaryElement *summary)
-/* Get extended summary information for summarySize evenely spaced elements into
+/* Get extended summary information for summarySize evenly spaced elements into
  * the summary array. */
 {
 return bbiSummaryArrayExtended(bbi, chrom, start, end, bigBedCoverageIntervals,

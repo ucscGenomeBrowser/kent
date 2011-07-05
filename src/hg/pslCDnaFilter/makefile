@@ -4,8 +4,10 @@ L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-H = cDnaAligns.h cDnaStats.h cDnaReader.h overlapFilter.h polyASize.h hapRegions.h usage.msg algo.msg
-O = cDnaAligns.o cDnaStats.o cDnaReader.o overlapFilter.o polyASize.o hapRegions.o pslCDnaFilter.o
+.SECONDARY:
+
+H = cDnaAligns.h cDnaStats.h cDnaReader.h overlapFilter.h globalNearBestFilter.h localNearBestFilter.h polyASize.h hapRegions.h usage.msg algo.msg
+O = cDnaAligns.o cDnaStats.o cDnaReader.o overlapFilter.o globalNearBestFilter.o localNearBestFilter.o polyASize.o hapRegions.o pslCDnaFilter.o
 A =  pslCDnaFilter
 
 $A: $O ${MYLIBS}
@@ -15,7 +17,9 @@ $A: $O ${MYLIBS}
 
 pslCDnaFilter.o: pslCDnaFilter.c $H
 cDnaAligns.o: cDnaAligns.c $H
+cDnaStats.o: cDnaStats.c $H
 overlapFilter.o: overlapFilter.c $H
+hapRegions.o: hapRegions.c $H
 polyASizes.o: polyASizes.c polyASizes.h
 
 # create msg from text

@@ -238,14 +238,14 @@ return vcfInfoNoType;
 static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?$";
 static const char *infoOrFormatRegex =
     "^##(INFO|FORMAT)="
-    "<ID=([A-Za-z0-9]+),"
-    "Number=(\\.|[0-9]+),"
+    "<ID=([A-Za-z0-9_:-]+),"
+    "Number=(\\.|[0-9-]+),"
     "Type=([A-Za-z]+),"
-    "Description=\"([^\"]+)\">$";
+    "Description=\"?([^\"]+)\"?>$";
 static const char *filterOrAltRegex =
     "^##(FILTER|ALT)="
-    "<ID=([A-Za-z0-9]+),"
-    "Description=\"([^\"]+)\">$";
+    "<ID=([A-Za-z0-9_:-]+),"
+    "(Description|Type)=\"([^\"]+)\">$";
 
 INLINE void nonAsciiWorkaround(char *line)
 // Workaround for annoying 3-byte quote marks included in some 1000 Genomes files:

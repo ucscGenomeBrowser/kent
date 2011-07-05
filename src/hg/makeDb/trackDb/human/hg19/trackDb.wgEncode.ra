@@ -6,13 +6,11 @@ include wgEncodeSuper.ra
 include wgEncodeGencodeV3.ra
 include wgEncodeGencodeV4.new.ra alpha
 include wgEncodeGencodeV4.ra beta,public
-include wgEncodeGencodeV5.ra alpha
+#include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra alpha
 
 # UNC/BSU Proteogenomics (wrangler: cline)
-# This line below is to be un-commented when the track is ready to go to beta (cline, 6/6/11)
-# include wgEncodeUncBsuProt.ra beta
-include wgEncodeUncBsuProt.new.ra alpha
+include wgEncodeUncBsuProt.ra alpha
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra
@@ -122,6 +120,7 @@ include wgEncodeHaibMethylSeq.ra
 #HAIB Methyl Array (wrangler:Cricket)
 #include wgEncodeHaibMethylArray.ra
 include wgEncodeHaibMethyl27.ra alpha
+include wgEncodeHaibMethyl450.ra alpha
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
 include wgEncodeHaibMethylRrbs.ra beta,public
 include wgEncodeHaibMethylRrbs.new.ra alpha

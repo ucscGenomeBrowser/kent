@@ -47,6 +47,8 @@ if (errCatch != NULL)
 static struct errCatch **getStack()
 /* Return a pointer to the errCatch object stack for the current pthread. */
 {
+static pthread_mutex_t getStackMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_lock( &getStackMutex );
 static struct hash *perThreadStacks = NULL;
 pthread_t pid = pthread_self(); //  can be a pointer or a number
 // A true integer has function would be nicer, but this will do.  
@@ -59,6 +61,7 @@ if (perThreadStacks == NULL)
 struct hashEl *hel = hashLookup(perThreadStacks, key);
 if (hel == NULL)
     hel = hashAdd(perThreadStacks, key, NULL);
+pthread_mutex_unlock( &getStackMutex );
 return (struct errCatch **)(&hel->val);
 }
 
@@ -95,7 +98,7 @@ popWarnHandler();
 popAbortHandler();
 struct errCatch **pErrCatchStack = getStack(), *errCatchStack = *pErrCatchStack;
 if (errCatch != errCatchStack)
-   errAbort("Mismatch betweene errCatch and errCatchStack");
+   errAbort("Mismatch between errCatch and errCatchStack");
 *pErrCatchStack = errCatch->next;
 }
 

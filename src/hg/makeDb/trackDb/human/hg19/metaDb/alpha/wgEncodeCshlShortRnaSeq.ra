@@ -80,7 +80,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4134
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
 objType table
@@ -317,7 +317,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4141
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep1
 objType table
@@ -554,7 +554,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4129
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep1
 objType table
@@ -909,7 +909,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4136
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep1
 objType table
@@ -1294,7 +1294,7 @@ localization cytosol
 project wgEncode
 rnaExtract shortTotal
 subId 4143
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep1
 objType table
@@ -1679,7 +1679,7 @@ localization nucleus
 project wgEncode
 rnaExtract shortTotal
 subId 4131
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep1
 objType table
@@ -1916,7 +1916,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4139
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep1
 objType table
@@ -2126,7 +2126,7 @@ localization cytosol
 project wgEncode
 rnaExtract shortTotal
 subId 4127
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalMinusRawRep2
 objType table
@@ -2256,7 +2256,7 @@ localization nucleus
 project wgEncode
 rnaExtract shortTotal
 subId 4137
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalMinusRawRep2
 objType table
@@ -2413,7 +2413,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4140
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep1
 objType table
@@ -2650,7 +2650,7 @@ localization cytosol
 project wgEncode
 rnaExtract shortTotal
 subId 4142
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep1
 objType table
@@ -2887,7 +2887,7 @@ localization nucleus
 project wgEncode
 rnaExtract shortTotal
 subId 4124
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep1
 objType table
@@ -3124,7 +3124,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4132
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
 objType table
@@ -3334,7 +3334,7 @@ localization cytosol
 project wgEncode
 rnaExtract shortTotal
 subId 4138
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
 objType table
@@ -3491,7 +3491,7 @@ localization nucleus
 project wgEncode
 rnaExtract shortTotal
 subId 4133
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
 objType table
@@ -3728,7 +3728,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4147
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep1
 objType table
@@ -3965,7 +3965,7 @@ localization cytosol
 project wgEncode
 rnaExtract shortTotal
 subId 4123
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep3
 objType table
@@ -4202,7 +4202,7 @@ localization nucleus
 project wgEncode
 rnaExtract shortTotal
 subId 4128
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep3
 objType table
@@ -4587,7 +4587,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4121
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep1
 objType table
@@ -4972,7 +4972,7 @@ localization chromatin
 project wgEncode
 rnaExtract shortTotal
 subId 4130
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep3
 objType table
@@ -5357,7 +5357,7 @@ localization cytosol
 project wgEncode
 rnaExtract shortTotal
 subId 4148
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep1
 objType table
@@ -5742,7 +5742,7 @@ localization nucleolus
 project wgEncode
 rnaExtract shortTotal
 subId 4135
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep3
 objType table
@@ -6127,7 +6127,7 @@ localization nucleoplasm
 project wgEncode
 rnaExtract shortTotal
 subId 4149
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep3
 objType table
@@ -6496,7 +6496,7 @@ objType table
 bioRep 001N,002N
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -6534,7 +6534,7 @@ localization nucleus
 project wgEncode
 rnaExtract shortTotal
 subId 4144
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep1
 objType table
@@ -6914,7 +6914,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4145
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1
 objType table
@@ -7151,7 +7151,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4126
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep1
 objType table
@@ -7388,7 +7388,7 @@ localization cytosol
 project wgEncode
 rnaExtract shortTotal
 subId 4122
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep3
 objType table
@@ -7625,7 +7625,7 @@ localization nucleus
 project wgEncode
 rnaExtract shortTotal
 subId 4146
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3
 objType table
@@ -8005,7 +8005,7 @@ localization cell
 project wgEncode
 rnaExtract shortTotal
 subId 4125
-view ExonGencV3c
+view ExonsGencV3c
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep1
 objType table
@@ -8167,4 +8167,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: 1685243287
+# MAGIC: -1447866226

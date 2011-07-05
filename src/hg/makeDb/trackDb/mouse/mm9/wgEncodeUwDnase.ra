@@ -74,6 +74,7 @@ wgEncode 1
 	pValueFilterLimits 1:324
 	scoreFilter 100 
 	scoreFilterLimits 100:1000
+	scoreMin 0
 
 		track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksHotspotsRep1
 		parent wgEncodeUwDnaseViewHotspots
@@ -591,6 +592,7 @@ wgEncode 1
 	pValueFilterLimits 1:324
 	scoreFilter 10
 	scoreFilterLimits 100:1000
+	scoreMin 0
 
 		track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksPkRep1
 		parent wgEncodeUwDnaseViewPeaks 

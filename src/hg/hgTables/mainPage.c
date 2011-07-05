@@ -643,6 +643,9 @@ hPrintf("<TABLE BORDER=0>\n");
     hOnClickButton("document.customTrackForm.submit();return false;",
         hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 
+    hPrintf(" ");
+    hOnClickButton("document.trackHubForm.submit();return false;", "import tracks");
+
     hPrintf("</TD></TR>\n");
     }
 
@@ -990,6 +993,11 @@ hPrintf("</FORM>\n");
 
 /* Hidden form for jumping to custom tracks CGI. */
 hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
+
+/* Hidden form for jumping to track hub manager CGI. */
+hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgHubConnectName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 

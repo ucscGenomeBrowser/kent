@@ -10,6 +10,9 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../in
 #global external libraries 
 L=
 
+# pthreads is required
+L+=-pthread
+
 # autodetect if openssl is installed
 ifeq (${SSLDIR},)
   SSLDIR = /usr/include/openssl
@@ -107,7 +110,6 @@ ifeq (${USE_TABIX},1)
 	HG_DEFS+=-DKNETFILE_HOOKS
     endif
 endif
-
 
 SYS = $(shell uname -s)
 
