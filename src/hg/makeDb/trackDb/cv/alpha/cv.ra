@@ -7938,6 +7938,11 @@ tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
 
+term RevXlinkChromatin 
+tag RXLCH
+type control
+description Control signal from reverse cross-link of Chromatin. (PROVISIONAL)
+
 term None
 tag NONE
 description No special treatment or protocol applies
