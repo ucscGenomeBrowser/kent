@@ -124,7 +124,7 @@ while (my $line = <MDB>) {
     (my $objName, my $settings) = split(" ", $line, 2);
 
 # DEBUG
-    #next unless $objName =~ /Caltech/;
+    # next unless $objName =~ /Caltech/;
 
     $metaLines{$objName} = $settings;
     print STDERR "     Composite OBJNAME: $objName   SETTINGS: $settings\n";
@@ -148,7 +148,7 @@ while (my $line = <MDB>) {
     (my $objName, my $settings) = split(" ", $line, 2);
 
 # DEBUG
-    #next unless $objName =~ /Caltech/;
+    # next unless $objName =~ /Caltech/;
 
     $metaLines{$objName} = $settings;
     print STDERR "     OBJNAME: $objName   SETTINGS: $settings\n";
@@ -230,7 +230,10 @@ foreach my $objName (keys %metaLines) {
 
     # can't handle if there are no expVars defined for composite (it's probably a combined or other non-production track)
     my $expVars = $composites{$composite};
-    next if (!defined($expVars));
+    if (!defined($expVars)) {
+        warn "composite $composite has no expVars, skipping";
+        next;
+    }
     if (defined($expVars)) {
         @varTermTypes = split(",", $expVars);
     }
