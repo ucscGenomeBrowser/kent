@@ -122,6 +122,10 @@ while (my $line = <MDB>) {
     chomp $line;
     $line =~ s/^.*metadata //;  
     (my $objName, my $settings) = split(" ", $line, 2);
+
+# DEBUG
+    #next unless $objName =~ /Caltech/;
+
     $metaLines{$objName} = $settings;
     print STDERR "     Composite OBJNAME: $objName   SETTINGS: $settings\n";
 }
@@ -142,6 +146,10 @@ while (my $line = <MDB>) {
     chomp $line;
     $line =~ s/^.*metadata //;  
     (my $objName, my $settings) = split(" ", $line, 2);
+
+# DEBUG
+    #next unless $objName =~ /Caltech/;
+
     $metaLines{$objName} = $settings;
     print STDERR "     OBJNAME: $objName   SETTINGS: $settings\n";
 }
@@ -386,7 +394,7 @@ while (@row = $sth->fetchrow_array()) {
     my $status = $row[2];
     my $updated_at = $row[3];
     $submissionStatus{$id} = $status;
-    HgAutomate::verbose(1, "project: \'$name\' $id $status \n");
+    HgAutomate::verbose(2, "project: \'$name\' $id $status \n");
     $submissionUpdated{$id} = $updated_at;
     $submissionUpdated{$id} =~ s/ \d\d:\d\d:\d\d//;
 }
@@ -399,11 +407,14 @@ our $betaHost = "mysqlbeta";
 our $dbhPushq = HgDb->new(DB => $pushqDb, HOST => $pushqHost);
 our $dbhBetaMeta = HgDb->new(DB => $assembly, HOST => $betaHost);
 
-# fill in statuses for those experiments missing them, and print out results
+# fill in statuses and print out results
 foreach my $key (keys %experiments) {
     my %experiment = %{$experiments{$key}};
+
+    # get subIds for this experiment in this assembly
     my %ids = %{$experiment{"ids"}};
-    print STDERR "    IDs: " . join(",", keys %ids) . " KEY:  " . $key . "\n";
+    my @ids = sort { $a <=> $b } keys %ids;
+    print STDERR "    IDs: " . join(",", @ids) . " KEY:  " . $key . "\n";
     $experiment{"project"} = "unknown"  unless defined($experiment{"project"});
     $experiment{"projectPi"} = "unknown"  unless defined($experiment{"projectPi"});
     $experiment{"lab"} = "unknown" unless defined($experiment{"lab"});
@@ -416,23 +427,29 @@ foreach my $key (keys %experiments) {
     $experiment{"treatment"} = "unknown" unless defined($experiment{"treatment"});
     $experiment{"submitDate"} = "unknown"  unless defined($experiment{"submitDate"});
     $experiment{"releaseDate"} = "unknown" unless defined($experiment{"releaseDate"});
-    my @ids = sort keys %ids;
-    my $lastId = pop @ids;
+
+    # find subId with 'highest' status in current assembly -- use that for reporting
+    my $maxId;
+    foreach $subId (keys %ids) {
+        my $subStat = $submissionStatus{$subId};
+        next if (!defined($subStat));
+        if (!defined($maxId)) { 
+            $maxId = $subId;
+            next;
+        }
+        last if ($submissionStatus{$maxId} eq "released");
+        if (Encode::laterPipelineStatus($submissionStatus{$subId}, $submissionStatus{$maxId})) {
+            $maxId = $subId;
+        }
+    }
     # TODO: fix metadata -- for now, exclude if not in status table (e.g. metadata for incorrect assembly)
-    if (!defined($submissionStatus{$lastId})) {
-        print STDERR "discarding experiment with no status for id (in this assembly): " . $lastId . "\n";
+    if (!defined($maxId)) {
+        print STDERR "discarding experiment with no status for id (in this assembly): " . $maxId . "\n";
         next;
     }
-    $experiment{"status"} = $submissionStatus{$lastId};
-    print STDERR "maxID = " . $lastId . "-" .  $experiment{"status"} . "\n";
+    $experiment{"status"} = $submissionStatus{$maxId};
+    print STDERR "maxID = " . $maxId . "-" .  $experiment{"status"} . "\n";
 
-    #foreach $subId (keys %ids) {
-        #last if (defined $experiment{"status"});
-        #$experiment{"status"} = defined($submissionStatus{$subId}) ? $submissionStatus{$subId} : "unknown";
-        #if ($experiment{"status"} eq "released") {
-            #$experiment{"releaseDate"} = $submissionUpdated{$subId}
-        #};
-    #}
     # look in pushQ for release date
     my $releaseDate;
     #if (defined($experiment{"objName"}) && $experiment{"status"} eq "released") {
@@ -460,7 +477,7 @@ foreach my $key (keys %experiments) {
             # fallback 2: Use project_status_log date created_at for the ID where status=released
             $releaseDate = $dbhPipeline->quickQuery(
                 "select max(created_at) from project_status_logs where project_id = ? and status = ?",
-                    $lastId, "released");
+                    $maxId, "released");
             # strip time
             $releaseDate =~ s/ .*//;  
             }
@@ -490,7 +507,7 @@ foreach my $key (keys %experiments) {
                 $experiment{"varLabels"}, $experiment{"factorLabels"}, 
                 $experiment{"freeze"}, $experiment{"submitDate"}, 
                 $experiment{"releaseDate"}, $experiment{"status"}, 
-                join(",", sort keys %ids), 
+                join(",", sort { $a <=> $b } keys %ids),
                 $experiment{"accession"}, $assembly,
                 # nhgri report only
                 $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"}, 
