@@ -225,7 +225,6 @@ foreach my $objName (keys %metaLines) {
     print STDERR "    objName  " . $objName . "\n";
 
     # determine term type for experiment parameters - extracted from composite expVars
-    my @varTermTypes;
     my $composite = $metadata{"composite"};
 
     # can't handle if there are no expVars defined for composite (it's probably a combined or other non-production track)
@@ -234,9 +233,7 @@ foreach my $objName (keys %metaLines) {
         warn "composite $composite has no expVars, skipping";
         next;
     }
-    if (defined($expVars)) {
-        @varTermTypes = split(",", $expVars);
-    }
+    my @varTermTypes = split(",", $expVars);
 
     my %vars = ();
     foreach $var (keys %metadata) {
@@ -244,6 +241,8 @@ foreach my $objName (keys %metaLines) {
         # are defaults
         next if ($var eq "treatment" && $metadata{$var} eq "None");
         next if ($var eq "age" && $metadata{$var} eq "immortalized");
+        # consider adding:
+        # next if ($var eq "strain" && $metadata{$var} eq "C57BL/6");
         foreach $termType (@varTermTypes) {
             # exclude the 'standard' experiment-defining vars
             next if (($termType eq "cell") or ($termType eq "lab") or ($termType eq "dataType"));
@@ -282,54 +281,58 @@ foreach my $objName (keys %metaLines) {
     } else {
         $experiment{"expId"} = 0;
     }
-
     if (defined($metadata{"dccAccession"})) {
         $experiment{"dccAccession"} = $metadata{"dccAccession"};
     } else {
         $experiment{"dccAccession"} = "";
     }
 
+    # special columns in report -- collect even if not expermint-defining variables
+    $experiment{"strain"} = defined($metadata{"strain"}) ? $metadata{"strain"} : "n/a";
+    $experiment{"age"} = defined($metadata{"age"}) ? $metadata{"age"} : "n/a";
+    $experiment{"treatment"} = (defined($metadata{"treatment"}) && lc($metadata{"treatment"}) ne "none") ? 
+                                        $metadata{"treatment"} : "none";
+
     # experimental params -- iterate through all tags, lookup in cv.ra, 
      $experiment{"vars"} = "none";
-     $experiment{"expVars"} = "none";
      $experiment{"varLabels"} = "none";
      $experiment{"factorLabels"} = "none";
-     $experiment{"treatment"} = "none";
-     $experiment{"age"} = "n/a";
-     $experiment{"strain"} = "n/a";
      if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
         # construct vars as list, semi-colon separated
+
+        # string of expVars + version, for constructing keys
         $experiment{"vars"} = "";
-        $experiment{"expVars"} = "";
+
+        # abbreviated string of expVars + version for printing in report (DCC Experimental Vars column)
         $experiment{"varLabels"} = "";
+
+        # string of expVars + version - (treatment, age, strain) for printing in report 
+        #                       (NHGRI Experimental Factors column)
         $experiment{"factorLabels"} = "";
+
         foreach $termType (sort keys %vars) {
             $var = $vars{$termType};
             $experiment{"vars"} = $experiment{"vars"} .  $termType . "=" . $var . " ";
-            if ($termType ne "version" && $var ne "None") {
-                $experiment{"expVars"} = $experiment{"expVars"} .  $termType . "=" . $var . " ";
-            }
             my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                 $terms{$termType}{$var}->{"label"} : $var;
+
             # special handling of treatment, age, strain for NHGRI -- they have specific columns
-            # treatment is experimental variable; sex is not (for now), age is if not 'immortalized'
-            if ($termType eq "treatment") {
-                $experiment{"treatment"} = $varLabel;
+            # so if they are exp vars, they are added only to varLabels column (unless they
+            #    are defaults (treatment=None, age=immortalized or 8wks, strain=C56BL/6)
+            if ($termType eq "treatment" && lc($varLabel) ne "none") {
                 $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
             } elsif ($termType eq "age") {
                 next if ($varLabel eq "immortalized");
-                $experiment{"age"} = $varLabel;
                 next if ($varLabel eq "adult-8wks");
                 $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
-            } elsif ($termType eq "strain") {
-                $experiment{"strain"} = $varLabel;
-            } elsif ($termType eq "sex") {
-                next;
-            } else {
-                # experimental variables
+            } elsif ($termType eq "strain" && lc($varLabel) ne "C57BL/6") {
                 $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
-                $experiment{"factorLabels"} = $experiment{"factorLabels"} .  ucfirst($termType) . "=" . $varLabel . " ";
+            } else {
+                # other experimental variables get added to both columns
+                $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
+                $experiment{"factorLabels"} = 
+                        $experiment{"factorLabels"} .  ucfirst($termType) . "=" . $varLabel . " ";
             }
         }
         chop $experiment{"vars"};
@@ -385,6 +388,8 @@ foreach my $objName (keys %metaLines) {
 
 # get submission status for all projects from the pipeline projects table
 my %submissionStatus = ();
+
+# TODO: determine how/if to keep/use the update time
 my %submissionUpdated = ();
 my $dbhPipeline = HgDb->new(DB => $pipeline);
 my $sth = $dbhPipeline->execute( 
@@ -427,7 +432,6 @@ foreach my $key (keys %experiments) {
     $experiment{"vars"} = "unknown" unless defined($experiment{"vars"});
     $experiment{"varLabels"} = "unknown" unless defined($experiment{"varLabels"});
     $experiment{"factorLabels"} = "unknown" unless defined($experiment{"factorLabels"});
-    $experiment{"treatment"} = "unknown" unless defined($experiment{"treatment"});
     $experiment{"submitDate"} = "unknown"  unless defined($experiment{"submitDate"});
     $experiment{"releaseDate"} = "unknown" unless defined($experiment{"releaseDate"});
 
