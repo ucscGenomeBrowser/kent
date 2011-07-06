@@ -37,7 +37,6 @@ struct perThreadAbortVars
     boolean errAbortInProgress;     /* Flag to indicate that an error abort is in progress.
 				     * Needed so that a warn handler can tell if it's really
 				     * being called because of a warning or an error. */
-       // TODO probably have to create a global accessor function for setting errAbortInProgress.
     WarnHandler warnArray[maxWarnHandlers];
     int warnIx;
     AbortHandler abortArray[maxAbortHandlers];
@@ -273,6 +272,16 @@ void errAbortDebugnPushPopErr()
 struct perThreadAbortVars *ptav = getThreadVars();
 ptav->debugPushPopErr = TRUE;
 }
+
+boolean isErrAbortInProgress() 
+/* Flag to indicate that an error abort is in progress.
+ * Needed so that a warn handler can tell if it's really
+ * being called because of a warning or an error. */
+{
+struct perThreadAbortVars *ptav = getThreadVars();
+return ptav->errAbortInProgress;
+}
+
 
 static struct perThreadAbortVars *getThreadVars()
 /* Return a pointer to the perThreadAbortVars for the current pthread. */

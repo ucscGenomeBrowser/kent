@@ -23,8 +23,10 @@ labProtocolId 021WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3124
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
 view Alignments
@@ -49,8 +51,10 @@ labProtocolId 022WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3125
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2
 view Alignments
@@ -75,8 +79,10 @@ labProtocolId 021WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3124
 view FastqRd1
 
@@ -100,8 +106,10 @@ labProtocolId 022WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3125
 view FastqRd1
 
@@ -125,8 +133,10 @@ labProtocolId 021WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3124
 view FastqRd2
 
@@ -150,8 +160,10 @@ labProtocolId 022WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3125
 view FastqRd2
 
@@ -175,8 +187,10 @@ labProtocolId 021WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3124
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -201,8 +215,10 @@ labProtocolId 022WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3125
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -227,8 +243,10 @@ labProtocolId 021WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3124
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -253,8 +271,10 @@ labProtocolId 022WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3125
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -401,8 +421,10 @@ labProtocolId 021WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4258
 view Spikeins
@@ -428,8 +450,10 @@ labProtocolId 022WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4213
 view Spikeins
@@ -502,8 +526,10 @@ labProtocolId 021WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2404
 tableName wgEncodeCshlLongRnaSeqA549CellPapAlnRep1
 view Alignments
@@ -528,8 +554,10 @@ labProtocolId 022WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2405
 tableName wgEncodeCshlLongRnaSeqA549CellPapAlnRep2
 view Alignments
@@ -603,8 +631,10 @@ labProtocolId 021WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2404
 view FastqRd1
 
@@ -628,8 +658,10 @@ labProtocolId 022WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2405
 view FastqRd1
 
@@ -653,8 +685,10 @@ labProtocolId 021WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2404
 view FastqRd2
 
@@ -678,8 +712,10 @@ labProtocolId 022WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2405
 view FastqRd2
 
@@ -776,8 +812,10 @@ labProtocolId 021WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2404
 tableName wgEncodeCshlLongRnaSeqA549CellPapMinusRawSigRep1
 view MinusRawSignal
@@ -802,8 +840,10 @@ labProtocolId 022WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2405
 tableName wgEncodeCshlLongRnaSeqA549CellPapMinusRawSigRep2
 view MinusRawSignal
@@ -828,8 +868,10 @@ labProtocolId 021WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2404
 tableName wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep1
 view PlusRawSignal
@@ -854,8 +896,10 @@ labProtocolId 022WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2405
 tableName wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep2
 view PlusRawSignal
@@ -927,8 +971,10 @@ labProtocolId 021WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4191
 view Spikeins
@@ -954,8 +1000,10 @@ labProtocolId 022WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4188
 view Spikeins
@@ -1028,8 +1076,10 @@ labProtocolId 017WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2707
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep1
 view Alignments
@@ -1054,8 +1104,10 @@ labProtocolId 018WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3127
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep2
 view Alignments
@@ -1080,8 +1132,10 @@ labProtocolId 017WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2707
 view FastqRd1
 
@@ -1105,8 +1159,10 @@ labProtocolId 018WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3127
 view FastqRd1
 
@@ -1130,8 +1186,10 @@ labProtocolId 017WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2707
 view FastqRd2
 
@@ -1155,8 +1213,10 @@ labProtocolId 018WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3127
 view FastqRd2
 
@@ -1180,8 +1240,10 @@ labProtocolId 017WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2707
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -1206,8 +1268,10 @@ labProtocolId 018WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3127
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -1232,8 +1296,10 @@ labProtocolId 017WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2707
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -1258,8 +1324,10 @@ labProtocolId 018WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3127
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -1406,8 +1474,10 @@ labProtocolId 017WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4208
 view Spikeins
@@ -1433,8 +1503,10 @@ labProtocolId 018WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4205
 view Spikeins
@@ -1507,8 +1579,10 @@ labProtocolId 017WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2345
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep1
 view Alignments
@@ -1533,8 +1607,10 @@ labProtocolId 018WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2406
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep2
 view Alignments
@@ -1608,8 +1684,10 @@ labProtocolId 017WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2345
 view FastqRd1
 
@@ -1633,8 +1711,10 @@ labProtocolId 018WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2406
 view FastqRd1
 
@@ -1658,8 +1738,10 @@ labProtocolId 017WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2345
 view FastqRd2
 
@@ -1683,8 +1765,10 @@ labProtocolId 018WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2406
 view FastqRd2
 
@@ -1780,8 +1864,10 @@ labProtocolId 017WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2345
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep1
 view MinusRawSignal
@@ -1806,8 +1892,10 @@ labProtocolId 018WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2406
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep2
 view MinusRawSignal
@@ -1832,8 +1920,10 @@ labProtocolId 017WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2345
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapPlusRawSigRep1
 view PlusRawSignal
@@ -1858,8 +1948,10 @@ labProtocolId 018WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2406
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapPlusRawSigRep2
 view PlusRawSignal
@@ -1931,8 +2023,10 @@ labProtocolId 017WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4253
 view Spikeins
@@ -1958,8 +2052,10 @@ labProtocolId 018WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4250
 view Spikeins
@@ -2032,8 +2128,10 @@ labProtocolId 037WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3128
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1
 view Alignments
@@ -2058,8 +2156,10 @@ labProtocolId 038WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3129
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep2
 view Alignments
@@ -2084,8 +2184,10 @@ labProtocolId 037WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3128
 view FastqRd1
 
@@ -2109,8 +2211,10 @@ labProtocolId 038WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3129
 view FastqRd1
 
@@ -2134,8 +2238,10 @@ labProtocolId 037WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3128
 view FastqRd2
 
@@ -2159,8 +2265,10 @@ labProtocolId 038WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3129
 view FastqRd2
 
@@ -2184,8 +2292,10 @@ labProtocolId 037WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3128
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -2210,8 +2320,10 @@ labProtocolId 038WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3129
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -2236,8 +2348,10 @@ labProtocolId 037WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3128
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -2262,8 +2376,10 @@ labProtocolId 038WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3129
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -2410,8 +2526,10 @@ labProtocolId 037WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4190
 view Spikeins
@@ -2437,8 +2555,10 @@ labProtocolId 038WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4254
 view Spikeins
@@ -2511,8 +2631,10 @@ labProtocolId 037WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2456
 tableName wgEncodeCshlLongRnaSeqBjCellPapAlnRep1
 view Alignments
@@ -2537,8 +2659,10 @@ labProtocolId 038WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2477
 tableName wgEncodeCshlLongRnaSeqBjCellPapAlnRep2
 view Alignments
@@ -2612,8 +2736,10 @@ labProtocolId 037WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2456
 view FastqRd1
 
@@ -2637,8 +2763,10 @@ labProtocolId 038WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2477
 view FastqRd1
 
@@ -2662,8 +2790,10 @@ labProtocolId 037WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2456
 view FastqRd2
 
@@ -2687,8 +2817,10 @@ labProtocolId 038WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2477
 view FastqRd2
 
@@ -2784,8 +2916,10 @@ labProtocolId 037WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2456
 tableName wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -2810,8 +2944,10 @@ labProtocolId 038WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2477
 tableName wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep2
 view MinusRawSignal
@@ -2836,8 +2972,10 @@ labProtocolId 037WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2456
 tableName wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep1
 view PlusRawSignal
@@ -2862,8 +3000,10 @@ labProtocolId 038WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2477
 tableName wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep2
 view PlusRawSignal
@@ -2935,8 +3075,10 @@ labProtocolId 037WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4251
 view Spikeins
@@ -2962,8 +3104,10 @@ labProtocolId 038WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4212
 view Spikeins
@@ -3036,8 +3180,10 @@ labProtocolId 003WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3230
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1
 view Alignments
@@ -3062,8 +3208,10 @@ labProtocolId 004WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2402
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep2
 view Alignments
@@ -3088,8 +3236,10 @@ labProtocolId 003WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3230
 view FastqRd1
 
@@ -3113,8 +3263,10 @@ labProtocolId 004WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2402
 view FastqRd1
 
@@ -3138,8 +3290,10 @@ labProtocolId 003WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3230
 view FastqRd2
 
@@ -3163,8 +3317,10 @@ labProtocolId 004WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2402
 view FastqRd2
 
@@ -3188,8 +3344,10 @@ labProtocolId 003WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3230
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -3214,8 +3372,10 @@ labProtocolId 004WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2402
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -3240,8 +3400,10 @@ labProtocolId 003WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3230
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -3266,8 +3428,10 @@ labProtocolId 004WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2402
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -3460,8 +3624,10 @@ labProtocolId 003WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4298
 view Spikeins
@@ -3487,8 +3653,10 @@ labProtocolId 004WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4288
 view Spikeins
@@ -3561,8 +3729,10 @@ labProtocolId 003WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2097
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1
 view Alignments
@@ -3587,8 +3757,10 @@ labProtocolId 004WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2445
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep2
 view Alignments
@@ -3662,8 +3834,10 @@ labProtocolId 003WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2097
 view FastqRd1
 
@@ -3687,8 +3861,10 @@ labProtocolId 004WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2445
 view FastqRd1
 
@@ -3712,8 +3888,10 @@ labProtocolId 003WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2097
 view FastqRd2
 
@@ -3737,8 +3915,10 @@ labProtocolId 004WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2445
 view FastqRd2
 
@@ -3835,8 +4015,10 @@ labProtocolId 003WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2097
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapMinusRawSigRep1
 view MinusRawSignal
@@ -3861,8 +4043,10 @@ labProtocolId 004WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2445
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapMinusRawSigRep2
 view MinusRawSignal
@@ -3887,8 +4071,10 @@ labProtocolId 003WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2097
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep1
 view PlusRawSignal
@@ -3913,8 +4099,10 @@ labProtocolId 004WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2445
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep2
 view PlusRawSignal
@@ -3986,8 +4174,10 @@ labProtocolId 003WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4260
 view Spikeins
@@ -4013,8 +4203,10 @@ labProtocolId 004WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4201
 view Spikeins
@@ -4301,8 +4493,10 @@ labProtocolId 003C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3130
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep1
 view Alignments
@@ -4327,8 +4521,10 @@ labProtocolId 004C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3131
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep2
 view Alignments
@@ -4353,8 +4549,10 @@ labProtocolId 003C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3130
 view FastqRd1
 
@@ -4378,8 +4576,10 @@ labProtocolId 004C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3131
 view FastqRd1
 
@@ -4403,8 +4603,10 @@ labProtocolId 003C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3130
 view FastqRd2
 
@@ -4428,8 +4630,10 @@ labProtocolId 004C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3131
 view FastqRd2
 
@@ -4453,8 +4657,10 @@ labProtocolId 003C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3130
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -4479,8 +4685,10 @@ labProtocolId 004C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3131
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -4505,8 +4713,10 @@ labProtocolId 003C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3130
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -4531,8 +4741,10 @@ labProtocolId 004C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3131
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -4726,8 +4938,10 @@ labProtocolId 003C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4195
 view Spikeins
@@ -4753,8 +4967,10 @@ labProtocolId 004C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4292
 view Spikeins
@@ -4827,8 +5043,10 @@ labProtocolId 003C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1911
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1
 view Alignments
@@ -4853,8 +5071,10 @@ labProtocolId 004C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2441
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep2
 view Alignments
@@ -4928,8 +5148,10 @@ labProtocolId 003C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1911
 view FastqRd1
 
@@ -4953,8 +5175,10 @@ labProtocolId 004C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2441
 view FastqRd1
 
@@ -4978,8 +5202,10 @@ labProtocolId 003C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1911
 view FastqRd2
 
@@ -5003,8 +5229,10 @@ labProtocolId 004C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2441
 view FastqRd2
 
@@ -5100,8 +5328,10 @@ labProtocolId 003C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1911
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep1
 view MinusRawSignal
@@ -5126,8 +5356,10 @@ labProtocolId 004C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2441
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep2
 view MinusRawSignal
@@ -5152,8 +5384,10 @@ labProtocolId 003C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1911
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep1
 view PlusRawSignal
@@ -5178,8 +5412,10 @@ labProtocolId 004C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2441
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep2
 view PlusRawSignal
@@ -5251,8 +5487,10 @@ labProtocolId 003C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4276
 view Spikeins
@@ -5278,8 +5516,10 @@ labProtocolId 004C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4231
 view Spikeins
@@ -5352,8 +5592,10 @@ labProtocolId 003N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
 view Alignments
@@ -5378,8 +5620,10 @@ labProtocolId 004N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3236
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2
 view Alignments
@@ -5404,8 +5648,10 @@ labProtocolId 003N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3133
 view FastqRd1
 
@@ -5429,8 +5675,10 @@ labProtocolId 004N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3236
 view FastqRd1
 
@@ -5454,8 +5702,10 @@ labProtocolId 003N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3133
 view FastqRd2
 
@@ -5479,8 +5729,10 @@ labProtocolId 004N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3236
 view FastqRd2
 
@@ -5504,8 +5756,10 @@ labProtocolId 003N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -5530,8 +5784,10 @@ labProtocolId 004N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3236
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -5556,8 +5812,10 @@ labProtocolId 003N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -5582,8 +5840,10 @@ labProtocolId 004N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3236
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -5776,8 +6036,10 @@ labProtocolId 003N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4215
 view Spikeins
@@ -5803,8 +6065,10 @@ labProtocolId 004N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4209
 view Spikeins
@@ -5877,8 +6141,10 @@ labProtocolId 003N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1926
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1
 view Alignments
@@ -5903,8 +6169,10 @@ labProtocolId 004N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1927
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2
 view Alignments
@@ -5978,8 +6246,10 @@ labProtocolId 003N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1926
 view FastqRd1
 
@@ -6003,8 +6273,10 @@ labProtocolId 004N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1927
 view FastqRd1
 
@@ -6028,8 +6300,10 @@ labProtocolId 003N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1926
 view FastqRd2
 
@@ -6053,8 +6327,10 @@ labProtocolId 004N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1927
 view FastqRd2
 
@@ -6150,8 +6426,10 @@ labProtocolId 003N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1926
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep1
 view MinusRawSignal
@@ -6176,8 +6454,10 @@ labProtocolId 004N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1927
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep2
 view MinusRawSignal
@@ -6202,8 +6482,10 @@ labProtocolId 003N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1926
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep1
 view PlusRawSignal
@@ -6228,8 +6510,10 @@ labProtocolId 004N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1927
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep2
 view PlusRawSignal
@@ -6301,8 +6585,10 @@ labProtocolId 003N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4290
 view Spikeins
@@ -6328,8 +6614,10 @@ labProtocolId 004N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4235
 view Spikeins
@@ -6402,8 +6690,10 @@ labProtocolId 005WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2457
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1
 view Alignments
@@ -6428,8 +6718,10 @@ labProtocolId 006WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2407
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep2
 view Alignments
@@ -6454,8 +6746,10 @@ labProtocolId 005WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2457
 view FastqRd1
 
@@ -6479,8 +6773,10 @@ labProtocolId 006WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2407
 view FastqRd1
 
@@ -6504,8 +6800,10 @@ labProtocolId 005WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2457
 view FastqRd2
 
@@ -6529,8 +6827,10 @@ labProtocolId 006WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2407
 view FastqRd2
 
@@ -6554,8 +6854,10 @@ labProtocolId 005WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2457
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -6580,8 +6882,10 @@ labProtocolId 006WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2407
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -6606,8 +6910,10 @@ labProtocolId 005WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2457
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -6632,8 +6938,10 @@ labProtocolId 006WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2407
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -6826,8 +7134,10 @@ labProtocolId 005WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4226
 view Spikeins
@@ -6853,8 +7163,10 @@ labProtocolId 006WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4239
 view Spikeins
@@ -6927,8 +7239,10 @@ labProtocolId 005WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2098
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1
 view Alignments
@@ -6953,8 +7267,10 @@ labProtocolId 006WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1929
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep2
 view Alignments
@@ -7028,8 +7344,10 @@ labProtocolId 005WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2098
 view FastqRd1
 
@@ -7053,8 +7371,10 @@ labProtocolId 006WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1929
 view FastqRd1
 
@@ -7078,8 +7398,10 @@ labProtocolId 005WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2098
 view FastqRd2
 
@@ -7103,8 +7425,10 @@ labProtocolId 006WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1929
 view FastqRd2
 
@@ -7200,8 +7524,10 @@ labProtocolId 005WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2098
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -7226,8 +7552,10 @@ labProtocolId 006WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1929
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep2
 view MinusRawSignal
@@ -7252,8 +7580,10 @@ labProtocolId 005WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2098
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep1
 view PlusRawSignal
@@ -7278,8 +7608,10 @@ labProtocolId 006WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1929
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep2
 view PlusRawSignal
@@ -7351,8 +7683,10 @@ labProtocolId 005WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4223
 view Spikeins
@@ -7378,8 +7712,10 @@ labProtocolId 006WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4265
 view Spikeins
@@ -7452,8 +7788,10 @@ labProtocolId 006C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3221
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2
 view Alignments
@@ -7478,8 +7816,10 @@ labProtocolId 006C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3221
 view FastqRd1
 
@@ -7503,8 +7843,10 @@ labProtocolId 006C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3221
 view FastqRd2
 
@@ -7528,8 +7870,10 @@ labProtocolId 006C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3221
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -7554,8 +7898,10 @@ labProtocolId 006C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3221
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -7580,8 +7926,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3615
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamContigs
 view Contigs
@@ -7606,8 +7954,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3615
 view ExonsGencV3c
 
@@ -7631,8 +7981,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3615
 view GeneDeNovo
 
@@ -7656,8 +8008,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3615
 view GeneGencV3c
 
@@ -7681,8 +8035,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3615
 view Junctions
 
@@ -7730,8 +8086,10 @@ labProtocolId 006C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4185
 view Spikeins
@@ -7756,8 +8114,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3615
 view TranscriptDeNovo
 
@@ -7781,8 +8141,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3615
 view TranscriptGencV3c
 
@@ -7806,8 +8168,10 @@ labProtocolId 006C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1912
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapAlnRep2
 view Alignments
@@ -7832,8 +8196,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3616
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapContigs
 view Contigs
@@ -7858,8 +8224,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3616
 view ExonsGencV3c
 
@@ -7883,8 +8251,10 @@ labProtocolId 006C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1912
 view FastqRd1
 
@@ -7908,8 +8278,10 @@ labProtocolId 006C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1912
 view FastqRd2
 
@@ -7933,8 +8305,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3616
 view GeneDeNovo
 
@@ -7958,8 +8332,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3616
 view GeneGencV3c
 
@@ -7983,8 +8359,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3616
 view Junctions
 
@@ -8008,8 +8386,10 @@ labProtocolId 006C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1912
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapMinusRawSigRep2
 view MinusRawSignal
@@ -8034,8 +8414,10 @@ labProtocolId 006C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1912
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapPlusRawSigRep2
 view PlusRawSignal
@@ -8084,8 +8466,10 @@ labProtocolId 006C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4280
 view Spikeins
@@ -8110,8 +8494,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3616
 view TranscriptDeNovo
 
@@ -8135,8 +8521,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3616
 view TranscriptGencV3c
 
@@ -8160,8 +8548,10 @@ labProtocolId 006N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3227
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2
 view Alignments
@@ -8186,8 +8576,10 @@ labProtocolId 006N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3227
 view FastqRd1
 
@@ -8211,8 +8603,10 @@ labProtocolId 006N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3227
 view FastqRd2
 
@@ -8236,8 +8630,10 @@ labProtocolId 006N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3227
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -8262,8 +8658,10 @@ labProtocolId 006N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3227
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -8288,8 +8686,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3617
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamContigs
 view Contigs
@@ -8314,8 +8714,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3617
 view ExonsGencV3c
 
@@ -8339,8 +8741,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3617
 view GeneDeNovo
 
@@ -8364,8 +8768,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3617
 view GeneGencV3c
 
@@ -8389,8 +8795,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3617
 view Junctions
 
@@ -8438,8 +8846,10 @@ labProtocolId 006N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4287
 view Spikeins
@@ -8464,8 +8874,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3617
 view TranscriptDeNovo
 
@@ -8489,8 +8901,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3617
 view TranscriptGencV3c
 
@@ -8514,8 +8928,10 @@ labProtocolId 006N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1913
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapAlnRep2
 view Alignments
@@ -8540,8 +8956,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3618
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapContigs
 view Contigs
@@ -8566,8 +8984,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3618
 view ExonsGencV3c
 
@@ -8591,8 +9011,10 @@ labProtocolId 006N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1913
 view FastqRd1
 
@@ -8616,8 +9038,10 @@ labProtocolId 006N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1913
 view FastqRd2
 
@@ -8641,8 +9065,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3618
 view GeneDeNovo
 
@@ -8666,8 +9092,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3618
 view GeneGencV3c
 
@@ -8691,8 +9119,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3618
 view Junctions
 
@@ -8716,8 +9146,10 @@ labProtocolId 006N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1913
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapMinusRawSigRep2
 view MinusRawSignal
@@ -8742,8 +9174,10 @@ labProtocolId 006N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1913
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapPlusRawSigRep2
 view PlusRawSignal
@@ -8792,8 +9226,10 @@ labProtocolId 006N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4270
 view Spikeins
@@ -8818,8 +9254,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3618
 view TranscriptDeNovo
 
@@ -8843,8 +9281,10 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3618
 view TranscriptGencV3c
 
@@ -8868,8 +9308,10 @@ labProtocolId 011WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3486
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1
 view Alignments
@@ -8894,8 +9336,10 @@ labProtocolId 012WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3140
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep2
 view Alignments
@@ -8920,8 +9364,10 @@ labProtocolId 011WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3486
 view FastqRd1
 
@@ -8945,8 +9391,10 @@ labProtocolId 012WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3140
 view FastqRd1
 
@@ -8970,8 +9418,10 @@ labProtocolId 011WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3486
 view FastqRd2
 
@@ -8995,8 +9445,10 @@ labProtocolId 012WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3140
 view FastqRd2
 
@@ -9020,8 +9472,10 @@ labProtocolId 011WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3486
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -9046,8 +9500,10 @@ labProtocolId 012WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3140
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -9072,8 +9528,10 @@ labProtocolId 011WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3486
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -9098,8 +9556,10 @@ labProtocolId 012WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3140
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -9292,8 +9752,10 @@ labProtocolId 011WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4229
 view Spikeins
@@ -9319,8 +9781,10 @@ labProtocolId 012WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4256
 view Spikeins
@@ -9393,8 +9857,10 @@ labProtocolId 011WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1944
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1
 view Alignments
@@ -9419,8 +9885,10 @@ labProtocolId 012WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1957
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep2
 view Alignments
@@ -9494,8 +9962,10 @@ labProtocolId 011WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1944
 view FastqRd1
 
@@ -9519,8 +9989,10 @@ labProtocolId 012WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1957
 view FastqRd1
 
@@ -9544,8 +10016,10 @@ labProtocolId 011WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1944
 view FastqRd2
 
@@ -9569,8 +10043,10 @@ labProtocolId 012WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1957
 view FastqRd2
 
@@ -9666,8 +10142,10 @@ labProtocolId 011WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1944
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep1
 view MinusRawSignal
@@ -9692,8 +10170,10 @@ labProtocolId 012WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1957
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep2
 view MinusRawSignal
@@ -9718,8 +10198,10 @@ labProtocolId 011WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1944
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep1
 view PlusRawSignal
@@ -9744,8 +10226,10 @@ labProtocolId 012WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1957
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep2
 view PlusRawSignal
@@ -9817,8 +10301,10 @@ labProtocolId 011WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4193
 view Spikeins
@@ -9844,8 +10330,10 @@ labProtocolId 012WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4271
 view Spikeins
@@ -9918,8 +10406,10 @@ labProtocolId 012C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3223
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2
 view Alignments
@@ -9944,8 +10434,10 @@ labProtocolId 012C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3223
 view FastqRd1
 
@@ -9969,8 +10461,10 @@ labProtocolId 012C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3223
 view FastqRd2
 
@@ -9994,8 +10488,10 @@ labProtocolId 012C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3223
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -10020,8 +10516,10 @@ labProtocolId 012C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3223
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -10046,8 +10544,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3631
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamContigs
 view Contigs
@@ -10072,8 +10572,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3631
 view ExonsGencV3c
 
@@ -10097,8 +10599,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3631
 view GeneDeNovo
 
@@ -10122,8 +10626,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3631
 view GeneGencV3c
 
@@ -10147,8 +10653,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3631
 view Junctions
 
@@ -10219,8 +10727,10 @@ labProtocolId 012C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4222
 view Spikeins
@@ -10245,8 +10755,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3631
 view TranscriptDeNovo
 
@@ -10270,8 +10782,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3631
 view TranscriptGencV3c
 
@@ -10295,8 +10809,10 @@ labProtocolId 011C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1951
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1
 view Alignments
@@ -10321,8 +10837,10 @@ labProtocolId 012C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2447
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep2
 view Alignments
@@ -10396,8 +10914,10 @@ labProtocolId 011C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1951
 view FastqRd1
 
@@ -10421,8 +10941,10 @@ labProtocolId 012C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2447
 view FastqRd1
 
@@ -10446,8 +10968,10 @@ labProtocolId 011C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1951
 view FastqRd2
 
@@ -10471,8 +10995,10 @@ labProtocolId 012C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2447
 view FastqRd2
 
@@ -10568,8 +11094,10 @@ labProtocolId 011C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1951
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep1
 view MinusRawSignal
@@ -10594,8 +11122,10 @@ labProtocolId 012C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2447
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep2
 view MinusRawSignal
@@ -10620,8 +11150,10 @@ labProtocolId 011C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1951
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep1
 view PlusRawSignal
@@ -10646,8 +11178,10 @@ labProtocolId 012C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2447
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep2
 view PlusRawSignal
@@ -10719,8 +11253,10 @@ labProtocolId 011C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4211
 view Spikeins
@@ -10746,8 +11282,10 @@ labProtocolId 012C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4225
 view Spikeins
@@ -10820,8 +11358,10 @@ labProtocolId 011N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3234
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1
 view Alignments
@@ -10846,8 +11386,10 @@ labProtocolId 012N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3142
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep2
 view Alignments
@@ -10872,8 +11414,10 @@ labProtocolId 011N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3234
 view FastqRd1
 
@@ -10897,8 +11441,10 @@ labProtocolId 012N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3142
 view FastqRd1
 
@@ -10922,8 +11468,10 @@ labProtocolId 011N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3234
 view FastqRd2
 
@@ -10947,8 +11495,10 @@ labProtocolId 012N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3142
 view FastqRd2
 
@@ -10972,8 +11522,10 @@ labProtocolId 011N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3234
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -10998,8 +11550,10 @@ labProtocolId 012N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3142
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -11024,8 +11578,10 @@ labProtocolId 011N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3234
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -11050,8 +11606,10 @@ labProtocolId 012N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3142
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -11244,8 +11802,10 @@ labProtocolId 011N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4262
 view Spikeins
@@ -11271,8 +11831,10 @@ labProtocolId 012N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4268
 view Spikeins
@@ -11345,8 +11907,10 @@ labProtocolId 011N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1952
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1
 view Alignments
@@ -11371,8 +11935,10 @@ labProtocolId 012N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1916
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep2
 view Alignments
@@ -11446,8 +12012,10 @@ labProtocolId 011N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1952
 view FastqRd1
 
@@ -11471,8 +12039,10 @@ labProtocolId 012N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1916
 view FastqRd1
 
@@ -11496,8 +12066,10 @@ labProtocolId 011N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1952
 view FastqRd2
 
@@ -11521,8 +12093,10 @@ labProtocolId 012N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1916
 view FastqRd2
 
@@ -11618,8 +12192,10 @@ labProtocolId 011N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1952
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep1
 view MinusRawSignal
@@ -11644,8 +12220,10 @@ labProtocolId 012N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1916
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep2
 view MinusRawSignal
@@ -11670,8 +12248,10 @@ labProtocolId 011N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1952
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep1
 view PlusRawSignal
@@ -11696,8 +12276,10 @@ labProtocolId 012N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1916
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep2
 view PlusRawSignal
@@ -11769,8 +12351,10 @@ labProtocolId 011N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4264
 view Spikeins
@@ -11796,8 +12380,10 @@ labProtocolId 012N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4272
 view Spikeins
@@ -11870,8 +12456,10 @@ labProtocolId 013WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1
 view Alignments
@@ -11896,8 +12484,10 @@ labProtocolId 014WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3487
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2
 view Alignments
@@ -11922,8 +12512,10 @@ labProtocolId 013WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2409
 view FastqRd1
 
@@ -11947,8 +12539,10 @@ labProtocolId 014WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3487
 view FastqRd1
 
@@ -11972,8 +12566,10 @@ labProtocolId 013WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2409
 view FastqRd2
 
@@ -11997,8 +12593,10 @@ labProtocolId 014WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3487
 view FastqRd2
 
@@ -12022,8 +12620,10 @@ labProtocolId 013WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -12048,8 +12648,10 @@ labProtocolId 014WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3487
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -12074,8 +12676,10 @@ labProtocolId 013WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -12100,8 +12704,10 @@ labProtocolId 014WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3487
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -12294,8 +12900,10 @@ labProtocolId 013WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4242
 view Spikeins
@@ -12321,8 +12929,10 @@ labProtocolId 014WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4243
 view Spikeins
@@ -12395,8 +13005,10 @@ labProtocolId 013WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1958
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1
 view Alignments
@@ -12421,8 +13033,10 @@ labProtocolId 014WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1960
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep2
 view Alignments
@@ -12496,8 +13110,10 @@ labProtocolId 013WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1958
 view FastqRd1
 
@@ -12521,8 +13137,10 @@ labProtocolId 014WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1960
 view FastqRd1
 
@@ -12546,8 +13164,10 @@ labProtocolId 013WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1958
 view FastqRd2
 
@@ -12571,8 +13191,10 @@ labProtocolId 014WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1960
 view FastqRd2
 
@@ -12668,8 +13290,10 @@ labProtocolId 013WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1958
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep1
 view MinusRawSignal
@@ -12694,8 +13318,10 @@ labProtocolId 014WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1960
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep2
 view MinusRawSignal
@@ -12720,8 +13346,10 @@ labProtocolId 013WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1958
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep1
 view PlusRawSignal
@@ -12746,8 +13374,10 @@ labProtocolId 014WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1960
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep2
 view PlusRawSignal
@@ -12819,8 +13449,10 @@ labProtocolId 013WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4296
 view Spikeins
@@ -12846,8 +13478,10 @@ labProtocolId 014WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4277
 view Spikeins
@@ -12920,8 +13554,10 @@ labProtocolId 013C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3235
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1
 view Alignments
@@ -12946,8 +13582,10 @@ labProtocolId 014C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3228
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep2
 view Alignments
@@ -12972,8 +13610,10 @@ labProtocolId 013C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3235
 view FastqRd1
 
@@ -12997,8 +13637,10 @@ labProtocolId 014C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3228
 view FastqRd1
 
@@ -13022,8 +13664,10 @@ labProtocolId 013C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3235
 view FastqRd2
 
@@ -13047,8 +13691,10 @@ labProtocolId 014C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3228
 view FastqRd2
 
@@ -13072,8 +13718,10 @@ labProtocolId 013C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3235
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -13098,8 +13746,10 @@ labProtocolId 014C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3228
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -13124,8 +13774,10 @@ labProtocolId 013C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3235
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -13150,8 +13802,10 @@ labProtocolId 014C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3228
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -13345,8 +13999,10 @@ labProtocolId 013C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4238
 view Spikeins
@@ -13372,8 +14028,10 @@ labProtocolId 014C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4224
 view Spikeins
@@ -13446,8 +14104,10 @@ labProtocolId 013C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1959
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1
 view Alignments
@@ -13472,8 +14132,10 @@ labProtocolId 014C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1917
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep2
 view Alignments
@@ -13547,8 +14209,10 @@ labProtocolId 013C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1959
 view FastqRd1
 
@@ -13572,8 +14236,10 @@ labProtocolId 014C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1917
 view FastqRd1
 
@@ -13597,8 +14263,10 @@ labProtocolId 013C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1959
 view FastqRd2
 
@@ -13622,8 +14290,10 @@ labProtocolId 014C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1917
 view FastqRd2
 
@@ -13720,8 +14390,10 @@ labProtocolId 013C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1959
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapMinusRawSigRep1
 view MinusRawSignal
@@ -13746,8 +14418,10 @@ labProtocolId 014C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1917
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapMinusRawSigRep2
 view MinusRawSignal
@@ -13772,8 +14446,10 @@ labProtocolId 013C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1959
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapPlusRawSigRep1
 view PlusRawSignal
@@ -13798,8 +14474,10 @@ labProtocolId 014C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1917
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapPlusRawSigRep2
 view PlusRawSignal
@@ -13871,8 +14549,10 @@ labProtocolId 013C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4207
 view Spikeins
@@ -13898,8 +14578,10 @@ labProtocolId 014C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4263
 view Spikeins
@@ -13972,8 +14654,10 @@ labProtocolId 013N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
 view Alignments
@@ -13998,8 +14682,10 @@ labProtocolId 014N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3237
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2
 view Alignments
@@ -14024,8 +14710,10 @@ labProtocolId 013N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3143
 view FastqRd1
 
@@ -14049,8 +14737,10 @@ labProtocolId 014N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3237
 view FastqRd1
 
@@ -14074,8 +14764,10 @@ labProtocolId 013N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3143
 view FastqRd2
 
@@ -14099,8 +14791,10 @@ labProtocolId 014N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3237
 view FastqRd2
 
@@ -14124,8 +14818,10 @@ labProtocolId 013N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -14150,8 +14846,10 @@ labProtocolId 014N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3237
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -14176,8 +14874,10 @@ labProtocolId 013N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -14202,8 +14902,10 @@ labProtocolId 014N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3237
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -14396,8 +15098,10 @@ labProtocolId 013N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4217
 view Spikeins
@@ -14423,8 +15127,10 @@ labProtocolId 014N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4244
 view Spikeins
@@ -14497,8 +15203,10 @@ labProtocolId 013N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1918
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep1
 view Alignments
@@ -14523,8 +15231,10 @@ labProtocolId 014N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1961
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep2
 view Alignments
@@ -14598,8 +15308,10 @@ labProtocolId 013N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1918
 view FastqRd1
 
@@ -14623,8 +15335,10 @@ labProtocolId 014N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1961
 view FastqRd1
 
@@ -14648,8 +15362,10 @@ labProtocolId 013N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1918
 view FastqRd2
 
@@ -14673,8 +15389,10 @@ labProtocolId 014N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1961
 view FastqRd2
 
@@ -14770,8 +15488,10 @@ labProtocolId 013N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1918
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep1
 view MinusRawSignal
@@ -14796,8 +15516,10 @@ labProtocolId 014N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1961
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep2
 view MinusRawSignal
@@ -14822,8 +15544,10 @@ labProtocolId 013N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1918
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapPlusRawSigRep1
 view PlusRawSignal
@@ -14848,8 +15572,10 @@ labProtocolId 014N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1961
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapPlusRawSigRep2
 view PlusRawSignal
@@ -14921,8 +15647,10 @@ labProtocolId 013N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4283
 view Spikeins
@@ -14948,8 +15676,10 @@ labProtocolId 014N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4221
 view Spikeins
@@ -15022,8 +15752,10 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2555
 tableName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1
 view Alignments
@@ -15048,8 +15780,10 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2555
 view FastqRd1
 
@@ -15073,8 +15807,10 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2555
 view FastqRd2
 
@@ -15098,8 +15834,10 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2555
 tableName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -15124,8 +15862,10 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2555
 tableName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -15150,8 +15890,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3619
 tableName wgEncodeCshlLongRnaSeqHmecCellPamContigs
 view Contigs
@@ -15176,8 +15918,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3619
 view ExonsGencV3c
 
@@ -15201,8 +15945,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3619
 view GeneDeNovo
 
@@ -15226,8 +15972,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3619
 view GeneGencV3c
 
@@ -15251,8 +15999,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3619
 view Junctions
 
@@ -15300,8 +16050,10 @@ labProtocolId 036WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4196
 view Spikeins
@@ -15326,8 +16078,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3619
 view TranscriptDeNovo
 
@@ -15351,8 +16105,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3619
 view TranscriptGencV3c
 
@@ -15376,8 +16132,10 @@ labProtocolId 036WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2458
 tableName wgEncodeCshlLongRnaSeqHmecCellPapAlnRep1
 view Alignments
@@ -15402,8 +16160,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3620
 tableName wgEncodeCshlLongRnaSeqHmecCellPapContigs
 view Contigs
@@ -15428,8 +16188,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3620
 view ExonsGencV3c
 
@@ -15453,8 +16215,10 @@ labProtocolId 036WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2458
 view FastqRd1
 
@@ -15478,8 +16242,10 @@ labProtocolId 036WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2458
 view FastqRd2
 
@@ -15503,8 +16269,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3620
 view GeneDeNovo
 
@@ -15528,8 +16296,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3620
 view GeneGencV3c
 
@@ -15553,8 +16323,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3620
 view Junctions
 
@@ -15578,8 +16350,10 @@ labProtocolId 036WC+
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1 
+readType 2x76D
+replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2458
 tableName wgEncodeCshlLongRnaSeqHmecCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -15604,8 +16378,10 @@ labProtocolId 036WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2458
 tableName wgEncodeCshlLongRnaSeqHmecCellPapPlusRawSigRep1
 view PlusRawSignal
@@ -15654,8 +16430,10 @@ labProtocolId 036WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4200
 view Spikeins
@@ -15680,8 +16458,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3620
 view TranscriptDeNovo
 
@@ -15705,8 +16485,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3620
 view TranscriptGencV3c
 
@@ -15730,8 +16512,10 @@ labProtocolId 023WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2552
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1
 view Alignments
@@ -15756,8 +16540,10 @@ labProtocolId 024WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2556
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep2
 view Alignments
@@ -15782,8 +16568,10 @@ labProtocolId 023WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2552
 view FastqRd1
 
@@ -15807,8 +16595,10 @@ labProtocolId 024WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2556
 view FastqRd1
 
@@ -15832,8 +16622,10 @@ labProtocolId 023WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2552
 view FastqRd2
 
@@ -15857,8 +16649,10 @@ labProtocolId 024WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2556
 view FastqRd2
 
@@ -15882,8 +16676,10 @@ labProtocolId 023WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2552
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -15908,8 +16704,10 @@ labProtocolId 024WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2556
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -15934,8 +16732,10 @@ labProtocolId 023WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2552
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -15960,8 +16760,10 @@ labProtocolId 024WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2556
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -16154,8 +16956,10 @@ labProtocolId 023WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4198
 view Spikeins
@@ -16181,8 +16985,10 @@ labProtocolId 024WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4249
 view Spikeins
@@ -16255,8 +17061,10 @@ labProtocolId 023WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2459
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep1
 view Alignments
@@ -16281,8 +17089,10 @@ labProtocolId 024WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4051
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2
@@ -16357,8 +17167,10 @@ labProtocolId 023WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2459
 view FastqRd1
 
@@ -16382,8 +17194,10 @@ labProtocolId 024WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2460
 view FastqRd1
 
@@ -16407,8 +17221,10 @@ labProtocolId 023WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2459
 view FastqRd2
 
@@ -16432,8 +17248,10 @@ labProtocolId 024WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2460
 view FastqRd2
 
@@ -16529,8 +17347,10 @@ labProtocolId 023WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2459
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -16555,8 +17375,10 @@ labProtocolId 024WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2460
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep2
 view MinusRawSignal
@@ -16581,8 +17403,10 @@ labProtocolId 023WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2459
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapPlusRawSigRep1
 view PlusRawSignal
@@ -16607,8 +17431,10 @@ labProtocolId 024WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2460
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapPlusRawSigRep2
 view PlusRawSignal
@@ -16680,8 +17506,10 @@ labProtocolId 023WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4261
 view Spikeins
@@ -16707,8 +17535,10 @@ labProtocolId 024WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4246
 view Spikeins
@@ -16781,8 +17611,10 @@ labProtocolId 009WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3134
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1
 view Alignments
@@ -16807,8 +17639,10 @@ labProtocolId 010WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3135
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2
 view Alignments
@@ -16833,8 +17667,10 @@ labProtocolId 009WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3134
 view FastqRd1
 
@@ -16858,8 +17694,10 @@ labProtocolId 010WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3135
 view FastqRd1
 
@@ -16883,8 +17721,10 @@ labProtocolId 009WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3134
 view FastqRd2
 
@@ -16908,8 +17748,10 @@ labProtocolId 010WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3135
 view FastqRd2
 
@@ -16933,8 +17775,10 @@ labProtocolId 009WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3134
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -16959,8 +17803,10 @@ labProtocolId 010WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3135
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -16985,8 +17831,10 @@ labProtocolId 009WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3134
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -17011,8 +17859,10 @@ labProtocolId 010WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3135
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -17205,8 +18055,10 @@ labProtocolId 009WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4255
 view Spikeins
@@ -17232,8 +18084,10 @@ labProtocolId 010WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4269
 view Spikeins
@@ -17306,8 +18160,10 @@ labProtocolId 009WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1930
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1
 view Alignments
@@ -17332,8 +18188,10 @@ labProtocolId 010WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1914
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep2
 view Alignments
@@ -17407,8 +18265,10 @@ labProtocolId 009WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1930
 view FastqRd1
 
@@ -17432,8 +18292,10 @@ labProtocolId 010WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1914
 view FastqRd1
 
@@ -17457,8 +18319,10 @@ labProtocolId 009WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1930
 view FastqRd2
 
@@ -17482,8 +18346,10 @@ labProtocolId 010WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1914
 view FastqRd2
 
@@ -17579,8 +18445,10 @@ labProtocolId 009WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1930
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -17605,8 +18473,10 @@ labProtocolId 010WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1914
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep2
 view MinusRawSignal
@@ -17631,8 +18501,10 @@ labProtocolId 009WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1930
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep1
 view PlusRawSignal
@@ -17657,8 +18529,10 @@ labProtocolId 010WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1914
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep2
 view PlusRawSignal
@@ -17730,8 +18604,10 @@ labProtocolId 009WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4286
 view Spikeins
@@ -17757,8 +18633,10 @@ labProtocolId 010WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4204
 view Spikeins
@@ -17831,8 +18709,10 @@ labProtocolId 029C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3225
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3
 view Alignments
@@ -17857,8 +18737,10 @@ labProtocolId 029C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3225
 view FastqRd1
 
@@ -17882,8 +18764,10 @@ labProtocolId 029C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3225
 view FastqRd2
 
@@ -17907,8 +18791,10 @@ labProtocolId 029C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3225
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaMinusRawSigRep3
 view MinusRawSignal
@@ -17933,8 +18819,10 @@ labProtocolId 029C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3225
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep3
 view PlusRawSignal
@@ -17959,7 +18847,9 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3623
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamContigs
 view Contigs
@@ -17984,7 +18874,9 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3623
 view ExonsGencV3c
 
@@ -18008,7 +18900,9 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3623
 view GeneDeNovo
 
@@ -18032,7 +18926,9 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3623
 view GeneGencV3c
 
@@ -18056,7 +18952,9 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3623
 view Junctions
 
@@ -18127,8 +19025,10 @@ labProtocolId 029C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4199
 view Spikeins
@@ -18153,7 +19053,9 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3623
 view TranscriptDeNovo
 
@@ -18177,7 +19079,9 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3623
 view TranscriptGencV3c
 
@@ -18201,8 +19105,10 @@ labProtocolId 029C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2461
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3
 view Alignments
@@ -18227,8 +19133,10 @@ labProtocolId 030C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2462
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep4
 view Alignments
@@ -18302,8 +19210,10 @@ labProtocolId 029C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2461
 view FastqRd1
 
@@ -18327,8 +19237,10 @@ labProtocolId 030C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2462
 view FastqRd1
 
@@ -18352,8 +19264,10 @@ labProtocolId 029C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2461
 view FastqRd2
 
@@ -18377,8 +19291,10 @@ labProtocolId 030C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2462
 view FastqRd2
 
@@ -18474,8 +19390,10 @@ labProtocolId 029C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2461
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep3
 view MinusRawSignal
@@ -18500,8 +19418,10 @@ labProtocolId 030C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2462
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep4
 view MinusRawSignal
@@ -18526,8 +19446,10 @@ labProtocolId 029C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2461
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep3
 view PlusRawSignal
@@ -18552,8 +19474,10 @@ labProtocolId 030C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2462
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep4
 view PlusRawSignal
@@ -18625,8 +19549,10 @@ labProtocolId 029C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4257
 view Spikeins
@@ -18652,8 +19578,10 @@ labProtocolId 030C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4187
 view Spikeins
@@ -18726,8 +19654,10 @@ labProtocolId 029N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3136
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3
 view Alignments
@@ -18752,8 +19682,10 @@ labProtocolId 030N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3137
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4
 view Alignments
@@ -18778,8 +19710,10 @@ labProtocolId 029N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3136
 view FastqRd1
 
@@ -18803,8 +19737,10 @@ labProtocolId 030N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3137
 view FastqRd1
 
@@ -18828,8 +19764,10 @@ labProtocolId 029N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3136
 view FastqRd2
 
@@ -18853,8 +19791,10 @@ labProtocolId 030N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3137
 view FastqRd2
 
@@ -18878,8 +19818,10 @@ labProtocolId 029N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3136
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep3
 view MinusRawSignal
@@ -18904,8 +19846,10 @@ labProtocolId 030N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3137
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep4
 view MinusRawSignal
@@ -18930,8 +19874,10 @@ labProtocolId 029N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3136
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep3
 view PlusRawSignal
@@ -18956,8 +19902,10 @@ labProtocolId 030N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3137
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep4
 view PlusRawSignal
@@ -19150,8 +20098,10 @@ labProtocolId 029N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4284
 view Spikeins
@@ -19177,8 +20127,10 @@ labProtocolId 030N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4206
 view Spikeins
@@ -19251,8 +20203,10 @@ labProtocolId 029N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1931
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep3
 view Alignments
@@ -19277,8 +20231,10 @@ labProtocolId 030N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2408
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep4
 view Alignments
@@ -19352,8 +20308,10 @@ labProtocolId 029N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1931
 view FastqRd1
 
@@ -19377,8 +20335,10 @@ labProtocolId 030N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2408
 view FastqRd1
 
@@ -19402,8 +20362,10 @@ labProtocolId 029N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1931
 view FastqRd2
 
@@ -19427,8 +20389,10 @@ labProtocolId 030N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2408
 view FastqRd2
 
@@ -19524,8 +20488,10 @@ labProtocolId 029N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1931
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep3
 view MinusRawSignal
@@ -19550,8 +20516,10 @@ labProtocolId 030N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2408
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep4
 view MinusRawSignal
@@ -19576,8 +20544,10 @@ labProtocolId 029N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1931
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep3
 view PlusRawSignal
@@ -19602,8 +20572,10 @@ labProtocolId 030N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2408
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep4
 view PlusRawSignal
@@ -19675,8 +20647,10 @@ labProtocolId 029N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4293
 view Spikeins
@@ -19702,8 +20676,10 @@ labProtocolId 030N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4210
 view Spikeins
@@ -19776,8 +20752,10 @@ labProtocolId 001WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2397
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1
 view Alignments
@@ -19802,8 +20780,10 @@ labProtocolId 002WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2411
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep2
 view Alignments
@@ -19828,8 +20808,10 @@ labProtocolId 001WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2397
 view FastqRd1
 
@@ -19853,8 +20835,10 @@ labProtocolId 002WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2411
 view FastqRd1
 
@@ -19878,8 +20862,10 @@ labProtocolId 001WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2397
 view FastqRd2
 
@@ -19903,8 +20889,10 @@ labProtocolId 002WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2411
 view FastqRd2
 
@@ -19928,8 +20916,10 @@ labProtocolId 001WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2397
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -19954,8 +20944,10 @@ labProtocolId 002WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2411
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -19980,8 +20972,10 @@ labProtocolId 001WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2397
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -20006,8 +21000,10 @@ labProtocolId 002WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2411
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -20200,8 +21196,10 @@ labProtocolId 001WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4227
 view Spikeins
@@ -20227,8 +21225,10 @@ labProtocolId 002WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4294
 view Spikeins
@@ -20301,8 +21301,10 @@ labProtocolId 001WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2478
 tableName wgEncodeCshlLongRnaSeqK562CellPapAlnRep1
 view Alignments
@@ -20327,8 +21329,10 @@ labProtocolId 002WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1919
 tableName wgEncodeCshlLongRnaSeqK562CellPapAlnRep2
 view Alignments
@@ -20402,8 +21406,10 @@ labProtocolId 001WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2478
 view FastqRd1
 
@@ -20427,8 +21433,10 @@ labProtocolId 002WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1919
 view FastqRd1
 
@@ -20452,8 +21460,10 @@ labProtocolId 001WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2478
 view FastqRd2
 
@@ -20477,8 +21487,10 @@ labProtocolId 002WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1919
 view FastqRd2
 
@@ -20575,8 +21587,10 @@ labProtocolId 001WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2478
 tableName wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep1
 view MinusRawSignal
@@ -20601,8 +21615,10 @@ labProtocolId 002WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1919
 tableName wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep2
 view MinusRawSignal
@@ -20627,8 +21643,10 @@ labProtocolId 001WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2478
 tableName wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep1
 view PlusRawSignal
@@ -20653,8 +21671,10 @@ labProtocolId 002WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1919
 tableName wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep2
 view PlusRawSignal
@@ -20726,8 +21746,10 @@ labProtocolId 001WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4273
 view Spikeins
@@ -20753,8 +21775,10 @@ labProtocolId 002WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4230
 view Spikeins
@@ -21041,8 +22065,10 @@ labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2711
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3
 view Alignments
@@ -21067,8 +22093,10 @@ labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4
 view Alignments
@@ -21142,8 +22170,10 @@ labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2711
 view FastqRd1
 
@@ -21167,8 +22197,10 @@ labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2713
 view FastqRd1
 
@@ -21192,8 +22224,10 @@ labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2711
 view FastqRd2
 
@@ -21217,8 +22251,10 @@ labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2713
 view FastqRd2
 
@@ -21314,8 +22350,10 @@ labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2711
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3
 view MinusRawSignal
@@ -21340,8 +22378,10 @@ labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep4
 view MinusRawSignal
@@ -21366,8 +22406,10 @@ labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2711
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3
 view PlusRawSignal
@@ -21392,8 +22434,10 @@ labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4
 view PlusRawSignal
@@ -21419,8 +22463,10 @@ labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4189
 view Spikeins
@@ -21446,8 +22492,10 @@ labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4236
 view Spikeins
@@ -21520,8 +22568,10 @@ labProtocolId 001C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3144
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1
 view Alignments
@@ -21546,8 +22596,10 @@ labProtocolId 002C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3229
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep2
 view Alignments
@@ -21572,8 +22624,10 @@ labProtocolId 001C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3144
 view FastqRd1
 
@@ -21597,8 +22651,10 @@ labProtocolId 002C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3229
 view FastqRd1
 
@@ -21622,8 +22678,10 @@ labProtocolId 001C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3144
 view FastqRd2
 
@@ -21647,8 +22705,10 @@ labProtocolId 002C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3229
 view FastqRd2
 
@@ -21672,8 +22732,10 @@ labProtocolId 001C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3144
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -21698,8 +22760,10 @@ labProtocolId 002C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3229
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -21724,8 +22788,10 @@ labProtocolId 001C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3144
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -21750,8 +22816,10 @@ labProtocolId 002C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3229
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -21970,8 +23038,10 @@ labProtocolId 001C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4197
 view Spikeins
@@ -21997,8 +23067,10 @@ labProtocolId 002C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4279
 view Spikeins
@@ -22071,8 +23143,10 @@ labProtocolId 001C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1920
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1
 view Alignments
@@ -22097,8 +23171,10 @@ labProtocolId 002C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1876
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep2
 view Alignments
@@ -22172,8 +23248,10 @@ labProtocolId 001C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1920
 view FastqRd1
 
@@ -22197,8 +23275,10 @@ labProtocolId 002C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1876
 view FastqRd1
 
@@ -22222,8 +23302,10 @@ labProtocolId 001C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1920
 view FastqRd2
 
@@ -22247,8 +23329,10 @@ labProtocolId 002C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1876
 view FastqRd2
 
@@ -22344,8 +23428,10 @@ labProtocolId 001C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1920
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep1
 view MinusRawSignal
@@ -22370,8 +23456,10 @@ labProtocolId 002C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1876
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep2
 view MinusRawSignal
@@ -22396,8 +23484,10 @@ labProtocolId 001C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1920
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep1
 view PlusRawSignal
@@ -22422,8 +23512,10 @@ labProtocolId 002C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1876
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep2
 view PlusRawSignal
@@ -22495,8 +23587,10 @@ labProtocolId 001C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4295
 view Spikeins
@@ -22522,8 +23616,10 @@ labProtocolId 002C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4192
 view Spikeins
@@ -22596,8 +23692,10 @@ labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2706
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3
 view Alignments
@@ -22622,8 +23720,10 @@ labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2709
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4
 view Alignments
@@ -22697,8 +23797,10 @@ labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2706
 view FastqRd1
 
@@ -22722,8 +23824,10 @@ labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2709
 view FastqRd1
 
@@ -22747,8 +23851,10 @@ labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2706
 view FastqRd2
 
@@ -22772,8 +23878,10 @@ labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2709
 view FastqRd2
 
@@ -22869,8 +23977,10 @@ labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2706
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
 view MinusRawSignal
@@ -22895,8 +24005,10 @@ labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2709
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4
 view MinusRawSignal
@@ -22921,8 +24033,10 @@ labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2706
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3
 view PlusRawSignal
@@ -22947,8 +24061,10 @@ labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2709
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4
 view PlusRawSignal
@@ -22974,8 +24090,10 @@ labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4285
 view Spikeins
@@ -23001,8 +24119,10 @@ labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4228
 view Spikeins
@@ -23075,8 +24195,10 @@ labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2710
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3
 view Alignments
@@ -23101,8 +24223,10 @@ labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2712
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4
 view Alignments
@@ -23176,8 +24300,10 @@ labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2710
 view FastqRd1
 
@@ -23201,8 +24327,10 @@ labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2712
 view FastqRd1
 
@@ -23226,8 +24354,10 @@ labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2710
 view FastqRd2
 
@@ -23251,8 +24381,10 @@ labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2712
 view FastqRd2
 
@@ -23348,8 +24480,10 @@ labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2710
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3
 view MinusRawSignal
@@ -23374,8 +24508,10 @@ labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2712
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep4
 view MinusRawSignal
@@ -23400,8 +24536,10 @@ labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2710
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3
 view PlusRawSignal
@@ -23426,8 +24564,10 @@ labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 subId 2712
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4
 view PlusRawSignal
@@ -23453,8 +24593,10 @@ labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract total
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4291
 view Spikeins
@@ -23480,8 +24622,10 @@ labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract total
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4297
 view Spikeins
@@ -23554,8 +24698,10 @@ labProtocolId 001N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3145
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1
 view Alignments
@@ -23580,8 +24726,10 @@ labProtocolId 002N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3146
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep2
 view Alignments
@@ -23606,8 +24754,10 @@ labProtocolId 001N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3145
 view FastqRd1
 
@@ -23631,8 +24781,10 @@ labProtocolId 002N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3146
 view FastqRd1
 
@@ -23656,8 +24808,10 @@ labProtocolId 001N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3145
 view FastqRd2
 
@@ -23681,8 +24835,10 @@ labProtocolId 002N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3146
 view FastqRd2
 
@@ -23706,8 +24862,10 @@ labProtocolId 001N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3145
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -23732,8 +24890,10 @@ labProtocolId 002N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3146
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -23758,8 +24918,10 @@ labProtocolId 001N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3145
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -23784,8 +24946,10 @@ labProtocolId 002N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3146
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -23978,8 +25142,10 @@ labProtocolId 001N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4259
 view Spikeins
@@ -24005,8 +25171,10 @@ labProtocolId 002N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4233
 view Spikeins
@@ -24079,8 +25247,10 @@ labProtocolId 001N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1921
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1
 view Alignments
@@ -24105,8 +25275,10 @@ labProtocolId 002N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1946
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep2
 view Alignments
@@ -24180,8 +25352,10 @@ labProtocolId 001N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1921
 view FastqRd1
 
@@ -24205,8 +25379,10 @@ labProtocolId 002N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1946
 view FastqRd1
 
@@ -24230,8 +25406,10 @@ labProtocolId 001N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1921
 view FastqRd2
 
@@ -24255,8 +25433,10 @@ labProtocolId 002N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1946
 view FastqRd2
 
@@ -24352,8 +25532,10 @@ labProtocolId 001N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1921
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep1
 view MinusRawSignal
@@ -24378,8 +25560,10 @@ labProtocolId 002N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1946
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep2
 view MinusRawSignal
@@ -24404,8 +25588,10 @@ labProtocolId 001N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1921
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep1
 view PlusRawSignal
@@ -24430,8 +25616,10 @@ labProtocolId 002N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1946
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep2
 view PlusRawSignal
@@ -24503,8 +25691,10 @@ labProtocolId 001N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4203
 view Spikeins
@@ -24530,8 +25720,10 @@ labProtocolId 002N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4220
 view Spikeins
@@ -24604,8 +25796,10 @@ labProtocolId 015WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2714
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1
 view Alignments
@@ -24630,8 +25824,10 @@ labProtocolId 016WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2708
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep2
 view Alignments
@@ -24656,8 +25852,10 @@ labProtocolId 015WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2714
 view FastqRd1
 
@@ -24681,8 +25879,10 @@ labProtocolId 016WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2708
 view FastqRd1
 
@@ -24706,8 +25906,10 @@ labProtocolId 015WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2714
 view FastqRd2
 
@@ -24731,8 +25933,10 @@ labProtocolId 016WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2708
 view FastqRd2
 
@@ -24756,8 +25960,10 @@ labProtocolId 015WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2714
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -24782,8 +25988,10 @@ labProtocolId 016WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2708
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -24808,8 +26016,10 @@ labProtocolId 015WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2714
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -24834,8 +26044,10 @@ labProtocolId 016WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2708
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -25028,8 +26240,10 @@ labProtocolId 015WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4056
 view Spikeins
@@ -25055,8 +26269,10 @@ labProtocolId 016WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4241
 view Spikeins
@@ -25129,8 +26345,10 @@ labProtocolId 015WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2475
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1
 view Alignments
@@ -25155,8 +26373,10 @@ labProtocolId 016WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2476
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep2
 view Alignments
@@ -25230,8 +26450,10 @@ labProtocolId 015WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2475
 view FastqRd1
 
@@ -25255,8 +26477,10 @@ labProtocolId 016WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2476
 view FastqRd1
 
@@ -25280,8 +26504,10 @@ labProtocolId 015WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2475
 view FastqRd2
 
@@ -25305,8 +26531,10 @@ labProtocolId 016WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2476
 view FastqRd2
 
@@ -25402,8 +26630,10 @@ labProtocolId 015WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2475
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep1
 view MinusRawSignal
@@ -25428,8 +26658,10 @@ labProtocolId 016WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2476
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep2
 view MinusRawSignal
@@ -25454,8 +26686,10 @@ labProtocolId 015WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2475
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1
 view PlusRawSignal
@@ -25480,8 +26714,10 @@ labProtocolId 016WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2476
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep2
 view PlusRawSignal
@@ -25553,8 +26789,10 @@ labProtocolId 015WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4248
 view Spikeins
@@ -25580,8 +26818,10 @@ labProtocolId 016WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4234
 view Spikeins
@@ -25654,8 +26894,10 @@ labProtocolId 007WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2413
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1
 view Alignments
@@ -25680,8 +26922,10 @@ labProtocolId 008WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2414
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2
 view Alignments
@@ -25706,8 +26950,10 @@ labProtocolId 035WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2558
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
 view Alignments
@@ -25732,8 +26978,10 @@ labProtocolId 007WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2413
 view FastqRd1
 
@@ -25757,8 +27005,10 @@ labProtocolId 008WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2414
 view FastqRd1
 
@@ -25782,8 +27032,10 @@ labProtocolId 035WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2558
 view FastqRd1
 
@@ -25807,8 +27059,10 @@ labProtocolId 007WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2413
 view FastqRd2
 
@@ -25832,8 +27086,10 @@ labProtocolId 008WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2414
 view FastqRd2
 
@@ -25857,8 +27113,10 @@ labProtocolId 035WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2558
 view FastqRd2
 
@@ -25882,8 +27140,10 @@ labProtocolId 007WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2413
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -25908,8 +27168,10 @@ labProtocolId 008WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2414
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -25934,8 +27196,10 @@ labProtocolId 035WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2558
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
 view MinusRawSignal
@@ -25960,8 +27224,10 @@ labProtocolId 007WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2413
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -25986,8 +27252,10 @@ labProtocolId 008WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2414
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -26012,8 +27280,10 @@ labProtocolId 035WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2558
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
 view PlusRawSignal
@@ -26038,8 +27308,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3657
 tableName wgEncodeCshlLongRnaSeqNhekCellPamContigs
 view Contigs
@@ -26064,8 +27336,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3657
 view ExonsGencV3c
 
@@ -26089,8 +27363,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3657
 view GeneDeNovo
 
@@ -26114,8 +27390,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3657
 view GeneGencV3c
 
@@ -26139,8 +27417,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3657
 view Junctions
 
@@ -26233,8 +27513,10 @@ labProtocolId 007WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4216
 view Spikeins
@@ -26260,8 +27542,10 @@ labProtocolId 008WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4289
 view Spikeins
@@ -26286,8 +27570,10 @@ labProtocolId 035WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4240
 view Spikeins
@@ -26312,8 +27598,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3657
 view TranscriptDeNovo
 
@@ -26337,8 +27625,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3657
 view TranscriptGencV3c
 
@@ -26362,8 +27652,10 @@ labProtocolId 007WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1947
 tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1
 view Alignments
@@ -26388,8 +27680,10 @@ labProtocolId 008WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1948
 tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2
 view Alignments
@@ -26414,8 +27708,10 @@ labProtocolId 035WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 sex U
 spikeInPool 14
 subId 4055
@@ -26442,8 +27738,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3659
 tableName wgEncodeCshlLongRnaSeqNhekCellPapContigs
 view Contigs
@@ -26468,8 +27766,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3659
 view ExonsGencV3c
 
@@ -26493,8 +27793,10 @@ labProtocolId 007WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1947
 view FastqRd1
 
@@ -26518,8 +27820,10 @@ labProtocolId 008WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1948
 view FastqRd1
 
@@ -26543,8 +27847,10 @@ labProtocolId 035WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2467
 view FastqRd1
 
@@ -26568,8 +27874,10 @@ labProtocolId 007WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1947
 view FastqRd2
 
@@ -26593,8 +27901,10 @@ labProtocolId 008WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1948
 view FastqRd2
 
@@ -26618,8 +27928,10 @@ labProtocolId 035WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2467
 view FastqRd2
 
@@ -26643,8 +27955,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3659
 view GeneDeNovo
 
@@ -26668,8 +27982,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3659
 view GeneGencV3c
 
@@ -26693,8 +28009,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3659
 view Junctions
 
@@ -26718,8 +28036,10 @@ labProtocolId 007WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1947
 tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -26744,8 +28064,10 @@ labProtocolId 008WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1948
 tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2
 view MinusRawSignal
@@ -26770,8 +28092,10 @@ labProtocolId 035WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2467
 tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
 view MinusRawSignal
@@ -26796,8 +28120,10 @@ labProtocolId 007WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1947
 tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1
 view PlusRawSignal
@@ -26822,8 +28148,10 @@ labProtocolId 008WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 1948
 tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2
 view PlusRawSignal
@@ -26848,8 +28176,10 @@ labProtocolId 035WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2467
 tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
 view PlusRawSignal
@@ -26943,8 +28273,10 @@ labProtocolId 007WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4186
 view Spikeins
@@ -26970,8 +28302,10 @@ labProtocolId 008WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4194
 view Spikeins
@@ -26996,8 +28330,10 @@ labProtocolId 035WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4219
 view Spikeins
@@ -27022,8 +28358,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3659
 view TranscriptDeNovo
 
@@ -27047,8 +28385,10 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 5
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3659
 view TranscriptGencV3c
 
@@ -27072,8 +28412,10 @@ labProtocolId 027C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3147
 tableName wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3
 view Alignments
@@ -27098,8 +28440,10 @@ labProtocolId 027C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3147
 view FastqRd1
 
@@ -27123,8 +28467,10 @@ labProtocolId 027C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3147
 view FastqRd2
 
@@ -27148,8 +28494,10 @@ labProtocolId 027C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3147
 tableName wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaMinusRawSigRep3
 view MinusRawSignal
@@ -27174,8 +28522,10 @@ labProtocolId 027C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3147
 tableName wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaPlusRawSigRep3
 view PlusRawSignal
@@ -27200,8 +28550,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3652
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPamContigs
 view Contigs
@@ -27226,8 +28578,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3652
 view ExonsGencV3c
 
@@ -27251,8 +28605,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3652
 view GeneDeNovo
 
@@ -27276,8 +28632,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3652
 view GeneGencV3c
 
@@ -27301,8 +28659,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3652
 view Junctions
 
@@ -27350,8 +28710,10 @@ labProtocolId 027C-
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4245
 view Spikeins
@@ -27376,8 +28738,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3652
 view TranscriptDeNovo
 
@@ -27401,8 +28765,10 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3652
 view TranscriptGencV3c
 
@@ -27426,8 +28792,10 @@ labProtocolId 027C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2415
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3
 view Alignments
@@ -27452,8 +28820,10 @@ labProtocolId 028C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2416
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep4
 view Alignments
@@ -27527,8 +28897,10 @@ labProtocolId 027C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2415
 view FastqRd1
 
@@ -27552,8 +28924,10 @@ labProtocolId 028C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2416
 view FastqRd1
 
@@ -27577,8 +28951,10 @@ labProtocolId 027C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2415
 view FastqRd2
 
@@ -27602,8 +28978,10 @@ labProtocolId 028C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2416
 view FastqRd2
 
@@ -27699,8 +29077,10 @@ labProtocolId 027C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2415
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep3
 view MinusRawSignal
@@ -27725,8 +29105,10 @@ labProtocolId 028C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2416
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep4
 view MinusRawSignal
@@ -27751,8 +29133,10 @@ labProtocolId 027C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2415
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep3
 view PlusRawSignal
@@ -27777,8 +29161,10 @@ labProtocolId 028C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2416
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep4
 view PlusRawSignal
@@ -27850,8 +29236,10 @@ labProtocolId 027C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4214
 view Spikeins
@@ -27877,8 +29265,10 @@ labProtocolId 028C+
 localization cytosol
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4247
 view Spikeins
@@ -27951,8 +29341,10 @@ labProtocolId 027N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3231
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3
 view Alignments
@@ -27977,8 +29369,10 @@ labProtocolId 028N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3148
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep4
 view Alignments
@@ -28003,8 +29397,10 @@ labProtocolId 027N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3231
 view FastqRd1
 
@@ -28028,8 +29424,10 @@ labProtocolId 028N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3148
 view FastqRd1
 
@@ -28053,8 +29451,10 @@ labProtocolId 027N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3231
 view FastqRd2
 
@@ -28078,8 +29478,10 @@ labProtocolId 028N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3148
 view FastqRd2
 
@@ -28103,8 +29505,10 @@ labProtocolId 027N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3231
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaMinusRawSigRep3
 view MinusRawSignal
@@ -28129,8 +29533,10 @@ labProtocolId 028N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3148
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaMinusRawSigRep4
 view MinusRawSignal
@@ -28155,8 +29561,10 @@ labProtocolId 027N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3231
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep3
 view PlusRawSignal
@@ -28181,8 +29589,10 @@ labProtocolId 028N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3148
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep4
 view PlusRawSignal
@@ -28375,8 +29785,10 @@ labProtocolId 027N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4274
 view Spikeins
@@ -28402,8 +29814,10 @@ labProtocolId 028N-
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4267
 view Spikeins
@@ -28476,8 +29890,10 @@ labProtocolId 027N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2417
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3
 view Alignments
@@ -28502,8 +29918,10 @@ labProtocolId 028N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 sex U
 spikeInPool 14
 subId 4053
@@ -28579,8 +29997,10 @@ labProtocolId 027N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2417
 view FastqRd1
 
@@ -28604,8 +30024,10 @@ labProtocolId 028N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2468
 view FastqRd1
 
@@ -28629,8 +30051,10 @@ labProtocolId 027N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2417
 view FastqRd2
 
@@ -28654,8 +30078,10 @@ labProtocolId 028N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2468
 view FastqRd2
 
@@ -28751,8 +30177,10 @@ labProtocolId 027N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2417
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep3
 view MinusRawSignal
@@ -28777,8 +30205,10 @@ labProtocolId 028N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2468
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep4
 view MinusRawSignal
@@ -28803,8 +30233,10 @@ labProtocolId 027N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2417
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep3
 view PlusRawSignal
@@ -28829,8 +30261,10 @@ labProtocolId 028N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2468
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep4
 view PlusRawSignal
@@ -28902,8 +30336,10 @@ labProtocolId 027N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4237
 view Spikeins
@@ -28929,8 +30365,10 @@ labProtocolId 028N+
 localization nucleus
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4218
 view Spikeins
@@ -29003,8 +30441,10 @@ labProtocolId 033WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2557
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1
 view Alignments
@@ -29029,8 +30469,10 @@ labProtocolId 034WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2554
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep2
 view Alignments
@@ -29055,8 +30497,10 @@ labProtocolId 033WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2557
 view FastqRd1
 
@@ -29080,8 +30524,10 @@ labProtocolId 034WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2554
 view FastqRd1
 
@@ -29105,8 +30551,10 @@ labProtocolId 033WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2557
 view FastqRd2
 
@@ -29130,8 +30578,10 @@ labProtocolId 034WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2554
 view FastqRd2
 
@@ -29155,8 +30605,10 @@ labProtocolId 033WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2557
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -29181,8 +30633,10 @@ labProtocolId 034WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2554
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -29207,8 +30661,10 @@ labProtocolId 033WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2557
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -29233,8 +30689,10 @@ labProtocolId 034WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 2554
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -29427,8 +30885,10 @@ labProtocolId 033WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4281
 view Spikeins
@@ -29454,8 +30914,10 @@ labProtocolId 034WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4275
 view Spikeins
@@ -29528,8 +30990,10 @@ labProtocolId 033WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4052
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
@@ -29555,8 +31019,10 @@ labProtocolId 034WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4054
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2
@@ -29631,8 +31097,10 @@ labProtocolId 033WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2469
 view FastqRd1
 
@@ -29656,8 +31124,10 @@ labProtocolId 034WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2470
 view FastqRd1
 
@@ -29681,8 +31151,10 @@ labProtocolId 033WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2469
 view FastqRd2
 
@@ -29706,8 +31178,10 @@ labProtocolId 034WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2470
 view FastqRd2
 
@@ -29803,8 +31277,10 @@ labProtocolId 033WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2469
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -29829,8 +31305,10 @@ labProtocolId 034WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2470
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep2
 view MinusRawSignal
@@ -29855,8 +31333,10 @@ labProtocolId 033WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2469
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep1
 view PlusRawSignal
@@ -29881,8 +31361,10 @@ labProtocolId 034WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2470
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep2
 view PlusRawSignal
@@ -29954,8 +31436,10 @@ labProtocolId 033WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4278
 view Spikeins
@@ -29981,8 +31465,10 @@ labProtocolId 034WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4266
 view Spikeins
@@ -30055,10 +31541,13 @@ labProtocolId 019WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3149
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1
+treatment retinoic acid
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2
@@ -30081,8 +31570,10 @@ labProtocolId 020WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3151
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2
 view Alignments
@@ -30107,8 +31598,10 @@ labProtocolId 019WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3149
 view FastqRd1
 
@@ -30132,8 +31625,10 @@ labProtocolId 020WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3151
 view FastqRd1
 
@@ -30157,8 +31652,10 @@ labProtocolId 019WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3149
 view FastqRd2
 
@@ -30182,8 +31679,10 @@ labProtocolId 020WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3151
 view FastqRd2
 
@@ -30207,8 +31706,10 @@ labProtocolId 019WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3149
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep1
 view MinusRawSignal
@@ -30233,8 +31734,10 @@ labProtocolId 020WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3151
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
@@ -30259,8 +31762,10 @@ labProtocolId 019WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3149
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep1
 view PlusRawSignal
@@ -30285,8 +31790,10 @@ labProtocolId 020WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 subId 3151
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
@@ -30433,8 +31940,10 @@ labProtocolId 019WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4252
 view Spikeins
@@ -30460,8 +31969,10 @@ labProtocolId 020WC-
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4202
 view Spikeins
@@ -30534,8 +32045,10 @@ labProtocolId 019WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2341
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1
 view Alignments
@@ -30560,8 +32073,10 @@ labProtocolId 020WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep2
 view Alignments
@@ -30635,8 +32150,10 @@ labProtocolId 019WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2341
 view FastqRd1
 
@@ -30660,8 +32177,10 @@ labProtocolId 020WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2418
 view FastqRd1
 
@@ -30685,8 +32204,10 @@ labProtocolId 019WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2341
 view FastqRd2
 
@@ -30710,8 +32231,10 @@ labProtocolId 020WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2418
 view FastqRd2
 
@@ -30807,8 +32330,10 @@ labProtocolId 019WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2341
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -30833,8 +32358,10 @@ labProtocolId 020WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2
 view MinusRawSignal
@@ -30859,8 +32386,10 @@ labProtocolId 019WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2341
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1
 view PlusRawSignal
@@ -30885,8 +32414,10 @@ labProtocolId 020WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSignal
@@ -30958,8 +32489,10 @@ labProtocolId 019WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4282
 view Spikeins
@@ -30985,8 +32518,10 @@ labProtocolId 020WC+
 localization cell
 origAssembly hg19
 project wgEncode
+readType 2x76D
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4232
 view Spikeins
@@ -31039,4 +32574,4 @@ rnaExtract longPolyA
 subId 3663
 view TranscriptGencV3c
 
-# MAGIC: -802386411
+# MAGIC: -1066783726

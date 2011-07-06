@@ -3975,16 +3975,18 @@ static void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, 
 struct bedPlusLabel *bpl = item;
 struct bed *bed = item;
 int heightPer = tg->heightPer;
-int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
-int w;
+int s = max(bed->chromStart, winStart), e = min(bed->chromEnd, winEnd);
+if (s > e)
+    return;
+int x1 = round((s-winStart)*scale) + xOff;
+int x2 = round((e-winStart)*scale) + xOff;
+int w = x2 - x1;
+if (w < 1)
+    w = 1;
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
 
-w = x2-x1;
-if (w < 1)
-    w = 1;
 hvGfxBox(hvg, x1, y, w, heightPer, color);
 
 // In full mode, draw bpl->label to the left of item:
@@ -4299,7 +4301,6 @@ if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
     {
     if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
         || startsWith("wgEncodeGencodeComp", tg->tdb->track)
-        || startsWith("wgEncodeGencodeFull", tg->tdb->track)
         || startsWith("wgEncodeGencode2wayConsPseudo", tg->tdb->track)
         || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
         dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
@@ -12783,7 +12784,7 @@ registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeBasicV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeFullV7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeCompV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodePseudoGeneV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencode2wayConsPseudoV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodePolyaV7", gencodeGeneMethods);

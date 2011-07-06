@@ -403,7 +403,7 @@ tier 3
 organism human
 description adrenal gland, donor H12803N, age 88, caucasian, DNA extract
 tissue Adrenal gland
-lineage mesoderm, ectoderm
+lineage ectoderm, mesoderm
 # http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 karyotype normal
 sex F
@@ -4206,7 +4206,6 @@ color 65,105,225
 sex U
 protocol Stam:Mesoderm_Stam_protocol.pdf
 
-#Missing VendorName and termId
 term Myocyte
 tag MYOCYTE
 type Cell Line
@@ -4220,10 +4219,9 @@ vendorName Hardison
 orderUrl http://bmb.psu.edu/directory/rch8
 color 139,69,19
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol PSU(Hardison):Myocyte_Hardison_protocol.pdf
 
-#missing VendorId
 term Muscle
 tag MUSCLE
 type Cell Line
@@ -4239,6 +4237,7 @@ termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 139,69,19
 sex U
+#Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
 term NIH-3T3
@@ -4258,7 +4257,6 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7146
 color 86,180,233
 sex M
 protocol Stam:NIH-3T3_Stam_protocol.pdf
-
 
 # shortened term
 term OlfactBulb
@@ -8409,13 +8407,13 @@ term FastqRd1
 tag FASTQRD1
 type view
 label FastqRd1
-description Raw sequence with phred33 quality scores Read 1
+description Raw sequence with Phred33 quality scores Read 1
 
 term FastqRd2
 tag FASTQRD2
 type view
 label FastqRd2
-description Raw sequence with phred33 quality scores Read 2
+description Raw sequence with Phred33 quality scores Read 2
 
 term FiltTransfrags
 tag FILTTRANSFRAGS
@@ -8876,7 +8874,7 @@ description C57 black 6, the most common inbred strain of laboratory mouse
 term CD-1
 tag CD1
 type strain
-description Multipurpose mouse used for safety and efficacy testing, aging, surgical model, pseudopregnancy
+description Multipurpose mouse used for safety testing, aging studies, surgical models and pseudopregnancy.
 
 term NIH/Swiss
 tag NIHS
@@ -9872,7 +9870,6 @@ projectName UNC-Giddings
 #       At End:
 #         dccInternalNotes:910  parentTable:920  sourceObj:921 tableName:970  fileName:980
 #         fileIndex:990 category:991
-
 
 term typeOfTerm
 tag TYPEOFTERM
