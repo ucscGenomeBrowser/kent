@@ -239,7 +239,7 @@ else if (cartVarExists(cart, hgHubDoClear))
     doClearHub(cart);
 else
     {
-    cartWebStart(cart, NULL, pageTitle);
+    cartWebStart(cart, NULL, "%s", pageTitle);
 
     printf(
        "<P>Track data hubs are collections of tracks from outside of UCSC that can be imported into "
