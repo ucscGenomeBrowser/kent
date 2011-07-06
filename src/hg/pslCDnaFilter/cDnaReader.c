@@ -38,24 +38,6 @@ else
 return psl;
 }
 
-static void addCdnaAln(struct cDnaReader *reader, struct cDnaQuery *cdna,
-                       struct psl *psl)
-/* add a cDNA alignment to the cDnaQuery */
-{
-struct cDnaAlign *aln = cDnaAlignNew(cdna, psl);
-
-/* set haplotype region flags, if have hap info */
-if (reader->hapRegions != NULL)
-    {
-    aln->isHapChrom = hapRegionsIsHapChrom(reader->hapRegions, psl->tName);
-    if (!aln->isHapChrom)
-        aln->isHapRegion = hapRegionsInHapRegion(reader->hapRegions, psl->tName,
-                                                 psl->tStart, psl->tEnd);
-    if (aln->isHapChrom || aln->isHapRegion)
-        cdna->haveHaps = TRUE;
-    }
-}
-
 boolean cDnaReaderNext(struct cDnaReader *reader)
 /* load the next set of cDNA alignments, return FALSE if no more */
 {
@@ -76,11 +58,11 @@ if (psl == NULL)
 if (reader->polyASizes != NULL)
     polyASize = hashFindVal(reader->polyASizes, psl->qName);
 cdna = reader->cdna = cDnaQueryNew(reader->opts, &reader->stats, psl, polyASize);
-addCdnaAln(reader, cdna, psl);
+cDnaAlignNew(cdna, psl);
 
 /* remaining alignments for same sequence */
 while (((psl = readNextPsl(reader)) != NULL) && sameString(psl->qName, cdna->id))
-    addCdnaAln(reader, cdna, psl);
+    cDnaAlignNew(cdna, psl);
 
 reader->nextCDnaPsl = psl;  /* save for next time (or NULL) */
 return TRUE;
@@ -113,9 +95,3 @@ if (reader != NULL)
     *readerPtr = NULL;
     }
 }
-
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */

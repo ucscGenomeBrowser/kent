@@ -40,9 +40,3 @@ void cDnaStatsPrint(struct cDnaStats *stats, int level);
 /* print stats if at verbose level or above */
 
 #endif
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */
-

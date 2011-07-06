@@ -3979,6 +3979,11 @@ int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
 
+// if x1 is calulated to be way off to the left, 
+// i.e. it has a negative number that will cause the item has a starting position off the screen,
+// this may cause a problem that the item does not get displayed, so set x1 to 0 if it is negative.
+if (x1 < 0 ) x1 = 0;
+
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
 
@@ -9428,17 +9433,18 @@ if (name == NULL)
 return name;
 }
 
-void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele, int trackY, int trackHeight)
+void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele, int itemY, int lineHeight)
 /* put text anchored on right upper corner, doing separate colors if needed */
 {
-boolean snapLeft = FALSE;
-int textX = x1 - width;
-snapLeft = (textX < insideX);
+int textX = x1 - width - 2;
+boolean snapLeft = (textX < insideX);
+int clipYBak = 0, clipHeightBak = 0;
 if (snapLeft)        /* Snap label to the left. */
     {
+    hvGfxGetClip(hvg, NULL, &clipYBak, NULL, &clipHeightBak);
     hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, leftLabelX, trackY, insideWidth, trackHeight);
-    x1 = leftLabelX;
+    hvGfxSetClip(hvg, leftLabelX, itemY, insideWidth, lineHeight);
+    textX = leftLabelX;
     width = leftLabelWidth-1;
     }
 
@@ -9453,16 +9459,16 @@ if (sameString(display, "freq"))
        allC = darkGreenColor;
     else if (startsWith("T", allele))
        allC = MG_MAGENTA;
-    hvGfxTextRight(hvg, x1, y, width, height, allC, font, allele);
+    hvGfxTextRight(hvg, textX, y, width, height, allC, font, allele);
     }
 else
     {
-    hvGfxTextRight(hvg, x1, y, width, height, color, font, allele);
+    hvGfxTextRight(hvg, textX, y, width, height, color, font, allele);
     }
 if (snapLeft)
     {
     hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, insideX, trackY, insideWidth, trackHeight);
+    hvGfxSetClip(hvg, insideX, clipYBak, insideWidth, clipHeightBak);
     }
 }
 
@@ -9564,7 +9570,7 @@ if (sameString(display, "freq"))
         complement(allele[0], strlen(allele[0]));
     if (revCmplDisp)
         reverseComplement(allele[0], strlen(allele[0]));
-    pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[0], y, tg->height);
+    pgSnpTextRight(display, hvg, x1, yCopy, allWidth, allHeight, color, font, allele[0], y, tg->lineHeight);
     }
 else
     {
@@ -9584,7 +9590,7 @@ if (cnt > 1)
             complement(allele[1], strlen(allele[1]));
         if (revCmplDisp)
             reverseComplement(allele[1], strlen(allele[1]));
-        pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[1], y, tg->height);
+        pgSnpTextRight(display, hvg, x1, yCopy, allWidth, allHeight, color, font, allele[1], y, tg->lineHeight);
         }
     else
         {
@@ -10913,7 +10919,7 @@ boolean doThisOmimEntry(struct track *tg, char *omimId)
 /* check if the specific class of this OMIM entry is selected by the user */
 {
 boolean doIt;
-
+boolean gotClassLabel;
 char labelName[255];
 boolean doClass1 = FALSE;
 boolean doClass2 = FALSE;
@@ -10927,8 +10933,13 @@ struct hashEl *label;
 safef(labelName, sizeof(labelName), "%s.label", tg->table);
 omimLocationLabels = cartFindPrefix(cart, labelName);
 
-/* if user has not made selection(s) from the filter, enable every item */
-if (omimLocationLabels == NULL) return(TRUE);
+gotClassLabel = FALSE;
+for (label = omimLocationLabels; label != NULL; label = label->next)
+	{
+	if (strstr(label->name, "class") != NULL) gotClassLabel = TRUE;
+	}
+/* if user has not made selection(s) from the phenotype class filter, enable every item */
+if (!gotClassLabel) return(TRUE);	
 
 /* check which classes have been selected */
 for (label = omimLocationLabels; label != NULL; label = label->next)
@@ -12192,15 +12203,18 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack) &&
 	( limitedVisFromComposite(subtrack) != tvHide))
 	{
-	lastTime = clock1000();
-	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
-	    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->track, track->track);
-        subtrack->loadItems(subtrack);
-	if (measureTiming)
+	if (!subtrack->parallelLoading)
 	    {
-	    thisTime = clock1000();
-	    subtrack->loadTime = thisTime - lastTime;
-	    lastTime = thisTime;
+	    lastTime = clock1000();
+	    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
+		errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->track, track->track);
+	    subtrack->loadItems(subtrack);
+	    if (measureTiming)
+		{
+		thisTime = clock1000();
+		subtrack->loadTime = thisTime - lastTime;
+		lastTime = thisTime;
+		}
 	    }
 	}
     else

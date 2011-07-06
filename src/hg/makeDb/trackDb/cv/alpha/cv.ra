@@ -2041,22 +2041,22 @@ sex U
 tier 3
 protocol Stam:Stam_15_protocols.pdf
 
-term HEK293(b)
-tag HEK293b
-type Cell Line
-organism human
-description embryonic kidney (alternate protocol). (PMID: 11967234)
-tissue Kidney
-vendorName ATCC
-vendorId CRL-1573
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
-lineage mesoderm
-karyotype cancer
-termId BTO:0000007
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
-sex U
-tier 3
-protocol Snyder:HEK293b_Snyder_protocol.pdf
+#term HEK293(b)
+#tag HEK293b
+#type Cell Line
+#organism human
+#description embryonic kidney (alternate protocol). (PMID: 11967234)
+#tissue Kidney
+#vendorName ATCC
+#vendorId CRL-1573
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
+#lineage mesoderm
+#karyotype cancer
+#termId BTO:0000007
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
+#sex U
+#tier 3
+#protocol Snyder:HEK293b_Snyder_protocol.pdf
 
 term Hepatocytes
 tag HEPATO
@@ -8329,7 +8329,7 @@ term Alignability
 tag ALIGNABI
 type view
 label Alignability
-description Displays how uniquely k-mer sequences align to a region of the genome
+description The CRG Alignability tracks display how uniquely k-mer sequences align to a region of the genome. To generate the data, the GEM-mappability program has been employed. The method is equivalent to mapping sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts to produce these tracks) back to the genome using the GEM mapper aligner (up to 2 mismatches were allowed in this case). For each window, a mapability score was computed (S = 1/(number of matches found in the genome): S=1 means one match in the genome, S=0.5 is two matches in the genome, and so on). The CRG Alignability tracks were generated independently of the ENCODE project, in the framework of the GEM (GEnome Multitool) project. 
 
 term Alignments
 tag ALN
@@ -8377,25 +8377,25 @@ term Fasta3p
 tag FASTA3P
 type view
 label Fasta3p
-description Fasta3p
+description 3 prime RNA FASTA
 
 term Fasta5p
 tag FASTA5P
 type view
 label Fasta5p
-description Fasta5p
+description 5 prime RNA FASTA
 
 term FastaRd1
 tag FASTARD1
 type view
 label FastaRd1
-description Fasta Read 1
+description FASTA Read 1
 
 term FastaRd2
 tag FASTARD2
 type view
 label FastaRd2
-description Fasta Read 2
+description FASTA Read 2
 
 term Fastq
 tag FASTQ
@@ -8510,13 +8510,13 @@ term RawData
 tag RAW
 type view
 label Raw_Data
-description Raw Data
+description Sequence and quality files
 
 term RawData2
 tag RAW2
 type view
 label Raw Data 2
-description Raw Data 2
+description Sequence and quality files
 
 term RawSignal
 tag RAWSIG
@@ -8570,7 +8570,7 @@ term Splices
 tag SPLICES
 type view
 label Splices
-description Splices
+description Subset of aligned reads that cross splice junctions
 
 term TranscriptDeNovo
 tag TRANSDENOVO
@@ -8600,13 +8600,13 @@ term Uniqueness
 tag UNQ
 type view
 label Uniqueness
-description Uniqueness
+description The Duke uniqueness tracks display how unique is each sequence on the positive strand starting at a particular base and of a particular length. Thus, the 20 bp track reflects the uniqueness of all 20 base sequences with the score being assigned to the first base of the sequence. Scores are normalized to between 0 and 1 with 1 representing a completely unique sequence and 0 representing the sequence occurs more than 4 times in the genome (excluding chrN_random and alternative haplotypes). A score of 0.5 indicates the sequence occurs exactly twice, likewise 0.33 for three times and 0.25 for four times. The Duke uniqueness tracks were generated for the ENCODE project as tools in the development of the Open Chromatin: DNaseI HS, FAIRE, TFBS and Synthesis tracks. 
 
 term Validation
 tag VALIDATION
 type view
 label Validation
-description Validation
+description Documents used for the verification of experimental results
 
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type
