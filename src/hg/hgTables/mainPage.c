@@ -997,7 +997,7 @@ cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
 /* Hidden form for jumping to track hub manager CGI. */
-hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgHubConnectName());
+hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
