@@ -4304,7 +4304,6 @@ if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
     {
     if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
         || startsWith("wgEncodeGencodeComp", tg->tdb->track)
-        || startsWith("wgEncodeGencodeFull", tg->tdb->track)
         || startsWith("wgEncodeGencode2wayConsPseudo", tg->tdb->track)
         || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
         dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
@@ -12788,7 +12787,7 @@ registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeBasicV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeFullV7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeCompV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodePseudoGeneV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencode2wayConsPseudoV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodePolyaV7", gencodeGeneMethods);
