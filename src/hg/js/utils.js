@@ -2151,14 +2151,16 @@ function findTracksMdbSelectPlusMinus(obj, rowNum)
 { // Now [+][-] mdb var rows with javascript rather than cgi roundtrip
   // Will remove row or clone new one.  Complication is that 'advanced' and 'files' tab duplicate the tables!
 
-    var objId = $(obj).attr('id');
+ var objId = $(obj).attr('id');
     rowNum = objId.substring(objId.length - 1);
     if ($(obj).val() == '+') {
         var buttons = $("input#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
         if (buttons.length > 0) {
+            var table = null;
             $(buttons).each(function (i) {
                 var tr = $(this).parents('tr.mdbSelect')[0];
                 if (tr != undefined) {
+                    table = $(tr).parents('table')[0];
                     if(newJQuery) {
                         var newTr = $(tr).clone();
                         var element = $(newTr).find("select.mdbVar")[0];
@@ -2175,8 +2177,9 @@ function findTracksMdbSelectPlusMinus(obj, rowNum)
                     } else
                         $(tr).after( $(tr).clone() );
                 }
-                findTracksMdbSelectRowsNormalize($(tr).parents('table')[0]); // magic is in this function
             });
+            if (table)
+                findTracksMdbSelectRowsNormalize(table); // magic is in this function
             return false;
         }
     } else { // == '-'
@@ -2205,6 +2208,7 @@ function findTracksMdbSelectPlusMinus(obj, rowNum)
 function findTracksMdbSelectRowsNormalize(table)
 { // Called when [-][+] buttons changed the number of mdbSelects in findTracks\
   // Will walk through each row and get the numberings of addressable elements correct.
+    //var table = $('table#'+tableId);
     if (table != undefined) {
         var mdbSelectRows = $(table).find('tr.mdbSelect');
         var needMinus = (mdbSelectRows.length > 2);
@@ -2215,8 +2219,9 @@ function findTracksMdbSelectRowsNormalize(table)
             var plusButton = $(this).find("input[value='+']")[0];
             if (plusButton != undefined) {
                 $(plusButton).attr('id',"plusButton"+rowNum);
-                $(plusButton).unbind('click')
-                $(plusButton).click(function() { return findTracksMdbSelectPlusMinus($(plusButton), rowNum); });
+                // rebinding click appears to be not needed and screws up IE as well.
+                //$(plusButton).unbind('click')
+                //$(plusButton).click(function() { return findTracksMdbSelectPlusMinus($(plusButton), rowNum); });
                 var minusButton = $(this).find("input[value='-']")[0];
                 if (needMinus) {
                     if (minusButton == undefined) {
