@@ -352,6 +352,7 @@ organism human
 description aortic smooth muscle cells
 tissue Heart
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2571
 orderUrl http://www.lonza.com/
@@ -1028,7 +1029,7 @@ term BJ-5ta
 tag BJ5TA
 type Cell Line
 organism human
-description hTERT/BJ skin fibroblasts expressing T antigens of SV40 virus. (PMID: 9916802)
+description BJ foreskin fibroblast transfected with the pGRN145 hTERT, expressing T antigens of SV40 virus.(PMID: 9916802)
 tissue Skin
 vendorName ATCC
 vendorId CRL-4001
@@ -1311,6 +1312,7 @@ organism human
 description Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 tissue Blood
 lineage mesoderm
+karyotype unknown
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
 vendorName Coriell
 vendorId GM10847
