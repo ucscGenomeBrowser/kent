@@ -3,13 +3,13 @@
 # encodeReport.pl - use metaDb tables to generate report of submitted and released experiments
 #
 # Reporting formats:
-# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID, DCC_Accession
+# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID, DCC_Accession, Lab_IDs
 
-# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID, DCC_Accession
+# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID, DCC_Accession, Lab_IDs
 # Briefly was:
 # DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Submission Ids, Accession, Assembly
 
-# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly, Exp_ID, DCC_Accession
+# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly, Exp_ID, DCC_Accession, Lab_IDs
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the git source at:
@@ -106,13 +106,13 @@ my $var;
 my $termType;
 my $subId;
 
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs", "Accession", "Assembly", 
-        "Strain", "Age", "Treatment", "Exp_ID", "DCC_Accession");
+        "Strain", "Age", "Treatment", "Exp_ID", "DCC_Accession", "Lab_IDs");
 
 # get experiment-defining variables for each composite from the metaDb
 open(MDB, "mdbPrint $assembly -table=metaDb -all -line | grep 'objType=composite' |") 
@@ -124,7 +124,7 @@ while (my $line = <MDB>) {
     (my $objName, my $settings) = split(" ", $line, 2);
 
 # DEBUG
-    # next unless $objName =~ /Caltech/;
+    #next unless $objName =~ /Cshl/;
 
     $metaLines{$objName} = $settings;
     print STDERR "     Composite OBJNAME: $objName   SETTINGS: $settings\n";
@@ -148,7 +148,7 @@ while (my $line = <MDB>) {
     (my $objName, my $settings) = split(" ", $line, 2);
 
 # DEBUG
-    # next unless $objName =~ /Caltech/;
+    # next unless $objName =~ /Cshl/;
 
     $metaLines{$objName} = $settings;
     print STDERR "     OBJNAME: $objName   SETTINGS: $settings\n";
@@ -366,21 +366,49 @@ foreach my $objName (keys %metaLines) {
     }
     print STDERR "KEY: " . $expKey . "\n";
 
+    # snag lab experiment ID's if any (may be a list)
+    my @labIds;
+    if (defined($metadata{"labExpId"})) {
+        @labIds = split(',', $metadata{"labExpId"});
+    }
+
     # save in a hash of experiments, 
     # (include version in vars)
     # subId -- lookup, add to list if exists
     if (defined($experiments{$expKey})) {
+        # add subId
+        # just for diagnostics
         my %ids = %{$experiments{$expKey}->{"ids"}};
         print STDERR "CHECKING: " . $expKey . " new ID: " . $subId . " IDs: " . join(",", keys %ids) . "\n";
-        if (!defined($experiment{$expKey}->{"ids"}->{$subId})) {
+        if (!defined($experiments{$expKey}->{"ids"}->{$subId})) {
             $experiments{$expKey}->{"ids"}->{$subId} = $subId;
+            # just for diagnostics
             %ids = %{$experiments{$expKey}->{"ids"}};
             print STDERR "MERGED: " . $expKey . " IDs: " . join(",", keys %ids) . "\n";
         }
+        if (defined($metadata{"labExpId"})) {
+            # add labExpIds
+            foreach my $labId (@labIds) {
+                if (!defined($experiments{$expKey}->{"labIds"}->{$labId})) {
+                    $experiments{$expKey}->{"labIds"}->{$labId} = $labId;
+                }
+            }
+        }
     } else {
+        # add subId
         my %ids = ();
         $ids{$subId} = $subId;
         $experiment{"ids"} = \%ids;
+
+        # add labExpIds
+        my %labIds = ();
+        if (defined($metadata{"labExpId"})) {
+            foreach my $labId (@labIds) {
+                $labIds{$labId} = $labId;
+            }
+        }
+        $experiment{"labIds"} = \%labIds;
+
         $experiments{$expKey} = \%experiment;
         print STDERR "ADDING: " . $expKey . " ID: " . $subId . "\n";
     }
@@ -423,6 +451,7 @@ foreach my $key (keys %experiments) {
     my %ids = %{$experiment{"ids"}};
     my @ids = sort { $a <=> $b } keys %ids;
     print STDERR "    IDs: " . join(",", @ids) . " KEY:  " . $key . "\n";
+    my %labIds = %{$experiment{"labIds"}};
     $experiment{"project"} = "unknown"  unless defined($experiment{"project"});
     $experiment{"projectPi"} = "unknown"  unless defined($experiment{"projectPi"});
     $experiment{"lab"} = "unknown" unless defined($experiment{"lab"});
@@ -507,7 +536,7 @@ foreach my $key (keys %experiments) {
                 $tags{"dataType"}{$dataType}->{"term"};
     }
 
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\n", 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\t%s\n", 
                 $experiment{"project"}, $experiment{"projectPi"}, 
                 $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
@@ -518,7 +547,8 @@ foreach my $key (keys %experiments) {
                 $experiment{"accession"}, $assembly,
                 # nhgri report only
                 $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"}, 
-                $experiment{"expId"}, $experiment{"dccAccession"});
+                $experiment{"expId"}, $experiment{"dccAccession"}, 
+                join(",", sort keys %labIds));
 }
 
 exit 0;
