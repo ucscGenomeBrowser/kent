@@ -192,7 +192,7 @@ wgEncode 1
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=GTF2B treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1149 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Gtf2bStdPk fileName=wgEncodeSydhTfbsK562Gtf2bStdPk.narrowPeak.gz
 
-	    track wgEncodeSydhTfbsK562Usf2StdPk
+	    track wgEncodeSydhTfbsK562Usf2IggrabPk
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562 USF2 Sd
 	    longLabel K562 USF2 Standard ChIP-Seq Peaks from ENCODE/SYDH
@@ -200,6 +200,7 @@ wgEncode 1
 	    type narrowPeak
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=USF2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1146 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Usf2StdPk fileName=wgEncodeSydhTfbsK562Usf2StdPk.narrowPeak.gz
+	    # was wgEncodeSydhTfbsK562Usf2StdPk wong Tue Jul  5 13:30:21 2011
 
 	    track wgEncodeSydhTfbsHepg2bZnf274UcdPk
 	    subTrack wgEncodeSydhTfbsViewPeaks off
@@ -463,7 +464,7 @@ wgEncode 1
         color 0,119,158
         # subId=2522 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsGm12878P300sc584sc584StdPk
+        track wgEncodeSydhTfbsGm12878P300sc584IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM78 p300 Sd
         longLabel GM12878 p300 Standard ChIP-Seq Peaks from ENCODE/SYDH
@@ -472,8 +473,9 @@ wgEncode 1
         color 153,38,0
         # subId=2523 dateSubmitted=2010-10-20
         # was wgEncodeSydhTfbsGm12878P300n15StdPk cricket Tue Apr 19 11:00:22 2011
+        # was wgEncodeSydhTfbsGm12878P300sc584sc584StdPk wong Tue Jul  5 13:30:20 2011
 
-        track wgEncodeSydhTfbsGm12878Irf3StdPk
+        track wgEncodeSydhTfbsGm12878Irf3IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM78 IRF3 Sd
         longLabel GM12878 IRF3 Standard ChIP-Seq Peaks from ENCODE/SYDH
@@ -481,6 +483,7 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
         # subId=2524 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsGm12878Irf3StdPk wong Tue Jul  5 13:30:24 2011
 
         track wgEncodeSydhTfbsGm12878Usf2IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -869,7 +872,7 @@ wgEncode 1
         color 189,0,157
         # subId=4411 dateSubmitted=2011-06-27
 
-        track wgEncodeSydhTfbsH1hescTbpStdPk
+        track wgEncodeSydhTfbsH1hescTbpIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HESC TBP Sd
         longLabel H1-hESC TBP Standard ChIP-Seq Peaks from ENCODE/SYDH
@@ -877,6 +880,7 @@ wgEncode 1
         type narrowPeak
         color 0,107,27
         # subId=3392 dateSubmitted=2011-01-19
+        # was wgEncodeSydhTfbsH1hescTbpStdPk wong Tue Jul  5 13:30:23 2011
 
         track wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -2541,7 +2545,7 @@ wgEncode 1
 #	    color 46,0,184
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=USF2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1146 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Usf2StdSig fileName=wgEncodeSydhTfbsK562Usf2StdSig.bigWig.gz
 
-        track wgEncodeSydhTfbsK562Usf2StdSig
+        track wgEncodeSydhTfbsK562Usf2IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 USF2 Sd
         longLabel K562 USF2 Standard ChIP-Seq Signal from ENCODE/SYDH
@@ -2549,6 +2553,7 @@ wgEncode 1
         type bigWig 0.000000 15252.900391
         color 46,0,184
         # subId=3072 dateSubmitted=2010-12-06
+        # was wgEncodeSydhTfbsK562Usf2StdSig wong Tue Jul  5 13:30:22 2011
 
 #	    track wgEncodeSydhTfbsHepg2Znf274UcdSig
 #	    subTrack wgEncodeSydhTfbsViewSignal off
@@ -2970,7 +2975,7 @@ wgEncode 1
         color 0,119,158
         # subId=2522 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsGm12878P300sc584sc584StdSig
+        track wgEncodeSydhTfbsGm12878P300sc584IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM78 p300 Sd
         longLabel GM12878 p300 Standard ChIP-Seq Signal from ENCODE/SYDH
@@ -2979,8 +2984,9 @@ wgEncode 1
         color 153,38,0
         # subId=2523 dateSubmitted=2010-10-20
         # was wgEncodeSydhTfbsGm12878P300n15StdSig cricket Tue Apr 19 11:00:22 2011
+        # was wgEncodeSydhTfbsGm12878P300sc584sc584StdSig wong Tue Jul  5 13:30:21 2011
 
-        track wgEncodeSydhTfbsGm12878Irf3StdSig
+        track wgEncodeSydhTfbsGm12878Irf3IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM78 IRF3 Sd
         longLabel GM12878 IRF3 Standard ChIP-Seq Signal from ENCODE/SYDH
@@ -2988,6 +2994,7 @@ wgEncode 1
         type bigWig 1.000000 13791.000000
         color 153,38,0
         # subId=2524 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsGm12878Irf3StdSig wong Tue Jul  5 13:30:24 2011
 
         track wgEncodeSydhTfbsGm12878Usf2IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -4902,7 +4909,7 @@ wgEncode 1
         color 189,0,157
         # subId=4411 dateSubmitted=2011-06-27
 
-        track wgEncodeSydhTfbsH1hescTbpStdSig
+        track wgEncodeSydhTfbsH1hescTbpIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HESC TBP Sd
         longLabel H1-hESC TBP Standard ChIP-Seq Signal from ENCODE/SYDH
@@ -4910,6 +4917,7 @@ wgEncode 1
         type bigWig 1.000000 116756.000000
         color 0,107,27
         # subId=3392 dateSubmitted=2011-01-19
+        # was wgEncodeSydhTfbsH1hescTbpStdSig wong Tue Jul  5 13:30:23 2011
 
         track wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdSig
         parent wgEncodeSydhTfbsViewSignal off
