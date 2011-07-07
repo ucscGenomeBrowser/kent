@@ -34,6 +34,7 @@ priority 0
 nextItemButton on
 wgEncode 1
 dataVersion through the ENCODE Jan 2010 Freeze
+html wgEncodeHudsonalphaChipSeq.new
 
     track wgEncodeHudsonalphaChipSeqViewPeaks
     shortLabel Peaks
