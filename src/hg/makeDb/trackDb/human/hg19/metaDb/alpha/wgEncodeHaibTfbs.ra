@@ -1973,7 +1973,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr1xDex100nmAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL474
@@ -1997,7 +1997,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr1xDex100nmRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL474
@@ -2021,7 +2021,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr1xDex100nmRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL474
@@ -2046,7 +2046,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr1xEtoh02AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL475
@@ -2073,7 +2073,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr1xEtoh02RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL475
@@ -2097,7 +2097,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr1xEtoh02RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL475
@@ -2122,7 +2122,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr2xDex100nmAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL335
@@ -2147,7 +2147,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr2xDex100nmRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL335
@@ -2171,7 +2171,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr2xDex100nmRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL335
@@ -2196,7 +2196,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr2xEtoh02AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL307
@@ -2221,7 +2221,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr2xEtoh02RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL307
@@ -2245,7 +2245,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsA549RxlchPcr2xEtoh02RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL307
@@ -4560,7 +4560,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsEcc1RxlchV0416102Dm002p1hAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
@@ -4585,7 +4585,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsEcc1RxlchV0416102Dm002p1hRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
@@ -4610,7 +4610,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsEcc1RxlchV0416102Dm002p1hRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
@@ -9366,7 +9366,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -9392,7 +9392,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -9419,7 +9419,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xAlnRep3
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL678
@@ -9443,7 +9443,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xAlnRep4
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1394
@@ -9467,7 +9467,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xAlnRep5
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1395
@@ -9491,7 +9491,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -9515,7 +9515,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -9539,7 +9539,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawDataRep3
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL678
@@ -9563,7 +9563,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawDataRep4
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1394
@@ -9588,7 +9588,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawDataRep5
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1395
@@ -9612,7 +9612,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -9637,7 +9637,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -9662,7 +9662,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawRep3
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL678
@@ -9687,7 +9687,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawRep4
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1394
@@ -9712,7 +9712,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr1xRawRep5
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1395
@@ -9737,7 +9737,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr2xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
@@ -9764,7 +9764,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr2xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL218
@@ -9791,7 +9791,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr2xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
@@ -9816,7 +9816,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr2xRawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL218
@@ -9841,7 +9841,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr2xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
@@ -9866,7 +9866,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchPcr2xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL218
@@ -9891,7 +9891,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchV0416101AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
@@ -9916,7 +9916,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchV0416101RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
@@ -9940,7 +9940,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchV0416101RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
@@ -9965,7 +9965,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878RxlchV0416102AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL3979
@@ -9989,7 +9989,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878RxlchV0416102RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL3979
@@ -10013,7 +10013,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878RxlchV0416102RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL3979
@@ -13349,7 +13349,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12891RxlchPcr1xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL817
@@ -13376,7 +13376,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12891RxlchPcr1xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL817
@@ -13402,7 +13402,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12891RxlchPcr1xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL817
@@ -13428,7 +13428,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12891RxlchV0416101AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
@@ -13455,7 +13455,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12891RxlchV0416101RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
@@ -13479,7 +13479,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12891RxlchV0416101RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
@@ -14523,7 +14523,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12892RxlchV0416101AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL1783
@@ -14550,7 +14550,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12892RxlchV0416101RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL1783
@@ -14575,7 +14575,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12892RxlchV0416101RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL1783
@@ -14600,7 +14600,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12892RxlchV0416102AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL818
@@ -14627,7 +14627,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12892RxlchV0416102RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL818
@@ -14652,7 +14652,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12892RxlchV0416102RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL818
@@ -18081,7 +18081,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsH1hescRxlchPcr1xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
@@ -18106,7 +18106,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsH1hescRxlchPcr1xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
@@ -18131,7 +18131,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsH1hescRxlchPcr1xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
@@ -18156,7 +18156,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsH1hescRxlchV0416102AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL969
@@ -18181,7 +18181,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsH1hescRxlchV0416102RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL969
@@ -18206,7 +18206,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsH1hescRxlchV0416102RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL969
@@ -20452,7 +20452,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHct116RxlchV0416101AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HCT-116
 composite wgEncodeHaibTfbs
 controlId SL3457
@@ -20477,7 +20477,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHct116RxlchV0416101RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HCT-116
 composite wgEncodeHaibTfbs
 controlId SL3457
@@ -20501,7 +20501,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHct116RxlchV0416101RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HCT-116
 composite wgEncodeHaibTfbs
 controlId SL3457
@@ -21546,7 +21546,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHelas3RxlchPcr1xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HeLa-S3
 composite wgEncodeHaibTfbs
 controlId SL592
@@ -21573,7 +21573,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHelas3RxlchPcr1xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HeLa-S3
 composite wgEncodeHaibTfbs
 controlId SL592
@@ -21598,7 +21598,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHelas3RxlchPcr1xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HeLa-S3
 composite wgEncodeHaibTfbs
 controlId SL592
@@ -25842,7 +25842,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL593
@@ -25869,7 +25869,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL819
@@ -25896,7 +25896,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xAlnRep3
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
@@ -25920,7 +25920,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xAlnRep4
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1401
@@ -25944,7 +25944,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL593
@@ -25970,7 +25970,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xRawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL819
@@ -25996,7 +25996,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xRawDataRep3
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
@@ -26020,7 +26020,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xRawDataRep4
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1401
@@ -26044,7 +26044,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL593
@@ -26069,7 +26069,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL819
@@ -26095,7 +26095,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xRawRep3
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
@@ -26120,7 +26120,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr1xRawRep4
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1401
@@ -26145,7 +26145,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr2xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL294
@@ -26171,7 +26171,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr2xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL295
@@ -26197,7 +26197,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr2xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL294
@@ -26222,7 +26222,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr2xRawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL295
@@ -26246,7 +26246,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr2xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL294
@@ -26271,7 +26271,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2RxlchPcr2xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL295
@@ -26296,7 +26296,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2RxlchV0416101AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1781
@@ -26322,7 +26322,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2RxlchV0416101AlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -26346,7 +26346,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2RxlchV0416101RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1781
@@ -26370,7 +26370,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2RxlchV0416101RawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -26394,7 +26394,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2RxlchV0416101RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1781
@@ -26419,7 +26419,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2RxlchV0416101RawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -32869,7 +32869,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL518
@@ -32896,7 +32896,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL519
@@ -32923,7 +32923,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xAlnRep3
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
@@ -32947,7 +32947,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xAlnRep4
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
@@ -32971,7 +32971,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xRawDataRep3
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
@@ -32995,7 +32995,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xRawDataRep4
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
@@ -33019,7 +33019,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL518
@@ -33044,7 +33044,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL519
@@ -33069,7 +33069,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xRawRep3
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
@@ -33094,7 +33094,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562RxlchPcr1xRawRep4
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
@@ -33119,7 +33119,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562RxlchV0416101AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -33142,7 +33142,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562RxlchV0416101AlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL3980
@@ -33166,7 +33166,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562RxlchV0416101RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -33190,7 +33190,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562RxlchV0416101RawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL3980
@@ -33214,7 +33214,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562RxlchV0416101RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -33239,7 +33239,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562RxlchV0416101RawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL3980
@@ -33264,7 +33264,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562RxlchV2RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL518
@@ -33292,7 +33292,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562RxlchV2RawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL519
@@ -36698,7 +36698,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPanc1RxlchPcr2xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL117
@@ -36723,7 +36723,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPanc1RxlchPcr2xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
@@ -36747,7 +36747,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPanc1RxlchPcr2xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL117
@@ -36772,7 +36772,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPanc1RxlchPcr2xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
@@ -36797,7 +36797,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPanc1RxlchRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL117
@@ -36823,7 +36823,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsPanc1RxlchRawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
@@ -37818,7 +37818,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
@@ -37842,7 +37842,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL412
@@ -37867,7 +37867,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xAlnRep3
 objType file
-antibody Control
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL16
@@ -37891,7 +37891,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
@@ -37915,7 +37915,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xRawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL412
@@ -37939,7 +37939,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xRawDataRep3
 objType file
-antibody Control
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL16
@@ -37963,7 +37963,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
@@ -37988,7 +37988,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL412
@@ -38013,7 +38013,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPfsk1RxlchPcr2xRawRep3
 objType table
-antibody Control
+antibody RevXlinkChromatin
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL16
@@ -38618,7 +38618,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsSknmcRxlchPcr2xAlnRep1
 objType file
-antibody Control
+antibody RevXlinkChromatin
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL102
@@ -38642,7 +38642,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsSknmcRxlchPcr2xRawDataRep1
 objType file
-antibody Control
+antibody RevXlinkChromatin
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL102
@@ -38666,7 +38666,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsSknmcRxlchPcr2xRawRep1
 objType table
-antibody Control
+antibody RevXlinkChromatin
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL102
@@ -38691,7 +38691,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsSknmcRxlchV0416101AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL1714
@@ -38717,7 +38717,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsSknmcRxlchV0416101RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL1714
@@ -38741,7 +38741,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsSknmcRxlchV0416101RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL1714
@@ -39156,7 +39156,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsSknshRxlchPcr2xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH
 composite wgEncodeHaibTfbs
 controlId SL108
@@ -39182,7 +39182,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsSknshRxlchPcr2xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH
 composite wgEncodeHaibTfbs
 controlId SL410
@@ -39209,7 +39209,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsSknshRxlchPcr2xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH
 composite wgEncodeHaibTfbs
 controlId SL108
@@ -39233,7 +39233,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsSknshRxlchPcr2xRawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH
 composite wgEncodeHaibTfbs
 controlId SL410
@@ -39258,7 +39258,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsSknshRxlchPcr2xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH
 composite wgEncodeHaibTfbs
 controlId SL108
@@ -39283,7 +39283,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsSknshRxlchPcr2xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH
 composite wgEncodeHaibTfbs
 controlId SL410
@@ -40092,7 +40092,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsSknshraRxlchV0416102AlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH_RA
 composite wgEncodeHaibTfbs
 controlId SL2905
@@ -40117,7 +40117,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsSknshraRxlchV0416102RawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH_RA
 composite wgEncodeHaibTfbs
 controlId SL2905
@@ -40141,7 +40141,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsSknshraRxlchV0416102RawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell SK-N-SH_RA
 composite wgEncodeHaibTfbs
 controlId SL2905
@@ -41914,7 +41914,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsT47dRxlchV0416102Dm002p1hAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1881
@@ -41939,7 +41939,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsT47dRxlchV0416102Dm002p1hRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1881
@@ -41963,7 +41963,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsT47dRxlchV0416102Dm002p1hRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1881
@@ -42387,7 +42387,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xAlnRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
@@ -42411,7 +42411,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL414
@@ -42436,7 +42436,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep1
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
@@ -42460,7 +42460,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep2
 objType file
-antibody Input
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL414
@@ -42484,7 +42484,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawRep1
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
@@ -42509,7 +42509,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawRep2
 objType table
-antibody Input
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL414
@@ -42534,7 +42534,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsU87RxlchV0416101AlnRep1
 objType file
-antibody Control
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL2338
@@ -42558,7 +42558,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsU87RxlchV0416101AlnRep2
 objType file
-antibody Control
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL3777
@@ -42582,7 +42582,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsU87RxlchV0416101RawDataRep1
 objType file
-antibody Control
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL2338
@@ -42606,7 +42606,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsU87RxlchV0416101RawDataRep2
 objType file
-antibody Control
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL3777
@@ -42630,7 +42630,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsU87RxlchV0416101RawRep1
 objType table
-antibody Control
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL2338
@@ -42655,7 +42655,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 objType table
-antibody Control
+antibody RevXlinkChromatin
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL3777
@@ -42678,4 +42678,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 1567407472
+# MAGIC: -234437146
