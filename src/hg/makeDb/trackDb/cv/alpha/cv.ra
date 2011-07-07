@@ -7941,7 +7941,7 @@ description The reference human genome is currently hg18 - March 2006 (NCBI Buil
 term RevXlinkChromatin 
 tag RXLCH
 type control
-description Control signal from reverse cross-link of Chromatin. (PROVISIONAL)
+description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. (PROVISIONAL)
 
 term None
 tag NONE
