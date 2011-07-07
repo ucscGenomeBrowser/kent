@@ -37,6 +37,7 @@ use SafePipe;
 use vars qw/
     $opt_configDir
     $opt_expTable
+    $opt_limit
     $opt_verbose
     /;
 
@@ -55,6 +56,7 @@ options:
     -configDir=dir      Path of configuration directory, containing
                         cv.ra file (default: pipeline config dir)
     -expTable=table     Alternate experiment table to use for fishing experiment ID's
+    -limit=string       Limit to objects matching /string/ (for debug)
     -verbose=num        Set verbose level to num (default 1).
 END
 exit 1;
@@ -67,6 +69,7 @@ my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
                     "expTable=s",
+                    "limit=s",
                     "verbose=i",
                     );
 usage() if (!$ok);
@@ -124,7 +127,9 @@ while (my $line = <MDB>) {
     (my $objName, my $settings) = split(" ", $line, 2);
 
 # DEBUG
-    #next unless $objName =~ /Cshl/;
+    if (defined($opt_limit)) {
+        next unless $objName =~ /$opt_limit/;
+    }
 
     $metaLines{$objName} = $settings;
     print STDERR "     Composite OBJNAME: $objName   SETTINGS: $settings\n";
@@ -148,7 +153,9 @@ while (my $line = <MDB>) {
     (my $objName, my $settings) = split(" ", $line, 2);
 
 # DEBUG
-    # next unless $objName =~ /Cshl/;
+    if (defined($opt_limit)) {
+        next unless $objName =~ /$opt_limit/;
+    }
 
     $metaLines{$objName} = $settings;
     print STDERR "     OBJNAME: $objName   SETTINGS: $settings\n";
@@ -226,13 +233,17 @@ foreach my $objName (keys %metaLines) {
 
     # determine term type for experiment parameters - extracted from composite expVars
     my $composite = $metadata{"composite"};
-
-    # can't handle if there are no expVars defined for composite (it's probably a combined or other non-production track)
-    my $expVars = $composites{$composite};
-    if (!defined($expVars)) {
-        warn "composite $composite has no expVars, skipping";
-        next;
+    my $expVars;
+    if (defined($composite)) {
+        $expVars = $composites{$composite};
+        if (!defined($expVars)) {
+            warn "composite $composite has no expVars, skipping";
+            next;
+        }
+    } else  {
+        $expVars = $metadata{"expVars"}
     }
+
     my @varTermTypes = split(",", $expVars);
 
     my %vars = ();
@@ -480,7 +491,7 @@ foreach my $key (keys %experiments) {
     }
     # TODO: fix metadata -- for now, exclude if not in status table (e.g. metadata for incorrect assembly)
     if (!defined($maxId)) {
-        print STDERR "discarding experiment with no status for id (in this assembly): " . $maxId . "\n";
+        print STDERR "discarding experiment with no id in this assembly found in project table: " . $key . "\n";
         next;
     }
     $experiment{"status"} = $submissionStatus{$maxId};
