@@ -3,13 +3,13 @@
 # encodeReport.pl - use metaDb tables to generate report of submitted and released experiments
 #
 # Reporting formats:
-# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID, DCC_Accession
+# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID, DCC_Accession, Lab_IDs
 
-# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID, DCC_Accession
+# DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID, DCC_Accession, Lab_IDs
 # Briefly was:
 # DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Submission Ids, Accession, Assembly
 
-# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly, Exp_ID, DCC_Accession
+# NHGRI:     Project(PI), Lab (PI), Assay (TBD), Data Type, Experimental Factor, Organism (human/mouse), Cell Line, Strain, Tissue (TBD), Stage/Age, Treatment, Date Data Submitted, Release Date, Status, Submission Id, GEO/SRA IDs, Assembly, Exp_ID, DCC_Accession, Lab_IDs
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the git source at:
@@ -37,6 +37,7 @@ use SafePipe;
 use vars qw/
     $opt_configDir
     $opt_expTable
+    $opt_limit
     $opt_verbose
     /;
 
@@ -55,6 +56,7 @@ options:
     -configDir=dir      Path of configuration directory, containing
                         cv.ra file (default: pipeline config dir)
     -expTable=table     Alternate experiment table to use for fishing experiment ID's
+    -limit=string       Limit to objects matching /string/ (for debug)
     -verbose=num        Set verbose level to num (default 1).
 END
 exit 1;
@@ -67,6 +69,7 @@ my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
                     "expTable=s",
+                    "limit=s",
                     "verbose=i",
                     );
 usage() if (!$ok);
@@ -106,13 +109,13 @@ my $var;
 my $termType;
 my $subId;
 
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs", "Accession", "Assembly", 
-        "Strain", "Age", "Treatment", "Exp_ID", "DCC_Accession");
+        "Strain", "Age", "Treatment", "Exp_ID", "DCC_Accession", "Lab_IDs");
 
 # get experiment-defining variables for each composite from the metaDb
 open(MDB, "mdbPrint $assembly -table=metaDb -all -line | grep 'objType=composite' |") 
@@ -124,7 +127,9 @@ while (my $line = <MDB>) {
     (my $objName, my $settings) = split(" ", $line, 2);
 
 # DEBUG
-    #next unless $objName =~ /Caltech/;
+    if (defined($opt_limit)) {
+        next unless $objName =~ /$opt_limit/;
+    }
 
     $metaLines{$objName} = $settings;
     print STDERR "     Composite OBJNAME: $objName   SETTINGS: $settings\n";
@@ -148,7 +153,9 @@ while (my $line = <MDB>) {
     (my $objName, my $settings) = split(" ", $line, 2);
 
 # DEBUG
-    #next unless $objName =~ /Caltech/;
+    if (defined($opt_limit)) {
+        next unless $objName =~ /$opt_limit/;
+    }
 
     $metaLines{$objName} = $settings;
     print STDERR "     OBJNAME: $objName   SETTINGS: $settings\n";
@@ -225,15 +232,19 @@ foreach my $objName (keys %metaLines) {
     print STDERR "    objName  " . $objName . "\n";
 
     # determine term type for experiment parameters - extracted from composite expVars
-    my @varTermTypes;
     my $composite = $metadata{"composite"};
-
-    # can't handle if there are no expVars defined for composite (it's probably a combined or other non-production track)
-    my $expVars = $composites{$composite};
-    next if (!defined($expVars));
-    if (defined($expVars)) {
-        @varTermTypes = split(",", $expVars);
+    my $expVars;
+    if (defined($composite)) {
+        $expVars = $composites{$composite};
+        if (!defined($expVars)) {
+            warn "composite $composite has no expVars, skipping";
+            next;
+        }
+    } else  {
+        $expVars = $metadata{"expVars"}
     }
+
+    my @varTermTypes = split(",", $expVars);
 
     my %vars = ();
     foreach $var (keys %metadata) {
@@ -241,6 +252,8 @@ foreach my $objName (keys %metaLines) {
         # are defaults
         next if ($var eq "treatment" && $metadata{$var} eq "None");
         next if ($var eq "age" && $metadata{$var} eq "immortalized");
+        # consider adding:
+        # next if ($var eq "strain" && $metadata{$var} eq "C57BL/6");
         foreach $termType (@varTermTypes) {
             # exclude the 'standard' experiment-defining vars
             next if (($termType eq "cell") or ($termType eq "lab") or ($termType eq "dataType"));
@@ -279,54 +292,58 @@ foreach my $objName (keys %metaLines) {
     } else {
         $experiment{"expId"} = 0;
     }
-
     if (defined($metadata{"dccAccession"})) {
         $experiment{"dccAccession"} = $metadata{"dccAccession"};
     } else {
         $experiment{"dccAccession"} = "";
     }
 
+    # special columns in report -- collect even if not expermint-defining variables
+    $experiment{"strain"} = defined($metadata{"strain"}) ? $metadata{"strain"} : "n/a";
+    $experiment{"age"} = defined($metadata{"age"}) ? $metadata{"age"} : "n/a";
+    $experiment{"treatment"} = (defined($metadata{"treatment"}) && lc($metadata{"treatment"}) ne "none") ? 
+                                        $metadata{"treatment"} : "none";
+
     # experimental params -- iterate through all tags, lookup in cv.ra, 
      $experiment{"vars"} = "none";
-     $experiment{"expVars"} = "none";
      $experiment{"varLabels"} = "none";
      $experiment{"factorLabels"} = "none";
-     $experiment{"treatment"} = "none";
-     $experiment{"age"} = "n/a";
-     $experiment{"strain"} = "n/a";
      if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
         # construct vars as list, semi-colon separated
+
+        # string of expVars + version, for constructing keys
         $experiment{"vars"} = "";
-        $experiment{"expVars"} = "";
+
+        # abbreviated string of expVars + version for printing in report (DCC Experimental Vars column)
         $experiment{"varLabels"} = "";
+
+        # string of expVars + version - (treatment, age, strain) for printing in report 
+        #                       (NHGRI Experimental Factors column)
         $experiment{"factorLabels"} = "";
+
         foreach $termType (sort keys %vars) {
             $var = $vars{$termType};
             $experiment{"vars"} = $experiment{"vars"} .  $termType . "=" . $var . " ";
-            if ($termType ne "version" && $var ne "None") {
-                $experiment{"expVars"} = $experiment{"expVars"} .  $termType . "=" . $var . " ";
-            }
             my $varLabel = defined($terms{$termType}{$var}->{"label"}) ? 
                                 $terms{$termType}{$var}->{"label"} : $var;
+
             # special handling of treatment, age, strain for NHGRI -- they have specific columns
-            # treatment is experimental variable; sex is not (for now), age is if not 'immortalized'
-            if ($termType eq "treatment") {
-                $experiment{"treatment"} = $varLabel;
+            # so if they are exp vars, they are added only to varLabels column (unless they
+            #    are defaults (treatment=None, age=immortalized or 8wks, strain=C56BL/6)
+            if ($termType eq "treatment" && lc($varLabel) ne "none") {
                 $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
             } elsif ($termType eq "age") {
                 next if ($varLabel eq "immortalized");
-                $experiment{"age"} = $varLabel;
                 next if ($varLabel eq "adult-8wks");
                 $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
-            } elsif ($termType eq "strain") {
-                $experiment{"strain"} = $varLabel;
-            } elsif ($termType eq "sex") {
-                next;
-            } else {
-                # experimental variables
+            } elsif ($termType eq "strain" && lc($varLabel) ne "C57BL/6") {
                 $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
-                $experiment{"factorLabels"} = $experiment{"factorLabels"} .  ucfirst($termType) . "=" . $varLabel . " ";
+            } else {
+                # other experimental variables get added to both columns
+                $experiment{"varLabels"} = $experiment{"varLabels"} .  $varLabel . ";";
+                $experiment{"factorLabels"} = 
+                        $experiment{"factorLabels"} .  ucfirst($termType) . "=" . $varLabel . " ";
             }
         }
         chop $experiment{"vars"};
@@ -360,21 +377,49 @@ foreach my $objName (keys %metaLines) {
     }
     print STDERR "KEY: " . $expKey . "\n";
 
+    # snag lab experiment ID's if any (may be a list)
+    my @labIds;
+    if (defined($metadata{"labExpId"})) {
+        @labIds = split(',', $metadata{"labExpId"});
+    }
+
     # save in a hash of experiments, 
     # (include version in vars)
     # subId -- lookup, add to list if exists
     if (defined($experiments{$expKey})) {
+        # add subId
+        # just for diagnostics
         my %ids = %{$experiments{$expKey}->{"ids"}};
         print STDERR "CHECKING: " . $expKey . " new ID: " . $subId . " IDs: " . join(",", keys %ids) . "\n";
-        if (!defined($experiment{$expKey}->{"ids"}->{$subId})) {
+        if (!defined($experiments{$expKey}->{"ids"}->{$subId})) {
             $experiments{$expKey}->{"ids"}->{$subId} = $subId;
+            # just for diagnostics
             %ids = %{$experiments{$expKey}->{"ids"}};
             print STDERR "MERGED: " . $expKey . " IDs: " . join(",", keys %ids) . "\n";
         }
+        if (defined($metadata{"labExpId"})) {
+            # add labExpIds
+            foreach my $labId (@labIds) {
+                if (!defined($experiments{$expKey}->{"labIds"}->{$labId})) {
+                    $experiments{$expKey}->{"labIds"}->{$labId} = $labId;
+                }
+            }
+        }
     } else {
+        # add subId
         my %ids = ();
         $ids{$subId} = $subId;
         $experiment{"ids"} = \%ids;
+
+        # add labExpIds
+        my %labIds = ();
+        if (defined($metadata{"labExpId"})) {
+            foreach my $labId (@labIds) {
+                $labIds{$labId} = $labId;
+            }
+        }
+        $experiment{"labIds"} = \%labIds;
+
         $experiments{$expKey} = \%experiment;
         print STDERR "ADDING: " . $expKey . " ID: " . $subId . "\n";
     }
@@ -382,6 +427,8 @@ foreach my $objName (keys %metaLines) {
 
 # get submission status for all projects from the pipeline projects table
 my %submissionStatus = ();
+
+# TODO: determine how/if to keep/use the update time
 my %submissionUpdated = ();
 my $dbhPipeline = HgDb->new(DB => $pipeline);
 my $sth = $dbhPipeline->execute( 
@@ -415,6 +462,7 @@ foreach my $key (keys %experiments) {
     my %ids = %{$experiment{"ids"}};
     my @ids = sort { $a <=> $b } keys %ids;
     print STDERR "    IDs: " . join(",", @ids) . " KEY:  " . $key . "\n";
+    my %labIds = %{$experiment{"labIds"}};
     $experiment{"project"} = "unknown"  unless defined($experiment{"project"});
     $experiment{"projectPi"} = "unknown"  unless defined($experiment{"projectPi"});
     $experiment{"lab"} = "unknown" unless defined($experiment{"lab"});
@@ -424,7 +472,6 @@ foreach my $key (keys %experiments) {
     $experiment{"vars"} = "unknown" unless defined($experiment{"vars"});
     $experiment{"varLabels"} = "unknown" unless defined($experiment{"varLabels"});
     $experiment{"factorLabels"} = "unknown" unless defined($experiment{"factorLabels"});
-    $experiment{"treatment"} = "unknown" unless defined($experiment{"treatment"});
     $experiment{"submitDate"} = "unknown"  unless defined($experiment{"submitDate"});
     $experiment{"releaseDate"} = "unknown" unless defined($experiment{"releaseDate"});
 
@@ -444,7 +491,7 @@ foreach my $key (keys %experiments) {
     }
     # TODO: fix metadata -- for now, exclude if not in status table (e.g. metadata for incorrect assembly)
     if (!defined($maxId)) {
-        print STDERR "discarding experiment with no status for id (in this assembly): " . $maxId . "\n";
+        print STDERR "discarding experiment with no id in this assembly found in project table: " . $key . "\n";
         next;
     }
     $experiment{"status"} = $submissionStatus{$maxId};
@@ -500,7 +547,7 @@ foreach my $key (keys %experiments) {
                 $tags{"dataType"}{$dataType}->{"term"};
     }
 
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\n", 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\t%s\n", 
                 $experiment{"project"}, $experiment{"projectPi"}, 
                 $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
@@ -511,7 +558,8 @@ foreach my $key (keys %experiments) {
                 $experiment{"accession"}, $assembly,
                 # nhgri report only
                 $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"}, 
-                $experiment{"expId"}, $experiment{"dccAccession"});
+                $experiment{"expId"}, $experiment{"dccAccession"}, 
+                join(",", sort keys %labIds));
 }
 
 exit 0;
