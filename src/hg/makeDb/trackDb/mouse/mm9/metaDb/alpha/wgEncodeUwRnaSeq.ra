@@ -73,7 +73,7 @@ strain C57BL/6
 subId 4346
 tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawSigRep1
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawSigRep2
 objType table
@@ -97,7 +97,7 @@ strain C57BL/6
 subId 4348
 tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawSigRep2
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 objType table
@@ -121,7 +121,7 @@ strain C57BL/6
 subId 4346
 tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawSigRep2
 objType table
@@ -145,7 +145,7 @@ strain C57BL/6
 subId 4348
 tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawSigRep2
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6RawDataRep1
 objType file
@@ -287,7 +287,7 @@ strain BALB/cAnN
 subId 4428
 tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawSigRep1
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawSigRep1
 objType table
@@ -311,7 +311,7 @@ strain BALB/cAnN
 subId 4428
 tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawSigRep1
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannRawDataRep1
 objType file
@@ -406,7 +406,7 @@ strain C57BL/6
 subId 4429
 tableName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6MinusRawSigRep1
 tissueSourceType Pooled
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 objType table
@@ -430,7 +430,7 @@ strain C57BL/6
 subId 4429
 tableName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 tissueSourceType Pooled
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6RawDataRep1
 objType file
@@ -549,7 +549,7 @@ strain C57BL/6
 subId 4430
 tableName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawSigRep1
 tissueSourceType Pooled
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawSigRep2
 objType table
@@ -573,7 +573,7 @@ strain C57BL/6
 subId 4431
 tableName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawSigRep2
 tissueSourceType Individual
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 objType table
@@ -597,7 +597,7 @@ strain C57BL/6
 subId 4430
 tableName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 tissueSourceType Pooled
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawSigRep2
 objType table
@@ -621,7 +621,7 @@ strain C57BL/6
 subId 4431
 tableName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawSigRep2
 tissueSourceType Individual
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6RawDataRep1
 objType file
@@ -763,7 +763,7 @@ strain C57BL/6
 subId 4432
 tableName wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6MinusRawSigRep1
 tissueSourceType Pooled
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 objType table
@@ -787,7 +787,7 @@ strain C57BL/6
 subId 4432
 tableName wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 tissueSourceType Pooled
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6RawDataRep1
 objType file
@@ -882,7 +882,7 @@ strain CD-1
 subId 4423
 tableName wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1MinusRawSigRep1
 tissueSourceType Individual
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1PlusRawSigRep1
 objType table
@@ -906,7 +906,7 @@ strain CD-1
 subId 4423
 tableName wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1PlusRawSigRep1
 tissueSourceType Individual
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1RawDataRep1
 objType file
@@ -1001,7 +1001,7 @@ strain C57BL/6
 subId 4424
 tableName wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6MinusRawSigRep1
 tissueSourceType Pooled
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 objType table
@@ -1025,7 +1025,7 @@ strain C57BL/6
 subId 4424
 tableName wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 tissueSourceType Pooled
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6RawDataRep1
 objType file
@@ -1192,7 +1192,7 @@ strain C57BL/6
 subId 4426
 tableName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep1
 tissueSourceType Pooled
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep2
 objType table
@@ -1216,7 +1216,7 @@ strain C57BL/6
 subId 4438
 tableName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep2
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep3
 objType table
@@ -1240,7 +1240,7 @@ strain C57BL/6
 subId 4439
 tableName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep3
 tissueSourceType Individual
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep4
 objType table
@@ -1264,7 +1264,7 @@ strain C57BL/6
 subId 4425
 tableName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep4
 tissueSourceType Pooled
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 objType table
@@ -1288,7 +1288,7 @@ strain C57BL/6
 subId 4426
 tableName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 tissueSourceType Pooled
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep2
 objType table
@@ -1312,7 +1312,7 @@ strain C57BL/6
 subId 4438
 tableName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep2
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep3
 objType table
@@ -1336,7 +1336,7 @@ strain C57BL/6
 subId 4439
 tableName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep3
 tissueSourceType Individual
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep4
 objType table
@@ -1360,7 +1360,7 @@ strain C57BL/6
 subId 4425
 tableName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep4
 tissueSourceType Pooled
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6RawDataRep1
 objType file
@@ -1596,7 +1596,7 @@ strain C57BL/6
 subId 4427
 tableName wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6MinusRawSigRep1
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6PlusRawSigRep1
 objType table
@@ -1620,7 +1620,7 @@ strain C57BL/6
 subId 4427
 tableName wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6PlusRawSigRep1
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6RawDataRep1
 objType file
@@ -1739,7 +1739,7 @@ strain C57BL/6
 subId 4433
 tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawSigRep1
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawSigRep2
 objType table
@@ -1763,7 +1763,7 @@ strain C57BL/6
 subId 4434
 tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawSigRep2
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 objType table
@@ -1787,7 +1787,7 @@ strain C57BL/6
 subId 4433
 tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawSigRep1
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawSigRep2
 objType table
@@ -1811,7 +1811,7 @@ strain C57BL/6
 subId 4434
 tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawSigRep2
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6RawDataRep1
 objType file
@@ -1977,7 +1977,7 @@ strain NIH/Swiss
 subId 4435
 tableName wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsMinusRawSigRep1
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsMinusRawSigRep2
 objType table
@@ -2001,7 +2001,7 @@ strain NIH/Swiss
 subId 4436
 tableName wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsMinusRawSigRep2
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsPlusRawSigRep1
 objType table
@@ -2025,7 +2025,7 @@ strain NIH/Swiss
 subId 4435
 tableName wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsPlusRawSigRep1
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsPlusRawSigRep2
 objType table
@@ -2049,7 +2049,7 @@ strain NIH/Swiss
 subId 4436
 tableName wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsPlusRawSigRep2
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsRawDataRep1
 objType file
@@ -2191,7 +2191,7 @@ strain Spretus.BL6-Xist
 subId 4437
 tableName wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6MinusRawSigRep1
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawSigRep1
 objType table
@@ -2215,7 +2215,7 @@ strain Spretus.BL6-Xist
 subId 4437
 tableName wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawSigRep1
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6RawDataRep1
 objType file
@@ -2334,7 +2334,7 @@ strain C57BL/6
 subId 4440
 tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2
 objType table
@@ -2358,7 +2358,7 @@ strain C57BL/6
 subId 4442
 tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1
 objType table
@@ -2382,7 +2382,7 @@ strain C57BL/6
 subId 4440
 tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2
 objType table
@@ -2406,7 +2406,7 @@ strain C57BL/6
 subId 4442
 tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6RawDataRep1
 objType file
@@ -2572,7 +2572,7 @@ strain C57BL/6
 subId 4443
 tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2
 objType table
@@ -2596,7 +2596,7 @@ strain C57BL/6
 subId 4441
 tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2
 tissueSourceType None
-view MinusRawSig
+view MinusRawSignal
 
 metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1
 objType table
@@ -2620,7 +2620,7 @@ strain C57BL/6
 subId 4443
 tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2
 objType table
@@ -2644,7 +2644,7 @@ strain C57BL/6
 subId 4441
 tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2
 tissueSourceType None
-view PlusRawSig
+view PlusRawSignal
 
 metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6RawDataRep1
 objType file
@@ -2740,4 +2740,4 @@ tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -1741083223
+# MAGIC: -1260216567
