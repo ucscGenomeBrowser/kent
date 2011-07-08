@@ -1007,7 +1007,7 @@ function filterCompositeExcludeOptions(multiSelect)
     if (allSubCBs.length == 0)
         return false;
 
-    if ($.browser.msie && $(allSubCBs).filter(":checked") > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
+    if ($.browser.msie && $(allSubCBs).filter(":checked").length > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
         return false;
 
     var filterClass = filterCompFilterVar(multiSelect);

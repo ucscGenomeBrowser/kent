@@ -2571,6 +2571,14 @@ function filterTableExcludeOptions(filter)
   // Will mark all options in one filterBy box that are inconsistent with the current
   // selections in other filterBy boxes.  Mark with class ".excluded"
 
+    // Compare to the list of all trs
+    var allTrs = $('tr.filterable'); // Default all
+    if (allTrs.length == 0)
+        return false;
+
+    if ($.browser.msie && $(allTrs).length > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
+        return false;
+
     // Find the var for this filter
     var filterVar = filterTableFilterVar(filter);
     if (filterVar == undefined)
@@ -2581,10 +2589,9 @@ function filterTableExcludeOptions(filter)
     if (visibleTrs == undefined)
         return false;
 
-    // Compare to the list of all trs
-    var allTrs = $('tr.filterable'); // Default all
-    if (allTrs.length == 0)
-        return false;
+    //if ($.browser.msie && $(visibleTrs).length > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
+    //    return false;
+
     if (allTrs.length == visibleTrs.length) {
         $(filter).children('option.excluded').removeClass('excluded');   // remove .excluded" from all
         return true;  // Nothing more to do.  All are already excluded
