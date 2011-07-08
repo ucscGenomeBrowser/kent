@@ -2380,11 +2380,11 @@ function handleTrackUi(response, status)
                                open: function () {
                                     if (newJQuery) {
                                         if( ! popUpTrackDescriptionOnly ) {
-                                            $('#hgTrackUiDialog').find('.filterComp').each( function(i) {
-                                                if ($(this).hasClass('filterBy'))
-                                                    ddclSetup(this, 'noneIsAll');
+                                            $('#hgTrackUiDialog').find('.filterBy,.filterComp').each( function(i) {
+                                                if ($(this).hasClass('filterComp'))
+                                                    ddcl.setup(this);
                                                 else
-                                                    ddclSetup(this);
+                                                    ddcl.setup(this, 'noneIsAll');
                                             });
                                         }
                                     }

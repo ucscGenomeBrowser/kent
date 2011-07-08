@@ -3517,6 +3517,9 @@ else
 filterBy_t *filterBy = NULL;
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
+#ifdef NEW_JQUERY
+jsIncludeFile("ddcl.js",NULL);
+#endif///def NEW_JQUERY
 
 int ix=0;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
@@ -3530,9 +3533,9 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
 
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
     #ifdef NEW_JQUERY
-        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none; font-size:.9em;' class='filterComp filterBy'><BR>\n"
+        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
     #else///ifndef NEW_JQUERY
-        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
+        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterBy'><BR>\n"
     #endif///ndef NEW_JQUERY
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
@@ -3577,8 +3580,10 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     }
     printf("</SELECT>\n");
 
+#ifndef NEW_JQUERY
     // The following is needed to make msie scroll to selected option.
     printf("<script type='text/javascript'>onload=function(){ if( $.browser.msie ) { $(\"select[name^='%s.filterBy.']\").children('option[selected]').each( function(i) { $(this).attr('selected',true); }); }}</script>\n",tdb->track);
+#endif///ndef NEW_JQUERY
 puts("</TR></TABLE>");
 
 return;
@@ -6432,13 +6437,11 @@ membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,cart);
 if(membersForAll == NULL || membersForAll->filters == FALSE) // Not Matrix or filters
     return FALSE;
 jsIncludeFile("ui.core.js",NULL);
-jsIncludeFile("ui.dropdownchecklist.js",NULL);
 webIncludeResourceFile("ui.dropdownchecklist.css");
-
-// TODO:
-// 1) Scroll long lists should be configurable through tdb setting
-//    #define FILTER_COMPOSITE_OPEN_SIZE 16
-// 2) columnCount (Number of filterBoxes per row) should be configurable through tdb setting
+jsIncludeFile("ui.dropdownchecklist.js",NULL);
+#ifdef NEW_JQUERY
+jsIncludeFile("ddcl.js",NULL);
+#endif///def NEW_JQUERY
 
 cgiDown(0.7);
 printf("<B>Filter subtracks %sby:</B> (select multiple %sitems - %s)<BR>\n",
