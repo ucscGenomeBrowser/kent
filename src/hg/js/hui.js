@@ -167,7 +167,7 @@ function matCbClick(matCB)
     matSubCBsSelected();
 }
 
-function matSetMatrixCheckBoxes(state)
+function _matSetMatrixCheckBoxes(state)
 {
 // matButtons:onclick Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
     //jQuery(this).css('cursor', 'wait');
@@ -179,15 +179,15 @@ function matSetMatrixCheckBoxes(state)
         this.checked = state;
         matCbComplete(this,true);
     });
-    subCDs = $("input.subCB");
+    subCbs = $("input.subCB");
     for(var vIx=1;vIx<arguments.length;vIx++) {
-        subCDs = $( subCDs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
+        subCbs = $( subCbs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
     if(state) { // If clicking [+], further limit to only checked ABCs
         var classes = matAbcCBclasses(false);
-        subCDs = objsFilterByClasses(subCDs,"not",classes);  // remove unchecked abcCB classes
+        subCbs = objsFilterByClasses(subCbs,"not",classes);  // remove unchecked abcCB classes
     }
-    $( subCDs ).each( function (i) {
+    $( subCbs ).each( function (i) {
         this.checked = state;
         matSubCBsetShadow(this);
     });
@@ -196,76 +196,29 @@ function matSetMatrixCheckBoxes(state)
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
     //jQuery(this).css('cursor', '');
+
+    var tbody = $( subCbs[0] ).parents('tbody.sorting');
+    if (tbody != undefined)
+         $(tbody).removeClass('sorting');
     return true;
 }
+function matSetMatrixCheckBoxes(state)
+{
+    var tbody = $( 'tbody.sortable');
+    if (tbody != undefined)
+         $(tbody).addClass('sorting');
 
-function filterCompositeSelectionChanged(obj)
-{ // filterComposite:onchange Set subtrack selection based upon the changed filter  [Not called for filterBy]
+    if (arguments.length >= 5)
+        waitOnFunction(_matSetMatrixCheckBoxes,state,arguments[1],arguments[2],arguments[3],arguments[4]);
+    else if (arguments.length >= 4)
+        waitOnFunction(_matSetMatrixCheckBoxes,state,arguments[1],arguments[2],arguments[3]);
+    else if (arguments.length >= 3)
+        waitOnFunction(_matSetMatrixCheckBoxes,state,arguments[1],arguments[2]);
+    else if (arguments.length >= 2)
+        waitOnFunction(_matSetMatrixCheckBoxes,state,arguments[1]);
+    else
+        waitOnFunction(_matSetMatrixCheckBoxes,state);
 
-    if($(obj).val() != undefined
-    && $(obj).val().toString().indexOf("All,") != -1) {
-        $(obj).val("All");
-        $(obj).attr('selectedIndex',0);
-    }
-    // Get list of values which should match classes of subtracks
-    var classes = $(obj).val();  // It is already an array!
-    if(classes == null) { // Nothing is selected.  Mark with "[empty]"
-        classes = "";
-        setCartVar($(obj).attr('name'),"[empty]");  // FIXME: setCartVar conflicts with "submit" button paradigm
-    }
-
-    // For all subtracks that DO NOT match selected classes AND are checked: uncheck
-    var subCBs = $("input.subCB");
-    var subCBsToUnselect = subCBs;
-    if (classes.length > 0 && classes[0] != "All")
-        subCBsToUnselect = objsFilterByClasses(subCBsToUnselect,"not",classes);  // remove unchecked classes
-    if (subCBsToUnselect.length > 0)
-        subCBsToUnselect = $(subCBsToUnselect).filter(":checked");
-    if (subCBsToUnselect.length > 0)
-        subCBsToUnselect.each( function (i) { matSubCBcheckOne(this,false); });
-
-    // For all subtracks that DO match a selected class AND are NOT checked:
-    //  Figure out if other selection criteria match.  If so: check
-    //var subCBs = $("input.subCB");
-    var subCBsToSelect = subCBs;
-    if(classes.length > 0) {
-        if(classes.length > 0 && classes[0] != "All")
-            subCBsToSelect = objsFilterByClasses(subCBsToSelect,"or",classes);     // Keep any that should be selected
-        // Now deal with all the others
-        if (subCBsToSelect.length > 0) {
-            var filterComp = $("select.filterComp").not("[name='"+obj.name+"']"); // Exclude self from list
-            for(var ix=0;ix<filterComp.length && subCBsToSelect.length > 0;ix++) {
-                var filterClasses = $(filterComp[ix]).val();
-                if(filterClasses.length > 0 && filterClasses[0] != "All")
-                    subCBsToSelect = objsFilterByClasses(subCBsToSelect,"or",filterClasses);     // Keep any that should be selected
-                else if(filterClasses.length == 0)
-                    subCBsToSelect.length = 0;
-            }
-        }
-        // Filter for Matrix CBs too
-        if (subCBsToSelect.length > 0) {
-            var matCb = $("input.matCB").filter(":checked");
-            if (matCb.length > 0) {
-                var matchClasses = "";
-                $( matCb ).each( function(i) {
-                    var filterClasses = $( this ).attr("class").split(" ");
-                    filterClasses = aryRemove(filterClasses,"matCB","halfVis","abc");
-                    matchClasses = matchClasses + ",." + filterClasses.join('.');
-                });
-                if (matchClasses.length > 0) {
-                    matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
-                    subCBsToSelect = $(subCBsToSelect).filter(matchClasses);     // Keep any that should be selected
-                }
-            }
-        }
-
-        // Now we have subCBs that should be checked.  Exclude already checked, then do it
-        if (subCBsToSelect.length > 0)
-            subCBsToSelect = $(subCBsToSelect).not(":checked");
-        if (subCBsToSelect.length > 0)
-            subCBsToSelect.each( function (i) { matSubCBcheckOne(this,true); });
-    }
-    matSubCBsSelected();
 }
 
 ///////////// CB support routines ///////////////
@@ -874,7 +827,7 @@ function filterCompositeSet(obj,all)
     matSubCBsCheck(all);
     var vars = [];
     var vals = [];
-    var filterComp = $("select.filterComp").not(".filterBy");
+    var filterComp = $("select.filterComp");
     if(all) {
         $(filterComp).each(function(i) {
             $(this).trigger("checkAll");
@@ -896,99 +849,208 @@ function filterCompositeSet(obj,all)
     matSubCBsSelected(); // Be sure to update the counts!
 }
 
-function filterCompositeExcludeOptions(obj)
+function matCbFilterClasses(matCb,joinThem)
+{ // returns the var associated with a filterComp
+
+    var classes = $( matCb ).attr("class").split(" ");
+    classes = aryRemove(classes,"matCB","halfVis","abc");
+    if (joinThem)
+        return '.' + classes.join('.');
+    return classes;
+}
+
+function filterCompFilterVar(filter)
+{ // returns the var associated with a filterComp
+
+    if($(filter).hasClass('filterComp') == false)
+        return undefined;
+
+    // Find the var for this filter
+    var parts = $(filter).attr("name").split('.');
+    return parts[parts.length - 1];
+}
+
+function filterCompApplyOneFilter(filter,subCbsRemaining)
+{ // Applies a single filter to a filterTables TRs
+    var classes = $(filter).val();
+    if (classes == null || classes.length == 0)
+        return []; // Nothing selected so exclude all rows
+
+    if(classes[0] == 'All')
+        return subCbsRemaining;  // nothing excluded by this filter
+
+    var subCbsAccumulating = [];
+    for(var ix =0;ix<classes.length;ix++) {
+        var subCBOneFIlter = $(subCbsRemaining).filter('.' + classes[ix]);
+        if (subCBOneFIlter.length > 0)
+            subCbsAccumulating = jQuery.merge( subCbsAccumulating, subCBOneFIlter );
+    }
+    //warnSince('filterCompApplyOneFilter('+filterCompFilterVar(filter)+','+subCbsRemaining.length+')');
+    return subCbsAccumulating;
+}
+
+function filterCompApplyOneMatCB(matCB,remainingCBs)
+{ // Applies a single filter to a filterTables TRs
+    var classes = matCbFilterClasses(matCB,true);
+    if (classes == null || classes.length == 0)
+        return []; // Nothing selected so exclude all rows
+
+    //warnSince('filterCompApplyOneMatCB('+classes+','+remainingCBs.length+');
+    return $(remainingCBs).filter(classes);
+}
+
+function filterCompSubCBsSurviving(filterClass)
+// returns a list of trs that satisfy all filters
+// If defined, will exclude filter identified by filterClass
+{
+    // find all filterable table rows
+    var subCbsFiltered = $("input.subCB");// Default all
+    if (subCbsFiltered.length == 0)
+        return [];
+
+    //warnSince('filterCompSubCBsSurviving() start: '+ subCbsFiltered.length);
+
+    // Find all filters
+    var filters = $("select.filterComp");
+    if (filters.length == 0)
+        return [];
+
+    // Exclude one if requested.
+    if (filterClass != undefined && filterClass.length > 0)
+        filters = $(filters).not("[name$='" + filterClass + "']");
+
+    for(var ix =0;subCbsFiltered.length > 0 && ix < filters.length;ix++) {
+        subCbsFiltered = filterCompApplyOneFilter(filters[ix],subCbsFiltered);  // successively reduces
+    }
+
+    // Filter for Matrix CBs too
+    if (subCbsFiltered.length > 0) {
+        var matCbAll = $("input.matCB");
+        var matCb = $(matCbAll).filter(":checked");
+        if (matCbAll.length > matCb.length) {
+            if (matCb.length == 0)
+                subCbsFiltered = [];
+            else {
+                var subCbsAccumulating = [];
+                for(var ix =0;ix<matCb.length;ix++) {
+                    var subCBOneFIlter = filterCompApplyOneMatCB(matCb[ix],subCbsFiltered);
+                    if (subCBOneFIlter.length > 0)
+                        filteredCBs = jQuery.merge( subCbsAccumulating, subCBOneFIlter );
+                }
+                subCbsFiltered = subCbsAccumulating;
+            }
+        }
+    }
+    //warnSince('filterCompSubCBsSurviving() matrix: '+subCbsFiltered.length);
+    return subCbsFiltered;
+}
+
+function _filterComposite()
+{ // Called when filterComp selection changes.  Will check/uncheck subtracks
+    var subCbsSelected = filterCompSubCBsSurviving();
+
+    // Uncheck:
+    var subCbsToUnselect = $("input.subCB:checked");// Default all
+    if (subCbsToUnselect.length > 0)
+        $(subCbsToUnselect).each( function (i) { matSubCBcheckOne(this,false); });
+    //warnSince('done with uncheck');
+
+    // check:
+    if (subCbsSelected.length > 0)
+        $(subCbsSelected).each( function (i) { matSubCBcheckOne(this,true); });
+    //warnSince('done with check');
+
+    // Update count
+    matSubCBsSelected();
+    //warnSince('done');
+
+    var tbody = $( subCbsSelected[0] ).parents('tbody.sorting');
+    if (tbody != undefined)
+         $(tbody).removeClass('sorting');
+}
+
+function filterCompositeTrigger()
+{ // Called when filterComp selection changes.  Will check/uncheck subtracks
+    var tbody = $( 'tbody.sortable');
+    if (tbody != undefined)
+         $(tbody).addClass('sorting');
+
+    waitOnFunction(_filterComposite);
+}
+
+function filterCompositeDone(event)
+{ // Called by custom 'done' event
+    event.stopImmediatePropagation();
+    $(this).unbind( event );
+    filterCompositeTrigger();
+    //waitOnFunction(filterCompositeTrigger,$(this));
+}
+
+function filterCompositeSelectionChanged(obj)
+{ // filterComposite:onchange Set subtrack selection based upon the changed filter  [Not called for filterBy]
+
+    var subCBs = $("input.subCB");
+    if ( subCBs.length > 300) {
+        //if ($.browser.msie) { // IE takes tooo long, so this should be called only when leaving the filterBy box
+            $(obj).one('done',filterCompositeDone);
+            return;
+        //}
+    } else
+        filterCompositeTrigger();
+}
+
+function filterCompositeExcludeOptions(multiSelect)
 { // Will mark all options in one filterComposite boxes that are inconsistent with the current
   // selections in other filterComposite boxes.  Mark is class ".excluded"
-
-    if($(obj).hasClass('filterBy'))
+    // Compare to the list of all trs
+    var allSubCBs = $("input.subCB");
+    if (allSubCBs.length == 0)
         return false;
 
-    // Walk through all other dimensions and narrow list of subCBs that are selected
-    // NOTE: narrowing the list should by each dimension other than current one is the same as
-    // getting the selected CB list if the current dimension selected all
-    var allSelectedTags = [ ];  // empty array
-    var oneEmpty = false;
-    var subCBs = $("input.subCB");
-    var filterComp = $("select.filterComp").not("#"+$(obj).attr('id')); // Exclude self from list
-    $( filterComp ).each( function (i)  {
-        if( $( subCBs ).length > 0 ) {
-            var selectedTags = $( this ).val();
-            if( !selectedTags || selectedTags.length == 0)
-                oneEmpty = true;
-            else if( selectedTags && selectedTags.length > 0 && selectedTags[0] != "All" ) {
-                subCBs = objsFilterByClasses(subCBs,"or",selectedTags);  // must belong to one or more
-                allSelectedTags = allSelectedTags.concat(selectedTags);
-            }
-        }
-    });
-    // Matrix CBs need to be considered too
-    if (subCBs.length > 0) {
-        var matCb = $("input.matCB").filter(":checked");
-        if (matCb.length == 0)
-            oneEmpty = true;
-        else {//if (matCb.length > 0) {
-            // If all selected, no additional filtering needed.
-            if (matCb.length < $("input.matCB").length) {
-                var matchClasses = "";
-                $( matCb ).each( function(i) {
-                    var filterClasses = $( this ).attr("class").split(" ");
-                    filterClasses = aryRemove(filterClasses,"matCB","halfVis","abc");
-                    matchClasses = matchClasses + ",." + filterClasses.join('.');
-                });
-                if (matchClasses.length > 0) {
-                    matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
-                    if ($.browser.msie) {   // IE was hanging on .filter(matchClasses), so do this ourselves
-                        var matchSets = matchClasses.split(',');
-                        if (matchSets < 80 && $(subCBs).length < 300) { // IE is just choking!
-                            var subsAccumulating = null;
-                            while(matchSets.length > 0) {
-                                var matchThis = matchSets.pop();
-                                var subBatch = $(subCBs).filter(matchThis);
-                                if (subBatch != undefined && subBatch.length > 0) {
-                                    //subCBs = $(subCBs).not(matchThis); // Would be nice to split the subCBs
-                                    if (subsAccumulating == null || subsAccumulating.length == 0)
-                                        subsAccumulating = subBatch;
-                                    else
-                                        subsAccumulating = subsAccumulating.add(subBatch);
-                                }
-                            }
-                            subCBs = subsAccumulating;
-                        }
-                    } else
-                        subCBs = $(subCBs).filter(matchClasses);
-                }
-            }
-        }
+    if ($.browser.msie && $(allSubCBs).filter(":checked").length > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
+        return false;
+
+    var filterClass = filterCompFilterVar(multiSelect);
+    if (filterClass == undefined)
+        return false;
+
+    // Look at list of CBs that would be selected if all were selected for this filter
+    var subCbsSelected = filterCompSubCBsSurviving(filterClass);
+    if (subCbsSelected.length == 0)
+        return false;
+
+    if (allSubCBs.length == subCbsSelected.length) {
+        $(multiSelect).children('option.excluded').removeClass('excluded');   // remove .excluded" from all
+        return true;
     }
 
+    //warnSince('filterCompositeExcludeOptions('+filterClass+'): subCbsSelected: '+subCbsSelected.length);
     // Walk through all selected subCBs to get other related tags
-    var possibleSelections = [ ];  // empty array
-    if(!oneEmpty) {
-        $( subCBs ).each( function (i)  {
+    var possibleSelections = [];  // empty array
+    $( subCbsSelected ).each( function (i)  {
 
-            var possibleClasses = $( this ).attr("class").split(" ");
-            if( $(possibleClasses).length > 0)
-                possibleClasses = aryRemoveVals(possibleClasses,[ "subCB" ]);
-            if( $(possibleClasses).length > 0)
-                possibleSelections = possibleSelections.concat(possibleClasses);
-        });
-        if( $ (possibleSelections).length > 0) // clean out tags from other dimensions
-            possibleSelections = aryRemoveVals(possibleSelections,allSelectedTags);
-    }
+        var possibleClasses = $( this ).attr("class").split(" ");
+        if( $(possibleClasses).length > 0)
+            possibleClasses = aryRemoveVals(possibleClasses,[ "subCB" ]);
+        if( $(possibleClasses).length > 0)
+            possibleSelections = possibleSelections.concat(possibleClasses);
+    });
+    //warnSince('filterCompositeExcludeOptions('+filterClass+'): possibleSelections: '+possibleSelections.length);
 
     // Walk through all options in this filterBox to set excluded class
-    //warn(possibleSelections,toString());
     var updated = false;
-    var opts = $(obj).children("option");
-    for(var ix = 1;ix < $(opts).length;ix++) { // All is always allowwed
-        if(!oneEmpty && possibleSelections.length > 0 && aryFind(possibleSelections,opts[ix].value) == -1) {
-            if($(opts[ix]).hasClass('excluded') == false) {
-                $(opts[ix]).addClass('excluded');
+    if(possibleSelections.length > 0) {
+        var opts = $(multiSelect).children("option");
+        for(var ix = 1;ix < $(opts).length;ix++) { // All is always allowed
+            if(aryFind(possibleSelections,opts[ix].value) == -1) {
+                if($(opts[ix]).hasClass('excluded') == false) {
+                    $(opts[ix]).addClass('excluded');
+                    updated = true;
+                }
+            } else if($(opts[ix]).hasClass('excluded')) {
+                $(opts[ix]).removeClass('excluded');
                 updated = true;
             }
-        } else if($(opts[ix]).hasClass('excluded')) {
-            $(opts[ix]).removeClass('excluded');
-            updated = true;
         }
     }
     return updated;
@@ -1100,12 +1162,7 @@ $(document).ready(function()
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
 
     $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-        if (newJQuery) {
-            if ($(this).hasClass('filterBy'))
-                ddclSetup(this, 'noneIsAll');
-            else
-                ddclSetup(this);
-        } else
+        if (newJQuery == false)
             $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
     });
 

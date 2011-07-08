@@ -4,8 +4,8 @@
 
 track wgEncodeSydhNsome
 compositeTrack on
-shortLabel Stanford Nucleosome
-longLabel ENCODE Stanford/BYU Snyder Nucleosome
+shortLabel Stanf Nucleosome
+longLabel Nucleosome Position by MNase-seq from ENCODE/Stanford/BYU
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
@@ -33,7 +33,7 @@ noInherit on
         track wgEncodeSydhNsomeK562Sig
         parent wgEncodeSydhNsomeViewSignal
         shortLabel K562 Sig
-        longLabel K562 Signal from ENCODE/Stanford/BYU
+        longLabel K562 Nucleosome Signal from ENCODE/Stanford/BYU
 	subGroups view=Signal cellType=K562
         type bigWig 0.000000 31303.900391
         origAssembly hg19
@@ -43,7 +43,7 @@ noInherit on
         track wgEncodeSydhNsomeGm12878Sig
         parent wgEncodeSydhNsomeViewSignal
         shortLabel GM12878 Sig
-        longLabel GM12878 Signal from ENCODE/Stanford/BYU
+        longLabel GM12878 Nucleosome Signal from ENCODE/Stanford/BYU
 	subGroups view=Signal cellType=GM12878
         type bigWig 0.000000 16392.599609
         origAssembly hg19

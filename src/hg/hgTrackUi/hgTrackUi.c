@@ -2769,7 +2769,7 @@ if (sameWord(tdb->track,"ensGene"))
 else
     {
     if (trackDbSetting(tdb, "wgEncode"))
-        printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' width=100 src='/images/logos/ENCODE_scaleup_logo.png'><A>");
+        printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
     printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
     }

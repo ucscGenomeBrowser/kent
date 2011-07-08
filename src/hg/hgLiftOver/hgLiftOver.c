@@ -308,6 +308,7 @@ cgiTableEnd();
 void webDataFormats()
 {
 webNewSection("Data Formats");
+puts("<ul>");
 puts("<LI>");
 puts(
     "<A HREF=\"../goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
@@ -317,6 +318,7 @@ puts("<LI>");
 puts("Genomic Coordinate Position<BR>");
 puts("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; chrN<B>:</B>start<B>-</B>end");
 puts("</LI>");
+puts("</ul>");
 }
 
 void webDownloads()

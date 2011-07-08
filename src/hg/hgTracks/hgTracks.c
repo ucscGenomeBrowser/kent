@@ -4,6 +4,7 @@
  * routine got moved to create a new entry point to the bulk of the code for the
  * hgRenderTracks web service.  See mainMain.c for the main used by the hgTracks CGI. */
 
+#include <pthread.h>
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
@@ -4346,6 +4347,182 @@ for (;track != NULL; track = track->next)
     }
 }
 
+
+struct paraFetchData
+    {
+    struct paraFetchData *next;
+    struct track *track;
+    boolean done;
+    };
+
+static boolean isTrackForParallelLoad(struct track *track)
+/* Is this a track that should be loaded in parallel ? */
+{
+char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
+return (startsWithWord("bigWig"  , track->tdb->type)
+     || startsWithWord("bigBed"  , track->tdb->type)
+     || startsWithWord("bam"     , track->tdb->type)
+     || startsWithWord("vcfTabix", track->tdb->type))
+     && (bdu && strstr(bdu,"://"))
+     && (track->subtracks == NULL);
+}
+
+static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList)
+/* Find leaves of track tree that are remote network resources for parallel-fetch loading */
+{
+struct track *track;
+if (!trackList)
+    return;
+for (track = trackList; track != NULL; track = track->next)
+    {
+
+    if (track->visibility != tvHide)
+	{
+	if (isTrackForParallelLoad(track))
+	    {
+	    struct paraFetchData *pfd;
+	    AllocVar(pfd);
+	    pfd->track = track;  // need pointer to be stable
+	    slAddHead(ppfdList, pfd);
+	    track->parallelLoading = TRUE;
+	    }
+	struct track *subtrack;
+        for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
+	    {
+	    if (isSubtrackVisible(subtrack))
+		{
+		if (isTrackForParallelLoad(subtrack))
+		    {
+		    struct paraFetchData *pfd;
+		    AllocVar(pfd);
+		    pfd->track = subtrack;  // need pointer to be stable
+		    slAddHead(ppfdList, pfd);
+		    subtrack->parallelLoading = TRUE;
+		    }
+		}
+	    }
+	}
+    }
+}
+
+static pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
+static struct paraFetchData *pfdList = NULL, *pfdRunning = NULL, *pfdDone = NULL, *pfdNeverStarted = NULL;
+
+static void *remoteParallelLoad(void *threadParam)
+/* Each thread loads tracks in parallel until all work is done. */
+{
+pthread_t *pthread = threadParam;
+struct paraFetchData *pfd = NULL;
+pthread_detach(*pthread);  // this thread will never join back with it's progenitor
+    // Canceled threads that might leave locks behind,
+    // so the theads are detached and will be neither joined nor canceled.
+boolean allDone = FALSE;
+while(1)
+    {
+    pthread_mutex_lock( &pfdMutex );
+    if (!pfdList)
+	{
+	allDone = TRUE;
+	}
+    else
+	{  // move it from the waiting queue to the running queue
+	pfd = slPopHead(&pfdList);
+	slAddHead(&pfdRunning, pfd);
+	}
+    pthread_mutex_unlock( &pfdMutex );
+    if (allDone)
+	return NULL;
+
+    long thisTime = 0, lastTime = 0;
+
+    if (measureTiming)
+	lastTime = clock1000();
+
+    /* protect against errAbort */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	pfd->done = FALSE;
+	checkMaxWindowToDraw(pfd->track);
+	pfd->track->loadItems(pfd->track);
+	pfd->done = TRUE;
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	pfd->track->networkErrMsg = cloneString(errCatch->message->string);
+	pfd->done = TRUE;
+	}
+    errCatchFree(&errCatch);
+
+    if (measureTiming)
+	{
+	thisTime = clock1000();
+	pfd->track->loadTime = thisTime - lastTime;
+	}
+
+    pthread_mutex_lock( &pfdMutex );
+    slRemoveEl(&pfdRunning, pfd);  // this list will not be huge
+    slAddHead(&pfdDone, pfd);
+    pthread_mutex_unlock( &pfdMutex );
+
+    }
+}
+
+static int remoteParallelLoadWait(int maxTimeInSeconds)
+/* Wait, checking to see if finished (completed or errAborted).
+ * If timed-out or never-ran, record error status.
+ * Return error count. */
+{
+int maxTimeInMilliseconds = 1000 * maxTimeInSeconds;
+struct paraFetchData *pfd;
+int errCount = 0;
+int waitTime = 0;
+while(1)
+    {
+    sleep1000(50); // milliseconds
+    waitTime += 50;
+    boolean done = TRUE;
+    pthread_mutex_lock( &pfdMutex );
+    if (pfdList || pfdRunning)
+	done = FALSE;
+    pthread_mutex_unlock( &pfdMutex );
+    if (done)
+        break;
+    if (waitTime >= maxTimeInMilliseconds)
+        break;
+    }
+pthread_mutex_lock( &pfdMutex );
+pfdNeverStarted = pfdList;
+pfdList = NULL;  // stop the workers from starting any more waiting track loads
+for (pfd = pfdNeverStarted; pfd; pfd = pfd->next)
+    {
+    // track was never even started
+    char temp[256];
+    safef(temp, sizeof temp, "Ran out of time (%d milliseconds) unable to process  %s", maxTimeInMilliseconds, pfd->track->track);
+    pfd->track->networkErrMsg = cloneString(temp);
+    ++errCount;
+    }
+for (pfd = pfdRunning; pfd; pfd = pfd->next)
+    {
+    // unfinished track
+    char temp[256];
+    safef(temp, sizeof temp, "Timeout %d milliseconds exceeded processing %s", maxTimeInMilliseconds, pfd->track->track);
+    pfd->track->networkErrMsg = cloneString(temp);
+    ++errCount;
+    }
+for (pfd = pfdDone; pfd; pfd = pfd->next)
+    {
+    // some done tracks may have errors
+    if (pfd->track->networkErrMsg)
+        ++errCount;
+    }
+pthread_mutex_unlock( &pfdMutex );
+return errCount;
+}
+
+
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -4449,7 +4626,10 @@ if (!isEmpty(jsCommand))
    jsCommandDispatch(jsCommand, trackList);
    }
 
+
 /* Tell tracks to load their items. */
+
+/* adjust visibility */
 for (track = trackList; track != NULL; track = track->next)
     {
     /* adjust track visibility based on supertrack just before load loop */
@@ -4463,19 +4643,54 @@ for (track = trackList; track != NULL; track = track->next)
 	track->limitedVis = tvHide;
 	track->limitedVisSet = TRUE;
 	}
-    else if (track->visibility != tvHide)
+    }
+/* pre-load remote tracks in parallel */
+int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
+pthread_t *threads = NULL;
+if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
+    {
+    findLeavesForParallelLoad(trackList, &pfdList);
+    /* launch parallel threads */
+    ptMax = min(ptMax, slCount(pfdList));
+    if (ptMax > 0)
 	{
-	if (measureTiming)
-	    lastTime = clock1000();
-	checkMaxWindowToDraw(track);
-	track->loadItems(track);
-
-	if (measureTiming)
+	AllocArray(threads, ptMax);
+	int pt;
+	for (pt = 0; pt < ptMax; ++pt)
 	    {
-	    thisTime = clock1000();
-	    track->loadTime = thisTime - lastTime;
+	    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
+	    if (rc)
+		{
+		errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
+		}
 	    }
 	}
+    }
+/* load regular tracks */
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (track->visibility != tvHide)
+	{
+	if (!track->parallelLoading)
+	    {
+	    if (measureTiming)
+		lastTime = clock1000();
+
+	    checkMaxWindowToDraw(track);
+	    track->loadItems(track);
+
+	    if (measureTiming)
+		{
+		thisTime = clock1000();
+		track->loadTime = thisTime - lastTime;
+		}
+	    }
+	}
+    }
+if (ptMax > 0)
+    {
+    /* wait for remote parallel load to finish */
+    remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
     }
 
 printTrackInitJavascript(trackList);
@@ -4756,6 +4971,9 @@ if (!hideControls)
         hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
 
     hPrintf(" ");
+    hPrintf("<INPUT TYPE='button' VALUE='import tracks' onClick='document.trackHubForm.submit();return false;' title='Import tracks from hubs'>");
+
+    hPrintf(" ");
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
@@ -4978,6 +5196,11 @@ hPrintf("</FORM>\n");
 
 /* hidden form for custom tracks CGI */
 hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
+
+/* hidden form for track hub CGI */
+hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
@@ -5623,10 +5846,10 @@ if(advancedJavascriptFeaturesEnabled(cart))
         webIncludeResourceFile("jquery.contextmenu.css");
         jsIncludeFile("jquery.contextmenu.js", NULL);
         webIncludeResourceFile("ui.dropdownchecklist.css");
-#ifndef NEW_JQUERY
-        jsIncludeFile("ui.core.js", NULL);
-#endif
         jsIncludeFile("ui.dropdownchecklist.js", NULL);
+#ifdef NEW_JQUERY
+        jsIncludeFile("ddcl.js", NULL);
+#endif///def NEW_JQUERY
         }
     }
 
