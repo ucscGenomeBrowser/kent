@@ -26,25 +26,27 @@ static struct optionSpec options[] = {
 static void makeTableListConn(char *tableListName, struct sqlConnection *conn)
 {
 // recreate tableList in given db
-// written so that tableList always exists (i.e. we use a temporary file and rename (which is hopefully atomic))
+// written so that tableList always exists (i.e. we use a temporary file and RENAME TABLE (which is hopefully atomic))
 
-char *tmp = cloneString(rTempName("/tmp", "makeTableList", ".txt"));
+char *tmpDir = getenv("TMPDIR");
+if(tmpDir == NULL)
+    tmpDir = "/tmp";
+char *tmp = cloneString(rTempName(tmpDir, "makeTableList", ".txt"));
 struct sqlResult *sr;
 char **row;
 char buf[1024];
 char tmpTable[512];
-FILE *fd = fopen(tmp, "w");
-if(fd == NULL)
-    errAbort("Couldn't create tmp file");
+FILE *fd = mustOpen(tmp, "w");
 
 sr = sqlGetResult(conn, "SHOW TABLES");
 while ((row = sqlNextRow(sr)) != NULL)
     fprintf(fd, "%s\n", row[0]);
 sqlFreeResult(&sr);
-fclose(fd);
+carefulClose(&fd);
 
 // now load show tables data into a temporary table
 safef(tmpTable, sizeof(tmpTable), "tableList%ld", (long) getpid());
+sqlDropTable(conn, tmpTable);
 safef(buf, sizeof(buf), "CREATE TABLE %s (name varchar(255) not null, PRIMARY KEY(name))", tmpTable);
 sqlUpdate(conn, buf);
 safef(buf, sizeof(buf), "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s", tmp, tmpTable);
@@ -52,9 +54,10 @@ sqlUpdate(conn, buf);
 
 if(sqlTableExists(conn, tableListName))
     {
+    sqlDropTable(conn, "tableListOld");
     safef(buf, sizeof(buf), "RENAME TABLE tableList to tableListOld, %s TO %s", tmpTable, tableListName);
     sqlUpdate(conn, buf);
-    sqlUpdate(conn, "DROP TABLE tableListOld");
+    sqlDropTable(conn, "tableListOld");
     }
 else
     {
