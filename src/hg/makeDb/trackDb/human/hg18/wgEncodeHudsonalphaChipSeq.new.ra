@@ -1357,14 +1357,6 @@ html wgEncodeHudsonalphaChipSeq.new
         type wig 1.00 1482.00
         color 46,0,184
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x
-        parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel K562 Inp PCR2x 2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Input in K562 cells, PCR2x)
-        subGroups view=zRaw factor=zRXLCH cellType=1K5 rep=rep2 prot=PCR2x treat=aNONE
-        type wig 1.00 3777.00
-        color 46,0,184
-
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Pol2
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 Pol2 R1
