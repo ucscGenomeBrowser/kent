@@ -25,7 +25,7 @@ use English;
 use Carp qw(cluck);
 use Cwd;
 use IO::File;
-use File::Basename;
+use Date::Parse;
 
 use lib "/cluster/bin/scripts";
 use Encode;
@@ -359,9 +359,6 @@ foreach my $objName (keys %metaLines) {
         $experiment{"freeze"} = "unknown";
     }
 
-    $experiment{"submitDate"} = defined($metadata{"dateResubmitted"}) ?
-                $metadata{"dateResubmitted"} : $metadata{"dateSubmitted"};
-
     $experiment{"releaseDate"} = "none";
 
     # a few tracks are missing the subId
@@ -387,6 +384,16 @@ foreach my $objName (keys %metaLines) {
     # (include version in vars)
     # subId -- lookup, add to list if exists
     if (defined($experiments{$expKey})) {
+        # replace submit date if it's earlier
+        if (!defined($metadata{"dateSubmitted"}) || 
+            !defined(str2time($metadata{"dateSubmitted"}))) {
+                warn("ERROR: Bad or missing dateSubmitted in experiment: $expKey subId=$subId");
+        } else {
+            if (str2time($metadata{"dateSubmitted"}) < 
+                str2time($experiments{$expKey}->{"submitDate"})) {
+                    $experiments{$expKey}->{"submitDate"} = $metadata{"dateSubmitted"};
+            }
+        }
         # add subId
         # just for diagnostics
         my %ids = %{$experiments{$expKey}->{"ids"}};
@@ -406,6 +413,15 @@ foreach my $objName (keys %metaLines) {
             }
         }
     } else {
+        # add submit date
+        if (!defined($metadata{"dateSubmitted"}) || 
+            !defined(str2time($metadata{"dateSubmitted"}))) {
+                warn("ERROR: Bad or missing dateSubmitted in experiment: $expKey subId=$subId");
+                $experiment{"submitDate"} = "unknown";
+        } else {
+            $experiment{"submitDate"} = $metadata{"dateSubmitted"};
+        }
+
         # add subId
         my %ids = ();
         $ids{$subId} = $subId;
