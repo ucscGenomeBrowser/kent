@@ -44,7 +44,7 @@
 /* Font size of 0 on the -selector and an explicit medium on -text required to eliminate 
    descender problems within the containers and still have a valid size for the text */
 .ui-dropdownchecklist-selector-wrapper {
-	border: 2px ridge gray;
+	border: 2px inset gray;
 	background: black;
 	vertical-align: middle;
 }

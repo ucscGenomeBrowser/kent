@@ -10,7 +10,7 @@ include wgEncodeSydhTfbs.newR2.ra alpha
 include wgEncodeSydhHistone.ra alpha
 
 # UW DNaseI HS (wrangler: Venkat)
-include wgEncodeUwDnase.ra beta
+include wgEncodeUwDnase.ra beta,public
 include wgEncodeUwDnase.new.ra alpha 
 
 # PSU TFBS (wrangler: Venkat)

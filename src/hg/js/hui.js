@@ -939,21 +939,19 @@ function filterCompositeExcludeOptions(obj)
                     matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
                     if ($.browser.msie) {   // IE was hanging on .filter(matchClasses), so do this ourselves
                         var matchSets = matchClasses.split(',');
-                        if (matchSets < 80 && $(subCBs).length < 300) { // IE is just choking!
-                            var subsAccumulating = null;
-                            while(matchSets.length > 0) {
-                                var matchThis = matchSets.pop();
-                                var subBatch = $(subCBs).filter(matchThis);
-                                if (subBatch != undefined && subBatch.length > 0) {
-                                    //subCBs = $(subCBs).not(matchThis); // Would be nice to split the subCBs
-                                    if (subsAccumulating == null || subsAccumulating.length == 0)
-                                        subsAccumulating = subBatch;
-                                    else
-                                        subsAccumulating = subsAccumulating.add(subBatch);
-                                }
+                        var subsAccumulating = null;
+                        while(matchSets.length > 0) {
+                            var matchThis = matchSets.pop();
+                            var subBatch = $(subCBs).filter(matchThis);
+                            if (subBatch != undefined && subBatch.length > 0) {
+                                //subCBs = $(subCBs).not(matchThis); // Would be nice to split the subCBs
+                                if (subsAccumulating == null || subsAccumulating.length == 0)
+                                    subsAccumulating = subBatch;
+                                else
+                                    subsAccumulating = jQuery.merge(subsAccumulating,subBatch);
                             }
-                            subCBs = subsAccumulating;
                         }
+                        subCBs = subsAccumulating;
                     } else
                         subCBs = $(subCBs).filter(matchClasses);
                 }

@@ -408,7 +408,7 @@ if (sortOrder != NULL)
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
         #ifdef NEW_JQUERY
-            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);' style='font-size:.9em;'");
+            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable(this);' style='font-size:.9em;'");
         #else///ifndef NEW_JQUERY
             char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);'");
         #endif///ndef NEW_JQUERY

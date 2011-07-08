@@ -18,7 +18,7 @@
 
 <P> The mean log R ratio for each region can be seen by clicking on each individual region. See Methods below for significance of log R ratio values.   The mean log R ratio for each region is reported in the .bed file available for download.
 </P>
-<P>The Illumina 1M-Duo B-allele frequency data is available from the <A TARGET=_BLANK HREF="http://hgwdev.cse.ucsc.edu/cgi-bin/hgFileUi?g=wgEncodeHaibGenotype ">Downloads</A> page.  The file (<A TARGET=_BLANK HREF=" http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/supplemental/wgEncodeHaibGenotypeBalleleSnp.txt">wgEncodeHaibGenotypeBalleleSnp.txt</A>) was generated using the standard Illumina protocol and contains the B-allele frequency for all cell types tested.  The genotype calls for all cell types tested are also available for download (<A TARGET=_BLANK HREF=" http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/supplemental/wgEncodeHaibGenotypeGtypeSnp.txt">wgEncodeHaibGenotypeGtypeSnp.txt</A>).  Genotyping calls with a Gencall value greater than 0.6 are considered significant.  
+<P>The Illumina 1M-Duo B-allele frequency data is available from the <A TARGET=_BLANK HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/supplemental/">Supplemental Materials</A> directory on the <A TARGET=_BLANK HREF="http://hgwdev.cse.ucsc.edu/cgi-bin/hgFileUi?g=wgEncodeHaibGenotype ">Downloads</A> page.  The file (<A TARGET=_BLANK HREF=" http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/supplemental/wgEncodeHaibGenotypeBalleleSnp.txt">wgEncodeHaibGenotypeBalleleSnp.txt</A>) was generated using the standard Illumina protocol and contains the B-allele frequency for all cell types tested.  The genotype calls for all cell types tested are also available for download (<A TARGET=_BLANK HREF=" http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/supplemental/wgEncodeHaibGenotypeGtypeSnp.txt">wgEncodeHaibGenotypeGtypeSnp.txt</A>).  Genotyping calls with a Gencall value greater than 0.6 are considered significant.  
 </P>
 
 <H3>Replicate Numbering</H3>
@@ -38,12 +38,12 @@ When comparing data across tracks, the lab replicate number should be considered
 </P>
 
 <H3> Processing and Analysis </H3>
-<P>We ascertained the genotypes from the 1M-Duo Arrays with BeadStudio by using default settings and formatting with the A/B genotype designation for each SNP.  Primary QC for each sample was a cut-off at a call rate of 0.95.
+<P>
+The genotypes from the 1M-Duo Arrays were ascertained with BeadStudio by using default settings and formatting with the A/B genotype designation for each SNP. Primary QC for each sample was a cut-off at a call rate of 0.95.
 </P>
-
-<P> We performed Copy Number Variation (CNV) analysis with circular binary segmentation (DNAcopy) of the log R ratio values at each probe (Olshen et al., 2004).  The parameters used were alpha=0.001, nperm=5000, sd.undo=1.  The copy number segments are reported with the mean log R ratio for each chromosomal segment called by CBS.  Log ratios of &#126;-0.2 to -1.5 can be considered heterozygous deletions, < -1.5 homozygous deletions, and &#62; 0.2 amplifications. Primary QC for each sample was SD(logR) of &#60; 0.6.
+<P>
+Copy Number Variation (CNV) analysis was performed with circular binary segmentation (DNAcopy) of the log R ratio values at each probe (Olshen et al., 2004). The parameters used were alpha=0.001, nperm=5000, sd.undo=1. The copy number segments are reported with the mean log R ratio for each chromosomal segment called by CBS. Log ratios of ~-0.2 to -1.5 can be considered heterozygous deletions, &lt; -1.5 homozygous deletions, and &gt; 0.2 amplifications. Primary QC for each sample was SD of &lt; 0.6.
 </P>
-
 
 <H2> Release Notes </H2>
 <P>This is the NCBI Build37 (hg19) release of this track.  This release includes the 3 cell types previously released on NCBI Build36 (hg18) which were lifted to NCBI Build37 (hg19) and adds data for many more cell types.  The track includes a single display for each cell type and reports the Log ratio in the .bed files.  The B-allele frequency and SNP genotyping files are not displayed, but are available for download for the entire dataset from the downloads page.
@@ -61,7 +61,14 @@ Contact:
 
 
 <H2> References </H2>
-<P>Olshen, A. et al. (2004).  Circular binary segmentation for the analysis of array-based DNA copy number data.  Biostatistics (Oxford, England) vol. 5 (4) pp. 557-572.
+<P>Olshen, A. et al. (2004).  
+<A HREF="http://biostatistics.oxfordjournals.org/content/5/4/557.long"
+	class="external test"
+	title="http://biostatistics.oxfordjournals.org/content/5/4/557.long"
+	rel="nofollow" TARGET = _BLACK>
+Circular binary segmentation for the analysis of array-based DNA copy number data.</A> 
+<em>Biostatistics</em> (Oxford, England) vol. 5 (4) pp. 557-572.
+
 </P>
 
 <H2> Data Release Policy </H2>

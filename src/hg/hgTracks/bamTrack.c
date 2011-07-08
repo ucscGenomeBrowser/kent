@@ -821,20 +821,6 @@ int width;
 int preDrawZero;
 };
 
-static void bamWigLoadItems(struct track *tg)
-{
-/* Figure out bigWig file name. */
-struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-/* this should call bamFileNameFromTable with logic from bamLoadItemsCore to 
- * check the bigDataUrl setting.  Fix this if bamWigs end up being
- * a supported type.   It may be that this code gets rolled into
- * normal BAM display... since that's the plan ;-).
- */
-char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
-tg->customPt = fileName;
-hFreeConn(&conn);
-}
-
 static int countBam(const bam1_t *bam, void *data)
 /* bam_fetch() calls this on each bam alignment retrieved.  */
 {
@@ -882,33 +868,47 @@ for (i = 0;  i < core->n_cigar;  i++)
 return 0;
 }
 
-static void bamWigDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis)
+static void bamWigLoadItems(struct track *tg)
 {
+char *fileName = NULL;
+/* Figure out bigWig file name. */
+if (tg->parallelLoading)
+    {
+    /* do not use mysql during parallel-fetch load */
+    fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+    /* this should call bamFileNameFromTable with logic from bamLoadItemsCore to 
+     * check the bigDataUrl setting.  Fix this if bamWigs end up being
+     * a supported type.   It may be that this code gets rolled into
+     * normal BAM display... since that's the plan ;-).
+     */
+    fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
+    hFreeConn(&conn);
+    }
+
 /* Allocate predraw area. */
 struct bamWigTrackData *bwData;
-double scale = (double)width/(winEnd - winStart);
+double scale = (double)insideWidth/(winEnd - winStart);
 
-struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(width);
+struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
 AllocVar(bwData);
 bwData->preDraw = pre->preDraw;
 bwData->scale = scale;
-bwData->width = width;
+bwData->width = insideWidth;
 bwData->preDrawZero = pre->preDrawZero;
 
 char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
-
-char *fileName = tg->customPt;
-tg->customPt = NULL;
 
 bamFetch(fileName, posForBam, countBam, bwData, NULL);
 
 /* fill in rest of predraw */
 int preDrawZero = pre->preDrawZero;
 int i;
-for (i=0; i<width; ++i)
+for (i=0; i<insideWidth; ++i)
     {
     struct preDrawElement *pe = &bwData->preDraw[i + preDrawZero];
     pe->min = pe->count;
@@ -917,9 +917,15 @@ for (i=0; i<width; ++i)
     pe->sumSquares = (pe->count * pe->count)/scale;
     }
 
+}
+
+static void bamWigDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
 /* Call actual graphing routine. */
 wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       pre, pre->preDrawZero, pre->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
 
 }
 

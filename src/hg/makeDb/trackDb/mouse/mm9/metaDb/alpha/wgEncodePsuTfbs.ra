@@ -748,9 +748,9 @@ project wgEncode
 seqPlatform Illumina_GA2
 setType exp
 sex M
+strain 129
 subId 3032
 tableName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
-train 129
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1
@@ -1053,4 +1053,4 @@ strain C57BL/6
 subId 3044
 view RawData
 
-# MAGIC: -1790894176
+# MAGIC: -1790776301
