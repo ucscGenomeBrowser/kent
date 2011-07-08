@@ -13,8 +13,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001590
-expId 1590
 fileName wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -37,8 +35,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001590
-expId 1590
 fileName wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -61,8 +57,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001590
-expId 1590
 fileName wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -85,7 +79,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-dccAccession wgEncodeEH001589
 expId 1589
 fileName wgEncodeHudsonalphaChipSeqAlignmentsA549Control.tagAlign.gz
 fragLength 225
@@ -112,7 +105,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-dccAccession wgEncodeEH001555
 expId 1555
 fileName wgEncodeHudsonalphaChipSeqAlignmentsA549Gr.tagAlign.gz
 fragLength 225
@@ -139,7 +131,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001643
 expId 1643
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xDexa.tagAlign.gz
 fragLength 225
@@ -164,7 +155,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001644
 expId 1644
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xEtoh02.tagAlign.gz
 fragLength 225
@@ -189,7 +179,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-dccAccession wgEncodeEH001589
 expId 1589
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr2xEtoh02.tagAlign.gz
 fragLength 225
@@ -214,7 +203,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001507
 expId 1507
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xDexa.tagAlign.gz
 fragLength 225
@@ -239,7 +227,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH001508
 expId 1508
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xEtoh02.tagAlign.gz
 fragLength 225
@@ -264,7 +251,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
 expId 1490
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex500pm.tagAlign.gz
 fragLength 225
@@ -290,7 +276,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
 expId 1491
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex50nm.tagAlign.gz
 fragLength 225
@@ -316,7 +301,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
 expId 1492
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex5nm.tagAlign.gz
 fragLength 225
@@ -342,7 +326,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-dccAccession wgEncodeEH001526
 expId 1526
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xEtoh02.tagAlign.gz
 fragLength 225
@@ -369,7 +352,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001494
 expId 1494
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2.tagAlign.gz
 fragLength 225
@@ -394,7 +376,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-dccAccession wgEncodeEH001493
 expId 1493
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2xEtoh02.tagAlign.gz
 fragLength 225
@@ -419,7 +400,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH001509
 expId 1509
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Usf1Pcr1xDexa.tagAlign.gz
 fragLength 225
@@ -444,7 +424,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001539
 expId 1539
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Usf1Pcr1xEtoh02.tagAlign.gz
 fragLength 225
@@ -469,8 +448,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002006
-expId 2006
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Be2cControl.tagAlign.gz
 fragLength 225
 grant Myers
@@ -494,8 +471,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002007
-expId 2007
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Be2cNrsf.tagAlign.gz
 fragLength 225
 grant Myers
@@ -519,7 +494,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001479
 expId 1479
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Batf.tagAlign.gz
 fragLength 225
@@ -545,7 +519,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001486
 expId 1486
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Bcl11a.tagAlign.gz
 fragLength 225
@@ -571,7 +544,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
-dccAccession wgEncodeEH001469
 expId 1469
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlPcr2x.tagAlign.gz
 fragLength 225
@@ -597,7 +569,6 @@ dataVersion post ENCODE Jan 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001467
 expId 1467
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz
 fragLength 225
@@ -623,7 +594,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001480
 expId 1480
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Ebf.tagAlign.gz
 fragLength 225
@@ -649,7 +619,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001462
 expId 1462
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Gabp.tagAlign.gz
 fragLength 225
@@ -674,7 +643,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
-dccAccession wgEncodeEH001484
 expId 1484
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Irf4.tagAlign.gz
 fragLength 225
@@ -700,7 +668,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH001465
 expId 1465
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Nrsf.tagAlign.gz
 fragLength 225
@@ -725,7 +692,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001475
 expId 1475
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Oct2.tagAlign.gz
 fragLength 225
@@ -751,7 +717,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001487
 expId 1487
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878P300.tagAlign.gz
 fragLength 225
@@ -777,7 +742,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-dccAccession wgEncodeEH001489
 expId 1489
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pax5c20.tagAlign.gz
 fragLength 225
@@ -803,7 +767,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001495
 expId 1495
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pax5n19.tagAlign.gz
 fragLength 225
@@ -828,7 +791,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001477
 expId 1477
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pbx3.tagAlign.gz
 fragLength 225
@@ -854,7 +816,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001463
 expId 1463
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pol2.tagAlign.gz
 fragLength 225
@@ -879,7 +840,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH001517
 expId 1517
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
@@ -904,7 +864,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001476
 expId 1476
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pu1.tagAlign.gz
 fragLength 225
@@ -930,7 +889,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001496
 expId 1496
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sp1Pcr1x.tagAlign.gz
 fragLength 225
@@ -955,7 +913,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
-dccAccession wgEncodeEH001485
 expId 1485
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Tcf12.tagAlign.gz
 fragLength 225
@@ -981,7 +938,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH001468
 expId 1468
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Usf1.tagAlign.gz
 fragLength 225
@@ -1006,7 +962,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-dccAccession wgEncodeEH001488
 expId 1488
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Zbtb33.tagAlign.gz
 fragLength 225
@@ -1032,7 +987,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001519
 expId 1519
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891ControlPcr1x.tagAlign.gz
 fragLength 225
@@ -1057,7 +1011,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001523
 expId 1523
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
@@ -1082,7 +1035,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001522
 expId 1522
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pol2Pcr1x.tagAlign.gz
 fragLength 225
@@ -1107,7 +1059,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001520
 expId 1520
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pou2f2Pcr1x.tagAlign.gz
 fragLength 225
@@ -1132,7 +1083,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001521
 expId 1521
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pu1Pcr1x.tagAlign.gz
 fragLength 225
@@ -1157,7 +1107,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001524
 expId 1524
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Taf1Pcr1x.tagAlign.gz
 fragLength 225
@@ -1182,8 +1131,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002019
-expId 2019
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1207,8 +1154,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002018
-expId 2018
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1232,8 +1177,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002017
-expId 2017
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1257,8 +1200,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002020
-expId 2020
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1282,7 +1223,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001543
 expId 1543
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescControlPcr1x.tagAlign.gz
 fragLength 225
@@ -1307,8 +1247,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002011
-expId 2011
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescNrsfPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1332,8 +1270,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH002016
-expId 2016
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescPol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1357,8 +1293,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-dccAccession wgEncodeEH002015
-expId 2015
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescPol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1382,8 +1316,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002012
-expId 2012
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescTaf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1407,7 +1339,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001628
 expId 1628
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Control.tagAlign.gz
 fragLength 225
@@ -1432,7 +1363,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001504
 expId 1504
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Gabp.tagAlign.gz
 fragLength 225
@@ -1457,7 +1387,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001474
 expId 1474
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Pol2.tagAlign.gz
 fragLength 225
@@ -1482,7 +1411,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001505
 expId 1505
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Taf1Pcr1xTaf1.tagAlign.gz
 fragLength 225
@@ -1507,7 +1435,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001603
 expId 1603
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2ControlPcr1x.tagAlign.gz
 fragLength 225
@@ -1532,8 +1459,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-dccAccession wgEncodeEH002013
-expId 2013
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Fosl2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1557,7 +1482,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-dccAccession wgEncodeEH001548
 expId 1548
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Gabp.tagAlign.gz
 fragLength 225
@@ -1583,8 +1507,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-dccAccession wgEncodeEH002014
-expId 2014
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Hey1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1608,7 +1530,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001470
 expId 1470
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Jund.tagAlign.gz
 fragLength 225
@@ -1633,7 +1554,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001549
 expId 1549
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Nrsf.tagAlign.gz
 fragLength 225
@@ -1658,8 +1578,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002010
-expId 2010
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2P300.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1683,7 +1601,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001550
 expId 1550
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Pol2.tagAlign.gz
 fragLength 225
@@ -1708,7 +1625,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001506
 expId 1506
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2RxraPcr1x.tagAlign.gz
 fragLength 225
@@ -1733,7 +1649,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001471
 expId 1471
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Sin3ak20.tagAlign.gz
 fragLength 225
@@ -1758,7 +1673,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-dccAccession wgEncodeEH001551
 expId 1551
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Taf1.tagAlign.gz
 fragLength 225
@@ -1784,7 +1698,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001472
 expId 1472
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Usf1.tagAlign.gz
 fragLength 225
@@ -1809,7 +1722,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001503
 expId 1503
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1x.tagAlign.gz
 fragLength 225
@@ -1834,8 +1746,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH002008
-expId 2008
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1JurkatControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1859,8 +1769,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH002009
-expId 2009
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1JurkatPol2Pcr2x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -1885,7 +1793,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-26
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001466
 expId 1466
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlV2.tagAlign.gz
 fragLength 225
@@ -1911,7 +1818,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Hey1.tagAlign.gz
 fragLength 225
@@ -1937,7 +1843,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001482
 expId 1482
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Pu1.tagAlign.gz
 fragLength 225
@@ -1963,7 +1868,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001525
 expId 1525
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Panc1Control.tagAlign.gz
 fragLength 225
@@ -1988,7 +1892,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001552
 expId 1552
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Panc1Nrsf.tagAlign.gz
 fragLength 225
@@ -2013,7 +1916,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001558
 expId 1558
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Control.tagAlign.gz
 fragLength 225
@@ -2038,7 +1940,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001460
 expId 1460
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Foxp2.tagAlign.gz
 fragLength 225
@@ -2063,7 +1964,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001553
 expId 1553
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Nrsf.tagAlign.gz
 fragLength 225
@@ -2088,7 +1988,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001461
 expId 1461
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1SknmcFoxp2.tagAlign.gz
 fragLength 225
@@ -2113,8 +2012,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001473
-expId 1473
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshControl.tagAlign.gz
 fragLength 225
 grant Myers
@@ -2138,8 +2035,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001547
-expId 1547
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshNrsf.tagAlign.gz
 fragLength 225
 grant Myers
@@ -2163,7 +2058,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001559
 expId 1559
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1U87Control.tagAlign.gz
 fragLength 225
@@ -2188,7 +2082,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001554
 expId 1554
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1U87Nrsf.tagAlign.gz
 fragLength 225
@@ -2213,7 +2106,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001507
 expId 1507
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xDexa.tagAlign.gz
 fragLength 225
@@ -2238,7 +2130,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH001508
 expId 1508
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xEtoh02.tagAlign.gz
 fragLength 225
@@ -2263,7 +2154,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
 expId 1490
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex500pm.tagAlign.gz
 fragLength 225
@@ -2289,7 +2179,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
 expId 1491
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex50nm.tagAlign.gz
 fragLength 225
@@ -2315,7 +2204,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
 expId 1492
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex5nm.tagAlign.gz
 fragLength 225
@@ -2341,7 +2229,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-dccAccession wgEncodeEH001526
 expId 1526
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xEtoh02.tagAlign.gz
 fragLength 225
@@ -2367,7 +2254,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001494
 expId 1494
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2.tagAlign.gz
 fragLength 225
@@ -2392,7 +2278,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-dccAccession wgEncodeEH001493
 expId 1493
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2xEtoh02.tagAlign.gz
 fragLength 225
@@ -2417,7 +2302,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH001509
 expId 1509
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Usf1Pcr1xDexa.tagAlign.gz
 fragLength 225
@@ -2442,7 +2326,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001539
 expId 1539
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Usf1Pcr1xEtoh02.tagAlign.gz
 fragLength 225
@@ -2467,8 +2350,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002006
-expId 2006
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Be2cControl.tagAlign.gz
 fragLength 225
 grant Myers
@@ -2492,8 +2373,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002007
-expId 2007
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Be2cNrsf.tagAlign.gz
 fragLength 225
 grant Myers
@@ -2517,7 +2396,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001479
 expId 1479
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Batf.tagAlign.gz
 fragLength 225
@@ -2543,7 +2421,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001486
 expId 1486
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Bcl11a.tagAlign.gz
 fragLength 225
@@ -2569,7 +2446,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
-dccAccession wgEncodeEH001469
 expId 1469
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlPcr2x.tagAlign.gz
 fragLength 225
@@ -2595,7 +2471,6 @@ dataVersion post ENCODE Jan 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001467
 expId 1467
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
 fragLength 225
@@ -2621,7 +2496,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001480
 expId 1480
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Ebf.tagAlign.gz
 fragLength 225
@@ -2647,7 +2521,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001462
 expId 1462
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Gabp.tagAlign.gz
 fragLength 225
@@ -2672,7 +2545,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-dccAccession wgEncodeEH001484
 expId 1484
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Irf4.tagAlign.gz
 fragLength 225
@@ -2698,7 +2570,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH001465
 expId 1465
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Nrsf.tagAlign.gz
 fragLength 225
@@ -2723,7 +2594,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001475
 expId 1475
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Oct2.tagAlign.gz
 fragLength 225
@@ -2749,7 +2619,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001487
 expId 1487
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878P300.tagAlign.gz
 fragLength 225
@@ -2775,7 +2644,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-dccAccession wgEncodeEH001489
 expId 1489
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pax5c20.tagAlign.gz
 fragLength 225
@@ -2801,7 +2669,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001495
 expId 1495
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pax5n19.tagAlign.gz
 fragLength 225
@@ -2826,7 +2693,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001477
 expId 1477
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pbx3.tagAlign.gz
 fragLength 225
@@ -2852,7 +2718,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001463
 expId 1463
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pol2.tagAlign.gz
 fragLength 225
@@ -2877,7 +2742,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH001517
 expId 1517
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
@@ -2902,7 +2766,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001476
 expId 1476
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pu1.tagAlign.gz
 fragLength 225
@@ -2928,7 +2791,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001496
 expId 1496
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sp1Pcr1x.tagAlign.gz
 fragLength 225
@@ -2953,7 +2815,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-dccAccession wgEncodeEH001485
 expId 1485
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Tcf12.tagAlign.gz
 fragLength 225
@@ -2979,7 +2840,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH001468
 expId 1468
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Usf1.tagAlign.gz
 fragLength 225
@@ -3004,7 +2864,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-dccAccession wgEncodeEH001488
 expId 1488
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Zbtb33.tagAlign.gz
 fragLength 225
@@ -3030,7 +2889,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001523
 expId 1523
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
@@ -3055,7 +2913,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001522
 expId 1522
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pol2Pcr1x.tagAlign.gz
 fragLength 225
@@ -3080,7 +2937,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001520
 expId 1520
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pou2f2Pcr1x.tagAlign.gz
 fragLength 225
@@ -3105,7 +2961,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001521
 expId 1521
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pu1Pcr1x.tagAlign.gz
 fragLength 225
@@ -3130,7 +2985,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001524
 expId 1524
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Taf1Pcr1x.tagAlign.gz
 fragLength 225
@@ -3155,8 +3009,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002018
-expId 2018
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3180,8 +3032,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002017
-expId 2017
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3205,8 +3055,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002020
-expId 2020
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3230,8 +3078,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002011
-expId 2011
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescNrsfPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3255,8 +3101,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH002016
-expId 2016
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescPol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3280,8 +3124,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-dccAccession wgEncodeEH002015
-expId 2015
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescPol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3305,8 +3147,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002012
-expId 2012
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescTaf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3330,7 +3170,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001504
 expId 1504
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Gabp.tagAlign.gz
 fragLength 225
@@ -3355,7 +3194,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001474
 expId 1474
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Pol2.tagAlign.gz
 fragLength 225
@@ -3380,7 +3218,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001505
 expId 1505
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Taf1Pcr1xTaf1.tagAlign.gz
 fragLength 225
@@ -3405,7 +3242,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001603
 expId 1603
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2ControlPcr1x.tagAlign.gz
 fragLength 225
@@ -3430,8 +3266,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-dccAccession wgEncodeEH002013
-expId 2013
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Fosl2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3455,7 +3289,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-dccAccession wgEncodeEH001548
 expId 1548
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Gabp.tagAlign.gz
 fragLength 225
@@ -3481,8 +3314,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-dccAccession wgEncodeEH002014
-expId 2014
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Hey1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3506,7 +3337,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001470
 expId 1470
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Jund.tagAlign.gz
 fragLength 225
@@ -3531,7 +3361,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001549
 expId 1549
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Nrsf.tagAlign.gz
 fragLength 225
@@ -3556,8 +3385,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002010
-expId 2010
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2P300.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3581,7 +3408,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001550
 expId 1550
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Pol2.tagAlign.gz
 fragLength 225
@@ -3606,7 +3432,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001506
 expId 1506
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2RxraPcr1x.tagAlign.gz
 fragLength 225
@@ -3631,7 +3456,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001471
 expId 1471
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Sin3ak20.tagAlign.gz
 fragLength 225
@@ -3656,7 +3480,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-dccAccession wgEncodeEH001551
 expId 1551
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Taf1.tagAlign.gz
 fragLength 225
@@ -3682,7 +3505,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001472
 expId 1472
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Usf1.tagAlign.gz
 fragLength 225
@@ -3707,7 +3529,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001503
 expId 1503
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1x.tagAlign.gz
 fragLength 225
@@ -3732,8 +3553,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH002009
-expId 2009
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2JurkatPol2Pcr2x.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3758,7 +3577,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-26
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001466
 expId 1466
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz
 fragLength 225
@@ -3784,7 +3602,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Hey1.tagAlign.gz
 fragLength 225
@@ -3810,7 +3627,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001482
 expId 1482
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pu1.tagAlign.gz
 fragLength 225
@@ -3836,7 +3652,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001525
 expId 1525
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Panc1Control.tagAlign.gz
 fragLength 225
@@ -3861,7 +3676,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001552
 expId 1552
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Panc1Nrsf.tagAlign.gz
 fragLength 225
@@ -3886,8 +3700,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001558
-expId 1558
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Control.tagAlign.gz
 fragLength 225
 grant Myers
@@ -3911,7 +3723,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001460
 expId 1460
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Foxp2.tagAlign.gz
 fragLength 225
@@ -3936,7 +3747,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001553
 expId 1553
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Nrsf.tagAlign.gz
 fragLength 225
@@ -3961,7 +3771,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001461
 expId 1461
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2SknmcFoxp2.tagAlign.gz
 fragLength 225
@@ -3986,8 +3795,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001473
-expId 1473
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2SknshControl.tagAlign.gz
 fragLength 225
 grant Myers
@@ -4011,8 +3818,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001547
-expId 1547
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2SknshNrsf.tagAlign.gz
 fragLength 225
 grant Myers
@@ -4036,7 +3841,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001559
 expId 1559
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2U87Control.tagAlign.gz
 fragLength 225
@@ -4061,7 +3865,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001554
 expId 1554
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2U87Nrsf.tagAlign.gz
 fragLength 225
@@ -4086,8 +3889,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-09-11
 dateUnrestricted 2009-06-11
-dccAccession wgEncodeEH001677
-expId 1677
 fileName wgEncodeHudsonalphaChipSeqAlignmentsSknmcControl.tagAlign.gz
 fragLength 225
 grant Myers
@@ -4111,8 +3912,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001467
-expId 1467
 fileName wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -4135,8 +3934,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001467
-expId 1467
 fileName wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -4159,8 +3956,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001467
-expId 1467
 fileName wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -4183,8 +3978,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001597
-expId 1597
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -4207,8 +4000,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001597
-expId 1597
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -4231,8 +4022,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001597
-expId 1597
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -4255,8 +4044,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001597
-expId 1597
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -4279,8 +4066,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001597
-expId 1597
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -4303,8 +4088,6 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001597
-expId 1597
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -4327,7 +4110,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-dccAccession wgEncodeEH001555
 expId 1555
 fileName wgEncodeHudsonalphaChipSeqPeaksA549Gr.broadPeak.gz
 grant Myers
@@ -4354,7 +4136,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001507
 expId 1507
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xDexa.broadPeak.gz
 grant Myers
@@ -4380,7 +4161,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH001508
 expId 1508
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xEtoh02.broadPeak.gz
 grant Myers
@@ -4406,7 +4186,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
 expId 1490
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549GrPcr1xDex500pm.broadPeak.gz
 grant Myers
@@ -4433,7 +4212,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
 expId 1491
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549GrPcr1xDex50nm.broadPeak.gz
 grant Myers
@@ -4460,7 +4238,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
 expId 1492
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549GrPcr1xDex5nm.broadPeak.gz
 grant Myers
@@ -4487,7 +4264,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001494
 expId 1494
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2.broadPeak.gz
 grant Myers
@@ -4513,7 +4289,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-dccAccession wgEncodeEH001493
 expId 1493
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2xEtoh02.broadPeak.gz
 grant Myers
@@ -4539,7 +4314,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH001509
 expId 1509
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549Usf1Pcr1xDexa.broadPeak.gz
 grant Myers
@@ -4565,7 +4339,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001539
 expId 1539
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1A549Usf1Pcr1xEtoh02.broadPeak.gz
 grant Myers
@@ -4591,8 +4364,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002007
-expId 2007
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Be2cNrsf.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -4617,7 +4388,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001479
 expId 1479
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Batf.broadPeak.gz
 grant Myers
@@ -4644,7 +4414,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001486
 expId 1486
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Bcl11a.broadPeak.gz
 grant Myers
@@ -4671,7 +4440,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001480
 expId 1480
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Ebf.broadPeak.gz
 grant Myers
@@ -4698,7 +4466,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001462
 expId 1462
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeaks.gz
 grant Myers
@@ -4723,7 +4490,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
-dccAccession wgEncodeEH001484
 expId 1484
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Irf4.broadPeak.gz
 grant Myers
@@ -4750,7 +4516,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH001465
 expId 1465
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf.narrowPeaks.gz
 grant Myers
@@ -4775,7 +4540,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001475
 expId 1475
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Oct2.broadPeak.gz
 grant Myers
@@ -4802,7 +4566,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001487
 expId 1487
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878P300.broadPeak.gz
 grant Myers
@@ -4829,7 +4592,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-dccAccession wgEncodeEH001489
 expId 1489
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pax5c20.broadPeak.gz
 grant Myers
@@ -4856,7 +4618,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001495
 expId 1495
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pax5n19.broadPeak.gz
 grant Myers
@@ -4882,7 +4643,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001477
 expId 1477
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pbx3.broadPeak.gz
 grant Myers
@@ -4909,7 +4669,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001463
 expId 1463
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2.narrowPeaks.gz
 grant Myers
@@ -4934,7 +4693,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH001517
 expId 1517
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol24h8Pcr1x.broadPeak.gz
 grant Myers
@@ -4960,7 +4718,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001476
 expId 1476
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pu1.broadPeak.gz
 grant Myers
@@ -4987,7 +4744,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001496
 expId 1496
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sp1Pcr1x.broadPeak.gz
 grant Myers
@@ -5013,7 +4769,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
-dccAccession wgEncodeEH001485
 expId 1485
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tcf12.broadPeak.gz
 grant Myers
@@ -5040,7 +4795,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH001468
 expId 1468
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Usf1.narrowPeak.gz
 grant Myers
@@ -5066,7 +4820,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-dccAccession wgEncodeEH001488
 expId 1488
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Zbtb33.broadPeak.gz
 grant Myers
@@ -5093,7 +4846,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001523
 expId 1523
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol24h8Pcr1x.broadPeak.gz
 grant Myers
@@ -5119,7 +4871,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001522
 expId 1522
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol2Pcr1x.broadPeak.gz
 grant Myers
@@ -5145,7 +4896,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001520
 expId 1520
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pou2f2Pcr1x.broadPeak.gz
 grant Myers
@@ -5171,7 +4921,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001521
 expId 1521
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pu1Pcr1x.broadPeak.gz
 grant Myers
@@ -5197,7 +4946,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001524
 expId 1524
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Taf1Pcr1x.broadPeak.gz
 grant Myers
@@ -5223,8 +4971,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002018
-expId 2018
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol24h8Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5249,8 +4995,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002017
-expId 2017
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol2Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5275,8 +5019,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002020
-expId 2020
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Taf1Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5301,8 +5043,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002011
-expId 2011
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1H1hescNrsfPcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5327,8 +5067,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH002016
-expId 2016
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1H1hescPol24h8Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5353,8 +5091,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-dccAccession wgEncodeEH002015
-expId 2015
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1H1hescPol2Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5379,8 +5115,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002012
-expId 2012
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1H1hescTaf1Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5405,7 +5139,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001504
 expId 1504
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Helas3Gabp.broadPeak.gz
 grant Myers
@@ -5431,7 +5164,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001474
 expId 1474
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Helas3Pol2.broadPeak.gz
 grant Myers
@@ -5457,7 +5189,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001505
 expId 1505
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Helas3Taf1Pcr1xTaf1.broadPeak.gz
 grant Myers
@@ -5483,8 +5214,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-dccAccession wgEncodeEH002013
-expId 2013
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Fosl2Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5509,7 +5238,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-dccAccession wgEncodeEH001548
 expId 1548
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Gabp.broadPeak.gz
 grant Myers
@@ -5536,8 +5264,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-dccAccession wgEncodeEH002014
-expId 2014
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Hey1Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5562,7 +5288,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001470
 expId 1470
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Jund.broadPeak.gz
 grant Myers
@@ -5588,7 +5313,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001549
 expId 1549
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Nrsf.broadPeak.gz
 grant Myers
@@ -5614,8 +5338,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002010
-expId 2010
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2P300.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5640,7 +5362,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001550
 expId 1550
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Pol2.broadPeak.gz
 grant Myers
@@ -5666,7 +5387,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001506
 expId 1506
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2RxraPcr1x.broadPeak.gz
 grant Myers
@@ -5692,7 +5412,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001471
 expId 1471
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Sin3ak20.broadPeak.gz
 grant Myers
@@ -5718,7 +5437,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-dccAccession wgEncodeEH001551
 expId 1551
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Taf1.broadPeak.gz
 grant Myers
@@ -5745,7 +5463,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001472
 expId 1472
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Usf1.broadPeak.gz
 grant Myers
@@ -5771,7 +5488,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001503
 expId 1503
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1x.broadPeak.gz
 grant Myers
@@ -5797,8 +5513,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH002009
-expId 2009
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1JurkatPol2Pcr2x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -5823,7 +5537,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Hey1.broadPeak.gz
 grant Myers
@@ -5850,7 +5563,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001482
 expId 1482
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Pu1.broadPeak.gz
 grant Myers
@@ -5877,7 +5589,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001552
 expId 1552
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Panc1Nrsf.broadPeak.gz
 grant Myers
@@ -5903,7 +5614,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001460
 expId 1460
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2.narrowPeaks.gz
 grant Myers
@@ -5928,7 +5638,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001553
 expId 1553
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Nrsf.broadPeak.gz
 grant Myers
@@ -5954,7 +5663,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001461
 expId 1461
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2.narrowPeaks.gz
 grant Myers
@@ -5979,8 +5687,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001547
-expId 1547
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1SknshNrsf.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -6005,7 +5711,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001554
 expId 1554
 fileName wgEncodeHudsonalphaChipSeqPeaksRep1U87Nrsf.broadPeak.gz
 grant Myers
@@ -6031,7 +5736,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001507
 expId 1507
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xDexa.broadPeak.gz
 grant Myers
@@ -6057,7 +5761,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH001508
 expId 1508
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xEtoh02.broadPeak.gz
 grant Myers
@@ -6083,7 +5786,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
 expId 1490
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549GrPcr1xDex500pm.broadPeak.gz
 grant Myers
@@ -6110,7 +5812,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
 expId 1491
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549GrPcr1xDex50nm.broadPeak.gz
 grant Myers
@@ -6137,7 +5838,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
 expId 1492
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549GrPcr1xDex5nm.broadPeak.gz
 grant Myers
@@ -6164,7 +5864,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001494
 expId 1494
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2.broadPeak.gz
 grant Myers
@@ -6190,7 +5889,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-dccAccession wgEncodeEH001493
 expId 1493
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2xEtoh02.broadPeak.gz
 grant Myers
@@ -6216,7 +5914,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH001509
 expId 1509
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549Usf1Pcr1xDexa.broadPeak.gz
 grant Myers
@@ -6242,7 +5939,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001539
 expId 1539
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2A549Usf1Pcr1xEtoh02.broadPeak.gz
 grant Myers
@@ -6268,8 +5964,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002007
-expId 2007
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Be2cNrsf.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -6294,7 +5988,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001479
 expId 1479
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Batf.broadPeak.gz
 grant Myers
@@ -6321,7 +6014,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001486
 expId 1486
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Bcl11a.broadPeak.gz
 grant Myers
@@ -6348,7 +6040,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001480
 expId 1480
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Ebf.broadPeak.gz
 grant Myers
@@ -6375,7 +6066,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001462
 expId 1462
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp.narrowPeaks.gz
 grant Myers
@@ -6400,7 +6090,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-dccAccession wgEncodeEH001484
 expId 1484
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Irf4.broadPeak.gz
 grant Myers
@@ -6427,7 +6116,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH001465
 expId 1465
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf.narrowPeaks.gz
 grant Myers
@@ -6452,7 +6140,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001475
 expId 1475
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Oct2.broadPeak.gz
 grant Myers
@@ -6479,7 +6166,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001487
 expId 1487
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878P300.broadPeak.gz
 grant Myers
@@ -6506,7 +6192,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-dccAccession wgEncodeEH001489
 expId 1489
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pax5c20.broadPeak.gz
 grant Myers
@@ -6533,7 +6218,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001495
 expId 1495
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pax5n19.broadPeak.gz
 grant Myers
@@ -6559,7 +6243,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001477
 expId 1477
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pbx3.broadPeak.gz
 grant Myers
@@ -6586,7 +6269,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001463
 expId 1463
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2.narrowPeaks.gz
 grant Myers
@@ -6611,7 +6293,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH001517
 expId 1517
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol24h8Pcr1x.broadPeak.gz
 grant Myers
@@ -6637,7 +6318,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001476
 expId 1476
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pu1.broadPeak.gz
 grant Myers
@@ -6664,7 +6344,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001496
 expId 1496
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sp1Pcr1x.broadPeak.gz
 grant Myers
@@ -6690,7 +6369,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-dccAccession wgEncodeEH001485
 expId 1485
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Tcf12.broadPeak.gz
 grant Myers
@@ -6717,7 +6395,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH001468
 expId 1468
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Usf1.narrowPeak.gz
 grant Myers
@@ -6743,7 +6420,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-dccAccession wgEncodeEH001488
 expId 1488
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Zbtb33.broadPeak.gz
 grant Myers
@@ -6770,7 +6446,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001523
 expId 1523
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol24h8Pcr1x.broadPeak.gz
 grant Myers
@@ -6796,7 +6471,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001522
 expId 1522
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol2Pcr1x.broadPeak.gz
 grant Myers
@@ -6822,7 +6496,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001520
 expId 1520
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pou2f2Pcr1x.broadPeak.gz
 grant Myers
@@ -6848,7 +6521,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001521
 expId 1521
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pu1Pcr1x.broadPeak.gz
 grant Myers
@@ -6874,7 +6546,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001524
 expId 1524
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Taf1Pcr1x.broadPeak.gz
 grant Myers
@@ -6900,8 +6571,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002018
-expId 2018
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol24h8Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -6926,8 +6595,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002017
-expId 2017
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol2Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -6952,8 +6619,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002020
-expId 2020
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Taf1Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -6978,8 +6643,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002011
-expId 2011
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2H1hescNrsfPcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7004,8 +6667,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH002016
-expId 2016
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2H1hescPol24h8Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7030,8 +6691,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-dccAccession wgEncodeEH002015
-expId 2015
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2H1hescPol2Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7056,8 +6715,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002012
-expId 2012
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2H1hescTaf1Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7082,7 +6739,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001504
 expId 1504
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Helas3Gabp.broadPeak.gz
 grant Myers
@@ -7108,7 +6764,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001474
 expId 1474
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Helas3Pol2.broadPeak.gz
 grant Myers
@@ -7134,7 +6789,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001505
 expId 1505
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Helas3Taf1Pcr1xTaf1.broadPeak.gz
 grant Myers
@@ -7160,8 +6814,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-dccAccession wgEncodeEH002013
-expId 2013
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Fosl2Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7186,7 +6838,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-dccAccession wgEncodeEH001548
 expId 1548
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Gabp.broadPeak.gz
 grant Myers
@@ -7213,8 +6864,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-dccAccession wgEncodeEH002014
-expId 2014
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Hey1Pcr1x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7239,7 +6888,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001470
 expId 1470
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Jund.broadPeak.gz
 grant Myers
@@ -7265,7 +6913,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001549
 expId 1549
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Nrsf.broadPeak.gz
 grant Myers
@@ -7291,8 +6938,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002010
-expId 2010
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2P300.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7317,7 +6962,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001550
 expId 1550
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Pol2.broadPeak.gz
 grant Myers
@@ -7343,7 +6987,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001506
 expId 1506
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2RxraPcr1x.broadPeak.gz
 grant Myers
@@ -7369,7 +7012,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001471
 expId 1471
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Sin3ak20.broadPeak.gz
 grant Myers
@@ -7395,7 +7037,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-dccAccession wgEncodeEH001551
 expId 1551
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Taf1.broadPeak.gz
 grant Myers
@@ -7422,7 +7063,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001472
 expId 1472
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Usf1.broadPeak.gz
 grant Myers
@@ -7448,7 +7088,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001503
 expId 1503
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1x.broadPeak.gz
 grant Myers
@@ -7474,8 +7113,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH002009
-expId 2009
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2JurkatPol2Pcr2x.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7500,7 +7137,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Hey1.broadPeak.gz
 grant Myers
@@ -7527,7 +7163,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001482
 expId 1482
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Pu1.broadPeak.gz
 grant Myers
@@ -7554,7 +7189,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001552
 expId 1552
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Panc1Nrsf.broadPeak.gz
 grant Myers
@@ -7580,7 +7214,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001460
 expId 1460
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2.narrowPeaks.gz
 grant Myers
@@ -7605,7 +7238,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001553
 expId 1553
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Nrsf.broadPeak.gz
 grant Myers
@@ -7631,7 +7263,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001461
 expId 1461
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2.narrowPeaks.gz
 grant Myers
@@ -7656,8 +7287,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001547
-expId 1547
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2SknshNrsf.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -7682,7 +7311,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001554
 expId 1554
 fileName wgEncodeHudsonalphaChipSeqPeaksRep2U87Nrsf.broadPeak.gz
 grant Myers
@@ -7708,8 +7336,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001558
-expId 1558
+expId 1673
 fileName wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -7732,8 +7359,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001558
-expId 1558
+expId 1673
 fileName wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -7756,8 +7382,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001558
-expId 1558
+expId 1673
 fileName wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -7780,8 +7405,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001558
-expId 1558
+expId 1673
 fileName wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -7804,8 +7428,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001558
-expId 1558
+expId 1673
 fileName wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -7828,8 +7451,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
-dccAccession wgEncodeEH001558
-expId 1558
+expId 1673
 fileName wgEncodeHudsonalphaChipSeqPfsk1ControlPcr2xRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -7852,7 +7474,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001507
 expId 1507
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549CtcfPcr1xDexa.fastq.gz
 grant Myers
@@ -7876,7 +7497,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH001508
 expId 1508
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549CtcfPcr1xEtoh02.fastq.gz
 grant Myers
@@ -7900,7 +7520,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
 expId 1490
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xDex500pm.fastq.gz
 grant Myers
@@ -7925,7 +7544,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
 expId 1491
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xDex50nm.fastq.gz
 grant Myers
@@ -7950,7 +7568,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
 expId 1492
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xDex5nm.fastq.gz
 grant Myers
@@ -7975,7 +7592,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-dccAccession wgEncodeEH001526
 expId 1526
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xEtoh02.fastq.gz
 grant Myers
@@ -8001,7 +7617,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH001509
 expId 1509
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549Usf1Pcr1xDexa.fastq.gz
 grant Myers
@@ -8025,7 +7640,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001539
 expId 1539
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549Usf1Pcr1xEtoh02.fastq.gz
 grant Myers
@@ -8049,7 +7663,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001479
 expId 1479
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Batf.fastq.gz
 grant Myers
@@ -8074,7 +7687,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001486
 expId 1486
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Bcl11a.fastq.gz
 grant Myers
@@ -8099,7 +7711,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
 dateUnrestricted 2011-02-14
-dccAccession wgEncodeEH001467
 expId 1467
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878ControlPcr1x.fastq.gz
 grant Myers
@@ -8123,7 +7734,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH001469
 expId 1469
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878ControlPcr2x.fastq.gz
 grant Myers
@@ -8147,7 +7757,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001480
 expId 1480
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Ebf.fastq.gz
 grant Myers
@@ -8172,7 +7781,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001462
 expId 1462
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878GabpPcr2x.fastq.gz
 grant Myers
@@ -8196,7 +7804,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001484
 expId 1484
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Irf4.fastq.gz
 grant Myers
@@ -8221,7 +7828,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH001465
 expId 1465
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878NrsfPcr2x.fastq.gz
 grant Myers
@@ -8245,7 +7851,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001487
 expId 1487
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878P300.fastq.gz
 grant Myers
@@ -8270,7 +7875,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-dccAccession wgEncodeEH001489
 expId 1489
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pax5c20.fastq.gz
 grant Myers
@@ -8295,7 +7899,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
 dateUnrestricted 2011-02-14
-dccAccession wgEncodeEH001477
 expId 1477
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pbx3Pcr1x.fastq.gz
 grant Myers
@@ -8320,7 +7923,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH001517
 expId 1517
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pol24h8Pcr1x.fastq.gz
 grant Myers
@@ -8344,7 +7946,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001463
 expId 1463
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pol2Pcr2x.fastq.gz
 grant Myers
@@ -8368,7 +7969,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
 dateUnrestricted 2011-02-14
-dccAccession wgEncodeEH001475
 expId 1475
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pou2f2Pcr1x.fastq.gz
 grant Myers
@@ -8394,7 +7994,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-05-14
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001496
 expId 1496
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
 grant Myers
@@ -8418,7 +8017,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
 dateUnrestricted 2011-02-14
-dccAccession wgEncodeEH001485
 expId 1485
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Tcf12Pcr1x.fastq.gz
 grant Myers
@@ -8443,7 +8041,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH001468
 expId 1468
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Usf1Pcr2x.fastq.gz
 grant Myers
@@ -8467,7 +8064,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-dccAccession wgEncodeEH001488
 expId 1488
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Zbtb33.fastq.gz
 grant Myers
@@ -8492,7 +8088,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001519
 expId 1519
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891ControlPcr1x.fastq.gz
 grant Myers
@@ -8516,7 +8111,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001523
 expId 1523
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Pol24h8Pcr1x.fastq.gz
 grant Myers
@@ -8540,7 +8134,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001522
 expId 1522
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Pol2Pcr1x.fastq.gz
 grant Myers
@@ -8564,7 +8157,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001520
 expId 1520
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Pou2f2Pcr1x.fastq.gz
 grant Myers
@@ -8588,7 +8180,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001521
 expId 1521
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Pu1Pcr1x.fastq.gz
 grant Myers
@@ -8612,7 +8203,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001524
 expId 1524
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Taf1Pcr1x.fastq.gz
 grant Myers
@@ -8636,8 +8226,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002019
-expId 2019
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12892ControlPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8660,8 +8248,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002018
-expId 2018
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12892Pol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8684,8 +8270,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002017
-expId 2017
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12892Pol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8708,8 +8292,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002020
-expId 2020
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12892Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8732,7 +8314,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001543
 expId 1543
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescControlPcr1x.fastq.gz
 grant Myers
@@ -8756,8 +8337,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002011
-expId 2011
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescNrsfPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8780,8 +8359,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH002016
-expId 2016
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescPol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8804,8 +8381,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-dccAccession wgEncodeEH002015
-expId 2015
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescPol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8828,8 +8403,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002012
-expId 2012
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescTaf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8852,7 +8425,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001504
 expId 1504
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Helas3GabpPcr1x.fastq.gz
 grant Myers
@@ -8876,7 +8448,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001474
 expId 1474
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Helas3Pol2Pcr1x.fastq.gz
 grant Myers
@@ -8900,7 +8471,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001505
 expId 1505
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Helas3Taf1Pcr1x.fastq.gz
 grant Myers
@@ -8924,7 +8494,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001603
 expId 1603
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2ControlPcr1x.fastq.gz
 grant Myers
@@ -8948,8 +8517,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-dccAccession wgEncodeEH002013
-expId 2013
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Fosl2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -8972,7 +8539,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-08-13
-dccAccession wgEncodeEH001548
 expId 1548
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2GabpPcr2x.fastq.gz
 grant Myers
@@ -8997,8 +8563,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-dccAccession wgEncodeEH002014
-expId 2014
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Hey1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -9021,7 +8585,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001470
 expId 1470
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2JundPcr1x.fastq.gz
 grant Myers
@@ -9045,8 +8608,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002010
-expId 2010
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2P300Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -9069,7 +8630,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001506
 expId 1506
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2RxraPcr1x.fastq.gz
 grant Myers
@@ -9093,7 +8653,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001472
 expId 1472
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Usf1Pcr1x.fastq.gz
 grant Myers
@@ -9117,7 +8676,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001503
 expId 1503
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Zbtb33Pcr1x.fastq.gz
 grant Myers
@@ -9142,7 +8700,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-07-06
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001466
 expId 1466
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562ControlV2.fastq.gz
 grant Myers
@@ -9167,7 +8724,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Hey1.fastq.gz
 grant Myers
@@ -9192,7 +8748,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001525
 expId 1525
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Panc1Control.fastq.gz
 grant Myers
@@ -9216,7 +8771,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001552
 expId 1552
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Panc1NrsfPcr2x.fastq.gz
 grant Myers
@@ -9240,7 +8794,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001507
 expId 1507
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549CtcfPcr1xDexa.fastq.gz
 grant Myers
@@ -9264,7 +8817,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH001508
 expId 1508
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549CtcfPcr1xEtoh02.fastq.gz
 grant Myers
@@ -9288,7 +8840,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
 expId 1490
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xDex500pm.fastq.gz
 grant Myers
@@ -9313,7 +8864,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
 expId 1491
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xDex50nm.fastq.gz
 grant Myers
@@ -9338,7 +8888,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
 expId 1492
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xDex5nm.fastq.gz
 grant Myers
@@ -9363,7 +8912,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-dccAccession wgEncodeEH001526
 expId 1526
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xEtoh02.fastq.gz
 grant Myers
@@ -9388,7 +8936,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH001509
 expId 1509
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549Usf1Pcr1xDexa.fastq.gz
 grant Myers
@@ -9412,7 +8959,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001539
 expId 1539
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549Usf1Pcr1xEtoh02.fastq.gz
 grant Myers
@@ -9436,7 +8982,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001479
 expId 1479
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Batf.fastq.gz
 grant Myers
@@ -9461,7 +9006,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001486
 expId 1486
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Bcl11a.fastq.gz
 grant Myers
@@ -9486,7 +9030,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
 dateUnrestricted 2011-02-14
-dccAccession wgEncodeEH001467
 expId 1467
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878ControlPcr1x.fastq.gz
 grant Myers
@@ -9510,7 +9053,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH001469
 expId 1469
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878ControlPcr2x.fastq.gz
 grant Myers
@@ -9534,7 +9076,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001480
 expId 1480
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Ebf.fastq.gz
 grant Myers
@@ -9559,7 +9100,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001462
 expId 1462
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878GabpPcr2x.fastq.gz
 grant Myers
@@ -9583,7 +9123,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001484
 expId 1484
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Irf4.fastq.gz
 grant Myers
@@ -9608,7 +9147,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH001465
 expId 1465
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878NrsfPcr2x.fastq.gz
 grant Myers
@@ -9632,7 +9170,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001487
 expId 1487
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878P300.fastq.gz
 grant Myers
@@ -9657,7 +9194,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-dccAccession wgEncodeEH001489
 expId 1489
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pax5c20.fastq.gz
 grant Myers
@@ -9682,7 +9218,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001495
 expId 1495
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pax5n19.fastq.gz
 grant Myers
@@ -9706,7 +9241,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
 dateUnrestricted 2011-02-14
-dccAccession wgEncodeEH001477
 expId 1477
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pbx3Pcr1x.fastq.gz
 grant Myers
@@ -9731,7 +9265,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH001517
 expId 1517
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pol24h8Pcr1x.fastq.gz
 grant Myers
@@ -9755,7 +9288,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001463
 expId 1463
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pol2Pcr2x.fastq.gz
 grant Myers
@@ -9780,7 +9312,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-05-14
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001475
 expId 1475
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
 grant Myers
@@ -9805,7 +9336,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001476
 expId 1476
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pu1Pcr1x.fastq.gz
 grant Myers
@@ -9830,7 +9360,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001496
 expId 1496
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Sp1Pcr1x.fastq.gz
 grant Myers
@@ -9854,7 +9383,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001485
 expId 1485
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Tcf12.fastq.gz
 grant Myers
@@ -9879,7 +9407,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-dccAccession wgEncodeEH001468
 expId 1468
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Usf1Pcr2x.fastq.gz
 grant Myers
@@ -9903,7 +9430,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-dccAccession wgEncodeEH001488
 expId 1488
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Zbtb33.fastq.gz
 grant Myers
@@ -9928,7 +9454,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001523
 expId 1523
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Pol24h8Pcr1x.fastq.gz
 grant Myers
@@ -9952,7 +9477,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001522
 expId 1522
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Pol2Pcr1x.fastq.gz
 grant Myers
@@ -9976,7 +9500,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001520
 expId 1520
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Pou2f2Pcr1x.fastq.gz
 grant Myers
@@ -10000,7 +9523,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001521
 expId 1521
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Pu1Pcr1x.fastq.gz
 grant Myers
@@ -10024,7 +9546,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001524
 expId 1524
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Taf1Pcr1x.fastq.gz
 grant Myers
@@ -10048,8 +9569,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002018
-expId 2018
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12892Pol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10072,8 +9591,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002017
-expId 2017
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12892Pol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10096,8 +9613,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002020
-expId 2020
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12892Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10120,8 +9635,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002011
-expId 2011
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2H1hescNrsfPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10144,8 +9657,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH002016
-expId 2016
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2H1hescPol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10168,8 +9679,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-dccAccession wgEncodeEH002015
-expId 2015
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2H1hescPol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10192,8 +9701,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002012
-expId 2012
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2H1hescTaf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10216,7 +9723,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001504
 expId 1504
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Helas3GabpPcr1x.fastq.gz
 grant Myers
@@ -10240,7 +9746,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001505
 expId 1505
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Helas3Taf1Pcr1x.fastq.gz
 grant Myers
@@ -10264,7 +9769,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001603
 expId 1603
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2ControlPcr1x.fastq.gz
 grant Myers
@@ -10288,8 +9792,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-dccAccession wgEncodeEH002013
-expId 2013
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Fosl2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10312,8 +9814,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-dccAccession wgEncodeEH002014
-expId 2014
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Hey1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10336,7 +9836,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001470
 expId 1470
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2JundPcr1x.fastq.gz
 grant Myers
@@ -10360,8 +9859,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002010
-expId 2010
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2P300Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10384,7 +9881,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001506
 expId 1506
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2RxraPcr1x.fastq.gz
 grant Myers
@@ -10408,7 +9904,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001471
 expId 1471
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Sin3ak20Pcr1x.fastq.gz
 grant Myers
@@ -10432,7 +9927,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001472
 expId 1472
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Usf1Pcr1x.fastq.gz
 grant Myers
@@ -10456,7 +9950,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001503
 expId 1503
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Zbtb33Pcr1x.fastq.gz
 grant Myers
@@ -10481,7 +9974,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-10-26
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001466
 expId 1466
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562ControlV2.fastq.gz
 grant Myers
@@ -10506,7 +9998,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Hey1.fastq.gz
 grant Myers
@@ -10531,7 +10022,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
 dateUnrestricted 2010-08-19
-dccAccession wgEncodeEH001482
 expId 1482
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Pu1.fastq.gz
 grant Myers
@@ -10556,7 +10046,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001525
 expId 1525
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Panc1Control.fastq.gz
 grant Myers
@@ -10580,7 +10069,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001460
 expId 1460
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Pfsk1Foxp2.fastq.gz
 grant Myers
@@ -10604,7 +10092,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001461
 expId 1461
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2SknmcFoxp2.fastq.gz
 grant Myers
@@ -10628,8 +10115,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-09-11
 dateUnrestricted 2009-06-11
-dccAccession wgEncodeEH001677
-expId 1677
 fileName wgEncodeHudsonalphaChipSeqRawDataSknmcControl.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -10652,7 +10137,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-dccAccession wgEncodeEH001589
 expId 1589
 fragLength 225
 grant Myers
@@ -10679,7 +10163,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-dccAccession wgEncodeEH001555
 expId 1555
 fragLength 225
 grant Myers
@@ -10706,7 +10189,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001643
 expId 1643
 fragLength 225
 grant Myers
@@ -10731,7 +10213,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001644
 expId 1644
 fragLength 225
 grant Myers
@@ -10756,7 +10237,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-dccAccession wgEncodeEH001589
 expId 1589
 fragLength 225
 grant Myers
@@ -10781,7 +10261,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001507
 expId 1507
 fragLength 225
 grant Myers
@@ -10806,7 +10285,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH001508
 expId 1508
 fragLength 225
 grant Myers
@@ -10831,7 +10309,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
 expId 1490
 fragLength 225
 grant Myers
@@ -10857,7 +10334,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
 expId 1491
 fragLength 225
 grant Myers
@@ -10883,7 +10359,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
 expId 1492
 fragLength 225
 grant Myers
@@ -10909,7 +10384,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-dccAccession wgEncodeEH001526
 expId 1526
 fragLength 225
 grant Myers
@@ -10936,7 +10410,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001494
 expId 1494
 fragLength 225
 grant Myers
@@ -10961,7 +10434,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-dccAccession wgEncodeEH001493
 expId 1493
 fragLength 225
 grant Myers
@@ -10986,7 +10458,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH001509
 expId 1509
 fragLength 225
 grant Myers
@@ -11011,7 +10482,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001539
 expId 1539
 fragLength 225
 grant Myers
@@ -11036,8 +10506,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002006
-expId 2006
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11061,8 +10529,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002007
-expId 2007
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11086,7 +10552,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001479
 expId 1479
 fragLength 225
 grant Myers
@@ -11112,7 +10577,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001486
 expId 1486
 fragLength 225
 grant Myers
@@ -11138,7 +10602,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
-dccAccession wgEncodeEH001469
 expId 1469
 fragLength 225
 grant Myers
@@ -11165,7 +10628,6 @@ dataVersion post ENCODE Jan 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001467
 expId 1467
 fragLength 225
 grant Myers
@@ -11191,7 +10653,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001480
 expId 1480
 fragLength 225
 grant Myers
@@ -11217,7 +10678,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001462
 expId 1462
 fragLength 225
 grant Myers
@@ -11242,7 +10702,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
-dccAccession wgEncodeEH001484
 expId 1484
 fragLength 225
 grant Myers
@@ -11268,7 +10727,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH001465
 expId 1465
 fragLength 225
 grant Myers
@@ -11293,7 +10751,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001475
 expId 1475
 fragLength 225
 grant Myers
@@ -11319,7 +10776,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001487
 expId 1487
 fragLength 225
 grant Myers
@@ -11345,7 +10801,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-dccAccession wgEncodeEH001489
 expId 1489
 fragLength 225
 grant Myers
@@ -11371,7 +10826,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001495
 expId 1495
 fragLength 225
 grant Myers
@@ -11396,7 +10850,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001477
 expId 1477
 fragLength 225
 grant Myers
@@ -11422,7 +10875,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001463
 expId 1463
 fragLength 225
 grant Myers
@@ -11447,7 +10899,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH001517
 expId 1517
 fragLength 225
 grant Myers
@@ -11472,7 +10923,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001476
 expId 1476
 fragLength 225
 grant Myers
@@ -11498,7 +10948,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001496
 expId 1496
 fragLength 225
 grant Myers
@@ -11523,7 +10972,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
-dccAccession wgEncodeEH001485
 expId 1485
 fragLength 225
 grant Myers
@@ -11549,7 +10997,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH001468
 expId 1468
 fragLength 225
 grant Myers
@@ -11574,7 +11021,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-dccAccession wgEncodeEH001488
 expId 1488
 fragLength 225
 grant Myers
@@ -11600,7 +11046,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001519
 expId 1519
 fragLength 225
 grant Myers
@@ -11625,7 +11070,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001523
 expId 1523
 fragLength 225
 grant Myers
@@ -11650,7 +11094,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001522
 expId 1522
 fragLength 225
 grant Myers
@@ -11675,7 +11118,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001520
 expId 1520
 fragLength 225
 grant Myers
@@ -11700,7 +11142,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001521
 expId 1521
 fragLength 225
 grant Myers
@@ -11725,7 +11166,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001524
 expId 1524
 fragLength 225
 grant Myers
@@ -11750,8 +11190,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002019
-expId 2019
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11775,8 +11213,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002018
-expId 2018
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11800,8 +11236,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002017
-expId 2017
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11825,8 +11259,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002020
-expId 2020
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11850,7 +11282,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001543
 expId 1543
 fragLength 225
 grant Myers
@@ -11875,8 +11306,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002011
-expId 2011
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11900,8 +11329,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH002016
-expId 2016
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11925,8 +11352,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-dccAccession wgEncodeEH002015
-expId 2015
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11950,8 +11375,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002012
-expId 2012
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11975,7 +11398,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001628
 expId 1628
 fragLength 225
 grant Myers
@@ -12000,7 +11422,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001504
 expId 1504
 fragLength 225
 grant Myers
@@ -12025,7 +11446,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001474
 expId 1474
 fragLength 225
 grant Myers
@@ -12050,7 +11470,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001505
 expId 1505
 fragLength 225
 grant Myers
@@ -12075,7 +11494,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001603
 expId 1603
 fragLength 225
 grant Myers
@@ -12100,8 +11518,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-dccAccession wgEncodeEH002013
-expId 2013
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12125,7 +11541,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-dccAccession wgEncodeEH001548
 expId 1548
 fragLength 225
 grant Myers
@@ -12151,8 +11566,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-dccAccession wgEncodeEH002014
-expId 2014
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12176,7 +11589,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001470
 expId 1470
 fragLength 225
 grant Myers
@@ -12201,7 +11613,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001549
 expId 1549
 fragLength 225
 grant Myers
@@ -12226,8 +11637,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002010
-expId 2010
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12251,7 +11660,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001550
 expId 1550
 fragLength 225
 grant Myers
@@ -12276,7 +11684,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001506
 expId 1506
 fragLength 225
 grant Myers
@@ -12301,7 +11708,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001471
 expId 1471
 fragLength 225
 grant Myers
@@ -12326,7 +11732,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-dccAccession wgEncodeEH001551
 expId 1551
 fragLength 225
 grant Myers
@@ -12352,7 +11757,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001472
 expId 1472
 fragLength 225
 grant Myers
@@ -12377,7 +11781,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001503
 expId 1503
 fragLength 225
 grant Myers
@@ -12402,8 +11805,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH002008
-expId 2008
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12427,8 +11828,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH002009
-expId 2009
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12453,7 +11852,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-26
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001466
 expId 1466
 fragLength 225
 grant Myers
@@ -12479,7 +11877,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001481
 expId 1481
 fragLength 225
 grant Myers
@@ -12505,7 +11902,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001482
 expId 1482
 fragLength 225
 grant Myers
@@ -12531,7 +11927,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001525
 expId 1525
 fragLength 225
 grant Myers
@@ -12556,7 +11951,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001552
 expId 1552
 fragLength 225
 grant Myers
@@ -12581,7 +11975,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001558
 expId 1558
 fragLength 225
 grant Myers
@@ -12606,7 +11999,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001460
 expId 1460
 fragLength 225
 grant Myers
@@ -12631,7 +12023,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001553
 expId 1553
 fragLength 225
 grant Myers
@@ -12656,7 +12047,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001461
 expId 1461
 fragLength 225
 grant Myers
@@ -12681,8 +12071,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001473
-expId 1473
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12706,8 +12094,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001547
-expId 1547
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12731,7 +12117,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001559
 expId 1559
 fragLength 225
 grant Myers
@@ -12756,7 +12141,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001554
 expId 1554
 fragLength 225
 grant Myers
@@ -12781,7 +12165,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001507
 expId 1507
 fragLength 225
 grant Myers
@@ -12806,7 +12189,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-dccAccession wgEncodeEH001508
 expId 1508
 fragLength 225
 grant Myers
@@ -12831,7 +12213,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
 expId 1490
 fragLength 225
 grant Myers
@@ -12857,7 +12238,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
 expId 1491
 fragLength 225
 grant Myers
@@ -12883,7 +12263,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
 expId 1492
 fragLength 225
 grant Myers
@@ -12909,7 +12288,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-dccAccession wgEncodeEH001526
 expId 1526
 fragLength 225
 grant Myers
@@ -12935,7 +12313,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001494
 expId 1494
 fragLength 225
 grant Myers
@@ -12960,7 +12337,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-dccAccession wgEncodeEH001493
 expId 1493
 fragLength 225
 grant Myers
@@ -12985,7 +12361,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-dccAccession wgEncodeEH001509
 expId 1509
 fragLength 225
 grant Myers
@@ -13010,7 +12385,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-dccAccession wgEncodeEH001539
 expId 1539
 fragLength 225
 grant Myers
@@ -13035,8 +12409,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002006
-expId 2006
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13060,8 +12432,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002007
-expId 2007
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13085,7 +12455,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001479
 expId 1479
 fragLength 225
 grant Myers
@@ -13111,7 +12480,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001486
 expId 1486
 fragLength 225
 grant Myers
@@ -13137,7 +12505,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
-dccAccession wgEncodeEH001469
 expId 1469
 fragLength 225
 grant Myers
@@ -13164,7 +12531,6 @@ dataVersion post ENCODE Jan 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001467
 expId 1467
 fragLength 225
 grant Myers
@@ -13190,7 +12556,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001480
 expId 1480
 fragLength 225
 grant Myers
@@ -13216,7 +12581,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001462
 expId 1462
 fragLength 225
 grant Myers
@@ -13241,7 +12605,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-dccAccession wgEncodeEH001484
 expId 1484
 fragLength 225
 grant Myers
@@ -13267,7 +12630,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-dccAccession wgEncodeEH001465
 expId 1465
 fragLength 225
 grant Myers
@@ -13292,7 +12654,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001475
 expId 1475
 fragLength 225
 grant Myers
@@ -13318,7 +12679,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-dccAccession wgEncodeEH001487
 expId 1487
 fragLength 225
 grant Myers
@@ -13344,7 +12704,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-dccAccession wgEncodeEH001489
 expId 1489
 fragLength 225
 grant Myers
@@ -13370,7 +12729,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-dccAccession wgEncodeEH001495
 expId 1495
 fragLength 225
 grant Myers
@@ -13395,7 +12753,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001477
 expId 1477
 fragLength 225
 grant Myers
@@ -13421,7 +12778,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-dccAccession wgEncodeEH001463
 expId 1463
 fragLength 225
 grant Myers
@@ -13446,7 +12802,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-dccAccession wgEncodeEH001517
 expId 1517
 fragLength 225
 grant Myers
@@ -13471,7 +12826,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-dccAccession wgEncodeEH001476
 expId 1476
 fragLength 225
 grant Myers
@@ -13497,7 +12851,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001496
 expId 1496
 fragLength 225
 grant Myers
@@ -13522,7 +12875,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-dccAccession wgEncodeEH001485
 expId 1485
 fragLength 225
 grant Myers
@@ -13548,7 +12900,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-dccAccession wgEncodeEH001468
 expId 1468
 fragLength 225
 grant Myers
@@ -13573,7 +12924,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-dccAccession wgEncodeEH001488
 expId 1488
 fragLength 225
 grant Myers
@@ -13599,7 +12949,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001523
 expId 1523
 fragLength 225
 grant Myers
@@ -13624,7 +12973,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001522
 expId 1522
 fragLength 225
 grant Myers
@@ -13649,7 +12997,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001520
 expId 1520
 fragLength 225
 grant Myers
@@ -13674,7 +13021,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-dccAccession wgEncodeEH001521
 expId 1521
 fragLength 225
 grant Myers
@@ -13699,7 +13045,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH001524
 expId 1524
 fragLength 225
 grant Myers
@@ -13724,8 +13069,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002018
-expId 2018
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13749,8 +13092,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002017
-expId 2017
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13774,8 +13115,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH002020
-expId 2020
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13799,8 +13138,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002011
-expId 2011
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13824,8 +13161,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-dccAccession wgEncodeEH002016
-expId 2016
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13849,8 +13184,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-dccAccession wgEncodeEH002015
-expId 2015
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13874,8 +13207,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH002012
-expId 2012
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13899,7 +13230,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001504
 expId 1504
 fragLength 225
 grant Myers
@@ -13924,7 +13254,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001474
 expId 1474
 fragLength 225
 grant Myers
@@ -13949,7 +13278,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-dccAccession wgEncodeEH001505
 expId 1505
 fragLength 225
 grant Myers
@@ -13974,7 +13302,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001603
 expId 1603
 fragLength 225
 grant Myers
@@ -13999,8 +13326,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-dccAccession wgEncodeEH002013
-expId 2013
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14024,7 +13349,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-dccAccession wgEncodeEH001548
 expId 1548
 fragLength 225
 grant Myers
@@ -14050,8 +13374,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-dccAccession wgEncodeEH002014
-expId 2014
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14075,7 +13397,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001470
 expId 1470
 fragLength 225
 grant Myers
@@ -14100,7 +13421,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001549
 expId 1549
 fragLength 225
 grant Myers
@@ -14125,8 +13445,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH002010
-expId 2010
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14150,7 +13468,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001550
 expId 1550
 fragLength 225
 grant Myers
@@ -14175,7 +13492,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-dccAccession wgEncodeEH001506
 expId 1506
 fragLength 225
 grant Myers
@@ -14200,7 +13516,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001471
 expId 1471
 fragLength 225
 grant Myers
@@ -14225,7 +13540,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-dccAccession wgEncodeEH001551
 expId 1551
 fragLength 225
 grant Myers
@@ -14251,7 +13565,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001472
 expId 1472
 fragLength 225
 grant Myers
@@ -14276,7 +13589,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH001503
 expId 1503
 fragLength 225
 grant Myers
@@ -14301,8 +13613,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-dccAccession wgEncodeEH002009
-expId 2009
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14327,7 +13637,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-26
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-dccAccession wgEncodeEH001466
 expId 1466
 fragLength 225
 grant Myers
@@ -14353,7 +13662,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001481
 expId 1481
 fragLength 225
 grant Myers
@@ -14379,7 +13687,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-dccAccession wgEncodeEH001482
 expId 1482
 fragLength 225
 grant Myers
@@ -14405,7 +13712,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001525
 expId 1525
 fragLength 225
 grant Myers
@@ -14430,7 +13736,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001552
 expId 1552
 fragLength 225
 grant Myers
@@ -14455,8 +13760,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001558
-expId 1558
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14480,7 +13783,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001460
 expId 1460
 fragLength 225
 grant Myers
@@ -14505,7 +13807,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001553
 expId 1553
 fragLength 225
 grant Myers
@@ -14530,7 +13831,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccAccession wgEncodeEH001461
 expId 1461
 fragLength 225
 grant Myers
@@ -14555,8 +13855,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001473
-expId 1473
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14580,8 +13878,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-dccAccession wgEncodeEH001547
-expId 1547
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14605,7 +13901,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001559
 expId 1559
 fragLength 225
 grant Myers
@@ -14630,7 +13925,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-dccAccession wgEncodeEH001554
 expId 1554
 fragLength 225
 grant Myers
@@ -14655,8 +13949,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-09-11
 dateUnrestricted 2009-06-11
-dccAccession wgEncodeEH001677
-expId 1677
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14670,4 +13962,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -925718627
+# MAGIC: 181705549
