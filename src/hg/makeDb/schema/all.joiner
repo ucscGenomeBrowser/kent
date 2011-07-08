@@ -3386,6 +3386,7 @@ tablesIgnored hg18
 
 tablesIgnored hg19
     affyExonProbe%
+    allHg19RS_BW
     altSeqHaplotypes
     altSeqLiftOverPsl
     altSeqPatches
@@ -3440,6 +3441,7 @@ tablesIgnored hg19
     uMassBrainHistone%
 
 tablesIgnored mm9
+	allMm9RS_BW
     crgMapability%
     rest
 
