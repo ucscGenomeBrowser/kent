@@ -564,10 +564,20 @@ tg->extraUiData = vcff;
 static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
 {
-struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-// TODO: may need to handle per-chrom files like bam, maybe fold bamFileNameFromTable into this::
-char *fileOrUrl = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
-hFreeConn(&conn);
+char *fileOrUrl = NULL;
+/* Figure out url or file name. */
+if (tg->parallelLoading)
+    {
+    /* do not use mysql uring parallel-fetch load */
+    fileOrUrl = trackDbSetting(tg->tdb, "bigDataUrl");
+    }
+else
+    {
+    // TODO: may need to handle per-chrom files like bam, maybe fold bamFileNameFromTable into this:
+    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+    fileOrUrl = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
+    hFreeConn(&conn);
+    }
 int vcfMaxErr = 100;
 struct vcfFile *vcff = NULL;
 /* protect against temporary network error */
@@ -575,6 +585,19 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
+    if (vcff != NULL)
+	{
+	if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 3000 &&
+	    (tg->visibility == tvPack || tg->visibility == tvSquish))
+	    vcfHapClusterOverloadMethods(tg, vcff);
+	else
+	    {
+	    tg->items = vcfFileToPgSnp(vcff);
+	    // pgSnp bases coloring/display decision on count of items:
+	    tg->customInt = slCount(tg->items);
+	    }
+	// Don't vcfFileFree here -- we are using its string pointers!
+	}
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -585,19 +608,6 @@ if (errCatch->gotError)
     tg->totalHeight = bigWarnTotalHeight;
     }
 errCatchFree(&errCatch);
-if (vcff != NULL)
-    {
-    if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 3000 &&
-	(tg->visibility == tvPack || tg->visibility == tvSquish))
-	vcfHapClusterOverloadMethods(tg, vcff);
-    else
-	{
-	tg->items = vcfFileToPgSnp(vcff);
-	// pgSnp bases coloring/display decision on count of items:
-	tg->customInt = slCount(tg->items);
-	}
-    // Don't vcfFileFree here -- we are using its string pointers!
-    }
 }
 
 void vcfTabixMethods(struct track *track)

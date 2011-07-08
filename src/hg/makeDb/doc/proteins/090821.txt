@@ -569,4 +569,63 @@ hgsql rn4 -N -e \
 # !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
 # AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
 
+
+#########################################################
+# UPDATE REACTOME TABLES WITH V37 DATA (DONE, Fan 07/01/2011)
+
+# Obtain the ucsc_events37 and ucsc_entity37 from Reactome.
+# Contact: Robin Haw [Robin.Haw@oicr.on.ca]
+
+ssh hgwdev
+mkdir /hive/data/outside/reactome/reactome37
+rm /hive/data/outside/reactome/current
+ln -s /hive/data/outside/reactome/reactome37 /hive/data/outside/reactome/current
+rm /hive/data/outside/reactome/reactome
+ln -s /hive/data/outside/reactome/reactome37 /hive/data/outside/reactome/reactome 
+cd /hive/data/outside/reactome/reactome
+
+# save these two .dat files to this subdirectory.
+
+cp ucsc_events37 ucsc_events37.tab
+cp ucsc_entity37 ucsc_entity37.tab
+
+# edit two .tab files to get rid of top head lines.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events37.tab" into table spReactomeEvent'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity37.tab" into table spReactomeId'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg17 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg17.lis
+
+hgsql hg18 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg18.lis
+
+hgsql hg19 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg19.lis
+
+hgsql mm9 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm9.lis
+
+hgsql mm8 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm8.lis
+
+hgsql rn4 -N -e \
+'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >rn4.lis
+
+# !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
+# AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
+
 endif # BRACKET

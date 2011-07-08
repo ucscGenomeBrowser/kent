@@ -28,6 +28,9 @@ char *hgTablesName();
 char *hgCustomName();
 /* Relative URL to custom tracks manager. */
 
+char *hgHubConnectName();
+/* Relative URL to track hub manager. */
+
 char *hgSessionName();
 /* Relative URL to session manager. */
 

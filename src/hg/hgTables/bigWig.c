@@ -122,14 +122,13 @@ if (anyIntersection())
 		/* Here we have to break things up. */
 		double val = iv->val;
 		struct bbiInterval *partIv = iv;	// Reuse memory for first interval
-		int s = start, end = start+size;
+		int s = iv->start, end = iv->end;
 		for (;;)
 		    {
-		    int bitsClear = bitFindClear(bits2, s, end-s);
-		    s += bitsClear;
+		    s = bitFindSet(bits2, s, end);
 		    if (s >= end)
 		        break;
-		    int bitsSet = bitFindSet(bits2, s, end-s);	// Always > 0
+		    int bitsSet = bitFindClear(bits2, s, end) - s;
 		    if (partIv == NULL)
 			lmAllocVar(lm, partIv);
 		    partIv->start = s;
@@ -299,6 +298,28 @@ hTableEnd();
 
 bbiFileClose(&bwf);
 htmlClose();
+}
+
+struct bed *bigWigIntervalsToBed(struct sqlConnection *conn, char *table, struct region *region,
+				 struct lm *lm)
+/* Return a list of unfiltered, unintersected intervals in region as bed (for
+ * secondary table in intersection). */
+{
+struct bed *bed, *bedList = NULL;
+char *fileName = bigWigFileName(table, conn);
+struct bbiFile *bwf = bigWigFileOpen(fileName);
+struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, region->chrom, region->start,
+						      region->end, lm);
+for (iv = ivList;  iv != NULL;  iv = iv->next)
+    {
+    lmAllocVar(lm, bed);
+    bed->chrom = region->chrom;
+    bed->chromStart = iv->start;
+    bed->chromEnd = iv->end;
+    slAddHead(&bedList, bed);
+    }
+slReverse(&bedList);
+return bedList;
 }
 
 void bigWigFillDataVector(char *table, struct region *region, 

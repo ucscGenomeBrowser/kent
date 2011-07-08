@@ -14,20 +14,36 @@
 
 // developer: this include is for an occasionally useful means of getting stack info without crashing
 // however, it is not supported on cygwin.  Conditionally compile this in when desired.
+
 //#define BACKTRACE_EXISTS
 #ifdef BACKTRACE_EXISTS
 #include <execinfo.h>
 #endif///def BACKTRACE_EXISTS
+#include <pthread.h>
 #include "common.h"
+#include "hash.h"
 #include "dystring.h"
 #include "errabort.h"
 
 static char const rcsid[] = "$Id: errabort.c,v 1.16 2010/01/12 18:16:27 markd Exp $";
 
-static boolean debugPushPopErr = FALSE; // generate stack dump on push/pop error
-boolean errAbortInProgress = FALSE;  /* Flag to indicate that an error abort is in progress.
-                                      * Needed so that a warn handler can tell if it's really
-                                      * being called because of a warning or an error. */
+
+#define maxWarnHandlers 20
+#define maxAbortHandlers 12
+struct perThreadAbortVars
+/* per thread variables for abort and warn */
+    {
+    boolean debugPushPopErr;        // generate stack dump on push/pop error
+    boolean errAbortInProgress;     /* Flag to indicate that an error abort is in progress.
+				     * Needed so that a warn handler can tell if it's really
+				     * being called because of a warning or an error. */
+    WarnHandler warnArray[maxWarnHandlers];
+    int warnIx;
+    AbortHandler abortArray[maxAbortHandlers];
+    int abortIx;
+    };
+
+static struct perThreadAbortVars *getThreadVars();  // forward declaration
 
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
@@ -46,14 +62,12 @@ static void silentVaWarn(char *format, va_list args)
 {
 }
 
-#define maxWarnHandlers 20
-static WarnHandler warnArray[maxWarnHandlers] = {defaultVaWarn,};
-static int warnIx = 0;
 
 void vaWarn(char *format, va_list args)
 /* Call top of warning stack to issue warning. */
 {
-warnArray[warnIx](format, args);
+struct perThreadAbortVars *ptav = getThreadVars();
+ptav->warnArray[ptav->warnIx](format, args);
 }
 
 void warn(char *format, ...)
@@ -117,25 +131,27 @@ va_end(args);
 void pushWarnHandler(WarnHandler handler)
 /* Set abort handler */
 {
-if (warnIx >= maxWarnHandlers-1)
+struct perThreadAbortVars *ptav = getThreadVars();
+if (ptav->warnIx >= maxWarnHandlers-1)
     {
-    if (debugPushPopErr)
+    if (ptav->debugPushPopErr)
         dumpStack("pushWarnHandler overflow");
     errAbort("Too many pushWarnHandlers, can only handle %d\n", maxWarnHandlers-1);
     }
-warnArray[++warnIx] = handler;
+ptav->warnArray[++ptav->warnIx] = handler;
 }
 
 void popWarnHandler()
 /* Revert to old warn handler. */
 {
-if (warnIx <= 0)
+struct perThreadAbortVars *ptav = getThreadVars();
+if (ptav->warnIx <= 0)
     {
-    if (debugPushPopErr)
+    if (ptav->debugPushPopErr)
         dumpStack("popWarnHandler underflow");
-    errAbort("Too many popWarnHandlers");
+    errAbort("Too few popWarnHandlers");
     }
---warnIx;
+--ptav->warnIx;
 }
 
 static void defaultAbort()
@@ -147,14 +163,12 @@ else
     exit(-1);
 }
 
-#define maxAbortHandlers 12
-static AbortHandler abortArray[maxAbortHandlers] = {defaultAbort,};
-static int abortIx = 0;
 
 void noWarnAbort()
 /* Abort without message. */
 {
-abortArray[abortIx]();
+struct perThreadAbortVars *ptav = getThreadVars();
+ptav->abortArray[ptav->abortIx]();
 exit(-1);		/* This is just to make compiler happy.
                          * We have already exited or longjmped by now. */
 }
@@ -167,7 +181,8 @@ void vaErrAbort(char *format, va_list args)
  * (like when logging), if it's an error or a warning.  This is far from
  * perfect, as this isn't cleared if the error handler continues,
  * as with an exception mechanism. */
-errAbortInProgress = TRUE;
+struct perThreadAbortVars *ptav = getThreadVars();
+ptav->errAbortInProgress = TRUE;
 vaWarn(format, args);
 noWarnAbort();
 }
@@ -195,25 +210,27 @@ va_end(args);
 void pushAbortHandler(AbortHandler handler)
 /* Set abort handler */
 {
-if (abortIx >= maxAbortHandlers-1)
+struct perThreadAbortVars *ptav = getThreadVars();
+if (ptav->abortIx >= maxAbortHandlers-1)
     {
-    if (debugPushPopErr)
+    if (ptav->debugPushPopErr)
         dumpStack("pushAbortHandler overflow");
     errAbort("Too many pushAbortHandlers, can only handle %d", maxAbortHandlers-1);
     }
-abortArray[++abortIx] = handler;
+ptav->abortArray[++ptav->abortIx] = handler;
 }
 
 void popAbortHandler()
 /* Revert to old abort handler. */
 {
-if (abortIx <= 0)
+struct perThreadAbortVars *ptav = getThreadVars();
+if (ptav->abortIx <= 0)
     {
-    if (debugPushPopErr)
+    if (ptav->debugPushPopErr)
         dumpStack("popAbortHandler underflow");
     errAbort("Too many popAbortHandlers\n");
     }
---abortIx;
+--ptav->abortIx;
 }
 
 static void debugAbort()
@@ -252,6 +269,49 @@ pushWarnHandler(silentVaWarn);
 void errAbortDebugnPushPopErr()
 /*  generate stack dump if there is a error in the push/pop functions */
 {
-debugPushPopErr = TRUE;
+struct perThreadAbortVars *ptav = getThreadVars();
+ptav->debugPushPopErr = TRUE;
+}
+
+boolean isErrAbortInProgress() 
+/* Flag to indicate that an error abort is in progress.
+ * Needed so that a warn handler can tell if it's really
+ * being called because of a warning or an error. */
+{
+struct perThreadAbortVars *ptav = getThreadVars();
+return ptav->errAbortInProgress;
+}
+
+
+static struct perThreadAbortVars *getThreadVars()
+/* Return a pointer to the perThreadAbortVars for the current pthread. */
+{
+static pthread_mutex_t ptavMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_lock( &ptavMutex );
+static struct hash *perThreadVars = NULL;
+pthread_t pid = pthread_self(); //  can be a pointer or a number
+// A true integer has function would be nicer, but this will do.  
+// Don't safef, theoretically that could abort.
+char key[64];
+snprintf(key, sizeof(key), "%lld",  ptrToLL(pid));
+key[ArraySize(key)-1] = '\0';
+if (perThreadVars == NULL)
+    perThreadVars = hashNew(0);
+struct hashEl *hel = hashLookup(perThreadVars, key);
+if (hel == NULL)
+    {
+    // if it is the first time, initialization the perThreadAbortVars
+    struct perThreadAbortVars *ptav;
+    AllocVar(ptav);
+    ptav->debugPushPopErr = FALSE;
+    ptav->errAbortInProgress = FALSE;
+    ptav->warnIx = 0;
+    ptav->warnArray[0] = defaultVaWarn;
+    ptav->abortIx = 0;
+    ptav->abortArray[0] = defaultAbort;
+    hel = hashAdd(perThreadVars, key, ptav);
+    }
+pthread_mutex_unlock( &ptavMutex );
+return (struct perThreadAbortVars *)(hel->val);
 }
 

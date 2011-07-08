@@ -18,9 +18,10 @@
 #ifndef ERRABORT_H
 #define ERRABORT_H
 
-extern boolean errAbortInProgress;  /* Flag to indicate that an error abort is in progress.
-                                     * Needed so that a warn handler can tell if it's really
-                                     * being called because of a warning or an error. */
+boolean isErrAbortInProgress();  
+/* Flag to indicate that an error abort is in progress.
+ * Needed so that a warn handler can tell if it's really
+ * being called because of a warning or an error. */
 
 void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */

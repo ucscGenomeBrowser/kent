@@ -8,6 +8,8 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/time.h>
+#include <utime.h>
+#include <pthread.h>
 #include "internet.h"
 #include "errabort.h"
 #include "hash.h"
@@ -17,7 +19,6 @@
 #include "cheapcgi.h"
 #include "https.h"
 #include "sqlNum.h"
-#include <utime.h>
 #include "obscure.h"
 
 static char const rcsid[] = "$Id: net.c,v 1.80 2010/04/14 07:42:06 galt Exp $";
@@ -813,32 +814,38 @@ close(sd);
 return TRUE;
 }
 
-static void sendFtpDataToPipe(int pipefd[2], int sd, int sdata, struct netParsedUrl npu)
+struct netConnectFtpParams
+/* params to pass to thread */
+{
+pthread_t thread;
+int pipefd[2];
+int sd;
+int sdata; 
+struct netParsedUrl npu;
+};
+
+static void *sendFtpDataToPipeThread(void *threadParams)
 /* This is to be executed by the child process after the fork in netGetOpenFtpSockets.
  * It keeps the ftp control socket alive while reading from the ftp data socket
  * and writing to the pipe to the parent process, which closes the ftp sockets
  * and reads from the pipe. */
 {
-fclose(stdin);
-fclose(stdout);
-close(pipefd[0]);  /* close unused half of pipe */
-/* close other file descriptors */
-int fd=0;
-for (fd = STDERR_FILENO+1; fd < 64; fd++)
-    if (fd != pipefd[1] && fd != sdata && fd != sd)
-  	close(fd);
+
+struct netConnectFtpParams *params = threadParams;
+
+pthread_detach(params->thread);  // this thread will never join back with it's progenitor
 
 char buf[32768];
 int rd = 0;
 long long dataPos = 0; 
-if (npu.byteRangeStart != -1)
-    dataPos = npu.byteRangeStart;
-while((rd = read(sdata, buf, 32768)) > 0) 
+if (params->npu.byteRangeStart != -1)
+    dataPos = params->npu.byteRangeStart;
+while((rd = read(params->sdata, buf, 32768)) > 0) 
     {
-    if (npu.byteRangeEnd != -1 && (dataPos + rd) > npu.byteRangeEnd)
-	rd = npu.byteRangeEnd - dataPos + 1;
-    int wt = write(pipefd[1], buf, rd);
-    if (wt == -1 && npu.byteRangeEnd != -1)
+    if (params->npu.byteRangeEnd != -1 && (dataPos + rd) > params->npu.byteRangeEnd)
+	rd = params->npu.byteRangeEnd - dataPos + 1;
+    int wt = write(params->pipefd[1], buf, rd);
+    if (wt == -1 && params->npu.byteRangeEnd != -1)
 	{
 	// errAbort in child process is messy; let reader complain if
 	// trouble.  If byterange was open-ended, we will hit this point
@@ -847,15 +854,16 @@ while((rd = read(sdata, buf, 32768)) > 0)
 	break;
 	}
     dataPos += rd;
-    if (npu.byteRangeEnd != -1 && dataPos >= npu.byteRangeEnd)
+    if (params->npu.byteRangeEnd != -1 && dataPos >= params->npu.byteRangeEnd)
 	break;	    
     }
 if (rd == -1)
     // Again, avoid abort in child process.
     errnoWarn("error reading ftp socket");
-close(pipefd[1]);  /* we are done with it */
-close(sd);
-close(sdata);
+close(params->pipefd[1]);  /* we are done with it */
+close(params->sd);
+close(params->sdata);
+return NULL;
 }
 
 static int netGetOpenFtpSockets(char *url, int *retCtrlSd)
@@ -944,27 +952,23 @@ else
     fflush(stdin);
     fflush(stdout);
     fflush(stderr);
+
+    struct netConnectFtpParams *params;
+    AllocVar(params);
+    params->sd = sd;
+    params->sdata = sdata;
+    params->npu = npu;
     /* make a pipe (fds go in pipefd[0] and pipefd[1])  */
-    int pipefd[2];
-    if (pipe(pipefd) != 0)
+    if (pipe(params->pipefd) != 0)
 	errAbort("netGetOpenFtpSockets: failed to create pipe: %s", strerror(errno));
-    int pid = fork();
-    if (pid < 0)
-	errnoAbort("can't fork in netGetOpenFtpSockets");
-    if (pid == 0)
+    int rc;
+    rc = pthread_create(&params->thread, NULL, sendFtpDataToPipeThread, (void *)params);
+    if (rc)
 	{
-	/* child */
-	sendFtpDataToPipe(pipefd, sd, sdata, npu);
-	exit(0);
-	/* child will never get to here */
+	errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
 	}
 
-    /* parent */
-    close(pipefd[1]);  /* close unused unput half of pipe */
-    /* although the parent closes these, the child has them open still */
-    close(sd);   
-    close(sdata);
-    return pipefd[0];
+    return params->pipefd[0];
     }
 }
 

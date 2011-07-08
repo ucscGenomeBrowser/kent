@@ -28,9 +28,17 @@ struct bbiFile *fetchBbiForTrack(struct track *track)
 struct bbiFile *bbi = track->bbiFile;
 if (bbi == NULL)
     {
-    struct sqlConnection *conn = hAllocConnTrack(database, track->tdb);
-    char *fileName = bbiNameFromSettingOrTable(track->tdb, conn, track->table);
-    hFreeConn(&conn);
+    char *fileName = NULL;
+    if (track->parallelLoading) // do not use mysql during parallel fetch
+	{
+	fileName = cloneString(trackDbSetting(track->tdb, "bigDataUrl"));
+	}
+    else
+	{
+	struct sqlConnection *conn = hAllocConnTrack(database, track->tdb);
+	fileName = bbiNameFromSettingOrTable(track->tdb, conn, track->table);
+	hFreeConn(&conn);
+	}
     bbi = track->bbiFile = bigBedFileOpen(fileName);
     }
 return bbi;
@@ -46,14 +54,38 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
-    int maxItems = maximumTrackItems(track) + 1;
-    result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);
-    if (slCount(result) >= maxItems)
+    if (track->limitedVis != tvDense)
 	{
-	track->limitedVis = tvDense;
-	track->limitedVisSet = TRUE;
-	result = NULL;
+	int maxItems = maximumTrackItems(track) + 1;
+	result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);
+	if (slCount(result) >= maxItems)
+	    {
+	    track->limitedVis = tvDense;
+	    track->limitedVisSet = TRUE;
+	    result = NULL;
+	    }
 	}
+    if (track->visibility == tvDense || track->limitedVis == tvDense)
+	{
+	AllocArray(track->summary, insideWidth);
+	if (bigBedSummaryArrayExtended(bbi, chrom, start, end, insideWidth, track->summary))
+	    {
+	    char *denseCoverage = trackDbSettingClosestToHome(track->tdb, "denseCoverage");
+	    if (denseCoverage != NULL)
+		{
+		double endVal = atof(denseCoverage);
+		if (endVal <= 0)
+		    {
+		    AllocVar(track->sumAll);
+		    *track->sumAll = bbiTotalSummary(bbi);
+		    }
+		}
+	    }
+	else
+	    freez(&track->summary);
+	}
+    bbiFileClose(&bbi);
+    track->bbiFile = NULL;
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -105,55 +137,43 @@ void bigBedDrawDense(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color)
 /* Use big-bed summary data to quickly draw bigBed. */
 {
-/* protect against temporary network error */
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
+struct bbiSummaryElement *summary = tg->summary;
+if (summary)
     {
-    struct bbiSummaryElement summary[width];
-    struct bbiFile *bbi = fetchBbiForTrack(tg);
-    if (bigBedSummaryArrayExtended(bbi, chromName, seqStart, seqEnd, width, summary))
+    char *denseCoverage = trackDbSettingClosestToHome(tg->tdb, "denseCoverage");
+    if (denseCoverage != NULL)
 	{
-	char *denseCoverage = trackDbSettingClosestToHome(tg->tdb, "denseCoverage");
-	if (denseCoverage != NULL)
+	double startVal = 0, endVal = atof(denseCoverage);
+	if (endVal <= 0)
 	    {
-	    double startVal = 0, endVal = atof(denseCoverage);
-	    if (endVal <= 0)
+	    struct bbiSummaryElement sumAll = *tg->sumAll;
+	    double mean = sumAll.sumData/sumAll.validCount;
+	    double std = calcStdFromSums(sumAll.sumData, sumAll.sumSquares, sumAll.validCount);
+	    rangeFromMinMaxMeanStd(0, sumAll.maxVal, mean, std, &startVal, &endVal);
+	    }
+	int x;
+	for (x=0; x<width; ++x)
+	    {
+	    if (summary[x].validCount > 0)
 		{
-		struct bbiSummaryElement sumAll = bbiTotalSummary(bbi);
-		double mean = sumAll.sumData/sumAll.validCount;
-		double std = calcStdFromSums(sumAll.sumData, sumAll.sumSquares, sumAll.validCount);
-		rangeFromMinMaxMeanStd(0, sumAll.maxVal, mean, std, &startVal, &endVal);
-		}
-	    int x;
-	    for (x=0; x<width; ++x)
-		{
-		if (summary[x].validCount > 0)
-		    {
-		    Color color = shadesOfGray[grayInRange(summary[x].maxVal, startVal, endVal)];
-		    hvGfxBox(hvg, x+xOff, yOff, 1, tg->heightPer, color);
-		    }
+		Color color = shadesOfGray[grayInRange(summary[x].maxVal, startVal, endVal)];
+		hvGfxBox(hvg, x+xOff, yOff, 1, tg->heightPer, color);
 		}
 	    }
-	else
+	}
+    else
+	{
+	int x;
+	for (x=0; x<width; ++x)
 	    {
-	    int x;
-	    for (x=0; x<width; ++x)
+	    if (summary[x].validCount > 0)
 		{
-		if (summary[x].validCount > 0)
-		    {
-		    hvGfxBox(hvg, x+xOff, yOff, 1, tg->heightPer, color);
-		    }
+		hvGfxBox(hvg, x+xOff, yOff, 1, tg->heightPer, color);
 		}
 	    }
 	}
     }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    tg->networkErrMsg = cloneString(errCatch->message->string);
-    bigDrawWarning(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, tvDense);
-    }
-errCatchFree(&errCatch);
+freez(&tg->summary);
 }
 
 void bigBedMethods(struct track *track, struct trackDb *tdb, 
