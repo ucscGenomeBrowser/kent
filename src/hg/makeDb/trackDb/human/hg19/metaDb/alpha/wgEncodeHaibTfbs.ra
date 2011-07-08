@@ -9373,7 +9373,7 @@ controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-05
-dateSubmitted 2008-12-117
+dateSubmitted 2008-12-11
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001467
 expId 1467
@@ -42678,4 +42678,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -234437146
+# MAGIC: -286431831
