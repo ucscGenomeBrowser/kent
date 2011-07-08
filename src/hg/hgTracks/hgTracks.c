@@ -4359,7 +4359,7 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
-return (startsWithWord("bigWig"  , track->tdb->type) 
+return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
@@ -4428,11 +4428,11 @@ while(1)
 	{  // move it from the waiting queue to the running queue
 	pfd = slPopHead(&pfdList);
 	slAddHead(&pfdRunning, pfd);
-	}	
+	}
     pthread_mutex_unlock( &pfdMutex );
     if (allDone)
 	return NULL;
-    
+
     long thisTime = 0, lastTime = 0;
 
     if (measureTiming)
@@ -5846,10 +5846,10 @@ if(advancedJavascriptFeaturesEnabled(cart))
         webIncludeResourceFile("jquery.contextmenu.css");
         jsIncludeFile("jquery.contextmenu.js", NULL);
         webIncludeResourceFile("ui.dropdownchecklist.css");
-#ifndef NEW_JQUERY
-        jsIncludeFile("ui.core.js", NULL);
-#endif
         jsIncludeFile("ui.dropdownchecklist.js", NULL);
+#ifdef NEW_JQUERY
+        jsIncludeFile("ddcl.js", NULL);
+#endif///def NEW_JQUERY
         }
     }
 
