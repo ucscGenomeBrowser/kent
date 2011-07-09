@@ -3820,8 +3820,8 @@ grpFreeList(&grps);
 	AllocVar(group);
 	group->name = cloneString(hub->name);
 	group->label = cloneString(hub->shortLabel);
-	group->defaultPriority = group->priority = maxPriority;
 	maxPriority += 1;
+	group->defaultPriority = group->priority = maxPriority;
 	slAddHead(&list, group);
 	hashAdd(hash, group->name, group);
 	}
