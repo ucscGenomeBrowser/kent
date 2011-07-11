@@ -1024,55 +1024,57 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Stam:BJ-tert_Stam_protocol.pdf
+# JEFF:  Please read and find which of these protocols is correct for BJ and label it appropriately
 
-term BJ-5ta
-tag BJ5TA
-type Cell Line
-organism human
-description BJ foreskin fibroblast transfected with the pGRN145 hTERT, expressing T antigens of SV40 virus.(PMID: 9916802)
-tissue Skin
-vendorName ATCC
-vendorId CRL-4001
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
-karyotype normal
-termId BTO:0001255
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
-sex M
-tier 3
-protocol Struhl:BJ_5ta_Struhl_protocol.pdf
-
-term BJ-HRas
-tag BJHRAS
-type Cell Line
-organism human
-description hTERT/BJ skin fibroblasts expressing T antigens of SV40 virus and H-RasV12
-tissue Skin
-vendorName Struhl laboratory
-vendorId BJ-HRas
-orderUrl https://struhl.med.harvard.edu/
-karyotype normal
-termId BTO:0001255
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
-sex M
-tier 3
-protocol Struhl:BJ-tert-HRas_Struhl_protocol.pdf
-
-
-term BJ-T
-tag BJT
-type Cell Line
-organism human
-description foreskin fibroblast
-tissue Skin
-vendorName Struhl laboratory
-vendorId BJ-T
-orderUrl https://struhl.med.harvard.edu/
-karyotype normal
-termId BTO:0001255
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
-sex M
-tier 3
-protocol Struhl:BJ-5ta_Struhl_protocol.pdf
+#These terms seem to have a lot of confusion and no one is currently using these cell lines.  We are commenting out until resovled see Bug#4536
+#term BJ-5ta
+#tag BJ5TA
+#type Cell Line
+#organism human
+#description BJ foreskin fibroblast transfected with the pGRN145 hTERT, expressing T antigens of SV40 virus.(PMID: 9916802)
+#tissue Skin
+#vendorName ATCC
+#vendorId CRL-4001
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
+#karyotype normal
+#termId BTO:0001255
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
+#sex M
+#tier 3
+#protocol Struhl:BJ_5ta_Struhl_protocol.pdf
+#
+#term BJ-HRas
+#tag BJHRAS
+#type Cell Line
+#organism human
+#description hTERT/BJ skin fibroblasts expressing T antigens of SV40 virus and H-RasV12
+#tissue Skin
+#vendorName Struhl laboratory
+#vendorId BJ-HRas
+#orderUrl https://struhl.med.harvard.edu/
+#karyotype normal
+#termId BTO:0001255
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
+#sex M
+#tier 3
+#protocol Struhl:BJ-tert-HRas_Struhl_protocol.pdf
+#
+#
+#term BJ-T
+#tag BJT
+#type Cell Line
+#organism human
+#description foreskin fibroblast
+#tissue Skin
+#vendorName Struhl laboratory
+#vendorId BJ-T
+#orderUrl https://struhl.med.harvard.edu/
+#karyotype normal
+#termId BTO:0001255
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
+#sex M
+#tier 3
+#protocol Struhl:BJ-5ta_Struhl_protocol.pdf
 
 term CD20+
 tag CD20+
@@ -2041,8 +2043,9 @@ termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 sex U
 tier 3
-protocol Stam:Stam_15_protocols.pdf
+protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf Snyder:HEK293b_Snyder_protocol.pdf
 
+#We are trying to eliminate these "b" terms.  We will not erase fully until 9/1/11.
 #term HEK293(b)
 #tag HEK293b
 #type Cell Line
@@ -7938,6 +7941,11 @@ tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
 
+term RevXlinkChromatin 
+tag RXLCH
+type control
+description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. (PROVISIONAL)
+
 term None
 tag NONE
 description No special treatment or protocol applies
@@ -8329,7 +8337,7 @@ term Alignability
 tag ALIGNABI
 type view
 label Alignability
-description The CRG Alignability tracks display how uniquely k-mer sequences align to a region of the genome. To generate the data, the GEM-mappability program has been employed. The method is equivalent to mapping sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts to produce these tracks) back to the genome using the GEM mapper aligner (up to 2 mismatches were allowed in this case). For each window, a mapability score was computed (S = 1/(number of matches found in the genome): S=1 means one match in the genome, S=0.5 is two matches in the genome, and so on). The CRG Alignability tracks were generated independently of the ENCODE project, in the framework of the GEM (GEnome Multitool) project. 
+description PROVISIONAL The CRG Alignability tracks display how uniquely k-mer sequences align to a region of the genome. To generate the data, the GEM-mappability program has been employed. The method is equivalent to mapping sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts to produce these tracks) back to the genome using the GEM mapper aligner (up to 2 mismatches were allowed in this case). For each window, a mapability score was computed (S = 1/(number of matches found in the genome): S=1 means one match in the genome, S=0.5 is two matches in the genome, and so on). The CRG Alignability tracks were generated independently of the ENCODE project, in the framework of the GEM (GEnome Multitool) project. 
 
 term Alignments
 tag ALN
@@ -8489,7 +8497,7 @@ label Plus Raw Signal
 description Graphs the base-by-base density of tags on the plus strand
 
 term Protocol
-tag PROTOCOL
+tag PRTCL
 type view
 label Protocol
 description Document of experimental methods
@@ -8535,6 +8543,18 @@ tag REGIONS
 type view
 label Regions
 description Regions
+
+term RepPeaks
+tag REPPEAKS
+type view
+label Replicate Peaks
+description Peaks determined by Replicate (PROVISIONAL)
+
+term RepSignal
+tag REPSIGNAL
+type view
+label Replicate Signal
+description Signal determined by Replicate (PROVISONAL)
 
 term Signal
 tag SIG
@@ -8600,7 +8620,7 @@ term Uniqueness
 tag UNQ
 type view
 label Uniqueness
-description The Duke uniqueness tracks display how unique is each sequence on the positive strand starting at a particular base and of a particular length. Thus, the 20 bp track reflects the uniqueness of all 20 base sequences with the score being assigned to the first base of the sequence. Scores are normalized to between 0 and 1 with 1 representing a completely unique sequence and 0 representing the sequence occurs more than 4 times in the genome (excluding chrN_random and alternative haplotypes). A score of 0.5 indicates the sequence occurs exactly twice, likewise 0.33 for three times and 0.25 for four times. The Duke uniqueness tracks were generated for the ENCODE project as tools in the development of the Open Chromatin: DNaseI HS, FAIRE, TFBS and Synthesis tracks. 
+description (PROVISIONAL)The Duke uniqueness tracks display how unique is each sequence on the positive strand starting at a particular base and of a particular length. Thus, the 20 bp track reflects the uniqueness of all 20 base sequences with the score being assigned to the first base of the sequence. Scores are normalized to between 0 and 1 with 1 representing a completely unique sequence and 0 representing the sequence occurs more than 4 times in the genome (excluding chrN_random and alternative haplotypes). A score of 0.5 indicates the sequence occurs exactly twice, likewise 0.33 for three times and 0.25 for four times. The Duke uniqueness tracks were generated for the ENCODE project as tools in the development of the Open Chromatin: DNaseI HS, FAIRE, TFBS and Synthesis tracks. 
 
 term Validation
 tag VALIDATION

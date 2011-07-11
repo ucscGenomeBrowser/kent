@@ -1,6 +1,6 @@
 # Data Agreement File for UW RNA-seq experiments for mm9  
 
-#$Revision: 1.3 $
+#$Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -48,13 +48,13 @@ type             bigWig
 hasReplicates    yes
 required         yes
 
-view             PlusRawSig
+view             PlusRawSignal
 longLabelPrefix  UW RNA-seq Plus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
 required         yes
 
-view             MinusRawSig
+view             MinusRawSignal
 longLabelPrefix  UW RNA-seq Minus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
