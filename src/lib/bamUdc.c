@@ -130,6 +130,7 @@ boolean bamFileExistsUdc(char *fileOrUrl, char *udcFuseRoot)
 {
 char *bamFileName = samtoolsFileNameUdcFuse(fileOrUrl, udcFuseRoot);
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
+boolean usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
 if (fh != NULL)
     {
 #ifndef KNETFILE_HOOKS
@@ -138,11 +139,13 @@ if (fh != NULL)
     // chdir to a trash directory before calling bam_index_load, then chdir back.
     char *runDir = getCurrentDir();
     char *samDir = getSamDir();
-    setCurrentDir(samDir);
+    if (usingUrl)
+	setCurrentDir(samDir);
 #endif//ndef KNETFILE_HOOKS
     bam_index_t *idx = bam_index_load(bamFileName);
 #ifndef KNETFILE_HOOKS
-    setCurrentDir(runDir);
+    if (usingUrl)
+	setCurrentDir(runDir);
 #endif//ndef KNETFILE_HOOKS
     samclose(fh);
     if (idx == NULL)
@@ -202,6 +205,7 @@ void bamFetchUdc(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void
 {
 char *bamFileName = NULL;
 samfile_t *fh = bamOpenUdc(fileOrUrl, &bamFileName, udcFuseRoot);
+boolean usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
 if (pSamFile != NULL)
     *pSamFile = fh;
 int chromId, start, end;
@@ -211,17 +215,18 @@ if (ret != 0 && startsWith("chr", position))
 if (ret != 0)
     // If the bam file does not cover the current chromosome, OK
     return;
-
 #ifndef KNETFILE_HOOKS
 // Since samtools' url-handling code saves the .bai file to the current directory,
 // chdir to a trash directory before calling bam_index_load, then chdir back.
 char *runDir = getCurrentDir();
 char *samDir = getSamDir();
-setCurrentDir(samDir);
+if (usingUrl)
+    setCurrentDir(samDir);
 #endif//ndef KNETFILE_HOOKS
 bam_index_t *idx = bam_index_load(bamFileName);
 #ifndef KNETFILE_HOOKS
-setCurrentDir(runDir);
+if (usingUrl)
+    setCurrentDir(runDir);
 #endif//ndef KNETFILE_HOOKS
 if (idx == NULL)
     warn("bam_index_load(%s) failed.", bamFileName);
@@ -580,7 +585,7 @@ return FALSE;
 samfile_t *bamOpenUdcFuse(char *fileOrUrl, char **retBamFileName)
 /* Return an open bam file, dealing with some FUSE caching if need be. */
 {
-errAbort(COMPILE_WITH_SAMTOOLS, "bamOpenUdc");
+warn(COMPILE_WITH_SAMTOOLS, "bamOpenUdc");
 return FALSE;
 }
 
