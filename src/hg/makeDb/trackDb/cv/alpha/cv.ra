@@ -8582,6 +8582,18 @@ type view
 label Regions
 description Regions
 
+term RepPeaks
+tag REPPEAKS
+type view
+label Replicate Peaks
+description Peaks determined by Replicate (PROVISIONAL)
+
+term RepSignal
+tag REPSIGNAL
+type view
+label Replicate Signal
+description Signal determined by Replicate (PROVISONAL)
+
 term Signal
 tag SIG
 type view
