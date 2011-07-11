@@ -329,14 +329,6 @@ def createHighThroughputSoftFile(database, composite, organism, compositeUrl, md
 		
 def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype, copyDirectory):
 	pass
-	
-	
-def copyFiles(fileList, downloadsDirectory, copyDirectory):
-
-	print 'Copying files:'
-	for filename in fileList:
-		print 'Copying file ' + filename + ' (' + count + '/' + len(fileList) + ' ...'
-		shutil.copy2(downloadsDirectory + filename, copyDirectory)
 		
 def main():
 	database = sys.argv[1]
@@ -365,7 +357,9 @@ def main():
 	sortedIds = expIds.keys()
 	sortedIds.sort()
 	sortedIds = sortedIds[sortedIds.index(submitStart):sortedIds.index(submitStart) + submitSize]
-	print 'Generating soft using expIds ' + min(sortedIds) + ' to ' + max(sortedIds)
+	minId = min(sortedIds)
+	maxId = max(sortedIds)
+	print 'Generating soft using expIds ' + minId + ' to ' + maxId
 	for expId in sortedIds:
 		submission[expId] = expIds[expId]
 
@@ -381,20 +375,13 @@ def main():
 	outfile = open(outfileName, 'w')
 	outfile.write(str(softfile))
 	
-	#print 'Copying files'
-
 	fileString = outfileName
 	for file in fileList:
 		fileString = fileString + ' ' + downloadsDirectory + file
 		
-#callList = [ '/opt/aspera/connect/bin/ascp asp-geo@upload.ncbi.nlm.nih.gov:ENCODE/' + composite, '-i', '~/encode_geo_key/encode_geo_key.ppk', '-QTr', '-l300m' ]
-#callList.extend(fileList)
-#callList.append(')
-    
 	fileString.strip()
 	callString = '/opt/aspera/connect/bin/ascp -i ~/encode_geo_key/encode_geo_key.ppk -QTr -l300m ' + fileString + ' asp-geo@upload.ncbi.nlm.nih.gov:ENCODE/' + composite
-#subprocess.call(callList, shell=True)
-	outscript = open(composite + '_' + submitStart + '-' + str(int(submitStart) + submitSize) + '.sh', 'w')
+	outscript = open(composite + minId + '-' + maxId + '.sh', 'w')
 	outscript.write('#!/bin/sh\n\n')
 	outscript.write('/opt/aspera/connect/bin/ascp -i ~/encode_geo_key/encode_geo_key.ppk -QTr -l300m \\\n')
 	
@@ -405,13 +392,8 @@ def main():
 		
 	outscript.write('asp-geo@upload.ncbi.nlm.nih.gov:ENCODE\n')
 	outscript.close()
-	#os.fchmod(composite + '_' + submitStart + '-' + str(int(submitStart) + submitSize) + '.sh', stat.S_IXUSR)
-	os.system('chmod +x ' + composite + '_' + submitStart + '-' + str(int(submitStart) + submitSize) + '.sh')
-#	outscript.write(callString)
-	#print callString
-	#os.system(callString)
-	
-	#copyFiles(fileList, downloadsDirectory, copyDirectory)
+
+	os.system('chmod +x ' + composite + minId + '-' + maxId + '.sh')
 		
 	print 'Finished!'
 	
