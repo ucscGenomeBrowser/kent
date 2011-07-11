@@ -239,7 +239,7 @@ if (cartVarExists(cart, hgHubDoClear))
     return;
     }
 
-cartWebStart(cart, NULL, pageTitle);
+cartWebStart(cart, NULL, "%s", pageTitle);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("jquery-ui.js", NULL);
