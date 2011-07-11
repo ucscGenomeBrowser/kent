@@ -37875,8 +37875,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
-dccAccession wgEncodeEH001673
-expId 1673
+dccAccession wgEncodeEH001558
+expId 1558
 fileName wgEncodeHaibTfbsPfsk1RxlchPcr2xAlnRep3.bam
 grant Myers
 lab HudsonAlpha
@@ -37947,8 +37947,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
-dccAccession wgEncodeEH001673
-expId 1673
+dccAccession wgEncodeEH001558
+expId 1558
 fileName wgEncodeHaibTfbsPfsk1RxlchPcr2xRawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -38021,8 +38021,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
-dccAccession wgEncodeEH001673
-expId 1673
+dccAccession wgEncodeEH001558
+expId 1558
 fileName wgEncodeHaibTfbsPfsk1RxlchPcr2xRawRep3.bigWig
 grant Myers
 lab HudsonAlpha
@@ -42678,4 +42678,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -286431831
+# MAGIC: -286431933
