@@ -130,7 +130,8 @@ boolean bamFileExistsUdc(char *fileOrUrl, char *udcFuseRoot)
 {
 char *bamFileName = samtoolsFileNameUdcFuse(fileOrUrl, udcFuseRoot);
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
-boolean usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
+boolean usingUrl = TRUE; 
+usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
 if (fh != NULL)
     {
 #ifndef KNETFILE_HOOKS
@@ -205,7 +206,8 @@ void bamFetchUdc(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void
 {
 char *bamFileName = NULL;
 samfile_t *fh = bamOpenUdc(fileOrUrl, &bamFileName, udcFuseRoot);
-boolean usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
+boolean usingUrl = TRUE;
+usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
 if (pSamFile != NULL)
     *pSamFile = fh;
 int chromId, start, end;
