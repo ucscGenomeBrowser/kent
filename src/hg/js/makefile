@@ -2,9 +2,15 @@ include ../../inc/common.mk
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 
-JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js jquery.autocomplete.js ui.core.js ui.dropdownchecklist.js
-JS_FILES=ajax.js autocomplete.js hgGateway.js hgTracks.js hui.js utils.js ${JQUERY_FILES}
+JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js \
+    jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
+    jquery.autocomplete.js ui.core.js ui.dropdownchecklist.js
+
+JS_FILES=ajax.js autocomplete.js hgGateway.js hgHubConnect.js hgTracks.js \
+    hui.js utils.js ddcl.js ${JQUERY_FILES}
+
 STATIC_FILES=staticDoc.js jquery.js
+
 ifdef LOWELAB
     JS_FILES += lowetooltip.js loweautocomplete.js
 endif

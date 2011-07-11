@@ -14262,6 +14262,146 @@ tableName wgEncodeSydhTfbsHct116Tcf4UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsHek293Elk4UcdAlnRep1
+objType file
+antibody ELK4
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-13
+dateUnrestricted 2011-10-13
+dccAccession wgEncodeEH001773
+expId 1773
+fileName wgEncodeSydhTfbsHek293Elk4UcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 3248
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHek293Elk4UcdAlnRep2
+objType file
+antibody ELK4
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-13
+dateUnrestricted 2011-10-13
+dccAccession wgEncodeEH001773
+expId 1773
+fileName wgEncodeSydhTfbsHek293Elk4UcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 3248
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHek293Elk4UcdPk
+objType table
+antibody ELK4
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-13
+dateUnrestricted 2011-10-13
+dccAccession wgEncodeEH001773
+expId 1773
+fileName wgEncodeSydhTfbsHek293Elk4UcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3248
+tableName wgEncodeSydhTfbsHek293Elk4UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHek293Elk4UcdRawDataRep1
+objType file
+antibody ELK4
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-13
+dateUnrestricted 2011-10-13
+dccAccession wgEncodeEH001773
+expId 1773
+fileName wgEncodeSydhTfbsHek293Elk4UcdRawDataRep1.fastq.gz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 3248
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293Elk4UcdRawDataRep2
+objType file
+antibody ELK4
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-13
+dateUnrestricted 2011-10-13
+dccAccession wgEncodeEH001773
+expId 1773
+fileName wgEncodeSydhTfbsHek293Elk4UcdRawDataRep2.fastq.gz
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 3248
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293Elk4UcdSig
+objType table
+antibody ELK4
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-13
+dateUnrestricted 2011-10-13
+dccAccession wgEncodeEH001773
+expId 1773
+fileName wgEncodeSydhTfbsHek293Elk4UcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3248
+tableName wgEncodeSydhTfbsHek293Elk4UcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsHek293InputRawData
 objType file
 antibody Input
@@ -14284,6 +14424,56 @@ setType input
 subId 191
 treatment None
 view RawData
+
+metaObject wgEncodeSydhTfbsHek293InputStdAlnRep1
+objType file
+antibody Input
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control std
+controlId HEK293/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-09
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000631
+expId 631
+fileName wgEncodeSydhTfbsHek293InputStdAlnRep1.bam
+grant Snyder
+lab Yale
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1282
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHek293InputStdSig
+objType table
+antibody Input
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control std
+controlId HEK293/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000631
+expId 631
+fileName wgEncodeSydhTfbsHek293InputStdSig.bigWig
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+setType input
+subId 3053
+tableName wgEncodeSydhTfbsHek293InputStdSig
+treatment None
+view Signal
 
 metaObject wgEncodeSydhTfbsHek293InputUcdAln
 objType file
@@ -14350,6 +14540,146 @@ project wgEncode
 setType input
 subId 3257
 tableName wgEncodeSydhTfbsHek293InputUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsHek293Kap1UcdAlnRep1
+objType file
+antibody KAP1
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001779
+expId 1779
+fileName wgEncodeSydhTfbsHek293Kap1UcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 3316
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHek293Kap1UcdAlnRep2
+objType file
+antibody KAP1
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001779
+expId 1779
+fileName wgEncodeSydhTfbsHek293Kap1UcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 3316
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHek293Kap1UcdPk
+objType table
+antibody KAP1
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001779
+expId 1779
+fileName wgEncodeSydhTfbsHek293Kap1UcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0. KAP1 colocalizes with H3K9me3 marks and peak analysis should be performed using programs modified for spreading histone marks such as H3K9me3 and H3K27me3.
+project wgEncode
+setType exp
+subId 3316
+tableName wgEncodeSydhTfbsHek293Kap1UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHek293Kap1UcdRawDataRep1
+objType file
+antibody KAP1
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001779
+expId 1779
+fileName wgEncodeSydhTfbsHek293Kap1UcdRawDataRep1.fastq.gz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 3316
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293Kap1UcdRawDataRep2
+objType file
+antibody KAP1
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001779
+expId 1779
+fileName wgEncodeSydhTfbsHek293Kap1UcdRawDataRep2.fastq.gz
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 3316
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293Kap1UcdSig
+objType table
+antibody KAP1
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001779
+expId 1779
+fileName wgEncodeSydhTfbsHek293Kap1UcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3316
+tableName wgEncodeSydhTfbsHek293Kap1UcdSig
 treatment None
 view Signal
 
@@ -14425,337 +14755,7 @@ subId 192
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHek293bElk4UcdAlnRep1
-objType file
-antibody ELK4
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
-dccAccession wgEncodeEH001773
-expId 1773
-fileName wgEncodeSydhTfbsHek293bElk4UcdAlnRep1.bam
-grant Snyder
-lab USC
-project wgEncode
-replicate 1
-setType exp
-subId 3248
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHek293bElk4UcdAlnRep2
-objType file
-antibody ELK4
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
-dccAccession wgEncodeEH001773
-expId 1773
-fileName wgEncodeSydhTfbsHek293bElk4UcdAlnRep2.bam
-grant Snyder
-lab USC
-project wgEncode
-replicate 2
-setType exp
-subId 3248
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHek293bElk4UcdPk
-objType table
-antibody ELK4
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
-dccAccession wgEncodeEH001773
-expId 1773
-fileName wgEncodeSydhTfbsHek293bElk4UcdPk.narrowPeak.gz
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 3248
-tableName wgEncodeSydhTfbsHek293bElk4UcdPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhTfbsHek293bElk4UcdRawDataRep1
-objType file
-antibody ELK4
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
-dccAccession wgEncodeEH001773
-expId 1773
-fileName wgEncodeSydhTfbsHek293bElk4UcdRawDataRep1.fastq.gz
-grant Snyder
-lab USC
-project wgEncode
-replicate 1
-setType exp
-subId 3248
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHek293bElk4UcdRawDataRep2
-objType file
-antibody ELK4
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
-dccAccession wgEncodeEH001773
-expId 1773
-fileName wgEncodeSydhTfbsHek293bElk4UcdRawDataRep2.fastq.gz
-grant Snyder
-lab USC
-project wgEncode
-replicate 2
-setType exp
-subId 3248
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHek293bElk4UcdSig
-objType table
-antibody ELK4
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
-dccAccession wgEncodeEH001773
-expId 1773
-fileName wgEncodeSydhTfbsHek293bElk4UcdSig.bigWig
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 3248
-tableName wgEncodeSydhTfbsHek293bElk4UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHek293bInputStdAlnRep1
-objType file
-antibody Input
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control std
-controlId HEK293/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-09
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000631
-expId 631
-fileName wgEncodeSydhTfbsHek293bInputStdAlnRep1.bam
-grant Snyder
-lab Yale
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1282
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHek293bInputStdSig
-objType table
-antibody Input
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control std
-controlId HEK293/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000631
-expId 631
-fileName wgEncodeSydhTfbsHek293bInputStdSig.bigWig
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-setType input
-subId 3053
-tableName wgEncodeSydhTfbsHek293bInputStdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHek293bKap1UcdAlnRep1
-objType file
-antibody KAP1
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001779
-expId 1779
-fileName wgEncodeSydhTfbsHek293bKap1UcdAlnRep1.bam
-grant Snyder
-lab USC
-project wgEncode
-replicate 1
-setType exp
-subId 3316
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHek293bKap1UcdAlnRep2
-objType file
-antibody KAP1
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001779
-expId 1779
-fileName wgEncodeSydhTfbsHek293bKap1UcdAlnRep2.bam
-grant Snyder
-lab USC
-project wgEncode
-replicate 2
-setType exp
-subId 3316
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHek293bKap1UcdPk
-objType table
-antibody KAP1
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001779
-expId 1779
-fileName wgEncodeSydhTfbsHek293bKap1UcdPk.narrowPeak.gz
-grant Snyder
-lab USC
-labVersion PeakSeq1.0. KAP1 colocalizes with H3K9me3 marks and peak analysis should be performed using programs modified for spreading histone marks such as H3K9me3 and H3K27me3.
-project wgEncode
-setType exp
-subId 3316
-tableName wgEncodeSydhTfbsHek293bKap1UcdPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhTfbsHek293bKap1UcdRawDataRep1
-objType file
-antibody KAP1
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001779
-expId 1779
-fileName wgEncodeSydhTfbsHek293bKap1UcdRawDataRep1.fastq.gz
-grant Snyder
-lab USC
-project wgEncode
-replicate 1
-setType exp
-subId 3316
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHek293bKap1UcdRawDataRep2
-objType file
-antibody KAP1
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001779
-expId 1779
-fileName wgEncodeSydhTfbsHek293bKap1UcdRawDataRep2.fastq.gz
-grant Snyder
-lab USC
-project wgEncode
-replicate 2
-setType exp
-subId 3316
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHek293bKap1UcdSig
-objType table
-antibody KAP1
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001779
-expId 1779
-fileName wgEncodeSydhTfbsHek293bKap1UcdSig.bigWig
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 3316
-tableName wgEncodeSydhTfbsHek293bKap1UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHek293bPol2StdAlnRep1
+metaObject wgEncodeSydhTfbsHek293Pol2StdAlnRep1
 objType file
 antibody Pol2
 cell HEK293(b)
@@ -14769,7 +14769,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000632
 expId 632
-fileName wgEncodeSydhTfbsHek293bPol2StdAlnRep1.bam
+fileName wgEncodeSydhTfbsHek293Pol2StdAlnRep1.bam
 grant Snyder
 lab Yale
 labVersion remapped from hg18
@@ -14781,7 +14781,7 @@ subId 1370
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHek293bPol2StdAlnRep2
+metaObject wgEncodeSydhTfbsHek293Pol2StdAlnRep2
 objType file
 antibody Pol2
 cell HEK293(b)
@@ -14795,7 +14795,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000632
 expId 632
-fileName wgEncodeSydhTfbsHek293bPol2StdAlnRep2.bam
+fileName wgEncodeSydhTfbsHek293Pol2StdAlnRep2.bam
 grant Snyder
 lab Yale
 labVersion remapped from hg18
@@ -14807,7 +14807,7 @@ subId 1382
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHek293bPol2StdAlnRep3
+metaObject wgEncodeSydhTfbsHek293Pol2StdAlnRep3
 objType file
 antibody Pol2
 cell HEK293(b)
@@ -14821,7 +14821,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000632
 expId 632
-fileName wgEncodeSydhTfbsHek293bPol2StdAlnRep3.bam
+fileName wgEncodeSydhTfbsHek293Pol2StdAlnRep3.bam
 grant Snyder
 lab Yale
 labVersion remapped from hg18
@@ -14833,7 +14833,7 @@ subId 1391
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHek293bPol2StdPk
+metaObject wgEncodeSydhTfbsHek293Pol2StdPk
 objType table
 antibody Pol2
 cell HEK293(b)
@@ -14846,18 +14846,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000632
 expId 632
-fileName wgEncodeSydhTfbsHek293bPol2StdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsHek293Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsHek293bPol2StdPk
+tableName wgEncodeSydhTfbsHek293Pol2StdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsHek293bPol2StdSig
+metaObject wgEncodeSydhTfbsHek293Pol2StdSig
 objType table
 antibody Pol2
 cell HEK293(b)
@@ -14870,14 +14870,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000632
 expId 632
-fileName wgEncodeSydhTfbsHek293bPol2StdSig.bigWig
+fileName wgEncodeSydhTfbsHek293Pol2StdSig.bigWig
 grant Snyder
 lab Yale
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsHek293bPol2StdSig
+tableName wgEncodeSydhTfbsHek293Pol2StdSig
 treatment None
 view Signal
 
@@ -24411,6 +24411,29 @@ tableName wgEncodeSydhTfbsHepg2InputPravastStdSig
 treatment pravastatin
 view Signal
 
+metaObject wgEncodeSydhTfbsHepg2InputRawData
+objType file
+antibody Input
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000674
+expId 674
+fileName wgEncodeSydhTfbsHepg2InputRawData.fastq.gz
+grant Snyder
+lab USC
+origAssembly hg18
+project wgEncode
+setType input
+subId 374
+treatment None
+view RawData
+
 metaObject wgEncodeSydhTfbsHepg2InputRawDataRep1
 objType file
 antibody Input
@@ -24482,6 +24505,56 @@ setType input
 subId 240
 treatment pravastatin
 view RawData
+
+metaObject wgEncodeSydhTfbsHepg2InputUcdAlnRep1
+objType file
+antibody Input
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000674
+expId 674
+fileName wgEncodeSydhTfbsHepg2InputUcdAlnRep1.bam
+grant Snyder
+lab USC
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1358
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2InputUcdSig
+objType table
+antibody Input
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000674
+expId 674
+fileName wgEncodeSydhTfbsHepg2InputUcdSig.bigWig
+grant Snyder
+lab USC
+origAssembly hg18
+project wgEncode
+setType input
+subId 3055
+tableName wgEncodeSydhTfbsHepg2InputUcdSig
+treatment None
+view Signal
 
 metaObject wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep1
 objType file
@@ -27722,6 +27795,157 @@ tableName wgEncodeSydhTfbsHepg2Tcf4UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsHepg2Tr4RawDataRep1
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000675
+expId 675
+fileName wgEncodeSydhTfbsHepg2Tr4RawDataRep1.fastq.gz
+grant Snyder
+lab USC
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 372
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Tr4RawDataRep2
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000675
+expId 675
+fileName wgEncodeSydhTfbsHepg2Tr4RawDataRep2.fastq.gz
+grant Snyder
+lab USC
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 372
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Tr4UcdAlnRep1
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000675
+expId 675
+fileName wgEncodeSydhTfbsHepg2Tr4UcdAlnRep1.bam
+grant Snyder
+lab USC
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1359
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2Tr4UcdAlnRep2
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000675
+expId 675
+fileName wgEncodeSydhTfbsHepg2Tr4UcdAlnRep2.bam
+grant Snyder
+lab USC
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1362
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2Tr4UcdPk
+objType table
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH000675
+expId 675
+fileName wgEncodeSydhTfbsHepg2Tr4UcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+origAssembly hg18
+project wgEncode
+setType exp
+subId 4165
+tableName wgEncodeSydhTfbsHepg2Tr4UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHepg2Tr4UcdSig
+objType table
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000675
+expId 675
+fileName wgEncodeSydhTfbsHepg2Tr4UcdSig.bigWig
+grant Snyder
+lab USC
+origAssembly hg18
+project wgEncode
+setType exp
+subId 3055
+tableName wgEncodeSydhTfbsHepg2Tr4UcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep1
 objType file
 antibody USF2
@@ -27862,231 +28086,7 @@ tableName wgEncodeSydhTfbsHepg2Usf2IggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHepg2bInputRawData
-objType file
-antibody Input
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-dccAccession wgEncodeEH000674
-expId 674
-fileName wgEncodeSydhTfbsHepg2bInputRawData.fastq.gz
-grant Snyder
-lab USC
-origAssembly hg18
-project wgEncode
-setType input
-subId 374
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2bInputUcdAlnRep1
-objType file
-antibody Input
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-dccAccession wgEncodeEH000674
-expId 674
-fileName wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam
-grant Snyder
-lab USC
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1358
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHepg2bInputUcdSig
-objType table
-antibody Input
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000674
-expId 674
-fileName wgEncodeSydhTfbsHepg2bInputUcdSig.bigWig
-grant Snyder
-lab USC
-origAssembly hg18
-project wgEncode
-setType input
-subId 3055
-tableName wgEncodeSydhTfbsHepg2bInputUcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHepg2bTr4RawDataRep1
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-dccAccession wgEncodeEH000675
-expId 675
-fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep1.fastq.gz
-grant Snyder
-lab USC
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 372
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2bTr4RawDataRep2
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-dccAccession wgEncodeEH000675
-expId 675
-fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep2.fastq.gz
-grant Snyder
-lab USC
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 372
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-dccAccession wgEncodeEH000675
-expId 675
-fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam
-grant Snyder
-lab USC
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1359
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-dccAccession wgEncodeEH000675
-expId 675
-fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam
-grant Snyder
-lab USC
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1362
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHepg2bTr4UcdPk
-objType table
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-06-03
-dateUnrestricted 2012-03-03
-dccAccession wgEncodeEH000675
-expId 675
-fileName wgEncodeSydhTfbsHepg2bTr4UcdPk.narrowPeak.gz
-grant Snyder
-lab USC
-origAssembly hg18
-project wgEncode
-setType exp
-subId 4165
-tableName wgEncodeSydhTfbsHepg2bTr4UcdPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhTfbsHepg2bTr4UcdSig
-objType table
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000675
-expId 675
-fileName wgEncodeSydhTfbsHepg2bTr4UcdSig.bigWig
-grant Snyder
-lab USC
-origAssembly hg18
-project wgEncode
-setType exp
-subId 3055
-tableName wgEncodeSydhTfbsHepg2bTr4UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1
 objType file
 antibody ZNF274
 cell HepG2b
@@ -28099,7 +28099,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 dccAccession wgEncodeEH001755
 expId 1755
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1.bam
+fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -28109,7 +28109,7 @@ subId 1190
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2
 objType file
 antibody ZNF274
 cell HepG2b
@@ -28122,7 +28122,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 dccAccession wgEncodeEH001755
 expId 1755
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2.bam
+fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -28132,7 +28132,7 @@ subId 1190
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdPk
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdPk
 objType table
 antibody ZNF274
 cell HepG2b
@@ -28145,18 +28145,18 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 dccAccession wgEncodeEH001755
 expId 1755
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
 subId 1190
-tableName wgEncodeSydhTfbsHepg2bZnf274UcdPk
+tableName wgEncodeSydhTfbsHepg2Znf274UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1
 objType file
 antibody ZNF274
 cell HepG2b
@@ -28169,7 +28169,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 dccAccession wgEncodeEH001755
 expId 1755
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
@@ -28180,7 +28180,7 @@ subId 1190
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2
 objType file
 antibody ZNF274
 cell HepG2b
@@ -28193,7 +28193,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 dccAccession wgEncodeEH001755
 expId 1755
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
@@ -28204,7 +28204,7 @@ subId 1190
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdSig
+metaObject wgEncodeSydhTfbsHepg2Znf274UcdSig
 objType table
 antibody ZNF274
 cell HepG2b
@@ -28217,14 +28217,14 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001755
 expId 1755
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdSig.bigWig
+fileName wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 3072
-tableName wgEncodeSydhTfbsHepg2bZnf274UcdSig
+tableName wgEncodeSydhTfbsHepg2Znf274UcdSig
 treatment None
 view Signal
 
@@ -44087,4 +44087,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -899699474
+# MAGIC: 1814007374
