@@ -104,6 +104,7 @@ boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug
 int imagePixelHeight = 0;
 boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
+struct hash *jsVarsHash = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
@@ -2467,14 +2468,15 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-hPrintf("<input type='hidden' id='hgt.dragSelection' name='dragSelection' value='%d'>\n", dragZooming ? 1 : 0);
+jsAddBoolean(jsVarsHash, "dragSelection", dragZooming);
+
 if(rulerClickHeight)
     {
-    hPrintf("<input type='hidden' id='hgt.rulerClickHeight' name='rulerClickHeight' value='%d'>\n", rulerClickHeight);
+    jsAddNumber(jsVarsHash, "rulerClickHeight", rulerClickHeight);
     }
 if(newWinWidth)
     {
-    hPrintf("<input type='hidden' id='hgt.newWinWidth' name='newWinWidth' value='%d'>\n", newWinWidth);
+    jsAddNumber(jsVarsHash, "newWinWidth", newWinWidth);
     }
 
 /* Save out picture and tell html file about it. */
@@ -4554,8 +4556,9 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
-hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
+jsAddNumber(jsVarsHash, "insideX", insideX);
+jsAddBoolean(jsVarsHash, "revCmplDisp", revCmplDisp);
+
 #ifdef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 #else///ifndef NEW_JQUERY
@@ -4861,12 +4864,10 @@ if (!hideControls)
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	// info for drag selection javascript
-	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
-	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
-	hPrintf("<input type='hidden' id='hgt.chromName' name='chromName' value='%s'>\n", chromName);
-
+	jsAddNumber(jsVarsHash, "winStart", winStart);
+	jsAddNumber(jsVarsHash, "winEnd", winEnd);
+	jsAddString(jsVarsHash, "chromName", chromName);
 	hPutc('\n');
-
 	}
     }
 
@@ -5818,6 +5819,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hgFindMatches = NULL;     // XXXX necessary ???
     }
 hWrites(commonCssStyles());
+jsVarsHash = newHash(8);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("utils.js", NULL);
@@ -5935,5 +5937,11 @@ else if (cartVarExists(cart, configShowEncodeGroups))
 else
     {
     tracksDisplay();
+    }
+if(hashNumEntries(jsVarsHash))
+    {
+    hPrintf("<script type='text/javascript'>\n");
+    jsPrintHash(jsVarsHash, "hgTracks", 0);
+    hPrintf("</script>\n");
     }
 }
