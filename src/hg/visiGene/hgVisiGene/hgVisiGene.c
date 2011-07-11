@@ -770,7 +770,7 @@ doDefault(conn, FALSE);
 static void problemPage(char *msg, char *url)
 /* send back a page describing problem */
 {
-printf("Content-Type: text/plain\n");
+printf("Content-Type: text/html\n");
 printf("\n");
 htmStart(stdout, "do download");
 printf("%s %s",msg,url);
