@@ -5370,10 +5370,10 @@ doTrackForm(psTn.forCgi, &ideoPsTn);
 // postscript
 printf("<UL>\n");
 printf("<LI><A HREF=\"%s\">Click here</A> "
-       "to download the current browser graphic in PostScript.  ", psTn.forCgi);
+       "to download the current browser graphic in PostScript.\n", psTn.forCgi);
 if (strlen(ideoPsTn.forCgi))
     printf("<LI><A HREF=\"%s\">Click here</A> "
-           "to download the current chromosome ideogram in PostScript.  ", ideoPsTn.forCgi);
+           "to download the current chromosome ideogram in PostScript.\n", ideoPsTn.forCgi);
 printf("</UL>\n");
 
 pdfFile = convertEpsToPdf(psTn.forCgi);
@@ -5384,10 +5384,10 @@ if(pdfFile != NULL)
     printf("<BR>PDF can be viewed with Adobe Acrobat Reader.\n");
     printf("<UL>\n");
     printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-       "to download the current browser graphic in PDF.", pdfFile);
+       "to download the current browser graphic in PDF.\n", pdfFile);
     if (ideoPdfFile != NULL)
         printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-               "to download the current chromosome ideogram in PDF.", ideoPdfFile);
+               "to download the current chromosome ideogram in PDF.\n", ideoPdfFile);
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
@@ -5395,8 +5395,7 @@ if(pdfFile != NULL)
 else
     printf("<BR><BR>PDF format not available");
 
-    #define RETURN_BUTTON "<FORM ACTION='../cgi-bin/hgTracks' NAME='TrackHeaderForm' id='TrackHeaderForm' METHOD='GET'><INPUT TYPE=SUBMIT ID='ChangeToNameToSetSomething' VALUE='Return to Browser'></FORM>"
-    printf(RETURN_BUTTON);
+    printf("<a href='../cgi-bin/hgTracks'><input type='button' VALUE='Return to Browser'></a>\n");
 }
 
 boolean isGenome(char *pos)

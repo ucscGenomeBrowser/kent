@@ -2987,6 +2987,17 @@ hgsid on
 url http://www.omim.org/entry/
 tableBrowser off omimAv omimAvRepl
 
+track cosmic
+shortLabel COSMIC
+longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
+group phenDis
+priority 29.80
+visibility pack
+color 200, 0, 0
+type bed 4
+hgsid on
+url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
+
 searchTable wgRnaOld
 searchMethod fuzzy
 searchType bed
