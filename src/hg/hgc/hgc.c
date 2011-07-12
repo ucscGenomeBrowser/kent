@@ -9104,6 +9104,89 @@ printGadDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
+void printCosmicDetails(struct trackDb *tdb, char *itemName)
+/* Print details of a COSMIC entry. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[1024];
+struct sqlResult *sr;
+char **row;
+char *chp;
+
+char *source, *cosmic_mutation_id, *gene_name, *accession_number;
+char *mut_description, *mut_syntax_cds, *mut_syntax_aa;
+char *chromosome, *grch37_start, *grch37_stop, *mut_nt;
+char *mut_aa, *tumour_site, *mutated_samples, *examined_samples, *mut_freq;
+char *url = tdb->url;
+
+char *chrom, *chromStart, *chromEnd;
+chrom      = cartOptionalString(cart, "c");
+chromStart = cartOptionalString(cart, "o");
+chromEnd   = cartOptionalString(cart, "t");
+
+safef(query, sizeof(query), 
+      "select %s,%s from cosmicRaw where cosmic_mutation_id='%s'",
+      "source,cosmic_mutation_id,gene_name,accession_number,mut_description,mut_syntax_cds,mut_syntax_aa",
+      "chromosome,grch37_start,grch37_stop,mut_nt,mut_aa,tumour_site,mutated_samples,examined_samples,mut_freq",
+      itemName);
+
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    int ii;
+    ii=0;
+    
+    source 		= row[ii];ii++;
+    cosmic_mutation_id  = row[ii];ii++;
+    gene_name 		= row[ii];ii++;
+    accession_number 	= row[ii];ii++;
+    mut_description 	= row[ii];ii++;
+    mut_syntax_cds 	= row[ii];ii++;
+    mut_syntax_aa 	= row[ii];ii++;
+
+    chromosome  	= row[ii];ii++;
+    grch37_start  	= row[ii];ii++;
+    grch37_stop  	= row[ii];ii++;
+    mut_nt  		= row[ii];ii++;
+    mut_aa  		= row[ii];ii++;
+    tumour_site  	= row[ii];ii++;
+    mutated_samples  	= row[ii];ii++;
+    examined_samples  	= row[ii];ii++;
+    mut_freq  		= row[ii];ii++;
+
+    chp = strstr(itemName, "COSM")+strlen("COSM");
+    printf("<B>COSMIC ID:</B> <A HREF=\"%s&id=%s\" TARGET=_BLANK>%s</A>\n", url, chp, chp);
+    
+    printf("<BR><B>Source:</B> %s\n", source);
+    printf("<BR><B>Gene Name:</B> %s\n", gene_name);
+    printf("<BR><B>Accession Number:</B> %s\n", accession_number);
+    printf("<BR><B>Genomic Position:</B> %s:%s-%s", chromosome, grch37_start, grch37_stop);
+    printf("<BR><B>Mutation Description:</B> %s\n", mut_description);
+    printf("<BR><B>Mutation Syntax CDS:</B> %s\n", mut_syntax_cds);
+    printf("<BR><B>Mutation Syntax AA:</B> %s\n", mut_syntax_aa);
+    printf("<BR><B>Mutation NT:</B> %s\n", mut_nt);
+    printf("<BR><B>Mutation AA:</B> %s\n", mut_aa);
+    printf("<BR><B>Tumour Site:</B> %s\n", tumour_site);
+    printf("<BR><B>Mutated Samples:</B> %s\n", mutated_samples);
+    printf("<BR><B>Examined Samples:</B> %s\n", examined_samples);
+    printf("<BR><B>Mutation Frequency:</B> %s\n", mut_freq);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+   
+printf("<HR>");
+printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+}
+
+void doCosmic(struct trackDb *tdb, char *item)
+/* Put up COSMIC track info. */
+{
+genericHeader(tdb, item);
+printCosmicDetails(tdb, item);
+printTrackHtml(tdb);
+}
+
 void printDecipherDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of a DECIPHER entry. */
 {
@@ -24749,6 +24832,10 @@ else if (tdb != NULL && startsWith("bedDetail", tdb->type))
 else if (startsWith("numtS", table))
     {
     doNumtS(tdb, item);
+    }
+else if (startsWith("cosmic", table))
+    {
+    doCosmic(tdb, item);
     }
 else if (tdb != NULL)
     {
