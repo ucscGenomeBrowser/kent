@@ -5156,9 +5156,12 @@ else if (tg->colorShades)
 if (color)
     {
     int heightPer = tg->heightPer;
-    int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-    int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
-    int w = x2-x1;
+    int s = max(bed->chromStart, winStart), e = min(bed->chromEnd, winEnd);
+    if (s > e)
+	return;
+    int x1 = round((s-winStart)*scale) + xOff;
+    int x2 = round((e-winStart)*scale) + xOff;
+    int w = x2 - x1;
     if (w < 1)
 	w = 1;
     hvGfxBox(hvg, x1, y, w, heightPer, color);

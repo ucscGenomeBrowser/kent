@@ -19,11 +19,11 @@
 #include "hubConnect.h"
 #include "dystring.h"
 #include "hPrint.h"
-
+#include "jsHelper.h"
+#include "obscure.h"
 
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
-#define hgHubDoAdd         hgHubDo "add"
 #define hgHubDoClear       hgHubDo "clear"
 
 struct cart *cart;	/* The user's ui state. */
@@ -34,14 +34,73 @@ static char *pageTitle = "Import Tracks from Data Hubs";
 char *database = NULL;
 char *organism = NULL;
 
-boolean nameInCommaList(char *name, char *commaList);
+static void ourCellStart()
+{
+puts("<TD>");
+}
+
+static void ourCellEnd()
+{
+puts("</TD>");
+}
+
+static void ourPrintCell(char *str)
+{
+ourCellStart();
+puts(str);
+ourCellEnd();
+}
 
 static void hgHubConnectUnlisted()
 /* Put up the list of unlisted hubs and other controls for the page. */
 {
-printf("<B>Unlisted Hubs</B><BR>");
-struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
+// put out the top of our page
+printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
+    "<table id=\"unlistedHubsTable\"> "
+    "<thead><tr> "
+	"<th colspan=\"5\" id=\"addHubBar\"><label>URL:</label> "
+	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
+	    "type=\"text\" size=\"65\"> "
+	"<input name=\"hubAddButton\""
+	    "onClick=\"document.addHubForm.elements['hubUrl'].value=hubText.value;"
+		"document.addHubForm.submit();return true;\" "
+		"class=\"hubField\" type=\"button\" value=\"Add Hub\">"
+	"</th> "
+    "</tr></thead> ");
+
+// count up the number of unlisted hubs we currently have
 int count = 0;
+struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
+for(hub = hubList; hub; hub = hub->next)
+    {
+    if (isHubUnlisted(hub))
+	count++;
+    }
+
+if (count == 0)
+    {
+    // nothing to see here
+    printf(
+	"<tr><th>No Track Hubs for this genome assembly</th></tr>"
+	"</td></table>");
+    cgiMakeButton("Submit", "Return to Genome Browser");
+    printf("</div>");
+    return;
+    }
+
+// time to output the big table.  First the header
+printf(
+    "<tr> "
+	"<th>Active?</th> "
+	"<th>Hub Name</th> "
+	"<th>Description</th> "
+	"<th>URL</th> "
+    "</tr>\n");
+
+// start first row
+printf("<tbody><tr>");
+
+count = 0;
 for(hub = hubList; hub; hub = hub->next)
     {
     /* if the hub is public, then don't list it here */
@@ -49,117 +108,51 @@ for(hub = hubList; hub; hub = hub->next)
 	continue;
 
     if (count)
-	webPrintLinkTableNewRow();
-    else
-	webPrintLinkTableStart();
+	webPrintLinkTableNewRow();  // ends last row and starts a new one
     count++;
 
+    // if there's an error message, we don't let people select it
+    // these error messages are cleared by the hubDaemon
     if (isEmpty(hub->errorMessage))
 	{
-	webPrintLinkCellStart();
+	ourCellStart();
 	char hubName[32];
 	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, hub->id);
 	cartMakeCheckBox(cart, hubName, FALSE);
-	webPrintLinkCellEnd();
+	ourCellEnd();
 	}
     else
-	webPrintLinkCell("error");
-    webPrintLinkCell(hub->shortLabel);
+	ourPrintCell("error");
+    ourPrintCell(hub->shortLabel);
     if (isEmpty(hub->errorMessage))
-	webPrintLinkCell(hub->longLabel);
+	ourPrintCell(hub->longLabel);
     else
-	webPrintLinkCell(hub->errorMessage);
-    webPrintLinkCell(hub->hubUrl);
+	ourPrintCell(hub->errorMessage);
+    ourPrintCell(hub->hubUrl);
     }
-if (count)
-    webPrintLinkTableEnd();
-else
-    printf("No Unlisted Track Hubs for this genome assembly<BR>");
-}
 
-static void makeNewHubButton()
-{
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"secondForm\">\n", "../cgi-bin/hgHubConnect");
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgHubDoAdd, "on");
-cgiMakeButton("add", "Add new unlisted hub");
-printf("</FORM>\n");
+printf("</TR></tbody></TABLE>\n");
+cgiMakeButton("Submit", "Display Selected Hubs");
+printf("</div>");
 }
 
 static void makeGenomePrint()
+/* print out the name of the current database etc. */
 {
 getDbAndGenome(cart, &database, &organism, oldVars);
+printf("<div id=\"assemblyInfo\"> \n");
 printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s  ",
 	organism, hFreezeDate(database));
-}
-
-static void addIntro()
-{
-printf("Enter URL to remote hub.<BR>\n");
-}
-
-void addUnlistedHubForm(struct hubConnectStatus *hub, char *err)
-/* display UI for adding unlisted hubs by URL */
-{
-getDbAndGenome(cart, &database, &organism, oldVars);
-boolean gotClade = FALSE;
-boolean isUpdateForm = FALSE;
-if (hub)
-    {
-    isUpdateForm = TRUE;
-    }
-else
-    /* add form needs clade for assembly menu */
-    gotClade = hGotClade();
-
-/* main form */
-printf("<FORM ACTION=\"%s\" METHOD=\"%s\" "
-    " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
-    "../cgi-bin/hgHubConnect", cartUsualString(cart, "formMethod", "POST"));
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
-
-/* intro text */
-puts("<P>");
-puts("Add your own unlisted data hub for the browser.");
-addIntro();
-puts("<P>");
-
-/* row for error message */
-if (err)
-    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:red; font-style:italic;'>Error</span>&nbsp;%s</B><P>", err);
-
-printf("Enter URL:");
-
-hTextVar(hgHubDataText, "", 60);
-cgiMakeSubmitButton();
-
-puts("</FORM>");
-}
-
-void helpUnlistedHub()
-{
-printf("Unlisted hubs are constructed the same way as public hubs, but they "
-   "aren't listed in hgcentral<BR>\n");
-}
-
-void doAddUnlistedHub(struct cart *theCart, char *err)
-/* Write header and body of html page. */
-{
-cartWebStart(cart, database, "Add Unlisted Hub");
-addUnlistedHubForm(NULL, err);
-helpUnlistedHub();
-cartWebEnd(cart);
+printf("</div>\n");
 }
 
 
 void hgHubConnectPublic()
-/* Put up the list of external hubs and other controls for the page. */
+/* Put up the list of public hubs and other controls for the page. */
 {
-printf("<B>Public Hubs</B><BR>");
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
-safef(query, sizeof(query), "select hubUrl, shortLabel,longLabel,dbList from %s", 
+safef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,dbList from %s", 
 	hubPublicTableName); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -175,44 +168,68 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    webPrintLinkTableNewRow();
 	else
 	    {
-	    webPrintLinkTableStart();
+	    /* output header */
+	    printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
+	    printf("<table id=\"publicHubsTable\"> "
+		"<thead><tr> "
+		    "<th>Active?</th> "
+		    "<th>Hub Name</th> "
+		    "<th>Description</th> "
+		    "<th>URL</th> "
+		"</tr></thead>\n");
+
+	    // start first row
+	    printf("<tbody> <tr>");
 	    gotAnyRows = TRUE;
 	    }
+
 	char *errorMessage = NULL;
+	// get an id for this hub
 	unsigned id = hubFindOrAddUrlInStatusTable(database, cart, 
 	    url, &errorMessage);
 
 	if ((id != 0) && isEmpty(errorMessage)) 
 	    {
-	    webPrintLinkCellStart();
+	    ourCellStart();
 	    char hubName[32];
 	    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
 	    cartMakeCheckBox(cart, hubName, FALSE);
-	    webPrintLinkCellEnd();
+	    ourCellEnd();
 	    }
 	else if (!isEmpty(errorMessage))
-	    webPrintLinkCell("error");
+	    ourPrintCell("error");
 	else
 	    errAbort("cannot get id for hub with url %s\n", url);
 
-	webPrintLinkCell(shortLabel);
+	ourPrintCell(shortLabel);
 	if (isEmpty(errorMessage))
-	    webPrintLinkCell(longLabel);
+	    ourPrintCell(longLabel);
 	else
 	    {
 	    char errorBuf[4*1024];
 	    safef(errorBuf, sizeof errorBuf, "Error: %s", errorMessage);
-	    webPrintLinkCell(errorBuf);
+	    ourPrintCell(errorBuf);
 	    }
-	webPrintLinkCell(url);
+	ourPrintCell(url);
 	}
     }
 sqlFreeResult(&sr);
 
 if (gotAnyRows)
-    webPrintLinkTableEnd();
+    {
+    printf("</TR></tbody></TABLE>\n");
+    cgiMakeButton("Submit", "Display Selected Hubs");
+    }
 else
+    {
+    printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
     printf("No Public Track Hubs for this genome assembly<BR>");
+    cgiMakeButton("Submit", "Return to Genome Browser");
+    }
+
+printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\"> genome@soe.ucsc.edu </A>to add a public hub.</span>\n");
+printf("</div>");
+
 hDisconnectCentral(&conn);
 }
 
@@ -233,42 +250,69 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 setUdcCacheDir();
-if (cartVarExists(cart, hgHubDoAdd))
-    doAddUnlistedHub(cart, NULL);
-else if (cartVarExists(cart, hgHubDoClear))
-    doClearHub(cart);
-else
+if (cartVarExists(cart, hgHubDoClear))
     {
-    cartWebStart(cart, NULL, pageTitle);
-
-    printf(
-       "<P>Track data hubs are collections of tracks from outside of UCSC that can be imported into "
-       "the Genome Browser.  To import a public hub check the box in the list below. "
-       "After import the hub will show up as a group of tracks with its own blue "
-       "bar and label underneath the main browser graphic, and in the configure page. </P>\n"
-       );
-    makeGenomePrint();
-
-    hubCheckForNew(database, cart);
-    printf("<BR><P>");
-    printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
-    cartSaveSession(cart);
-    hgHubConnectPublic();
-    printf("<BR>Contact <A HREF=\"mailto:genome@soe.ucsc.edu\"> genome@soe.ucsc.edu </A>to add a public hub.</P>\n");
-    puts("<BR>");
-    hgHubConnectUnlisted();
-    puts("<BR>");
-
-    cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
-    cgiMakeButton("Submit", "Use Selected Hubs");
-    puts("</FORM>");
-
-    makeNewHubButton();
+    doClearHub(cart);
+    cartWebEnd();
+    return;
     }
+
+cartWebStart(cart, NULL, "%s", pageTitle);
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+
+webIncludeResourceFile("jquery-ui.css");
+
+jsIncludeFile("ajax.js", NULL);
+jsIncludeFile("hgHubConnect.js", NULL);
+webIncludeResourceFile("hgHubConnect.css");
+
+printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
+printf(
+   "<P>Track data hubs are collections of tracks from outside of UCSC that "
+   "can be imported into the Genome Browser.  To import a public hub check "
+   "the box in the list below. "
+   "After import the hub will show up as a group of tracks with its own blue "
+   "bar and label underneath the main browser graphic, and in the "
+   "configure page. </P>\n"
+   );
+printf("</div>\n");
+
+// figure out and print out genome name
+makeGenomePrint();
+
+// check to see if we have any new hubs
+hubCheckForNew(database, cart);
+
+// here's a little form for the add new hub button
+printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
+cgiMakeHiddenVar("hubUrl", "foo");
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+puts("</FORM>");
+
+// ... and now the main form
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
+cartSaveSession(cart);
+
+// we have two tabs for the public and unlisted hubs
+printf("<div id=\"tabs\">"
+       "<ul> <li><a href=\"#publicHubs\">Public Hubs</a></li>"
+       "<li><a href=\"#unlistedHubs\">My Hubs</a></li> "
+       "</ul> ");
+			     
+hgHubConnectPublic();
+hgHubConnectUnlisted();
+printf("</div>");
+
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+
+printf("</div>\n");
+puts("</FORM>");
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, hgHubDoClear, hgHubDataText, NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl,  hgHubDoClear, hgHubDataText, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
