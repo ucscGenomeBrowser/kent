@@ -29,5 +29,6 @@ wgEncodeHelicosRnaSeq.ra\
 wgEncodeAffyRnaChip.ra\
 wgEncodeGisRnaSeq.ra\
 wgEncodeHudsonalphaCnv.ra\
+wgEncodeBroadHmm.ra \
 
 include ../../../../makefile.metaDb

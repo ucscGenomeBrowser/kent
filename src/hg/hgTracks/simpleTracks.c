@@ -133,7 +133,6 @@
 static char const rcsid[] = "$Id: simpleTracks.c,v 1.149 2010/06/05 19:29:42 braney Exp $";
 
 #define CHROM_COLORS 26
-#define SMALLDYBUF 64
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
@@ -3976,16 +3975,18 @@ static void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, 
 struct bedPlusLabel *bpl = item;
 struct bed *bed = item;
 int heightPer = tg->heightPer;
-int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
-int w;
+int s = max(bed->chromStart, winStart), e = min(bed->chromEnd, winEnd);
+if (s > e)
+    return;
+int x1 = round((s-winStart)*scale) + xOff;
+int x2 = round((e-winStart)*scale) + xOff;
+int w = x2 - x1;
+if (w < 1)
+    w = 1;
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
 
-w = x2-x1;
-if (w < 1)
-    w = 1;
 hvGfxBox(hvg, x1, y, w, heightPer, color);
 
 // In full mode, draw bpl->label to the left of item:
@@ -4299,7 +4300,8 @@ struct dyString *dyQuery = NULL;
 if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
     {
     if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
-        || startsWith("wgEncodeGencodeFull", tg->tdb->track)
+        || startsWith("wgEncodeGencodeComp", tg->tdb->track)
+        || startsWith("wgEncodeGencode2wayConsPseudo", tg->tdb->track)
         || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
         dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
     }
@@ -5154,9 +5156,12 @@ else if (tg->colorShades)
 if (color)
     {
     int heightPer = tg->heightPer;
-    int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-    int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
-    int w = x2-x1;
+    int s = max(bed->chromStart, winStart), e = min(bed->chromEnd, winEnd);
+    if (s > e)
+	return;
+    int x1 = round((s-winStart)*scale) + xOff;
+    int x2 = round((e-winStart)*scale) + xOff;
+    int w = x2 - x1;
     if (w < 1)
 	w = 1;
     hvGfxBox(hvg, x1, y, w, heightPer, color);
@@ -9427,17 +9432,18 @@ if (name == NULL)
 return name;
 }
 
-void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele, int trackY, int trackHeight)
+void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele, int itemY, int lineHeight)
 /* put text anchored on right upper corner, doing separate colors if needed */
 {
-boolean snapLeft = FALSE;
-int textX = x1 - width;
-snapLeft = (textX < insideX);
+int textX = x1 - width - 2;
+boolean snapLeft = (textX < insideX);
+int clipYBak = 0, clipHeightBak = 0;
 if (snapLeft)        /* Snap label to the left. */
     {
+    hvGfxGetClip(hvg, NULL, &clipYBak, NULL, &clipHeightBak);
     hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, leftLabelX, trackY, insideWidth, trackHeight);
-    x1 = leftLabelX;
+    hvGfxSetClip(hvg, leftLabelX, itemY, insideWidth, lineHeight);
+    textX = leftLabelX;
     width = leftLabelWidth-1;
     }
 
@@ -9452,16 +9458,16 @@ if (sameString(display, "freq"))
        allC = darkGreenColor;
     else if (startsWith("T", allele))
        allC = MG_MAGENTA;
-    hvGfxTextRight(hvg, x1, y, width, height, allC, font, allele);
+    hvGfxTextRight(hvg, textX, y, width, height, allC, font, allele);
     }
 else
     {
-    hvGfxTextRight(hvg, x1, y, width, height, color, font, allele);
+    hvGfxTextRight(hvg, textX, y, width, height, color, font, allele);
     }
 if (snapLeft)
     {
     hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, insideX, trackY, insideWidth, trackHeight);
+    hvGfxSetClip(hvg, insideX, clipYBak, insideWidth, clipHeightBak);
     }
 }
 
@@ -9563,7 +9569,7 @@ if (sameString(display, "freq"))
         complement(allele[0], strlen(allele[0]));
     if (revCmplDisp)
         reverseComplement(allele[0], strlen(allele[0]));
-    pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[0], y, tg->height);
+    pgSnpTextRight(display, hvg, x1, yCopy, allWidth, allHeight, color, font, allele[0], y, tg->lineHeight);
     }
 else
     {
@@ -9583,7 +9589,7 @@ if (cnt > 1)
             complement(allele[1], strlen(allele[1]));
         if (revCmplDisp)
             reverseComplement(allele[1], strlen(allele[1]));
-        pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[1], y, tg->height);
+        pgSnpTextRight(display, hvg, x1, yCopy, allWidth, allHeight, color, font, allele[1], y, tg->lineHeight);
         }
     else
         {
@@ -10855,8 +10861,8 @@ boolean isOmimOtherClass(char *omimId)
 
    The Other class is defined as:
 
-	2. does not have class 1 or 2 or 3, or 4; some may have class '-1'.
-	3. for an entry of omimId that the omimPhenotype table does not even have a row with omimId
+	1. does not have class 1 or 2 or 3, or 4; some may have class '-1'.
+	2. for an entry of omimId that the omimPhenotype table does not even have a row with omimId
 */
 {
 boolean result;
@@ -10912,7 +10918,7 @@ boolean doThisOmimEntry(struct track *tg, char *omimId)
 /* check if the specific class of this OMIM entry is selected by the user */
 {
 boolean doIt;
-
+boolean gotClassLabel;
 char labelName[255];
 boolean doClass1 = FALSE;
 boolean doClass2 = FALSE;
@@ -10926,8 +10932,13 @@ struct hashEl *label;
 safef(labelName, sizeof(labelName), "%s.label", tg->table);
 omimLocationLabels = cartFindPrefix(cart, labelName);
 
-/* if user has not made selection(s) from the filter, enable every item */
-if (omimLocationLabels == NULL) return(TRUE);
+gotClassLabel = FALSE;
+for (label = omimLocationLabels; label != NULL; label = label->next)
+	{
+	if (strstr(label->name, "class") != NULL) gotClassLabel = TRUE;
+	}
+/* if user has not made selection(s) from the phenotype class filter, enable every item */
+if (!gotClassLabel) return(TRUE);	
 
 /* check which classes have been selected */
 for (label = omimLocationLabels; label != NULL; label = label->next)
@@ -11040,15 +11051,6 @@ class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
 
-/* last try of Brooke's suggestion, the class 1 and 2 are too bright */
-/*
-class1Clr = hvGfxFindColorIx(hvg, 125,225,115);
-class2Clr = hvGfxFindColorIx(hvg, 35,155,10);
-class3Clr = hvGfxFindColorIx(hvg, 10,60,0);
-class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
-classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
-*/
-
 safef(query, sizeof(query),
       "select omimId, phenotypeClass from omimPhenotype where omimId=%s order by phenotypeClass desc", el->name);
 sr = sqlMustGetResult(conn, query);
@@ -11100,11 +11102,79 @@ else
     }
 }
 
+char * omimGene2Name(struct track *tg, void *item)
+/* Returns a combination of OMIM ID and/or gene symbol(s) depending on user's selection */
+{
+struct bed *el = item;
+
+struct sqlConnection *conn = hAllocConn(database);
+boolean labelStarted = FALSE;
+boolean useGeneSymbol = FALSE;
+boolean useOmimId =  FALSE;
+char *geneSymbol;
+char *omimId;
+struct hashEl *omimGene2Labels = cartFindPrefix(cart, "omimGene2.label");
+struct hashEl *label;
+
+if (omimGene2Labels == NULL)
+    {
+    useOmimId = TRUE; /* default to omim ID*/
+    /* set cart to match the default set */
+    cartSetBoolean(cart, "omimGene2.label.omimId", TRUE);
+    }
+else
+    {
+    for (label = omimGene2Labels; label != NULL; label = label->next)
+    	{
+    	if (endsWith(label->name, "gene") && differentString(label->val, "0"))
+	    {
+	    useGeneSymbol = TRUE;
+	    }
+    	else if (endsWith(label->name, "omimId") && differentString(label->val, "0"))
+    	    {
+            useOmimId = TRUE;
+	    }  
+    	}	
+    }
+
+struct dyString *name = dyStringNew(SMALLDYBUF);
+labelStarted = FALSE; /* reset for each item in track */
+
+if (useOmimId)
+    {
+    omimId = strdup(el->name);
+    if (omimId != NULL)
+        {
+        dyStringAppend(name, omimId);
+        }
+    labelStarted = TRUE;
+    }
+
+if (useGeneSymbol)
+    {
+    if (labelStarted) 
+    	dyStringAppendC(name, '/');
+    else 
+    	labelStarted = TRUE;
+    // get gene symbol(s) from omimGeneMap table.
+    // Note: some entries are not in omimGeneMap and/or does not have gene symbol(s)
+    char query[256];
+    safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
+    geneSymbol = sqlQuickString(conn, query);
+    if (geneSymbol && differentString(geneSymbol, "0"))
+        dyStringAppend(name, geneSymbol);
+    }
+
+hFreeConn(&conn);
+return(name->string);
+}
+
 void omimGene2Methods (struct track *tg)
 /* Methods for version 2 of OMIM Genes track. */
 {
 tg->loadItems	  = omimGene2Load;
 tg->itemColor 	  = omimGene2Color;
+tg->itemName	  = omimGene2Name;
 tg->itemNameColor = omimGene2Color;
 tg->drawItemAt    = bedPlusLabelDrawAt;
 tg->mapItem       = bedPlusLabelMapItem;
@@ -11214,15 +11284,6 @@ class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
 class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
-
-/* last try of Brooke's suggestion, the class 1 and 2 are too bright */
-/*
-class1Clr = hvGfxFindColorIx(hvg, 125,225,115);
-class2Clr = hvGfxFindColorIx(hvg, 35,155,10);
-class3Clr = hvGfxFindColorIx(hvg, 10,60,0);
-class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
-classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
-*/
 
 struct sqlConnection *conn = hAllocConn(database);
 
@@ -12141,15 +12202,18 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack) &&
 	( limitedVisFromComposite(subtrack) != tvHide))
 	{
-	lastTime = clock1000();
-	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
-	    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->track, track->track);
-        subtrack->loadItems(subtrack);
-	if (measureTiming)
+	if (!subtrack->parallelLoading)
 	    {
-	    thisTime = clock1000();
-	    subtrack->loadTime = thisTime - lastTime;
-	    lastTime = thisTime;
+	    lastTime = clock1000();
+	    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
+		errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->track, track->track);
+	    subtrack->loadItems(subtrack);
+	    if (measureTiming)
+		{
+		thisTime = clock1000();
+		subtrack->loadTime = thisTime - lastTime;
+		lastTime = thisTime;
+		}
 	    }
 	}
     else
@@ -12723,7 +12787,7 @@ registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeBasicV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeFullV7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeCompV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodePseudoGeneV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencode2wayConsPseudoV7", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodePolyaV7", gencodeGeneMethods);

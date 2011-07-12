@@ -33,8 +33,8 @@ if (errCatchStart(errCatch))
     struct bbiSummaryElement *summary;
     AllocArray(summary, summarySize);
 
-    struct bbiFile *bbiFile ;
-    for(bbiFile = tg->bbiFile; bbiFile ; bbiFile = bbiFile->next)
+    struct bbiFile *bbiFile, *bbiNext;
+    for(bbiFile = tg->bbiFile; bbiFile ; bbiFile = bbiNext)
 	{
 	struct preDrawContainer *pre = initPreDrawContainer(width);
 	slAddHead(&preDrawList, pre);
@@ -56,7 +56,10 @@ if (errCatchStart(errCatch))
 		pe->sumSquares = be->sumSquares;
 		}
 	    }
+	bbiNext = bbiFile->next;
+	bigWigFileClose(&bbiFile);
 	}
+    tg->bbiFile = NULL;
     freeMem(summary);
     }
 errCatchEnd(errCatch);
@@ -73,12 +76,11 @@ static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
-struct preDrawContainer *pre = bigWigLoadPreDraw(tg, seqStart, seqEnd, width);
 if (tg->networkErrMsg == NULL)
     {
     /* Call actual graphing routine. */
     wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-		   pre, pre->preDrawZero, pre->preDrawSize, 
+		   tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, 
 		   &tg->graphUpperLimit, &tg->graphLowerLimit);
     }
 else
@@ -115,17 +117,26 @@ char *extTableString = trackDbSetting(tg->tdb, "extTable");
 if (tg->bbiFile == NULL)
     {
     /* Figure out bigWig file name. */
-    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-    char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
-    bigWigOpenCatch(tg, fileName);
-    // if there's an extra table, read this one in too
-    if (extTableString != NULL)
+    if (tg->parallelLoading) // do not use mysql during parallel-fetch
 	{
-	fileName = bbiNameFromSettingOrTable(tg->tdb, conn, extTableString);
-        bigWigOpenCatch(tg, fileName);
+	char *fileName = cloneString(trackDbSetting(tg->tdb, "bigDataUrl"));
+	bigWigOpenCatch(tg, fileName);
 	}
-    hFreeConn(&conn);
+    else
+	{
+	struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+	char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
+	bigWigOpenCatch(tg, fileName);
+	// if there's an extra table, read this one in too
+	if (extTableString != NULL)
+	    {
+	    fileName = bbiNameFromSettingOrTable(tg->tdb, conn, extTableString);
+	    bigWigOpenCatch(tg, fileName);
+	    }
+	hFreeConn(&conn);
+	}
     }
+bigWigLoadPreDraw(tg, winStart, winEnd, insideWidth);
 }
 
 void bigWigMethods(struct track *track, struct trackDb *tdb, 

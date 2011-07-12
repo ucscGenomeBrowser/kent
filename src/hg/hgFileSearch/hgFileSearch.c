@@ -438,13 +438,18 @@ webIncludeResourceFile("jquery-ui.css");
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery-ui.js", NULL);
-//jsIncludeFile("ui.core.js",NULL);   // NOTE: This appears to be not needed as long as jquery-ui.js comes before ui.dropdownchecklist.js
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 jsIncludeFile("utils.js",NULL);
 
 // This line is needed to get the multi-selects initialized
-//printf("<script type='text/javascript'>$(document).ready(function() { setTimeout('updateMetaDataHelpLinks(0);',50);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
+#ifdef NEW_JQUERY
+jsIncludeFile("ddcl.js",NULL);
+printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
+printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0); });</script>\n");
+#else///ifndef NEW_JQUERY
+printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
 printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
+#endif///ndef NEW_JQUERY
 
 doFileSearch(db,organism,cart,tdbList);
 

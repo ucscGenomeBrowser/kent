@@ -33,6 +33,7 @@ updateCounter(&stats->maxAlignsDropCnts);
 updateCounter(&stats->localBestDropCnts);
 updateCounter(&stats->globalBestDropCnts);
 updateCounter(&stats->minSpanDropCnts);
+updateCounter(&stats->nonUniqueMap);
 }
 
 static void verbStats(int level, char *label, struct cDnaCnts *cnts, boolean always)
@@ -61,6 +62,7 @@ verbStats(level, "drop minSpan", &stats->minSpanDropCnts, FALSE);
 verbStats(level, "drop localBest", &stats->localBestDropCnts, FALSE);
 verbStats(level, "drop globalBest", &stats->globalBestDropCnts, FALSE);
 verbStats(level, "drop maxAligns", &stats->maxAlignsDropCnts, FALSE);
+verbStats(level, "drop nonUnique", &stats->nonUniqueMap, FALSE);
 verbStats(level, "kept weird", &stats->weirdKeptCnts, FALSE);
 verbStats(level, "kept", &stats->keptCnts, TRUE);
 }

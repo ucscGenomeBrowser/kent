@@ -10,7 +10,7 @@ subGroup4 rnaExtract RNA_Extract longPolyA=PolyA+
 subGroup5 localization Localization cell=Whole_Cell cytosol=Cytosol 
 dimensions dimensionY=localization dimensionX=cellType dimensionA=rep
 dimensionAchecked rep1,rep2
-#fileSortOrder cell=Cell_Line   localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Rep replicate=Lab<BR>Rep bioRep=Cross_Lab<BR>Replicate labProtocolId=<i>Protocol<BR>ID</i> labExpId=Lab<BR>Exp_ID origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract replicate=Rep bioRep=Cross_Lab<BR>Replicate labExpId=Lab<BR>Exp_ID view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks

@@ -1,3 +1,8 @@
+metaObject wgEncodeSydhRnaSeq
+objType composite
+composite wgEncodeSydhRnaSeq
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeSydhRnaSeqCh12PolyaAlnRep1
 objType table
 age immortalized
@@ -9,7 +14,7 @@ dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 fileName wgEncodeSydhRnaSeqCh12PolyaAlnRep1.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -33,7 +38,7 @@ dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 fileName wgEncodeSydhRnaSeqCh12PolyaRawDataRep1.fastq.tgz
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -56,7 +61,7 @@ dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 fileName wgEncodeSydhRnaSeqCh12PolyaSigRep1.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -69,70 +74,77 @@ tableName wgEncodeSydhRnaSeqCh12PolyaSigRep1
 treatment None
 view Signal
 
-metaObject wgEncodeSydhRnaSeqMelDmso20PolyaAlnRep1
+metaObject wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1
 objType table
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
-fileName wgEncodeSydhRnaSeqMelDmso20PolyaAlnRep1.bam
+fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3764
-tableName wgEncodeSydhRnaSeqMelDmso20PolyaAlnRep1
+tableName wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhRnaSeqMelDmso20PolyaRawDataRep1
+metaObject wgEncodeSydhRnaSeqMelDm2p5dPolyaRawDataRep1
 objType file
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
-fileName wgEncodeSydhRnaSeqMelDmso20PolyaRawDataRep1.fastq.gz
+fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3764
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhRnaSeqMelDmso20PolyaSigRep1
+metaObject wgEncodeSydhRnaSeqMelDm2p5dPolyaSigRep1
 objType table
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
-fileName wgEncodeSydhRnaSeqMelDmso20PolyaSigRep1.bigWig
+fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaSigRep1.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3764
-tableName wgEncodeSydhRnaSeqMelDmso20PolyaSigRep1
+tableName wgEncodeSydhRnaSeqMelDm2p5dPolyaSigRep1
 treatment DMSO_2.0pct
 view Signal
 
 metaObject wgEncodeSydhRnaSeqMelPolyaAlnRep1
 objType table
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -141,12 +153,13 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 fileName wgEncodeSydhRnaSeqMelPolyaAlnRep1.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3818
 tableName wgEncodeSydhRnaSeqMelPolyaAlnRep1
 treatment None
@@ -154,6 +167,7 @@ view Alignments
 
 metaObject wgEncodeSydhRnaSeqMelPolyaRawDataRep1
 objType file
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -162,18 +176,20 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 fileName wgEncodeSydhRnaSeqMelPolyaRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3818
 treatment None
 view RawData
 
 metaObject wgEncodeSydhRnaSeqMelPolyaSigRep1
 objType table
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -182,15 +198,16 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 fileName wgEncodeSydhRnaSeqMelPolyaSigRep1.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 origAssembly mm9
 project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3818
 tableName wgEncodeSydhRnaSeqMelPolyaSigRep1
 treatment None
 view Signal
 
-# MAGIC: -163359414
+# MAGIC: -1475813620

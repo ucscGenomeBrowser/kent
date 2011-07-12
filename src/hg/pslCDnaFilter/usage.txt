@@ -98,6 +98,18 @@ Options:
 
    -alignStats=file - output the per-alignment statistics to this file
 
+   -uniqueMapped - keep only cDNAs that are uniquely aligned after all
+    other filters have been applied.
+
+   -noValidate - don't run pslCheck validation.
+
+   -verbose=1 - 0: quite
+                1: output stats
+                2: list problem alignment (weird or invalid)
+                3: list dropped alignments and reason for dropping
+                4: list kept psl and info
+                5: info about all PSLs
+
    -hapRefMapped=psl - output PSLs of haplotype to reference chromosome
     cDNA alignments mappings (for debugging purposes).
 
@@ -108,14 +120,6 @@ Options:
     on output.  Useful for debugging, as they are include in the verbose
     tracing as [#1], etc.  Will make a mess of normal production usage.
 
-   -noValidate - don't run pslCheck validation.
-
-   -verbose=1 - 0: quite
-                1: output stats
-                2: list problem alignment (weird or invalid)
-                3: list dropped alignments and reason for dropping
-                4: list kept psl and info
-                5: info about all PSLs
 
 The default options don't do any filtering. If no filtering
 criteria are specified, all PSLs will be passed though, except

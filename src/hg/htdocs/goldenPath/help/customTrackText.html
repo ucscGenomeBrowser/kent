@@ -793,10 +793,9 @@ TARGET=_blank>here</a> to display this track in the Genome Browser.
 <P><B><I>Example 5b:</I></B><BR>
 It is also possible to color items by strand in a BED track 
 using the <em>colorByStrand</em> attribute in the 
-<A HREF="#TRACK">track line</A> as shown below. Please 
-note that, for BED tracks, this attribute functions only when there are 
-no other fields specified after the <em>strand</em> field (i.e. only with 
-BED6 files). 
+<A HREF="#TRACK">track line</A> as shown below. For BED 
+tracks, this attribute functions only for custom tracks 
+with 6 to 8 fields (i.e. BED6 through BED8).
 NOTE: The track and data lines in this example have been reformatted for
 documentation purposes. Click <A HREF ="examples/ct_example5b.txt" TARGET=_blank>here</A>
 for a copy of this example that can be pasted into the browser without editing.
@@ -849,7 +848,7 @@ required on each data line within a PSL file:
 <LI><B>qBaseInsert</B> - Number of bases inserted in query
 <LI><B>tNumInsert</B> - Number of inserts in target
 <LI><B>tBaseInsert</B> - Number of bases inserted in target
-<LI><B>strand</B> - '+' or '-' for query strand. In mouse, second '+'or '-' is for genomic strand
+<LI><B>strand</B> - '+' or '-' for query strand. In protein or translated alignments, the second '+'or '-' is for genomic strand
 <LI><B>qName</B> - Query sequence name
 <LI><B>qSize</B> - Query sequence size
 <LI><B>qStart</B> - Alignment start position in query
@@ -1146,7 +1145,9 @@ assembly to a certain location on chr21 would look like this:
 <font color="000099"><a
 class="insideLink" href="../../cgi-bin/hgTracks?db=hg18&position=chr21:33038447-33041505&hgct_customText=track%20type=bigBed%20name=myBigBedTrack%20description=%22a%20bigBed%20track%22%20visibility=full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb" 
 TARGET=_BLANK><tt>
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg18&position=chr21:33038447-33041505&hgct_customText=track%20type=bigBed%20name=myBigBedTrack%20description=%22a%20bigBed%20track%22%20visibility=full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg18&position=chr21:33038447-33041505&hgct_customText<br>
+=track%20type=bigBed%20name=myBigBedTrack%20description=%22a%20bigBed%20track%22%20visibility=<br>
+full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
 </tt></a></font><BR><BR>
 
 

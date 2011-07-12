@@ -17,7 +17,7 @@ void containerLoadItems(struct track *track)
 struct track *subtrack;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    if (isSubtrackVisible(subtrack))
+    if (isSubtrackVisible(subtrack) && !subtrack->parallelLoading)
 	subtrack->loadItems(subtrack);
     }
 }

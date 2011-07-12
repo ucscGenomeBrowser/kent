@@ -4,9 +4,10 @@ PROG = ../encodeExp
 
 TABLE = encodeExpTest_${USER}
 
-test: copyTest removeTest addTest accTest showTest idTest renameTest restoreTest
+test: copyTest addTest accTest showTest renameTest modifyTest removeTest idTest restoreTest
 	echo tested all
 	@#-rm -rf output
+
 
 # Add experiments from .ra file
 addTest:
@@ -76,6 +77,17 @@ idTest:
 	${PROG} add input/addTest.in.ra -table=${TABLE}
 	${PROG} id human Stanford ChipSeq GM12878 Antibody:Pol2 -table=${TABLE} > output/$@.out.ra
 	${PROG} id human Duke DNaseSeq K562 -table=${TABLE} >> output/$@.out.ra
+	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
+
+modifyTest:
+	${MAKE} setup
+	${PROG} add input/addTest.in.ra -table=${TABLE}
+	${PROG} update 3 lab Duke UW -table=${TABLE}
+	${PROG} update 3 cellType K562 GM12878 -table=${TABLE}
+	${PROG} update 3 dataType DnaseSeq RnaSeq -table=${TABLE}
+	${PROG} update 2 Antibody Pol2 CTCF -table=${TABLE}
+	${PROG} show 3 -table=${TABLE} >> output/$@.out.ra
+	${PROG} show 2 -table=${TABLE} >> output/$@.out.ra
 	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
 
 clean:

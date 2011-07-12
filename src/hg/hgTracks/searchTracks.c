@@ -488,11 +488,11 @@ else
         jsonTdbSettingsBuild(&jsonTdbVars, track, FALSE); // FALSE: No configuration from track search
 
         if (tdbIsFolder(track->tdb)) // supertrack
-            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL4);
+            hPrintf("<tr class='bgLevel4' valign='top' class='found'>\n");
         else if (tdbIsContainer(track->tdb))
-            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL3);
+            hPrintf("<tr class='bgLevel3' valign='top' class='found'>\n");
         else
-            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL2);
+            hPrintf("<tr class='bgLevel2' valign='top' class='found'>\n");
 
         hPrintf("<td align='center'>\n");
 
@@ -548,7 +548,7 @@ else
         // shortLabel has description popup and longLabel has "..." metadata
         hPrintf("<td><a target='_top' onclick=\"hgTrackUiPopUp('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
-        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE, tdbHash);
+        compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE, tdbHash);
         hPrintf("</td></tr>\n");
         }
     //hPrintf("</table>\n");
@@ -585,10 +585,15 @@ if (!advancedJavascriptFeaturesEnabled(cart))
     }
 
 webIncludeResourceFile("ui.dropdownchecklist.css");
-//jsIncludeFile("ui.core.js",NULL);   // NOTE: This appears to be not needed as long as jquery-ui.js comes before ui.dropdownchecklist.js
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized
+#ifdef NEW_JQUERY
+jsIncludeFile("ddcl.js",NULL);
+hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
+#else///ifndef NEW_JQUERY
+hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
 hPrintf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
+#endif///ndef NEW_JQUERY
 
 struct group *group;
 char *groups[128];

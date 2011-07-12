@@ -58,6 +58,7 @@ if (magic != sig)
 // look for signature at the end of the file
 mustLseek(fd, -sizeof(magic), SEEK_END);
 mustReadFd(fd, &magic, sizeof(magic));
+mustCloseFd(&fd);
 
 if (isSwapped)
     {

@@ -1,0 +1,44 @@
+Style Guide for Python Code
+
+Documentation Conventions
+
+Use """ doc strings to embed comments for automated documentation generator:
+    http://epydoc.sourceforge.net/
+
+Naming Conventions
+
+Packages and Modules
+    All lowercase names, no spaces. Underscores if it would improve
+readability in modules, but not for use in packages. Need to discuss how
+classes are organized in packages and files and where programs are stored.
+
+Classes
+    CapitalCase names. Note the leading captial letter to distinguish between a
+ClassName and a functionName. Underscores are not used, except for private
+internal classes, where the name is preceded by double underscores which
+Python recognizes as private.
+
+Methods
+    mixedCase names. The leading character is not captialized, but all
+successive words are capitalized. Underscores are not used, except for private
+internal methods, where the name is preceded by double underscores which
+Python recognizes as private.
+
+Variables
+    mixedCase names. Underscores are not used, except for private
+internal variables, where the name is preceded by double underscores which
+Python recognizes as private.
+
+Testing
+    Testing is carried out using the unittest module in python. This module
+allows for self-running scripts which only need the following lines at the
+bottom of the script:
+    if __name__ == '__main__':
+        unittest.main()
+
+    The scripts themselves are composed of one or more classes, all of which
+inherit from unittest.TestCase and contain one or more methods which use
+various asserts or failure checks to determine whether a test passes or not.
+Testing is self-contained, and should provide its own input and output
+directories and files. 
+

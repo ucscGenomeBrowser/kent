@@ -933,61 +933,75 @@ spanList 60
 viewLimits -1.5:1.5
 html laminB1Mm9
 
-track forelimbH3k27ac
-type bed 3
-color 0,0,150
-group x
-visibility hide
-
-track NumtSeq
+track numtSeq
 compositeTrack on
-shortLabel NumtSeq
-longLabel NumtS mitochondrial sequence
+shortLabel NumtS Sequence
+longLabel Mouse NumtS mitochondrial sequence
 group varRep
 priority 500.5
 visibility hide
 noInherit on
 type bed 3 .
-html numtSeqHg19
+html numtSeqMm9
 
     track numtS
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS
-    longLabel NumtS
+    longLabel Mouse NumtS
     color 0,60,120
-     #itemRgb on
     useScore 1
+    #noScoreFilter .
     priority 1
     type bed 6 .
-    html numtSeqHg19
-
+    html numtSeqMm9
+    
     track numtSAssembled
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS assembled
-    longLabel NumtS assembled
+    longLabel Mouse NumtS assembled
     color 0,60,120
     priority 2
     useScore 1
+    #noScoreFilter .
     type bed 12 .
-    html numtSeqHg19
-
+    html numtSeqMm9
+    
     track numtSMitochondrion
-    parent NumtSeq
-    shortLabel NumtS on mitochondrion
-    longLabel NumtS on mitochondrion
+    parent numtSeq
+    shortLabel NumtS on mitochon
+    longLabel Mouse NumtS on mitochondrion
     useScore 1
+    #noScoreFilter .
     color 0,60,120
     priority 3
     type bed 6 .
-    html numtSeqHg19
+    html numtSeqMm9
+    chromosomes chrM
 
     track  bamMmsNumtSSorted
-    parent NumtSeq
-    shortLabel bamMmsNumtSSorted
-    longLabel Mouse NumtS SNPs
+    parent numtSeq
+    shortLabel NumtS SNPs
+    longLabel Mouse NumtS on mitochondrion SNPs
     priority 4
     visibility pack
+    configurable on
     type bam
+    bamSkipPrintQualScore .
+    chromosomes chrM
+    pairEndsByName on
+    showNames on
+    noColorTag .
+    bamColorMode strand
+    bamGrayMode aliQual
+    aliQualRange 0:255
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    maxWindowToDraw 1000000
+
 
 searchTable numtSMitochondrion
 searchMethod exact
@@ -1012,4 +1026,5 @@ searchType bed
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
 termiRegex HSA_NumtS_*
+
 

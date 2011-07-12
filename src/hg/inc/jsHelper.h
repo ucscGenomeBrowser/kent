@@ -21,7 +21,7 @@
 #define JS_SET_ALL_BUTTON_LABEL  "Set all"
 #define JS_DEFAULTS_BUTTON_LABEL "Set defaults"
 
-// #define NEW_JQUERY 1          // temporary define turn on to test new jQuery (1.5) and jQuery UI (1.8)
+#define NEW_JQUERY 1          // temporary define turn on to test new jQuery (1.5) and jQuery UI (1.8)
 
 void jsCreateHiddenForm(struct cart *cart, char *scriptName,
 	char **vars, int varCount);
@@ -139,5 +139,21 @@ void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, ch
 
 void jsEndCollapsibleSection();
 /* End the collapsible <TR id=...>. */
+
+void jsAddString(struct hash *h, char *name, char *val);
+// Add a string to a hash which will be used to print a javascript object;
+// existing values are replaced.
+
+void jsAddNumber(struct hash *h, char *name, long val);
+// Add a number to a hash which will be used to print a javascript object;
+// existing values are replaced.
+
+void jsAddBoolean(struct hash *h, char *name, boolean val);
+// Add a boolean to a hash which will be used to print a javascript object;
+// existing values are replaced.
+
+void jsPrintHash(struct hash *hash, char *name, int indentLevel);
+// prints a hash as a javascript variable
+
 
 #endif /* JSHELPER_H */

@@ -741,7 +741,8 @@ for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
             fprintf(f, "%s %s\n", fp->name, val);
         }
     }
-fputs("\n", f);
+if (f != NULL)
+    fputs("\n", f);
 return ra;
 }
 
@@ -872,8 +873,8 @@ char query[256];
 struct encodeExp *exp2 = encodeExpGetByIdFromTable(conn, tableName, exp->ix);
 if (encodeExpSame(exp, exp2))
     {
-    safef(query, sizeof(query), "delete from %s where %s=%d", 
-                                tableName, ENCODE_EXP_FIELD_IX, exp->ix); 
+    safef(query, sizeof(query), "delete from %s where %s=%d",
+                                tableName, ENCODE_EXP_FIELD_IX, exp->ix);
     sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
     sqlUpdate(conn, query);
     encodeExpAddUserToLatestHistory(conn, tableName, exp->ix);
@@ -882,38 +883,73 @@ if (encodeExpSame(exp, exp2))
     }
 }
 
-void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
-                                int id, char *field, char *val)
-/* Update field in encodeExp identified by id with value.
-   Only supported for a few non-interdependent fields
-   and only for non-accessioned experiments */
+boolean encodeExpIsFieldVar(char *var)
+/* Return true if var is a field in schema -- one of standard set (not an expVar) */
 {
-struct dyString *query = NULL;
-
-if (differentString(field, ENCODE_EXP_FIELD_LAB) &&
-    differentString(field, ENCODE_EXP_FIELD_DATA_TYPE) &&
-    differentString(field, ENCODE_EXP_FIELD_CELL_TYPE))
-        errAbort("Unsupported encodeExp field update: %s", field);
-
-query = dyStringCreate("update %s set %s=\'%s\' where ix=%d",
-                        tableName, field, val, id);
-sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
-sqlUpdate(conn, dyStringCannibalize(&query));
-encodeExpAddUserToLatestHistory(conn, tableName, id);
-sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+if (var == NULL)
+    return FALSE;
+return (sameString(var, ENCODE_EXP_FIELD_LAB) ||
+    sameString(var, ENCODE_EXP_FIELD_DATA_TYPE) ||
+    sameString(var, ENCODE_EXP_FIELD_CELL_TYPE));
 }
 
-void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
-                                int id, struct slPair *varPairs)
-/* Update expVars in encodeExp identified by accession */
+void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
+                                int id, char *var, char *newVal, char *oldVal)
+/* Update field in encodeExp or var in expVars, identified by id with value.
+ * If oldVal is non-NULL, verify it matches experiment, as a safety check.
+ * Abort if experiment is accessioned (must deaccession first) */
 {
-char *expVars;
-struct dyString *dy;
+char *val = NULL;
+struct dyString *dy = NULL;
 
-slPairSortCase(&varPairs);
-expVars = slPairListToString(varPairs, FALSE);
-dy = dyStringCreate("update %s set %s=\'%s\' where ix=\'%d\'",
-                        tableName, ENCODE_EXP_FIELD_FACTORS, expVars, id);
+/* verify new value is valid term in CV */
+char *type = (char *)cvTermNormalized(var);
+if (type == NULL)
+    errAbort("Attempt to update encodeExp experiment with unknown CV type %s", var);
+if (cvOneTermHash(type, newVal) == NULL)
+    errAbort("Attempt to update encodeExp experiment with unknown CV term %s of type %s", newVal, var);
+
+struct encodeExp *exp = encodeExpGetByIdFromTable(conn, tableName, id);
+if (exp == NULL)
+    errAbort("Id %d not found in experiment table %s", id, tableName);
+if (exp->accession)
+    errAbort("Id %d in table %s has accession", id, tableName);
+
+if (encodeExpIsFieldVar(var))
+    {
+    /* check if old value matches */
+    if (oldVal)
+        {
+        struct hash *expRa = encodeExpToRa(exp);
+        val = hashFindVal(expRa, var);
+        if (val == NULL)
+            errAbort("Field %s not found in id %d from table %s", var, id, tableName);
+        if (differentString(val, oldVal))
+            errAbort("Mismatch: id %d has %s=%s, not %s in table %s", id, var, val, oldVal, tableName);
+        }
+    dy = dyStringCreate("update %s set %s=\'%s\' ", tableName, var, newVal);
+    }
+else
+    {
+    /* must be an expVar -- extract all expVars for this experiment */
+    struct slPair *varPairs = slPairListFromString(exp->expVars,FALSE);
+    struct slPair *pair = slPairFind(varPairs, var);
+    if (pair == NULL)
+        errAbort("Attempt to change experiment %d with unknown expVar %s in table %s",
+                    id, var, tableName);
+    // TODO: allow adding a new expVar
+    if (oldVal)
+        {
+        val = (char *)pair->val;
+        if (differentString(val, oldVal))
+            errAbort("Mismatch: id %d has %s=%s, not %s in table %s", id, var, val, oldVal, tableName);
+        }
+    /* change the designated var */
+    pair->val = newVal;
+    char *expVars = slPairListToString(varPairs, FALSE);
+    dy = dyStringCreate("update %s set %s=\'%s\' ", tableName, ENCODE_EXP_FIELD_FACTORS, expVars);
+    }
+dyStringPrintf(dy, " where ix=%d", id);
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 encodeExpAddUserToLatestHistory(conn, tableName, id);

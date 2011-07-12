@@ -197,8 +197,8 @@ taxId 9913
     # %47.91 masked total, %48.28 masked real
 
     # double check with featureBits
-    featureBits -countGaps bosTau4 gap
-    # 186143830 bases of 2917974530 (6.379%) in intersection
+    featureBits -countGaps bosTau6 gap
+    # 20740270 bases of 2670422299 (0.777%) in intersection
 
     rm /gbdb/bosTau6/bosTau6.2bit
     ln -s `pwd`/bosTau6.2bit /gbdb/bosTau6/bosTau6.2bit
@@ -755,7 +755,7 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (working 2011-02-07 - Chin)
+# all.joiner update, downloads and in pushQ - (working 2011-06-14 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=bosTau6 -all all.joiner
@@ -769,12 +769,15 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/bosTau6/pushQ
     makePushQSql.pl bosTau6 > bosTau6.pushQ.sql 2> stderr.out
     #	check for errors in stderr.out, some are OK, e.g.:
-# WARNING: bosTau6 does not have seq
-# WARNING: bosTau6 does not have extFile
-
-# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
-# supporting and genbank tables) which tracks to assign these tables to:
-#  bosTau4ChainPileUp
+    # WARNING: hgwdev does not have /gbdb/bosTau6/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/bosTau6/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/bosTau6/bbi/quality.bw
+    # WARNING: bosTau6 does not have seq
+    # WARNING: bosTau6 does not have extFile
+    # 
+    # WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+    # supporting and genbank tables) which tracks to assign these tables to:
+    #   tableList
 
     #	copy it to hgwbeta
     scp -p bosTau6.pushQ.sql hgwbeta:/tmp

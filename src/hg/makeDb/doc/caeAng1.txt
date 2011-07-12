@@ -1,0 +1,330 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis angaria
+#	Submitted (15-OCT-2010) Division of Biology, California Institute
+#	of Technology, 1200 E. California Blvd., Pasadena, CA 91125, USA 
+
+#	Division of Biology, California Institute of Technology(PS1010) ps10rel4 (GCA_000165025.1)
+#
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEHI01
+
+###########################################################################
+## Download sequence (DONE - 2011-05-31 - Hiram)
+    mkdir /hive/data/genomes/caeAng1
+    cd /hive/data/genomes/caeAng1
+    mkdir genbank
+    cd genbank
+    wget --no-parent --timestamping -m -nH --cut-dirs=7 \
+    ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/invertebrates/Caenorhabditis_sp_PS1010/ps1010rel4/
+    faSize unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 79761545 bases (4502764 N's 75258781 real 75258781 upper 0 lower)
+#	in 33559 sequences in 1 files
+
+    # change the names from GL numbers to scaffold numbers
+    cat << '_EOF_' > scafNames.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: scafNames.pl makeItSo\n";
+    printf STDERR "via the scaffold_localID2acc file translate names\n";
+    printf STDERR "in the AGP and FASTA files to construct UCSC versions.\n";
+}
+
+my %scafName;	# index is GL name, value is scaffold name
+
+open (FH, "<localID2acc") or die "can not read localID2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($scaf, $glName) = split('\s+', $line);
+    $scaf =~ s/ps1010rel4_//;	# remove redundant name info
+    die "ERROR: duplicate glName: $glName" if (exists($scafName{$glName}));
+    $scafName{$glName} = $scaf;
+}
+close (FH);
+
+open (AG, "|gzip -c > caeAng1.scaf.agp.gz") or die "can not write to gzip -c > caeAng1.scaf.agp.gz";
+open (FH, "zcat unplaced_scaffolds/AGP/unplaced.scaf.agp.gz|") or
+    die "can not read unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+	printf AG "%s", $line;
+    } else {
+	chomp $line;
+	my ($glName, $rest) = split('\s+', $line, 2);
+	printf AG "%s\t%s\n", $scafName{$glName}, $rest;
+    }
+}
+close (FH);
+close (AG);
+
+open (FA, "|gzip -c > caeAng1.scaf.fa.gz") or die "can not write to gzip -c > caeAng1.scaf.fa.gz";
+open (FH, "zcat unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz|") or
+	die "can not read unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+	chomp $line;
+	$line =~ s/>gi.[0-9]+.gb.//;
+	$line =~ s/. Caeno.*//;
+	printf FA ">%s\n", $scafName{$line};
+    } else {
+	printf FA "%s", $line;
+    }
+}
+close (FH);
+close (FA);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./scafNames.pl
+    time ./scafNames.pl makeItSo
+    #	real    0m22.682s
+
+
+    faSize caeAng1.scaf.fa.gz 
+# 79761545 bases (4502764 N's 75258781 real 75258781 upper 0 lower)
+#	in 33559 sequences in 1 files
+
+    checkAgpAndFa  caeAng1.scaf.agp.gz caeAng1.scaf.fa.gz 2>&1 | tail -1
+    #	All AGP and FASTA entries agree - both files are valid
+
+###########################################################################
+## Initial sequence (DONE - 2011-05-31 - Hiram)
+    cd /hive/data/genomes/caeAng1
+    cat << '_EOF_' > caeAng1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caeAng1
+clade worm
+genomeCladePriority 70
+scientificName Caenorhabditis angaria
+commonName C. angaria
+assemblyDate Oct. 2010
+assemblyShortLabel WS225
+assemblyLabel Division of Biology, California Institute of Technology(PS1010) ps10rel4 (GCA_000165025.1)
+orderKey 838
+mitoAcc none
+fastaFiles /hive/data/genomes/caeAng1/genbank/caeAng1.scaf.fa.gz
+agpFiles /hive/data/genomes/caeAng1/genbank/caeAng1.scaf.agp.gz
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 96668
+'_EOF_'
+    # << happy emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    time nice -n +19 makeGenomeDb.pl caeAng1.config.ra -stop=agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	real    0m22.767s
+
+    #	check that log to verify it has no errors
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl caeAng1.config.ra -continue=db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m19.007s
+    #	check that log to verify it has no errors
+
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+###########################################################################
+## RepeatMasker (DONE - 2011-05-31 - Hiram)
+    mkdir /hive/data/genomes/caeAng1/bed/repeatMasker
+    cd /hive/data/genomes/caeAng1/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
+	-species="caenorhabditis sp. ps1010" -buildDir=`pwd` caeAng1 \
+	> do.log 2>&1 &
+    #	real    108m37.276s
+
+    #	from the do.log:
+# RepeatMasker version development-$Id: RepeatMasker,v
+#	1.25 2010/09/08 21:32:26 angie Exp $
+#	CC   RELEASE 20090604; 
+
+    cat faSize.rmsk.txt
+# 79761545 bases (4502764 N's 75258781 real 74350029 upper 908752 lower)
+#	in 33559 sequences in 1 files
+# %1.14 masked total, %1.21 masked real
+
+###########################################################################
+## Simple Repeats (DONE - 2011-05-31 - Hiram)
+    mkdir /cluster/data/caeAng1/bed/simpleRepeat
+    cd /cluster/data/caeAng1/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
+	-workhorse=hgwdev -buildDir=`pwd` caeAng1 > do.log 2>&1 &
+    #	real    19m27.079s
+    cat fb.simpleRepeat 
+    #	3868038 bases of 75258781 (5.140%) in intersection
+
+###########################################################################
+## WindowMasker (DONE - 2011-05-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/caeAng1/bed/windowMasker
+    cd /hive/data/genomes/caeAng1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -verbose=2 -buildDir=`pwd` \
+	-workhorse=hgwdev caeAng1 > do.log 2>&1 &
+    #	real    2m38.301s
+
+    twoBitToFa caeAng1.wmsk.sdust.2bit stdout | faSize stdin
+# 79761545 bases (4502764 N's 75258781 real 46477651 upper 28781130 lower)
+#	in 33559 sequences in 1 files
+# %36.08 masked total, %38.24 masked real
+
+    #	load this initial data to get ready to clean it
+    cd /hive/data/genomes/caeAng1/bed/windowMasker
+    hgLoadBed caeAng1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 790580 elements of size 3
+    featureBits -countGaps caeAng1 windowmaskerSdust
+    #	33265794 bases of 79761545 (41.707%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits caeAng1 -not gap -bed=notGap.bed
+    #	75258781 bases of 75258781 (100.000%) in intersection
+    time nice -n +19 featureBits caeAng1 windowmaskerSdust notGap.bed \
+	-bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	28781130 bases of 75258781 (38.243%) in intersection
+    #	real    10m6.750s
+
+    #	reload track to get it clean
+    hgLoadBed caeAng1 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 790135 elements of size 4
+    featureBits -countGaps caeAng1 windowmaskerSdust
+    #	28781130 bases of 79761545 (36.084%) in intersection
+
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../caeAng1.unmasked.2bit stdin \
+	    -type=.bed caeAng1.cleanWMSdust.2bit
+    twoBitToFa caeAng1.cleanWMSdust.2bit stdout | faSize stdin \
+        > caeAng1.cleanWMSdust.faSize.txt
+    cat caeAng1.cleanWMSdust.faSize.txt
+# 79761545 bases (4502764 N's 75258781 real 46477651 upper 28781130 lower)
+#	in 33559 sequences in 1 files
+# %36.08 masked total, %38.24 masked real
+
+########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-31 - Hiram)
+    cd /hive/data/genomes/caeAng1
+    twoBitMask -add bed/windowMasker/caeAng1.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed caeAng1.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa caeAng1.2bit stdout | faSize stdin > faSize.caeAng1.txt
+    cat faSize.caeAng1.txt
+# 79761545 bases (4502764 N's 75258781 real 46424184 upper 28834597 lower)
+#	in 33559 sequences in 1 files
+# %36.15 masked total, %38.31 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/caeAng1/caeAng1.2bit
+    ln -s `pwd`/caeAng1.2bit /gbdb/caeAng1/caeAng1.2bit
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-31 - Hiram)
+    # numerator is caeAng1 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases "real" as reported by faSize
+    # 1024 is threshold used for human -repMatch:
+    calc \( 75258781  / 2897310462 \) \* 1024
+    #	( 75258781 / 2897310462 ) * 1024 = 26.598804
+
+    # Round up to use -repMatch=100 since 60 would result in too many
+    cd /hive/data/genomes/caeAng1
+    blat caeAng1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/caeAng1.11.ooc -repMatch=100
+    #	Wrote 5510 overused 11-mers to jkStuff/caeAng1.11.ooc
+    # there are no non-bridged gaps here to make a lift file from
+    # cd jkStuff
+    # gapToLift -verbose=2 caeAng1 caeAng1.nonBridged.lift -bedFile=caeAng1.nonBridged.bed
+
+    mkdir /hive/data/staging/data/caeAng1
+    cp -p chrom.sizes caeAng1.2bit jkStuff/caeAng1.11.ooc \
+	/hive/data/staging/data/caeAng1
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2011-05-26 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add caeAng1 just before caeRem3
+
+# caeAng1 (C. angaria)
+caeAng1.serverGenome = /hive/data/genomes/caeAng1/caeAng1.2bit
+caeAng1.clusterGenome = /scratch/data/caeAng1/caeAng1.2bit
+caeAng1.ooc = /scratch/data/caeAng1/caeAng1.11.ooc
+caeAng1.lift = no
+caeAng1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeAng1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeAng1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeAng1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeAng1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeAng1.refseq.mrna.native.load = no
+caeAng1.refseq.mrna.xeno.load  = yes
+caeAng1.refseq.mrna.xeno.loadDesc = yes
+caeAng1.genbank.mrna.xeno.load = yes
+caeAng1.genbank.est.native.load = yes
+caeAng1.genbank.est.native.loadDesc = no
+caeAng1.downloadDir = caeAng1
+caeAng1.perChromTables = no
+
+    git commit -m "Added caeAng1 C. angaria WS220" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeAng1 &
+    #	logFile:  var/build/logs/2011.05.26-09:19:08.caeAng1.initalign.log
+    #	real    291m13.960s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeAng1
+    #	logFile: var/dbload/hgwdev/logs/2011.05.25-15:46:59.dbload.log
+    #	real    22m27.349s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add caeAng1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# lastz swap ce10 to caeAng1 (DONE - 2011-06-08 - Hiram)
+    # original alignment on ce10
+    cd /hive/data/genomes/ce10/bed/lastzCaeAng1.2011-06-08
+    cat fb.ce10.chainCaeAng1Link.txt 
+    #	17675040 bases of 100286070 (17.625%) in intersection
+
+    mkdir /hive/data/genomes/caeAng1/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeAng1/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeAng1.2011-06-08/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    2m29.548s
+
+    cat fb.caeAng1.chainCe10Link.txt 
+    #	17607671 bases of 75258781 (23.396%) in intersection
+
+#########################################################################
+# Constructing Downloads (DONE - 2011-06-10 - Hiram)
+    cd /hive/data/genomes/caeAng1
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caeAng1 \
+	 > downloads.log 2>&1
+    #	real    0m40.587s
+    # fixup the README files constructed in goldenPath/*/README.txt
+
+    # add window masker bed file:
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+############################################################################

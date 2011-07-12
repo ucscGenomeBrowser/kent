@@ -1145,7 +1145,8 @@ typedef struct _filterBy {
     char*htmlName;            // Name used in HTML/CGI
     boolean useIndex;         // The returned values should be indexes
     boolean valueAndLabel;    // If values list is value|label, then label is shown to the user
-    boolean colorFollows;     // If values list is value|label{#color, then bg color follows value and label
+    boolean styleFollows;     // style settings can follow like value|label[background-color:#660000]
+                              // legacy like value|label{#AA0000} is a just the style='color... that follows
     struct slName *slValues;  // Values that can be filtered on (All is always implied)
     struct slName *slChoices; // Values that have been chosen
 } filterBy_t;

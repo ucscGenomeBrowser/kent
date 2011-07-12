@@ -53,12 +53,12 @@ shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2_C BJ=BJ CACO2=Caco-2 CMK=CMK GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7es=H7-hESC HAh=HA-h HA-sp=HA-sp HAc=HAc HAE=HAEpiC HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy  HNPCE=HNPCEpiC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HRGEC=HRGEC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp(G1_phase) LNCaP=LNCaP MCF7=MCF-7 MonoCD14=Monocytes-CD14+ NB4=NB4 NHA=NH-A NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2 WERIRb1=WERI-Rb-1 WI38=WI-38
+subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2_C BJ=BJ CACO2=Caco-2 CD20+=CD20+ CD34+MOBILIZED=CD34+_Mobilized CMK=CMK GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7es=H7-hESC HAh=HA-h HA-sp=HA-sp HAc=HAc HAE=HAEpiC HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECDAD=HMVEC-dAd HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCE=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HRGEC=HRGEC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp;(G1_phase) LNCaP=LNCaP MCF7=MCF-7 MONOCD14=Monocytes-CD14+ NB4=NB4 NHA=NH-A NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2D1=NT2-D1 PANC1=PANC-1 PREC=PReC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2 WERIRb1=WERI-Rb-1 WI38=WI-38
 subGroup3 rep Replicate 1=1 2=2
 subGroup4 treatment Treatment None=None OHTAM=4-OHTAM_20nM_72hr
 dimensions dimensionY=cellType dimensionX=rep
 sortOrder cellType=+ rep=+ view=+ treatment=+
-fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accessio fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
+fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accessio geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 dragAndDrop subTracks
 noInherit on
 html wgEncodeUwDnase.new
@@ -1406,13 +1406,13 @@ wgEncode 1
         origAssembly hg19
         # subId=3210 dateSubmitted=2011-01-11
 
-        track wgEncodeUwDnaseMonocd14HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel Mono-CD14+ Hspt 1
-        longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=MonoCD14 treatment=None rep=1
-        type broadPeak
-        origAssembly hg19
+        #track wgEncodeUwDnaseMonocd14HotspotsRep1
+        #parent wgEncodeUwDnaseViewHot off
+        #shortLabel Mono-CD14+ Hspt 1
+        #longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        #subGroups view=Hot cellType=MONOCD14 treatment=None rep=1
+        #type broadPeak
+        #origAssembly hg19
         # subId=3211 dateSubmitted=2011-01-11
 
         track wgEncodeUwDnaseWi38HotspotsRep1
@@ -1450,6 +1450,114 @@ wgEncode 1
         type broadPeak
         origAssembly hg19
         # subId=3215 dateSubmitted=2011-01-11
+
+        track wgEncodeUwDnaseHmvecdadHotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVEC-dAd 2
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMVEC-dAd cells)
+        subGroups view=Hot cellType=HMVECDAD treatment=None rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4402 dateSubmitted=2011-06-29
+
+        track wgEncodeUwDnaseHmvecdadHotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVEC-dAd 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMVEC-dAd cells)
+        subGroups view=Hot cellType=HMVECDAD treatment=None rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4403 dateSubmitted=2011-06-29
+
+        track wgEncodeUwDnaseHpaecHotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HPAEC 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HPAEC cells)
+        subGroups view=Hot cellType=HPAEC treatment=None rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4404 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseCd34mobilizedHotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel CD34+_Mobilized 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in CD34+_Mobilized cells)
+        subGroups view=Hot cellType=CD34+MOBILIZED treatment=None rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4401 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseCd20PosHotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel CD20+ 2
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in CD20+ cells)
+        subGroups view=Hot cellType=CD20+ treatment=None rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4400 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseMonocd14HotspotsRep1V2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Monocytes-CD14+ 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in Monocytes-CD14+ cells)
+        subGroups view=Hot cellType=MONOCD14 treatment=None rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4398 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseMonocd14HotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Monocytes-CD14+ 2
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in Monocytes-CD14+ cells)
+        subGroups view=Hot cellType=MONOCD14 treatment=None rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4399 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseNt2d1HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel NT2-D1 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in NT2-D1 cells)
+        subGroups view=Hot cellType=NT2D1 treatment=None rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4407 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnasePrecHotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel PrEC 2
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in PrEC cells)
+        subGroups view=Hot cellType=PREC treatment=None rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4408 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseHsmmtHotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HSMMtube 2
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HSMMtube cells)
+        subGroups view=Hot cellType=HSMMt treatment=None rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4405 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseNt2d1HotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel NT2-D1 2
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in NT2-D1 cells)
+        subGroups view=Hot cellType=NT2D1 treatment=None rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=4406 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnasePrecHotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel PrEC 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in PrEC cells)
+        subGroups view=Hot cellType=PREC treatment=None rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=4409 dateSubmitted=2011-06-25
 
 
     track wgEncodeUwDnaseViewaPeaks
@@ -2718,13 +2826,13 @@ wgEncode 1
         origAssembly hg19
         # subId=3210 dateSubmitted=2011-01-11
 
-        track wgEncodeUwDnaseMonocd14PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Mono-CD14+ Pk 1
-        longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=MonoCD14 treatment=None rep=1
-        type narrowPeak
-        origAssembly hg19
+        #track wgEncodeUwDnaseMonocd14PkRep1
+        #parent wgEncodeUwDnaseViewaPeaks off
+        #shortLabel Mono-CD14+ Pk 1
+        #longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 1 from ENCODE/UW
+        #subGroups view=Peaks cellType=MONOCD14 treatment=None rep=1
+        #type narrowPeak
+        #origAssembly hg19
         # subId=3211 dateSubmitted=2011-01-11
 
         track wgEncodeUwDnaseWi38PkRep1
@@ -2835,6 +2943,114 @@ wgEncode 1
         origAssembly hg18
         color 224,75,0
         # subId=3261 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDnaseHmvecdadPkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVEC-dAd Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMVEC-dAd cells)
+        subGroups view=Peaks cellType=HMVECDAD treatment=None rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4402 dateSubmitted=2011-06-29
+
+        track wgEncodeUwDnaseHmvecdadPkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVEC-dAd Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMVEC-dAd cells)
+        subGroups view=Peaks cellType=HMVECDAD treatment=None rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4403 dateSubmitted=2011-06-29
+
+        track wgEncodeUwDnaseHpaecPkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HPAEC Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HPAEC cells)
+        subGroups view=Peaks cellType=HPAEC treatment=None rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4404 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseCd34mobilizedPkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel CD34+_Mobilized Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in CD34+_Mobilized cells)
+        subGroups view=Peaks cellType=CD34+MOBILIZED treatment=None rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4401 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseCd20PosPkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel CD20+ Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in CD20+ cells)
+        subGroups view=Peaks cellType=CD20+ treatment=None rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4400 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseMonocd14PkRep1V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Monocytes-CD14+ Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in Monocytes-CD14+ cells)
+        subGroups view=Peaks cellType=MONOCD14 treatment=None rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4398 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseMonocd14PkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Monocytes-CD14+ Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in Monocytes-CD14+ cells)
+        subGroups view=Peaks cellType=MONOCD14 treatment=None rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4399 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseNt2d1PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel NT2-D1 Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in NT2-D1 cells)
+        subGroups view=Peaks cellType=NT2D1 treatment=None rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4407 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnasePrecPkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel PrEC Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in PrEC cells)
+        subGroups view=Peaks cellType=PREC treatment=None rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4408 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseHsmmtPkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HSMMtube Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HSMMtube cells)
+        subGroups view=Peaks cellType=HSMMt treatment=None rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4405 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseNt2d1PkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel NT2-D1 Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in NT2-D1 cells)
+        subGroups view=Peaks cellType=NT2D1 treatment=None rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=4406 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnasePrecPkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel PrEC Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in PrEC cells)
+        subGroups view=Peaks cellType=PREC treatment=None rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=4409 dateSubmitted=2011-06-25
 
 
     track wgEncodeUwDnaseViewzRaw
@@ -4178,13 +4394,13 @@ wgEncode 1
         origAssembly hg19
         # subId=3210 dateSubmitted=2011-01-11
 
-        track wgEncodeUwDnaseMonocd14RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Mono-CD14+ Sig 1
-        longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=MonoCD14 treatment=None rep=1
-        type bigWig 1.000000 24864.000000
-        origAssembly hg19
+        #track wgEncodeUwDnaseMonocd14RawRep1
+        #parent wgEncodeUwDnaseViewzRaw off
+        #shortLabel Mono-CD14+ Sig 1
+        #longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 1 from ENCODE/UW
+        #subGroups view=zRSig cellType=MONOCD14 treatment=None rep=1
+        #type bigWig 1.000000 24864.000000
+        #origAssembly hg19
         # subId=3211 dateSubmitted=2011-01-11
 
         track wgEncodeUwDnaseWi38RawRep1
@@ -4222,5 +4438,113 @@ wgEncode 1
         type bigWig 1.000000 24297.000000
         origAssembly hg19
         # subId=3215 dateSubmitted=2011-01-11
+
+        track wgEncodeUwDnaseHmvecdadRawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVEC-dAd Raw 2
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMVEC-dAd cells)
+        subGroups view=zRSig cellType=HMVECDAD treatment=None rep=2
+        type bigWig 1.000000 22548.000000
+        origAssembly hg19
+        # subId=4402 dateSubmitted=2011-06-29
+
+        track wgEncodeUwDnaseHmvecdadRawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVEC-dAd Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMVEC-dAd cells)
+        subGroups view=zRSig cellType=HMVECDAD treatment=None rep=1
+        type bigWig 1.000000 18524.000000
+        origAssembly hg19
+        # subId=4403 dateSubmitted=2011-06-29
+
+        track wgEncodeUwDnaseHpaecRawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HPAEC Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HPAEC cells)
+        subGroups view=zRSig cellType=HPAEC treatment=None rep=1
+        type bigWig 1.000000 21814.000000
+        origAssembly hg19
+        # subId=4404 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseCd34mobilizedRawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel CD34+_Mobilized Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in CD34+_Mobilized cells)
+        subGroups view=zRSig cellType=CD34+MOBILIZED treatment=None rep=1
+        type bigWig 1.000000 15908.000000
+        origAssembly hg19
+        # subId=4401 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseCd20PosRawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel CD20+ Raw 2
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in CD20+ cells)
+        subGroups view=zRSig cellType=CD20+ treatment=None rep=2
+        type bigWig 1.000000 31470.000000
+        origAssembly hg19
+        # subId=4400 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseMonocd14RawRep1V2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Monocytes-CD14+ Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Monocytes-CD14+ cells)
+        subGroups view=zRSig cellType=MONOCD14 treatment=None rep=1
+        type bigWig 1.000000 41303.000000
+        origAssembly hg19
+        # subId=4398 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseMonocd14RawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Monocytes-CD14+ Raw 2
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Monocytes-CD14+ cells)
+        subGroups view=zRSig cellType=MONOCD14 treatment=None rep=2
+        type bigWig 1.000000 36131.000000
+        origAssembly hg19
+        # subId=4399 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseNt2d1RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel NT2-D1 Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in NT2-D1 cells)
+        subGroups view=zRSig cellType=NT2D1 treatment=None rep=1
+        type bigWig 1.000000 20649.000000
+        origAssembly hg19
+        # subId=4407 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnasePrecRawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel PrEC Raw 2
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in PrEC cells)
+        subGroups view=zRSig cellType=PREC treatment=None rep=2
+        type bigWig 1.000000 17986.000000
+        origAssembly hg19
+        # subId=4408 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseHsmmtRawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HSMMtube Raw 2
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HSMMtube cells)
+        subGroups view=zRSig cellType=HSMMt treatment=None rep=2
+        type bigWig 1.000000 33969.000000
+        origAssembly hg19
+        # subId=4405 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnaseNt2d1RawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel NT2-D1 Raw 2
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in NT2-D1 cells)
+        subGroups view=zRSig cellType=NT2D1 treatment=None rep=2
+        type bigWig 1.000000 16081.000000
+        origAssembly hg19
+        # subId=4406 dateSubmitted=2011-06-25
+
+        track wgEncodeUwDnasePrecRawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel PrEC Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in PrEC cells)
+        subGroups view=zRSig cellType=PREC treatment=None rep=1
+        type bigWig 1.000000 17665.000000
+        origAssembly hg19
+        # subId=4409 dateSubmitted=2011-06-25
 
 

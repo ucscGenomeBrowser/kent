@@ -918,3 +918,25 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+############################################################################
+# N-SCAN gene predictions (nscanGene) - (2011-07-07 markd)
+
+    # obtained NSCAN predictions from Jeltje van Baren <jeltje@mbari.org>
+    cd /hive/data/genomes/melGal1/bed/nscan
+    cp -r /cluster/home/jeltje/hive/melGal1/for_browser/{melGal1.gtf,	melGal1.prot.fa,readme.txt} .
+    gzip melGal1.* 
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt melGal1.gtf.gz stdout | hgLoadGenePred -genePredExt melGal1 nscanGene stdin
+    hgPepPred melGal1 generic nscanPep melGal1.prot.fa.gz
+    rm *.tab
+
+    # turkey/melGal1/trackDb.ra, add:
+    track nscanGene override
+    informant Nscan-EST on melGal1 with taeGut1 as informant and galGal3/taeGut1 parameter file. Not pseudogene masked. Used transmapped UCSC gene track as EST track.
+
+    # verify top-level search spec, should produce no results and an error for egrep:
+    hgsql -Ne 'select name from nscanGene' melGal1 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
+
+############################################################################

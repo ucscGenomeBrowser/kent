@@ -170,8 +170,6 @@ tg->loadItems = loadRetroGene;
 tg->itemName = retroName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = retroGeneColor;
-tg->exonArrows = TRUE;
-tg->exonArrowsAlways = TRUE;
 }
 
 static unsigned getLabelTypes(struct track *tg)
@@ -295,11 +293,13 @@ void retroRegisterTrackHandlers()
 //registerTrackHandler("retroMrnaInfo2", retroGeneMethods);
 //registerTrackHandler("retroMrnaInfo3", retroGeneMethods);
 registerTrackHandler("ucscRetroInfo", retroGeneMethods);
+registerTrackHandler("ucscRetroInfo1", retroGeneMethods);
 registerTrackHandler("ucscRetroInfo2", retroGeneMethods);
 registerTrackHandler("ucscRetroInfo3", retroGeneMethods);
 //registerTrackHandler("retroCdsAli", retroAliMethods);
 //registerTrackHandler("retroCdsAli3", retroAliMethods);
 registerTrackHandler("ucscRetroAli", retroAliMethods);
+registerTrackHandler("ucscRetroAli1", retroAliMethods);
 registerTrackHandler("ucscRetroAli2", retroAliMethods);
 registerTrackHandler("ucscRetroAli3", retroAliMethods);
 }

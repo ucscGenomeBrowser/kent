@@ -10,6 +10,9 @@ from BeautifulSoup import BeautifulSoup
 import HTMLParser
 from optparse import OptionParser
 import re
+import shlex
+import string
+import subprocess
 import sys
 import urllib2 
 from ucscgenomics.rafile.RaFile import *
@@ -18,13 +21,16 @@ from ucscgenomics.rafile.RaFile import *
 
 def stripLeadingTrailingWhitespace(text):
     """Given a string, remove any leading or trailing whitespace"""
-    text = re.sub("^( )+", "", text)
-    text = re.sub("( )+$", "", text)
+    text = re.sub("^([" + string.whitespace + "])+", "", text)
+    text = re.sub("([" + string.whitespace + "])+$", "", text)
     return(text)
 
 def getContents(field):
     """Given an HTML field, return the contents"""
-    return(stripLeadingTrailingWhitespace(field.contents[0]))
+    contents = stripLeadingTrailingWhitespace(field.contents[0])
+    if len(contents) == 0:
+        contents = "missing"
+    return(contents)
 
 def processSource(orderEntry):
     """ 
@@ -98,7 +104,7 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir,
     - the number of ways users can do unexpected things cannot be counted
     """
     validationCellContents = getContents(validationCell)
-    if validationCellContents is "missing" or len(validationCell.findAll("a")) == 0:
+    if validationCellContents is "missing" and len(validationCell.findAll("a")) == 0:
         validation = "missing"
     else:
         #
@@ -132,12 +138,18 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir,
         # from the antibody name.  Parentheses in filenames are just bad...
         documentName = species + "_" + re.sub("[\(\)]", "", antibody) \
                        + "_validation_" + lab + ".pdf"
+        targetDocumentName = downloadsDir + "/" + documentName
         #
-        # If a hyperlink exists, download the document to the downloads directory
+        # If a single hyperlinked PDF exists, download the document to the 
+        # downloads directory.  If multiple hyperlinked PDFs exist, download the 
+        # documents separately and combine them into a single file.  If one or more
+        # hyperlinked document is not a PDF, give a warning but don't combine them.
+        #
         urlClauses = validationCell.findAll("a")
-        if len(urlClauses) > 0:
-            if urlClauses[0].has_key("href"):
-                url = urlClauses[0]["href"]
+        downloadedFileList = ""
+        for ii in range(0,len(urlClauses)):
+            if urlClauses[ii].has_key("href"):
+                url = urlClauses[ii]["href"]
                 # 
                 # If this document is not in PDF format (e.g. if it's a word doc, 
                 # print out a warning message and don't try to download it, but return the
@@ -146,13 +158,24 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir,
                 if re.search(".pdf$", url):
                     validationData = accessWiki(wikiBaseUrl + url, username, password)
                     if len(validationData) > 0:
-                        newValidationFile = open(downloadsDir + "/" + documentName, "wb")
+                        downloadFilename = targetDocumentName + str(ii)
+                        newValidationFile = open(downloadFilename, "wb")
                         newValidationFile.write(validationData)
                         newValidationFile.close()
+                        downloadedFileList = downloadedFileList + " " + downloadFilename
                     else:
                         print "Warning: not downloading", url, ": not a PDF file";
-                    validation =  validationLabel + ":" + documentName
-                    validation = re.sub("(\s)+", "", validation)
+        if len(urlClauses) == 1:
+            renameCmd = "mv %s %s" % (downloadedFileList, targetDocumentName)
+            subprocess.Popen(renameCmd, shell=True)
+            #subprocess.Popen("rm %s" % (downloadedFileList), shell=True)
+        elif len(urlClauses) > 1:
+            combineCmd = "pdftk %s cat output %s" \
+                % (downloadedFileList, targetDocumentName)
+            subprocess.Popen(combineCmd, shell=True)
+            #subprocess.Popen("rm %s" % (downloadedFileList), shell=True)
+        validation =  validationLabel + ":" + documentName
+        validation = re.sub("(\s)+", "", validation)
     return(validation)
 
 

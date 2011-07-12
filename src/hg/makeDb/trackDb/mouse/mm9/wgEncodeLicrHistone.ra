@@ -38,8 +38,8 @@ subGroup6 strain Strain C57BL6=C57BL/6
 subGroup7 control Control std=std
 dimensions dimensionX=cellType dimensionY=factor 
 sortOrder cellType=+ factor=+ view=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target strain=Strain sex=Sex age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType factor sex age strain control
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target strain=Strain sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control:wq
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=dense Signal=full
 priority 0
@@ -55,11 +55,10 @@ noInherit on
 	#viewUi on
 	subTrack wgEncodeLicrHistone
 	signalFilter 0
-	signalFilterLimits 0:18241
-	pValueFilter 0
-	pValueFilterLimits 0:300
-	qValueFilter 0
-	qValueFilterLimits 0:300
+	signalFilterLimits 0:125
+	scoreFilterLimits 1:1000
+    scoreFilter 0
+    scoreMin 0
 
 		track wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdPk
 		parent wgEncodeLicrHistoneViewPeaks 
