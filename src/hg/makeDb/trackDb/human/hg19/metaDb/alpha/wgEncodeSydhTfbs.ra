@@ -12905,6 +12905,134 @@ tableName wgEncodeSydhTfbsH1hescInputUcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsH1hescJundStdAlnRep1
+objType file
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdAlnRep1.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 4412
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescJundStdAlnRep2
+objType file
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdAlnRep2.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 4412
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescJundStdPk
+objType table
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4412
+tableName wgEncodeSydhTfbsH1hescJundStdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsH1hescJundStdRawDataRep1
+objType file
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 4412
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsH1hescJundStdRawDataRep2
+objType file
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 4412
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsH1hescJundStdSig
+objType table
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4412
+tableName wgEncodeSydhTfbsH1hescJundStdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsH1hescMaxUcdAlnRep1
 objType file
 antibody Max
@@ -44087,4 +44215,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -494096354
+# MAGIC: -2031097648
