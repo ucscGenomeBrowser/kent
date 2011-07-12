@@ -109,7 +109,6 @@ void makeDirsOnPath(char *pathName)
 if (fileExists(pathName))
     return;
 
-/* Return current directory.  Abort if it fails. */
 /* Make local copy of pathName. */
 int len = strlen(pathName);
 char pathCopy[len+1];

@@ -115,10 +115,10 @@ for (i = 0; tbl[i].name != NULL; i++)
 return dyStringCannibalize(&msg);
 }
 
-static void logWarnHander(char *format, va_list args)
+static void logWarnHandler(char *format, va_list args)
 /* Warn handler that logs message. */
 {
-if (errAbortInProgress)
+if (isErrAbortInProgress())
     logErrorVa(format, args);
 else
     logWarnVa(format, args);
@@ -179,7 +179,7 @@ void logOpenSyslog(char* program, char *facility)
 #ifndef NO_SYSLOG
 setProgram(program);
 openlog(program, LOG_PID, parseFacility(facility));
-pushWarnHandler(logWarnHander);
+pushWarnHandler(logWarnHandler);
 pushAbortHandler(logAbortHandler);
 gSysLogOn = TRUE;
 #else
@@ -195,7 +195,7 @@ void logOpenFile(char* program, char *logFile)
 {
 setProgram(program);
 gLogFh = mustOpen(logFile, "a");
-pushWarnHandler(logWarnHander);
+pushWarnHandler(logWarnHandler);
 pushAbortHandler(logAbortHandler);
 }
 

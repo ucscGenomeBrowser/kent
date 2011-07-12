@@ -2071,6 +2071,12 @@ identifier rgdSslpId external=RGD
     $rn.rgdSslpLink.name
 
 
+# New RGD Genes Family Identifiers
+
+identifier rgdGene2Id external=RGD
+"RGD Genes ID"
+    $rn.rgdGene2.name
+
 # The Ensembl Gmish
 
 identifier ensemblGeneId external=Ensembl
@@ -3380,6 +3386,7 @@ tablesIgnored hg18
 
 tablesIgnored hg19
     affyExonProbe%
+    allHg19RS_BW
     altSeqHaplotypes
     altSeqLiftOverPsl
     altSeqPatches
@@ -3434,6 +3441,7 @@ tablesIgnored hg19
     uMassBrainHistone%
 
 tablesIgnored mm9
+	allMm9RS_BW
     crgMapability%
     rest
 
