@@ -2333,7 +2333,13 @@ sub generateLongLabel {
 	my $datatype = $_[4];
 	my $view = $_[5];
 	
-
+	my $count = 0;
+	foreach my $value (@_){
+		unless (defined($value)){
+			$_[$count] = "";
+		}
+		$count++;
+	}
 	
 	#takes off -m if the lab does mouse also
 	$lab =~ s/\-m$//g;
@@ -2346,6 +2352,8 @@ sub generateLongLabel {
 	#if the particular track doesn't have an EDV, then skip it
 	foreach my $key (@order){
 		if (exists $vars{$key}){
+			
+			#don't put anything that matches none to the label
 			my $testvars = lc($vars{$key});
 			if ($testvars =~ m/none/){next}
 			$longlabel = $longlabel . " $vars{$key}";
@@ -2358,7 +2366,10 @@ sub generateLongLabel {
 	else {
 		$longlabel = $longlabel . " $prefix $view from ENCODE/$lab";
 	}
-	
+
+	#turn all _ into spaces
+	$longlabel =~ s/\_/ /g;
+
 	#length checker
 	my $llength = length ($longlabel);
 	if ($llength > 80){
