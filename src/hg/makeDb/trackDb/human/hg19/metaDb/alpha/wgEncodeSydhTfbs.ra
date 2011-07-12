@@ -14265,7 +14265,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHek293Elk4UcdAlnRep1
 objType file
 antibody ELK4
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14288,7 +14288,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293Elk4UcdAlnRep2
 objType file
 antibody ELK4
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14311,7 +14311,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293Elk4UcdPk
 objType table
 antibody ELK4
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14335,7 +14335,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsHek293Elk4UcdRawDataRep1
 objType file
 antibody ELK4
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14358,7 +14358,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293Elk4UcdRawDataRep2
 objType file
 antibody ELK4
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14381,7 +14381,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293Elk4UcdSig
 objType table
 antibody ELK4
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14405,7 +14405,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHek293InputRawData
 objType file
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14428,7 +14428,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293InputStdAlnRep1
 objType file
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14454,7 +14454,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293InputStdSig
 objType table
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14478,7 +14478,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHek293InputUcdAln
 objType file
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14500,7 +14500,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293InputUcdRawData
 objType file
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14522,7 +14522,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293InputUcdSig
 objType table
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14546,7 +14546,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHek293Kap1UcdAlnRep1
 objType file
 antibody KAP1
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14569,7 +14569,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293Kap1UcdAlnRep2
 objType file
 antibody KAP1
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14592,7 +14592,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293Kap1UcdPk
 objType table
 antibody KAP1
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14616,7 +14616,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsHek293Kap1UcdRawDataRep1
 objType file
 antibody KAP1
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14639,7 +14639,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293Kap1UcdRawDataRep2
 objType file
 antibody KAP1
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14662,7 +14662,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293Kap1UcdSig
 objType table
 antibody KAP1
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HEK293(b)/None/Input/UCDavis
@@ -14686,7 +14686,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep1
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14710,7 +14710,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep2
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14734,7 +14734,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep3
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14758,7 +14758,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293Pol2StdAlnRep1
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14784,7 +14784,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293Pol2StdAlnRep2
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14810,7 +14810,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293Pol2StdAlnRep3
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -14836,7 +14836,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293Pol2StdPk
 objType table
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293(b)/None/Input/std
@@ -14860,7 +14860,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsHek293Pol2StdSig
 objType table
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeSydhTfbs
 control std
 controlId HEK293/None/Input/std
@@ -24414,7 +24414,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHepg2InputRawData
 objType file
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -24509,7 +24509,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHepg2InputUcdAlnRep1
 objType file
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -24535,7 +24535,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHepg2InputUcdSig
 objType table
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -27798,7 +27798,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHepg2Tr4RawDataRep1
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -27823,7 +27823,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHepg2Tr4RawDataRep2
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -27849,7 +27849,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHepg2Tr4UcdAlnRep1
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -27875,7 +27875,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHepg2Tr4UcdAlnRep2
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -27901,7 +27901,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHepg2Tr4UcdPk
 objType table
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -27925,7 +27925,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsHepg2Tr4UcdSig
 objType table
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -28089,7 +28089,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1
 objType file
 antibody ZNF274
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -28112,7 +28112,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2
 objType file
 antibody ZNF274
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -28135,7 +28135,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHepg2Znf274UcdPk
 objType table
 antibody ZNF274
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -28159,7 +28159,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1
 objType file
 antibody ZNF274
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -28183,7 +28183,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2
 objType file
 antibody ZNF274
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -28207,7 +28207,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHepg2Znf274UcdSig
 objType table
 antibody ZNF274
-cell HepG2b
+cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -44087,4 +44087,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1814007374
+# MAGIC: 1653425994

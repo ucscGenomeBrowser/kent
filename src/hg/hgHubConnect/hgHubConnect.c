@@ -34,6 +34,23 @@ static char *pageTitle = "Import Tracks from Data Hubs";
 char *database = NULL;
 char *organism = NULL;
 
+static void ourCellStart()
+{
+puts("<TD>");
+}
+
+static void ourCellEnd()
+{
+puts("</TD>");
+}
+
+static void ourPrintCell(char *str)
+{
+ourCellStart();
+puts(str);
+ourCellEnd();
+}
+
 static void hgHubConnectUnlisted()
 /* Put up the list of unlisted hubs and other controls for the page. */
 {
@@ -98,20 +115,20 @@ for(hub = hubList; hub; hub = hub->next)
     // these error messages are cleared by the hubDaemon
     if (isEmpty(hub->errorMessage))
 	{
-	webPrintLinkCellStart();
+	ourCellStart();
 	char hubName[32];
 	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, hub->id);
 	cartMakeCheckBox(cart, hubName, FALSE);
-	webPrintLinkCellEnd();
+	ourCellEnd();
 	}
     else
-	webPrintLinkCell("error");
-    webPrintLinkCell(hub->shortLabel);
+	ourPrintCell("error");
+    ourPrintCell(hub->shortLabel);
     if (isEmpty(hub->errorMessage))
-	webPrintLinkCell(hub->longLabel);
+	ourPrintCell(hub->longLabel);
     else
-	webPrintLinkCell(hub->errorMessage);
-    webPrintLinkCell(hub->hubUrl);
+	ourPrintCell(hub->errorMessage);
+    ourPrintCell(hub->hubUrl);
     }
 
 printf("</TR></tbody></TABLE>\n");
@@ -128,6 +145,7 @@ printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s  ",
 	organism, hFreezeDate(database));
 printf("</div>\n");
 }
+
 
 void hgHubConnectPublic()
 /* Put up the list of public hubs and other controls for the page. */
@@ -172,27 +190,27 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 	if ((id != 0) && isEmpty(errorMessage)) 
 	    {
-	    webPrintLinkCellStart();
+	    ourCellStart();
 	    char hubName[32];
 	    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
 	    cartMakeCheckBox(cart, hubName, FALSE);
-	    webPrintLinkCellEnd();
+	    ourCellEnd();
 	    }
 	else if (!isEmpty(errorMessage))
-	    webPrintLinkCell("error");
+	    ourPrintCell("error");
 	else
 	    errAbort("cannot get id for hub with url %s\n", url);
 
-	webPrintLinkCell(shortLabel);
+	ourPrintCell(shortLabel);
 	if (isEmpty(errorMessage))
-	    webPrintLinkCell(longLabel);
+	    ourPrintCell(longLabel);
 	else
 	    {
 	    char errorBuf[4*1024];
 	    safef(errorBuf, sizeof errorBuf, "Error: %s", errorMessage);
-	    webPrintLinkCell(errorBuf);
+	    ourPrintCell(errorBuf);
 	    }
-	webPrintLinkCell(url);
+	ourPrintCell(url);
 	}
     }
 sqlFreeResult(&sr);
@@ -239,7 +257,7 @@ if (cartVarExists(cart, hgHubDoClear))
     return;
     }
 
-cartWebStart(cart, NULL, pageTitle);
+cartWebStart(cart, NULL, "%s", pageTitle);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("jquery-ui.js", NULL);
