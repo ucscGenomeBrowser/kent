@@ -1,0 +1,68 @@
+<STYLE TYPE="text/css">
+<!--
+T {text-indent: 30pt;}
+-->
+</STYLE>
+
+<h2> Description </h2>
+<p>This track is produced as part of the ENCODE project.  The track displays the methylation status of specific CpG dinucleotides in the given cell types as identified by the <a target='_blank' href="http://www.illumina.com/products/methylation_450_beadchip_kits.ilmn">Illumina Infinium HumanMethylation450 BeadArray platform</a>.  In general, methylation of CpG sites within a promoter causes silencing of the gene associated with that promoter. 
+
+<p>The Infinium HumanMethylation450 platform uses bisulfite treated genomic DNA to assay the methylation status of more than 450,000 CpG sites covering all designatable RefSeq genes, including promoter, 5', and 3' regions, without bias against those lacking CpG islands. Additionally, the assay includes CpG islands and shores, CpG sites outside of CpG islands, non-CpG methylated sites identified in human stem cells, differentially methylated sites identified in tumor versus normal (multiple forms of cancer) and across several tissue types, CpG islands outside of coding regions, miRNA promoter regions, and disease-associated regions identified through GWAS.
+</p>
+<p>
+Detailed information for the CpG targets is in an XLS formatted spreadsheet on the Myers' lab  
+<a target='_blank' href="http://hudsonalpha.org/myers-lab/protocols">protocols</a> website.
+</a>
+</p>
+<h2>Display Conventions</h2>
+<p>
+Scores associated with each site are beta values (see Methods) multiplied by 1000.  Methylation
+status is color-coded as:
+<ul>
+<li><font color="#FF7f00">orange</font> = methylated (score >= 600) </li>
+<li><font color="#800080">purple</font> = partially methylated (200 < score < 600)</li>
+<li><font color="#0000CD">bright blue</font> = unmethylated (0 < score <= 200) </li>
+<li>black = NA (score = 0)</li>
+</ul>
+</p>
+<p>
+</p>
+
+<a name="Methods"></a><h2> Methods </h2>
+
+<P>
+Cells were grown according to the approved
+<A HREF="http://hgwdev.cse.ucsc.edu/cgi-bin/hgEncodeVocab?type=cellType" TARGET=_BLANK>ENCODE cell culture protocols</A>.</P>
+
+<p>Genomic DNA was isolated from each cell line with the QIAGEN DNeasy Blood &amp; Tissue Kit according to the instructions provided by the manufacturer.  DNA concentrations and a level of quality of each preparation was determined by fluorescence with the Qubit Fluorometer (Invitrogen).  Genomic DNA was treated with sodium bisulfite, converting unmethylated cytosines of CpG dinucleotides into uracils; methylated cytosines do not get converted.  After bisulfite treatment, the methylation status of a site was assayed by single base-pair extension with a Cy3 or Cy5 labeled nucleotide on oligo-beads specific for the methylated or unmethylated state. 
+
+<p>The bisulfite conversion reaction was done using the
+<a target='_blank' href="http://www.zymoresearch.com/product/ez-96-dna-methylation-kit-d5003">Zymo Research EZ-96 DNA Methylation<sup>TM</sup> Kit</a>.  One step of the protocol was modified.  During the incubation, a 30 sec 95<sup>o</sup>C denaturing step every hour was included to increase reaction efficiency as recommended by the Illumina Infinium Human Methylation27 protocol. 
+</p>
+
+<p>The bead arrays were run according to the 
+<a target='_blank' href="http://www.illumina.com/support/documentation.ilmn">protocol</a> provided by Illumina.
+</p>
+
+<p>A beta value was calculated for each CpG target with Illumina's Bead Studio software with the Methylation Module v3.2.  Beta-value = intensity value from the methylated bead type/(intensity values from the methylated + intensity value from unmethylated bead types + 100).  
+The data was then quality-filtered using p-values.  Beta values with p-value greater than 0.01 are considered to fall below the minimum intensity threshold are displayed as "NA".
+</p>
+<p>
+Any beta value equal to or greater than 0.6 is considered fully methylated.  Any beta value equal to or less than 0.2 is considered to be fully unmethylated.  Beta values between 0.2 and 0.6 are considered to be partially methylated.  
+</p>
+<a name="Credits"></a><h2> Credits </h2>
+<p>
+<P>These data were produced by the <A TARGET=_BLANK HREF="http://hudsonalpha.org/myers-lab"> Dr. Richard Myers Lab</A> and the Dr. Devin Absher lab at the <A TARGET=_BLANK HREF="http://hudsonalpha.org/"> HudsonAlpha Institute for Biotechnology</A>.  
+<p>Cells were grown by the Myers Lab and other ENCODE production groups. 
+</P>
+Contact:
+<A HREF="mailto:&#102;p&#97;&#117;&#108;&#105;&#64;&#104;&#117;&#100;&#115;&#111;&#110;&#97;&#108;&#112;&#104;a.
+&#111;r&#103;">Dr. Florencia Pauli</A>.
+<!-- above address is fpauli at hudsonalpha.org (encodeEmail.pl) -->
+
+
+<h2> Data Release Policy </h2>
+
+<p>Data users may freely use ENCODE data, but may not, without prior consent, submit publications that use an unpublished ENCODE dataset until nine months following the release of the dataset.  This date is listed in the <EM>Restricted Until</EM> column on the track configuration page and the download page.  The full data release policy for ENCODE is available
+<a href="../ENCODE/terms.html" TARGET=_BLANK>here</a>.</p>
+

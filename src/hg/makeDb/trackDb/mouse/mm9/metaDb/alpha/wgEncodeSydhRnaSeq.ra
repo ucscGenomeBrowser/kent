@@ -76,6 +76,7 @@ view Signal
 
 metaObject wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1
 objType table
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -90,6 +91,7 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3764
 tableName wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1
 treatment DMSO_2.0pct
@@ -97,6 +99,7 @@ view Alignments
 
 metaObject wgEncodeSydhRnaSeqMelDm2p5dPolyaRawDataRep1
 objType file
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -111,12 +114,14 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3764
 treatment DMSO_2.0pct
 view RawData
 
 metaObject wgEncodeSydhRnaSeqMelDm2p5dPolyaSigRep1
 objType table
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -131,6 +136,7 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3764
 tableName wgEncodeSydhRnaSeqMelDm2p5dPolyaSigRep1
 treatment DMSO_2.0pct
@@ -138,6 +144,7 @@ view Signal
 
 metaObject wgEncodeSydhRnaSeqMelPolyaAlnRep1
 objType table
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -152,6 +159,7 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3818
 tableName wgEncodeSydhRnaSeqMelPolyaAlnRep1
 treatment None
@@ -159,6 +167,7 @@ view Alignments
 
 metaObject wgEncodeSydhRnaSeqMelPolyaRawDataRep1
 objType file
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -173,12 +182,14 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3818
 treatment None
 view RawData
 
 metaObject wgEncodeSydhRnaSeqMelPolyaSigRep1
 objType table
+age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
@@ -193,9 +204,10 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_GA2x
+strain Unknown
 subId 3818
 tableName wgEncodeSydhRnaSeqMelPolyaSigRep1
 treatment None
 view Signal
 
-# MAGIC: -742947084
+# MAGIC: -1475813620

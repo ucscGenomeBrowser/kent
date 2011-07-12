@@ -12130,9 +12130,252 @@ done
     # The file dates are 2005, but all log files begin with 2002 dates.
     # Good, we can proceed with fosends.3 and won't have to reverse-engineer
     # Terry's lost pipeline for translating the files.
+    # take a look at the names
+    zcat Hs*.dr.mfa.gz | grep "^>" > sequence.names
+    zcat *.trim.log.gz | cut -f6 | sort > clone.names
+    # we are going to translate the .T0 .T1 .T2 suffix on the sequence names
+    #	to _T0 _T1 _T2 to avoid problems during blat and other parts of
+    #	the pipeline
+    # using the *.trim.log.gz files, figure out the pairs, write to
+    #	files endPairs.txt and singles.txt
+    cat << '_EOF_' > pairEnds.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %endIds;	# key is cloneId.subId, value is endId_F,endId_R
+open(FH,"zcat Hs.*trim.log.gz|") or die "can not read Hs.*trim.log.gz";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    my ($id, $l0, $l1, $endId, $wibr, $cloneId, $fr, $cId, $l2) =
+	split('\s+', $line);
+    my ($oneEnd, $subId) = split('\.', $endId);
+    my $key = "$cloneId.$subId";
+    if (exists($endIds{$key})) {
+	die "ERROR: third end: $endId $cloneId $endIds{$key}"
+		if ($endIds{$key} =~ m/,/);
+	if ($fr eq "F") {
+	    $endIds{$key} = "$endId,$endIds{$key}";
+	} else {
+	    $endIds{$key} = "$endIds{$key},$endId";
+	}
+    } else {
+	$endIds{$key} = $endId;
+    }
+}
+close (FH);
+
+open (EP, ">endPairs.txt") or die "can not write to endPairs.txt";
+open (SI, ">singles.txt") or die "can not write to singles.txt";
+foreach my $key (sort (keys %endIds)) {
+    my ($cloneId, $subId) = split('\.', $key);
+    if ($endIds{$key} =~ m/,/) {
+	my ($fwd, $rev) = split(',', $endIds{$key});
+	$fwd =~ s/\./_/;
+	$rev =~ s/\./_/;
+	printf EP "%s\t%s\t%s\n", $fwd, $rev, $cloneId;
+    } else {
+	my $fwd = $endIds{$key};
+	$fwd =~ s/\./_/;
+	printf SI "%s\t%s\n", $fwd, $cloneId;
+    }
+}
+close(EP);
+close(SI);
+'_EOF_'
+    # << happy emacs
+    chmod +x pairEnds.pl
+    ./pairEnds.pl
+
+    # working in the hg19 build directory
     mkdir /hive/data/genomes/hg19/bed/fosEndPairs
     cd /hive/data/genomes/hg19/bed/fosEndPairs
 
+    mkdir /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds
+    # fixup the names, and upper case all sequence (the names are already uc)
+    zcat /hive/data/outside/fosends.4/*.dr.mfa.gz \
+	| sed -e "s/^>gnl.* />/; s/\.T/_T/" | tr '[a-z]' '[A-Z]' > fosends.4.fa
+    faCount fosends.4.fa > fosends.4.faCount
+    tail -1 fosends.4.faCount
+# total   1258791003      329912804       274295722       339230145       279976011       35376321        40508700
+    # verify nothing broken, nothing lost with the name transition
+    faCount /hive/data/outside/fosends.4/*.mfa.gz > /tmp/fs4.faCount
+    tail -1 /tmp/fs4.faCount
+# total   1258791003      329912804       274295722       339230145       279976011       35376321        40508700
+
+    faSize fosends.4.fa
+# 1258791003 bases (35376321 N's 1223414682 real 1223414682 upper 0 lower) in 1615492 sequences in 1 files
+# Total size: mean 779.2 sd 190.8 min 12 (G248P84602FB12_T0) max 3784 (G248P89620RG7_T0) median 722
+
+    # some of these sequences are too small for blat:
+    awk '$2 < 25' fosends.4.faCount | cut -f1 > smallRecords.list
+    faSomeRecords -exclude fosends.4.fa smallRecords.list fosEnds.fa
+
+    # figure out break points in hg19 around large gaps
+    hgsql -N -e "select chrom,chromStart,chromEnd,size from gap;" hg19 \
+	| sort -k4nr > hg19.gap.bed
+    # script to combine adjacent gaps into single gaps
+    cat << '_EOF_' > bedCollapse.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc < 1) {
+    printf STDERR "usage: ./bedCollapse.pl <file.bed>\n";
+    printf STDERR "will combine adjacent bed elements into one element\n";
+    exit 255
+}
+
+my $file = shift;
+my $chr = "";
+my $prevEnd = 0;
+my $start = 0;
+my $end = 0;
+my $size = 0;
+open (FH, "sort -k1,1 -k2,2n $file|") or die "can not read $file";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($c, $s, $e, $rest) = split('\s+', $line, 4);
+    $size = $end - $start;
+    if (length($chr) > 1) {
+        if ($chr ne $c) {
+            printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
+            $chr = $c; $start = $s; $end = $e;
+        } else {
+            if ($s == $end) { 
+                $end = $e;
+            } else {
+                printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
+                $chr = $c; $start = $s; $end = $e;
+            }
+        }
+    } else {
+        $chr = $c; $start = $s; $end = $e;
+    }
+}
+printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x bedCollapse.pl
+    # filter out for gaps of 50,000 and larger
+    ./bedCollapse.pl hg19.gap.bed | awk '$4 > 49999' > hg19.gapBreaks.bed
+    cat << '_EOF_' > hg19SplitSpec.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %chromSizes;
+open (FH, "<../../../chrom.sizes") or die "can not read ../../../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chromSizes{$chr} = $size;
+}
+close (FH);
+
+my %chrDone;	# to measure which chroms have been done
+my $curChr = "";
+my $start = 0;
+my $end = 0;
+open (FH, "grep -v '_' hg19.gapBreaks.bed|") or die "can not grep hg19.gapBreaks.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($c, $s, $e, $rest) = split('\s+', $line, 4);
+    if (length($curChr) > 0) {
+	if ($c eq $curChr) {
+	    $end = $s;
+	    my $size = $end - $start;
+	    die "ERROR: size is zero ? $c $s $e" if ($size < 1);
+	    printf "%s\t%d\t%d\t%d\n", $curChr, $start, $end, $size;
+	    $chrDone{$curChr} = 1;
+	} else {	# finish off previous chrom
+	    my $chrSize = $chromSizes{$curChr};
+	    if ($start < $chrSize) {
+		my $size = $chrSize - $start;
+		printf "%s\t%d\t%d\t%d\n", $curChr, $start, $chrSize, $size;
+		$chrDone{$curChr} = 1;
+	    }
+	    $curChr = $c;
+	}
+    } else {  # first line in the file
+	$curChr = $c;
+	if ($s > 0) {
+	    printf "%s\t0\t%d\t%d\n", $curChr, $s, $s;
+	    $chrDone{$curChr} = 1;
+	}
+    }
+    $start = $e;	# next start is this end
+    $end = $start;	# next end will be next start or chrSize
+}
+close(FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x hg19SplitSpec.pl
+    ./hg19SplitSpec.pl > hg19.splits.bed
+
+    # gaps of 1M or more:
+    awk '$4 > 999999' hg19.gap.bed | sort -k1,1 -k2,2n > hg19.bigGaps.bed
+
+    mkdir /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run
+    awk '{printf "%s:%d-%d\n", $1,$2,$3}' ../hg19.splits.bed > hg19.list
+    ls ../fosEnds > fosEnds.list
+
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) $(root2) {check out exists+ psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 hg19.list fosEnds.list template jobList
+
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+
+set t=$1
+set q=$2
+set c=`echo $t | sed -e 's/:.*//'`
+set ctgStart=`echo $t | sed -e 's/.*://; s/-.*//'`
+set ctgSize=`echo $t | sed -e 's/:/ /; s/-/ /;' | awk '{printf "%d", $3-$2}'`
+set chrSize=`egrep "^$c " /hive/data/genomes/hg19/chrom.sizes | cut -f2`
+set result="psl/${t}/${q}.psl"
+/bin/mkdir -p "psl/${t}"
+set tmpLift="/scratch/tmp/${t}.${q}.lift"
+echo $ctgStart $t $ctgSize $c $chrSize > ${tmpLift}
+
+blat -fastMap -stepSize=5 \
+        /scratch/data/hg19/hg19.2bit:${t} ../fosEnds/${q}.fa stdout \
+    | liftUp -type=.psl ${result} ${tmpLift} error stdin
+/bin/rm ${tmpLift}
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    # these jobs run too fast and there are too many of them, bigger chunks
+    #	next time
+    gensub2 hg19.list fosEnds.list template jobList
+    para create jobList
+    para try
+    para check ... push ... etc
+# Completed: 2852836 of 2852836 jobs
+# CPU time in finished jobs:    5169061s   86151.02m  1435.85h   59.83d  0.164 y
+# IO & Wait Time:               8136335s  135605.58m  2260.09h   94.17d  0.258 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
+# Longest finished job:             107s       1.78m     0.03h    0.00d
+# Submission to last job:         50806s     846.77m    14.11h    0.59d
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run
+    time pslSort dirs raw.psl /scratch/tmp psl/ch*
+# Got 2852836 files 1689 files per mid file
 
 ##############################################################################
 # hg18 <-> hg19 difference tracks (WORKING - 2010-09-03 - Hiram)
@@ -15585,7 +15828,7 @@ TMPDIR=/scratch/tmp
     #	88296392 bases of 1701353770 (5.190%) in intersection
 
 ##############################################################################
-# NCBI patch 3 (WORRKING - 2011-04-21 - Hiram)
+# NCBI patch 3 (NOT COMPLETE - 2011-04-21 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch3
     cd /hive/data/genomes/hg19/bed/additionalSequence/patch3
     # these scripts were altered slightly for improvements and corrections
@@ -15605,6 +15848,27 @@ TMPDIR=/scratch/tmp
 	> haplotypeLocations.bed
 # not found: GL339449.1 HSCHR5_1_CTG1
 # not found: GL339450.1 HG79_PATCH
+
+##############################################################################
+# NCBI patch 5 (WORKING - 2011-07-01 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch5
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch5
+    wget --cut-dirs=6 --no-parent --timestamping --no-remove-listing -m \
+        -nH --ftp-user=anonymous --ftp-password=yourName@domain.edu \
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p5/
+    # the scripts from patch4 appear to work without modification
+    cp ../patch4/gatherNames.pl .
+    ./gatherNames.pl . > ucscNames.patch5.txt
+    cp -p ../patch4/mkTables.pl .
+    ./mkTables.pl  patches.chrom.sizes ucscNames.patch5.txt PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz
+    # output to stdout is the contents of alt.scaf.agp.gz
+    # constructs files: ctgPos.txt chromInfo.txt gold.txt and gap.txt
+    cp -p ../patch4/mkCtgPos2.pl .
+    ./mkCtgPos2.pl ucscNames.patch5.txt patches.chrom.sizes > ctgPos2.txt
+    cp -p ../patch4/mkHapLocate.pl .
+    ./mkHapLocate.pl ctgPos.txt \
+	PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
+	> haplotypeLocations.bed
 
 ##############################################################################
 #  hg19 - Human - Ensembl Genes version 62  (DONE - 2011-04-22 - hiram)

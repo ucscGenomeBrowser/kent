@@ -45,6 +45,10 @@ if (isCustomTrack(table) && ctLookupName(table) != NULL)
     return TRUE;
 if (isBamTable(table))
     return TRUE;
+if (isBigWigTable(table))
+    return TRUE;
+if (isBigBed(database, table, curTrack, ctLookupName))
+    return TRUE;
 if (isHubTrack(table))
     return TRUE;
 if (sameWord(table, WIKI_TRACK_TABLE))
@@ -101,7 +105,8 @@ jsDropDownCarryOver(dy, hgtaNextIntersectTable);
 jsTrackedVarCarryOver(dy, hgtaNextIntersectOp, "op");
 jsTextCarryOver(dy, hgtaNextMoreThreshold);
 jsTextCarryOver(dy, hgtaNextLessThreshold);
-jsTrackedVarCarryOver(dy, hgtaNextInvertTable, "invertTable");
+if (!isBigWigTable(curTable))
+    jsTrackedVarCarryOver(dy, hgtaNextInvertTable, "invertTable");
 jsTrackedVarCarryOver(dy, hgtaNextInvertTable2, "invertTable2");
 return dy;
 }
@@ -506,7 +511,14 @@ char *table2 = cartString(cart, hgtaIntersectTable);
 struct hTableInfo *hti2 = getHti(database, table2, conn);
 struct lm *lm2 = lmInit(64*1024);
 Bits *bits2 = bitAlloc(chromSize+8);
-struct bed *bedList2 = getFilteredBeds(conn, table2, region, lm2, NULL);
+struct bed *bedList2;
+if (isBigWigTable(table2))
+    bedList2 = bigWigIntervalsToBed(conn, table2, region, lm2);
+else
+    // We should go straight to raw beds here, not through the routines that
+    // do filter & intersections, because the secondary table has no filter
+    // and sure shouldn't be intersected. :)
+    bedList2 = getFilteredBeds(conn, table2, region, lm2, NULL);
 if (!isBpWise)
     expandZeroSize(bedList2, hti2->hasBlocks, chromSize);
 bedOrBits(bits2, chromSize, bedList2, hti2->hasBlocks, 0);

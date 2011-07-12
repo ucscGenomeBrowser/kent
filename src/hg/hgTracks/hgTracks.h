@@ -245,6 +245,9 @@ struct track
     boolean customTrack; /* Need to explicitly declare this is a custom track */
     boolean syncChildVisToSelf;	/* If TRUE sync visibility to of children to self. */
     char *networkErrMsg;        /* Network layer error message */
+    boolean parallelLoading;    /* If loading in parallel, usually network resources. */
+    struct bbiSummaryElement *summary;  /* for bigBed */
+    struct bbiSummaryElement *sumAll;   /* for bigBid */
     };
 
 

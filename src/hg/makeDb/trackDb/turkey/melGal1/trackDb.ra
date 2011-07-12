@@ -14,3 +14,5 @@ priority 10
 visibility hide
 type ctgPos
 
+track nscanGene override
+informant Nscan-EST on melGal1 with taeGut1 as informant and galGal3/taeGut1 parameter file. Not pseudogene masked. Used transmapped UCSC gene track as EST track.

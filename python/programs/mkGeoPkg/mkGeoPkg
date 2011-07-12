@@ -1,0 +1,501 @@
+#!/hive/groups/encode/dcc/bin/python
+import sys, os, shutil, stat
+from rafile.RaFile import *
+from softfile.SoftFile import *
+from cvfile.CvFile import *
+
+class DataType(object):
+
+	def __init__(self, molecule, strategy, source, selection, soft):
+		self.molecule = molecule
+		self.strategy = strategy
+		self.source = source
+		self.selection = selection
+		self.soft = soft
+
+datatypes = {
+	'Cage': DataType('OVERRIDE RNA', 'OTHER', 'transcriptomic', 'CAGE', HighThroughputSoftFile),
+	'ChipSeq': DataType('genomic DNA', 'ChIP-Seq', 'genomic', 'ChIP', HighThroughputSoftFile),
+	'DnaPet': DataType('genomic DNA', 'OTHER', 'genomic', 'size fractionation', HighThroughputSoftFile),
+	'DnaseDgf': DataType('genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', HighThroughputSoftFile),
+	'DnaseSeq': DataType('genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', HighThroughputSoftFile),
+	'FaireSeq': DataType('genomic DNA', 'OTHER', 'genomic', 'other', HighThroughputSoftFile),
+	'MethylSeq': DataType('genomic DNA', 'MRE-Seq', 'genomic', 'Restriction Digest', HighThroughputSoftFile),
+	'MethylRrbs': DataType('genomic DNA', 'Bisulfite-Seq', 'genomic', 'Reduced Representation', HighThroughputSoftFile),
+	'Orchid': DataType('genomic DNA', 'OTHER', 'genomic', 'other', HighThroughputSoftFile),
+	'Proteogenomics': DataType('protein', 'mass spectrometry-based proteogenomic mapping', 'protein', 'chromatographically fractionated peptides', HighThroughputSoftFile),
+	'RnaPet': DataType('OVERRIDE RNA', 'OTHER', 'transcriptomic', 'other', HighThroughputSoftFile),
+	'RnaSeq': DataType('OVERRIDE RNA', 'RNA-Seq', 'transcriptomic', 'cDNA', HighThroughputSoftFile),
+	
+	#these need to be curated
+	'5C': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'AffyExonArray': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Bip': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Cluster': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Cnv': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Combined': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Genotype': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Gencode': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'ChiaPet': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Mapability': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'MethylArray': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'NRE': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Nucleosome': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'RnaChip': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'RipGeneSt': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'RipTiling': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'RipChip': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'RipSeq': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'Switchgear': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'TfbsValid': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None)
+}
+cvDetails = {
+	'cell':	[ 'organism', 'description', 'karyotype', 'lineage', 'sex' ],
+	'antibody': [ 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId' ]
+}
+
+#if the term appears in the mdb and must overriding the value in the cv
+cvOverride = [ 'sex' ]
+
+#talk to Venkat lol
+cvPretend = { 'antibody Input': 'control' }
+
+#if its not in cvDetails, which things should we check by default
+cvDefaults = [ 'description' ]
+
+mdbWhitelist = [
+	'age',
+	'bioRep',
+	'control',
+	'controlId',
+	'fragSize',
+	'labExpId',
+	'labVersion',
+	'mapAlgorithm',
+	'obtainedBy',
+	'phase',
+	'readType',
+	'region',
+	'replicate',
+	'restrictionEnzyme',
+	'run',
+	'softwareVersion',
+	'spikeInPool',
+	'strain'
+]
+
+# if the molecule is RNA, we need to map our data into !Sample_molecule, which only takes certain fields
+# first we check rnaExtractMapping. If its not there, we use the localization. This is because (at current)
+# polyA is the most important trait, otherwise its going to be nonPolyA which GEO doesn't accept that. 
+rnaExtractMapping = {
+	'shortPolyA': 'polyA RNA', 
+	'longPolyA': 'polyA RNA', 
+	'polyA': 'polyA RNA'
+}
+
+localizationMapping = {
+	'cytosol': 'cytoplasmic RNA', 
+	'polysome': 'cytoplasmic RNA',
+	'membraneFraction': 'cytoplasmic RNA',
+	'mitochondria': 'cytoplasmic RNA',
+	'nucleus': 'nuclear RNA', 
+	'nucleolus': 'nuclear RNA', 
+	'nucleoplasm': 'nuclear RNA', 
+	'nuclearMatrix': 'nuclear RNA', 
+	'chromatin': 'nuclear RNA',
+	'cell': 'total RNA'
+}
+
+# map our instrument names to GEO's names
+instrumentModels = {
+	'Illumina_GA2x': 'Illumina Genome Analyzer II'
+}
+
+organisms = {
+	'hg19': 'human',
+	'hg18': 'human',
+	'mm9': 'mouse'
+}
+
+
+def getFileType(filename):
+	filename.replace('.gz', '')
+	return filename.rsplit('.')[1]
+	
+def isRawFile(filename):
+	return (getFileType(filename) == 'fastq' or getFileType(filename) == 'fasta')
+	
+def isSupplimentaryFile(filename):
+	return not isRawFile(filename)
+
+
+def readMd5sums(filename):
+	if os.path.isfile(filename):
+		md5sums = dict()
+		md5file = open(filename, 'r')
+		for line in md5file:
+			val, key = map(str.strip, line.split('  ', 1))
+			md5sums[key] = val
+	else:
+		return None
+	
+def createMappings(mdb):
+	expIds = dict()
+	geoMapping = dict()
+	expVars = None
+	series = None
+	datatype = None
+	
+	for stanza in mdb.itervalues():
+		
+		if 'objType' in stanza and stanza['objType'] == 'composite':
+			series = stanza
+			expVars = stanza['expVars'].split(',')
+			continue
+
+		if 'expId' not in stanza:
+			print stanza.name + ': no expId'
+			continue
+
+		if 'geoSampleAccession' not in stanza:
+			# if this hasn't been submitted to GEO yet, we'll add it to the submission list
+			if stanza['expId'] not in expIds:
+				expIds[stanza['expId']] = list()
+				
+			expIds[stanza['expId']].append(stanza)
+		
+		else:
+			# otherwise we keep track of the geo number for partially submitted samples
+			if stanza['expId'] not in geoMapping:
+				geoMapping[stanza['expId']] = stanza['geoSampleAccession']
+			elif geoMapping[stanza['expId']] != 'Inconsistent' and geoMapping[stanza['expId']] != stanza['geoSampleAccession']:
+				geoMapping[stanza['expId']] = 'Inconsistent'
+				print stanza.name + ': inconsistent geo mapping'
+		
+		if datatype == None and 'dataType' in stanza:
+			datatype = stanza['dataType']
+		elif datatype != None and 'dataType' in stanza and datatype != stanza['dataType']:
+			raise KeyError(stanza.name + ': inconsistent data type') 
+
+		
+	
+	datatype = datatypes[datatype]
+	
+	return expIds, expVars, geoMapping, series, datatype
+	
+	
+def createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, series):
+	
+	if 'geoSeriesAccession' in series:
+		print 'Existing series ' + series['composite'] + ' using geoSeriesAccession ' + series['geoSeriesAccession']
+		return
+		
+	print 'Writing series ' + series['composite']
+	
+	seriesStanza = SeriesStanza()
+	seriesStanza['^SERIES'] = series['composite']
+	seriesStanza['!Series_title'] = track[composite]['longLabel'] #STILL INCORRECT
+	seriesStanza['!Series_summary'] = '[REPLACE]'
+	seriesStanza['!Series_overall_design'] = '[REPLACE]'
+	seriesStanza['!Series_web_link'] = [ compositeUrl, 'http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html' ]
+	seriesStanza['!Series_contributor'] = '[REPLACE]'
+	seriesStanza['!Series_gp_id'] = '[REPLACE]'
+	
+	#stanza['!Series_variable_1'] = 'var1' #dont use for now, follow up for later
+	#stanza['!Series_variable_description_1'] = 'desc1' # ^
+	#stanza['!Series_variable_sample_list_1'] = 'list1' # ^
+	#stanza['!Series_repeats_1'] = 'rep1' #WILL USE BUT DONT KNOW YET
+	#stanza['!Series_repeats_sample_list_1'] = 'replist1' # ^
+	
+	seriesStanza['!Series_sample_id'] = list()
+	
+	for idNum in expIds.iterkeys():
+		if idNum in geoMapping and geoMapping[idNum] != 'Inconsistent':
+			seriesStanza['!Series_sample_id'].append(geoMapping[idNum])
+		else:
+			seriesStanza['!Series_sample_id'].append(expIds[idNum][0]['metaObject'])
+	
+	if 'geoAccession' in series:
+		seriesStanza['!Series_geo_accession'] = series['geoAccession']
+	
+	softfile[series['composite']] = seriesStanza
+	
+def createHighThroughputSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype, copyDirectory):
+	
+	print 'Creating HighThroughput soft file'
+
+	softfile = SoftFile()
+	fileList = list()
+	
+	createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, series)
+		
+	for idNum in expIds.iterkeys():
+		
+		expId = expIds[idNum]
+		firstStanza = expId[0]
+		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
+		sample = HighThroughputSampleStanza()
+		sample['^SAMPLE'] = firstStanza['metaObject']
+		sample['!Sample_type'] = 'SRA'
+		
+		concat = expVars[0]
+		for expVar in expVars[1:len(expVars)]:
+			concat += '_' + firstStanza[expVar]
+		sample['!Sample_title'] = concat
+		
+		if 'geoSeriesAccession' in series:
+			sample['!Sample_series_id'] = series['geoSeriesAccession']
+			
+		count = 1
+		
+		for stanza in expId:
+		
+			if isRawFile(stanza['fileName']):
+				sample['!Sample_raw_file_' + str(count)] = stanza['fileName']
+				sample['!Sample_raw_file_type_' + str(count)] = getFileType(stanza['fileName'])
+				
+				if 'checksum' in stanza:
+					sample['!Sample_raw_file_checksum_' + str(count)] = stanza['checksum']
+				elif md5sums != None and stanza['fileName'] in md5sums:
+					sample['!Sample_raw_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
+
+				fileList.append(stanza['fileName'])	
+				count = count + 1
+			
+		count = 1
+			
+		for stanza in expId:
+		
+			if isSupplimentaryFile(stanza['fileName']):
+				sample['!Sample_supplementary_file_' + str(count)] = stanza['fileName']
+				
+				if 'checksum' in stanza:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
+				elif md5sums != None and stanza['fileName'] in md5sums:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
+				
+				sample['!Sample_supplementary_file_build_' + str(count)] = database
+				
+				fileList.append(stanza['fileName'])
+				count = count + 1
+			
+		sample['!Sample_source_name'] = firstStanza['cell']
+		sample['!Sample_organism'] = organism
+		
+		sample['!Sample_characteristics'] = list()
+		allVars = expVars + mdbWhitelist
+		
+		for var in allVars:
+			if var in firstStanza:
+				foobar = var
+				sample['!Sample_characteristics'].append(var + ': ' + firstStanza[var])
+				for pretend in cvPretend.iterkeys():
+					if var + ' ' + firstStanza[var] == pretend:
+						foobar = cvPretend[pretend]
+				if foobar in cvDetails:
+					for cvVar in cvDetails[foobar]:
+						if cvVar in cvOverride and cvVar in firstStanza:
+							sample['!Sample_characteristics'].append(var + ' ' + cvVar + ': ' + firstStanza[cvVar])
+						elif cvVar in cv[firstStanza[var]]:
+							sample['!Sample_characteristics'].append(var + ' ' + cvVar + ': ' + cv[firstStanza[var]][cvVar])
+				else:
+					for cvVar in cvDefaults:
+						if firstStanza[var] in cv and cvVar in cv[firstStanza[var]]:
+							sample['!Sample_characteristics'].append(var + ' ' +  cvVar + ': ' + cv[firstStanza[var]][cvVar])
+				
+		sample['!Sample_biomaterial_provider'] = cv[firstStanza['cell']]['vendorName']
+		
+		if 'treatment' in firstStanza:
+			sample['!Sample_treatment_protocol'] = firstStanza['treatment']
+		
+		if 'protocol' in cv[firstStanza['cell']]:
+			for protocol in cv[firstStanza['cell']]['protocol'].split(' '):
+					key, val = protocol.split(':')
+					if key == 'ENCODE' or key == cv[firstStanza['lab']]['labPi']:
+						sample['!Sample_growth_protocol'] = val
+		
+		if datatype.molecule == 'OVERRIDE RNA':
+			if firstStanza['rnaExtract'] in rnaExtractMapping:
+				sample['!Sample_molecule'] = rnaExtractMapping[firstStanza['rnaExtract']]
+			elif firstStanza['localization'] in localizationMapping:
+				sample['!Sample_molecule'] = localizationMapping[firstStanza['localization']]
+				
+		else:
+			sample['!Sample_molecule'] = datatype.molecule
+			
+		sample['!Sample_extract_protocol'] = compositeUrl
+		sample['!Sample_library_strategy'] = datatype.strategy
+		sample['!Sample_library_source'] = datatype.source
+		sample['!Sample_library_selection'] = datatype.selection
+		
+		# set to replace for if nothing has a seqPlatform
+		sample['!Sample_instrument_model'] = '[REPLACE]'
+		for stanza in expId:	
+			if 'seqPlatform' in stanza:
+				sample['!Sample_instrument_model'] = instrumentModels[stanza['seqPlatform']]
+			
+		sample['!Sample_data_processing'] = compositeUrl
+
+		if idNum in geoMapping and geoMapping[idNum] != 'Inconsistent':
+			sample['!Sample_geo_accession'] = geoMapping[idNum]
+		
+		softfile[firstStanza['metaObject']] = sample
+		
+	return softfile, fileList
+		
+		
+def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype, copyDirectory):
+	
+	print 'Creating MicroArray soft file'
+
+	softfile = SoftFile()
+	fileList = list()
+	
+	createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, series)
+	
+	for idNum in expIds.iterkeys():
+		
+		expId = expIds[idNum]
+		firstStanza = expId[0]
+		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
+		sample = MicroArraySampleStanza()
+		sample['^SAMPLE'] = firstStanza['metaObject']
+
+		concat = expVars[0]
+		for expVar in expVars[1:len(expVars)]:
+			concat += '_' + firstStanza[expVar]
+		sample['!Sample_title'] = concat
+		
+		count = 1
+			
+		for stanza in expId:
+		
+			if isSupplimentaryFile(stanza['fileName']):
+				sample['!Sample_supplementary_file_' + str(count)] = stanza['fileName']
+				
+				# if 'checksum' in stanza:
+					# sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
+				# elif md5sums != None and stanza['fileName'] in md5sums:
+					# sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
+				
+				# sample['!Sample_supplementary_file_build_' + str(count)] = database
+				
+				fileList.append(stanza['fileName'])
+				count = count + 1
+
+		# sample['!Sample_table'] = KeyOptional # CEL file
+		# sample['!Sample_source_name_ch'] = KeyOnePlusNumbered
+		# sample['!Sample_organism_ch'] = KeyOnePlusNumbered
+		# sample['!Sample_characteristics_ch'] = KeyOnePlusNumbered
+		# sample['!Sample_biomaterial_provider_ch'] = KeyZeroPlusNumbered
+		# sample['!Sample_treatment_protocol_ch'] = KeyZeroPlusNumbered
+		# sample['!Sample_growth_protocol_ch'] = KeyZeroPlusNumbered
+		# sample['!Sample_molecule_ch'] = KeyOnePlusNumbered
+		# sample['!Sample_extract_protocol_ch'] = KeyOnePlusNumbered
+		# sample['!Sample_label_ch'] = KeyOnePlusNumbered
+		# sample['!Sample_label_protocol_ch'] = KeyOnePlusNumbered
+		# sample['!Sample_hyb_protocol'] = KeyOnePlus
+		# sample['!Sample_scan_protocol'] = KeyOnePlus
+		# sample['!Sample_data_processing'] = KeyOnePlus
+		# sample['!Sample_description'] = KeyZeroPlus
+		# sample['!Sample_platform_id'] = KeyRequired
+		# sample['!Sample_geo_accession'] = KeyOptional
+		# sample['!Sample_anchor'] = KeyRequired
+		# sample['!Sample_type'] = KeyRequired
+		# sample['!Sample_tag_count'] = KeyRequired
+		# sample['!Sample_tag_length'] = KeyRequired
+		# sample['!Sample_table_begin'] = KeyRequired
+		# sample['!Sample_table_end'] = KeyRequired
+	
+	# for idk:
+	
+		# platform = PlatformStanza()
+		
+		# platform['^PLATFORM'] = KeyRequired
+		# platform['!Platform_title'] = KeyRequired
+		# platform['!Platform_distribution'] = KeyRequired
+		# platform['!Platform_technology'] = KeyRequired
+		# platform['!Platform_organism'] = KeyOnePlus
+		# platform['!Platform_manufacturer'] = KeyRequired
+		# platform['!Platform_manufacture_protocol'] = KeyOnePlus
+		# platform['!Platform_catalog_number'] = KeyZeroPlus
+		# platform['!Platform_web_link'] = KeyZeroPlus
+		# platform['!Platform_support'] = KeyOptional
+		# platform['!Platform_coating'] = KeyOptional
+		# platform['!Platform_description'] = KeyZeroPlus
+		# platform['!Platform_contributor'] = KeyZeroPlus
+		# platform['!Platform_pubmed_id'] = KeyZeroPlus
+		# platform['!Platform_geo_accession'] = KeyOptional
+		# platform['!Platform_table_begin'] = KeyRequired
+		# platform['!Platform_table_end'] = KeyRequired
+	
+		
+def main():
+	database = sys.argv[1]
+	composite = sys.argv[2]
+	submitStart = sys.argv[3]
+	submitSize = int(sys.argv[4])
+	organism = organisms[database]
+
+	mdbPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/' + organism + '/' + database + '/metaDb/alpha/' + composite + '.ra' #CHANGE
+	cvPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/cv/alpha/cv.ra' #CHANGE
+	trackPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/' + organism + '/' + database + '/' + composite + '.ra'
+	md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/md5sum.txt'
+
+	downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/'
+	copyDirectory = '/cluster/home/mmaddren/kent/python/ucscgenomics/mkGeoPkg/' + composite
+	
+	compositeUrl = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + composite
+	
+	mdb = RaFile(mdbPath)
+	cv = CvFile(cvPath)
+	track = RaFile(trackPath)
+	md5sums = readMd5sums(md5path)
+	expIds, expVars, geoMapping, series, datatype = createMappings(mdb)
+	
+	submission = dict()
+	sortedIds = expIds.keys()
+	sortedIds.sort()
+	sortedIds = sortedIds[sortedIds.index(submitStart):sortedIds.index(submitStart) + submitSize]
+	minId = min(sortedIds)
+	maxId = max(sortedIds)
+	print 'Generating soft using expIds ' + minId + ' to ' + maxId
+	for expId in sortedIds:
+		submission[expId] = expIds[expId]
+
+	if datatype.soft == HighThroughputSoftFile:
+		softfile, fileList = createHighThroughputSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype, copyDirectory)
+	elif datatype.soft == MicroArraySoftFile:
+		softfile, fileList = createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype, copyDirectory)
+	else:
+		raise Error('unsupported type')
+		
+	print 'Writing soft file'
+	outfileName = os.path.dirname(sys.argv[0]) + composite + '.soft'
+	outfile = open(outfileName, 'w')
+	outfile.write(str(softfile))
+	
+	fileString = outfileName
+	for file in fileList:
+		fileString = fileString + ' ' + downloadsDirectory + file
+		
+	fileString.strip()
+	callString = '/opt/aspera/connect/bin/ascp -i ~/encode_geo_key/encode_geo_key.ppk -QTr -l300m ' + fileString + ' asp-geo@upload.ncbi.nlm.nih.gov:ENCODE/' + composite
+	outscript = open(composite + minId + '-' + maxId + '.sh', 'w')
+	outscript.write('#!/bin/sh\n\n')
+	outscript.write('/opt/aspera/connect/bin/ascp -i ~/encode_geo_key/encode_geo_key.ppk -QTr -l300m \\\n')
+	
+	outscript.write(os.path.dirname(sys.argv[0]) + composite + '.soft' + ' \\\n')
+	
+	for file in fileList:
+		outscript.write(downloadsDirectory + file + ' \\\n')
+		
+	outscript.write('asp-geo@upload.ncbi.nlm.nih.gov:ENCODE\n')
+	outscript.close()
+
+	os.system('chmod +x ' + composite + minId + '-' + maxId + '.sh')
+		
+	print 'Finished!'
+	
+if __name__ == '__main__':
+	main()
