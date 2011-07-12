@@ -3773,6 +3773,15 @@ if (!tdbIsSuper(tdb))
 return (tdb->visibility != tvHide);
 }
 
+int hubCmpAlpha(const void *va, const void *vb)
+/* Compare to sort hubs based on name */
+{
+const struct trackHub *a = *((struct trackHub **)va);
+const struct trackHub *b = *((struct trackHub **)vb);
+
+return strcmp(a->shortLabel, b->shortLabel);
+}
+
 static void groupTracks(struct trackHub *hubList, struct track **pTrackList,
 	struct group **pGroupList, int vis)
 /* Make up groups and assign tracks to groups.
@@ -3785,14 +3794,15 @@ struct track *track;
 struct trackRef *tr;
 struct grp* grps = hLoadGrps(database);
 struct grp *grp;
-float maxPriority = 0;
+float minPriority = 100000; // something really large
 
 /* build group objects from database. */
 for (grp = grps; grp != NULL; grp = grp->next)
     {
     /* deal with group reordering */
     float priority = grp->priority;
-    if (priority > maxPriority) maxPriority = priority;
+    // we want to get the minimum priority over 1 (which is custom tracks)
+    if ((priority > 1.0) && (priority < minPriority)) minPriority = priority;
     if (withPriorityOverride)
         {
         char cartVar[512];
@@ -3816,16 +3826,31 @@ grpFreeList(&grps);
 
 /* build group objects from hub */
     {
-    struct trackHub *hub;
-    for (hub = hubList; hub != NULL; hub = hub->next)
-        {
-	AllocVar(group);
-	group->name = cloneString(hub->name);
-	group->label = cloneString(hub->shortLabel);
-	maxPriority += 1;
-	group->defaultPriority = group->priority = maxPriority;
-	slAddHead(&list, group);
-	hashAdd(hash, group->name, group);
+    int count = slCount(hubList);
+
+    if (count) // if we have track hubs
+	{
+	slSort(&hubList, hubCmpAlpha);	// alphabetize
+	minPriority -= 1.0;             // priority is 1-based
+	// the idea here is to get enough room between priority 1
+	// (which is custom tracks) and the group with the next 
+	// priority number, so that the hub nestle inbetween the
+	// custom tracks and everything else at the top of the list
+	// of track groups
+	double priorityInc = (0.9 * minPriority) / count;
+	double priority = 1.0 + priorityInc;
+
+	struct trackHub *hub;
+	for (hub = hubList; hub != NULL; hub = hub->next)
+	    {
+	    AllocVar(group);
+	    group->name = cloneString(hub->name);
+	    group->label = cloneString(hub->shortLabel);
+	    group->defaultPriority = group->priority = priority;
+	    priority += priorityInc;
+	    slAddHead(&list, group);
+	    hashAdd(hash, group->name, group);
+	    }
 	}
     }
 
@@ -5025,7 +5050,6 @@ if (!hideControls)
 	    /* 4 cols fit GSID's display better */
 	    cg = startControlGrid(4, "left");
 	    }
-	boolean isFirstNotCtGroup = TRUE;
 	for (group = groupList; group != NULL; group = group->next)
 	    {
 	    if (group->trackList == NULL)
@@ -5057,10 +5081,11 @@ if (!hideControls)
             hPrintf("</td></tr></table></th>\n");
 	    controlGridEndRow(cg);
 
-	    /* First track group that is not custom track group gets ruler,
+	    /* First track group that is not the custom track group (#1)
+	     * or a track hub, gets the Base Position track
 	     * unless it's collapsed. */
-	    if (!showedRuler && isFirstNotCtGroup &&
-			differentString(group->name, "user"))
+	    if (!showedRuler && !isHubTrack(group->name) && 
+		    differentString(group->name, "user") )
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
 		showedRuler = TRUE;
@@ -5075,8 +5100,6 @@ if (!hideControls)
 		controlGridEndCell(cg);
 		freeMem(url);
 		}
-	    if (differentString(group->name, "user"))
-		isFirstNotCtGroup = FALSE;
 
 	    /* Add supertracks to  track list, sort by priority and
 	     * determine if they have visible member tracks */
@@ -5347,10 +5370,10 @@ doTrackForm(psTn.forCgi, &ideoPsTn);
 // postscript
 printf("<UL>\n");
 printf("<LI><A HREF=\"%s\">Click here</A> "
-       "to download the current browser graphic in PostScript.  ", psTn.forCgi);
+       "to download the current browser graphic in PostScript.\n", psTn.forCgi);
 if (strlen(ideoPsTn.forCgi))
     printf("<LI><A HREF=\"%s\">Click here</A> "
-           "to download the current chromosome ideogram in PostScript.  ", ideoPsTn.forCgi);
+           "to download the current chromosome ideogram in PostScript.\n", ideoPsTn.forCgi);
 printf("</UL>\n");
 
 pdfFile = convertEpsToPdf(psTn.forCgi);
@@ -5361,10 +5384,10 @@ if(pdfFile != NULL)
     printf("<BR>PDF can be viewed with Adobe Acrobat Reader.\n");
     printf("<UL>\n");
     printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-       "to download the current browser graphic in PDF.", pdfFile);
+       "to download the current browser graphic in PDF.\n", pdfFile);
     if (ideoPdfFile != NULL)
         printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-               "to download the current chromosome ideogram in PDF.", ideoPdfFile);
+               "to download the current chromosome ideogram in PDF.\n", ideoPdfFile);
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
@@ -5372,8 +5395,7 @@ if(pdfFile != NULL)
 else
     printf("<BR><BR>PDF format not available");
 
-    #define RETURN_BUTTON "<FORM ACTION='../cgi-bin/hgTracks' NAME='TrackHeaderForm' id='TrackHeaderForm' METHOD='GET'><INPUT TYPE=SUBMIT ID='ChangeToNameToSetSomething' VALUE='Return to Browser'></FORM>"
-    printf(RETURN_BUTTON);
+    printf("<a href='../cgi-bin/hgTracks'><input type='button' VALUE='Return to Browser'></a>\n");
 }
 
 boolean isGenome(char *pos)

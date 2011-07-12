@@ -20,7 +20,7 @@ priority 0
 type bed 3
 wgEncode 1
 superTrack wgEncodeRnaSeqSuper dense
-#html wgEncodeRikenCage.new
+html wgEncodeRikenCage.new
 
     track wgEncodeRikenCageViewClusters
     shortLabel Clusters 

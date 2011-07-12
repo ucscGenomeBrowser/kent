@@ -1,0 +1,246 @@
+metaObject wgEncodeGencode2wayConsPseudoV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencode2wayConsPseudoV7.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion 2-way Pseudogene Annotation Set
+project wgEncode
+subId 4347
+tableName wgEncodeGencode2wayConsPseudoV7
+
+metaObject wgEncodeGencodeAttrsV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeAttrsV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Transcript Attributes
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeAttrsV7
+
+metaObject wgEncodeGencodeBasicV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeBasicV7.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Basic Gene Annotation Set
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeBasicV7
+
+metaObject wgEncodeGencodeCompV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeCompV7.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Comprehensive Gene Annotation Set
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeCompV7
+
+metaObject wgEncodeGencodeExonSupportV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeExonSupportV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Exon Support
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeExonSupportV7
+
+metaObject wgEncodeGencodeGeneSourceV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeGeneSourceV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Source Lab
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeGeneSourceV7
+
+metaObject wgEncodeGencodePdbV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodePdbV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion PDB entry mapping
+project wgEncode
+subId 4347
+tableName wgEncodeGencodePdbV7
+
+metaObject wgEncodeGencodePolyaV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodePolyaV7.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion PolyA Transcript Annotation Set
+project wgEncode
+subId 4347
+tableName wgEncodeGencodePolyaV7
+
+metaObject wgEncodeGencodePseudoGeneV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodePseudoGeneV7.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Pseudogene Annotation Set
+project wgEncode
+subId 4347
+tableName wgEncodeGencodePseudoGeneV7
+
+metaObject wgEncodeGencodePubMedV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodePubMedV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion PubMed ID mapping
+project wgEncode
+subId 4347
+tableName wgEncodeGencodePubMedV7
+
+metaObject wgEncodeGencodeRefSeqV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeRefSeqV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion RefSeq mapping
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeRefSeqV7
+
+metaObject wgEncodeGencodeTagV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeTagV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Transcript Tags
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeTagV7
+
+metaObject wgEncodeGencodeTranscriptSourceV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeTranscriptSourceV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Transcript Source Lab
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeTranscriptSourceV7
+
+metaObject wgEncodeGencodeTranscriptSupportV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeTranscriptSupportV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion Transcript Support
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeTranscriptSupportV7
+
+metaObject wgEncodeGencodeUniProtV7
+objType table
+composite wgEncodeGencodeV7
+dataType Gencode
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH001881
+expId 1881
+fileName wgEncodeGencodeUniProtV7.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V7
+labVersion UniProt ID mapping
+project wgEncode
+subId 4347
+tableName wgEncodeGencodeUniProtV7
+
+metaObject wgEncodeGencodeV7
+objType composite
+composite wgEncodeGencodeV7
+expVars lab,dataType,labExpId
+
+# MAGIC: 223810545
