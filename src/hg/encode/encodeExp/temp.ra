@@ -1,0 +1,161 @@
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Heart
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Kidney
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Kidney
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType BoneMarrow
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType BoneMarrow
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Cerebellum
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Cortex
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Cortex
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Cerebellum
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Liver
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Heart
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Lung
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Liver
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Lung
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType MEF
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType MEF
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Spleen
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Spleen
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType Heart
+expVars antibody=p300
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType ES-Bruce4
+expVars antibody=CTCF
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType ES-Bruce4
+expVars antibody=Input
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType ES-Bruce4
+expVars antibody=Pol2
+
+ix 0
+organism mouse
+lab LICR-m
+dataType ChipSeq
+cellType ES-Bruce4
+expVars antibody=p300
+

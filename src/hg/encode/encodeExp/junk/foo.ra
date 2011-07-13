@@ -1,0 +1,3296 @@
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Pol2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=STAT1 control=std treatment=IFNg30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Pol2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NB4
+expVars antibody=Pol2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Fos control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Jun control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Myc control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Max control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=NF-E2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Pol2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Input control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HEK293(b)
+expVars antibody=Input control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HEK293(b)
+expVars antibody=Pol2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input control=MNase
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input control=Naked_DNA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input control=std treatment=IFNg30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Input control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Max control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NB4
+expVars antibody=Input control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=JunD control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Input control=std treatment=pravastatin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Pol2 control=std treatment=pravastatin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=SREBP1 control=std treatment=pravastatin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=SREBP2 control=std treatment=pravastatin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=JunD control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Pol3 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Max control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=c-Fos control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=c-Myc control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Rad21 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=XRCC4 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input control=Large_Fragment
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Input control=std treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Input control=std treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Input control=std treatment=IFNg30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Input control=std treatment=IFNg6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Myc control=std treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Pol2 control=std treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Pol2 control=std treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Pol2 control=std treatment=IFNg6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=STAT1 control=std treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=STAT1 control=std treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=STAT2 control=std treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=STAT2 control=std treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Jun control=std treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Jun control=std treatment=IFNg6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Myc control=std treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Myc control=std treatment=IFNg6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Jun control=std treatment=IFNg30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=Input control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Brg1 control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=WHIP control=IgG-mus
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+expVars antibody=HMGN3 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=IRF3 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Rad21 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=TBP control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Input control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Pol2 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=TBP control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=c-Jun control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Input control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Nrf1 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=USF2 control=std
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=SUZ12 control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=ELK4 control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+expVars antibody=CCNT2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=IRF1 control=std treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=IRF1 control=std treatment=IFNg6h
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HepG2b
+expVars antibody=ZNF274 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=Max control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType GM12878
+expVars antibody=ZNF274 control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=GATA-2 control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType Raji
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType Raji
+expVars antibody=Pol2 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=TBP control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=c-Fos control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=STAT3 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=IRF3 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=JunD control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Nrf1 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Rad21 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=USF2 control=IgG-rab
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType U2OS
+expVars antibody=SETDB1 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Pol2(phosphoS2) control=std
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG04449
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG04450
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG09309
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG09319
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG10803
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType CMK
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Fibrobl
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM19239
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM19240
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HAEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HCF
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HCM
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HEEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HEK293
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HIPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HMEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HNPCEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HRCEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HSMMtube
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HepG2
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType MCF-7
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType MCF-7
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NB4
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NHBE
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NT2-D1
+expVars obtainedBy=Stanford
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NT2-D1
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType SKMC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM12878
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HCT-116
+expVars obtainedBy=Stanford
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HRE
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HRPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Jurkat
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM12891
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM12892
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType H1-hESC
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HeLa-S3
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HepG2
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType K562
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=c-Myc control=std treatment=IFNg30
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=ZNF274 control=UCDavis
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=ZZZ3 control=std
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+expVars antibody=KAP1 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NB4
+expVars antibody=Max control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NB4
+expVars antibody=c-Myc control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=NF-E2_(SC-22827) control=std
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HCPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HEK293
+expVars obtainedBy=Stanford
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HPAEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType LNCaP
+expVars obtainedBy=Duke treatment=androgen
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType MCF-7
+expVars obtainedBy=Stanford
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NHDF-neo
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType SAEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType SK-N-SH_RA
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType PBDE
+expVars antibody=GATA-1 control=UCDavis
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HSMM
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Melano
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PanIslets
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType ProgFib
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType RPTEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType PBDE
+expVars antibody=Pol2 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=IRF3 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=RFX5_(200-401-194) control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=STAT3 control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=USF2 control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=p300_(SC-584) control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=BRCA1_(A300-000A) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=CEBPB control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=GTF2F1_(AB28179) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=PRDM1_(9115) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=RFX5_(200-401-194) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=USF2 control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=p300_(SC-584) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=CEBPB control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=CHD2_(AB68301) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=GTF2F1_(AB28179) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=TAL1_(SC-12984) control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=TBP control=IgG-mus
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=CtBP2 control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType SH-SY5Y
+expVars antibody=GATA-2 control=UCDavis
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=Pol2 control=UCDavis treatment=TAM_1uM_36hr
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=STAT3 control=UCDavis treatment=TAM_1uM_36hr
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Mxi1_(AF4185) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=Mxi1_(AF4185) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=p300_(SC-48343) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=Pol2 control=UCDavis treatment=EtOH_0.01pct
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=STAT3 control=UCDavis treatment=EtOH_0.01pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM12878-XiMat
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType IMR90
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType MCF10A-Er-Src
+expVars obtainedBy=Stanford
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType MCF10A-Er-Src
+expVars obtainedBy=Stanford treatment=TAM_1uM_36hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NH-A
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Osteobl
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=TR4 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=YY1 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=ZZZ3 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HCT-116
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HCT-116
+expVars antibody=Pol2 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HCT-116
+expVars antibody=TCF4 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=AP-2alpha control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=AP-2gamma control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=BDP1 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=BRF1 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=BRF2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=E2F1 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=E2F4 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=E2F6 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=HA-E2F1 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=RPC155 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=TFIIIC-110 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=TR4 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2b
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2b
+expVars antibody=TR4 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=ATF3 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=BDP1 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=BRF1 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=BRF2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=NELFe control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=RPC155 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=SIRT6 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=TFIIIC-110 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=E2F4 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=E2F6 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=GATA-1 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=GATA-2 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=SETDB1 control=UCDavis treatment=MNaseD
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=SETDB1 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=TR4 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=YY1 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=ZNF263 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+expVars antibody=ZNF274 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType MCF-7
+expVars antibody=HA-E2F1 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType MCF-7
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NT2-D1
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NT2-D1
+expVars antibody=SUZ12 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NT2-D1
+expVars antibody=YY1 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=SUZ12 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=GATA-2 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=ELK4 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2b
+expVars antibody=ZNF274 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=CCNT2 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=GTF2B control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=HMGN3 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType Raji
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType Raji
+expVars antibody=Pol2 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType U2OS
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType U2OS
+expVars antibody=SETDB1 control=UCDavis
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AoSMC
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Astrocy
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Adrenal_Gland_H12803N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Brain_H11058N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Breast_02-03015
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Kidney_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Left_Ventricle_N41
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Leukocyte_UHN00204
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Liver_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Lung_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Pancreas_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Pericardium_H12529N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Placenta_UHN00189
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Skeletal_Muscle_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Skeletal_Muscle_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Skin_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Stomach_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Testis_N30
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Uterus_BN0765
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BE2_C
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BJ
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType ECC-1
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HTB-11
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Hepatocytes
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType LNCaP
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType LNCaP
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Myometr
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PANC-1
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PFSK-1
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PrEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType SK-N-MC
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType T-47D
+expVars obtainedBy=HudsonAlpha treatment=DMSO_0.02pct_24hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType T-47D
+expVars obtainedBy=HudsonAlpha treatment=Estradiol_10nM_24hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType U87
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType K562
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType U2OS
+expVars antibody=KAP1 control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HEK293(b)
+expVars antibody=ELK4 control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HUVEC
+expVars antibody=c-Fos control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+expVars antibody=ZNF274 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=CEBPB control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=STAT3 control=std treatment=EtOH_0.01pct_12hr
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HEK293(b)
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType PBDE
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=Input control=std treatment=EtOH_0.01pct_12hr
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=Input control=std treatment=EtOH_0.01pct_4hr
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=STAT3 control=std treatment=EtOH_0.01pct_4hr
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType GM12878
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType H1-hESC
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType HUVEC
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType HeLa-S3
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType HepG2
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType K562
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType NHEK
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HRCEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HRE
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HRPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType IMR90
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType Jurkat
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType LNCaP
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType MCF-7
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType MCF10A-Er-Src
+expVars obtainedBy=Stanford
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType MCF10A-Er-Src
+expVars obtainedBy=Stanford treatment=TAM_1uM_36hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType NB4
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType NH-A
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType NHBE
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType NHDF-neo
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType NT2-D1
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType PANC-1
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType PrEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType RPTEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType SAEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType SK-N-SH_RA
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType SKMC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=BRCA1_(A300-000A) control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=CHD2_(AB68301) control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=EBF1_(SC-137065) control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=SMC3_(ab9263) control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=Input control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=RFX5_(200-401-194) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=Rad21 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=USF2 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=Pol2(phosphoS2) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=SMC3_(ab9263) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=CHD2_(AB68301) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=MafF_(M8194) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=MafK_(ab50322) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=RFX5_(200-401-194) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=MafK_(ab50322) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=SMC3_(ab9263) control=IgG-rab
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HEK293(b)
+expVars antibody=KAP1 control=UCDavis
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType AG04449
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType AG04450
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType AG09309
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType AG09319
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType AG10803
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Adipose_UHN00001
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Adrenal_Gland_H12803N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Bladder_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Brain_H11058N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Breast_02-03015
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Colon_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Colon_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Esophagus_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Esophagus_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Jejunum_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Kidney_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Kidney_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Left_Ventricle_N41
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Leukocyte_UHN00204
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Liver_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Lung_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Lung_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Pancreas_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Penis_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Pericardium_H12529N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Placenta_UHN00189
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Prostate_Gland_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Rectum_N29
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Skeletal_Muscle_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Skeletal_Muscle_H12817N
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Skin_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType BC_Small_Intestine_01-11002
+expVars obtainedBy=BioChain
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType CMK
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType GM12891
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType GM12892
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType H1-hESC
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HAEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HCF
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HCM
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HCPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HEEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HEK293
+expVars obtainedBy=Yale
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HIPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HMEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HNPCEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HPAEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HRCEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HRE
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HRPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType HepG2
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType IMR90
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType Jurkat
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType MCF-7
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType NB4
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType NH-A
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType NHBE
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType NHDF-neo
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType RPTEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType SAEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType SK-N-SH_RA
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType SKMC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HTR8svn
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Nrf1 control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=Nrf1 control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=TBP control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=GCN5 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=MafK_(SC-477) control=IgG-rab
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HepG2b
+expVars antibody=TCF4 control=UCDavis
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType GM12878
+expVars antibody=SPT20 control=std
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType A549
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType AG04449
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType AG04450
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType AG09309
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType AG09319
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType AG10803
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType AoSMC
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType Astrocy
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType BC_Jejunum_H12817N
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType BC_Small_Intestine_01-11002
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType BJ
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType CMK
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType Caco-2
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType Chorion
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType GM06990
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType GM12891
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType GM12892
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType GM19239
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType H1-hESC
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HAEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HCF
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HCM
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HCPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HEEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HEK293
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HIPEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HL-60
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HMEC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HNPCEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HPAEpiC
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HSMM
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HSMMtube
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HTR8svn
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HUVEC
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HeLa-S3
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType Melano
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType Myometr
+expVars obtainedBy=Duke
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType PANC-1
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType PFSK-1
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType T-47D
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType U87
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType ovcar-3
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=CTCF_(SC-15914) control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=STAT1 control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Znf143_(16618-1-AP) control=std
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=c-Jun control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+expVars antibody=SPT20 control=std
+
+ix 0
+organism human
+lab Yale-Weissman
+dataType ChipSeq
+cellType GM12878
+expVars antibody=GCN5 control=std
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType T-REx-HEK293
+expVars antibody=ZNF263 control=UCDavis
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+expVars antibody=Input control=std
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType MCF10A-Er-Src
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType SH-SY5Y
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType T-REx-HEK293
+expVars antibody=Input control=UCDavis
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylArray
+cellType GM12878
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType GM12878
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType HepG2
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType K562
+expVars obtainedBy=HudsonAlpha
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+expVars antibody=BHLHE40_(NB100-1800) control=IgG-rab
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Genotype
+cellType None
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Caco-2
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM06990
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HL-60
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PANC-1
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType ovcar-3
+expVars obtainedBy=UW
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars antibody=Pol2(phosphoS2) control=IgG-mus
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=BRCA1_(A300-000A) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=Pol2(phosphoS2) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=SMC3_(ab9263) control=IgG-rab
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+expVars antibody=p300_(SC-584) control=IgG-rab
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType GM12878
+expVars localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType GM12878
+expVars localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType GM12878
+expVars localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType HeLa-S3
+expVars localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType GM12878
+expVars obtainedBy=HudsonAlpha
+

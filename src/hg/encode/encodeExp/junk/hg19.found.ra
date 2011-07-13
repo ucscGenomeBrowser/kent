@@ -1,0 +1,12803 @@
+ix 0
+organism human
+lab CRG-Guigo
+dataType Mapability
+cellType None
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=TCF12 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Control protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=NRSF protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Pol2 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=TAF1 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=FOSL2 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=HEY1 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType PFSK-1
+factors antibody=FOXP2 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType SK-N-MC
+factors antibody=FOXP2 protocol=PCR1x
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=STAT1 treatment=IFNg30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NB4
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Input treatment=IFNg30
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=STAT1 treatment=IFNg30
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType NB4
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType NB4
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12878
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType GM06990
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=GABP protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Pol2 protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=SRF protocol=PCR2x
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType Th1
+factors 
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType GM12878
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType GM12878
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=polysome rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Fos
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Jun
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Fos
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Jun
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType prostate
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType prostate
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=cell rnaExtract=total
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=NRSF protocol=PCR2x
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType GM12878
+factors antibody=c-Fos
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType K562
+factors antibody=Input
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType GM12878
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+factors 
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType prostate
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType K562
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType K562
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=Control protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Control protocol=PCR1x
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K9me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2(b)
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K9me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Pol2(b)
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K9me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHEK
+factors antibody=Pol2(b)
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=chromatin rnaExtract=total
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=nucleoplasm rnaExtract=total
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=Max
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=NF-E2
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType GM12878
+factors antibody=Max
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=NF-E2
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType K562
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=chromatin rnaExtract=total
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=nucleoplasm rnaExtract=total
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=polysome rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType GM12878
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType GM12878
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HEK293(b)
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HEK293(b)
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Input treatment=IFNg30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Max
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NB4
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HCT-116
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HCT-116
+factors antibody=TCF4
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=ZNF263
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HEK293(b)
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HEK293(b)
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Max
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=JunD
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Input treatment=pravastatin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Pol2 treatment=pravastatin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=SREBP1 treatment=pravastatin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=SREBP2 treatment=pravastatin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=JunD
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=GATA-1
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType K562
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType GM12878
+factors antibody=JunD
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HepG2
+factors antibody=Input treatment=pravastatin
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HepG2
+factors antibody=Pol2 treatment=pravastatin
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HepG2
+factors antibody=SREBP1 treatment=pravastatin
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HepG2
+factors antibody=SREBP2 treatment=pravastatin
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=JunD
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType K562
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType GM12878
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType GM12878
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType GM12878
+factors localization=cell rnaExtract=total
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab GIS
+dataType DnaPet
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab GIS
+dataType DnaPet
+cellType K562
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HepG2
+factors antibody=Input
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType RnaSeq
+cellType K562
+factors rnaExtract=polyA
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12878
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HeLa-S3
+factors treatment=IFNa4h
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HepG2
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HeLa-S3
+factors treatment=IFNa4h
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HeLa-S3
+factors treatment=IFNg4h
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HepG2
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType GM12878
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType SK-N-SH_RA
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType Caco-2
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType BJ
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HUVEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HL-60
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType SKMC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType Th2
+factors 
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=Pol3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Max
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=c-Fos
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Rad21
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=XRCC4
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType GM12878
+factors antibody=Pol3
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Max
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=c-Fos
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Rad21
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=XRCC4
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HCT-116
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType HepG2
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType HepG2
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType NHEK
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType NHEK
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=SUZ12
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=YY1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Input treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Input treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Input treatment=IFNg30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Input treatment=IFNg6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc treatment=IFNa30
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Input treatment=IFNa30
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Input treatment=IFNa6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Input treatment=IFNg30
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Input treatment=IFNg6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2 treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2 treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2 treatment=IFNg6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=STAT1 treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=STAT1 treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=STAT2 treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=STAT2 treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Jun treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Jun treatment=IFNg6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc treatment=IFNa6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc treatment=IFNg6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2 treatment=IFNa30
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2 treatment=IFNa6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2 treatment=IFNg6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=STAT1 treatment=IFNa30
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=STAT1 treatment=IFNa6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=STAT2 treatment=IFNa30
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=STAT2 treatment=IFNa6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Jun treatment=IFNa6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Jun treatment=IFNg6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc treatment=IFNa6h
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc treatment=IFNg6h
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Jun treatment=IFNg30
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=E2F4
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType K562
+factors antibody=c-Jun treatment=IFNg30
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType NHEK
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType NHEK
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HepG2b
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HepG2b
+factors antibody=TR4
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=E2F6
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=SETDB1
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=BDP1
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=BRF1
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=RPC155
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=SIRT6
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=TR4
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HRCEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HRE
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType SK-N-SH_RA
+factors 
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM06990
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12801
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12878
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HEK293
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HL-60
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType K562
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType K562
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=USF-1 protocol=PCR2x
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType Caco-2
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType GM06990
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType K562
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType SKMC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType Th1
+factors 
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HepG2
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType WERI-Rb-1
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HRCEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HRE
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Control protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=Egr-1 protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12878
+factors restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12878
+factors restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType K562
+factors restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType K562
+factors restrictionEnzyme=msp
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType HepG2
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType HepG2
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=JunD protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=Sin3Ak-20 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=USF-1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HTB-11
+factors antibody=Control protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Pol2 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=POU2F2 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=PU.1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Pbx3 protocol=PCR1x
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType GM12878
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab Affy
+dataType RnaChip
+cellType HepG2
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=GATA-2
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=YY1
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12878
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType NB4
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType NHEK
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType PANC-1
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType SAEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType BJ
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType Caco-2
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType BJ
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HUVEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType Jurkat
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType MCF-7
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType NB4
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType NHEK
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType PANC-1
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType SAEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HRE
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NHEK
+factors antibody=CTCF
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=cytosol rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=nucleus rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=chromatin rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=cytosol rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=nucleolus rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=nucleoplasm rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=nucleus rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=polysome rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType prostate
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HUVEC
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=AP-2alpha
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=AP-2gamma
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=TR4
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HUVEC
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType RnaSeq
+cellType GM12878
+factors rnaExtract=polyA
+
+ix 0
+organism human
+lab Yale
+dataType RnaSeq
+cellType K562
+factors rnaExtract=polyA treatment=IFNa30
+
+ix 0
+organism human
+lab Yale
+dataType RnaSeq
+cellType K562
+factors rnaExtract=polyA treatment=IFNa6h
+
+ix 0
+organism human
+lab Yale
+dataType RnaSeq
+cellType K562
+factors rnaExtract=polyA treatment=IFNg30
+
+ix 0
+organism human
+lab Yale
+dataType RnaSeq
+cellType K562
+factors rnaExtract=polyA treatment=IFNg6h
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HUVEC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=HA-E2F1
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HMEC
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType NHEK
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=E2F4
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HepG2
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType Caco-2
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HRE
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HUVEC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType MCF-7
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType NHEK
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType NHEK
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMEC
+factors 
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=NFKB treatment=TNFa
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HUVEC
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType GM12878
+factors antibody=NFKB treatment=TNFa
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12892
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType SK-N-SH_RA
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM12891
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType Th1
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM12892
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM19238
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM19239
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM19240
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12891
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM19238
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM19239
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM19240
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType BJ
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM06990
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HL-60
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HMEC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SAEC
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SAEC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType PanIslets
+factors 
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType BJ
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType Caco-2
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType Caco-2
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM06990
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HRE
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HRE
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HUVEC
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType K562
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType K562
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NHEK
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SAEC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SAEC
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HGF
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=E2F6
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=cell rnaExtract=total
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=cell rnaExtract=total
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType BJ
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM06990
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=BATF protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=EBF1_(C-8) protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=HEY1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=PU.1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=SIX5 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=IRF4_(M-17) protocol=PCR1x
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType MCF-7
+factors antibody=HA-E2F1
+
+ix 0
+organism human
+lab GIS
+dataType RnaSeq
+cellType GM12878
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaSeq
+cellType H1-hESC
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaSeq
+cellType K562
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Pol3
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType GM12878
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType GM12878
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType H1-hESC
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType HUVEC
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType HepG2
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType HepG2
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType K562
+factors localization=polysome rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType K562
+factors localization=chromatin rnaExtract=total
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType K562
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType K562
+factors localization=nucleoplasm rnaExtract=total
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType K562
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType K562
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType NHEK
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType NHEK
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType prostate
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=BCL11A protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=p300 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12891
+factors restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12891
+factors restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=ZBTB33 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12892
+factors restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12892
+factors restrictionEnzyme=msp
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType HUVEC
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType HeLa-S3
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=PAX5-C20 protocol=PCR1x
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType HeLa-S3
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=GR protocol=PCR1x treatment=DEX_500pM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=GR protocol=PCR1x treatment=DEX_50nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=GR protocol=PCR1x treatment=DEX_5nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=Pol2 protocol=PCR2x treatment=EtOH_0.02pct
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHLF
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Astrocy
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Chorion
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Fibrobl
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType GM12891
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType GM12892
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType GM18507
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType GM19238
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType GM19239
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType GM19240
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Gliobla
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HMEC
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HUVEC
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HeLa-S3
+factors treatment=IFNa4h
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HeLa-S3
+factors treatment=IFNg4h
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType LNCaP
+factors treatment=androgen
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType LNCaP
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType MCF-7
+factors treatment=estrogen
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType MCF-7
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType MCF-7
+factors treatment=vehicle
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Medullo
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType NHEK
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Osteobl
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType ProgFib
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Medullo
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType PanIslets
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType ProgFib
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=Pol2 protocol=PCR2x treatment=DEX_100nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=PAX5-N19 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=SP1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=ZBTB33 protocol=PCR1x
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType MCF-7
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=GABP protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=TAF1 protocol=PCR1x
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType GM19239
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType GM18507
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Fibrobl
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HSMM
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HSMMtube
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType GM12878
+factors antibody=YY1
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType GM18507
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+factors antibody=Input
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType GM12878
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType ProgFib
+factors antibody=Input
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType H9ES
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Pol2 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=RXRA protocol=PCR1x
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Chorion
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType ProgFib
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=ilNA readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=ZNF274
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType K562
+factors insertLength=ilNA readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=Control protocol=PCR1x treatment=DEX_100nM
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType AG04449
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H1-hESC
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H1-hESC
+factors protocol=PCR1x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H1-hESC
+factors protocol=PCR2x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H1-hESC
+factors protocol=PCR1x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HeLa-S3
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HeLa-S3
+factors protocol=PCR2x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HepG2
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HepG2
+factors protocol=PCR2x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType GM12878
+factors antibody=TR4
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType AG04450
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType AG09309
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType AG09319
+factors 
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType GM12878
+factors antibody=ZZZ3
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Pol2-4H8 protocol=PCR1x
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=E2F1
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType AG10803
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType CMK
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType H7-hESC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HAEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HCF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HCPEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HEEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HNPCEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HRPEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType NHDF-neo
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType AoSMC
+factors treatment=serum_free_media
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Melano
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Myometr
+factors 
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=ATF3
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=NELFe
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType NHBE
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HCM
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12892
+factors antibody=Control protocol=v041610.1
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType FibroP
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType ProgFib
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType AG04449
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType AG04450
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType AG09309
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType AG09319
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType AG10803
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType CMK
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType H7-hESC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HAEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HCF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HCM
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HCPEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HEEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HIPEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HNPCEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HRPEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType NHDF-neo
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType NHLF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType GM12865
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType NHLF
+factors 
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=GTF2B
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=Control protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=POU2F2 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=PU.1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=Pol2 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=Pol2-4H8 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=TAF1 protocol=PCR1x
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2 treatment=IFNg30
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12864
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12865
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12872
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12873
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12874
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12875
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HepG2
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM10847
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12891
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12891
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12892
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12892
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM15510
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM15510
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18505
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18526
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM19099
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM19193
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HUVEC
+factors antibody=c-Jun
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BAF155
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BAF170
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Ini1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Nrf1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Brg1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Ini1
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType H1-hESC
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType H1-hESC
+factors insertLength=400 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HUVEC
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HeLa-S3
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType NHEK
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType H1-hESC
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HUVEC
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HepG2
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HepG2
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HepG2
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM10847
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12892
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18505
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18505
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18526
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18526
+factors antibody=Pol2
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType H1-hESC
+factors insertLength=ilNA localization=cell readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType H1-hESC
+factors insertLength=ilNA readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HUVEC
+factors insertLength=ilNA readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HeLa-S3
+factors insertLength=ilNA readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HepG2
+factors insertLength=ilNA readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType NHEK
+factors insertLength=ilNA readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType GM12878
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType NHEK
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType NHEK
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM10847
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12891
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM15510
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18951
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18951
+factors antibody=NFKB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM18951
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM19099
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM19099
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM19193
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM19193
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=JunD
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=c-Jun
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType GM06990
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType K562
+factors 
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=400 localization=cell readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=400 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=TFIIIC-110
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=TFIIIC-110
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType PANC-1
+factors antibody=Control protocol=PCR2x
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=Rad21
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=CEBPB treatment=forskolin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=ERRA treatment=forskolin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=GRp20 treatment=forskolin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=HNF4A treatment=forskolin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=HSF1 treatment=forskolin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Input treatment=forskolin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Input treatment=insulin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=PGC1A treatment=forskolin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Pol2 treatment=forskolin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=SREBP1 treatment=insulin
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=STAT1 treatment=IFNg30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=STAT1 treatment=IFNg6h
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType MCF-7
+factors antibody=Input
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BDP1
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BRF1
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BRF2
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=RPC155
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=BRF2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Max
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=SETDB1 treatment=MNaseD
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=ilNA localization=cell readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType K562
+factors insertLength=ilNA localization=cell readType=1x75D rnaExtract=longPolyA
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType BJ
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType Caco-2
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM06990
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12801
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12864
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12865
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12872
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12873
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12874
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12875
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType GM12878
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HEK293
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HL-60
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HMEC
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HRE
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HepG2
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType K562
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NHEK
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SAEC
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType WERI-Rb-1
+factors antibody=Input
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=GR protocol=PCR1x treatment=EtOH_0.02pct
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Brg1
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Input
+
+ix 0
+organism human
+lab Yale
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Brg1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=SIX5 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=SP1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Sin3Ak-20 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=TCF12 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=USF-1 protocol=PCR1x
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=WHIP
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=HMGN3
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=SRF protocol=PCR1x
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=IRF3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Rad21
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=TBP
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=TBP
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=c-Jun
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Nrf1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=USF2
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=SUZ12
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=ELK4
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Input
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType K562
+factors antibody=CCNT2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=GABP protocol=PCR1x
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=IRF1 treatment=IFNa30
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=IRF1 treatment=IFNg6h
+
+ix 0
+organism human
+lab Sanger
+dataType Gencode
+cellType None
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=H3K4me3B
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HepG2b
+factors antibody=ZNF274
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType SK-N-MC
+factors antibody=Control protocol=v041610.1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Max
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType GM12878
+factors antibody=ZNF274
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HUVEC
+factors antibody=GATA-2
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType Raji
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType Raji
+factors antibody=Pol2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType ECC-1
+factors antibody=ERalpha_a protocol=v041610.2 treatment=Estradiol_10nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType ECC-1
+factors antibody=ERalpha_a protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Egr-1 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12892
+factors antibody=Control protocol=PCR1x
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType GM12878
+factors antibody=CELF1 ripTgtProtein=CELF1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType GM12878
+factors antibody=ELAVL1 ripTgtProtein=ELAVL1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType GM12878
+factors antibody=IGF2BP1 ripTgtProtein=IGF2BP1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType GM12878
+factors antibody=PABPC1 ripTgtProtein=PABPC1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType GM12878
+factors antibody=SLBP ripTgtProtein=SLBP
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType GM12878
+factors antibody=T7Tag ripTgtProtein=T7Tag
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType GM12878
+factors antibody=ripInput ripTgtProtein=ripInput
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType HeLa-S3
+factors antibody=ripInput ripTgtProtein=ripInput
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType HepG2
+factors antibody=ripInput ripTgtProtein=ripInput
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType K562
+factors antibody=ELAVL1 ripTgtProtein=ELAVL1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType K562
+factors antibody=PABPC1 ripTgtProtein=PABPC1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType K562
+factors antibody=SLBP ripTgtProtein=SLBP
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType K562
+factors antibody=T7Tag ripTgtProtein=T7Tag
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType K562
+factors antibody=ripInput ripTgtProtein=ripInput
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType ECC-1
+factors antibody=GR protocol=v041610.2 treatment=DEX_100nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=SIX5 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=BHLHE40 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=TCF12 protocol=PCR1x
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=TBP
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=c-Fos
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=STAT3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=IRF3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=JunD
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Nrf1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=Rad21
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=USF2
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562
+factors antibody=H3K4me3B
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562
+factors antibody=H3K9acB
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=H3K36me3B
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType U2OS
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType U2OS
+factors antibody=SETDB1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=PAX5-C20 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12892
+factors antibody=PAX5-C20 protocol=v041610.1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType HeLa-S3
+factors antibody=ELAVL1 ripTgtProtein=ELAVL1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType HeLa-S3
+factors antibody=PABPC1 ripTgtProtein=PABPC1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType HeLa-S3
+factors antibody=T7Tag ripTgtProtein=T7Tag
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType HepG2
+factors antibody=ELAVL1 ripTgtProtein=ELAVL1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType HepG2
+factors antibody=PABPC1 ripTgtProtein=PABPC1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType HepG2
+factors antibody=T7Tag ripTgtProtein=T7Tag
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType K562
+factors antibody=CELF1 ripTgtProtein=CELF1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K79me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H3K9me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H2A.Z
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H3K79me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMMtube
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HUVEC
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K79me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H4K20me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Pol2(b)
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H2A.Z
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HepG2
+factors antibody=H3K79me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=Control
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=200 localization=cell readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HTB-11
+factors antibody=NRSF protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=GABP protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=NRSF protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=Pol2 protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=TAF1 protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType PANC-1
+factors antibody=NRSF protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType PFSK-1
+factors antibody=NRSF protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType U87
+factors antibody=NRSF protocol=PCR2x
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType K562
+factors insertLength=200 localization=cell readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=GR protocol=PCR2x treatment=DEX_100nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=ERalpha_a protocol=v041610.2 treatment=Genistein_100nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12878
+factors protocol=PCR1x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12878
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12878
+factors protocol=PCR1x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12878
+factors protocol=PCR2x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12891
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12891
+factors protocol=PCR1x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12891
+factors protocol=PCR1x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12892
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12892
+factors protocol=PCR1x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType GM12892
+factors protocol=PCR1x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType K562
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType K562
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType K562
+factors protocol=PCR2x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=H3K9me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NH-A
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NH-A
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NH-A
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NH-A
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NH-A
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NH-A
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NH-A
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2(phosphoS2)
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HSMM
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType MCF-7
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType NHLF
+factors insertLength=200 readType=2x75 rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG04449
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG04450
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG09309
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG09319
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AG10803
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType CMK
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Fibrobl
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM19239
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM19240
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HAEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HCF
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HCM
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HEEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HEK293
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HIPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HMEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HNPCEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HRCEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HSMMtube
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType MCF-7
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NB4
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NHBE
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NT2-D1
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType SKMC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HCT-116
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HRE
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HRPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Jurkat
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM12891
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM12892
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType K562
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType BG02ES
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType BG02ES
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType BG02ES-EBD
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType BG02ES-EBD
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-AFP+
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-AFP+
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-CM
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-CM
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-E
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-E
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-EBD
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HAL
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HAL
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HCT-116
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HCT-116
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HCT-116
+factors protocol=PCR2x restrictionEnzyme=msp
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HFL11W
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HFL11W
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HFL24W
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType HFL24W
+factors 
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType H7-hESC
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType H7-hESC
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType H7-hESC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType H7-hESC
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType AoAF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HCT-116
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMVEC-LBl
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType H7-hESC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HAEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HCPEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HMF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HMVEC-dBl-Ad
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType NHDF-Ad
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType SKMC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HCFaa
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HConF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMVEC-LLy
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMVEC-dBl-Ad
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMVEC-dBl-Neo
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMVEC-dLy-Ad
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMVEC-dLy-Neo
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HMVEC-dNeo
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HPAF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HPF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HPdLF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HVMF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType NHDF-Ad
+factors 
+
+ix 0
+organism human
+lab Yale
+dataType RnaSeq
+cellType K562
+factors rnaExtract=nonPolyARRna
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HBMEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType NH-A
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=GR protocol=PCR2x treatment=EtOH_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType PFSK-1
+factors antibody=Control protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType U87
+factors antibody=Control protocol=PCR2x
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType U2OS
+factors antibody=H3K9me3
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=ZZZ3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=c-Myc treatment=IFNg30
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=ZNF274
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType AoAF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HBMEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HCFaa
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HCT-116
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HConF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HEK293
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HGF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HL-60
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMVEC-LBl
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMVEC-LLy
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMVEC-dBl-Ad
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMVEC-dBl-Neo
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMVEC-dLy-Ad
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMVEC-dLy-Neo
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HMVEC-dNeo
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HPAF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HPF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HPdLF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HVMF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType NH-A
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType NHDF-Ad
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType K562b
+factors antibody=KAP1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NB4
+factors antibody=Max
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NB4
+factors antibody=c-Myc
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=NF-E2_(H-230)
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=RXRA protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=SP1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=ATF3 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=BCLAF1_(M33-P5B11) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=ETS1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=MEF2A protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=ATF3 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=YY1_(C-20) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=ATF3 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=ZBTB33 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=BCL3 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=BCLAF1_(M33-P5B11) protocol=PCR1x
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType H1-hESC
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType H1-hESC
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType H1-hESC
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HUVEC
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HUVEC
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HUVEC
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HeLa-S3
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HeLa-S3
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HeLa-S3
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HepG2
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HepG2
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HepG2
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType MCF-7
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType NHEK
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType NHEK
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType NHEK
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HCPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HPAEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType LNCaP
+factors treatment=androgen
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NHDF-neo
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType SAEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType SK-N-SH_RA
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType PBDE
+factors antibody=GATA-1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType ECC-1
+factors antibody=Pol2 protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=YY1_(C-20) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=p300 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType ECC-1
+factors antibody=ERalpha_a protocol=v041610.2 treatment=Genistein_100nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=GATA2_(CG2-96) protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=ERalpha_a protocol=v041610.2 treatment=Estradiol_10nM
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType A549
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType AG04450
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType BJ
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HMEC
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HSMM
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHLF
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType SK-N-SH_RA
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HSMM
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Melano
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PanIslets
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType ProgFib
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType RPTEC
+factors 
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=cytosol rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=nucleus rnaExtract=longPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=SP1 protocol=PCR1x
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType MCF-7
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType PBDE
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType Fibrobl
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType Fibrobl
+factors antibody=Input
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType A549
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType LNCaP
+factors treatment=androgen
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType LNCaP
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType Astrocy
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType GM12891
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType GM12892
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType Gliobla
+factors antibody=Input
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Osteobl
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType Medullo
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+factors antibody=CTCF treatment=estrogen
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+factors antibody=CTCF treatment=vehicle
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+factors antibody=c-Myc treatment=vehicle
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType MCF-7
+factors antibody=c-Myc treatment=estrogen
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType pHTE
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Gliobla
+factors 
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=Pol2 treatment=TAM_1uM_36hr
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=STAT3 treatment=TAM_1uM_36hr
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=IRF3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=RFX5_(N-494)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=STAT3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=USF2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=p300_(N-15)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BRCA1_(C-1863)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=CEBPB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=GTF2F1_(RAP-74)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=PRDM1_(Val90)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=RFX5_(N-494)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=USF2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=p300_(N-15)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=CEBPB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=CHD2_(N-1250)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=GTF2F1_(RAP-74)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=TAL1_(SC-12984)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=TBP
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=CtBP2
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType SH-SY5Y
+factors antibody=GATA-2
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType Gliobla
+factors 
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType Gliobla
+factors antibody=CTCF
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HMEC
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HSMM
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHLF
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=JunD protocol=v041610.2
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG04449
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG04449
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG04449
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG04450
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG04450
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG04450
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG09309
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG09309
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG09309
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG09319
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG09319
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG09319
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG10803
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG10803
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AG10803
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AoAF
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AoAF
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType AoAF
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HBMEC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HBMEC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HBMEC
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCF
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCF
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCFaa
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCFaa
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCFaa
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCM
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCM
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCPEpiC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCPEpiC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCPEpiC
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCT-116
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HCT-116
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HEEpiC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HEEpiC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HEEpiC
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HEK293
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HMEC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HMF
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HMF
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HMF
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HPAF
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HPAF
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HPAF
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HPF
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HPF
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HPF
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HRPEpiC
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HRPEpiC
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HRPEpiC
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HVMF
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HVMF
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType Jurkat
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType Jurkat
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType MCF-7
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType MCF-7
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NB4
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NB4
+factors antibody=Input
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NHDF-neo
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType NHDF-neo
+factors antibody=Input
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType AG04450
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=chromatin rnaExtract=total
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=nucleoplasm rnaExtract=total
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType MCF-7
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=ETS1 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2-4H8 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=TAF1 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=USF-1 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=YY1 protocol=v041610.1
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HMEC
+factors 
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=STAT3 treatment=EtOH_0.01pct
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Mxi1_(bHLH)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=Mxi1_(bHLH)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=p300_(F-4)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=Pol2 treatment=EtOH_0.01pct
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType K562
+factors treatment=NaBut
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType K562
+factors treatment=OHUrea
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=Rad21 protocol=v041610.2
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HA-sp
+factors antibody=CTCF
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HA-sp
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab UW
+dataType ChipSeq
+cellType HA-sp
+factors antibody=Input
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType PanIsletD
+factors 
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HeLa-S3
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType HeLa-S3
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType 8988T
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType CLL
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HTR8svn
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType U2OS
+factors antibody=H3K36me3B
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType K562
+factors localization=nucleolus rnaExtract=total
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType ECC-1
+factors antibody=Control protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType ECC-1
+factors antibody=FOXA1_(C-20) protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=FOXA1_(C-20) protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType GM12878-XiMat
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType IMR90
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType MCF10A-Er-Src
+factors treatment=TAM_1uM_36hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType MCF10A-Er-Src
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType NH-A
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Osteobl
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-AFP-
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-AFP-
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-EB
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-EB
+factors protocol=PCR2x restrictionEnzyme=hpa
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylSeq
+cellType H9ES-EBD
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H2A.Z
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K79me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType GM12878
+factors antibody=H3K9me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HSMM
+factors antibody=H2A.Z
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H2A.Z
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K79me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType K562
+factors antibody=H3K9me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType Osteobl
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType Osteobl
+factors antibody=H2A.Z
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType Osteobl
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType Osteobl
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType Osteobl
+factors antibody=H3K4me1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType Osteobl
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType Osteobl
+factors antibody=H3K9me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHDF-Ad
+factors antibody=CTCF
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHDF-Ad
+factors antibody=H3K27ac
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHDF-Ad
+factors antibody=H3K27me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHDF-Ad
+factors antibody=H3K36me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHDF-Ad
+factors antibody=H3K4me2
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHDF-Ad
+factors antibody=H3K4me3
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHDF-Ad
+factors antibody=H3K9ac
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=Control protocol=PCR2x treatment=EtOH_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=Control protocol=PCR2x treatment=DEX_100nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=USF-1 protocol=PCR1x treatment=EtOH_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=RXRA protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=CTCF protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Egr-1 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Pol2-4H8 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Rad21 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=Control protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=Control protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=FOXA1_(C-20) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=HNF4A_(H-171) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=Pol2-4H8 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=Control protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=E2F6_(H-50) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=SRF protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=CTCF protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=p300 protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12892
+factors antibody=Control protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12892
+factors antibody=Pol2 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12892
+factors antibody=TAF1 protocol=v041610.2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=TR4
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=YY1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=ZZZ3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HCT-116
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HCT-116
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HCT-116
+factors antibody=TCF4
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=AP-2alpha
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=AP-2gamma
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BDP1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BRF1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=BRF2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=E2F1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=E2F4
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=E2F6
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=HA-E2F1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=RPC155
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=TFIIIC-110
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=TR4
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2b
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2b
+factors antibody=TR4
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=ATF3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=BDP1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=BRF1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=BRF2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=NELFe
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=RPC155
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=SIRT6
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=TFIIIC-110
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=E2F4
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=E2F6
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=GATA-1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=GATA-2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=SETDB1 treatment=MNaseD
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=SETDB1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=TR4
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=YY1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=ZNF263
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562b
+factors antibody=ZNF274
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType MCF-7
+factors antibody=HA-E2F1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType MCF-7
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=SUZ12
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=YY1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=Sin3Ak-20 protocol=v041610.1
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType NHDF-Ad
+factors antibody=Control
+
+ix 0
+organism human
+lab Broad
+dataType ChipSeq
+cellType Osteobl
+factors antibody=Control
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType HPDE6-E6E7
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Hepatocytes
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Stellate
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType T-47D
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType iPS
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=Rad21 protocol=v041610.1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=SUZ12
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HUVEC
+factors antibody=GATA-2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=ELK4
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2b
+factors antibody=ZNF274
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=CCNT2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=GTF2B
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=HMGN3
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType Raji
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType Raji
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType U2OS
+factors antibody=Input
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType U2OS
+factors antibody=SETDB1
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Huh-7
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Huh-7.5
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12892
+factors antibody=YY1 protocol=v041610.1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType H1-hESC
+factors antibody=ELAVL1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType H1-hESC
+factors antibody=T7Tag
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipChip
+cellType H1-hESC
+factors antibody=ripInput
+
+ix 0
+organism human
+lab SunyAlbany
+dataType Switchgear
+cellType HT-1080
+factors ripTgtProtein=ELAVL1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType Switchgear
+cellType HT-1080
+factors ripTgtProtein=IGF2BP1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=Control protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=TAF7_(SQ-8) protocol=v041610.2
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType 8988T
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType AoSMC
+factors treatment=serum_free_media
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType AoSMC
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType AoSMC
+factors treatment=TGFb
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType CLL
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType FibroP
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType H9ES
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HPDE6-E6E7
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HSMM
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HSMMtube
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType HTR8svn
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Hepatocytes
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Huh-7
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Huh-7.5
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType K562
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Melano
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Myometr
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Stellate
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Urothelia
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType Urothelia
+factors treatment=UT189
+
+ix 0
+organism human
+lab Duke
+dataType AffyExonArray
+cellType iPS
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Egr-1 protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=SRF protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=p300 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType BE2_C
+factors antibody=NRSF protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=CTCF protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=Control protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=Rad21 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=YY1_(C-20) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=p300 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=USF-1 protocol=PCR1x treatment=DEX_100nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=TAF1 protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12892
+factors antibody=Pol2-4H8 protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=ELF1_(SC-631) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=HDAC2_(SC-6296) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=ELF1_(SC-631) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=ZBTB7A_(SC-34508) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType SK-N-SH_RA
+factors antibody=USF1_(SC-8983) protocol=v041610.2
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType A549
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType BJ
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType GM12878
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=HDAC2_(SC-6296) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=YY1 protocol=v041610.2
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType K562
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType SK-N-SH_RA
+factors localization=cell rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType A549
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=SRF protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HCT-116
+factors antibody=Control protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HCT-116
+factors antibody=Pol2-4H8 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=FOXA1_(SC-101058) protocol=v041610.1
+
+ix 0
+organism human
+lab UNC/BSU
+dataType Proteogenomics
+cellType GM12878
+factors localization=nucleus
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Egr-1 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Control protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=Control protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=Pol2 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType AoSMC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Astrocy
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Adrenal_Gland_H12803N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Brain_H11058N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Breast_02-03015
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Kidney_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Left_Ventricle_N41
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Leukocyte_UHN00204
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Liver_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Lung_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Pancreas_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Pericardium_H12529N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Placenta_UHN00189
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Skeletal_Muscle_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Skeletal_Muscle_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Skin_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Stomach_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Testis_N30
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BC_Uterus_BN0765
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BE2_C
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType BJ
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType ECC-1
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HTB-11
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Hepatocytes
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType LNCaP
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType Myometr
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PANC-1
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PFSK-1
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType PrEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType SK-N-MC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType T-47D
+factors treatment=DMSO_0.02pct_24hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType T-47D
+factors treatment=Estradiol_10nM_24hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType U87
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType BE2_C
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType GM12864
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HA-sp
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HIPEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HSMM
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HSMMtube
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType Jurkat
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType LNCaP
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType RPTEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType SK-N-MC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType WERI-Rb-1
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Control protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12891
+factors antibody=Control protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType K562
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType AoAF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HPAF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HPdLF
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HPF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType HRCEpiC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType NH-A
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseDgf
+cellType SAEC
+factors 
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=nucleus rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=cytosol rnaExtract=longNonPolyA
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Urothelia
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType Urothelia
+factors treatment=UT189
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=NANOG_(SC-33759) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=POU5F1_(SC-9081) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=FOSL1_(SC-183) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=NRSF protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=GATA3_(SC-268) protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType A549
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType BE2_C
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HA-sp
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HSMMtube
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType LNCaP
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType RPTEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType WI-38
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType WI-38
+factors treatment=4OHTAM_20nM_72hr
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HA-h
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HAc
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HFF
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HFF-Myc
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType HRGEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType Monocytes-CD14+
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType WI-38
+factors 
+
+ix 0
+organism human
+lab UW
+dataType DnaseSeq
+cellType WI-38
+factors treatment=4OHTAM_20nM_72hr
+
+ix 0
+organism human
+lab UNC/BSU
+dataType Proteogenomics
+cellType K562
+factors localization=membraneFraction
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Rad21 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=ELF1_(SC-631) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=ZBTB33 protocol=v041610.1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType U2OS
+factors antibody=KAP1
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HEK293(b)
+factors antibody=ELK4
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HUVEC
+factors antibody=c-Fos
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType NT2-D1
+factors antibody=ZNF274
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=Input treatment=EtOH_0.01pct_12hr
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=Input treatment=EtOH_0.01pct_4hr
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=STAT3 treatment=EtOH_0.01pct_4hr
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=CEBPB
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=STAT3 treatment=EtOH_0.01pct_12hr
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HEK293(b)
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType PBDE
+factors antibody=Input
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType HUVEC
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType K562
+factors 
+
+ix 0
+organism human
+lab Duke
+dataType Combined
+cellType NHEK
+factors 
+
+ix 0
+organism human
+lab GIS
+dataType RnaPet
+cellType HeLa-S3
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType Gliobla
+factors antibody=Pol2
+
+ix 0
+organism human
+lab UT-A
+dataType ChipSeq
+cellType Monocytes-CD14+
+factors antibody=Input
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType BJ
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=nucleus rnaExtract=shortTotal
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HRCEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HRE
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HRPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType IMR90
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType Jurkat
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType LNCaP
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType MCF-7
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType MCF10A-Er-Src
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType MCF10A-Er-Src
+factors treatment=TAM_1uM_36hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType NB4
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType NH-A
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType NHBE
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType NHDF-neo
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType NT2-D1
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType PANC-1
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType PrEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType RPTEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType SAEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType SK-N-SH_RA
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType SKMC
+factors 
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=BRCA1_(C-1863)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=CHD2_(N-1250)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=EBF
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=SMC3_(ab9263)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=RFX5_(N-494)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Rad21
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=USF2
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=Pol2(phosphoS2)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=SMC3_(ab9263)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=CHD2_(N-1250)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=MafF_(M8194)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=MafK_(ab50322)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=RFX5_(N-494)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=MafK_(ab50322)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=SMC3_(ab9263)
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipSeq
+cellType K562
+factors antibody=ELAVL1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipSeq
+cellType K562
+factors antibody=PABPC1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipSeq
+cellType K562
+factors antibody=ripInput
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HEK293(b)
+factors antibody=KAP1
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType Urothelia
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType Urothelia
+factors treatment=UT189
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType A549
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType AG04450
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=cytosol rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType H1-hESC
+factors localization=nucleus rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HUVEC
+factors localization=cytosol rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=cytosol rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=nucleus rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HeLa-S3
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=cytosol rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=nucleus rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType HepG2
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType MCF-7
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=cytosol rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType NHEK
+factors localization=nucleus rnaExtract=shortTotal
+
+ix 0
+organism human
+lab CSHL
+dataType RnaSeq
+cellType SK-N-SH_RA
+factors localization=cell rnaExtract=shortTotal
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType GM12878
+factors antibody=SPT20
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType A549
+factors antibody=Control protocol=PCR1x treatment=EtOH_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType ECC-1
+factors antibody=GR protocol=v041610.2 treatment=EtOH_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=ZEB1_(SC-25388) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=Egr-1 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=ERalpha_a protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType AG04449
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType AG04450
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType AG09309
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType AG09319
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType AG10803
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Adipose_UHN00001
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Adrenal_Gland_H12803N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Bladder_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Brain_H11058N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Breast_02-03015
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Colon_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Colon_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Esophagus_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Esophagus_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Jejunum_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Kidney_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Kidney_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Left_Ventricle_N41
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Leukocyte_UHN00204
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Liver_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Lung_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Lung_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Pancreas_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Penis_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Pericardium_H12529N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Placenta_UHN00189
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Prostate_Gland_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Rectum_N29
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Skeletal_Muscle_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Skeletal_Muscle_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Skin_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType BC_Small_Intestine_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType CMK
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType GM12891
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType GM12892
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HAEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HCF
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HCM
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HCPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HEEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HEK293
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HIPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HMEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HNPCEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HPAEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HRCEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HRE
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HRPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType IMR90
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType Jurkat
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType MCF-7
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType NB4
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType NH-A
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType NHBE
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType NHDF-neo
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType RPTEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType SAEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType SK-N-SH_RA
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType SKMC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType MethylRrbs
+cellType HTR8svn
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType A549
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_100pM
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType SK-N-SH_RA
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=Nrf1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Nrf1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=TBP
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=GCN5
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HepG2
+factors antibody=MafK_(SC-477)
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipSeq
+cellType GM12878
+factors antibody=ELAVL1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipSeq
+cellType GM12878
+factors antibody=PABPC1
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipSeq
+cellType GM12878
+factors antibody=ripInput
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType HepG2b
+factors antibody=TCF4
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType HTR8svn
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType MCF-7
+factors treatment=Hypoxia_LacAcid
+
+ix 0
+organism human
+lab GIS-Ruan
+dataType ChiaPet
+cellType HeLa-S3
+factors antibody=Pol2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType BE2_C
+factors antibody=Control protocol=PCR2x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType PANC-1
+factors antibody=Control protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType A549
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType AG04449
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType AG04450
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType AG09309
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType AG09319
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType AG10803
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType AoSMC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType Astrocy
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType BC_Jejunum_H12817N
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType BC_Small_Intestine_01-11002
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType BJ
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType CMK
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType Caco-2
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType Chorion
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType GM06990
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType GM12891
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType GM12892
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType GM19239
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HAEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HCF
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HCM
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HCPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HEEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HEK293
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HIPEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HL-60
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HMEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HNPCEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HPAEpiC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HSMM
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HTR8svn
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HUVEC
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType Melano
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType Myometr
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType PFSK-1
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType T-47D
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType U87
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType ovcar-3
+factors 
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType A549
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType AG04450
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab RIKEN
+dataType Cage
+cellType BJ
+factors localization=cell rnaExtract=longPolyA
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=CTCF_(C-20)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=STAT1
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+factors antibody=Znf143_(16618-1-AP)
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=c-Jun
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=SPT20
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipSeq
+cellType GM12878
+factors antibody=T7Tag
+
+ix 0
+organism human
+lab SunyAlbany
+dataType RipSeq
+cellType K562
+factors antibody=T7Tag
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12891
+factors readType=1x75D
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12891
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12892
+factors insertLength=ilNA readType=1x75D
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12892
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType H1-hESC
+factors insertLength=ilNA readType=1x75D
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HUVEC
+factors insertLength=ilNA readType=1x75D
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HepG2
+factors insertLength=ilNA readType=1x75D
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType K562
+factors insertLength=ilNA readType=1x75D
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType NHEK
+factors insertLength=ilNA readType=1x75D
+
+ix 0
+organism human
+lab Harvard
+dataType ChipSeq
+cellType GM12878
+factors antibody=GCN5
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Control protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=MEF2C_(SC-13268) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=Sin3Ak-20 protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=CTCF_(SC-5916) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=Control protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HeLa-S3
+factors antibody=NRSF protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=FOXA2_(SC-6554) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType HepG2
+factors antibody=HNF4G_(SC-6558) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=CTCFL_(SC-98982) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=SP2_(SC-643) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=TAF7_(SQ-8) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType K562
+factors antibody=THAP1_(SC-98174) protocol=v041610.1
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType T-47D
+factors antibody=CTCF_(SC-5916) protocol=v041610.2 treatment=DMSO_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType A549
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_100nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType A549
+factors readType=1x36 rnaExtract=shortPolyA treatment=EtOH_0.02pct
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType ECC-1
+factors readType=1x36 rnaExtract=shortPolyA treatment=BPA_100nM_4hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType ECC-1
+factors readType=1x36 rnaExtract=shortPolyA treatment=DMSO_4hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType ECC-1
+factors readType=1x36 rnaExtract=shortPolyA treatment=Estradiol_10nM_4hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType ECC-1
+factors readType=1x36 rnaExtract=shortPolyA treatment=Genistein_100nM_4hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType T-47D
+factors readType=1x36 rnaExtract=shortPolyA treatment=BPA_100nM_4hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType T-47D
+factors readType=1x36 rnaExtract=shortPolyA treatment=DMSO_4hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType T-47D
+factors readType=1x36 rnaExtract=shortPolyA treatment=Estradiol_10nM_4hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType T-47D
+factors readType=1x36 rnaExtract=shortPolyA treatment=Genistein_100nM_4hr
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=ilNA readType=1x75D
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType GM12878
+factors insertLength=400 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType H1-hESC
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HCT-116
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HSMM
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HUVEC
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HeLa-S3
+factors insertLength=ilNA readType=1x75D
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HeLa-S3
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType HepG2
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType K562
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType MCF-7
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType NHEK
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType NHLF
+factors insertLength=200 readType=2x75
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType A549
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_1nM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType A549
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_500pM
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType RnaSeq
+cellType A549
+factors readType=1x36 rnaExtract=shortPolyA treatment=DEX_5nM
+
+ix 0
+organism human
+lab Stanford
+dataType Nucleosome
+cellType K562
+factors 
+
+ix 0
+organism human
+lab UNC
+dataType FaireSeq
+cellType A549
+factors 
+
+ix 0
+organism human
+lab Stanford
+dataType Nucleosome
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType T-REx-HEK293
+factors antibody=ZNF263
+
+ix 0
+organism human
+lab UMass-Dekker
+dataType 5C
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab UMass-Dekker
+dataType 5C
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab UMass-Dekker
+dataType 5C
+cellType HeLa-S3
+factors 
+
+ix 0
+organism human
+lab UMass-Dekker
+dataType 5C
+cellType K562
+factors 
+
+ix 0
+organism human
+lab UChicago
+dataType ChipSeq
+cellType K562
+factors antibody=Input
+
+ix 0
+organism human
+lab UChicago
+dataType ChipSeq
+cellType K562
+factors antibody=eGFP-FOS
+
+ix 0
+organism human
+lab UChicago
+dataType ChipSeq
+cellType K562
+factors antibody=eGFP-GATA2
+
+ix 0
+organism human
+lab UChicago
+dataType ChipSeq
+cellType K562
+factors antibody=eGFP-HDAC8
+
+ix 0
+organism human
+lab UChicago
+dataType ChipSeq
+cellType K562
+factors antibody=eGFP-JunB
+
+ix 0
+organism human
+lab UChicago
+dataType ChipSeq
+cellType K562
+factors antibody=eGFP-JunD
+
+ix 0
+organism human
+lab UChicago
+dataType ChipSeq
+cellType K562
+factors antibody=eGFP-NR4A1
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType MCF10A-Er-Src
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType SH-SY5Y
+factors antibody=Input
+
+ix 0
+organism human
+lab UCD
+dataType ChipSeq
+cellType T-REx-HEK293
+factors antibody=Input
+
+ix 0
+organism human
+lab GIS-Ruan
+dataType ChiaPet
+cellType HCT-116
+factors antibody=Pol2
+
+ix 0
+organism human
+lab GIS-Ruan
+dataType ChiaPet
+cellType K562
+factors antibody=Pol2
+
+ix 0
+organism human
+lab GIS-Ruan
+dataType ChiaPet
+cellType MCF-7
+factors antibody=ERalpha_a
+
+ix 0
+organism human
+lab GIS-Ruan
+dataType ChiaPet
+cellType MCF-7
+factors antibody=Pol2
+
+ix 0
+organism human
+lab GIS-Ruan
+dataType ChiaPet
+cellType NB4
+factors antibody=Pol2
+
+ix 0
+organism human
+lab Yale
+dataType RnaSeq
+cellType K562
+factors rnaExtract=nonPolyARRna treatment=Alpha-amanitin_50ug_9hr
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Methyl27
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=YY1_(C-20) protocol=PCR1x
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Cnv
+cellType K562
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType GM12878
+factors antibody=BCL3 protocol=v041610.1
+
+ix 0
+organism human
+lab Caltech
+dataType RnaSeq
+cellType H1-hESC
+factors insertLength=400 readType=2x75
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType K562
+factors antibody=BHLHE40_(NB100-1800)
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=HDAC2_(SC-6296) protocol=v041610.2
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType Snp
+cellType None
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HAc
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HRGEC
+factors 
+
+ix 0
+organism human
+lab UW
+dataType AffyExonArray
+cellType HSMM
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType GM12878
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType H1-hESC
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType HMEC
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType HSMM
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType HUVEC
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType HepG2
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType K562
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType NHEK
+factors 
+
+ix 0
+organism human
+lab Broad
+dataType Combined
+cellType NHLF
+factors 
+
+ix 0
+organism human
+lab HudsonAlpha
+dataType ChipSeq
+cellType H1-hESC
+factors antibody=BCL11A protocol=PCR1x
+

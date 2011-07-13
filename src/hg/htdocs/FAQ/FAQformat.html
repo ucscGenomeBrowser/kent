@@ -49,7 +49,11 @@
                 		<LI><A HREF="#format8">.nib format</A>
                 		<LI><A HREF="#format9">GenePred table format</A>
 				<LI><A HREF="#format10">Personal Genome SNP format</A>
-				</UL>
+                                <LI><A HREF="#format11">ENCODE RNA elements format</A>
+				<LI><A HREF="#format12">narrowPeak format</A>
+				<LI><A HREF="#format13">broadPeak format</A>
+				<LI><A HREF="#format14">gappedPeak format</A>
+                                </UL>
 				<P>
 				<A HREF="index.html">Return to FAQ Table of Contents</A>
 				<BR>
@@ -1398,5 +1402,231 @@ chr21	31812879	31812880	C	1	0	0
         <BR>
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
+
+<!--content table-->
+<a name="format11"></a>
+    <!--outer table is for border purposes-->        
+    	<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
+             <tr><td>            
+        	<table bgcolor="fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
+	    	     <tr><td>                
+  	    		<table bgcolor="d9e4f8" background="../images/hr.gif" width="100%">
+	        	     <tr><td>                
+	   			<table cellpadding=0 cellspacing=0 margin=0 width="100%">
+		    		     <tr><td align="left"><font size="4"><b>&nbsp; ENCODE RNA elements: BED6 + 3 scores format</b></font></td> 
+		    		     <td align="right"><a href="#top"><img src="/images/index.gif" alt="" align="right" border=0></a>
+	            		     </td></tr>
+  	        		</table>                
+	        	     </td></tr>
+  	    		</table>                
+   	    		<table bgcolor="fffee8" width="100%" cellpadding=0>
+	        	    <tr><th height=10></th></tr>
+                	    <tr><td width=10>&nbsp;</td>
+		    	    <td>
+	            	    <p>
+<ol>
+        <li><b>chrom</b> - Name of the chromosome (or contig, scaffold, etc.).
+        <li><b>chromStart</b> - The starting position of the feature in the
+        chromosome or scaffold. The first base in a chromosome is numbered 0.
+        <li><b>chromEnd</b> - The ending position of the feature in the
+        chromosome or scaffold. The <i>chromEnd</i> base is not included in the
+        display of the feature. For example, the first 100 bases of a
+        chromosome are defined as <i>chromStart=0, chromEnd=100</i>, and span
+        the bases numbered 0-99.
+        <li><b>name</b> - Name given to a region (preferably unique). 
+        Use '.' if no name is assigned.
+        <li><b>score</b> - Indicates how dark the peak will be displayed in the 
+        browser (1-1000).  Ideally average signalvalue per base spread is 
+        between 100 and 1000.
+        <li><b>strand</b> - +/- to denote strand or orientation (whenever 
+        applicable). Use '.' if no orientation is assigned.
+        <li><b>level</b> - Expression level such as rpkm or fpkm.
+        <li><b>signif</b> - Statistical significance such as idr.
+        <li><b>score2</b> - Additional measurement/ count e.g. number of reads.
+			    </td><td width=15></td></tr>
+	    		</table><br>
+		     </td></tr>
+		</table>
+     	     </td></tr>
+    	</table>
+	<br>
+
+<!--content table-->
+<a name="format12"></a>
+    <!--outer table is for border purposes-->        
+    	<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
+             <tr><td>            
+        	<table bgcolor="fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
+	    	     <tr><td>                
+  	    		<table bgcolor="d9e4f8" background="../images/hr.gif" width="100%">
+	        	     <tr><td>                
+	   			<table cellpadding=0 cellspacing=0 margin=0 width="100%">
+		    		     <tr><td align="left"><font size="4"><b>&nbsp; narrowPeak: Narrow (or Point-Source) Peaks format</b></font></td> 
+		    		     <td align="right"><a href="#top"><img src="/images/index.gif" alt="" align="right" border=0></a>
+	            		     </td></tr>
+  	        		</table>                
+	        	     </td></tr>
+  	    		</table>                
+   	    		<table bgcolor="fffee8" width="100%" cellpadding=0>
+	        	    <tr><th height=10></th></tr>
+                	    <tr><td width=10>&nbsp;</td>
+		    	    <td>
+	            	    <p>
+<P>This format is used to provide called peaks of signal enrichment based on pooled, normalized (interpreted) data. It is a BED6+4 format.
+</P>
+<ol>
+        <li><b>chrom</b> - Name of the chromosome (or contig, scaffold, etc.).
+        <li><b>chromStart</b> - The starting position of the feature in the
+        chromosome or scaffold. The first base in a chromosome is numbered 0.
+        <li><b>chromEnd</b> - The ending position of the feature in the
+        chromosome or scaffold. The <i>chromEnd</i> base is not included in the
+        display of the feature. For example, the first 100 bases of a
+        chromosome are defined as <i>chromStart=0, chromEnd=100</i>, and span
+        the bases numbered 0-99.
+        <li><b>name</b> - Name given to a region (preferably unique). 
+        Use '.' if no name is assigned.
+        <li><b>score</b> - Indicates how dark the peak will be displayed in the 
+        browser (1-1000).  Ideally average signalvalue per base spread is 
+        between 100 and 1000.
+        <li><b>strand</b> - +/- to denote strand or orientation (whenever 
+        applicable). Use '.' if no orientation is assigned.
+	<li><b>signalValue</b> - Measurement of overall (usually, average) 
+        enrichment for the region.
+        <li><b>pValue</b> - Measurement of statistical signficance (-log10). 
+        Use -1 if no pValue is assigned.
+        <li><b>qValue</b> - Measurement of statistical significance using 
+        false discovery rate. Use -1 if no qValue is assigned.
+        <li><b>peak</b> - Point-source called for this peak; 0-based offset 
+        from chromStart. Use -1 if no point-source called.
+<P>
+e.g.
+
+chrX    9091548 9091648 .       0       .       182     5.0945  -1  50
+chrX    9358722 9358822 .       0       .       91      4.6052  -1  40
+chrX    9391082 9391182 .       0       .       182     9.2103  -1  75
+</P>
+        		     </td><td width=15></td></tr>
+	    		</table><br>
+		     </td></tr>
+		</table>
+     	     </td></tr>
+    	</table>
+	<br>
+
+
+<!--content table-->
+<a name="format13"></a>
+    <!--outer table is for border purposes-->        
+    	<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
+             <tr><td>            
+        	<table bgcolor="fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
+	    	     <tr><td>                
+  	    		<table bgcolor="d9e4f8" background="../images/hr.gif" width="100%">
+	        	     <tr><td>                
+	   			<table cellpadding=0 cellspacing=0 margin=0 width="100%">
+		    		     <tr><td align="left"><font size="4"><b>&nbsp; broadPeak: Broad Peaks (or Regions) format</b></font></td> 
+		    		     <td align="right"><a href="#top"><img src="/images/index.gif" alt="" align="right" border=0></a>
+	            		     </td></tr>
+  	        		</table>                
+	        	     </td></tr>
+  	    		</table>                
+   	    		<table bgcolor="fffee8" width="100%" cellpadding=0>
+	        	    <tr><th height=10></th></tr>
+                	    <tr><td width=10>&nbsp;</td>
+		    	    <td>
+	            	    <p>
+This format is used to provide called regions of signal enrichment based on pooled, normalized (interpreted) data. It is a BED 6+3 format.</P>
+<ol>
+        <li><b>chrom</b> - Name of the chromosome (or contig, scaffold, etc.).
+        <li><b>chromStart</b> - The starting position of the feature in the
+        chromosome or scaffold. The first base in a chromosome is numbered 0.
+        <li><b>chromEnd</b> - The ending position of the feature in the
+        chromosome or scaffold. The <i>chromEnd</i> base is not included in the
+        display of the feature. For example, the first 100 bases of a
+        chromosome are defined as <i>chromStart=0, chromEnd=100</i>, and span
+        the bases numbered 0-99.
+        <li><b>name</b> - Name given to a region (preferably unique). 
+        Use '.' if no name is assigned.
+        <li><b>score</b> - Indicates how dark the peak will be displayed in the 
+        browser (1-1000).  Ideally average signalvalue per base spread is 
+        between 100 and 1000.
+        <li><b>strand</b> - +/- to denote strand or orientation (whenever 
+        applicable). Use '.' if no orientation is assigned.
+	<li><b>signalValue</b> - Measurement of overall (usually, average) 
+        enrichment for the region.
+        <li><b>pValue</b> - Measurement of statistical signficance (-log10). 
+        Use -1 if no pValue is assigned.
+        <li><b>qValue</b> - Measurement of statistical significance using 
+        false discovery rate. Use -1 if no qValue is assigned.
+<P>
+        		     </td><td width=15></td></tr>
+	    		</table><br>
+		     </td></tr>
+		</table>
+     	     </td></tr>
+    	</table>
+	<br>
+
+
+<!--content table-->
+<a name="format14"></a>
+    <!--outer table is for border purposes-->        
+    	<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
+             <tr><td>            
+        	<table bgcolor="fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
+	    	     <tr><td>                
+  	    		<table bgcolor="d9e4f8" background="../images/hr.gif" width="100%">
+	        	     <tr><td>                
+	   			<table cellpadding=0 cellspacing=0 margin=0 width="100%">
+		    		     <tr><td align="left"><font size="4"><b>&nbsp; gappedPeak: Gapped Peaks (or Regions) format</b></font></td> 
+		    		     <td align="right"><a href="#top"><img src="/images/index.gif" alt="" align="right" border=0></a>
+	            		     </td></tr>
+  	        		</table>                
+	        	     </td></tr>
+  	    		</table>                
+   	    		<table bgcolor="fffee8" width="100%" cellpadding=0>
+	        	    <tr><th height=10></th></tr>
+                	    <tr><td width=10>&nbsp;</td>
+		    	    <td>
+	            	    <p>
+<P>
+This format is used to provide called regions of signal enrichment based on pooled, normalized (interpreted) data where the regions may be spliced or incorporate gaps in the genomic sequence. It is a BED12+3 format.
+</P>
+<ol>
+        <li><b>chrom</b> - Name of the chromosome (or contig, scaffold, etc.).
+        <li><b>chromStart</b> - The starting position of the feature in the
+        chromosome or scaffold. The first base in a chromosome is numbered 0.
+        <li><b>chromEnd</b> - The ending position of the feature in the
+        chromosome or scaffold. The <i>chromEnd</i> base is not included in the
+        display of the feature. For example, the first 100 bases of a
+        chromosome are defined as <i>chromStart=0, chromEnd=100</i>, and span
+        the bases numbered 0-99.
+        <li><b>name</b> - Name given to a region (preferably unique). 
+        Use '.' if no name is assigned.
+        <li><b>score</b> - Indicates how dark the peak will be displayed in the 
+        browser (1-1000).  Ideally average signalvalue per base spread is 
+        between 100 and 1000.
+        <li><b>strand</b> - +/- to denote strand or orientation (whenever 
+        applicable). Use '.' if no orientation is assigned.
+	<li><b>thickStart</b> - The starting position at which the feature is drawn thickly.
+	<li><b>thickEnd</b> - The ending position at which the feature is drawn thickly.
+	<li><b>itemRgb</b> - An RGB value of the form R,G,B (e.g. 255,0,0).
+	<li><b>blockCount</b> - The number of blocks (exons) in the BED line.
+	<li><b>blockSizes</b> - A comma-separated list of the block sizes.
+	<li><b>blockStarts</b> - A comma-separated list of block starts.
+	<li><b>signalValue</b> - Measurement of overall (usually, average) 
+        enrichment for the region.
+        <li><b>pValue</b> - Measurement of statistical signficance (-log10). 
+        Use -1 if no pValue is assigned.
+        <li><b>qValue</b> - Measurement of statistical significance using 
+        false discovery rate. Use -1 if no qValue is assigned.
+<P>
+        		     </td><td width=15></td></tr>
+	    		</table><br>
+		     </td></tr>
+		</table>
+     	     </td></tr>
+    	</table>
+	<br>
 
 </BODY></HTML>

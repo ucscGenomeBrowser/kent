@@ -251,6 +251,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001158
+expId 1158
 fileName wgEncodeRikenCageA549CellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -510,6 +512,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001159
+expId 1159
 fileName wgEncodeRikenCageAg04450CellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -769,6 +773,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001160
+expId 1160
 fileName wgEncodeRikenCageBjCellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1020,6 +1026,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001680
+expId 1680
 fileName wgEncodeRikenCageGm12878CellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1174,6 +1182,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000338
+expId 338
 fileName wgEncodeRikenCageGm12878CytosolPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1425,6 +1435,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001679
+expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1576,6 +1588,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000340
+expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1724,6 +1738,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000339
+expId 339
 fileName wgEncodeRikenCageGm12878NucleusPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1975,6 +1991,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001678
+expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -2129,6 +2147,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000341
+expId 341
 fileName wgEncodeRikenCageH1hescCellPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -2388,6 +2408,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001138
+expId 1138
 fileName wgEncodeRikenCageH1hescCellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -2911,6 +2933,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001146
+expId 1146
 fileName wgEncodeRikenCageHelas3CellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -3060,6 +3084,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001155
+expId 1155
 fileName wgEncodeRikenCageHelas3CytosolPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -3319,6 +3345,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001144
+expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -3468,6 +3496,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001156
+expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -3727,6 +3757,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001145
+expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -3987,6 +4019,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001149
+expId 1149
 fileName wgEncodeRikenCageHepg2CellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -4141,6 +4175,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000343
+expId 343
 fileName wgEncodeRikenCageHepg2CytosolPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -4400,6 +4436,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001147
+expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -4551,6 +4589,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000344
+expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -4705,6 +4745,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000345
+expId 345
 fileName wgEncodeRikenCageHepg2NucleusPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -4964,6 +5006,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001148
+expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -5223,6 +5267,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001141
+expId 1141
 fileName wgEncodeRikenCageHuvecCellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -5377,6 +5423,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000342
+expId 342
 fileName wgEncodeRikenCageHuvecCytosolPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -5636,6 +5684,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001142
+expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -5895,6 +5945,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001143
+expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -6154,6 +6206,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001150
+expId 1150
 fileName wgEncodeRikenCageK562CellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -6308,6 +6362,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000334
+expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -6489,6 +6545,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000329
+expId 329
 fileName wgEncodeRikenCageK562CytosolPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -6885,6 +6943,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000332
+expId 332
 fileName wgEncodeRikenCageK562CytosolPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -7036,6 +7096,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000335
+expId 335
 fileName wgEncodeRikenCageK562NucleolusTotalTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -7190,6 +7252,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000336
+expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -7368,6 +7432,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000330
+expId 330
 fileName wgEncodeRikenCageK562NucleusPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -7627,6 +7693,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000333
+expId 333
 fileName wgEncodeRikenCageK562NucleusPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -7781,6 +7849,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000337
+expId 337
 fileName wgEncodeRikenCageK562PolysomePamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -7881,6 +7951,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-17
 dateUnrestricted 2012-03-17
+dccAccession wgEncodeEH001151
+expId 1151
 fileName wgEncodeRikenCageMcf7CellPapMinusRawRep2.bigWig
 grant Gingeras
 lab RIKEN
@@ -7930,6 +8002,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-17
 dateUnrestricted 2012-03-17
+dccAccession wgEncodeEH001151
+expId 1151
 fileName wgEncodeRikenCageMcf7CellPapPlusRawRep2.bigWig
 grant Gingeras
 lab RIKEN
@@ -8031,6 +8105,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001151
+expId 1151
 fileName wgEncodeRikenCageMcf7CellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -8290,6 +8366,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001152
+expId 1152
 fileName wgEncodeRikenCageNhekCellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -8444,6 +8522,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000346
+expId 346
 fileName wgEncodeRikenCageNhekCytosolPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -8698,6 +8778,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001153
+expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -8852,6 +8934,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000347
+expId 347
 fileName wgEncodeRikenCageNhekNucleusPamTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -9004,6 +9088,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001154
+expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -9422,6 +9508,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001157
+expId 1157
 fileName wgEncodeRikenCageSknshraCellPapTssGencV7.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -9433,4 +9521,4 @@ rnaExtract longPolyA
 subId 4524
 view TssGencV7
 
-# MAGIC: 108949991
+# MAGIC: 470578237
