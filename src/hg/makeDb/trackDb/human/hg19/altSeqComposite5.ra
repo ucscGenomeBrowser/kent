@@ -1,0 +1,104 @@
+track altSeqComposite
+compositeTrack on
+shortLabel GRC Patch Release
+longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
+subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
+dragAndDrop subTracks
+# sortOrder view=+
+visibility hide
+type bed 6
+noInherit on
+group map
+priority 25
+chromosomes  chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
+otherDb hg19Patch5
+chainMinScore 2000
+chainLinearGap medium
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+html altSeqComposite
+dataVersion GRCh37 Patch 5 update, June 2011
+
+    track altSeqCompositeViewlocation
+    shortLabel Patch/Haplotype
+    view location
+    visibility pack
+    parent altSeqComposite
+    noScoreFilter .
+
+	track altSeqHaplotypes
+        parent altSeqCompositeViewlocation
+        subGroups view=location
+	color 32,32,190
+	shortLabel Haplotypes
+	longLabel Haplotypes to GRCh37 Reference Sequence
+	html altSeqComposite
+	priority 1
+	urlLabel Fetch alternate sequence (GRCh37.p5):
+	url http:/cgi-bin/hgc?db=hg19Patch5&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
+
+	track altSeqPatches
+        parent altSeqCompositeViewlocation
+        subGroups view=location
+	color 190,32,32
+	shortLabel Patches
+	longLabel Patches to GRCh37 Reference Sequence
+	html altSeqComposite
+	priority 2
+	urlLabel Fetch alternate sequence (GRCh37.p5):
+	url http:/cgi-bin/hgc?db=hg19Patch5&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
+
+    track altSeqCompositeViewpsl
+    shortLabel Alignment
+    view psl
+    visibility hide
+    parent altSeqComposite
+    type psl
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsMaxZoom 10000.0
+    showCdsAllScales .
+    baseColorDefault itemBases
+    pslSequence no
+    baseColorUseSequence extFile seqHg19Patch5 extHg19Patch5
+
+	track altSeqLiftOverPsl
+        parent altSeqCompositeViewpsl
+        subGroups view=psl
+	shortLabel Alignment
+	longLabel GRCh37 Alternate Sequence Lift Over Alignments
+	html altSeqComposite
+	priority 3
+
+    track altSeqCompositeViewchain
+    shortLabel Chain
+    view chain
+    visibility hide
+    parent altSeqComposite
+    spectrum on
+
+        track chainHg19Patch5
+        parent altSeqCompositeViewchain
+        subGroups view=chain
+        shortLabel Chain
+        longLabel GRCh37 Alternate Sequence Chained Alignments
+        type chain hg19Patch5
+        html chainNet
+	priority 4
+
+    track altSeqCompositeViewnet
+    shortLabel Net
+    view net
+    visibility hide
+    parent altSeqComposite
+
+        track netHg19Patch5
+        parent altSeqCompositeViewnet
+        subGroups view=net
+        shortLabel Net
+        longLabel GRCh37 Alternate Sequence Alignment Net
+        type netAlign hg19Patch5 chainHg19Patch5
+        html chainNet
+	priority 5
