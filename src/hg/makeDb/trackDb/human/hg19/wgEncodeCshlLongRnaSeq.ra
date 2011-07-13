@@ -784,7 +784,7 @@ noInherit on
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 chrm tot + 4
 		longLabel K562 chromatin total Long RNA-seq Plus strand signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIM rnaExtract=TOTAL rep=rep2
+		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 1486821.000000
 		origAssembly hg19
 		color 46,0,184
@@ -804,7 +804,7 @@ noInherit on
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 chrm tot + 3
 		longLabel K562 chromatin total Long RNA-seq Plus strand signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIM rnaExtract=TOTAL rep=rep1
+		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 791439.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1957,7 +1957,7 @@ noInherit on
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 chrm tot - 4
 		longLabel K562 chromatin total Long RNA-seq Minus Strand Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CHROMATIM rnaExtract=TOTAL rep=rep2
+		subGroups view=MinusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 2383507.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1977,7 +1977,7 @@ noInherit on
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 chrm tot - 3
 		longLabel K562 chromatin total Long RNA-seq Minus Strand Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CHROMATIM rnaExtract=TOTAL rep=rep1
+		subGroups view=MinusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 1518807.000000
 		origAssembly hg19
 		color 46,0,184
@@ -3127,7 +3127,7 @@ noInherit on
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel K562 chrm tot A 4
 		longLabel K562 chromatin total Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=Alignments cellType=1K562 localization=CHROMATIM rnaExtract=TOTAL rep=rep2
+		subGroups view=Alignments cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep2
 		type bam
 		origAssembly hg19
 		color 46,0,184
@@ -3147,7 +3147,7 @@ noInherit on
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel K562 chrm tot A 3
 		longLabel K562 chromatin total Long RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=Alignments cellType=1K562 localization=CHROMATIM rnaExtract=TOTAL rep=rep1
+		subGroups view=Alignments cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
 		type bam
 		origAssembly hg19
 		color 46,0,184
@@ -3899,7 +3899,7 @@ noInherit on
         parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel K562 chromatin total
         longLabel K562 chromatin total Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=1K562 localization=CHROMATIM rnaExtract=TOTAL
+        subGroups view=Contigs rep=Pooled cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL
         type bed 6
         color 46,0,184
         # subId=3641 dateSubmitted=2011-02-18
@@ -4440,7 +4440,7 @@ noInherit on
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel K562 chromatin total
         longLabel K562 chromatin total Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=CHROMATIM rnaExtract=TOTAL
+        subGroups view=Junctions rep=Pooled cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL
         type bed 6
         color 46,0,184
         # subId=3641 dateSubmitted=2011-02-18
