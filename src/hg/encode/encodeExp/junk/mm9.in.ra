@@ -1,0 +1,259 @@
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=E2F4 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=Input treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=JunD treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=Pol2 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=TBP treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=c-Jun treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=c-Myc treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=GATA-1 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=H3K4me3 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=Input treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=Pol2 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=TBP treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=c-Myc treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=JunD treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=E2F4 treatment=None
+
+ix 0
+organism mouse
+lab Yale-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=H3K4me3 treatment=None
+
+ix 0
+organism mouse
+lab Yale-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=Input treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=CTCF_(SC-15914) treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=Max treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=Rad21 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=USF2 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=p300_(SC-584) treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=Max treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=USF2 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=p300_(SC-584) treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=NELFe treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=Rad21 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=c-Myb_(SC-7874) treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=CTCF treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType MEL
+expVars antibody=p300 treatment=None
+
+ix 0
+organism mouse
+lab Stanford
+dataType ChipSeq
+cellType CH12
+expVars antibody=Pol2(phosphoS2) treatment=None
+
+ix 0
+organism mouse
+lab Stanford
+dataType ChipSeq
+cellType CH12
+expVars antibody=SMC3_(ab9263) treatment=None
+
+ix 0
+organism mouse
+lab Stanford
+dataType ChipSeq
+cellType MEL
+expVars antibody=CHD2_(AB68301) treatment=None
+
+ix 0
+organism mouse
+lab Stanford
+dataType ChipSeq
+cellType MEL
+expVars antibody=Mxi1_(AF4185) treatment=None
+
+ix 0
+organism mouse
+lab Stanford
+dataType ChipSeq
+cellType MEL
+expVars antibody=Pol2(phosphoS2) treatment=None
+
+ix 0
+organism mouse
+lab Stanford
+dataType ChipSeq
+cellType CH12
+expVars antibody=CHD2_(AB68301) treatment=None
+
+ix 0
+organism mouse
+lab Stanford
+dataType ChipSeq
+cellType CH12
+expVars antibody=Mxi1_(AF4185) treatment=None
+

@@ -1,0 +1,21 @@
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=E2F4 treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=Input treatment=None
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars antibody=JunD treatment=None
+
