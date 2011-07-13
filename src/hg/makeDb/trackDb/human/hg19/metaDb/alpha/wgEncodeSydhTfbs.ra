@@ -469,7 +469,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -486,7 +486,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1366
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep2
@@ -495,7 +495,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -512,7 +512,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1377
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep3
@@ -521,7 +521,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -538,7 +538,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1388
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep4
@@ -547,7 +547,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -564,7 +564,7 @@ project wgEncode
 replicate 4
 setType exp
 subId 1392
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep5
@@ -573,7 +573,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -590,7 +590,7 @@ project wgEncode
 replicate 5
 setType exp
 subId 1393
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabPk
@@ -599,7 +599,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -614,7 +614,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm10847NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep1
@@ -623,7 +623,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -639,7 +639,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1050
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep2
@@ -648,7 +648,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -664,7 +664,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1050
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep3
@@ -673,7 +673,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -689,7 +689,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1050
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep4
@@ -698,7 +698,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -714,7 +714,7 @@ project wgEncode
 replicate 4
 setType exp
 subId 1050
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep5
@@ -723,7 +723,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -739,7 +739,7 @@ project wgEncode
 replicate 5
 setType exp
 subId 1050
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm10847NfkbIggrabSig
@@ -748,7 +748,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -763,7 +763,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm10847NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep1
@@ -6891,7 +6891,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -6908,7 +6908,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1367
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep2
@@ -6917,7 +6917,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -6934,7 +6934,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1379
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep3
@@ -6943,7 +6943,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -6960,7 +6960,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1389
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12891NfkbIggrabPk
@@ -6969,7 +6969,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -6984,7 +6984,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm12891NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep1
@@ -6993,7 +6993,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -7009,7 +7009,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1051
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep2
@@ -7018,7 +7018,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -7034,7 +7034,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1051
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep3
@@ -7043,7 +7043,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -7059,7 +7059,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1051
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12891NfkbIggrabSig
@@ -7068,7 +7068,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -7083,7 +7083,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm12891NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep1
@@ -7698,7 +7698,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -7715,7 +7715,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1368
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep2
@@ -7724,7 +7724,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -7741,7 +7741,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1379
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep3
@@ -7750,7 +7750,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -7767,7 +7767,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1389
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12892NfkbIggrabPk
@@ -7776,7 +7776,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -7791,7 +7791,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm12892NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep1
@@ -7800,7 +7800,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -7816,7 +7816,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 941
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep2
@@ -7825,7 +7825,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -7841,7 +7841,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 941
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep3
@@ -7850,7 +7850,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -7866,7 +7866,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 941
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12892NfkbIggrabSig
@@ -7875,7 +7875,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -7890,7 +7890,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm12892NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep1
@@ -8352,7 +8352,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8369,7 +8369,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1368
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep2
@@ -8378,7 +8378,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8395,7 +8395,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1380
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep3
@@ -8404,7 +8404,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8421,7 +8421,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1389
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep4
@@ -8430,7 +8430,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8447,7 +8447,7 @@ project wgEncode
 replicate 4
 setType exp
 subId 1393
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep5
@@ -8456,7 +8456,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8473,7 +8473,7 @@ project wgEncode
 replicate 5
 setType exp
 subId 1394
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabPk
@@ -8482,7 +8482,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -8497,7 +8497,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm15510NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep1
@@ -8506,7 +8506,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8522,7 +8522,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1052
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep2
@@ -8531,7 +8531,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8547,7 +8547,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1052
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep3
@@ -8556,7 +8556,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8572,7 +8572,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1052
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep4
@@ -8581,7 +8581,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8597,7 +8597,7 @@ project wgEncode
 replicate 4
 setType exp
 subId 1052
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep5
@@ -8606,7 +8606,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8622,7 +8622,7 @@ project wgEncode
 replicate 5
 setType exp
 subId 1052
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm15510NfkbIggrabSig
@@ -8631,7 +8631,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -8646,7 +8646,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm15510NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep1
@@ -9108,7 +9108,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9125,7 +9125,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1369
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep2
@@ -9134,7 +9134,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9151,7 +9151,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1380
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep3
@@ -9160,7 +9160,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9177,7 +9177,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1390
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep4
@@ -9186,7 +9186,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9203,7 +9203,7 @@ project wgEncode
 replicate 4
 setType exp
 subId 1393
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep5
@@ -9212,7 +9212,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9229,7 +9229,7 @@ project wgEncode
 replicate 5
 setType exp
 subId 1394
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabPk
@@ -9238,7 +9238,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -9253,7 +9253,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm18505NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep1
@@ -9262,7 +9262,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9278,7 +9278,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 945
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep2
@@ -9287,7 +9287,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9303,7 +9303,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 945
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep3
@@ -9312,7 +9312,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9328,7 +9328,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 945
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep4
@@ -9337,7 +9337,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9353,7 +9353,7 @@ project wgEncode
 replicate 4
 setType exp
 subId 945
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep5
@@ -9362,7 +9362,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9378,7 +9378,7 @@ project wgEncode
 replicate 5
 setType exp
 subId 945
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18505NfkbIggrabSig
@@ -9387,7 +9387,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -9402,7 +9402,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm18505NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep1
@@ -9966,7 +9966,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9983,7 +9983,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1369
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep2
@@ -9992,7 +9992,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10009,7 +10009,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1380
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep3
@@ -10018,7 +10018,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10035,7 +10035,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1390
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18526NfkbIggrabPk
@@ -10044,7 +10044,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -10059,7 +10059,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm18526NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep1
@@ -10068,7 +10068,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -10084,7 +10084,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 942
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep2
@@ -10093,7 +10093,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -10109,7 +10109,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 942
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep3
@@ -10118,7 +10118,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -10134,7 +10134,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 942
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18526NfkbIggrabSig
@@ -10143,7 +10143,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -10158,7 +10158,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm18526NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep1
@@ -10567,7 +10567,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10584,7 +10584,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1369
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep2
@@ -10593,7 +10593,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10609,7 +10609,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1381
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep3
@@ -10618,7 +10618,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10635,7 +10635,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1390
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep4
@@ -10644,7 +10644,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10661,7 +10661,7 @@ project wgEncode
 replicate 4
 setType exp
 subId 1393
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabPk
@@ -10670,7 +10670,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -10685,7 +10685,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm18951NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep1
@@ -10694,7 +10694,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10710,7 +10710,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1053
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep2
@@ -10719,7 +10719,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10735,7 +10735,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1053
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep3
@@ -10744,7 +10744,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10760,7 +10760,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1053
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep4
@@ -10769,7 +10769,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10785,7 +10785,7 @@ project wgEncode
 replicate 4
 setType exp
 subId 1053
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18951NfkbIggrabSig
@@ -10794,7 +10794,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -10809,7 +10809,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm18951NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep1
@@ -11319,7 +11319,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -11336,7 +11336,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1370
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep2
@@ -11345,7 +11345,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-01-12
@@ -11361,7 +11361,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1381
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep3
@@ -11370,7 +11370,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -11387,7 +11387,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1390
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19099NfkbIggrabPk
@@ -11396,7 +11396,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -11411,7 +11411,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm19099NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep1
@@ -11420,7 +11420,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -11436,7 +11436,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 946
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep2
@@ -11445,7 +11445,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -11461,7 +11461,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 946
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep3
@@ -11470,7 +11470,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -11486,7 +11486,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 946
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19099NfkbIggrabSig
@@ -11495,7 +11495,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -11510,7 +11510,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm19099NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep1
@@ -11969,7 +11969,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -11986,7 +11986,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1370
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep2
@@ -11995,7 +11995,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -12012,7 +12012,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1382
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep3
@@ -12021,7 +12021,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -12038,7 +12038,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1390
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19193NfkbIggrabPk
@@ -12047,7 +12047,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -12062,7 +12062,7 @@ project wgEncode
 setType exp
 subId 4165
 tableName wgEncodeSydhTfbsGm19193NfkbIggrabPk
-treatment None
+treatment TNFa
 view Peaks
 
 metaObject wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep1
@@ -12071,7 +12071,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -12087,7 +12087,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 947
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep2
@@ -12096,7 +12096,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -12112,7 +12112,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 947
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep3
@@ -12121,7 +12121,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -12137,7 +12137,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 947
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19193NfkbIggrabSig
@@ -12146,7 +12146,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TFNa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -12161,7 +12161,7 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsGm19193NfkbIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep1
@@ -12902,6 +12902,134 @@ project wgEncode
 setType input
 subId 3072
 tableName wgEncodeSydhTfbsH1hescInputUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsH1hescJundStdAlnRep1
+objType file
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdAlnRep1.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 4412
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescJundStdAlnRep2
+objType file
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdAlnRep2.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 4412
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescJundStdPk
+objType table
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4412
+tableName wgEncodeSydhTfbsH1hescJundStdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsH1hescJundStdRawDataRep1
+objType file
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 4412
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsH1hescJundStdRawDataRep2
+objType file
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 4412
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsH1hescJundStdSig
+objType table
+antibody JunD
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsH1hescJundStdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4412
+tableName wgEncodeSydhTfbsH1hescJundStdSig
 treatment None
 view Signal
 
@@ -31905,10 +32033,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562E2f4RawDataRep1
 objType file
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
@@ -31930,10 +32058,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562E2f4RawDataRep2
 objType file
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
@@ -31955,10 +32083,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562E2f4UcdAlnRep1
 objType file
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -31981,10 +32109,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562E2f4UcdAlnRep2
 objType file
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -32007,10 +32135,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562E2f4UcdPk
 objType table
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -32031,10 +32159,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562E2f4UcdSig
 objType table
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -32055,10 +32183,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562E2f6RawDataRep1
 objType file
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -32080,10 +32208,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562E2f6RawDataRep2
 objType file
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -32106,10 +32234,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562E2f6UcdAlnRep1
 objType file
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -32132,10 +32260,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562E2f6UcdAlnRep2
 objType file
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -32158,10 +32286,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562E2f6UcdPk
 objType table
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -32182,10 +32310,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562E2f6UcdSig
 objType table
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -32206,10 +32334,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562Gata1RawDataRep1
 objType file
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
@@ -32232,10 +32360,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Gata1RawDataRep2
 objType file
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
@@ -32258,10 +32386,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Gata1UcdAlnRep1
 objType file
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -32284,10 +32412,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Gata1UcdAlnRep2
 objType file
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -32310,10 +32438,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Gata1UcdPk
 objType table
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -32334,10 +32462,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Gata1UcdSig
 objType table
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -32358,10 +32486,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562Gata2RawDataRep1
 objType file
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-02
@@ -32384,10 +32512,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Gata2RawDataRep2
 objType file
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-02
@@ -32410,10 +32538,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Gata2UcdAlnRep1
 objType file
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -32436,10 +32564,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Gata2UcdAlnRep2
 objType file
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -32462,10 +32590,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Gata2UcdPk
 objType table
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -32486,10 +32614,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Gata2UcdSig
 objType table
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -34311,10 +34439,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562InputRawData
 objType file
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
@@ -34411,10 +34539,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562InputUcdAlnRep1
 objType file
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -34437,10 +34565,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562InputUcdSig
 objType table
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -34944,10 +35072,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562Kap1UcdAlnRep1
 objType file
 antibody KAP1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
@@ -34967,10 +35095,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Kap1UcdAlnRep2
 objType file
 antibody KAP1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
@@ -34990,10 +35118,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Kap1UcdPk
 objType table
 antibody KAP1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
@@ -35014,10 +35142,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Kap1UcdRawDataRep1
 objType file
 antibody KAP1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
@@ -35038,10 +35166,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Kap1UcdRawDataRep2
 objType file
 antibody KAP1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
@@ -35062,10 +35190,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Kap1UcdSig
 objType table
 antibody KAP1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
@@ -35808,6 +35936,262 @@ project wgEncode
 setType exp
 subId 3056
 tableName wgEncodeSydhTfbsK562Nfe2StdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562NfyaStdAlnRep1
+objType file
+antibody NF-YA
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsK562NfyaStdAlnRep1.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 4342
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562NfyaStdAlnRep2
+objType file
+antibody NF-YA
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsK562NfyaStdAlnRep2.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 4342
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562NfyaStdPk
+objType table
+antibody NF-YA
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsK562NfyaStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4342
+tableName wgEncodeSydhTfbsK562NfyaStdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsK562NfyaStdRawDataRep1
+objType file
+antibody NF-YA
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsK562NfyaStdRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 4342
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562NfyaStdRawDataRep2
+objType file
+antibody NF-YA
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsK562NfyaStdRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 4342
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562NfyaStdSig
+objType table
+antibody NF-YA
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsK562NfyaStdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4342
+tableName wgEncodeSydhTfbsK562NfyaStdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562NfybStdAlnRep1
+objType file
+antibody NF-YB
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsK562NfybStdAlnRep1.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 4410
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562NfybStdAlnRep2
+objType file
+antibody NF-YB
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsK562NfybStdAlnRep2.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 4410
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562NfybStdPk
+objType table
+antibody NF-YB
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsK562NfybStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4410
+tableName wgEncodeSydhTfbsK562NfybStdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsK562NfybStdRawDataRep1
+objType file
+antibody NF-YB
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsK562NfybStdRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 4410
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562NfybStdRawDataRep2
+objType file
+antibody NF-YB
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsK562NfybStdRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 4410
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562NfybStdSig
+objType table
+antibody NF-YB
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-27
+dateUnrestricted 2012-03-27
+fileName wgEncodeSydhTfbsK562NfybStdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4410
+tableName wgEncodeSydhTfbsK562NfybStdSig
 treatment None
 view Signal
 
@@ -37524,10 +37908,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep1
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -37550,10 +37934,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep2
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -37576,10 +37960,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep1
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -37602,10 +37986,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep2
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -37652,10 +38036,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdSig
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -37676,10 +38060,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562Setdb1RawDataRep1
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -37702,10 +38086,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Setdb1RawDataRep2
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -37728,10 +38112,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Setdb1UcdAlnRep1
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -37754,10 +38138,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Setdb1UcdAlnRep2
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -37780,10 +38164,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Setdb1UcdPk
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -37804,10 +38188,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Setdb1UcdSig
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -39304,10 +39688,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Tr4RawDataRep1
 objType file
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
@@ -39330,10 +39714,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Tr4RawDataRep2
 objType file
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
@@ -39356,10 +39740,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Tr4UcdAlnRep1
 objType file
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -39382,10 +39766,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Tr4UcdAlnRep2
 objType file
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -39408,10 +39792,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Tr4UcdPk
 objType table
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -39432,10 +39816,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Tr4UcdSig
 objType table
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -39746,10 +40130,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562Yy1RawDataRep1
 objType file
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-03
@@ -39772,10 +40156,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Yy1RawDataRep2
 objType file
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-03
@@ -39798,10 +40182,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Yy1UcdAlnRep1
 objType file
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -39824,10 +40208,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Yy1UcdAlnRep2
 objType file
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -39850,10 +40234,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Yy1UcdPk
 objType table
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -39874,10 +40258,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Yy1UcdSig
 objType table
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -40032,10 +40416,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562Znf263RawDataRep1
 objType file
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
@@ -40058,10 +40442,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Znf263RawDataRep2
 objType file
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
@@ -40084,10 +40468,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Znf263UcdAlnRep1
 objType file
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -40110,10 +40494,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Znf263UcdAlnRep2
 objType file
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -40136,10 +40520,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Znf263UcdPk
 objType table
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -40160,10 +40544,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Znf263UcdSig
 objType table
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -40184,10 +40568,10 @@ view Signal
 metaObject wgEncodeSydhTfbsK562Znf274RawDataRep1
 objType file
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
@@ -40210,10 +40594,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Znf274RawDataRep2
 objType file
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
@@ -40236,10 +40620,10 @@ view RawData
 metaObject wgEncodeSydhTfbsK562Znf274UcdAlnRep1
 objType file
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -40262,10 +40646,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Znf274UcdAlnRep2
 objType file
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -40288,10 +40672,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Znf274UcdPk
 objType table
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -40312,10 +40696,10 @@ view Peaks
 metaObject wgEncodeSydhTfbsK562Znf274UcdSig
 objType table
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -43459,6 +43843,134 @@ tableName wgEncodeSydhTfbsShsy5yGata2UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdAlnRep1
+objType file
+antibody GATA3_(SC-269)
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+fileName wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4343
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdAlnRep2
+objType file
+antibody GATA3_(SC-269)
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+fileName wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4343
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdPk
+objType table
+antibody GATA3_(SC-269)
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+fileName wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4343
+tableName wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdRawDataRep1
+objType file
+antibody GATA3_(SC-269)
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+fileName wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4343
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdRawDataRep2
+objType file
+antibody GATA3_(SC-269)
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+fileName wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdRawDataRep2.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4343
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdSig
+objType table
+antibody GATA3_(SC-269)
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+fileName wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4343
+tableName wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsShsy5yInputUcdAln
 objType file
 antibody Input
@@ -44087,4 +44599,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1653425994
+# MAGIC: -1470118620

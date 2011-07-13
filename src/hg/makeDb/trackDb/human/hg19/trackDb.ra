@@ -1174,13 +1174,13 @@ html hg19vertChainNet
         type chain taeGut1
         otherDb taeGut1
 
-        track chainAnoCar1
+        track chainAnoCar2
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=fLizard clade=cLepi
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain anoCar1
-        otherDb anoCar1
+        type chain anoCar2
+        otherDb anoCar2
 
         track chainXenTro2
     #replaces record chainXenTro2 in parent dir missing/extra priority
@@ -1284,13 +1284,13 @@ html hg19vertChainNet
         type netAlign taeGut1 chainTaeGut1
         otherDb taeGut1
 
-        track netAnoCar1
+        track netAnoCar2
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=fLizard clade=cLepi
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign anoCar1 chainAnoCar1
-        otherDb anoCar1
+        type netAlign anoCar2 chainAnoCar2
+        otherDb anoCar2
 
         track netXenTro2
     #replaces record netXenTro2 in parent dir missing/extra priority

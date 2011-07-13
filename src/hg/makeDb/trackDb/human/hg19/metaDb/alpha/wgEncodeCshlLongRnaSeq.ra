@@ -2,6 +2,7 @@ metaObject wgEncodeCshlLongRnaSeq
 objType composite
 composite wgEncodeCshlLongRnaSeq
 expVars lab,dataType,cell,localization,rnaExtract
+geoSeriesAccession GSE30567
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
 objType table
@@ -32574,4 +32575,4 @@ rnaExtract longPolyA
 subId 3663
 view TranscriptGencV3c
 
-# MAGIC: -1066783726
+# MAGIC: -650077939
