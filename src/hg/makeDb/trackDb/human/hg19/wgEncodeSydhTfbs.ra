@@ -194,9 +194,9 @@ wgEncode 1
 
 	    track wgEncodeSydhTfbsK562Usf2IggrabPk
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel K562 USF2 Std
-	    longLabel K562 USF2 Standard ChIP-Seq Peaks from ENCODE/SYDH
-	    subGroups view=Peaks factor=USF2 cellType=K562 control=std treatment=aNone
+	    shortLabel K562 USF2 IgGr
+	    longLabel K562 USF2 IgG-rab ChIP-Seq Peaks from ENCODE/SYDH
+	    subGroups view=Peaks factor=USF2 cellType=K562 control=IGGRAB treatment=aNone
 	    type narrowPeak
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=USF2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1146 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Usf2StdPk fileName=wgEncodeSydhTfbsK562Usf2StdPk.narrowPeak.gz
@@ -467,9 +467,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm12878P300sc584IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM78 p300 Std
-        longLabel GM12878 p300 Standard ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=P300SC582 cellType=GM12878 control=std treatment=aNone
+        shortLabel GM78 p300 IgGm
+        longLabel GM12878 p300 IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=P300SC582 cellType=GM12878 control=IGGMUS treatment=aNone
         type narrowPeak
         color 153,38,0
         # subId=2523 dateSubmitted=2010-10-20
@@ -478,9 +478,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm12878Irf3IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM78 IRF3 Std
-        longLabel GM12878 IRF3 Standard ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=IRF3 cellType=GM12878 control=std treatment=aNone
+        shortLabel GM78 IRF3 IgGm
+        longLabel GM12878 IRF3 IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=IRF3 cellType=GM12878 control=IGGMUS treatment=aNone
         type narrowPeak
         color 153,38,0
         # subId=2524 dateSubmitted=2010-10-20
@@ -876,9 +876,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsH1hescTbpIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel H1ES TBP Std
-        longLabel H1-hESC TBP Standard ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=TBP cellType=H1HESC control=std treatment=aNone
+        shortLabel H1ES TBP IgGr
+        longLabel H1-hESC TBP IgG-rab ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=TBP cellType=H1HESC control=IGGRAB treatment=aNone
         type narrowPeak
         color 0,107,27
         # subId=3392 dateSubmitted=2011-01-19
@@ -1867,14 +1867,15 @@ wgEncode 1
         color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12878NfkbTnfaStdPk
+        track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM78 TNFa NFKB Sd
-        longLabel GM12878 NFKB Standard TNFa ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=NFKB cellType=GM12878 control=std treatment=TNFa
+        shortLabel GM78 TNFa NFKB Ir
+        longLabel GM12878 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=NFKB cellType=GM12878 control=IGGRAB treatment=TNFa
         type narrowPeak
         color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
+        # was wgEncodeSydhTfbsGm12878NfkbTnfaStdPk wong Wed Jul 13 12:02:10 2011
 
         track wgEncodeSydhTfbsGm18951NfkbIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -2552,9 +2553,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsK562Usf2IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel K562 USF2 Std
-        longLabel K562 USF2 Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=USF2 cellType=K562 control=std treatment=aNone
+        shortLabel K562 USF2 IgGr
+        longLabel K562 USF2 IgG-rab ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=USF2 cellType=K562 control=IGGRAB treatment=aNone
         type bigWig 0.000000 15252.900391
         color 46,0,184
         # subId=3072 dateSubmitted=2010-12-06
@@ -2983,9 +2984,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm12878P300sc584IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 p300 Std
-        longLabel GM12878 p300 Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=P300SC582 cellType=GM12878 control=std treatment=aNone
+        shortLabel GM78 p300 IgGm
+        longLabel GM12878 p300 IgG-mus ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=P300SC582 cellType=GM12878 control=IGGMUS treatment=aNone
         type bigWig 1.000000 20108.000000
         color 153,38,0
         # subId=2523 dateSubmitted=2010-10-20
@@ -2994,9 +2995,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm12878Irf3IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 IRF3 Std
-        longLabel GM12878 IRF3 Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=IRF3 cellType=GM12878 control=std treatment=aNone
+        shortLabel GM78 IRF3 IgGm
+        longLabel GM12878 IRF3 IgG-mus ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=IRF3 cellType=GM12878 control=IGGMUS treatment=aNone
         type bigWig 1.000000 13791.000000
         color 153,38,0
         # subId=2524 dateSubmitted=2010-10-20
@@ -3261,14 +3262,15 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878NfkbTnfaStdSig
+        track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 TNFa NFKB Sd
-        longLabel GM12878 NFKB Standard TNFa ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=NFKB cellType=GM12878 control=std treatment=TNFa
+        shortLabel GM78 TNFa NFKB Ir
+        longLabel GM12878 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=NFKB cellType=GM12878 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 6696.200195
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm12878NfkbTnfaStdSig wong Wed Jul 13 12:02:10 2011
 
         track wgEncodeSydhTfbsGm12878Pol2IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -4922,9 +4924,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsH1hescTbpIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel H1ES TBP Std
-        longLabel H1-hESC TBP Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=TBP cellType=H1HESC control=std treatment=aNone
+        shortLabel H1ES TBP IgGr
+        longLabel H1-hESC TBP IgG-rab ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=TBP cellType=H1HESC control=IGGRAB treatment=aNone
         type bigWig 1.000000 116756.000000
         color 0,107,27
         # subId=3392 dateSubmitted=2011-01-19

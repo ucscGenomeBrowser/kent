@@ -1,3 +1,4 @@
+/* pslPairs - join paired ends in psl alignments */
 /*
   File: pslPairs.c
   Author: Terry Furey
@@ -16,6 +17,56 @@
 #include "psl.h"
 #include "options.h"
 #include "binRange.h"
+
+static boolean VERBOSE = FALSE;
+static boolean SLOP = FALSE;
+static boolean SHORT = FALSE;
+static boolean LONG = FALSE;
+static boolean MISMATCH = FALSE;
+static boolean ORPHAN = FALSE;
+static boolean NORANDOM = FALSE;
+static boolean NOBIN = FALSE;
+static int MIN = 32000;
+static int MAX = 47000;
+static int SLOPVAL = 5000;
+static float NEARTOP = 0.001;
+static int TINSERT = 500;
+static int HARDMAX = 75000;
+static float MIN_ID = 0.96;
+static float MIN_ORPHAN_ID = 0.96;
+
+static void usage()
+/* Explain usage and exit */
+{
+errAbort(
+"pslPairs - join paired ends in psl alignments\n"
+"usage: pslPairs <pslFile> <pairFile> <pslTableName> <outFilePrefix>\n"
+"  creates: <outFilePrefix>.pairs file\n"
+"  pslFile\t- filtered psl alignments of ends from kluster run\n"
+"  pairFile\t- three column tab separated: forward reverse cloneId\n"
+"\t\t- forward and reverse columns can be comma separated end ids\n"
+"  pslTableName\t- table name the psl alignments have been loaded into\n"
+"  outFilePrefix\t- prefix used for each output file name\n"
+"Options:\n"
+"  -max=N\t- maximum length of clone sequence (default=%d)\n"
+"  -min=N\t- minimum length of clone sequence (default=%d)\n"
+"  -slopval=N\t- deviation from max/min clone lengths allowed for slop report\n\t\t- (default=%d)\n"
+"  -nearTop=N\t- maximium deviation from best match allowed (default=%0.3f)\n"
+"  -minId=N\t- minimum pct ID of at least one end (default=%0.2f)\n"
+"  -minOrphanId=N - minimum pct ID for orphan alignment (default=%0.2f)\n"
+"  -tInsert=N\t- maximum insert bases allowed in sequence alignment\n\t\t- (default=%d)\n"
+"  -hardMax=N\t- absolute maximum clone length for long report (default=%d)\n"
+"  -verbose\t- display all informational messages\n"
+"  -noBin\t- do not include bin column in output file\n"
+"  -noRandom\t- do not include placements on random portions\n\t\t- {length(chr name) < 7}\n"
+"  -slop\t\t- create <outFilePrefix>.slop file of pairs that fall within\n\t\t- slop length\n"
+"  -short\t- create <outFilePrefix>.short file of pairs shorter than\n\t\t- min size\n"
+"  -long\t\t- create <outFilePrefix>.long file of pairs longer than\n\t\t- max size, but less than hardMax size\n"
+"  -mismatch\t- create <outFilePrefix>.mismatch file of pairs with\n\t\t- bad orientation of ends\n"
+"  -orphan\t- create <outFilePrefix>.orphan file of unmatched end sequences",
+MAX, MIN, SLOPVAL, NEARTOP, MIN_ID, MIN_ORPHAN_ID, TINSERT, HARDMAX
+);
+}
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -37,23 +88,6 @@ static struct optionSpec optionSpecs[] = {
     {"hardMax", OPTION_INT},
     {NULL, 0}
 };
-
-boolean VERBOSE = FALSE;
-boolean SLOP = FALSE;
-boolean SHORT = FALSE;
-boolean LONG = FALSE;
-boolean MISMATCH = FALSE;
-boolean ORPHAN = FALSE;
-boolean NORANDOM = FALSE;
-boolean NOBIN = FALSE;
-int MIN;
-int MAX;
-int SLOPVAL;
-float NEARTOP;
-int TINSERT;
-int HARDMAX;
-float MIN_ID;
-float MIN_ORPHAN_ID;
 
 FILE *of, *orf, *sf, *mf, *esf, *elf;
 
@@ -476,10 +510,8 @@ int main(int argc, char *argv[])
 
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
-    {
-      fprintf(stderr, "USAGE: pslPairs <psl file> <pair file> <psl table name> <out file prefix>\n  Options:\n\t-max=N\t\tmaximum length of clone sequence (default=50000)\n\t-min=N\t\tminimum length of clone sequence (default=30000)\n\t-slopval=N\tdeviation from max/min clone lengths allowed for slop report (default=5000)\n\t-nearTop=N\tmaximium deviation from best match allowed (default=0.001)\n\t-minId=N\tminimum pct ID of at least one end (default=0.96)\n\t-minOrphanId=N\tminimum pct ID for orphan alignment (default=0.96)\n\t-tInsert=N\tmaximum insert bases allowed in sequence alignment (default=500)\n\t-hardMax=N\tabsolute maximum clone length for long report (default=75000)\n\t-verbose\tdisplay all informational messages\n\t-noBin\t\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n\t-slop\t\tcreate file of pairs that fall within slop length\n\t-short\t\tcreate file of pairs shorter than min size\n\t-long\t\tcreate file of pairs longer than max size, but less than hardMax size\n\t-mismatch\tcreate file of pairs with bad orientation of ends\n\t-orphan\t\tcreate file of unmatched end sequences\n");
-      return 1;
-    }
+    usage();
+
   VERBOSE = optionExists("verbose");
   SLOP = optionExists("slop");
   SHORT = optionExists("short");
@@ -488,18 +520,18 @@ int main(int argc, char *argv[])
   ORPHAN = optionExists("orphan");
   NORANDOM = optionExists("noRandom");
   NOBIN = optionExists("noBin");
-  MIN = optionInt("min",32000);
-  MAX = optionInt("max",47000);
-  TINSERT = optionInt("tInsert",500);
-  HARDMAX = optionInt("hardMax",75000);
+  MIN = optionInt("min",MIN);
+  MAX = optionInt("max",MAX);
+  TINSERT = optionInt("tInsert",TINSERT);
+  HARDMAX = optionInt("hardMax",HARDMAX);
   if (SLOP)
-      SLOPVAL = optionInt("slopval",5000);
+      SLOPVAL = optionInt("slopval",SLOPVAL);
   else
       SLOPVAL = 0;
-  NEARTOP = optionFloat("nearTop",0.001);
+  NEARTOP = optionFloat("nearTop",NEARTOP);
   NEARTOP = 1 - NEARTOP;
-  MIN_ID = optionFloat("minId",0.96);
-  MIN_ORPHAN_ID = optionFloat("minOrphanId",0.96);
+  MIN_ID = optionFloat("minId",MIN_ID);
+  MIN_ORPHAN_ID = optionFloat("minOrphanId",MIN_ORPHAN_ID);
 
   pf = pslFileOpen(argv[1]);
   prf = lineFileOpen(argv[2],TRUE);
