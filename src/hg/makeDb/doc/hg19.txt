@@ -12121,7 +12121,7 @@ done
     #	8782198 bases of 2911519270 (0.302%) in intersection
 
 #########################################################################
-# FOSMID END PAIRS (IN PROGRESS 9/1/10 angie)
+# FOSMID END PAIRS (STARTED 9/1/10 angie, WORKING - 2011-07-07 - Hiram)
     # First I downloaded raw files from NCBI, to see if they are newer
     # than what we have in fosends.3:
     mkdir /hive/data/outside/fosends.4
@@ -12209,9 +12209,8 @@ close(SI);
 # 1258791003 bases (35376321 N's 1223414682 real 1223414682 upper 0 lower) in 1615492 sequences in 1 files
 # Total size: mean 779.2 sd 190.8 min 12 (G248P84602FB12_T0) max 3784 (G248P89620RG7_T0) median 722
 
-    # some of these sequences are too small for blat:
-    awk '$2 < 25' fosends.4.faCount | cut -f1 > smallRecords.list
-    faSomeRecords -exclude fosends.4.fa smallRecords.list fosEnds.fa
+    mkdir splitEnds
+    faSplit sequence fosEnds.4.fa 400 splitEnds/fosEnds
 
     # figure out break points in hg19 around large gaps
     hgsql -N -e "select chrom,chromStart,chromEnd,size from gap;" hg19 \
@@ -12320,23 +12319,18 @@ close(FH);
     chmod +x hg19SplitSpec.pl
     ./hg19SplitSpec.pl > hg19.splits.bed
 
-    # gaps of 1M or more:
-    awk '$4 > 999999' hg19.gap.bed | sort -k1,1 -k2,2n > hg19.bigGaps.bed
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds
+    # 4M chunks might work a bit better
+    ./partitionBed.pl 4000000 10000 hg19.splits.bed > hg19.4M.10K.bed
+    mkdir /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run4M
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run4M
+    awk '{printf "%s:%d-%d\n", $1,$2,$3}' ../hg19.4M.10K.bed > hg19.list
+    ls ../../splitEnds | sed -e "s/.fa//" > fosEnds.list
 
-    mkdir /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run
-    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run
-    awk '{printf "%s:%d-%d\n", $1,$2,$3}' ../hg19.splits.bed > hg19.list
-    ls ../fosEnds > fosEnds.list
-
-    cat << '_EOF_' > template
-#LOOP
-runOne $(root1) $(root2) {check out exists+ psl/$(root1)/$(root2).psl}
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
-
-    gensub2 hg19.list fosEnds.list template jobList
-
+    # XXX this didn't work with -fastMap, too much of the query was knocked
+    #	out and the results wouldn't pass the pslReps filter
+    #  Need to run blat without any arguments, filter the results
+    #	with pslReps
     cat << '_EOF_' > runOne
 #!/bin/csh -fe
 
@@ -12345,40 +12339,161 @@ set q=$2
 set c=`echo $t | sed -e 's/:.*//'`
 set ctgStart=`echo $t | sed -e 's/.*://; s/-.*//'`
 set ctgSize=`echo $t | sed -e 's/:/ /; s/-/ /;' | awk '{printf "%d", $3-$2}'`
-set chrSize=`egrep "^$c " /hive/data/genomes/hg19/chrom.sizes | cut -f2`
+set chrSize=`egrep "^$c " /scratch/data/hg19/chrom.sizes | cut -f2`
 set result="psl/${t}/${q}.psl"
 /bin/mkdir -p "psl/${t}"
 set tmpLift="/scratch/tmp/${t}.${q}.lift"
+set tResult="/scratch/tmp/${t}.${q}.psl"
 echo $ctgStart $t $ctgSize $c $chrSize > ${tmpLift}
 
-blat -fastMap -stepSize=5 \
-        /scratch/data/hg19/hg19.2bit:${t} ../fosEnds/${q}.fa stdout \
-    | liftUp -type=.psl ${result} ${tmpLift} error stdin
-/bin/rm ${tmpLift}
+blat /scratch/data/hg19/hg19.2bit:${t} ../../splitEnds/${q}.fa stdout \
+    | liftUp -type=.psl ${tResult} ${tmpLift} error stdin
+pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons ${tResult} \
+                        ${result} /dev/null
+/bin/rm -f ${tmpLift} ${tResult}
 '_EOF_'
     # << happy emacs
     chmod +x runOne
 
-    # these jobs run too fast and there are too many of them, bigger chunks
-    #	next time
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run4M
     gensub2 hg19.list fosEnds.list template jobList
+    #	340,470 jobs
     para create jobList
     para try
     para check ... push ... etc
-# Completed: 2852836 of 2852836 jobs
-# CPU time in finished jobs:    5169061s   86151.02m  1435.85h   59.83d  0.164 y
-# IO & Wait Time:               8136335s  135605.58m  2260.09h   94.17d  0.258 y
-# Average job time:                   5s       0.08m     0.00h    0.00d
-# Longest finished job:             107s       1.78m     0.03h    0.00d
-# Submission to last job:         50806s     846.77m    14.11h    0.59d
+# Completed: 340470 of 340470 jobs
+# CPU time in finished jobs:  306516290s 5108604.83m 85143.41h 3547.64d  9.720 y
+# IO & Wait Time:              22550855s  375847.59m  6264.13h  261.01d  0.715 y
+# Average job time:                 967s      16.11m     0.27h    0.01d
+# Longest finished job:           18257s     304.28m     5.07h    0.21d
+# Submission to last job:        572370s    9539.50m   158.99h    6.62d
 
-    ssh hgwdev
-    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run
-    time pslSort dirs raw.psl /scratch/tmp psl/ch*
-# Got 2852836 files 1689 files per mid file
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run4M
+    time pslSort dirs raw.psl /scratch/tmp psl/ch* > sort.log 2>&1 &
+    # 340470 files in 873 dirs
+    # Got 340470 files 583 files per mid file
+
+XXX - running Wed Jul  6 15:40:10 PDT 2011
+
+    # and now that all those individual results are together, filter all
+    # of them
+    pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons raw.psl \
+                        hg19.fosEnds.psl /dev/null
+
+    # FYI: to see all minimum covers:
+grep "^[0-9]" raw.psl \
+	| awk '{printf "%.2f\n", 100*($1+$3)/$11}' | ave stdin
+# Q1 7.320000
+# median 8.040000
+# Q3 11.690000
+# average 13.519178
+# min 0.980000
+# max 100.000000
+# count 627281022
+# total 8480323865.619440
+# standard deviation 13.540966
+
+    cd /hive/data/genomes/hg19/bed/fosEndPairs
+    time /cluster/home/hiram/bin/x86_64/pslPairs \
+    -tInsert=5000 -minId=0.94 -noBin -min=30000 -max=50000 -slop -short \
+	-long -orphan -mismatch -verbose mapEnds/hg19.fosEnds.psl \
+	/hive/data/outside/fosends.4/endPairs.txt all_fosends hg19.fosEnds
+    #	real    0m6.712s
+    # filter for score over 300
+    awk '$5 >= 300' hg19.fosEnds.pairs | sort -k1,1 -k2,2n \
+	> hg19.fosEndPairs.bed
+    wc -l hg19.fosEnds.pairs hg19.fosEndPairs.bed
+    #	184223 hg19.fosEnds.pairs
+    #	184108 hg19.fosEndPairs.bed
+    awk '$5 >= 300' hg19.fosEnds.slop hg19.fosEnds.short hg19.fosEnds.long \
+	hg19.fosEnds.mismatch hg19.fosEnds.orphan | sort -k1,1 -k2,2n \
+	> hg19.fosEndPairsBad.bed
+
+    # for all names in the hg19.fosEndPairs.bed and hg19.fosEndPairsBad.bed
+    # files, extract those names from the mapEnds/hg19.fosEnds.psl file
+    # to construct a psl file to load up to represent all ends
+    awk '{print $11}' hg19.fosEndPairs.bed hg19.fosEndPairsBad.bed \
+	| tr '[,]' '[\n]' | sort -u > hg19.allEnds.names
+    # the '\t' here actually needs to be the literal: Ctrl-v i
+    #	to get a "real" tab there as the character
+    headRest 5 mapEnds/hg19.fosEnds.psl | sort -k10 \
+	| join -t '\t' -1 10 -2 1 \
+-o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,1.15,1.16,1.17,1.18,1.19,1.20,1.21 - hg19.allEnds.names | sort -k 14,14 -k 15,15n \
+	> hg19.fosEnds.load.psl
+
+    sed -e "s/fosEndPairs/hg19FosEndPairs/" \
+	$HOME/kent/src/hg/lib/fosEndPairs.sql > hg19FosEndPairs.sql
+    sed -e "s/all_fosends/hg19AllFosEnds/" hg19.fosEndPairs.bed \
+	| sort -u | hgLoadBed -notItemRgb hg19 hg19FosEndPairs stdin \
+	    -sqlTable=hg19FosEndPairs.sql 
+    # Loaded 184108 elements
+    # this is about half of what was in previous fosEnd tracks
+
+    # note - this track isn't pushed to RR, just used for assembly QA
+    sed -e "s/fosEndPairsBad/hg19FosEndPairsBad/" \
+                 ~/kent/src/hg/lib/fosEndPairsBad.sql > hg19FosEndPairsBad.sql
+
+    sed -e "s/all_fosends/hg19AllFosEnds/" hg19.fosEndPairsBad.bed \
+	| sort -u | hgLoadBed -notItemRgb hg19 hg19FosEndPairsBad \
+	    hg19.fosEndPairsBad.bed stdin -sqlTable=hg19FosEndPairsBad.sql
+    #	Loaded 229304 elements of size 11
+    # this is about 10 times more than previous fosEnd tracks
+    time hgLoadPsl hg19 -table=hg19AllFosEnds hg19.fosEnds.load.psl
+    #	real    0m27.288s
+
+# the sequences are already loaded from the hg18 lift:
+    grep "^>" /gbdb/hg19/fosends/fosEnds.fromHg18.fa | sed -e 's/>//' \
+	| sort > hg18.fosEnds.names
+    # but they are not the same names:
+    grep "^>" mapEnds/fosends.4.fa | sed -e 's/>//' \
+	| sort > hg19.fosEnds.names
+    sed -e 's/_T.//' hg19.fosEnds.names | sort -u > hg19.unique.fosEnd.names
+    wc -l hg18.fosEnds.names hg19.unique.fosEnd.names
+    #	1087670 hg18.fosEnds.names
+    #	1567737 hg19.unique.fosEnd.names
+    comm -12 hg18.fosEnds.names hg19.unique.fosEnd.names | wc -l
+    #	1087670
+
+    grep "^>" /hive/data/outside/fosends.3/fosEnds.fa \
+	| sed -e 's/>//' | sort > fosends.3.names
+    zcat /hive/data/outside/fosends.4/Hs*.dr.mfa.gz | grep "^>" \
+	| awk '{print $2}' | sort > fosends.4.names
+
+    zcat /hive/data/outside/fosends.4/Hs.WGS*.dr.mfa.gz \
+       | sed -e "s/^>gnl.* />/; s/\.T/_T/" > fosEnds.4.fa
+
+    mkdir /gbdb/hg19/fosends
+    ln -s /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/fosends.4.fa \
+    ln -s /hive/data/genomes/hg19/bed/fosEndPairs/fosEnds.4.fa \
+	/gbdb/hg19/fosends/hg19FosEndPairs.fa
+    time hgLoadSeq hg19 /gbdb/hg19/fosends/hg19FosEndPairs.fa
+    #	1615492 sequences
+    #	real    1m26.084s
+
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run/reps
+    time /cluster/home/hiram/bin/x86_64/pslPairs \
+	-tInsert=5000 -minId=0.94 -noBin -min=30000 -max=50000 -slop -short \
+	-long -orphan -mismatch -verbose repsSort.psl \
+	/hive/data/outside/fosends.4/endPairs.txt hg19AllFosEnds hg19.fosEnds
+    #	real    0m44.577s
+    # filter for score over 300
+    awk '$5 >= 300' hg19.fosEnds.pairs | sort -k1,1 -k2,2n \
+	> hg19.fosEndPairs.bed
+    wc -l hg19.fosEnds.pairs hg19.fosEndPairs.bed
+    #	184342 hg19.fosEnds.pairs
+    #	184227 hg19.fosEndPairs.bed
+
+    sed -e "s/_T0//; s/_T1//; s/_T2//;" repsSort.psl > cleanEndIds.psl
+    time /cluster/home/hiram/bin/x86_64/pslPairs \
+	-tInsert=5000 -minId=0.94 -noBin -min=30000 -max=50000 -slop -short \
+	-long -orphan -mismatch -verbose cleanEndIds.psl \
+	/hive/data/outside/fosends.4/endPairs.txt hg19AllFosEnds \
+	hg19.cleanEnd.fosEnds
+## empty results ?
 
 ##############################################################################
-# hg18 <-> hg19 difference tracks (WORKING - 2010-09-03 - Hiram)
+# hg18 <-> hg19 difference tracks (DONE - 2010-09-03 - Hiram)
     # this is documented in hg18.txt, same heading as above
     mkdir /hive/data/genomes/hg18/bed/liftOverHg19
     cd /hive/data/genomes/hg18/bed/liftOverHg19
@@ -15850,13 +15965,14 @@ TMPDIR=/scratch/tmp
 # not found: GL339450.1 HG79_PATCH
 
 ##############################################################################
-# NCBI patch 5 (WORKING - 2011-07-01 - Hiram)
+# NCBI patch 5 (DONE - 2011-07-01,13 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch5
     cd /hive/data/genomes/hg19/bed/additionalSequence/patch5
     wget --cut-dirs=6 --no-parent --timestamping --no-remove-listing -m \
         -nH --ftp-user=anonymous --ftp-password=yourName@domain.edu \
 ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p5/
-    # the scripts from patch4 appear to work without modification
+    # the scripts from patch4 were modified slightly to update and fix some
+    #	of the new names in this patch5
     cp ../patch4/gatherNames.pl .
     ./gatherNames.pl . > ucscNames.patch5.txt
     cp -p ../patch4/mkTables.pl .
@@ -15869,6 +15985,32 @@ ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_s
     ./mkHapLocate.pl ctgPos.txt \
 	PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
 	> haplotypeLocations.bed
+    cp haplotypeLocations.bed altSequence.bed
+    ln -s ../patch2/before.patch2.hapLoc.bed hg19.hapLoc.bed
+    awk '{printf "%s\t%d\t%d\t%s\t500\t+\t%d\t%d\t32,32,190\n", $2,$3,$4,$5,$3,$4}' \
+hg19.hapLoc.bed >> altSequence.bed
+
+    # a new script for patch5
+    ./mkFasta.pl ucscNames.patch5.txt > hg19.patch5.fa
+    # the build of hg19Patch5 can be seen in hg19Patch5.txt
+
+    egrep -v "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    > altSeqPatchesP5.tab
+    egrep "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    > altSeqHaplotypesP5.tab
+    # verify none lost
+    wc -l altSeqPatchesP5.tab altSeqHaplotypesP5.tab
+    #	41 altSeqPatchesP5.tab
+    #	75 altSeqHaplotypesP5.tab
+    #	116 total
+    wc -l altSequence.bed
+    #	116 altSequence.bed
+    hgLoadBed hg19 altSeqHaplotypesP5 altSeqHaplotypesP5.tab
+    #	Loaded 75 elements of size 6
+    hgLoadBed hg19 altSeqPatchesP5 altSeqPatchesP5.tab
+    #	Loaded 41 elements of size 6
 
 ##############################################################################
 #  hg19 - Human - Ensembl Genes version 62  (DONE - 2011-04-22 - hiram)
