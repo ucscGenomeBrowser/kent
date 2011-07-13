@@ -8442,6 +8442,12 @@ type view
 label Genes DeNovo
 description Expression estimates for genes defined by Cufflinks in de novo mode in gtf format
 
+term GeneGencV7 
+tag GENEGENCV7 
+type view
+label Genes Gencode V7 
+description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format (Provisional)
+
 term GeneGencV3c
 tag GENEGENCV3C
 type view
@@ -8604,6 +8610,12 @@ tag TRANSDENOVO
 type view
 label TranscriptDeNovo
 description Transcript models and expression estimates in FPKM produced by Cufflinks in de novo mode
+
+term TranscriptGencV7 
+tag TRANSGENCV7 
+type view
+label Transcript Gencode V7 
+description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format (Provisional)
 
 term TranscriptGencV3c
 tag TRANSGENCV3C
