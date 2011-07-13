@@ -159,7 +159,7 @@ include wgEncodeOpenChromChip.new.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra alpha
+include wgEncodeHaibTfbs.ra 
 
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra alpha

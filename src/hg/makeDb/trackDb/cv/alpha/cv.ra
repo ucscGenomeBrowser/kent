@@ -8381,6 +8381,13 @@ type view
 label Exons Gencode V3c
 description Expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
+#provisional still - matt
+term ExonsGencV7
+tag EXONGENCV7
+type view
+label Exons Gencode V7
+description Provisional entry for Gencode V7
+
 term Fasta3p
 tag FASTA3P
 type view
