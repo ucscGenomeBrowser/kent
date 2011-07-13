@@ -3251,8 +3251,8 @@ objType file
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3276,8 +3276,8 @@ objType file
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3301,8 +3301,8 @@ objType file
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3325,8 +3325,8 @@ objType file
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3349,8 +3349,8 @@ objType file
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3375,8 +3375,8 @@ objType file
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3401,8 +3401,8 @@ objType file
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3427,8 +3427,8 @@ objType file
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3453,8 +3453,8 @@ objType table
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/TNFa/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -3477,8 +3477,8 @@ objType table
 antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
-control std
-controlId GM12878/None/Input/std
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -44599,4 +44599,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1470118620
+# MAGIC: 983886507
