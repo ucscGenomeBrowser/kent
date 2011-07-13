@@ -3246,105 +3246,7 @@ tableName wgEncodeSydhTfbsGm12878NfkbIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep1
-objType file
-antibody NFKB
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-01
-dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000690
-expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 620
-treatment TNFa
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep2
-objType file
-antibody NFKB
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-01
-dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000690
-expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 620
-treatment TNFa
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep3
-objType file
-antibody NFKB
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-01
-dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000690
-expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep3.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 3
-setType exp
-subId 620
-treatment TNFa
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep4
-objType file
-antibody NFKB
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-01
-dateUnrestricted 2010-06-30
-dccAccession wgEncodeEH000690
-expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep4.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 4
-setType exp
-subId 620
-treatment TNFa
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep1
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM12878
@@ -3358,7 +3260,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000690
 expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep1.bam
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -3370,7 +3272,7 @@ subId 1367
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep2
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM12878
@@ -3384,7 +3286,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000690
 expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep2.bam
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -3396,7 +3298,7 @@ subId 1378
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep3
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM12878
@@ -3410,7 +3312,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000690
 expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep3.bam
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18
@@ -3422,7 +3324,7 @@ subId 1389
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep4
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep4
 objType file
 antibody NFKB
 cell GM12878
@@ -3436,7 +3338,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000690
 expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep4.bam
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep4.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18
@@ -3448,7 +3350,7 @@ subId 1392
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaStdPk
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM12878
@@ -3461,18 +3363,116 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000690
 expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm12878NfkbTnfaStdPk
+tableName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm12878NfkbTnfaStdSig
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep1
+objType file
+antibody NFKB
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-01
+dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000690
+expId 690
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 620
+treatment TNFa
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep2
+objType file
+antibody NFKB
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-01
+dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000690
+expId 690
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 620
+treatment TNFa
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep3
+objType file
+antibody NFKB
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-01
+dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000690
+expId 690
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep3.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 620
+treatment TNFa
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep4
+objType file
+antibody NFKB
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-01
+dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000690
+expId 690
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep4.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 4
+setType exp
+subId 620
+treatment TNFa
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM12878
@@ -3485,14 +3485,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000690
 expId 690
-fileName wgEncodeSydhTfbsGm12878NfkbTnfaStdSig.bigWig
+fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm12878NfkbTnfaStdSig
+tableName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -44599,4 +44599,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 983886507
+# MAGIC: -2121326055
