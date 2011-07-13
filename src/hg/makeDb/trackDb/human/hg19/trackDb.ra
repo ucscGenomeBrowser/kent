@@ -2133,8 +2133,8 @@ dataVersion GRCh37 Patch 2 update, August 2010
 
 track altSeqCompositeP5
 compositeTrack on
-shortLabel GRC Patch Release
-longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
+shortLabel GRC Patch 5
+longLabel GRCh37 patch 5 alternate sequences, haplotypes and reference sequence patches
 subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
 # sortOrder view=+
