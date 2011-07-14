@@ -964,6 +964,12 @@ errorCount = 0;
 struct mdbObj *mdbObjs = NULL;
 struct hash *mdbHash = getMetaDbHash(metaDb, &mdbObjs);
 
+if (strlen(newObj) > 64)
+    {
+    ++errorCount;
+    logErrAbort("ERROR: new name %s is too long for mysql table name, length %ld exceeds 64 chars in length.", newObj, strlen(newObj));
+    }
+
 // Does object exist in mdb
 struct mdbObj *mdbObj = (struct mdbObj *)hashFindVal(mdbHash, oldObj);
 if (!mdbObj)
