@@ -3768,8 +3768,8 @@ tissue Skeletal Muscle
 category cellLine
 age immortalized
 strain C3H
-description Myoblast cell line derived from thigh muscle of C3H mice after crush injury (PROVISIONAL)
-vendorName 	Barbara Wold lab
+description Myoblast cell line derived from thigh muscle of C3H mice after crush injury 
+vendorName Barbara Wold lab
 vendorId C2C12
 termId 7125
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
@@ -7944,7 +7944,7 @@ description The reference human genome is currently hg18 - March 2006 (NCBI Buil
 term RevXlinkChromatin 
 tag RXLCH
 type control
-description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. (PROVISIONAL)
+description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. 
 
 term None
 tag NONE
@@ -8381,12 +8381,11 @@ type view
 label Exons Gencode V3c
 description Expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
-#provisional still - matt
 term ExonsGencV7
 tag EXONGENCV7
 type view
 label Exons Gencode V7
-description Provisional entry for Gencode V7
+description Expression level estimates for GENCODE V7 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
 term Fasta3p
 tag FASTA3P
@@ -8446,7 +8445,7 @@ term GeneGencV7
 tag GENEGENCV7 
 type view
 label Genes Gencode V7 
-description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format (Provisional)
+description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format 
 
 term GeneGencV3c
 tag GENEGENCV3C
@@ -8561,13 +8560,13 @@ term RepPeaks
 tag REPPEAKS
 type view
 label Replicate Peaks
-description Peaks determined by Replicate (PROVISIONAL)
+description Peaks determined per individual replicate  
 
 term RepSignal
 tag REPSIGNAL
 type view
 label Replicate Signal
-description Signal determined by Replicate (PROVISONAL)
+description Signal determined per individual replicate 
 
 term Signal
 tag SIG
@@ -8615,7 +8614,7 @@ term TranscriptGencV7
 tag TRANSGENCV7 
 type view
 label Transcript Gencode V7 
-description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format (Provisional)
+description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format 
 
 term TranscriptGencV3c
 tag TRANSGENCV3C
@@ -8639,7 +8638,7 @@ term Uniqueness
 tag UNQ
 type view
 label Uniqueness
-description (PROVISIONAL)Displays how unique is each sequence on the positive strand starting at a particular base and of a particular length.  The score of 1 represents completely unique, 0.5 occurs exactly twice, 0.33 three times, 0.25 four times and 0 occurs > 4 times (excluding chrN_random and alternative haplotypes).  The Duke uniqueness tracks were generated for the ENCODE project.
+description Displays how unique is each sequence on the positive strand starting at a particular base and of a particular length.  The score of 1 represents completely unique, 0.5 occurs exactly twice, 0.33 three times, 0.25 four times and 0 occurs > 4 times (excluding chrN_random and alternative haplotypes).  The Duke uniqueness tracks were generated for the ENCODE project.
 
 term Validation
 tag VALIDATION
@@ -8841,13 +8840,6 @@ tag  RIPSEQ
 type dataType
 label RIP-seq
 description RNA-seq on RIP-chip data
-
-#term Snp
-#tag SNP
-#type dataType
-#label SNPs
-#description PROVISIONAL Single-nucleotide polymorphism
-# I would like to take this out and replace with Genotype as a more general datatype to match the composite
 
 term Switchgear
 tag SWITCHGEAR
