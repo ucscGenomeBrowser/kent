@@ -8381,6 +8381,13 @@ type view
 label Exons Gencode V3c
 description Expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
+#provisional still - matt
+term ExonsGencV7
+tag EXONGENCV7
+type view
+label Exons Gencode V7
+description Provisional entry for Gencode V7
+
 term Fasta3p
 tag FASTA3P
 type view
@@ -8434,6 +8441,12 @@ tag GENEDENO
 type view
 label Genes DeNovo
 description Expression estimates for genes defined by Cufflinks in de novo mode in gtf format
+
+term GeneGencV7 
+tag GENEGENCV7 
+type view
+label Genes Gencode V7 
+description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format (Provisional)
 
 term GeneGencV3c
 tag GENEGENCV3C
@@ -8597,6 +8610,12 @@ tag TRANSDENOVO
 type view
 label TranscriptDeNovo
 description Transcript models and expression estimates in FPKM produced by Cufflinks in de novo mode
+
+term TranscriptGencV7 
+tag TRANSGENCV7 
+type view
+label Transcript Gencode V7 
+description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format (Provisional)
 
 term TranscriptGencV3c
 tag TRANSGENCV3C

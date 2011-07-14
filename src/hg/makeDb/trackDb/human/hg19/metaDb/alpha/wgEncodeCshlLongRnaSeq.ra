@@ -2,6 +2,7 @@ metaObject wgEncodeCshlLongRnaSeq
 objType composite
 composite wgEncodeCshlLongRnaSeq
 expVars lab,dataType,cell,localization,rnaExtract
+geoSeriesAccession GSE30567
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
 objType table
@@ -328,6 +329,29 @@ rnaExtract longNonPolyA
 subId 3601
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqA549CellPamExonsGencV7
+objType file
+bioRep 021WC,022WC
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqA549CellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9005,LID9006
+labProtocolId 021WC-,022WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4589
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqA549CellPamGeneDeNovo
 objType file
 bioRep 021WC,022WC
@@ -375,6 +399,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3601
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqA549CellPamGeneGencV7
+objType file
+bioRep 021WC,022WC
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqA549CellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9005,LID9006
+labProtocolId 021WC-,022WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4589
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPamJunctions
 objType file
@@ -506,6 +553,30 @@ rnaExtract longNonPolyA
 subId 3601
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV7
+objType table
+bioRep 021WC,022WC
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9005,LID9006
+labProtocolId 021WC-,022WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4589
+tableName wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqA549CellPapAlnRep1
 objType table
 bioRep 021WC
@@ -610,6 +681,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3602
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqA549CellPapExonsGencV7
+objType file
+bioRep 021WC,022WC
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqA549CellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8963,LID8964
+labProtocolId 021WC+,022WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4549
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapFastqRd1Rep1
 objType file
@@ -766,6 +860,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3602
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqA549CellPapGeneGencV7
+objType file
+bioRep 021WC,022WC
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqA549CellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8963,LID8964
+labProtocolId 021WC+,022WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4549
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapJunctions
 objType table
@@ -1055,6 +1172,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3602
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqA549CellPapTranscriptGencV7
+objType table
+bioRep 021WC,022WC
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqA549CellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8963,LID8964
+labProtocolId 021WC+,022WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4549
+tableName wgEncodeCshlLongRnaSeqA549CellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep1
 objType table
@@ -1381,6 +1522,29 @@ rnaExtract longNonPolyA
 subId 3603
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqAg04450CellPamExonsGencV7
+objType file
+bioRep 017WC,018WC
+cell AG04450
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqAg04450CellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9001,LID9002
+labProtocolId 017WC-,018WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4558
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamGeneDeNovo
 objType file
 bioRep 017WC,018WC
@@ -1428,6 +1592,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3603
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqAg04450CellPamGeneGencV7
+objType file
+bioRep 017WC,018WC
+cell AG04450
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqAg04450CellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9001,LID9002
+labProtocolId 017WC-,018WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4558
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamJunctions
 objType file
@@ -1559,6 +1746,30 @@ rnaExtract longNonPolyA
 subId 3603
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7
+objType table
+bioRep 017WC,018WC
+cell AG04450
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9001,LID9002
+labProtocolId 017WC-,018WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4558
+tableName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep1
 objType table
 bioRep 017WC
@@ -1663,6 +1874,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3604
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqAg04450CellPapExonsGencV7
+objType file
+bioRep 017WC,018WC
+cell AG04450
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqAg04450CellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8965,LID8966
+labProtocolId 017WC+,018WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4554
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd1Rep1
 objType file
@@ -1819,6 +2053,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3604
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqAg04450CellPapGeneGencV7
+objType file
+bioRep 017WC,018WC
+cell AG04450
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqAg04450CellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8965,LID8966
+labProtocolId 017WC+,018WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4554
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapJunctions
 objType file
@@ -2107,6 +2364,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3604
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV7
+objType table
+bioRep 017WC,018WC
+cell AG04450
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8965,LID8966
+labProtocolId 017WC+,018WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4554
+tableName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1
 objType table
@@ -2433,6 +2714,29 @@ rnaExtract longNonPolyA
 subId 3605
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqBjCellPamExonsGencV7
+objType file
+bioRep 037WC,038WC
+cell BJ
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqBjCellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9007,LID9008
+labProtocolId 037WC-,038WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4581
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqBjCellPamGeneDeNovo
 objType file
 bioRep 037WC,038WC
@@ -2480,6 +2784,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3605
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqBjCellPamGeneGencV7
+objType file
+bioRep 037WC,038WC
+cell BJ
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqBjCellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9007,LID9008
+labProtocolId 037WC-,038WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4581
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPamJunctions
 objType file
@@ -2611,6 +2938,30 @@ rnaExtract longNonPolyA
 subId 3605
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV7
+objType table
+bioRep 037WC,038WC
+cell BJ
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9007,LID9008
+labProtocolId 037WC-,038WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4581
+tableName wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqBjCellPapAlnRep1
 objType table
 bioRep 037WC
@@ -2715,6 +3066,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3606
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqBjCellPapExonsGencV7
+objType file
+bioRep 037WC,038WC
+cell BJ
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqBjCellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8969,LID8970
+labProtocolId 037WC+,038WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4576
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapFastqRd1Rep1
 objType file
@@ -2871,6 +3245,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3606
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqBjCellPapGeneGencV7
+objType file
+bioRep 037WC,038WC
+cell BJ
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqBjCellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8969,LID8970
+labProtocolId 037WC+,038WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4576
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapJunctions
 objType file
@@ -3159,6 +3556,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3606
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV7
+objType table
+bioRep 037WC,038WC
+cell BJ
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8969,LID8970
+labProtocolId 037WC+,038WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4576
+tableName wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1
 objType table
@@ -3485,6 +3906,29 @@ rnaExtract longNonPolyA
 subId 3611
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqGm12878CellPamExonsGencV7
+objType file
+bioRep 003WC,004WC
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8661,LID8662
+labProtocolId 003WC-,004WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4586
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamGeneDeNovo
 objType file
 bioRep 003WC,004WC
@@ -3532,6 +3976,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3611
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellPamGeneGencV7
+objType file
+bioRep 003WC,004WC
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8661,LID8662
+labProtocolId 003WC-,004WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4586
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamJunctions
 objType file
@@ -3709,6 +4176,30 @@ rnaExtract longNonPolyA
 subId 3611
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV7
+objType table
+bioRep 003WC,004WC
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8661,LID8662
+labProtocolId 003WC-,004WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4586
+tableName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1
 objType table
 bioRep 003WC
@@ -3813,6 +4304,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3612
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellPapExonsGencV7
+objType file
+bioRep 003WC,004WC
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16629,LID16630
+labProtocolId 003WC+,004WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4571
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd1Rep1
 objType file
@@ -3969,6 +4483,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3612
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellPapGeneGencV7
+objType file
+bioRep 003WC,004WC
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16629,LID16630
+labProtocolId 003WC+,004WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4571
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapJunctions
 objType table
@@ -4258,6 +4795,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3612
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptGencV7
+objType table
+bioRep 003WC,004WC
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16629,LID16630
+labProtocolId 003WC+,004WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4571
+tableName wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
 objType table
@@ -4798,6 +5359,29 @@ rnaExtract longNonPolyA
 subId 3607
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamExonsGencV7
+objType file
+bioRep 003C,004C
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18547,LID18548
+labProtocolId 003C-,004C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4559
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamGeneDeNovo
 objType file
 bioRep 003C,004C
@@ -4845,6 +5429,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3607
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamGeneGencV7
+objType file
+bioRep 003C,004C
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18547,LID18548
+labProtocolId 003C-,004C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4559
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamJunctions
 objType file
@@ -5023,6 +5630,30 @@ rnaExtract longNonPolyA
 subId 3607
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV7
+objType table
+bioRep 003C,004C
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18547,LID18548
+labProtocolId 003C-,004C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4559
+tableName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1
 objType table
 bioRep 003C
@@ -5127,6 +5758,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3608
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapExonsGencV7
+objType file
+bioRep 003C,004C
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8467,LID8468
+labProtocolId 003C+,004C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4553
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd1Rep1
 objType file
@@ -5283,6 +5937,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3608
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapGeneGencV7
+objType file
+bioRep 003C,004C
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8467,LID8468
+labProtocolId 003C+,004C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4553
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapJunctions
 objType file
@@ -5571,6 +6248,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3608
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7
+objType table
+bioRep 003C,004C
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8467,LID8468
+labProtocolId 003C+,004C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4553
+tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
 objType table
@@ -5897,6 +6598,29 @@ rnaExtract longNonPolyA
 subId 3609
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamExonsGencV7
+objType file
+bioRep 003N,004N
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9197,LID9198
+labProtocolId 003N-,004N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4548
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamGeneDeNovo
 objType file
 bioRep 003N,004N
@@ -5944,6 +6668,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3609
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamGeneGencV7
+objType file
+bioRep 003N,004N
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9197,LID9198
+labProtocolId 003N-,004N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4548
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamJunctions
 objType file
@@ -6121,6 +6868,30 @@ rnaExtract longNonPolyA
 subId 3609
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV7
+objType table
+bioRep 003N,004N
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9197,LID9198
+labProtocolId 003N-,004N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4548
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1
 objType table
 bioRep 003N
@@ -6225,6 +6996,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3610
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapExonsGencV7
+objType file
+bioRep 003N,004N
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8532,LID8533
+labProtocolId 003N+,004N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4601
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd1Rep1
 objType file
@@ -6381,6 +7175,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3610
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapGeneGencV7
+objType file
+bioRep 003N,004N
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8532,LID8533
+labProtocolId 003N+,004N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4601
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapJunctions
 objType file
@@ -6669,6 +7486,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3610
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7
+objType table
+bioRep 003N,004N
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8532,LID8533
+labProtocolId 003N+,004N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4601
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1
 objType table
@@ -6995,6 +7836,29 @@ rnaExtract longNonPolyA
 subId 3613
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqH1hescCellPamExonsGencV7
+objType file
+bioRep 005WC,006WC
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8663,LID8664
+labProtocolId 005WC-,006WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4593
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamGeneDeNovo
 objType file
 bioRep 005WC,006WC
@@ -7042,6 +7906,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3613
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCellPamGeneGencV7
+objType file
+bioRep 005WC,006WC
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8663,LID8664
+labProtocolId 005WC-,006WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4593
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamJunctions
 objType file
@@ -7219,6 +8106,30 @@ rnaExtract longNonPolyA
 subId 3613
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV7
+objType table
+bioRep 005WC,006WC
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8663,LID8664
+labProtocolId 005WC-,006WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4593
+tableName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1
 objType table
 bioRep 005WC
@@ -7323,6 +8234,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3614
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCellPapExonsGencV7
+objType file
+bioRep 005WC,006WC
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8461,LID8462
+labProtocolId 005WC+,006WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4592
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd1Rep1
 objType file
@@ -7479,6 +8413,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3614
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCellPapGeneGencV7
+objType file
+bioRep 005WC,006WC
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8461,LID8462
+labProtocolId 005WC+,006WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4592
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapJunctions
 objType file
@@ -7768,6 +8725,30 @@ rnaExtract longPolyA
 subId 3614
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV7
+objType table
+bioRep 005WC,006WC
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8461,LID8462
+labProtocolId 005WC+,006WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4592
+tableName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2
 objType table
 bioRep 006C
@@ -7961,6 +8942,29 @@ seqPlatform Illumina_GA2x
 subId 3615
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamExonsGencV7
+objType file
+bioRep 006C
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18549
+labProtocolId 006C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4542
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamGeneDeNovo
 objType file
 bioRep 006C
@@ -8014,6 +9018,29 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3615
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamGeneGencV7
+objType file
+bioRep 006C
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18549
+labProtocolId 006C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4542
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamJunctions
 objType file
@@ -8148,6 +9175,30 @@ seqPlatform Illumina_GA2x
 subId 3615
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV7
+objType table
+bioRep 006C
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18549
+labProtocolId 006C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4542
+tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapAlnRep2
 objType table
 bioRep 006C
@@ -8230,6 +9281,29 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapExonsGencV7
+objType file
+bioRep 006C
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8536
+labProtocolId 006C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4582
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapFastqRd1Rep2
 objType file
@@ -8338,6 +9412,29 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapGeneGencV7
+objType file
+bioRep 006C
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8536
+labProtocolId 006C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4582
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapJunctions
 objType file
@@ -8527,6 +9624,30 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV7
+objType table
+bioRep 006C
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8536
+labProtocolId 006C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4582
+tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2
 objType table
@@ -8721,6 +9842,29 @@ seqPlatform Illumina_GA2x
 subId 3617
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamExonsGencV7
+objType file
+bioRep 006N
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9199
+labProtocolId 006N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4590
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamGeneDeNovo
 objType file
 bioRep 006N
@@ -8774,6 +9918,29 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3617
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamGeneGencV7
+objType file
+bioRep 006N
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9199
+labProtocolId 006N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4590
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamJunctions
 objType file
@@ -8908,6 +10075,30 @@ seqPlatform Illumina_GA2x
 subId 3617
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV7
+objType table
+bioRep 006N
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9199
+labProtocolId 006N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4590
+tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapAlnRep2
 objType table
 bioRep 006N
@@ -8990,6 +10181,29 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapExonsGencV7
+objType file
+bioRep 006N
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8558
+labProtocolId 006N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4570
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapFastqRd1Rep2
 objType file
@@ -9098,6 +10312,29 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapGeneGencV7
+objType file
+bioRep 006N
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8558
+labProtocolId 006N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4570
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapJunctions
 objType file
@@ -9287,6 +10524,30 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV7
+objType table
+bioRep 006N
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8558
+labProtocolId 006N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4570
+tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1
 objType table
@@ -9613,6 +10874,29 @@ rnaExtract longNonPolyA
 subId 3629
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHelas3CellPamExonsGencV7
+objType file
+bioRep 011WC,012WC
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8790,LID8791
+labProtocolId 011WC-,012WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4599
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamGeneDeNovo
 objType file
 bioRep 011WC,012WC
@@ -9660,6 +10944,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3629
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3CellPamGeneGencV7
+objType file
+bioRep 011WC,012WC
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8790,LID8791
+labProtocolId 011WC-,012WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4599
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamJunctions
 objType file
@@ -9837,6 +11144,30 @@ rnaExtract longNonPolyA
 subId 3629
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV7
+objType table
+bioRep 011WC,012WC
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8790,LID8791
+labProtocolId 011WC-,012WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4599
+tableName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1
 objType table
 bioRep 011WC
@@ -9941,6 +11272,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3630
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3CellPapExonsGencV7
+objType file
+bioRep 011WC,012WC
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16633,LID16634
+labProtocolId 011WC+,012WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4583
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd1Rep1
 objType file
@@ -10097,6 +11451,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3630
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3CellPapGeneGencV7
+objType file
+bioRep 011WC,012WC
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16633,LID16634
+labProtocolId 011WC+,012WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4583
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapJunctions
 objType file
@@ -10386,6 +11763,30 @@ rnaExtract longPolyA
 subId 3630
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7
+objType table
+bioRep 011WC,012WC
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16633,LID16634
+labProtocolId 011WC+,012WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4583
+tableName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2
 objType table
 bioRep 012C
@@ -10579,6 +11980,29 @@ seqPlatform Illumina_GA2x
 subId 3631
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamExonsGencV7
+objType file
+bioRep 012C
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18551
+labProtocolId 012C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4577
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneDeNovo
 objType file
 bioRep 012C
@@ -10632,6 +12056,29 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3631
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneGencV7
+objType file
+bioRep 012C
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18551
+labProtocolId 012C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4577
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamJunctions
 objType file
@@ -10789,6 +12236,30 @@ seqPlatform Illumina_GA2x
 subId 3631
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV7
+objType table
+bioRep 012C
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18551
+labProtocolId 012C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4577
+tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1
 objType table
 bioRep 011C
@@ -10893,6 +12364,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3632
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapExonsGencV7
+objType file
+bioRep 011C,012C
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8469,LID8470
+labProtocolId 011C+,012C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4544
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd1Rep1
 objType file
@@ -11049,6 +12543,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3632
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapGeneGencV7
+objType file
+bioRep 011C,012C
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8469,LID8470
+labProtocolId 011C+,012C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4544
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapJunctions
 objType file
@@ -11337,6 +12854,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3632
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7
+objType table
+bioRep 011C,012C
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8469,LID8470
+labProtocolId 011C+,012C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4544
+tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1
 objType table
@@ -11663,6 +13204,29 @@ rnaExtract longNonPolyA
 subId 3633
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamExonsGencV7
+objType file
+bioRep 011N,012N
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9200,LID9201
+labProtocolId 011N-,012N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4568
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamGeneDeNovo
 objType file
 bioRep 011N,012N
@@ -11710,6 +13274,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3633
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamGeneGencV7
+objType file
+bioRep 011N,012N
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9200,LID9201
+labProtocolId 011N-,012N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4568
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamJunctions
 objType file
@@ -11887,6 +13474,30 @@ rnaExtract longNonPolyA
 subId 3633
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV7
+objType table
+bioRep 011N,012N
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9200,LID9201
+labProtocolId 011N-,012N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4568
+tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1
 objType table
 bioRep 011N
@@ -11991,6 +13602,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3634
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapExonsGencV7
+objType file
+bioRep 011N,012N
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8559,LID8560
+labProtocolId 011N+,012N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4550
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd1Rep1
 objType file
@@ -12147,6 +13781,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3634
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapGeneGencV7
+objType file
+bioRep 011N,012N
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8559,LID8560
+labProtocolId 011N+,012N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4550
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapJunctions
 objType file
@@ -12435,6 +14092,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3634
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7
+objType table
+bioRep 011N,012N
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8559,LID8560
+labProtocolId 011N+,012N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4550
+tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1
 objType table
@@ -12761,6 +14442,29 @@ rnaExtract longNonPolyA
 subId 3639
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHepg2CellPamExonsGencV7
+objType file
+bioRep 013WC,014WC
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8792,LID8793
+labProtocolId 013WC-,014WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4580
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamGeneDeNovo
 objType file
 bioRep 013WC,014WC
@@ -12808,6 +14512,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3639
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2CellPamGeneGencV7
+objType file
+bioRep 013WC,014WC
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8792,LID8793
+labProtocolId 013WC-,014WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4580
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamJunctions
 objType file
@@ -12985,6 +14712,30 @@ rnaExtract longNonPolyA
 subId 3639
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV7
+objType table
+bioRep 013WC,014WC
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8792,LID8793
+labProtocolId 013WC-,014WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4580
+tableName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1
 objType table
 bioRep 013WC
@@ -13089,6 +14840,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3640
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2CellPapExonsGencV7
+objType file
+bioRep 013WC,014WC
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16635,LID16636
+labProtocolId 013WC+,014WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4596
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd1Rep1
 objType file
@@ -13245,6 +15019,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3640
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2CellPapGeneGencV7
+objType file
+bioRep 013WC,014WC
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16635,LID16636
+labProtocolId 013WC+,014WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4596
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapJunctions
 objType file
@@ -13533,6 +15330,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3640
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV7
+objType table
+bioRep 013WC,014WC
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16635,LID16636
+labProtocolId 013WC+,014WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4596
+tableName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1
 objType table
@@ -13859,6 +15680,29 @@ rnaExtract longNonPolyA
 subId 3635
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamExonsGencV7
+objType file
+bioRep 013C,014C
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18552,LID18553
+labProtocolId 013C-,014C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4575
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamGeneDeNovo
 objType file
 bioRep 013C,014C
@@ -13906,6 +15750,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3635
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamGeneGencV7
+objType file
+bioRep 013C,014C
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18552,LID18553
+labProtocolId 013C-,014C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4575
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamJunctions
 objType table
@@ -14084,6 +15951,30 @@ rnaExtract longNonPolyA
 subId 3635
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptGencV7
+objType table
+bioRep 013C,014C
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18552,LID18553
+labProtocolId 013C-,014C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4575
+tableName wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1
 objType table
 bioRep 013C
@@ -14188,6 +16079,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3636
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapExonsGencV7
+objType file
+bioRep 013C,014C
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8471,LID8472
+labProtocolId 013C+,014C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4603
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd1Rep1
 objType file
@@ -14344,6 +16258,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3636
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapGeneGencV7
+objType file
+bioRep 013C,014C
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8471,LID8472
+labProtocolId 013C+,014C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4603
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapJunctions
 objType file
@@ -14633,6 +16570,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3636
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV7
+objType table
+bioRep 013C,014C
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8471,LID8472
+labProtocolId 013C+,014C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4603
+tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
 objType table
@@ -14959,6 +16920,29 @@ rnaExtract longNonPolyA
 subId 3637
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamExonsGencV7
+objType file
+bioRep 013N,014N
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9202,LID9203
+labProtocolId 013N-,014N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4562
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamGeneDeNovo
 objType file
 bioRep 013N,014N
@@ -15006,6 +16990,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3637
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamGeneGencV7
+objType file
+bioRep 013N,014N
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9202,LID9203
+labProtocolId 013N-,014N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4562
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamJunctions
 objType file
@@ -15183,6 +17190,30 @@ rnaExtract longNonPolyA
 subId 3637
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV7
+objType table
+bioRep 013N,014N
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9202,LID9203
+labProtocolId 013N-,014N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4562
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep1
 objType table
 bioRep 013N
@@ -15287,6 +17318,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3638
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapExonsGencV7
+objType file
+bioRep 013N,014N
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8534,LID8535
+labProtocolId 013N+,014N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4584
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd1Rep1
 objType file
@@ -15443,6 +17497,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3638
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapGeneGencV7
+objType file
+bioRep 013N,014N
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8534,LID8535
+labProtocolId 013N+,014N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4584
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapJunctions
 objType file
@@ -15732,6 +17809,30 @@ rnaExtract longPolyA
 subId 3638
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV7
+objType table
+bioRep 013N,014N
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8534,LID8535
+labProtocolId 013N+,014N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4584
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1
 objType table
 bioRep 036WC
@@ -15925,6 +18026,29 @@ seqPlatform Illumina_GA2x
 subId 3619
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHmecCellPamExonsGencV7
+objType file
+bioRep 036WC
+cell HMEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHmecCellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8831
+labProtocolId 036WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4547
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamGeneDeNovo
 objType file
 bioRep 036WC
@@ -15978,6 +18102,29 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3619
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHmecCellPamGeneGencV7
+objType file
+bioRep 036WC
+cell HMEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHmecCellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8831
+labProtocolId 036WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4547
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamJunctions
 objType file
@@ -16112,6 +18259,30 @@ seqPlatform Illumina_GA2x
 subId 3619
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7
+objType table
+bioRep 036WC
+cell HMEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8831
+labProtocolId 036WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4547
+tableName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapAlnRep1
 objType table
 bioRep 036WC
@@ -16194,6 +18365,29 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHmecCellPapExonsGencV7
+objType file
+bioRep 036WC
+cell HMEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHmecCellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8695
+labProtocolId 036WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4556
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapFastqRd1Rep1
 objType file
@@ -16302,6 +18496,29 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHmecCellPapGeneGencV7
+objType file
+bioRep 036WC
+cell HMEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHmecCellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8695
+labProtocolId 036WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4556
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapJunctions
 objType file
@@ -16491,6 +18708,30 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
+objType table
+bioRep 036WC
+cell HMEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8695
+labProtocolId 036WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4556
+tableName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1
 objType table
@@ -17147,6 +19388,29 @@ rnaExtract longPolyA
 subId 3622
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHsmmCellPapExonsGencV7
+objType file
+bioRep 023WC,024WC
+cell HSMM
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHsmmCellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8710,LID8711
+labProtocolId 023WC+,024WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4587
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd1Rep1
 objType file
 bioRep 023WC
@@ -17302,6 +19566,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3622
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHsmmCellPapGeneGencV7
+objType file
+bioRep 023WC,024WC
+cell HSMM
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHsmmCellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8710,LID8711
+labProtocolId 023WC+,024WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4587
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapJunctions
 objType file
@@ -17590,6 +19877,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3622
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV7
+objType table
+bioRep 023WC,024WC
+cell HSMM
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8710,LID8711
+labProtocolId 023WC+,024WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4587
+tableName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1
 objType table
@@ -17916,6 +20227,29 @@ rnaExtract longNonPolyA
 subId 3627
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHuvecCellPamExonsGencV7
+objType file
+bioRep 009WC,010WC
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8788,LID8789
+labProtocolId 009WC-,010WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4565
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamGeneDeNovo
 objType file
 bioRep 009WC,010WC
@@ -17963,6 +20297,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3627
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecCellPamGeneGencV7
+objType file
+bioRep 009WC,010WC
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8788,LID8789
+labProtocolId 009WC-,010WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4565
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamJunctions
 objType file
@@ -18140,6 +20497,30 @@ rnaExtract longNonPolyA
 subId 3627
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV7
+objType table
+bioRep 009WC,010WC
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8788,LID8789
+labProtocolId 009WC-,010WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4565
+tableName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1
 objType table
 bioRep 009WC
@@ -18244,6 +20625,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3628
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecCellPapExonsGencV7
+objType file
+bioRep 009WC,010WC
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8463,LID8464
+labProtocolId 009WC+,010WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4564
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd1Rep1
 objType file
@@ -18400,6 +20804,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3628
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecCellPapGeneGencV7
+objType file
+bioRep 009WC,010WC
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8463,LID8464
+labProtocolId 009WC+,010WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4564
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapJunctions
 objType file
@@ -18689,6 +21116,30 @@ rnaExtract longPolyA
 subId 3628
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV7
+objType table
+bioRep 009WC,010WC
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8463,LID8464
+labProtocolId 009WC+,010WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4564
+tableName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3
 objType table
 bioRep 029C
@@ -18880,6 +21331,29 @@ seqPlatform Illumina_GA2x
 subId 3623
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamExonsGencV7
+objType file
+bioRep 029C
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18556
+labProtocolId 029C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4552
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamGeneDeNovo
 objType file
 bioRep 029C
@@ -18931,6 +21405,29 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3623
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamGeneGencV7
+objType file
+bioRep 029C
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18556
+labProtocolId 029C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4552
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamJunctions
 objType file
@@ -19085,6 +21582,30 @@ seqPlatform Illumina_GA2x
 subId 3623
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7
+objType table
+bioRep 029C
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18556
+labProtocolId 029C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4552
+tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3
 objType table
 bioRep 029C
@@ -19189,6 +21710,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3624
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapExonsGencV7
+objType file
+bioRep 029C,030C
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8688,LID8689
+labProtocolId 029C+,030C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4595
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd1Rep3
 objType file
@@ -19345,6 +21889,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3624
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapGeneGencV7
+objType file
+bioRep 029C,030C
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8688,LID8689
+labProtocolId 029C+,030C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4595
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapJunctions
 objType file
@@ -19633,6 +22200,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3624
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV7
+objType table
+bioRep 029C,030C
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8688,LID8689
+labProtocolId 029C+,030C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4595
+tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3
 objType table
@@ -19959,6 +22550,29 @@ rnaExtract longNonPolyA
 subId 3625
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamExonsGencV7
+objType file
+bioRep 029N,030N
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9206,LID9207
+labProtocolId 029N-,030N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4563
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamGeneDeNovo
 objType file
 bioRep 029N,030N
@@ -20006,6 +22620,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3625
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamGeneGencV7
+objType file
+bioRep 029N,030N
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9206,LID9207
+labProtocolId 029N-,030N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4563
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamJunctions
 objType file
@@ -20183,6 +22820,30 @@ rnaExtract longNonPolyA
 subId 3625
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV7
+objType table
+bioRep 029N,030N
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9206,LID9207
+labProtocolId 029N-,030N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4563
+tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep3
 objType table
 bioRep 029N
@@ -20287,6 +22948,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3626
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapExonsGencV7
+objType file
+bioRep 029N,030N
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8690,LID8691
+labProtocolId 029N+,030N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4602
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd1Rep3
 objType file
@@ -20443,6 +23127,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3626
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapGeneGencV7
+objType file
+bioRep 029N,030N
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8690,LID8691
+labProtocolId 029N+,030N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4602
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapJunctions
 objType file
@@ -20731,6 +23438,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3626
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7
+objType table
+bioRep 029N,030N
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8690,LID8691
+labProtocolId 029N+,030N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4602
+tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1
 objType table
@@ -21057,6 +23788,29 @@ rnaExtract longNonPolyA
 subId 3648
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562CellPamExonsGencV7
+objType file
+bioRep 001WC,002WC
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8659,LID8660
+labProtocolId 001WC-,002WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4588
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562CellPamGeneDeNovo
 objType file
 bioRep 001WC,002WC
@@ -21104,6 +23858,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3648
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562CellPamGeneGencV7
+objType file
+bioRep 001WC,002WC
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8659,LID8660
+labProtocolId 001WC-,002WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4588
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamJunctions
 objType file
@@ -21281,6 +24058,30 @@ rnaExtract longNonPolyA
 subId 3648
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV7
+objType table
+bioRep 001WC,002WC
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8659,LID8660
+labProtocolId 001WC-,002WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4588
+tableName wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562CellPapAlnRep1
 objType table
 bioRep 001WC
@@ -21385,6 +24186,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3649
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562CellPapExonsGencV7
+objType file
+bioRep 001WC,002WC
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16627,LID16628
+labProtocolId 001WC+,002WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4585
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapFastqRd1Rep1
 objType file
@@ -21541,6 +24365,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3649
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562CellPapGeneGencV7
+objType file
+bioRep 001WC,002WC
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16627,LID16628
+labProtocolId 001WC+,002WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4585
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapJunctions
 objType table
@@ -21830,6 +24677,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3649
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7
+objType table
+bioRep 001WC,002WC
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16627,LID16628
+labProtocolId 001WC+,002WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4585
+tableName wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
 objType table
@@ -22150,6 +25021,29 @@ rnaExtract total
 subId 3641
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalExonsGencV7
+objType file
+bioRep 025CH,026CH
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9185,LID9186
+labProtocolId 025CHt,026CHt
+labVersion iIDR
+localization chromatin
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4551
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep3
 objType file
 bioRep 025CH
@@ -22305,6 +25199,29 @@ project wgEncode
 rnaExtract total
 subId 3641
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalGeneGencV7
+objType file
+bioRep 025CH,026CH
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9185,LID9186
+labProtocolId 025CHt,026CHt
+labVersion iIDR
+localization chromatin
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4551
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalJunctions
 objType file
@@ -22547,6 +25464,30 @@ project wgEncode
 rnaExtract total
 subId 3641
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7
+objType table
+bioRep 025CH,026CH
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9185,LID9186
+labProtocolId 025CHt,026CHt
+labVersion iIDR
+localization chromatin
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4551
+tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1
 objType table
@@ -22898,6 +25839,29 @@ rnaExtract longNonPolyA
 subId 3642
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562CytosolPamExonsGencV7
+objType file
+bioRep 001C,002C
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CytosolPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18545,LID18546
+labProtocolId 001C-,002C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4579
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPamGeneDeNovo
 objType file
 bioRep 001C,002C
@@ -22945,6 +25909,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3642
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562CytosolPamGeneGencV7
+objType file
+bioRep 001C,002C
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CytosolPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18545,LID18546
+labProtocolId 001C-,002C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4579
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPamJunctions
 objType table
@@ -23123,6 +26110,30 @@ rnaExtract longNonPolyA
 subId 3642
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptGencV7
+objType table
+bioRep 001C,002C
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18545,LID18546
+labProtocolId 001C-,002C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4579
+tableName wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1
 objType table
 bioRep 001C
@@ -23227,6 +26238,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3643
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562CytosolPapExonsGencV7
+objType file
+bioRep 001C,002C
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CytosolPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8465,LID8466
+labProtocolId 001C+,002C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4572
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd1Rep1
 objType file
@@ -23383,6 +26417,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3643
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562CytosolPapGeneGencV7
+objType file
+bioRep 001C,002C
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CytosolPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8465,LID8466
+labProtocolId 001C+,002C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4572
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapJunctions
 objType file
@@ -23672,6 +26729,30 @@ rnaExtract longPolyA
 subId 3643
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV7
+objType table
+bioRep 001C,002C
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8465,LID8466
+labProtocolId 001C+,002C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4572
+tableName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3
 objType table
 bioRep 025NL
@@ -23776,6 +26857,29 @@ project wgEncode
 rnaExtract total
 subId 3644
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalExonsGencV7
+objType file
+bioRep 025NL,026NL
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9187,LID9188
+labProtocolId 025NLt,026NLt
+labVersion iIDR
+localization nucleolus
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4546
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep3
 objType file
@@ -23932,6 +27036,29 @@ project wgEncode
 rnaExtract total
 subId 3644
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalGeneGencV7
+objType file
+bioRep 025NL,026NL
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9187,LID9188
+labProtocolId 025NLt,026NLt
+labVersion iIDR
+localization nucleolus
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4546
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions
 objType file
@@ -24175,6 +27302,30 @@ rnaExtract total
 subId 3644
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7
+objType table
+bioRep 025NL,026NL
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9187,LID9188
+labProtocolId 025NLt,026NLt
+labVersion iIDR
+localization nucleolus
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4546
+tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3
 objType table
 bioRep 025NP
@@ -24279,6 +27430,29 @@ project wgEncode
 rnaExtract total
 subId 3645
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalExonsGencV7
+objType file
+bioRep 025NP,026NP
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9189,LID9190
+labProtocolId 025NPt,026NPt
+labVersion iIDR
+localization nucleoplasm
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4545
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep3
 objType file
@@ -24435,6 +27609,29 @@ project wgEncode
 rnaExtract total
 subId 3645
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalGeneGencV7
+objType file
+bioRep 025NP,026NP
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9189,LID9190
+labProtocolId 025NPt,026NPt
+labVersion iIDR
+localization nucleoplasm
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4545
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalJunctions
 objType file
@@ -24677,6 +27874,30 @@ project wgEncode
 rnaExtract total
 subId 3645
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7
+objType table
+bioRep 025NP,026NP
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9189,LID9190
+labProtocolId 025NPt,026NPt
+labVersion iIDR
+localization nucleoplasm
+project wgEncode
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4545
+tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1
 objType table
@@ -25003,6 +28224,29 @@ rnaExtract longNonPolyA
 subId 3646
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562NucleusPamExonsGencV7
+objType file
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleusPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9195,LID9196
+labProtocolId 001N-,002N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4541
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamGeneDeNovo
 objType file
 bioRep 001N,002N
@@ -25050,6 +28294,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3646
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleusPamGeneGencV7
+objType file
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleusPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9195,LID9196
+labProtocolId 001N-,002N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4541
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamJunctions
 objType file
@@ -25227,6 +28494,30 @@ rnaExtract longNonPolyA
 subId 3646
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV7
+objType table
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9195,LID9196
+labProtocolId 001N-,002N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4541
+tableName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1
 objType table
 bioRep 001N
@@ -25331,6 +28622,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3647
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleusPapExonsGencV7
+objType file
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleusPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8556,LID8557
+labProtocolId 001N+,002N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4555
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd1Rep1
 objType file
@@ -25487,6 +28801,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3647
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleusPapGeneGencV7
+objType file
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleusPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8556,LID8557
+labProtocolId 001N+,002N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4555
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapJunctions
 objType file
@@ -25775,6 +29112,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3647
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7
+objType table
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8556,LID8557
+labProtocolId 001N+,002N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4555
+tableName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1
 objType table
@@ -26101,6 +29462,29 @@ rnaExtract longNonPolyA
 subId 3650
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqMcf7CellPamExonsGencV7
+objType file
+bioRep 015WC,016WC
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqMcf7CellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8824,LID8825
+labProtocolId 015WC-,016WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4578
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamGeneDeNovo
 objType file
 bioRep 015WC,016WC
@@ -26148,6 +29532,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3650
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CellPamGeneGencV7
+objType file
+bioRep 015WC,016WC
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqMcf7CellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8824,LID8825
+labProtocolId 015WC-,016WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4578
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamJunctions
 objType file
@@ -26325,6 +29732,30 @@ rnaExtract longNonPolyA
 subId 3650
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV7
+objType table
+bioRep 015WC,016WC
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8824,LID8825
+labProtocolId 015WC-,016WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4578
+tableName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1
 objType table
 bioRep 015WC
@@ -26429,6 +29860,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3651
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CellPapExonsGencV7
+objType file
+bioRep 015WC,016WC
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqMcf7CellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8686,LID8687
+labProtocolId 015WC+,016WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4600
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd1Rep1
 objType file
@@ -26585,6 +30039,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3651
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CellPapGeneGencV7
+objType file
+bioRep 015WC,016WC
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqMcf7CellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8686,LID8687
+labProtocolId 015WC+,016WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4600
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapJunctions
 objType file
@@ -26873,6 +30350,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3651
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7
+objType table
+bioRep 015WC,016WC
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8686,LID8687
+labProtocolId 015WC+,016WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4600
+tableName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1
 objType table
@@ -27343,6 +30844,29 @@ seqPlatform Illumina_GA2x
 subId 3657
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamExonsGencV7
+objType file
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8665,LID8666
+labProtocolId 007WC-,008WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4567
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovo
 objType file
 bioRep 035WC
@@ -27396,6 +30920,29 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3657
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV7
+objType file
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8665,LID8666
+labProtocolId 007WC-,008WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4567
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamJunctions
 objType file
@@ -27632,6 +31179,30 @@ seqPlatform Illumina_GA2x
 subId 3657
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7
+objType table
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8665,LID8666
+labProtocolId 007WC-,008WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4567
+tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1
 objType table
 bioRep 007WC
@@ -27772,6 +31343,29 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapExonsGencV7
+objType file
+bioRep 035WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8694
+labProtocolId 035WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4574
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep1
 objType file
@@ -27988,6 +31582,29 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV7
+objType file
+bioRep 035WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8694
+labProtocolId 035WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4574
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapJunctions
 objType file
@@ -28392,6 +32009,30 @@ seqPlatform Illumina_GA2x
 subId 3659
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7
+objType table
+bioRep 035WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8694
+labProtocolId 035WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4574
+tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3
 objType table
 bioRep 027C
@@ -28585,6 +32226,29 @@ seqPlatform Illumina_GA2x
 subId 3652
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamExonsGencV7
+objType file
+bioRep 027C
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18554
+labProtocolId 027C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4598
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamGeneDeNovo
 objType file
 bioRep 027C
@@ -28638,6 +32302,29 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamGeneGencV7
+objType file
+bioRep 027C
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18554
+labProtocolId 027C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4598
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamJunctions
 objType file
@@ -28772,6 +32459,30 @@ seqPlatform Illumina_GA2x
 subId 3652
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7
+objType table
+bioRep 027C
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID18554
+labProtocolId 027C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4598
+tableName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3
 objType table
 bioRep 027C
@@ -28876,6 +32587,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3653
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapExonsGencV7
+objType file
+bioRep 027C,028C
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8795,LID8796
+labProtocolId 027C+,028C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4597
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd1Rep3
 objType file
@@ -29032,6 +32766,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3653
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapGeneGencV7
+objType file
+bioRep 027C,028C
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8795,LID8796
+labProtocolId 027C+,028C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4597
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapJunctions
 objType file
@@ -29320,6 +33077,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3653
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7
+objType table
+bioRep 027C,028C
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8795,LID8796
+labProtocolId 027C+,028C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4597
+tableName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3
 objType table
@@ -29646,6 +33427,29 @@ rnaExtract longNonPolyA
 subId 3654
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamExonsGencV7
+objType file
+bioRep 027N,028N
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9204,LID9205
+labProtocolId 027N-,028N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4566
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamGeneDeNovo
 objType file
 bioRep 027N,028N
@@ -29693,6 +33497,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3654
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamGeneGencV7
+objType file
+bioRep 027N,028N
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9204,LID9205
+labProtocolId 027N-,028N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4566
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamJunctions
 objType file
@@ -29870,6 +33697,30 @@ rnaExtract longNonPolyA
 subId 3654
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV7
+objType table
+bioRep 027N,028N
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9204,LID9205
+labProtocolId 027N-,028N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4566
+tableName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3
 objType table
 bioRep 027N
@@ -29976,6 +33827,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3655
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapExonsGencV7
+objType file
+bioRep 027N,028N
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8797,LID8798
+labProtocolId 027N+,028N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4569
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd1Rep3
 objType file
@@ -30132,6 +34006,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3655
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapGeneGencV7
+objType file
+bioRep 027N,028N
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8797,LID8798
+labProtocolId 027N+,028N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4569
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapJunctions
 objType file
@@ -30420,6 +34317,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3655
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7
+objType table
+bioRep 027N,028N
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8797,LID8798
+labProtocolId 027N+,028N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4569
+tableName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1
 objType table
@@ -30746,6 +34667,29 @@ rnaExtract longNonPolyA
 subId 3660
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhlfCellPamExonsGencV7
+objType file
+bioRep 033WC,034WC
+cell NHLF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhlfCellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8828,LID8829
+labProtocolId 033WC-,034WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4573
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamGeneDeNovo
 objType file
 bioRep 033WC,034WC
@@ -30793,6 +34737,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3660
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhlfCellPamGeneGencV7
+objType file
+bioRep 033WC,034WC
+cell NHLF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhlfCellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8828,LID8829
+labProtocolId 033WC-,034WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4573
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamJunctions
 objType file
@@ -30970,6 +34937,30 @@ rnaExtract longNonPolyA
 subId 3660
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7
+objType table
+bioRep 033WC,034WC
+cell NHLF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8828,LID8829
+labProtocolId 033WC-,034WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4573
+tableName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
 objType table
 bioRep 033WC
@@ -31076,6 +35067,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3661
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhlfCellPapExonsGencV7
+objType file
+bioRep 033WC,034WC
+cell NHLF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhlfCellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8692,LID8701
+labProtocolId 033WC+,034WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4543
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd1Rep1
 objType file
@@ -31232,6 +35246,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3661
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhlfCellPapGeneGencV7
+objType file
+bioRep 033WC,034WC
+cell NHLF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhlfCellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8692,LID8701
+labProtocolId 033WC+,034WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4543
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapJunctions
 objType file
@@ -31520,6 +35557,30 @@ project wgEncode
 rnaExtract longPolyA
 subId 3661
 view TranscriptGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7
+objType table
+bioRep 033WC,034WC
+cell NHLF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8692,LID8701
+labProtocolId 033WC+,034WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4543
+tableName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7
+view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1
 objType table
@@ -31847,6 +35908,29 @@ rnaExtract longNonPolyA
 subId 3662
 view ExonsGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqSknshraCellPamExonsGencV7
+objType file
+bioRep 019WC,020WC
+cell SK-N-SH_RA
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqSknshraCellPamExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9003,LID9011
+labProtocolId 019WC-,020WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4561
+view ExonsGencV7
+
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamGeneDeNovo
 objType file
 bioRep 019WC,020WC
@@ -31894,6 +35978,29 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3662
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqSknshraCellPamGeneGencV7
+objType file
+bioRep 019WC,020WC
+cell SK-N-SH_RA
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqSknshraCellPamGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9003,LID9011
+labProtocolId 019WC-,020WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4561
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamJunctions
 objType file
@@ -32025,6 +36132,30 @@ rnaExtract longNonPolyA
 subId 3662
 view TranscriptGencV3c
 
+metaObject wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV7
+objType table
+bioRep 019WC,020WC
+cell SK-N-SH_RA
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9003,LID9011
+labProtocolId 019WC-,020WC-
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4561
+tableName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV7
+view TranscriptGencV7
+
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1
 objType table
 bioRep 019WC
@@ -32129,6 +36260,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3663
 view ExonsGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqSknshraCellPapExonsGencV7
+objType file
+bioRep 019WC,020WC
+cell SK-N-SH_RA
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqSknshraCellPapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8967,LID8968
+labProtocolId 019WC+,020WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4560
+view ExonsGencV7
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd1Rep1
 objType file
@@ -32285,6 +36439,29 @@ project wgEncode
 rnaExtract longPolyA
 subId 3663
 view GeneGencV3c
+
+metaObject wgEncodeCshlLongRnaSeqSknshraCellPapGeneGencV7
+objType file
+bioRep 019WC,020WC
+cell SK-N-SH_RA
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqSknshraCellPapGeneGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8967,LID8968
+labProtocolId 019WC+,020WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4560
+view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapJunctions
 objType file
@@ -32574,4 +36751,28 @@ rnaExtract longPolyA
 subId 3663
 view TranscriptGencV3c
 
-# MAGIC: -1066783726
+metaObject wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
+objType table
+bioRep 019WC,020WC
+cell SK-N-SH_RA
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-13
+dateUnrestricted 2012-04-13
+fileName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8967,LID8968
+labProtocolId 019WC+,020WC+
+labVersion iIDR
+localization cell
+project wgEncode
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool 14
+subId 4560
+tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
+view TranscriptGencV7
+
+# MAGIC: -1746975696
