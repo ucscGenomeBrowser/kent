@@ -1,3 +1,0 @@
-#!/bin/tcsh
-mongrel_rails stop
-quitpipebg
