@@ -528,12 +528,13 @@ if(hashNumEntries(hash))
     {
     struct hashEl *el, *list = hashElListHash(hash);
     slSort(&list, hashElCmp);
-    hPrintf("%svar %s = {\n", indentBuf, name);
+    // We add START and END comments to facilitate scraping out this variable by javascript.
+    hPrintf("// START %s\n%svar %s = {\n", name, indentBuf, name);
     for (el = list; el != NULL; el = el->next)
         {
-        hPrintf("%s\t%s: %s%s\n", indentBuf, el->name, (char *) el->val, el->next == NULL ? "" : ",");
+        hPrintf("%s\t\"%s\": %s%s\n", indentBuf, el->name, (char *) el->val, el->next == NULL ? "" : ",");
         }
-    hPrintf("%s};\n", indentBuf);
+    hPrintf("%s};\n// END %s\n", indentBuf, name);
     hashElFreeList(&list);
     }
 }
