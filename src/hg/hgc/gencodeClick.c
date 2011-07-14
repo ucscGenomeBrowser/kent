@@ -513,13 +513,13 @@ cartWebStart(cart, database, "%s", header);
 printf("<H2> %s</H2>\n", header);
 
 writeBasicInfoHtml(tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource);
+writeTagLinkHtml(tags);
 /* FIXME: sequence links */
 writePdbLinkHtml(pdbs);
 writePubMedLinkHtml(pubMeds);
 writeRefSeqLinkHtml(refSeqs);
 writeUniProtLinkHtml(uniProts);
 writeSupportingEvidenceLinkHtml(transcriptSupports, exonSupports);
-writeTagLinkHtml(tags);
 wgEncodeGencodeAttrsFree(&transAttrs);
 wgEncodeGencodeGeneSourceFreeList(&geneSource);
 wgEncodeGencodeTranscriptSourceFreeList(&transcriptSource);
