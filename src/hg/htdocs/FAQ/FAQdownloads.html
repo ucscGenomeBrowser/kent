@@ -1828,10 +1828,12 @@
                         <P>
                         <B><FONT COLOR="#006666">Response:</FONT></B><BR>
                         The fourth column of the BED output contains a lot of information separated by underscores. For example:<BR>
-			<TT>uc009vjk.2_cds_1_0_chr1_324343_f</TT><BR>
+			<PRE>
+			<TT>uc009vjk.2_cds_1_0_chr1_324343_f</TT></PRE><BR>
 			<BR>
-			This information is represented as follows:
-			<TT>ucscId_sequenceType_sequenceTypeNumber_basesAdded_chromosome_positionOfFirstBaseOfItem_strand</TT><BR>
+			This information is represented as follows:<BR>
+			<PRE>
+			<TT>ucscId_sequenceType_sequenceTypeNumber_basesAdded_chromosome_positionOfFirstBaseOfItem_strand</TT></PRE><BR>
 			<BR>
 			<UL>
 			<LI>
@@ -1849,7 +1851,7 @@
 			<LI>
 			Chromosome: chromosome number the item is on.
 			<LI>
-			Position of First Base of Item: if you have specified basses added to the 
+			Position of First Base of Item: if you have specified bases added to the 
 			requested features (for example, Exons plus 10 bases on each end), then 
 			columns 2 and 3 of the output wouldn't be the exact coordinates of the exon, 
 			they would start and end 10 bases before/after the exon. So, this part of 
@@ -1861,7 +1863,7 @@
 			but this start position listed in this section of the 4th column is actually 1 based. 
 			It will be the exact coordinate the feature starts on as displayed in the browser.
 			<LI>
-			Strand: forward(f) or reverse(-) strand
+			Strand: forward(f) or reverse(-) strand.
 			</UL>
 		    </TD><TD WIDTH=15></TD>
                 </TR>
