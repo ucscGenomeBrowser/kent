@@ -4098,8 +4098,7 @@ termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 102,50,200
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR(Ren):Limb_Ren_protocol.pdf
+protocol LICR(Ren):Limb_Ren_protocol.pdf
 
 term Liver
 tag LIVER
@@ -4332,8 +4331,7 @@ termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR:Placenta_Ren_protocol.pdf
+protocol LICR:Placenta_Ren_protocol.pdf
 
 #Shortened term
 term SmIntestine
