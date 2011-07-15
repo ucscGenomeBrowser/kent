@@ -16297,4 +16297,34 @@ hgsql hg19 -e "delete from omimLocation where name='${1}'"
     # setup trackDb for hg19
 
 ############################################################################
+# COSMIC TRACK (DONE 2011-07-15 Fan)
+
+mkdir /hive/data/outside/cosmic/20110711
+# put raw data file, EnsMutExp_v54_080711.csv, received by email to there.
+
+mkdir /hive/data/genomes/hg19/bed/cosmic/20110711
+cd /hive/data/genomes/hg19/bed/cosmic/20110711
+
+cp -p /hive/data/outside/cosmic/20110711/EnsMutExp_v54_080711.csv . 
+
+cat EnsMutExp_v54_080711.csv|sed -e 's/\t//g' |sed -e 's/,/\t/g' |\
+grep -v COSMIC_MUTATION_ID |grep -v 'selected'|grep COSM
+>EnsMutExp_v54_080711.tab
+
+hgsql hg19 -e 'drop table cosmicRaw'
+hgsql hg19 < ~/kent/src/hg/lib/cosmicRaw.sql
+
+hgLoadSqlTab hg19 cosmicRaw ~/kent/src/hg/lib/cosmicRaw.sql
+EnsMutExp_v54_080711.tab
+
+# use  grch37_start-1 for our zero based chromStart and 
+# conver their chr23 and chr24 to chrX and chrY.
+
+hgsql hg19 -N -e 'select "chr", chromosome, grch37_start-1, grch37_stop,
+cosmic_mutation_id from cosmicRaw' \
+|grep -v NULL |sed -e 's/chr\t/chr/'|sort -u|sed -e 's/chr23/chrX/' |sed -e
+'s/chr24/chrY/' >cosmic.bed
+
+hgLoadBed -allowStartEqualEnd  hg19 cosmic cosmic.bed
+############################################################################
 
