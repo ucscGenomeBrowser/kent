@@ -14332,7 +14332,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdAlnRep1.bam
@@ -14355,7 +14355,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdAlnRep2.bam
@@ -14378,7 +14378,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdPk.narrowPeak.gz
@@ -14402,7 +14402,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdRawDataRep1.fastq.gz
@@ -14425,7 +14425,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdRawDataRep2.fastq.gz
@@ -14448,7 +14448,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdSig.bigWig
@@ -14613,7 +14613,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdAlnRep1.bam
@@ -14636,7 +14636,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdAlnRep2.bam
@@ -14659,7 +14659,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdPk.narrowPeak.gz
@@ -14683,7 +14683,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdRawDataRep1.fastq.gz
@@ -14706,7 +14706,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdRawDataRep2.fastq.gz
@@ -14729,7 +14729,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdSig.bigWig
@@ -31930,7 +31930,7 @@ controlId K562/IFNg6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000670
 expId 670
 fileName wgEncodeSydhTfbsK562CmycIfng6hStdSig.bigWig
@@ -32078,7 +32078,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000621
 expId 621
 fileName wgEncodeSydhTfbsK562CmycStdSig.bigWig
@@ -32228,7 +32228,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000671
 expId 671
 fileName wgEncodeSydhTfbsK562E2f4UcdSig.bigWig
@@ -32379,7 +32379,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000676
 expId 676
 fileName wgEncodeSydhTfbsK562E2f6UcdSig.bigWig
@@ -32531,7 +32531,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000638
 expId 638
 fileName wgEncodeSydhTfbsK562Gata1UcdSig.bigWig
@@ -32683,7 +32683,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000683
 expId 683
 fileName wgEncodeSydhTfbsK562Gata2UcdSig.bigWig
@@ -34092,7 +34092,7 @@ controlId K562/None/Input/IgG-mus
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000725
 expId 725
 fileName wgEncodeSydhTfbsK562Ini1IggmusSig.bigWig
@@ -34142,7 +34142,7 @@ controlId K562/IFNa30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000655
 expId 655
 fileName wgEncodeSydhTfbsK562InputIfna30StdSig.bigWig
@@ -34192,7 +34192,7 @@ controlId K562/IFNa6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000656
 expId 656
 fileName wgEncodeSydhTfbsK562InputIfna6hStdSig.bigWig
@@ -34242,7 +34242,7 @@ controlId K562/IFNg30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000657
 expId 657
 fileName wgEncodeSydhTfbsK562InputIfng30StdSig.bigWig
@@ -34292,7 +34292,7 @@ controlId K562/IFNg6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000658
 expId 658
 fileName wgEncodeSydhTfbsK562InputIfng6hStdSig.bigWig
@@ -34368,7 +34368,7 @@ controlId K562/None/Input/IgG-mus
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000726
 expId 726
 fileName wgEncodeSydhTfbsK562InputIggmusSig.bigWig
@@ -34536,7 +34536,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000615
 expId 615
 fileName wgEncodeSydhTfbsK562InputStdSig.bigWig
@@ -34586,7 +34586,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000672
 expId 672
 fileName wgEncodeSydhTfbsK562InputUcdSig.bigWig
@@ -35069,7 +35069,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000644
 expId 644
 fileName wgEncodeSydhTfbsK562JundStdSig.bigWig
@@ -35499,7 +35499,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000637
 expId 637
 fileName wgEncodeSydhTfbsK562MaxStdSig.bigWig
@@ -35791,7 +35791,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000701
 expId 701
 fileName wgEncodeSydhTfbsK562NelfeStdSig.bigWig
@@ -35939,7 +35939,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000624
 expId 624
 fileName wgEncodeSydhTfbsK562Nfe2StdSig.bigWig
@@ -36579,7 +36579,7 @@ controlId K562/IFNa30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000660
 expId 660
 fileName wgEncodeSydhTfbsK562Pol2Ifna30StdSig.bigWig
@@ -36679,7 +36679,7 @@ controlId K562/IFNa6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000661
 expId 661
 fileName wgEncodeSydhTfbsK562Pol2Ifna6hStdSig.bigWig
@@ -36779,7 +36779,7 @@ controlId K562/IFNg30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000704
 expId 704
 fileName wgEncodeSydhTfbsK562Pol2Ifng30StdSig.bigWig
@@ -36879,7 +36879,7 @@ controlId K562/IFNg6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000662
 expId 662
 fileName wgEncodeSydhTfbsK562Pol2Ifng6hStdSig.bigWig
@@ -37029,7 +37029,7 @@ controlId K562/None/Input/IgG-mus
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000727
 expId 727
 fileName wgEncodeSydhTfbsK562Pol2IggmusSig.bigWig
@@ -37177,7 +37177,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000616
 expId 616
 fileName wgEncodeSydhTfbsK562Pol2StdSig.bigWig
@@ -37471,7 +37471,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000694
 expId 694
 fileName wgEncodeSydhTfbsK562Pol3StdSig.bigWig
@@ -37621,7 +37621,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000649
 expId 649
 fileName wgEncodeSydhTfbsK562Rad21StdSig.bigWig
@@ -37905,7 +37905,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000680
 expId 680
 fileName wgEncodeSydhTfbsK562Rpc155StdSig.bigWig
@@ -38057,7 +38057,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000769
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdSig.bigWig
@@ -38209,7 +38209,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000677
 expId 677
 fileName wgEncodeSydhTfbsK562Setdb1UcdSig.bigWig
@@ -38359,7 +38359,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000681
 expId 681
 fileName wgEncodeSydhTfbsK562Sirt6StdSig.bigWig
@@ -38599,7 +38599,7 @@ controlId K562/IFNa30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000663
 expId 663
 fileName wgEncodeSydhTfbsK562Stat1Ifna30StdSig.bigWig
@@ -38699,7 +38699,7 @@ controlId K562/IFNa6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000664
 expId 664
 fileName wgEncodeSydhTfbsK562Stat1Ifna6hStdSig.bigWig
@@ -38847,7 +38847,7 @@ controlId K562/IFNg30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000760
 expId 760
 fileName wgEncodeSydhTfbsK562Stat1Ifng30StdSig.bigWig
@@ -38996,7 +38996,7 @@ controlId K562/IFNg6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000761
 expId 761
 fileName wgEncodeSydhTfbsK562Stat1Ifng6hStdSig.bigWig
@@ -39096,7 +39096,7 @@ controlId K562/IFNa30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000665
 expId 665
 fileName wgEncodeSydhTfbsK562Stat2Ifna30StdSig.bigWig
@@ -39196,7 +39196,7 @@ controlId K562/IFNa6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000666
 expId 666
 fileName wgEncodeSydhTfbsK562Stat2Ifna6hStdSig.bigWig
@@ -39610,7 +39610,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000748
 expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdSig.bigWig
@@ -39837,7 +39837,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000682
 expId 682
 fileName wgEncodeSydhTfbsK562Tr4UcdSig.bigWig
@@ -40127,7 +40127,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000650
 expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4StdSig.bigWig
@@ -40279,7 +40279,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000684
 expId 684
 fileName wgEncodeSydhTfbsK562Yy1UcdSig.bigWig
@@ -40565,7 +40565,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000630
 expId 630
 fileName wgEncodeSydhTfbsK562Znf263UcdSig.bigWig
@@ -40717,7 +40717,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000696
 expId 696
 fileName wgEncodeSydhTfbsK562Znf274UcdSig.bigWig
@@ -41929,7 +41929,7 @@ controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000693
 expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdSig.bigWig
@@ -42057,7 +42057,7 @@ controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000762
 expId 762
 fileName wgEncodeSydhTfbsMcf7InputUcdSig.bigWig
@@ -42270,7 +42270,7 @@ controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000617
 expId 617
 fileName wgEncodeSydhTfbsNb4InputStdSig.bigWig
@@ -42610,7 +42610,7 @@ controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000618
 expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdSig.bigWig
@@ -42683,7 +42683,7 @@ controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000654
 expId 654
 fileName wgEncodeSydhTfbsNt2d1InputUcdSig.bigWig
@@ -42835,7 +42835,7 @@ controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000652
 expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdSig.bigWig
@@ -42987,7 +42987,7 @@ controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000653
 expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdSig.bigWig
@@ -44341,7 +44341,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdAlnRep1.bam
@@ -44364,7 +44364,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdAlnRep2.bam
@@ -44387,7 +44387,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdPk.narrowPeak.gz
@@ -44411,7 +44411,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdRawDataRep1.fastq.gz
@@ -44434,7 +44434,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdRawDataRep2.fastq.gz
@@ -44457,7 +44457,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdSig.bigWig
@@ -44613,4 +44613,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1642794442
+# MAGIC: -1642808409
