@@ -2527,7 +2527,7 @@ description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
 vendorName Refer to the protocol documents for differing sources
-vendorId HSMM
+vendorId CC-2580
 #orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
@@ -2540,11 +2540,11 @@ term HSMMtube
 tag HSMMt
 type Cell Line
 organism human
-description Normal Human Skeletal Muscle Myotubes
+description PROVISIONAL Normal human skeletal muscle myotubes differentiated from the HSMM cell line
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
-vendorId (missing)
+vendorId See HSMM
 orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
