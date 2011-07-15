@@ -4612,7 +4612,7 @@ noInherit on
         # subId=3662 dateSubmitted=2011-02-18
 
     track wgEncodeCshlLongRnaSeqViewTranscriptGencV7
-    shortLabel TranscirptGencV7
+    shortLabel TranscriptGencV7
     view TRANSGENCV7
     visibility full
     subTrack wgEncodeCshlLongRnaSeq
