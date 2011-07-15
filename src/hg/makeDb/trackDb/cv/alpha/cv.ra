@@ -2527,7 +2527,7 @@ description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
 vendorName Refer to the protocol documents for differing sources
-vendorId HSMM
+vendorId CC-2580
 #orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
@@ -2540,11 +2540,11 @@ term HSMMtube
 tag HSMMt
 type Cell Line
 organism human
-description Normal Human Skeletal Muscle Myotubes
+description PROVISIONAL Normal human skeletal muscle myotubes differentiated from the HSMM cell line
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
-vendorId (missing)
+vendorId See HSMM
 orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
@@ -4098,8 +4098,7 @@ termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 102,50,200
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR(Ren):Limb_Ren_protocol.pdf
+protocol Ren:Limb_Ren_protocol.pdf
 
 term Liver
 tag LIVER
@@ -4332,8 +4331,7 @@ termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR:Placenta_Ren_protocol.pdf
+protocol Ren:Placenta_Ren_protocol.pdf
 
 #Shortened term
 term SmIntestine
