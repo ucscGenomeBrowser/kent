@@ -399,11 +399,11 @@ hg19Patch5.perChromTables = no
     make etc-update
 
 ############################################################################
-# new blat server for the hg19.patch5 sequence (WORKING - 2010-08-27 - Hiram)
+# new blat server for the hg19.patch5 sequence (WORKING - 2011-07-13 - Hiram)
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("hg19Patch5", "blat4", "17792", "1", "0"); \
+	VALUES ("hg19Patch5", "blatx", "17838", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("hg19Patch5", "blat4", "17793", "0", "1");' \
+	VALUES ("hg19Patch5", "blatx", "17839", "0", "1");' \
 	    hgcentraltest
 
 ############################################################################
@@ -616,5 +616,17 @@ done
 
     # load this PSL track
     hgLoadPsl hg19 -table=altSeqLiftOverPslP5 fixup.hg19.hg19Patch5.over.psl
+    # to replace this table in the current track:
+    hgLoadPsl hg19 -table=altSeqLiftOverPsl fixup.hg19.hg19Patch5.over.psl
+
+############################################################################
+# Add this sequence to hg19 (DONE - 2011-07-13 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch5/bed/altSequence/seqExt
+    cd /hive/data/genomes/hg19Patch5/bed/altSequence/seqExt
+    twoBitToFa ../../../hg19Patch5.2bit hg19Patch5.fa
+    mkdir -p /gbdb/hg19/hg19Patch5 hg19Patch5
+    faSplit byname hg19Patch5.fa ./hg19Patch5/
+    ln -s `pwd`/hg19Patch5/*.fa /gbdb/hg19/hg19Patch5
+    hgLoadSeq -drop -seqTbl=seqHg19Patch5 -extFileTbl=extHg19Patch5 hg19 /gbdb/hg19/hg19Patch5/*.fa
 
 ############################################################################

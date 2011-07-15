@@ -2485,20 +2485,14 @@ function handleUpdateTrackMap(response, status)
                     //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                 }
             }
-            // parse out and reset position info.
-            a = /<INPUT [^>]*NAME=["']position['"] VALUE=['"]([^'"]+)/.exec(response);
-            if(a != null && a[1] != null) {
-                var o = parsePosition(a[1]);
-                setPosition(a[1], commify(o.end - o.start + 1));
-                hgTracks.winStart = o.start - 1;
-                hgTracks.winEnd = o.end;
+            var json = scrapeVariable(response, "hgTracks");
+            if(json != undefined) {
+                hgTracks.winStart = json.winStart;
+                hgTracks.winEnd = json.winEnd;
+                hgTracks.newWinWidth = json.newWinWidth;
+                setPositionByCoordinates(json.chromName, hgTracks.winStart + 1, hgTracks.winEnd);
             } else {
                 showWarning("Couldn't parse out new position info");
-            }
-            abort("This is broken (needs to be fixed to pull new variable values out of the response)");
-            a = /<input [^>]*id=["']hgt\.newWinWidth['"][^>]*value=['"]([^'"]+)/.exec(response);
-            if(a != null && a[1] != null) {
-                $("#hgt\\.newWinWidth").val(a[1]);
             }
             afterImgTblReload();
         } else {
