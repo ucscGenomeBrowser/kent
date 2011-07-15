@@ -37931,6 +37931,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep1.fastq.gz
 grant Snyder
@@ -37957,6 +37958,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep2.fastq.gz
 grant Snyder
@@ -37984,6 +37986,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep1.bam
 grant Snyder
@@ -38010,6 +38013,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep2.bam
 grant Snyder
@@ -38026,7 +38030,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdPk
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562b/MNaseD/Input/UCDavis
@@ -38035,6 +38039,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdPk.narrowPeak.gz
 grant Snyder
@@ -38059,6 +38064,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdSig.bigWig
 grant Snyder
@@ -44613,4 +44619,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1642808409
+# MAGIC: -1704131051
