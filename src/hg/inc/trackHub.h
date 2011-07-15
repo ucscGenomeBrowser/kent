@@ -84,5 +84,10 @@ void trackHubGenomeFree(struct trackHubGenome **pGenome);
 void trackHubGenomeFreeList(struct trackHubGenome **pList);
 /* Free a list of dynamically allocated trackHubGenome's */
 
+int trackHubCheck(char *hubUrl, struct dyString *errors);
+/* trackHubCheck - Check a track data hub for integrity. Put errors in dyString.
+ *      return 0 if hub has no errors, 1 otherwise */
+
+
 #endif /* TRACKHUB_H */
 
