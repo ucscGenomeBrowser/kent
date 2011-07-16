@@ -46,32 +46,6 @@ if (fileName == NULL)
 return fileName;
 }
 
-boolean bamFileExists(char *fileOrUrl)
-/* Return TRUE if we can successfully open the bam file and its index file. */
-{
-char *udcFuseRoot = cfgOption("udcFuse.mountPoint");
-return bamFileExistsUdc(fileOrUrl, udcFuseRoot);
-}
-samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
-/* Return an open bam file, dealing with FUSE caching if need be. 
- * Return parameter if NON-null will return the file name after FUSing */
-{
-char *udcFuseRoot = cfgOption("udcFuse.mountPoint");
-return bamOpenUdc(fileOrUrl, retBamFileName, udcFuseRoot);
-}
-
-void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-		     samfile_t **pSamFile)
-/* Open the .bam file, fetch items in the seq:start-end position range,
- * and call callbackFunc on each bam item retrieved from the file plus callbackData.
- * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
- * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
- * the benefit of the callback function, with the open samFile.  */
-{
-char *udcFuseRoot = cfgOption("udcFuse.mountPoint");
-bamFetchUdc(fileOrUrl, position, callbackFunc, callbackData, pSamFile, udcFuseRoot);
-}
-
 struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset,
 			 boolean useStrand, char **retQSeq)
 /* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the 
@@ -263,20 +237,6 @@ char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeq
 {
 errAbort(COMPILE_WITH_SAMTOOLS, "bamFileNameFromTable");
 return NULL;
-}
-
-boolean bamFileExists(char *fileOrUrl)
-/* Return TRUE if we can successfully open the bam file and its index file. */
-{
-errAbort(COMPILE_WITH_SAMTOOLS, "bamFileExists");
-return FALSE;
-}
-
-samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
-/* Return an open bam file, dealing with some FUSE caching if need be. */
-{
-errAbort(COMPILE_WITH_SAMTOOLS, "bamOpen");
-return FALSE;
 }
 
 struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,

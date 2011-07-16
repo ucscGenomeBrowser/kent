@@ -21,17 +21,6 @@ char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeq
  * row associated with bamSeqName (which can be e.g. '1' not 'chr1' if that is the
  * case in the bam file). */
 
-boolean bamFileExists(char *bamFileName);
-/* Return TRUE if we can successfully open the bam file and its index file. */
-
-void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-	samfile_t **pSamFile);
-/* Open the .bam file, fetch items in the seq:start-end position range,
- * and call callbackFunc on each bam item retrieved from the file plus callbackData.
- * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
- * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
- * the benefit of the callback function, with the open samFile.  */
-
 struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
 	struct lm *lm);
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
