@@ -2209,7 +2209,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
@@ -2233,7 +2233,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
@@ -2257,7 +2257,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
@@ -2281,7 +2281,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
@@ -2305,7 +2305,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
@@ -2329,7 +2329,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
@@ -2557,4 +2557,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 1443942104
+# MAGIC: 1443939830

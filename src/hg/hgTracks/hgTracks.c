@@ -4146,9 +4146,6 @@ for (track = trackList; track != NULL; track = track->next)
 	    compositeTrackVis(track);
 	}
     }
-if (measureTiming)
-    uglyTime("getTrackList");
-
 return trackList;
 }
 
@@ -4236,17 +4233,11 @@ static void pruneRedundantCartVis(struct track *trackList)
  * more common case where track visibilities are tweaked. */
 {
 struct track *track;
-if (measureTiming)
-    uglyTime("Done with trackForm");
 for (track = trackList; track != NULL; track = track->next)
     {
     char *cartVis = cartOptionalString(cart, track->track);
     if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
     cartRemove(cart, track->track);
-    }
-if (measureTiming)
-    {
-    uglyTime("Pruned redundant vis from cart");
     }
 }
 
@@ -4608,7 +4599,11 @@ if (!hideControls)
 if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
+if (measureTiming)
+    uglyTime("getTrackList");
 makeGlobalTrackHash(trackList);
+/* Tell tracks to load their items. */
+
 
 // honor defaultImgOrder
 if(cgiVarExists("hgt.defaultImgOrder"))
@@ -4618,6 +4613,8 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     cartRemoveLike(cart, wildCard);
     }
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+if (measureTiming)
+    uglyTime("parentChildCartCleanup");
 
 
 /* Honor hideAll and visAll variables */
@@ -4658,8 +4655,6 @@ if (!isEmpty(jsCommand))
    jsCommandDispatch(jsCommand, trackList);
    }
 
-
-/* Tell tracks to load their items. */
 
 /* adjust visibility */
 for (track = trackList; track != NULL; track = track->next)
@@ -4723,6 +4718,8 @@ if (ptMax > 0)
     {
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+    if (measureTiming)
+	uglyTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
     }
 
 printTrackInitJavascript(trackList);
@@ -5243,6 +5240,8 @@ cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
 pruneRedundantCartVis(trackList);
+if (measureTiming)
+    uglyTime("Done with trackForm");
 }
 
 static void toggleRevCmplDisp()

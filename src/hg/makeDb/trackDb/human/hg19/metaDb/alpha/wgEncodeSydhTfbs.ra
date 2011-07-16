@@ -463,7 +463,7 @@ tableName wgEncodeSydhTfbsGm10847InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM10847
@@ -477,7 +477,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
@@ -489,7 +489,7 @@ subId 1366
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM10847
@@ -503,7 +503,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
@@ -515,7 +515,7 @@ subId 1377
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM10847
@@ -529,7 +529,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
@@ -541,7 +541,7 @@ subId 1388
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep4
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep4
 objType file
 antibody NFKB
 cell GM10847
@@ -555,7 +555,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep4.bam
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep4.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM10847_IgG_Control
@@ -567,7 +567,7 @@ subId 1392
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep5
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep5
 objType file
 antibody NFKB
 cell GM10847
@@ -581,7 +581,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep5.bam
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep5.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM10847_IgG_Control
@@ -593,7 +593,7 @@ subId 1393
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM10847
@@ -606,18 +606,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm10847NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM10847
@@ -630,7 +630,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
@@ -642,7 +642,7 @@ subId 1050
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM10847
@@ -655,7 +655,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
@@ -667,7 +667,7 @@ subId 1050
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM10847
@@ -680,7 +680,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
@@ -692,7 +692,7 @@ subId 1050
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep4
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep4
 objType file
 antibody NFKB
 cell GM10847
@@ -705,7 +705,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM10847_IgG_Control
@@ -717,7 +717,7 @@ subId 1050
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep5
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep5
 objType file
 antibody NFKB
 cell GM10847
@@ -730,7 +730,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep5.fastq.gz
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep5.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM10847_IgG_Control
@@ -742,7 +742,7 @@ subId 1050
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm10847NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM10847
@@ -755,14 +755,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000734
 expId 734
-fileName wgEncodeSydhTfbsGm10847NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm10847NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm10847NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -6346,20 +6346,20 @@ tableName wgEncodeSydhTfbsGm12878Znf143166181apStdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1
+metaObject wgEncodeSydhTfbsGm12878Znf274StdAlnRep1
 objType file
 antibody ZNF274
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001756
 expId 1756
-fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam
+fileName wgEncodeSydhTfbsGm12878Znf274StdAlnRep1.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -6369,13 +6369,13 @@ subId 4324
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2
+metaObject wgEncodeSydhTfbsGm12878Znf274StdAlnRep2
 objType file
 antibody ZNF274
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-14
@@ -6383,7 +6383,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH001756
 expId 1756
-fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam
+fileName wgEncodeSydhTfbsGm12878Znf274StdAlnRep2.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -6393,44 +6393,44 @@ subId 4324
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878Znf274UcdPk
+metaObject wgEncodeSydhTfbsGm12878Znf274StdPk
 objType table
 antibody ZNF274
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH001756
 expId 1756
-fileName wgEncodeSydhTfbsGm12878Znf274UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm12878Znf274StdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
 subId 1203
-tableName wgEncodeSydhTfbsGm12878Znf274UcdPk
+tableName wgEncodeSydhTfbsGm12878Znf274StdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep1
+metaObject wgEncodeSydhTfbsGm12878Znf274StdRawDataRep1
 objType file
 antibody ZNF274
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH001756
 expId 1756
-fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Znf274StdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
@@ -6441,20 +6441,20 @@ subId 1203
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep2
+metaObject wgEncodeSydhTfbsGm12878Znf274StdRawDataRep2
 objType file
 antibody ZNF274
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH001756
 expId 1756
-fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Znf274StdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
@@ -6465,27 +6465,27 @@ subId 1203
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Znf274UcdSig
+metaObject wgEncodeSydhTfbsGm12878Znf274StdSig
 objType table
 antibody ZNF274
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH001756
 expId 1756
-fileName wgEncodeSydhTfbsGm12878Znf274UcdSig.bigWig
+fileName wgEncodeSydhTfbsGm12878Znf274StdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 1203
-tableName wgEncodeSydhTfbsGm12878Znf274UcdSig
+tableName wgEncodeSydhTfbsGm12878Znf274StdSig
 treatment None
 view Signal
 
@@ -6885,7 +6885,7 @@ tableName wgEncodeSydhTfbsGm12891InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM12891
@@ -6899,7 +6899,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000735
 expId 735
-fileName wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
@@ -6911,7 +6911,7 @@ subId 1367
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM12891
@@ -6925,7 +6925,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000735
 expId 735
-fileName wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
@@ -6937,7 +6937,7 @@ subId 1379
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM12891
@@ -6951,7 +6951,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000735
 expId 735
-fileName wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
@@ -6963,7 +6963,7 @@ subId 1389
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12891NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM12891
@@ -6976,18 +6976,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000735
 expId 735
-fileName wgEncodeSydhTfbsGm12891NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm12891NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM12891
@@ -7000,7 +7000,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000735
 expId 735
-fileName wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -7012,7 +7012,7 @@ subId 1051
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM12891
@@ -7025,7 +7025,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000735
 expId 735
-fileName wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -7037,7 +7037,7 @@ subId 1051
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM12891
@@ -7050,7 +7050,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000735
 expId 735
-fileName wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -7062,7 +7062,7 @@ subId 1051
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM12891
@@ -7075,14 +7075,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000735
 expId 735
-fileName wgEncodeSydhTfbsGm12891NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm12891NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm12891NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -7692,7 +7692,7 @@ tableName wgEncodeSydhTfbsGm12892InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM12892
@@ -7706,7 +7706,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000712
 expId 712
-fileName wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control
@@ -7718,7 +7718,7 @@ subId 1368
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM12892
@@ -7732,7 +7732,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000712
 expId 712
-fileName wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control
@@ -7744,7 +7744,7 @@ subId 1379
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM12892
@@ -7758,7 +7758,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000712
 expId 712
-fileName wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control
@@ -7770,7 +7770,7 @@ subId 1389
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12892NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM12892
@@ -7783,18 +7783,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000712
 expId 712
-fileName wgEncodeSydhTfbsGm12892NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm12892NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM12892
@@ -7807,7 +7807,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000712
 expId 712
-fileName wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control
@@ -7819,7 +7819,7 @@ subId 941
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM12892
@@ -7832,7 +7832,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000712
 expId 712
-fileName wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control
@@ -7844,7 +7844,7 @@ subId 941
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM12892
@@ -7857,7 +7857,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000712
 expId 712
-fileName wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control
@@ -7869,7 +7869,7 @@ subId 941
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12892NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM12892
@@ -7882,14 +7882,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000712
 expId 712
-fileName wgEncodeSydhTfbsGm12892NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm12892NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm12892NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -8346,7 +8346,7 @@ tableName wgEncodeSydhTfbsGm15510InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM15510
@@ -8360,7 +8360,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
@@ -8372,7 +8372,7 @@ subId 1368
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM15510
@@ -8386,7 +8386,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
@@ -8398,7 +8398,7 @@ subId 1380
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM15510
@@ -8412,7 +8412,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
@@ -8424,7 +8424,7 @@ subId 1389
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep4
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep4
 objType file
 antibody NFKB
 cell GM15510
@@ -8438,7 +8438,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep4.bam
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep4.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM15510_IgG_Control.
@@ -8450,7 +8450,7 @@ subId 1393
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep5
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep5
 objType file
 antibody NFKB
 cell GM15510
@@ -8464,7 +8464,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep5.bam
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep5.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM15510_IgG_Control.
@@ -8476,7 +8476,7 @@ subId 1394
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM15510
@@ -8489,18 +8489,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm15510NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM15510
@@ -8513,7 +8513,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
@@ -8525,7 +8525,7 @@ subId 1052
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM15510
@@ -8538,7 +8538,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
@@ -8550,7 +8550,7 @@ subId 1052
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM15510
@@ -8563,7 +8563,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
@@ -8575,7 +8575,7 @@ subId 1052
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep4
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep4
 objType file
 antibody NFKB
 cell GM15510
@@ -8588,7 +8588,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM15510_IgG_Control.
@@ -8600,7 +8600,7 @@ subId 1052
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep5
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep5
 objType file
 antibody NFKB
 cell GM15510
@@ -8613,7 +8613,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep5.fastq.gz
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep5.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM15510_IgG_Control.
@@ -8625,7 +8625,7 @@ subId 1052
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM15510
@@ -8638,14 +8638,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000736
 expId 736
-fileName wgEncodeSydhTfbsGm15510NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm15510NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm15510NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -9102,7 +9102,7 @@ tableName wgEncodeSydhTfbsGm18505InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM18505
@@ -9116,7 +9116,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
@@ -9128,7 +9128,7 @@ subId 1369
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM18505
@@ -9142,7 +9142,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
@@ -9154,7 +9154,7 @@ subId 1380
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM18505
@@ -9168,7 +9168,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
@@ -9180,7 +9180,7 @@ subId 1390
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep4
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep4
 objType file
 antibody NFKB
 cell GM18505
@@ -9194,7 +9194,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep4.bam
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep4.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
@@ -9206,7 +9206,7 @@ subId 1393
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep5
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep5
 objType file
 antibody NFKB
 cell GM18505
@@ -9220,7 +9220,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep5.bam
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep5.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
@@ -9232,7 +9232,7 @@ subId 1394
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM18505
@@ -9245,18 +9245,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm18505NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM18505
@@ -9269,7 +9269,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18505_IgG_Control
@@ -9281,7 +9281,7 @@ subId 945
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM18505
@@ -9294,7 +9294,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18505_IgG_Control
@@ -9306,7 +9306,7 @@ subId 945
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM18505
@@ -9319,7 +9319,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18505_IgG_Control
@@ -9331,7 +9331,7 @@ subId 945
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep4
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep4
 objType file
 antibody NFKB
 cell GM18505
@@ -9344,7 +9344,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18505_IgG_Control
@@ -9356,7 +9356,7 @@ subId 945
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep5
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep5
 objType file
 antibody NFKB
 cell GM18505
@@ -9369,7 +9369,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep5.fastq.gz
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep5.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18505_IgG_Control
@@ -9381,7 +9381,7 @@ subId 945
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM18505
@@ -9394,14 +9394,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000715
 expId 715
-fileName wgEncodeSydhTfbsGm18505NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm18505NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm18505NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -9960,7 +9960,7 @@ tableName wgEncodeSydhTfbsGm18526InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM18526
@@ -9974,7 +9974,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000716
 expId 716
-fileName wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18526_IgG_Control
@@ -9986,7 +9986,7 @@ subId 1369
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM18526
@@ -10000,7 +10000,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000716
 expId 716
-fileName wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18526_IgG_Control
@@ -10012,7 +10012,7 @@ subId 1380
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM18526
@@ -10026,7 +10026,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000716
 expId 716
-fileName wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18526_IgG_Control
@@ -10038,7 +10038,7 @@ subId 1390
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18526NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM18526
@@ -10051,18 +10051,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000716
 expId 716
-fileName wgEncodeSydhTfbsGm18526NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm18526NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM18526
@@ -10075,7 +10075,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000716
 expId 716
-fileName wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18526_IgG_Control
@@ -10087,7 +10087,7 @@ subId 942
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM18526
@@ -10100,7 +10100,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000716
 expId 716
-fileName wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18526_IgG_Control
@@ -10112,7 +10112,7 @@ subId 942
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM18526
@@ -10125,7 +10125,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000716
 expId 716
-fileName wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18526_IgG_Control
@@ -10137,7 +10137,7 @@ subId 942
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18526NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM18526
@@ -10150,14 +10150,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000716
 expId 716
-fileName wgEncodeSydhTfbsGm18526NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm18526NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm18526NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -10561,7 +10561,7 @@ tableName wgEncodeSydhTfbsGm18951InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM18951
@@ -10575,7 +10575,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
@@ -10587,7 +10587,7 @@ subId 1369
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM18951
@@ -10600,7 +10600,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
@@ -10612,7 +10612,7 @@ subId 1381
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM18951
@@ -10626,7 +10626,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
@@ -10638,7 +10638,7 @@ subId 1390
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep4
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep4
 objType file
 antibody NFKB
 cell GM18951
@@ -10652,7 +10652,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep4.bam
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep4.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18951_IgG_Control.
@@ -10664,7 +10664,7 @@ subId 1393
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM18951
@@ -10677,18 +10677,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm18951NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM18951
@@ -10701,7 +10701,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
@@ -10713,7 +10713,7 @@ subId 1053
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM18951
@@ -10726,7 +10726,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
@@ -10738,7 +10738,7 @@ subId 1053
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM18951
@@ -10751,7 +10751,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
@@ -10763,7 +10763,7 @@ subId 1053
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep4
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep4
 objType file
 antibody NFKB
 cell GM18951
@@ -10776,7 +10776,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM18951_IgG_Control.
@@ -10788,7 +10788,7 @@ subId 1053
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM18951
@@ -10801,14 +10801,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000738
 expId 738
-fileName wgEncodeSydhTfbsGm18951NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm18951NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm18951NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -11313,7 +11313,7 @@ tableName wgEncodeSydhTfbsGm19099InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM19099
@@ -11327,7 +11327,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000717
 expId 717
-fileName wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19099_IgG_Control
@@ -11339,7 +11339,7 @@ subId 1370
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM19099
@@ -11352,7 +11352,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000717
 expId 717
-fileName wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19099_IgG_Control
@@ -11364,7 +11364,7 @@ subId 1381
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM19099
@@ -11378,7 +11378,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000717
 expId 717
-fileName wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19099_IgG_Control
@@ -11390,7 +11390,7 @@ subId 1390
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19099NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM19099
@@ -11403,18 +11403,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000717
 expId 717
-fileName wgEncodeSydhTfbsGm19099NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm19099NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM19099
@@ -11427,7 +11427,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000717
 expId 717
-fileName wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM19099_IgG_Control
@@ -11439,7 +11439,7 @@ subId 946
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM19099
@@ -11452,7 +11452,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000717
 expId 717
-fileName wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM19099_IgG_Control
@@ -11464,7 +11464,7 @@ subId 946
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM19099
@@ -11477,7 +11477,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000717
 expId 717
-fileName wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM19099_IgG_Control
@@ -11489,7 +11489,7 @@ subId 946
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19099NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM19099
@@ -11502,14 +11502,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000717
 expId 717
-fileName wgEncodeSydhTfbsGm19099NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm19099NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm19099NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -11963,7 +11963,7 @@ tableName wgEncodeSydhTfbsGm19193InputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep1
 objType file
 antibody NFKB
 cell GM19193
@@ -11977,7 +11977,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000718
 expId 718
-fileName wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19193_IgG_Control
@@ -11989,7 +11989,7 @@ subId 1370
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep2
 objType file
 antibody NFKB
 cell GM19193
@@ -12003,7 +12003,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000718
 expId 718
-fileName wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19193_IgG_Control
@@ -12015,7 +12015,7 @@ subId 1382
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep3
+metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep3
 objType file
 antibody NFKB
 cell GM19193
@@ -12029,7 +12029,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000718
 expId 718
-fileName wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep3.bam
+fileName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep3.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19193_IgG_Control
@@ -12041,7 +12041,7 @@ subId 1390
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19193NfkbIggrabPk
+metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabPk
 objType table
 antibody NFKB
 cell GM19193
@@ -12054,18 +12054,18 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000718
 expId 718
-fileName wgEncodeSydhTfbsGm19193NfkbIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsGm19193NfkbIggrabPk
+tableName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabPk
 treatment TNFa
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep1
 objType file
 antibody NFKB
 cell GM19193
@@ -12078,7 +12078,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000718
 expId 718
-fileName wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM19193_IgG_Control
@@ -12090,7 +12090,7 @@ subId 947
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep2
 objType file
 antibody NFKB
 cell GM19193
@@ -12103,7 +12103,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000718
 expId 718
-fileName wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM19193_IgG_Control
@@ -12115,7 +12115,7 @@ subId 947
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep3
+metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep3
 objType file
 antibody NFKB
 cell GM19193
@@ -12128,7 +12128,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000718
 expId 718
-fileName wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM19193_IgG_Control
@@ -12140,7 +12140,7 @@ subId 947
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19193NfkbIggrabSig
+metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabSig
 objType table
 antibody NFKB
 cell GM19193
@@ -12153,14 +12153,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000718
 expId 718
-fileName wgEncodeSydhTfbsGm19193NfkbIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsGm19193NfkbIggrabSig
+tableName wgEncodeSydhTfbsGm19193NkfbTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -12769,74 +12769,6 @@ tableName wgEncodeSydhTfbsH1hescInputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsH1hescInputStdAln
-objType file
-antibody Input
-cell H1-hESC
-composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-03
-dateUnrestricted 2011-11-03
-dccAccession wgEncodeEH001856
-expId 1856
-fileName wgEncodeSydhTfbsH1hescInputStdAln.bam
-grant Snyder
-lab Stanford
-project wgEncode
-setType input
-subId 3501
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsH1hescInputStdRawData
-objType file
-antibody Input
-cell H1-hESC
-composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-03
-dateUnrestricted 2011-11-03
-dccAccession wgEncodeEH001856
-expId 1856
-fileName wgEncodeSydhTfbsH1hescInputStdRawData.fastq.gz
-grant Snyder
-lab Stanford
-project wgEncode
-setType input
-subId 3501
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsH1hescInputStdSig
-objType table
-antibody Input
-cell H1-hESC
-composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-03
-dateUnrestricted 2011-11-03
-dccAccession wgEncodeEH001856
-expId 1856
-fileName wgEncodeSydhTfbsH1hescInputStdSig.bigWig
-grant Snyder
-lab Stanford
-labVersion PeakSeq1.0
-project wgEncode
-setType input
-subId 3501
-tableName wgEncodeSydhTfbsH1hescInputStdSig
-treatment None
-view Signal
-
 metaObject wgEncodeSydhTfbsH1hescInputUcdAln
 objType file
 antibody Input
@@ -12905,18 +12837,18 @@ tableName wgEncodeSydhTfbsH1hescInputUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsH1hescJundStdAlnRep1
+metaObject wgEncodeSydhTfbsH1hescJundIggrabAlnRep1
 objType file
 antibody JunD
 cell H1-hESC
 composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
+control IgG-rab
+controlId H1-hESC/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
-fileName wgEncodeSydhTfbsH1hescJundStdAlnRep1.bam
+fileName wgEncodeSydhTfbsH1hescJundIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 project wgEncode
@@ -12926,18 +12858,18 @@ subId 4412
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsH1hescJundStdAlnRep2
+metaObject wgEncodeSydhTfbsH1hescJundIggrabAlnRep2
 objType file
 antibody JunD
 cell H1-hESC
 composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
+control IgG-rab
+controlId H1-hESC/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
-fileName wgEncodeSydhTfbsH1hescJundStdAlnRep2.bam
+fileName wgEncodeSydhTfbsH1hescJundIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 project wgEncode
@@ -12947,40 +12879,40 @@ subId 4412
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsH1hescJundStdPk
+metaObject wgEncodeSydhTfbsH1hescJundIggrabPk
 objType table
 antibody JunD
 cell H1-hESC
 composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
+control IgG-rab
+controlId H1-hESC/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
-fileName wgEncodeSydhTfbsH1hescJundStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsH1hescJundIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4412
-tableName wgEncodeSydhTfbsH1hescJundStdPk
+tableName wgEncodeSydhTfbsH1hescJundIggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsH1hescJundStdRawDataRep1
+metaObject wgEncodeSydhTfbsH1hescJundIggrabRawDataRep1
 objType file
 antibody JunD
 cell H1-hESC
 composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
+control IgG-rab
+controlId H1-hESC/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
-fileName wgEncodeSydhTfbsH1hescJundStdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsH1hescJundIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
 project wgEncode
@@ -12990,18 +12922,18 @@ subId 4412
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsH1hescJundStdRawDataRep2
+metaObject wgEncodeSydhTfbsH1hescJundIggrabRawDataRep2
 objType file
 antibody JunD
 cell H1-hESC
 composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
+control IgG-rab
+controlId H1-hESC/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
-fileName wgEncodeSydhTfbsH1hescJundStdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsH1hescJundIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
 project wgEncode
@@ -13011,25 +12943,25 @@ subId 4412
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsH1hescJundStdSig
+metaObject wgEncodeSydhTfbsH1hescJundIggrabSig
 objType table
 antibody JunD
 cell H1-hESC
 composite wgEncodeSydhTfbs
-control std
-controlId H1-hESC/None/Input/std
+control IgG-rab
+controlId H1-hESC/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
-fileName wgEncodeSydhTfbsH1hescJundStdSig.bigWig
+fileName wgEncodeSydhTfbsH1hescJundIggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 4412
-tableName wgEncodeSydhTfbsH1hescJundStdSig
+tableName wgEncodeSydhTfbsH1hescJundIggrabSig
 treatment None
 view Signal
 
@@ -14400,7 +14332,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdAlnRep1.bam
@@ -14423,7 +14355,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdAlnRep2.bam
@@ -14446,7 +14378,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdPk.narrowPeak.gz
@@ -14470,7 +14402,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdRawDataRep1.fastq.gz
@@ -14493,7 +14425,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdRawDataRep2.fastq.gz
@@ -14516,7 +14448,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001773
 expId 1773
 fileName wgEncodeSydhTfbsHek293Elk4UcdSig.bigWig
@@ -14681,7 +14613,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdAlnRep1.bam
@@ -14704,7 +14636,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdAlnRep2.bam
@@ -14727,7 +14659,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdPk.narrowPeak.gz
@@ -14751,7 +14683,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdRawDataRep1.fastq.gz
@@ -14774,7 +14706,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdRawDataRep2.fastq.gz
@@ -14797,7 +14729,7 @@ controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001779
 expId 1779
 fileName wgEncodeSydhTfbsHek293Kap1UcdSig.bigWig
@@ -15006,6 +14938,136 @@ project wgEncode
 setType exp
 subId 3053
 tableName wgEncodeSydhTfbsHek293Pol2StdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsHek293Tcf4UcdAlnRep1
+objType file
+antibody TCF4
+cell HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsHek293Tcf4UcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4341
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHek293Tcf4UcdAlnRep2
+objType file
+antibody TCF4
+cell HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsHek293Tcf4UcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4341
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHek293Tcf4UcdPk
+objType table
+antibody TCF4
+cell HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsHek293Tcf4UcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4341
+tableName wgEncodeSydhTfbsHek293Tcf4UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep1
+objType file
+antibody TCF4
+cell HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation:  Protein G Magnetic Beads.
+project wgEncode
+replicate 1
+setType exp
+subId 4341
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep2
+objType file
+antibody TCF4
+cell HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep2.fastq.tgz
+grant Snyder
+lab USC
+labVersion Method of Chromatin Fragmentation:  Sonciation. Method of Immunoprecipitation:  Protein G Magnetic Beads.
+project wgEncode
+replicate 2
+setType exp
+subId 4341
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293Tcf4UcdSig
+objType table
+antibody TCF4
+cell HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-22
+dateUnrestricted 2012-03-22
+fileName wgEncodeSydhTfbsHek293Tcf4UcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4341
+tableName wgEncodeSydhTfbsHek293Tcf4UcdSig
 treatment None
 view Signal
 
@@ -31868,7 +31930,7 @@ controlId K562/IFNg6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000670
 expId 670
 fileName wgEncodeSydhTfbsK562CmycIfng6hStdSig.bigWig
@@ -32016,7 +32078,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000621
 expId 621
 fileName wgEncodeSydhTfbsK562CmycStdSig.bigWig
@@ -32166,7 +32228,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000671
 expId 671
 fileName wgEncodeSydhTfbsK562E2f4UcdSig.bigWig
@@ -32317,7 +32379,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000676
 expId 676
 fileName wgEncodeSydhTfbsK562E2f6UcdSig.bigWig
@@ -32469,7 +32531,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000638
 expId 638
 fileName wgEncodeSydhTfbsK562Gata1UcdSig.bigWig
@@ -32621,7 +32683,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000683
 expId 683
 fileName wgEncodeSydhTfbsK562Gata2UcdSig.bigWig
@@ -32634,54 +32696,6 @@ subId 3056
 tableName wgEncodeSydhTfbsK562Gata2UcdSig
 treatment None
 view Signal
-
-metaObject wgEncodeSydhTfbsK562Gtf2bRawDataRep1
-objType file
-antibody GTF2B
-cell K562
-composite wgEncodeSydhTfbs
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-11
-dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000703
-expId 703
-fileName wgEncodeSydhTfbsK562Gtf2bRawDataRep1.fastq.gz
-grant Snyder
-lab Harvard
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 975
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562Gtf2bRawDataRep2
-objType file
-antibody GTF2B
-cell K562
-composite wgEncodeSydhTfbs
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-11
-dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000703
-expId 703
-fileName wgEncodeSydhTfbsK562Gtf2bRawDataRep2.fastq.gz
-grant Snyder
-lab Harvard
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 975
-treatment None
-view RawData
 
 metaObject wgEncodeSydhTfbsK562Gtf2bStdAlnRep1
 objType file
@@ -34078,7 +34092,7 @@ controlId K562/None/Input/IgG-mus
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000725
 expId 725
 fileName wgEncodeSydhTfbsK562Ini1IggmusSig.bigWig
@@ -34128,7 +34142,7 @@ controlId K562/IFNa30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000655
 expId 655
 fileName wgEncodeSydhTfbsK562InputIfna30StdSig.bigWig
@@ -34178,7 +34192,7 @@ controlId K562/IFNa6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000656
 expId 656
 fileName wgEncodeSydhTfbsK562InputIfna6hStdSig.bigWig
@@ -34228,7 +34242,7 @@ controlId K562/IFNg30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000657
 expId 657
 fileName wgEncodeSydhTfbsK562InputIfng30StdSig.bigWig
@@ -34278,7 +34292,7 @@ controlId K562/IFNg6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000658
 expId 658
 fileName wgEncodeSydhTfbsK562InputIfng6hStdSig.bigWig
@@ -34354,7 +34368,7 @@ controlId K562/None/Input/IgG-mus
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000726
 expId 726
 fileName wgEncodeSydhTfbsK562InputIggmusSig.bigWig
@@ -34522,7 +34536,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000615
 expId 615
 fileName wgEncodeSydhTfbsK562InputStdSig.bigWig
@@ -34572,7 +34586,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000672
 expId 672
 fileName wgEncodeSydhTfbsK562InputUcdSig.bigWig
@@ -35055,7 +35069,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000644
 expId 644
 fileName wgEncodeSydhTfbsK562JundStdSig.bigWig
@@ -35485,7 +35499,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000637
 expId 637
 fileName wgEncodeSydhTfbsK562MaxStdSig.bigWig
@@ -35777,7 +35791,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000701
 expId 701
 fileName wgEncodeSydhTfbsK562NelfeStdSig.bigWig
@@ -35925,7 +35939,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000624
 expId 624
 fileName wgEncodeSydhTfbsK562Nfe2StdSig.bigWig
@@ -36565,7 +36579,7 @@ controlId K562/IFNa30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000660
 expId 660
 fileName wgEncodeSydhTfbsK562Pol2Ifna30StdSig.bigWig
@@ -36665,7 +36679,7 @@ controlId K562/IFNa6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000661
 expId 661
 fileName wgEncodeSydhTfbsK562Pol2Ifna6hStdSig.bigWig
@@ -36765,7 +36779,7 @@ controlId K562/IFNg30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000704
 expId 704
 fileName wgEncodeSydhTfbsK562Pol2Ifng30StdSig.bigWig
@@ -36865,7 +36879,7 @@ controlId K562/IFNg6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000662
 expId 662
 fileName wgEncodeSydhTfbsK562Pol2Ifng6hStdSig.bigWig
@@ -37015,7 +37029,7 @@ controlId K562/None/Input/IgG-mus
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000727
 expId 727
 fileName wgEncodeSydhTfbsK562Pol2IggmusSig.bigWig
@@ -37163,7 +37177,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000616
 expId 616
 fileName wgEncodeSydhTfbsK562Pol2StdSig.bigWig
@@ -37457,7 +37471,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000694
 expId 694
 fileName wgEncodeSydhTfbsK562Pol3StdSig.bigWig
@@ -37607,7 +37621,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000649
 expId 649
 fileName wgEncodeSydhTfbsK562Rad21StdSig.bigWig
@@ -37891,7 +37905,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000680
 expId 680
 fileName wgEncodeSydhTfbsK562Rpc155StdSig.bigWig
@@ -37917,6 +37931,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep1.fastq.gz
 grant Snyder
@@ -37943,6 +37958,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep2.fastq.gz
 grant Snyder
@@ -37970,6 +37986,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep1.bam
 grant Snyder
@@ -37996,6 +38013,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep2.bam
 grant Snyder
@@ -38012,7 +38030,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdPk
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562b/MNaseD/Input/UCDavis
@@ -38021,6 +38039,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdPk.narrowPeak.gz
 grant Snyder
@@ -38043,8 +38062,9 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000769
+dccInternalNotes release2
 expId 769
 fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdSig.bigWig
 grant Snyder
@@ -38195,7 +38215,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000677
 expId 677
 fileName wgEncodeSydhTfbsK562Setdb1UcdSig.bigWig
@@ -38345,7 +38365,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000681
 expId 681
 fileName wgEncodeSydhTfbsK562Sirt6StdSig.bigWig
@@ -38585,7 +38605,7 @@ controlId K562/IFNa30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000663
 expId 663
 fileName wgEncodeSydhTfbsK562Stat1Ifna30StdSig.bigWig
@@ -38685,7 +38705,7 @@ controlId K562/IFNa6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000664
 expId 664
 fileName wgEncodeSydhTfbsK562Stat1Ifna6hStdSig.bigWig
@@ -38833,7 +38853,7 @@ controlId K562/IFNg30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000760
 expId 760
 fileName wgEncodeSydhTfbsK562Stat1Ifng30StdSig.bigWig
@@ -38982,7 +39002,7 @@ controlId K562/IFNg6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000761
 expId 761
 fileName wgEncodeSydhTfbsK562Stat1Ifng6hStdSig.bigWig
@@ -39082,7 +39102,7 @@ controlId K562/IFNa30/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000665
 expId 665
 fileName wgEncodeSydhTfbsK562Stat2Ifna30StdSig.bigWig
@@ -39182,7 +39202,7 @@ controlId K562/IFNa6h/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000666
 expId 666
 fileName wgEncodeSydhTfbsK562Stat2Ifna6hStdSig.bigWig
@@ -39596,7 +39616,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000748
 expId 748
 fileName wgEncodeSydhTfbsK562Tf3c110StdSig.bigWig
@@ -39823,7 +39843,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000682
 expId 682
 fileName wgEncodeSydhTfbsK562Tr4UcdSig.bigWig
@@ -40113,7 +40133,7 @@ controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000650
 expId 650
 fileName wgEncodeSydhTfbsK562Xrcc4StdSig.bigWig
@@ -40265,7 +40285,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000684
 expId 684
 fileName wgEncodeSydhTfbsK562Yy1UcdSig.bigWig
@@ -40551,7 +40571,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000630
 expId 630
 fileName wgEncodeSydhTfbsK562Znf263UcdSig.bigWig
@@ -40703,7 +40723,7 @@ controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000696
 expId 696
 fileName wgEncodeSydhTfbsK562Znf274UcdSig.bigWig
@@ -41915,7 +41935,7 @@ controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000693
 expId 693
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdSig.bigWig
@@ -42043,7 +42063,7 @@ controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000762
 expId 762
 fileName wgEncodeSydhTfbsMcf7InputUcdSig.bigWig
@@ -42256,7 +42276,7 @@ controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000617
 expId 617
 fileName wgEncodeSydhTfbsNb4InputStdSig.bigWig
@@ -42596,7 +42616,7 @@ controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000618
 expId 618
 fileName wgEncodeSydhTfbsNb4Pol2StdSig.bigWig
@@ -42669,7 +42689,7 @@ controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000654
 expId 654
 fileName wgEncodeSydhTfbsNt2d1InputUcdSig.bigWig
@@ -42821,7 +42841,7 @@ controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000652
 expId 652
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdSig.bigWig
@@ -42973,7 +42993,7 @@ controlId NT2-D1/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000653
 expId 653
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdSig.bigWig
@@ -44327,7 +44347,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdAlnRep1.bam
@@ -44350,7 +44370,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdAlnRep2.bam
@@ -44373,7 +44393,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdPk.narrowPeak.gz
@@ -44397,7 +44417,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdRawDataRep1.fastq.gz
@@ -44420,7 +44440,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdRawDataRep2.fastq.gz
@@ -44443,7 +44463,7 @@ controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
-dateUnrestricted 2011-10-13
+dateUnrestricted 2011-05-31
 dccAccession wgEncodeEH001776
 expId 1776
 fileName wgEncodeSydhTfbsU2osKap1UcdSig.bigWig
@@ -44599,4 +44619,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -2121326055
+# MAGIC: -1704131051
