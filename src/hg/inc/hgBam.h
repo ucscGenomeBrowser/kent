@@ -1,10 +1,11 @@
-/* bamFile -- interface to binary alignment format files using Heng Li's samtools lib. */
+/* hgBam -- interface to binary alignment format files using Heng Li's samtools lib. */
+/* these are the components that link to MySQL */
+
+#ifndef HGBAM_H
+#define HGBAM_H
 
 #ifndef BAMFILE_H
-#define BAMFILE_H
-
-#ifndef BAMUDC_H
-#include "bamUdc.h"
+#include "bamFile.h"
 #endif
 
 #ifdef USE_BAM
@@ -49,4 +50,4 @@ struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOff
 /* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the 
  * query sequence into which ffAli needle pointers point. */
 
-#endif//ndef BAMFILE_H
+#endif//ndef HGBAM_H

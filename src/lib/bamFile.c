@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "portable.h"
-#include "bamUdc.h"
+#include "bamFile.h"
 #ifdef USE_BAM
 #include "htmshell.h"
 #include "udc.h"

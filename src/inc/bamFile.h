@@ -1,7 +1,7 @@
 /* bamFile -- interface to binary alignment format files using Heng Li's samtools lib. */
 
-#ifndef BAMUDC_H
-#define BAMUDC_H
+#ifndef BAMFILE_H
+#define BAMFILE_H
 
 #ifdef USE_BAM
 
@@ -129,4 +129,4 @@ char *bamGetTagString(const bam1_t *bam, char *tag, char *buf, size_t bufSize);
 void bamUnpackAux(const bam1_t *bam, struct dyString *dy);
 /* Unpack the tag:type:val part of bam into dy */
 
-#endif//ndef BAMUDC_H
+#endif//ndef BAMFILE_H

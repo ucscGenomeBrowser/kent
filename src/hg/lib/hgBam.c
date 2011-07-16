@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "hdb.h"
-#include "bamFile.h"
+#include "hgBam.h"
 
 #ifdef USE_BAM
 #include "htmshell.h"
