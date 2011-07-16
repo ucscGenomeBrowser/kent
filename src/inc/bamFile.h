@@ -34,15 +34,15 @@ typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
 #include "dystring.h"
 #endif
 
-boolean bamFileExistsUdc(char *bamFileName, char *udcFuseRoot);
+boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */
 
-samfile_t *bamOpenUdc(char *fileOrUrl, char **retBamFileName, char *udcFuseRoot);
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
 /* Return an open bam file, dealing with FUSE caching if need be. 
  * Return parameter if NON-null will return the file name after FUSing */
 
-void bamFetchUdc(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-	samfile_t **pSamFile, char *udcFuseRoot);
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+	samfile_t **pSamFile);
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
  * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
