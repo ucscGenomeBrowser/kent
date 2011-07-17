@@ -6,8 +6,6 @@
 
 #ifdef USE_BAM
 #include "htmshell.h"
-#include "hgConfig.h"
-#include "udc.h"
 #include "samAlignment.h"
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)

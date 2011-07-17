@@ -30,10 +30,6 @@ struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct l
 /* Read next count alignments in SAM format, allocated in lm.  May return less than
  * count at end of file. */
 
-samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
-/* Return an open bam file, dealing with FUSE caching if need be. 
- * Return parameter if NON-null will return the file name after FUSing */
-
 struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset,
 			 boolean useStrand, char **retQSeq);
 /* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the 
