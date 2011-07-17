@@ -38,8 +38,14 @@ boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */
 
 samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
-/* Return an open bam file, dealing with FUSE caching if need be. 
- * Return parameter if NON-null will return the file name after FUSing */
+/* Return an open bam file as well as the filename of the bam. */
+
+void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName, 
+			 char *position, bam_fetch_f callbackFunc, void *callbackData);
+/* With the open bam file, return items the same way with the callbacks as with bamFetch() */
+/* except in this case use an already-open bam file and index (use bam_index_load and free() for */
+/* the index). It seems a little strange to pass the filename in with the open bam, but */
+/* it's just used to report errors. */
 
 void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
 	samfile_t **pSamFile);

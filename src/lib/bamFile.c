@@ -93,6 +93,25 @@ if (pSamFile != NULL)
     }
 }
 
+void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName, 
+			 char *position, bam_fetch_f callbackFunc, void *callbackData)
+/* With the open bam file, return items the same way with the callbacks as with bamFetch() */
+/* except in this case use an already-open bam file and index (use bam_index_load and free() for */
+/* the index). It seems a little strange to pass the filename in with the open bam, but */
+/* it's just used to report errors. */
+{
+int chromId, start, end;
+int ret = bam_parse_region(samfile->header, position, &chromId, &start, &end);
+if (ret != 0 && startsWith("chr", position))
+    ret = bam_parse_region(samfile->header, position+strlen("chr"), &chromId, &start, &end);
+if (ret != 0)
+    // If the bam file does not cover the current chromosome, OK
+    return;
+ret = bam_fetch(samfile->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
+if (ret != 0)
+    warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
+}
+
 void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
 		 samfile_t **pSamFile)
 /* Open the .bam file, fetch items in the seq:start-end position range,
@@ -107,13 +126,6 @@ boolean usingUrl = TRUE;
 usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
 if (pSamFile != NULL)
     *pSamFile = fh;
-int chromId, start, end;
-int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
-if (ret != 0 && startsWith("chr", position))
-    ret = bam_parse_region(fh->header, position+strlen("chr"), &chromId, &start, &end);
-if (ret != 0)
-    // If the bam file does not cover the current chromosome, OK
-    return;
 #ifndef KNETFILE_HOOKS
 // Since samtools' url-handling code saves the .bai file to the current directory,
 // chdir to a trash directory before calling bam_index_load, then chdir back.
@@ -131,9 +143,7 @@ if (idx == NULL)
     warn("bam_index_load(%s) failed.", bamFileName);
 else
     {
-    ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
-    if (ret != 0)
-	warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
+    bamFetchAlreadyOpen(fh, idx, bamFileName, position, callbackFunc, callbackData);
     free(idx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
     }
 bamClose(&fh);
