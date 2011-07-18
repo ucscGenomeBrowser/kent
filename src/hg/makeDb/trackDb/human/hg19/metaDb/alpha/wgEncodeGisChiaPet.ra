@@ -871,7 +871,6 @@ lab GIS-Ruan
 labVersion RNAPII_K562
 origAssembly hg19
 project wgEncode
-replicate pooled
 subId 3382
 submitPath gisChIA-PET_RNAPII_K562_combined/RNAPII_K562T.chromInteractons.bed
 type bed 12
@@ -1920,7 +1919,6 @@ lab GIS-Ruan
 labVersion RNAPII
 origAssembly hg19
 project wgEncode
-replicate pooled
 subId 3383
 submitPath gisChIA-PET_RNAPII_MCF7_combined/RNAPII.chromInteractons.bed
 type bed 12
@@ -1944,7 +1942,6 @@ lab GIS-Ruan
 labVersion ER
 origAssembly hg19
 project wgEncode
-replicate pooled
 subId 3385
 submitPath gisChIA-PET_ER_MCF7_combined/ER.chromInteractons.bed
 type bed 12
@@ -2393,10 +2390,9 @@ lab GIS-Ruan
 labVersion RNAPII_NB4
 origAssembly hg19
 project wgEncode
-replicate pooled
 subId 3381
 submitPath gisChIA-PET_RNAPII_NB4_combined/RNAPII_NB4T.chromInteractons.bed
 type bed 12
 view Interactions
 
-# MAGIC: 582591792
+# MAGIC: 543053388

@@ -3809,7 +3809,6 @@ dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
 dccRep 2
 expId 1149
-fileiIndex wgEncodeRikenCageHepg2CellPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHepg2CellPapAlnRep2.bam
 grant Gingeras
 lab RIKEN
@@ -9521,4 +9520,4 @@ rnaExtract longPolyA
 subId 4524
 view TssGencV7
 
-# MAGIC: 470578237
+# MAGIC: -820880693

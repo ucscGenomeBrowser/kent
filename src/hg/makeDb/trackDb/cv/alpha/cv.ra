@@ -7658,6 +7658,11 @@ tag R2X75
 type readType
 description Paired 75 n.t. reads
 
+term 2x76D
+tag R2X76D
+type readType
+description Paired 76 n.t. directed reads
+
 #### insertLength
 #### This is being used by the Wold lab as a variable.
 #### I do not think that it needs to be controlled. - Cricket
@@ -8626,11 +8631,17 @@ type view
 label Transfrags
 description Transfrags
 
-term TSS
-tag TSS
+term TssGencV3c
+tag TssV3c
 type view
-label TSS
-description Expression level estimates for GENCODE CRCh37.v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+label TSS Gencode V3c
+description Expression level estimates for GENCODE v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+
+term TssGencV7
+tag TssV7 
+type view
+label TSS Gencode V7
+description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
 
 term Uniqueness
 tag UNQ
