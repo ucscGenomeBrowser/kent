@@ -337,7 +337,7 @@ tableName wgEncodeSydhTfbsGm10847InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm10847InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm10847InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM10847
@@ -351,7 +351,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000770
 expId 770
-fileName wgEncodeSydhTfbsGm10847InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm10847InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -363,7 +363,7 @@ subId 1366
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm10847InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm10847InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM10847
@@ -377,7 +377,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000770
 expId 770
-fileName wgEncodeSydhTfbsGm10847InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm10847InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -389,7 +389,7 @@ subId 1377
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm10847InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm10847InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM10847
@@ -402,7 +402,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000770
 expId 770
-fileName wgEncodeSydhTfbsGm10847InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm10847InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -414,7 +414,7 @@ subId 1108
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm10847InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm10847InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM10847
@@ -427,7 +427,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000770
 expId 770
-fileName wgEncodeSydhTfbsGm10847InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm10847InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -439,7 +439,7 @@ subId 1108
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm10847InputIggrabSig
+metaObject wgEncodeSydhTfbsGm10847InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM10847
@@ -452,14 +452,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000770
 expId 770
-fileName wgEncodeSydhTfbsGm10847InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm10847InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm10847InputIggrabSig
+tableName wgEncodeSydhTfbsGm10847InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -6761,7 +6761,7 @@ tableName wgEncodeSydhTfbsGm12891InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12891InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm12891InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM12891
@@ -6775,7 +6775,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000772
 expId 772
-fileName wgEncodeSydhTfbsGm12891InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm12891InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18
@@ -6787,7 +6787,7 @@ subId 1367
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12891InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm12891InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM12891
@@ -6801,7 +6801,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000772
 expId 772
-fileName wgEncodeSydhTfbsGm12891InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm12891InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18
@@ -6813,7 +6813,7 @@ subId 1379
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12891InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm12891InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM12891
@@ -6826,7 +6826,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000772
 expId 772
-fileName wgEncodeSydhTfbsGm12891InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12891InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
@@ -6837,7 +6837,7 @@ subId 1111
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm12891InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM12891
@@ -6850,7 +6850,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000772
 expId 772
-fileName wgEncodeSydhTfbsGm12891InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12891InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 origAssembly hg18
@@ -6861,7 +6861,7 @@ subId 1111
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891InputIggrabSig
+metaObject wgEncodeSydhTfbsGm12891InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM12891
@@ -6874,14 +6874,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000772
 expId 772
-fileName wgEncodeSydhTfbsGm12891InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm12891InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm12891InputIggrabSig
+tableName wgEncodeSydhTfbsGm12891InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -7566,7 +7566,7 @@ tableName wgEncodeSydhTfbsGm12892InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12892InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm12892InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM12892
@@ -7580,7 +7580,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000773
 expId 773
-fileName wgEncodeSydhTfbsGm12892InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm12892InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -7592,7 +7592,7 @@ subId 1368
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12892InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm12892InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM12892
@@ -7606,7 +7606,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000773
 expId 773
-fileName wgEncodeSydhTfbsGm12892InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm12892InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -7618,7 +7618,7 @@ subId 1379
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12892InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm12892InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM12892
@@ -7631,7 +7631,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000773
 expId 773
-fileName wgEncodeSydhTfbsGm12892InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12892InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -7643,7 +7643,7 @@ subId 1110
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12892InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm12892InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM12892
@@ -7656,7 +7656,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000773
 expId 773
-fileName wgEncodeSydhTfbsGm12892InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12892InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -7668,7 +7668,7 @@ subId 1110
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12892InputIggrabSig
+metaObject wgEncodeSydhTfbsGm12892InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM12892
@@ -7681,14 +7681,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000773
 expId 773
-fileName wgEncodeSydhTfbsGm12892InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm12892InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm12892InputIggrabSig
+tableName wgEncodeSydhTfbsGm12892InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -8220,7 +8220,7 @@ tableName wgEncodeSydhTfbsGm15510InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm15510InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm15510InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM15510
@@ -8234,7 +8234,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000774
 expId 774
-fileName wgEncodeSydhTfbsGm15510InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm15510InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -8246,7 +8246,7 @@ subId 1368
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm15510InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm15510InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM15510
@@ -8260,7 +8260,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000774
 expId 774
-fileName wgEncodeSydhTfbsGm15510InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm15510InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -8272,7 +8272,7 @@ subId 1379
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm15510InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm15510InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM15510
@@ -8285,7 +8285,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000774
 expId 774
-fileName wgEncodeSydhTfbsGm15510InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm15510InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -8297,7 +8297,7 @@ subId 1112
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm15510InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM15510
@@ -8310,7 +8310,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000774
 expId 774
-fileName wgEncodeSydhTfbsGm15510InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm15510InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -8322,7 +8322,7 @@ subId 1112
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510InputIggrabSig
+metaObject wgEncodeSydhTfbsGm15510InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM15510
@@ -8335,14 +8335,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000774
 expId 774
-fileName wgEncodeSydhTfbsGm15510InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm15510InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm15510InputIggrabSig
+tableName wgEncodeSydhTfbsGm15510InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -8976,7 +8976,7 @@ tableName wgEncodeSydhTfbsGm18505InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm18505InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm18505InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM18505
@@ -8990,7 +8990,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000775
 expId 775
-fileName wgEncodeSydhTfbsGm18505InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm18505InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -9002,7 +9002,7 @@ subId 1368
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18505InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm18505InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM18505
@@ -9016,7 +9016,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000775
 expId 775
-fileName wgEncodeSydhTfbsGm18505InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm18505InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -9028,7 +9028,7 @@ subId 1380
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18505InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm18505InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM18505
@@ -9041,7 +9041,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000775
 expId 775
-fileName wgEncodeSydhTfbsGm18505InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18505InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -9053,7 +9053,7 @@ subId 1113
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm18505InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM18505
@@ -9066,7 +9066,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000775
 expId 775
-fileName wgEncodeSydhTfbsGm18505InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18505InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -9078,7 +9078,7 @@ subId 1113
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505InputIggrabSig
+metaObject wgEncodeSydhTfbsGm18505InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM18505
@@ -9091,14 +9091,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000775
 expId 775
-fileName wgEncodeSydhTfbsGm18505InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm18505InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm18505InputIggrabSig
+tableName wgEncodeSydhTfbsGm18505InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -9834,7 +9834,7 @@ tableName wgEncodeSydhTfbsGm18526InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm18526InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm18526InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM18526
@@ -9848,7 +9848,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000776
 expId 776
-fileName wgEncodeSydhTfbsGm18526InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm18526InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -9860,7 +9860,7 @@ subId 1369
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18526InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm18526InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM18526
@@ -9874,7 +9874,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000776
 expId 776
-fileName wgEncodeSydhTfbsGm18526InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm18526InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -9886,7 +9886,7 @@ subId 1380
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18526InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm18526InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM18526
@@ -9899,7 +9899,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000776
 expId 776
-fileName wgEncodeSydhTfbsGm18526InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18526InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -9911,7 +9911,7 @@ subId 1114
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18526InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm18526InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM18526
@@ -9924,7 +9924,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000776
 expId 776
-fileName wgEncodeSydhTfbsGm18526InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18526InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -9936,7 +9936,7 @@ subId 1114
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18526InputIggrabSig
+metaObject wgEncodeSydhTfbsGm18526InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM18526
@@ -9949,14 +9949,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000776
 expId 776
-fileName wgEncodeSydhTfbsGm18526InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm18526InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm18526InputIggrabSig
+tableName wgEncodeSydhTfbsGm18526InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -10436,7 +10436,7 @@ tableName wgEncodeSydhTfbsGm18951InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm18951InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm18951InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM18951
@@ -10450,7 +10450,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000777
 expId 777
-fileName wgEncodeSydhTfbsGm18951InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm18951InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -10462,7 +10462,7 @@ subId 1369
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18951InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm18951InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM18951
@@ -10475,7 +10475,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000777
 expId 777
-fileName wgEncodeSydhTfbsGm18951InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm18951InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -10487,7 +10487,7 @@ subId 1381
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18951InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm18951InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM18951
@@ -10500,7 +10500,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000777
 expId 777
-fileName wgEncodeSydhTfbsGm18951InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18951InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -10512,7 +10512,7 @@ subId 1115
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm18951InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM18951
@@ -10525,7 +10525,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000777
 expId 777
-fileName wgEncodeSydhTfbsGm18951InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18951InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -10537,7 +10537,7 @@ subId 1115
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951InputIggrabSig
+metaObject wgEncodeSydhTfbsGm18951InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM18951
@@ -10550,14 +10550,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000777
 expId 777
-fileName wgEncodeSydhTfbsGm18951InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm18951InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm18951InputIggrabSig
+tableName wgEncodeSydhTfbsGm18951InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -11188,7 +11188,7 @@ tableName wgEncodeSydhTfbsGm19099InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm19099InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm19099InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM19099
@@ -11202,7 +11202,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000778
 expId 778
-fileName wgEncodeSydhTfbsGm19099InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm19099InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -11214,7 +11214,7 @@ subId 1370
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19099InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm19099InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM19099
@@ -11227,7 +11227,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000778
 expId 778
-fileName wgEncodeSydhTfbsGm19099InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm19099InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -11239,7 +11239,7 @@ subId 1381
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19099InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm19099InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM19099
@@ -11252,7 +11252,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000778
 expId 778
-fileName wgEncodeSydhTfbsGm19099InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm19099InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -11264,7 +11264,7 @@ subId 1116
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19099InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm19099InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM19099
@@ -11277,7 +11277,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000778
 expId 778
-fileName wgEncodeSydhTfbsGm19099InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm19099InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -11289,7 +11289,7 @@ subId 1116
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19099InputIggrabSig
+metaObject wgEncodeSydhTfbsGm19099InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM19099
@@ -11302,14 +11302,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000778
 expId 778
-fileName wgEncodeSydhTfbsGm19099InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm19099InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm19099InputIggrabSig
+tableName wgEncodeSydhTfbsGm19099InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -11838,7 +11838,7 @@ tableName wgEncodeSydhTfbsGm19193InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm19193InputIggrabAlnRep1
+metaObject wgEncodeSydhTfbsGm19193InputTnfaIggrabAlnRep1
 objType file
 antibody Input
 cell GM19193
@@ -11852,7 +11852,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000779
 expId 779
-fileName wgEncodeSydhTfbsGm19193InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsGm19193InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -11864,7 +11864,7 @@ subId 1370
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19193InputIggrabAlnRep2
+metaObject wgEncodeSydhTfbsGm19193InputTnfaIggrabAlnRep2
 objType file
 antibody Input
 cell GM19193
@@ -11877,7 +11877,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000779
 expId 779
-fileName wgEncodeSydhTfbsGm19193InputIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsGm19193InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
@@ -11889,7 +11889,7 @@ subId 1381
 treatment TNFa
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19193InputIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsGm19193InputTnfaIggrabRawDataRep1
 objType file
 antibody Input
 cell GM19193
@@ -11902,7 +11902,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000779
 expId 779
-fileName wgEncodeSydhTfbsGm19193InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm19193InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -11914,7 +11914,7 @@ subId 1117
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19193InputIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsGm19193InputTnfaIggrabRawDataRep2
 objType file
 antibody Input
 cell GM19193
@@ -11927,7 +11927,7 @@ dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
 dccAccession wgEncodeEH000779
 expId 779
-fileName wgEncodeSydhTfbsGm19193InputIggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm19193InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
@@ -11939,7 +11939,7 @@ subId 1117
 treatment TNFa
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19193InputIggrabSig
+metaObject wgEncodeSydhTfbsGm19193InputTnfaIggrabSig
 objType table
 antibody Input
 cell GM19193
@@ -11952,14 +11952,14 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000779
 expId 779
-fileName wgEncodeSydhTfbsGm19193InputIggrabSig.bigWig
+fileName wgEncodeSydhTfbsGm19193InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 origAssembly hg18
 project wgEncode
 setType input
 subId 3053
-tableName wgEncodeSydhTfbsGm19193InputIggrabSig
+tableName wgEncodeSydhTfbsGm19193InputTnfaIggrabSig
 treatment TNFa
 view Signal
 
@@ -44619,4 +44619,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 537501743
+# MAGIC: 1825716266
