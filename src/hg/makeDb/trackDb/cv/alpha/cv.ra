@@ -8626,11 +8626,11 @@ type view
 label Transfrags
 description Transfrags
 
-term TSS
-tag TSS
+term TssGencV7
+tag TssV7 
 type view
-label TSS
-description Expression level estimates for GENCODE CRCh37.v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+label TSS Gencode V7
+description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
 
 term Uniqueness
 tag UNQ
