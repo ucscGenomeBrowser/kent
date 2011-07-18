@@ -8631,6 +8631,12 @@ type view
 label Transfrags
 description Transfrags
 
+term TssGencV3c
+tag TssV3c
+type view
+label TSS Gencode V3c
+description Expression level estimates for GENCODE v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+
 term TssGencV7
 tag TssV7 
 type view
