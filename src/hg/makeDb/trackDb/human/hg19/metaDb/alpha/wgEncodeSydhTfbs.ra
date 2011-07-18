@@ -40873,7 +40873,7 @@ tableName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig
 treatment EtOH_0.01pct_12hr
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesInputUcdAln
+metaObject wgEncodeSydhTfbsMcf10aesInputStdAln
 objType file
 antibody Input
 cell MCF10A-Er-Src
@@ -40886,7 +40886,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 dccAccession wgEncodeEH001782
 expId 1782
-fileName wgEncodeSydhTfbsMcf10aesInputUcdAln.bam
+fileName wgEncodeSydhTfbsMcf10aesInputStdAln.bam
 grant Snyder
 lab USC
 project wgEncode
@@ -40895,7 +40895,7 @@ subId 3497
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesInputUcdRawData
+metaObject wgEncodeSydhTfbsMcf10aesInputStdRawData
 objType file
 antibody Input
 cell MCF10A-Er-Src
@@ -40908,7 +40908,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 dccAccession wgEncodeEH001782
 expId 1782
-fileName wgEncodeSydhTfbsMcf10aesInputUcdRawData.fastq.gz
+fileName wgEncodeSydhTfbsMcf10aesInputStdRawData.fastq.gz
 grant Snyder
 lab USC
 project wgEncode
@@ -40917,7 +40917,7 @@ subId 3497
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesInputUcdSig
+metaObject wgEncodeSydhTfbsMcf10aesInputStdSig
 objType table
 antibody Input
 cell MCF10A-Er-Src
@@ -40930,14 +40930,14 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 dccAccession wgEncodeEH001782
 expId 1782
-fileName wgEncodeSydhTfbsMcf10aesInputUcdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesInputStdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
 project wgEncode
 setType input
 subId 3497
-tableName wgEncodeSydhTfbsMcf10aesInputUcdSig
+tableName wgEncodeSydhTfbsMcf10aesInputStdSig
 treatment None
 view Signal
 
@@ -44619,4 +44619,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1704136095
+# MAGIC: -1665200694
