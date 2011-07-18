@@ -469,7 +469,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -495,7 +495,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -521,7 +521,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -547,7 +547,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -573,7 +573,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -599,7 +599,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -623,7 +623,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -648,7 +648,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -673,7 +673,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -698,7 +698,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -723,7 +723,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -748,7 +748,7 @@ antibody NFKB
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/TFNa/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -6891,7 +6891,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/TFNa/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -6917,7 +6917,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/TFNa/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -6943,7 +6943,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/TFNa/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -6969,7 +6969,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/TFNa/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -6993,7 +6993,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/TFNa/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -7018,7 +7018,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/TFNa/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -7043,7 +7043,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/TFNa/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -7068,7 +7068,7 @@ antibody NFKB
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/TFNa/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -7698,7 +7698,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/TFNa/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -7724,7 +7724,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/TFNa/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -7750,7 +7750,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/TFNa/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -7776,7 +7776,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/TFNa/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -7800,7 +7800,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/TFNa/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -7825,7 +7825,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/TFNa/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -7850,7 +7850,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/TFNa/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -7875,7 +7875,7 @@ antibody NFKB
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/TFNa/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -8352,7 +8352,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8378,7 +8378,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8404,7 +8404,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8430,7 +8430,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8456,7 +8456,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8482,7 +8482,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -8506,7 +8506,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8531,7 +8531,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8556,7 +8556,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8581,7 +8581,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8606,7 +8606,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -8631,7 +8631,7 @@ antibody NFKB
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/TFNa/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -9108,7 +9108,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9134,7 +9134,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9160,7 +9160,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9186,7 +9186,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9212,7 +9212,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9238,7 +9238,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -9262,7 +9262,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9287,7 +9287,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9312,7 +9312,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9337,7 +9337,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9362,7 +9362,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -9387,7 +9387,7 @@ antibody NFKB
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/TFNa/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -9966,7 +9966,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/TFNa/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9992,7 +9992,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/TFNa/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10018,7 +10018,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/TFNa/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10044,7 +10044,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/TFNa/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -10068,7 +10068,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/TFNa/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -10093,7 +10093,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/TFNa/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -10118,7 +10118,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/TFNa/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -10143,7 +10143,7 @@ antibody NFKB
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/TFNa/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -10567,7 +10567,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10593,7 +10593,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10618,7 +10618,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10644,7 +10644,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10670,7 +10670,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -10694,7 +10694,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10719,7 +10719,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10744,7 +10744,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10769,7 +10769,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
@@ -10794,7 +10794,7 @@ antibody NFKB
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/TFNa/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -11319,7 +11319,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/TFNa/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -11345,7 +11345,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/TFNa/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-01-12
@@ -11370,7 +11370,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/TFNa/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -11396,7 +11396,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/TFNa/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -11420,7 +11420,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/TFNa/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -11445,7 +11445,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/TFNa/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -11470,7 +11470,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/TFNa/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -11495,7 +11495,7 @@ antibody NFKB
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/TFNa/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -11969,7 +11969,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/TFNa/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -11995,7 +11995,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/TFNa/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -12021,7 +12021,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/TFNa/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -12047,7 +12047,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/TFNa/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -12071,7 +12071,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/TFNa/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -12096,7 +12096,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/TFNa/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -12121,7 +12121,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/TFNa/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -12146,7 +12146,7 @@ antibody NFKB
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/TFNa/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
