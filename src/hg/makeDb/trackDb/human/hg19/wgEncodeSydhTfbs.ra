@@ -3230,15 +3230,16 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
+        track wgEncodeSydhTfbsGm12878InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 Inpt TNF IgG
-        longLabel GM12878 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM12878 control=IGGRAB treatment=TNFa
+        shortLabel GM78 Inpt IgGr
+        longLabel GM12878 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM12878 control=IGGRAB treatment=aNone
         type bigWig 0.000000 8421.900391
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm12878InputIggrabSig wong Mon Jul 18 14:43:21 2011
+        # was wgEncodeSydhTfbsGm12878InputTnfaIggrabSig wong Mon Jul 18 15:19:22 2011
 
         track wgEncodeSydhTfbsGm12878InputStdSig
         parent wgEncodeSydhTfbsViewSignal off

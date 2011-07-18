@@ -343,7 +343,7 @@ antibody Input
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -369,7 +369,7 @@ antibody Input
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -395,7 +395,7 @@ antibody Input
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -420,7 +420,7 @@ antibody Input
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -445,7 +445,7 @@ antibody Input
 cell GM10847
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM10847/None/Input/IgG-rab
+controlId GM10847/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -2077,6 +2077,130 @@ tableName wgEncodeSydhTfbsGm12878InputIggmusSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsGm12878InputIggrabAlnRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputIggrabAlnRep1.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1366
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878InputIggrabAlnRep2
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputIggrabAlnRep2.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1378
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878InputIggrabRawDataRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputIggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1109
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878InputIggrabRawDataRep2
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputIggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1109
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878InputIggrabSig
+objType table
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId GM12878/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputIggrabSig.bigWig
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+setType input
+subId 3053
+tableName wgEncodeSydhTfbsGm12878InputIggrabSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsGm12878InputRawData
 objType file
 antibody Input
@@ -2147,130 +2271,6 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm12878InputStdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1366
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1378
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep1
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1109
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep2
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1109
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
-objType table
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId GM12878/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabSig.bigWig
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-setType input
-subId 3053
-tableName wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
 treatment None
 view Signal
 
@@ -6767,7 +6767,7 @@ antibody Input
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -6793,7 +6793,7 @@ antibody Input
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -6819,7 +6819,7 @@ antibody Input
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -6843,7 +6843,7 @@ antibody Input
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -6867,7 +6867,7 @@ antibody Input
 cell GM12891
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12891/None/Input/IgG-rab
+controlId GM12891/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -7572,7 +7572,7 @@ antibody Input
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -7598,7 +7598,7 @@ antibody Input
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -7624,7 +7624,7 @@ antibody Input
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -7649,7 +7649,7 @@ antibody Input
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -7674,7 +7674,7 @@ antibody Input
 cell GM12892
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12892/None/Input/IgG-rab
+controlId GM12892/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -8226,7 +8226,7 @@ antibody Input
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8252,7 +8252,7 @@ antibody Input
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -8278,7 +8278,7 @@ antibody Input
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -8303,7 +8303,7 @@ antibody Input
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -8328,7 +8328,7 @@ antibody Input
 cell GM15510
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM15510/None/Input/IgG-rab
+controlId GM15510/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -8982,7 +8982,7 @@ antibody Input
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9008,7 +9008,7 @@ antibody Input
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9034,7 +9034,7 @@ antibody Input
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -9059,7 +9059,7 @@ antibody Input
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -9084,7 +9084,7 @@ antibody Input
 cell GM18505
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18505/None/Input/IgG-rab
+controlId GM18505/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -9840,7 +9840,7 @@ antibody Input
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9866,7 +9866,7 @@ antibody Input
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -9892,7 +9892,7 @@ antibody Input
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -9917,7 +9917,7 @@ antibody Input
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -9942,7 +9942,7 @@ antibody Input
 cell GM18526
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18526/None/Input/IgG-rab
+controlId GM18526/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -10442,7 +10442,7 @@ antibody Input
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -10468,7 +10468,7 @@ antibody Input
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -10493,7 +10493,7 @@ antibody Input
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -10518,7 +10518,7 @@ antibody Input
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -10543,7 +10543,7 @@ antibody Input
 cell GM18951
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM18951/None/Input/IgG-rab
+controlId GM18951/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -11194,7 +11194,7 @@ antibody Input
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -11220,7 +11220,7 @@ antibody Input
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -11245,7 +11245,7 @@ antibody Input
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -11270,7 +11270,7 @@ antibody Input
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -11295,7 +11295,7 @@ antibody Input
 cell GM19099
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19099/None/Input/IgG-rab
+controlId GM19099/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -11844,7 +11844,7 @@ antibody Input
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -11870,7 +11870,7 @@ antibody Input
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -11895,7 +11895,7 @@ antibody Input
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -11920,7 +11920,7 @@ antibody Input
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -11945,7 +11945,7 @@ antibody Input
 cell GM19193
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM19193/None/Input/IgG-rab
+controlId GM19193/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -44619,4 +44619,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 895109389
+# MAGIC: 751971247
