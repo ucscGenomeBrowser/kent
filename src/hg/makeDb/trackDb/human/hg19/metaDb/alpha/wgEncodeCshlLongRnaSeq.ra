@@ -4833,7 +4833,6 @@ dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000141
 dccRep 1
 expId 141
-fileIndex wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam.bai
 fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam
 grant Gingeras
 lab CSHL
@@ -4861,7 +4860,6 @@ dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000141
 dccRep 2
 expId 141
-fileIndex wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam.bai
 fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam
 grant Gingeras
 lab CSHL
@@ -24715,7 +24713,6 @@ dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000142
 dccRep 1
 expId 142
-fileIndex wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam.bai
 fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam
 grant Gingeras
 lab CSHL
@@ -24743,7 +24740,6 @@ dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000142
 dccRep 2
 expId 142
-fileIndex wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam.bai
 fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam
 grant Gingeras
 lab CSHL
@@ -36775,4 +36771,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1746975696
+# MAGIC: 1785091618
