@@ -3252,7 +3252,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3278,7 +3278,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3304,7 +3304,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3330,7 +3330,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3356,7 +3356,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -3380,7 +3380,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3405,7 +3405,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3430,7 +3430,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3454,7 +3454,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3478,7 +3478,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId GM12878/TNFa/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -14328,7 +14328,7 @@ antibody ELK4
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
@@ -14351,7 +14351,7 @@ antibody ELK4
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
@@ -14374,7 +14374,7 @@ antibody ELK4
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
@@ -14398,7 +14398,7 @@ antibody ELK4
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
@@ -14421,7 +14421,7 @@ antibody ELK4
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
@@ -14444,7 +14444,7 @@ antibody ELK4
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-13
@@ -14541,7 +14541,7 @@ antibody Input
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
@@ -14563,7 +14563,7 @@ antibody Input
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
@@ -14585,7 +14585,7 @@ antibody Input
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
@@ -14609,7 +14609,7 @@ antibody KAP1
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -14632,7 +14632,7 @@ antibody KAP1
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -14655,7 +14655,7 @@ antibody KAP1
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -14679,7 +14679,7 @@ antibody KAP1
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -14702,7 +14702,7 @@ antibody KAP1
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -14725,7 +14725,7 @@ antibody KAP1
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
+controlId HEK293/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -14899,7 +14899,7 @@ antibody Pol2
 cell HEK293
 composite wgEncodeSydhTfbs
 control std
-controlId HEK293(b)/None/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -24607,7 +24607,7 @@ antibody Input
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
@@ -24702,7 +24702,7 @@ antibody Input
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -24728,7 +24728,7 @@ antibody Input
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -27991,7 +27991,7 @@ antibody TR4
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
@@ -28016,7 +28016,7 @@ antibody TR4
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-12
@@ -28042,7 +28042,7 @@ antibody TR4
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -28068,7 +28068,7 @@ antibody TR4
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -28094,7 +28094,7 @@ antibody TR4
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -28118,7 +28118,7 @@ antibody TR4
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -28282,7 +28282,7 @@ antibody ZNF274
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
@@ -28305,7 +28305,7 @@ antibody ZNF274
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
@@ -28328,7 +28328,7 @@ antibody ZNF274
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
@@ -28352,7 +28352,7 @@ antibody ZNF274
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
@@ -28376,7 +28376,7 @@ antibody ZNF274
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
@@ -28400,7 +28400,7 @@ antibody ZNF274
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2b/None/Input/UCDavis
+controlId HepG2/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -44619,4 +44619,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1704131051
+# MAGIC: -1704136095
