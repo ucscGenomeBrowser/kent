@@ -7658,6 +7658,11 @@ tag R2X75
 type readType
 description Paired 75 n.t. reads
 
+term 2x76D
+tag R2X76D
+type readType
+description Paired 76 n.t. directed reads
+
 #### insertLength
 #### This is being used by the Wold lab as a variable.
 #### I do not think that it needs to be controlled. - Cricket
