@@ -25,6 +25,7 @@
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
 #define hgHubDoClear       hgHubDo "clear"
+#define hgHubDoDisconnect  hgHubDo "disconnect"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -70,7 +71,7 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
 
 // count up the number of unlisted hubs we currently have
 int count = 0;
-struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
+struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCartAll(cart);
 for(hub = hubList; hub; hub = hub->next)
     {
     if (isHubUnlisted(hub))
@@ -95,6 +96,7 @@ printf(
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
 	"<th>URL</th> "
+	"<th>Disconnect</th> "
     "</tr>\n");
 
 // start first row
@@ -129,6 +131,18 @@ for(hub = hubList; hub; hub = hub->next)
     else
 	ourPrintCell(hub->errorMessage);
     ourPrintCell(hub->hubUrl);
+
+    ourCellStart();
+    printf(
+    "<input name=\"hubDisconnectButton\""
+	"onClick=\"document.disconnectHubForm.elements['hubUrl'].value='%s';"
+	    "document.disconnectHubForm.submit();return true;\" "
+	    "class=\"hubField\" type=\"button\" value=\"X\">"
+	    , hub->hubUrl);
+    //cgiMakeButton("Submit", "X");
+    ourCellEnd();
+    //hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+
     }
 
 printf("</TR></tbody></TABLE>\n");
@@ -245,6 +259,16 @@ else
 printf("<pre>Completed\n");
 }
 
+static void doDisconnectHub(struct cart *theCart)
+{
+char *url = cartOptionalString(cart, hgHubDataText);
+
+if (url != NULL)
+    hubDisconnect(theCart, url);
+
+cartRemove(theCart, hgHubDataText);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -256,6 +280,9 @@ if (cartVarExists(cart, hgHubDoClear))
     cartWebEnd();
     return;
     }
+
+if (cartVarExists(cart, hgHubDoDisconnect))
+    doDisconnectHub(cart);
 
 cartWebStart(cart, NULL, "%s", pageTitle);
 jsIncludeFile("jquery.js", NULL);
@@ -287,7 +314,14 @@ hubCheckForNew(database, cart);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
-cgiMakeHiddenVar("hubUrl", "foo");
+cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+puts("</FORM>");
+
+// this the form for the disconnect hub button
+printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubConnect");
+cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
@@ -312,7 +346,9 @@ puts("</FORM>");
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl,  hgHubDoClear, hgHubDataText, NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
+    hgHubConnectCgiDestUrl,  hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
+    hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

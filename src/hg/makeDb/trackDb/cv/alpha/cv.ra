@@ -2527,7 +2527,7 @@ description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
 vendorName Refer to the protocol documents for differing sources
-vendorId HSMM
+vendorId CC-2580
 #orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
@@ -2540,11 +2540,11 @@ term HSMMtube
 tag HSMMt
 type Cell Line
 organism human
-description Normal Human Skeletal Muscle Myotubes
+description PROVISIONAL Normal human skeletal muscle myotubes differentiated from the HSMM cell line
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
-vendorId (missing)
+vendorId See HSMM
 orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
@@ -3768,8 +3768,8 @@ tissue Skeletal Muscle
 category cellLine
 age immortalized
 strain C3H
-description Myoblast cell line derived from thigh muscle of C3H mice after crush injury (PROVISIONAL)
-vendorName 	Barbara Wold lab
+description Myoblast cell line derived from thigh muscle of C3H mice after crush injury 
+vendorName Barbara Wold lab
 vendorId C2C12
 termId 7125
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
@@ -4098,8 +4098,7 @@ termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 102,50,200
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR(Ren):Limb_Ren_protocol.pdf
+protocol Ren:Limb_Ren_protocol.pdf
 
 term Liver
 tag LIVER
@@ -4332,8 +4331,7 @@ termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR:Placenta_Ren_protocol.pdf
+protocol Ren:Placenta_Ren_protocol.pdf
 
 #Shortened term
 term SmIntestine
@@ -7959,7 +7957,7 @@ description The reference human genome is currently hg18 - March 2006 (NCBI Buil
 term RevXlinkChromatin 
 tag RXLCH
 type control
-description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. (PROVISIONAL)
+description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. 
 
 term None
 tag NONE
@@ -8375,7 +8373,7 @@ term Alignability
 tag ALIGNABI
 type view
 label Alignability
-description PROVISIONAL The CRG Alignability tracks display how uniquely k-mer sequences align to a region of the genome. To generate the data, the GEM-mappability program has been employed. The method is equivalent to mapping sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts to produce these tracks) back to the genome using the GEM mapper aligner (up to 2 mismatches were allowed in this case). For each window, a mapability score was computed (S = 1/(number of matches found in the genome): S=1 means one match in the genome, S=0.5 is two matches in the genome, and so on). The CRG Alignability tracks were generated independently of the ENCODE project, in the framework of the GEM (GEnome Multitool) project. 
+description PROVISIONAL Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mapability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project. 
 
 term Alignments
 tag ALN
@@ -8418,6 +8416,12 @@ tag EXONGENCV3C
 type view
 label Exons Gencode V3c
 description Expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
+
+term ExonsGencV7
+tag EXONGENCV7
+type view
+label Exons Gencode V7
+description Expression level estimates for GENCODE V7 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
 term Fasta3p
 tag FASTA3P
@@ -8472,6 +8476,12 @@ tag GENEDENO
 type view
 label Genes DeNovo
 description Expression estimates for genes defined by Cufflinks in de novo mode in gtf format
+
+term GeneGencV7 
+tag GENEGENCV7 
+type view
+label Genes Gencode V7 
+description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format 
 
 term GeneGencV3c
 tag GENEGENCV3C
@@ -8586,13 +8596,13 @@ term RepPeaks
 tag REPPEAKS
 type view
 label Replicate Peaks
-description Peaks determined by Replicate (PROVISIONAL)
+description Peaks determined per individual replicate  
 
 term RepSignal
 tag REPSIGNAL
 type view
 label Replicate Signal
-description Signal determined by Replicate (PROVISONAL)
+description Signal determined per individual replicate 
 
 term Signal
 tag SIG
@@ -8636,6 +8646,12 @@ type view
 label TranscriptDeNovo
 description Transcript models and expression estimates in FPKM produced by Cufflinks in de novo mode
 
+term TranscriptGencV7 
+tag TRANSGENCV7 
+type view
+label Transcript Gencode V7 
+description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format 
+
 term TranscriptGencV3c
 tag TRANSGENCV3C
 type view
@@ -8658,7 +8674,7 @@ term Uniqueness
 tag UNQ
 type view
 label Uniqueness
-description (PROVISIONAL)The Duke uniqueness tracks display how unique is each sequence on the positive strand starting at a particular base and of a particular length. Thus, the 20 bp track reflects the uniqueness of all 20 base sequences with the score being assigned to the first base of the sequence. Scores are normalized to between 0 and 1 with 1 representing a completely unique sequence and 0 representing the sequence occurs more than 4 times in the genome (excluding chrN_random and alternative haplotypes). A score of 0.5 indicates the sequence occurs exactly twice, likewise 0.33 for three times and 0.25 for four times. The Duke uniqueness tracks were generated for the ENCODE project as tools in the development of the Open Chromatin: DNaseI HS, FAIRE, TFBS and Synthesis tracks. 
+description Displays how unique is each sequence on the positive strand starting at a particular base and of a particular length.  The score of 1 represents completely unique, 0.5 occurs exactly twice, 0.33 three times, 0.25 four times and 0 occurs > 4 times (excluding chrN_random and alternative haplotypes).  The Duke uniqueness tracks were generated for the ENCODE project.
 
 term Validation
 tag VALIDATION
@@ -8860,13 +8876,6 @@ tag  RIPSEQ
 type dataType
 label RIP-seq
 description RNA-seq on RIP-chip data
-
-#term Snp
-#tag SNP
-#type dataType
-#label SNPs
-#description PROVISIONAL Single-nucleotide polymorphism
-# I would like to take this out and replace with Genotype as a more general datatype to match the composite
 
 term Switchgear
 tag SWITCHGEAR

@@ -151,6 +151,27 @@ return hub;
 }
 
 
+struct hubConnectStatus *hubConnectStatusListFromCartAll(struct cart *cart)
+/* Return list of all track hubs that are referenced by cart. */
+{
+struct hubConnectStatus *hubList = NULL, *hub;
+struct slPair *pair, *pairList = cartVarsWithPrefix(cart, hgHubConnectHubVarPrefix);
+struct sqlConnection *conn = hConnectCentral();
+for (pair = pairList; pair != NULL; pair = pair->next)
+    {
+    int id = hubIdFromCartName(pair->name);
+    hub = hubConnectStatusForId(cart, conn, id);
+    if (hub != NULL)
+	{
+        slAddHead(&hubList, hub);
+	}
+    }
+slFreeList(&pairList);
+hDisconnectCentral(&conn);
+slReverse(&hubList);
+return hubList;
+}
+
 struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart)
 /* Return list of track hubs that are turned on by user in cart. */
 {
@@ -170,6 +191,17 @@ slFreeList(&nameList);
 hDisconnectCentral(&conn);
 slReverse(&hubList);
 return hubList;
+}
+
+int hubIdFromCartName(char *cartName)
+/* Given something like "hgHubConnect.hub.123" return 123 */
+{
+assert(startsWith("hgHubConnect.hub.", cartName));
+
+char *ptr1 = strchr(cartName, '.');
+char *ptr2 = strchr(ptr1 + 1, '.');
+
+return sqlUnsigned(ptr2+1);
 }
 
 int hubIdFromTrackName(char *trackName)
@@ -477,6 +509,27 @@ safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", hubStatusTab
 
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
-
 }
 
+void hubDisconnect(struct cart *cart, char *url)
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+
+safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+unsigned id = sqlQuickNum(conn, query);
+
+if (id == 0)
+    errAbort("could not find url %s in status table (%s)\n", 
+	url, hubStatusTableName);
+
+safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+
+sqlUpdate(conn, query);
+hDisconnectCentral(&conn);
+
+char buffer[1024];
+
+safef(buffer, sizeof buffer, "hgHubConnect.hub.%d", id);
+cartRemove(cart, buffer);
+}
