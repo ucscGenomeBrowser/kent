@@ -3188,9 +3188,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm10847InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM47 Inpt IgGr
-        longLabel GM10847 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM10847 control=IGGRAB treatment=aNone
+        shortLabel GM47 Inpt TNF Igr
+        longLabel GM10847 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM10847 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 8241.500000
         # subId=3053 dateSubmitted=2010-12-02
 
@@ -3366,9 +3366,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm12891InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM91 Inpt IgGr
-        longLabel GM12891 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM12891 control=IGGRAB treatment=aNone
+        shortLabel GM91 Inpt TNF Igr
+        longLabel GM12891 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM12891 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 12307.200195
         # subId=3053 dateSubmitted=2010-12-02
 
@@ -3399,9 +3399,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm12892InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM92 Inpt IgGr
-        longLabel GM12892 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM12892 control=IGGRAB treatment=aNone
+        shortLabel GM92 Inpt TNF Igr
+        longLabel GM12892 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM12892 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 10143.200195
         # subId=3053 dateSubmitted=2010-12-02
 
@@ -3432,9 +3432,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm15510InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM10 Inpt IgGr
-        longLabel GM15510 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM15510 control=IGGRAB treatment=aNone
+        shortLabel GM10 Inpt TNF Igr
+        longLabel GM15510 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM15510 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 9380.400391
         # subId=3053 dateSubmitted=2010-12-02
 
@@ -3465,9 +3465,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm18505InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM05 Inpt IgGr
-        longLabel GM18505 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM18505 control=IGGRAB treatment=aNone
+        shortLabel GM05 Inpt TNF Igr
+        longLabel GM18505 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM18505 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 9532.299805
         # subId=3053 dateSubmitted=2010-12-02
 
@@ -3498,9 +3498,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm18526InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM26 Inpt IgGr
-        longLabel GM18526 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM18526 control=IGGRAB treatment=aNone
+        shortLabel GM26 Inpt TNF Igr
+        longLabel GM18526 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM18526 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 13078.500000
         # subId=3053 dateSubmitted=2010-12-02
 
@@ -3531,9 +3531,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm18951InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM51 Inpt IgGr
-        longLabel GM18951 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM18951 control=IGGRAB treatment=aNone
+        shortLabel GM51 Inpt TNF Igr
+        longLabel GM18951 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM18951 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 8158.299805
         # subId=3053 dateSubmitted=2010-12-02
 
@@ -3564,9 +3564,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm19099InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM99 Inpt IgGr
-        longLabel GM19099 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM19099 control=IGGRAB treatment=aNone
+        shortLabel GM99 Inpt TNF Igr
+        longLabel GM19099 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM19099 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 12792.200195
         # subId=3053 dateSubmitted=2010-12-02
 
@@ -3597,9 +3597,9 @@ wgEncode 1
 
         track wgEncodeSydhTfbsGm19193InputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM93 Inpt IgGr
-        longLabel GM19193 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM19193 control=IGGRAB treatment=aNone
+        shortLabel GM93 Inpt TNF Igr
+        longLabel GM19193 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM19193 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 8317.400391
         # subId=3053 dateSubmitted=2010-12-02
 
