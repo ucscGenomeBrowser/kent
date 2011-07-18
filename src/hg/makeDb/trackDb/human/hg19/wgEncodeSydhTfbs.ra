@@ -5078,13 +5078,14 @@ wgEncode 1
         type bigWig 1.000000 9027.000000
         # subId=3498 dateSubmitted=2011-02-03
 
-        track wgEncodeSydhTfbsMcf10aesInputUcdSig
+        track wgEncodeSydhTfbsMcf10aesInputStdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel MCF1 Inpt UCD
-        longLabel MCF10A Input UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputucd cellType=MCF10AES control=UCD treatment=aNone
+        shortLabel MCF1 Inpt Std
+        longLabel MCF10A Input Standard ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputstd cellType=MCF10AES control=std treatment=aNone
         type bigWig 1.000000 35209.000000
         # subId=3497 dateSubmitted=2011-02-03
+        # was wgEncodeSydhTfbsMcf10aesInputUcdSig wong Mon Jul 18 13:25:03 2011
 
         track wgEncodeSydhTfbsK562Bhlhe40nb100IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
