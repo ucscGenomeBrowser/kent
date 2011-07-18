@@ -360,7 +360,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1366
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm10847InputIggrabAlnRep2
@@ -386,7 +386,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1377
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm10847InputIggrabRawDataRep1
@@ -411,7 +411,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1108
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm10847InputIggrabRawDataRep2
@@ -436,7 +436,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1108
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm10847InputIggrabSig
@@ -460,7 +460,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm10847InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep1
@@ -6784,7 +6784,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1367
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12891InputIggrabAlnRep2
@@ -6810,7 +6810,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1379
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12891InputIggrabRawDataRep1
@@ -6834,7 +6834,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1111
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12891InputIggrabRawDataRep2
@@ -6858,7 +6858,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1111
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12891InputIggrabSig
@@ -6882,7 +6882,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm12891InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep1
@@ -7589,7 +7589,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1368
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12892InputIggrabAlnRep2
@@ -7615,7 +7615,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1379
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm12892InputIggrabRawDataRep1
@@ -7640,7 +7640,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1110
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12892InputIggrabRawDataRep2
@@ -7665,7 +7665,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1110
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm12892InputIggrabSig
@@ -7689,7 +7689,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm12892InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep1
@@ -8243,7 +8243,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1368
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm15510InputIggrabAlnRep2
@@ -8269,7 +8269,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1379
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm15510InputIggrabRawDataRep1
@@ -8294,7 +8294,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1112
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm15510InputIggrabRawDataRep2
@@ -8319,7 +8319,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1112
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm15510InputIggrabSig
@@ -8343,7 +8343,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm15510InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep1
@@ -8999,7 +8999,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1368
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18505InputIggrabAlnRep2
@@ -9025,7 +9025,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1380
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18505InputIggrabRawDataRep1
@@ -9050,7 +9050,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1113
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18505InputIggrabRawDataRep2
@@ -9075,7 +9075,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1113
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18505InputIggrabSig
@@ -9099,7 +9099,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm18505InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep1
@@ -9857,7 +9857,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1369
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18526InputIggrabAlnRep2
@@ -9883,7 +9883,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1380
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18526InputIggrabRawDataRep1
@@ -9908,7 +9908,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1114
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18526InputIggrabRawDataRep2
@@ -9933,7 +9933,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1114
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18526InputIggrabSig
@@ -9957,7 +9957,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm18526InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep1
@@ -10459,7 +10459,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1369
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18951InputIggrabAlnRep2
@@ -10484,7 +10484,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1381
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm18951InputIggrabRawDataRep1
@@ -10509,7 +10509,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1115
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18951InputIggrabRawDataRep2
@@ -10534,7 +10534,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1115
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm18951InputIggrabSig
@@ -10558,7 +10558,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm18951InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep1
@@ -11211,7 +11211,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1370
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19099InputIggrabAlnRep2
@@ -11236,7 +11236,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1381
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19099InputIggrabRawDataRep1
@@ -11261,7 +11261,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1116
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19099InputIggrabRawDataRep2
@@ -11286,7 +11286,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1116
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19099InputIggrabSig
@@ -11310,7 +11310,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm19099InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep1
@@ -11861,7 +11861,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1370
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19193InputIggrabAlnRep2
@@ -11886,7 +11886,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1381
-treatment None
+treatment TNFa
 view Alignments
 
 metaObject wgEncodeSydhTfbsGm19193InputIggrabRawDataRep1
@@ -11911,7 +11911,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1117
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19193InputIggrabRawDataRep2
@@ -11936,7 +11936,7 @@ project wgEncode
 replicate 2
 setType input
 subId 1117
-treatment None
+treatment TNFa
 view RawData
 
 metaObject wgEncodeSydhTfbsGm19193InputIggrabSig
@@ -11960,7 +11960,7 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm19193InputIggrabSig
-treatment None
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep1
@@ -40878,8 +40878,8 @@ objType file
 antibody Input
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-03
@@ -40888,7 +40888,7 @@ dccAccession wgEncodeEH001782
 expId 1782
 fileName wgEncodeSydhTfbsMcf10aesInputStdAln.bam
 grant Snyder
-lab USC
+lab Harvard
 project wgEncode
 setType input
 subId 3497
@@ -40900,8 +40900,8 @@ objType file
 antibody Input
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-03
@@ -40910,7 +40910,7 @@ dccAccession wgEncodeEH001782
 expId 1782
 fileName wgEncodeSydhTfbsMcf10aesInputStdRawData.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 project wgEncode
 setType input
 subId 3497
@@ -40922,8 +40922,8 @@ objType table
 antibody Input
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-03
@@ -40932,7 +40932,7 @@ dccAccession wgEncodeEH001782
 expId 1782
 fileName wgEncodeSydhTfbsMcf10aesInputStdSig.bigWig
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -40946,8 +40946,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -40956,7 +40956,7 @@ dccAccession wgEncodeEH001771
 expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1.bam
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1
 project wgEncode
 replicate 1
@@ -40970,8 +40970,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -40980,7 +40980,7 @@ dccAccession wgEncodeEH001771
 expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2.bam
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2
 project wgEncode
 replicate 2
@@ -40994,8 +40994,8 @@ objType table
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41004,7 +41004,7 @@ dccAccession wgEncodeEH001771
 expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdPk.narrowPeak.gz
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41018,8 +41018,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41028,7 +41028,7 @@ dccAccession wgEncodeEH001771
 expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawDataRep1.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -41042,8 +41042,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41052,7 +41052,7 @@ dccAccession wgEncodeEH001771
 expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawDataRep2.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -41066,8 +41066,8 @@ objType table
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41076,7 +41076,7 @@ dccAccession wgEncodeEH001771
 expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdSig.bigWig
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41090,8 +41090,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41100,7 +41100,7 @@ dccAccession wgEncodeEH001768
 expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1.bam
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1
 project wgEncode
 replicate 1
@@ -41114,8 +41114,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41124,7 +41124,7 @@ dccAccession wgEncodeEH001768
 expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2.bam
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2
 project wgEncode
 replicate 2
@@ -41138,8 +41138,8 @@ objType table
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41148,7 +41148,7 @@ dccAccession wgEncodeEH001768
 expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdPk.narrowPeak.gz
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41162,8 +41162,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41172,7 +41172,7 @@ dccAccession wgEncodeEH001768
 expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep1.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdRawSignalRep1
 project wgEncode
 replicate 1
@@ -41186,8 +41186,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41196,7 +41196,7 @@ dccAccession wgEncodeEH001768
 expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep2.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdRawSignalRep2
 project wgEncode
 replicate 2
@@ -41210,8 +41210,8 @@ objType table
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41220,7 +41220,7 @@ dccAccession wgEncodeEH001768
 expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdSig.bigWig
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41234,8 +41234,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41244,7 +41244,7 @@ dccAccession wgEncodeEH001772
 expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1.bam
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
 project wgEncode
 replicate 1
@@ -41258,8 +41258,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41268,7 +41268,7 @@ dccAccession wgEncodeEH001772
 expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2.bam
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
 project wgEncode
 replicate 2
@@ -41282,8 +41282,8 @@ objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41292,7 +41292,7 @@ dccAccession wgEncodeEH001772
 expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk.narrowPeak.gz
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41306,8 +41306,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41316,7 +41316,7 @@ dccAccession wgEncodeEH001772
 expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep1.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -41330,8 +41330,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41340,7 +41340,7 @@ dccAccession wgEncodeEH001772
 expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep2.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -41354,8 +41354,8 @@ objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -41364,7 +41364,7 @@ dccAccession wgEncodeEH001772
 expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig.bigWig
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41658,8 +41658,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41668,7 +41668,7 @@ dccAccession wgEncodeEH001769
 expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1.bam
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1
 project wgEncode
 replicate 1
@@ -41682,8 +41682,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41692,7 +41692,7 @@ dccAccession wgEncodeEH001769
 expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2.bam
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2
 project wgEncode
 replicate 2
@@ -41706,8 +41706,8 @@ objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41716,7 +41716,7 @@ dccAccession wgEncodeEH001769
 expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdPk.narrowPeak.gz
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -41730,8 +41730,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41740,7 +41740,7 @@ dccAccession wgEncodeEH001769
 expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep1.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdRawSignalRep1
 project wgEncode
 replicate 1
@@ -41754,8 +41754,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41764,7 +41764,7 @@ dccAccession wgEncodeEH001769
 expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep2.fastq.gz
 grant Snyder
-lab USC
+lab Harvard
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdRawSignalRep2
 project wgEncode
 replicate 2
@@ -41778,8 +41778,8 @@ objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId MCF10A-Er-Src/None/Input/UCDavis
+control std
+controlId MCF10A-Er-Src/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -41788,7 +41788,7 @@ dccAccession wgEncodeEH001769
 expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdSig.bigWig
 grant Snyder
-lab USC
+lab Harvard
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -44619,4 +44619,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1665200694
+# MAGIC: 537501743
