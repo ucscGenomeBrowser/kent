@@ -33,7 +33,7 @@ dimensionZchecked aNone
 dimensionAchecked std,IGGmus,IGGrab,UCD
 filterComposite dimZ=one dimA=multi
 sortOrder cellType=+ factor=+ control=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View controd=Control setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View control=Control setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
 visibilityViewDefaults Peaks=pack  Signal=full
