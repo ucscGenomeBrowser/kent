@@ -49,7 +49,17 @@ class RaFile(OrderedDict):
 				stanza = list()
 
 		if len(stanza) > 0:
-			raise IOError('File is not newline terminated')
+			if keyValue == '':
+				keyValue, name, entry = self.readStanza(stanza)
+			else:
+				testKey, name, entry = self.readStanza(stanza)
+				if entry != None and keyValue != testKey:
+					raise KeyError('Inconsistent Key ' + testKey)
+			
+			if entry != None:
+				if name in self:
+					raise KeyError('Duplicate Key ' + name)
+				self[name] = entry
 
 		file.close()
 

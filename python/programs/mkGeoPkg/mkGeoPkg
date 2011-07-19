@@ -158,14 +158,14 @@ def createMappings(mdb):
 			print stanza.name + ': no expId'
 			continue
 
-		if 'geoSampleAccession' not in stanza:
+		#if 'geoSampleAccession' not in stanza:
 			# if this hasn't been submitted to GEO yet, we'll add it to the submission list
-			if stanza['expId'] not in expIds:
-				expIds[stanza['expId']] = list()
-				
-			expIds[stanza['expId']].append(stanza)
+		if stanza['expId'] not in expIds:
+			expIds[stanza['expId']] = list()
+			
+		expIds[stanza['expId']].append(stanza)
 		
-		else:
+		if 'geoSampleAccession' in stanza:
 			# otherwise we keep track of the geo number for partially submitted samples
 			if stanza['expId'] not in geoMapping:
 				geoMapping[stanza['expId']] = stanza['geoSampleAccession']
@@ -221,7 +221,7 @@ def createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, s
 	
 	softfile[series['composite']] = seriesStanza
 	
-def createHighThroughputSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype, copyDirectory):
+def createHighThroughputSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype):
 	
 	print 'Creating HighThroughput soft file'
 
@@ -345,7 +345,7 @@ def createHighThroughputSoftFile(database, composite, organism, compositeUrl, md
 	return softfile, fileList
 		
 		
-def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype, copyDirectory):
+def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype):
 	
 	print 'Creating MicroArray soft file'
 
@@ -439,6 +439,56 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 		
 	return softfile, fileList
 	
+	
+def createSpecialSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype):
+	softfile = SoftFile()
+	fileList = list()
+	
+	createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, series)
+	
+	for idNum in expIds.iterkeys():
+		
+		expId = expIds[idNum]
+		firstStanza = expId[0]
+		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
+		sample = HighThroughputSampleStanza()
+		
+		hasbigwig = 0
+		for stanza in expId:
+		
+			if getFileType(stanza['fileName']) == 'bigWig':
+				hasbigwig = 1
+				
+		if hasbigwig == 0:
+			continue
+		
+		sample['^SAMPLE'] = firstStanza['geoSampleAccession']
+		
+		if 'geoSeriesAccession' in series:
+			sample['!Sample_series_id'] = series['geoSeriesAccession']
+			
+		sample['!Sample_geo_accession'] = firstStanza['geoSampleAccession']
+		
+		count = 1
+			
+		for stanza in expId:
+		
+			if getFileType(stanza['fileName']) == 'bigWig':
+				sample['!Sample_supplementary_file_' + str(count)] = stanza['fileName']
+				
+				if 'checksum' in stanza:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
+				elif md5sums != None and stanza['fileName'] in md5sums:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
+				
+				# sample['!Sample_supplementary_file_build_' + str(count)] = database
+				
+				fileList.append(stanza['fileName'])
+				count = count + 1
+				
+		softfile[firstStanza['geoSampleAccession']] = sample
+		
+	return softfile, fileList
 		
 def main():
 	database = sys.argv[1]
@@ -465,12 +515,12 @@ def main():
 	cv = CvFile(cvPath)
 	track = RaFile(trackPath)
 	md5sums = readMd5sums(md5path)
-	print md5sums
 	expIds, expVars, geoMapping, series, datatype = createMappings(mdb)
 	
 	submission = dict()
 	sortedIds = expIds.keys()
 	sortedIds.sort()
+	print sortedIds
 	
 	if wholeComposite == 0:
 		sortedIds = sortedIds[sortedIds.index(submitStart):sortedIds.index(submitStart) + submitSize]
@@ -482,9 +532,9 @@ def main():
 		submission[expId] = expIds[expId]
 
 	if datatype.soft == HighThroughputSoftFile:
-		softfile, fileList = createHighThroughputSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype, copyDirectory)
+		softfile, fileList = createSpecialSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype)
 	elif datatype.soft == MicroArraySoftFile:
-		softfile, fileList = createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype, copyDirectory)
+		softfile, fileList = createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype)
 	else:
 		raise KeyError('unsupported type')
 		
