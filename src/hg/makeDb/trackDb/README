@@ -374,6 +374,14 @@ The format of the type fields:
     includes an ID field, so if an URL is specified can link to another
     resource without affecting the name displayed in the track.
 
+22. type pgSnp
+    This type is used for the display of variants (for example, personal genome
+    variants).  It will display stacked boxes showing the proportion of reads
+    supporting each allele when frequency is available (in case of 2 alleles 
+    only).  Also the details page will use the UCSC genes to compute any amino 
+    acid changes.  The track can be loaded using hgLoadBed and the -sqlTable 
+    option (see pgSnp.sql for the format).
+
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
