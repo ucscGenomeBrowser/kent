@@ -29,7 +29,7 @@ datatypes = {
 	
 	#these need to be curated
 	'5C': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'AffyExonArray': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'AffyExonArray': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', MicroArraySoftFile),
 	'Bip': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
 	'Cluster': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
 	'Cnv': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
@@ -136,6 +136,7 @@ def readMd5sums(filename):
 		for line in md5file:
 			val, key = map(str.strip, line.split('  ', 1))
 			md5sums[key] = val
+		return md5sums
 	else:
 		return None
 	
@@ -359,12 +360,17 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 		firstStanza = expId[0]
 		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
 		sample = MicroArraySampleStanza()
-		sample['^SAMPLE'] = firstStanza['metaObject']
+		sample['^SAMPLE'] = firstStanza['accession']
+		
+		if 'geoSeriesAccession' in series:
+			sample['!Sample_series_id'] = series['geoSeriesAccession']
 
-		concat = expVars[0]
-		for expVar in expVars[1:len(expVars)]:
-			concat += '_' + firstStanza[expVar]
-		sample['!Sample_title'] = concat
+		#concat = expVars[0]
+		#for expVar in expVars[1:len(expVars)]:
+		#	concat += '_' + firstStanza[expVar]
+		#sample['!Sample_title'] = concat
+		
+		sample['!Sample_geo_accession'] = firstStanza['accession']
 		
 		count = 1
 			
@@ -373,15 +379,17 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 			if isSupplimentaryFile(stanza['fileName']):
 				sample['!Sample_supplementary_file_' + str(count)] = stanza['fileName']
 				
-				# if 'checksum' in stanza:
-					# sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
-				# elif md5sums != None and stanza['fileName'] in md5sums:
-					# sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
+				if 'checksum' in stanza:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
+				elif md5sums != None and stanza['fileName'] in md5sums:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
 				
 				# sample['!Sample_supplementary_file_build_' + str(count)] = database
 				
 				fileList.append(stanza['fileName'])
 				count = count + 1
+				
+		softfile[firstStanza['accession']] = sample
 
 		# sample['!Sample_table'] = KeyOptional # CEL file
 		# sample['!Sample_source_name_ch'] = KeyOnePlusNumbered
@@ -428,13 +436,20 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 		# platform['!Platform_geo_accession'] = KeyOptional
 		# platform['!Platform_table_begin'] = KeyRequired
 		# platform['!Platform_table_end'] = KeyRequired
+		
+	return softfile, fileList
 	
 		
 def main():
 	database = sys.argv[1]
 	composite = sys.argv[2]
-	submitStart = sys.argv[3]
-	submitSize = int(sys.argv[4])
+	
+	wholeComposite = 1
+	if len(sys.argv) == 5:
+		submitStart = sys.argv[3]
+		submitSize = int(sys.argv[4])
+		wholeComposite = 0
+		
 	organism = organisms[database]
 
 	mdbPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/' + organism + '/' + database + '/metaDb/alpha/' + composite + '.ra' #CHANGE
@@ -443,7 +458,6 @@ def main():
 	md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/md5sum.txt'
 
 	downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/'
-	copyDirectory = '/cluster/home/mmaddren/kent/python/ucscgenomics/mkGeoPkg/' + composite
 	
 	compositeUrl = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + composite
 	
@@ -451,12 +465,16 @@ def main():
 	cv = CvFile(cvPath)
 	track = RaFile(trackPath)
 	md5sums = readMd5sums(md5path)
+	print md5sums
 	expIds, expVars, geoMapping, series, datatype = createMappings(mdb)
 	
 	submission = dict()
 	sortedIds = expIds.keys()
 	sortedIds.sort()
-	sortedIds = sortedIds[sortedIds.index(submitStart):sortedIds.index(submitStart) + submitSize]
+	
+	if wholeComposite == 0:
+		sortedIds = sortedIds[sortedIds.index(submitStart):sortedIds.index(submitStart) + submitSize]
+		
 	minId = min(sortedIds)
 	maxId = max(sortedIds)
 	print 'Generating soft using expIds ' + minId + ' to ' + maxId
@@ -468,7 +486,7 @@ def main():
 	elif datatype.soft == MicroArraySoftFile:
 		softfile, fileList = createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype, copyDirectory)
 	else:
-		raise Error('unsupported type')
+		raise KeyError('unsupported type')
 		
 	print 'Writing soft file'
 	outfileName = os.path.dirname(sys.argv[0]) + composite + '.soft'
@@ -488,6 +506,8 @@ def main():
 	outscript.write(os.path.dirname(sys.argv[0]) + composite + '.soft' + ' \\\n')
 	
 	for file in fileList:
+		if not os.path.exists(downloadsDirectory + file):
+			raise FileError(downloadsDirectory + file + ' does not exist')
 		outscript.write(downloadsDirectory + file + ' \\\n')
 		
 	outscript.write('asp-geo@upload.ncbi.nlm.nih.gov:ENCODE\n')

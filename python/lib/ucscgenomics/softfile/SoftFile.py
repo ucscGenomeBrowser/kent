@@ -346,7 +346,8 @@ class SeriesStanza(SoftStanza):
 			'!Series_repeats': KeyZeroPlusNumbered,
 			'!Series_repeats_sample_list': KeyZeroPlusNumbered,
 			'!Series_sample_id': KeyOnePlus,
-			'!Series_geo_accession': KeyOptional
+			'!Series_geo_accession': KeyOptional,
+			'!Series_gp_id': KeyOptional
 		}
 				
 		SoftStanza.__init__(self, keys)
