@@ -97,6 +97,10 @@ struct slPair *cartVarsLike(struct cart *cart, char *wildCard);
 struct slPair *cartVarsWithPrefix(struct cart *cart, char *prefix);
 /* Return a slPair list of cart vars that begin with prefix */
 
+struct slPair *cartVarsWithPrefixLm(struct cart *cart, char *prefix, struct lm *lm);
+/* Return list of cart vars that begin with prefix allocated in local memory. 
+ * Quite a lot faster than cartVarsWithPrefix. */
+
 void cartRemoveLike(struct cart *cart, char *wildCard);
 /* Remove all variable from cart that match wildCard. */
 
@@ -532,11 +536,6 @@ double cartOrTdbDouble(struct cart *cart, struct trackDb *tdb, char *var, double
 boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved,boolean ignoreCreated);
 /* Returns TRUE if new cart setting has changed from old cart setting */
 
-int cartNamesPruneChanged(struct cart *newCart,struct hash *oldVars,
-                          struct slPair **cartNames,boolean ignoreRemoved,boolean unChanged);
-/* Prunes a list of cartNames if the settings have changed between new and old cart.
-   Returns pruned count */
-
 int cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boolean skipParent);
 /* Removes a 'trackName.suffix' from all tdb descendents (but not parent).
    If suffix NULL then removes 'trackName' which holds visibility */
@@ -545,7 +544,7 @@ boolean cartTdbTreeReshapeIfNeeded(struct cart *cart,struct trackDb *tdbComposit
 /* When subtrack vis is set via findTracks, and composite has no cart settings,
    then fashion composite to match found */
 
-boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars);
+boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars, struct lm *lm);
 /* When composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
 

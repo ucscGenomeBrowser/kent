@@ -66,14 +66,14 @@ wgEncode 1
 	qValueFilter 2
 	qValueFilterLimits 0:300
   
-		#### Submission 1166 ####
-		track wgEncodeSydhHistMelH3k4me3IggyalePk
+		track wgEncodeSydhHistMelH3k04me3IggyalePk
 		subTrack wgEncodeSydhHistViewPeaks 
 		shortLabel MEL H3K4me3
 		longLabel MEL H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=zNone
 		type narrowPeak
 		color 86,180,233 
+		# subId=4611 dateSubmitted=2011-07-19
 
         track wgEncodeSydhHistMelH3k04me3Dm2p5dIggyalePk
         parent wgEncodeSydhHistViewPeaks 
