@@ -2768,7 +2768,8 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
@@ -2781,7 +2782,7 @@ project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1156
+subId 4610
 tableName wgEncodeSydhTfbsCh12TbpIggmusPk
 treatment None
 view Peaks
@@ -3406,7 +3407,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
@@ -3419,7 +3421,7 @@ project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1163
+subId 4610
 tableName wgEncodeSydhTfbsMelCmycIggrabPk
 treatment None
 view Peaks
@@ -3502,6 +3504,33 @@ subId 1163
 tableName wgEncodeSydhTfbsMelCmycIggrabSig
 treatment None
 view Signal
+
+metaObject wgEncodeSydhTfbsMelCtcfbIggrabPk
+objType table
+age immortalized
+antibody CTCF_(SC-15914)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEM001968
+expId 1968
+fileName wgEncodeSydhTfbsMelCtcfbIggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 4610
+tableName wgEncodeSydhTfbsMelCtcfbIggrabPk
+treatment None
+view Peaks
 
 metaObject wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1
 objType file
@@ -3713,33 +3742,6 @@ strain Unknown
 subId 3087
 treatment None
 view Alignments
-
-metaObject wgEncodeSydhTfbsMelCtcfsc15914IggrabPk
-objType table
-age immortalized
-antibody CTCF_(SC-15914)
-cell MEL
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId MEL/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-10
-dateUnrestricted 2011-09-10
-dccAccession wgEncodeEM001968
-expId 1968
-fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabPk.narrowPeak.gz
-grant Snyder
-lab Stanford-m
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-sex M
-strain Unknown
-subId 3087
-tableName wgEncodeSydhTfbsMelCtcfsc15914IggrabPk
-treatment None
-view Peaks
 
 metaObject wgEncodeSydhTfbsMelCtcfsc15914IggrabRawDataRep1
 objType file
@@ -4043,7 +4045,8 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
@@ -4056,7 +4059,7 @@ project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1165
+subId 4610
 tableName wgEncodeSydhTfbsMelGata1IggratPk
 treatment None
 view Peaks
@@ -6593,7 +6596,8 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
@@ -6606,7 +6610,7 @@ project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1160
+subId 4610
 tableName wgEncodeSydhTfbsMelTbpIggmusPk
 treatment None
 view Peaks
@@ -6852,4 +6856,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -564313408
+# MAGIC: -2129384813
