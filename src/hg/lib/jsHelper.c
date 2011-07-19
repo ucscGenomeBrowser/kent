@@ -538,3 +538,17 @@ if(hashNumEntries(hash))
     hashElFreeList(&list);
     }
 }
+
+void jsonErrPrintf(struct dyString *ds, char *format, ...)
+//  Printf a json error to a dyString for communicating with ajax code; format is:
+//  {"error": error message here}
+{
+va_list args;
+va_start(args, format);
+dyStringPrintf(ds, "{\"error\": \"");
+struct dyString *buf = newDyString(1000);
+dyStringVaPrintf(buf, format, args);
+dyStringAppend(ds, javaScriptLiteralEncode(dyStringCannibalize(&buf)));
+dyStringPrintf(ds, "\"}");
+va_end(args);
+}
