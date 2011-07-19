@@ -9,5 +9,5 @@ organism mouse
 lab Stanford-m
 dataType ChipSeq
 cellType CH12
-expVars Antibody=CTCF
+expVars Antibody=CTCF treatment=TNFa
 
