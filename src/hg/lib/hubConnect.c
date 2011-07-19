@@ -481,16 +481,19 @@ if ((id = getHubId(url, errorMessage)) == 0)
 return id;
 }
 
-void hubCheckForNew(char *database, struct cart *cart)
-/* see if the user just typed in a new hub url */
+boolean hubCheckForNew(char *database, struct cart *cart)
+/* see if the user just typed in a new hub url, return TRUE if so */
 {
 char *url = cartOptionalString(cart, hgHubDataText);
 
 if (url != NULL)
     {
+    stripChar(url, ' ');
     getAndSetHubStatus(database, cart, url, TRUE, TRUE);
     cartRemove(cart, hgHubDataText);
+    return TRUE;
     }
+return FALSE;
 }
 
 void hubClearStatus(char *url)
