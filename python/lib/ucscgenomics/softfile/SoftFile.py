@@ -50,12 +50,11 @@ class SoftFile(OrderedDict):
 
 
 	def readStanza(self, stanza):
-		#print stanza
-	
+
 		if stanza[0].startswith('^SAMPLE'):
 			entry = HighThroughputSampleStanza() #WILL HAVE TO CHANGE
 		elif stanza[0].startswith('^SERIES'):
-			entry = HighThroughputSeriesStanza() #WILL HAVE TO CHANGE
+			entry = SeriesStanza()
 		elif stanza[0].startswith('^PLATFORM'):
 			entry = PlatformStanza()
 		else:
@@ -98,10 +97,35 @@ class HighThroughputSoftFile(SoftFile):
 	def __init__(self, filePath=''):
 		SoftFile__init__(self, filePath)
 
+	def readStanza(self, stanza):
+		if stanza[0].startswith('^SAMPLE'):
+			entry = HighThroughputSampleStanza()
+		elif stanza[0].startswith('^SERIES'):
+			entry = SeriesStanza()
+		else:
+			raise KeyError(stanza[0])
+
+		val = entry.readStanza(stanza)
+		return val, entry
+		
+		
 class MicroArraySoftFile(SoftFile):
 
 	def __init__(self, filePath=''):
 		SoftFile__init__(self, filePath)
+		
+	def readStanza(self, stanza):
+		if stanza[0].startswith('^SAMPLE'):
+			entry = MicroArraySampleStanza()
+		elif stanza[0].startswith('^SERIES'):
+			entry = SeriesStanza()
+		elif stanza[0].startswith('^PLATFORM'):
+			entry = PlatformStanza()
+		else:
+			raise KeyError(stanza[0])
+
+		val = entry.readStanza(stanza)
+		return val, entry
 		
 			
 class KeyRequired(object):
@@ -304,7 +328,7 @@ class MicroArraySampleStanza(SoftStanza):
 		SoftStanza.__init__(self, keys)		
 		
 		
-class MicroArraySeriesStanza(SoftStanza):
+class SeriesStanza(SoftStanza):
 	
 	def __init__(self):
 	
@@ -365,26 +389,3 @@ class HighThroughputSampleStanza(SoftStanza):
 		
 		SoftStanza.__init__(self, keys)
 		
-
-class HighThroughputSeriesStanza(SoftStanza):
-	
-	def __init__(self):
-	
-		keys = {
-			'^SERIES': KeyRequired,
-			'!Series_title': KeyRequired,
-			'!Series_summary': KeyOnePlus,
-			'!Series_overall_design': KeyRequired,
-			'!Series_pubmed_id': KeyZeroPlus,
-			'!Series_web_link': KeyZeroPlus,
-			'!Series_contributor': KeyZeroPlus,
-			'!Series_variable': KeyZeroPlusNumbered,
-			'!Series_variable_description': KeyZeroPlusNumbered,
-			'!Series_variable_sample_list': KeyZeroPlusNumbered,
-			'!Series_repeats': KeyZeroPlusNumbered,
-			'!Series_repeats_sample_list': KeyZeroPlusNumbered,
-			'!Series_sample_id': KeyOnePlus,
-			'!Series_geo_accession': KeyOptional
-		}
-				
-		SoftStanza.__init__(self, keys)

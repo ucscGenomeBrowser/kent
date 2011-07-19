@@ -56,6 +56,9 @@ struct hubConnectStatus *hubConnectStatusForId(struct cart *cart,
 struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart);
 /* Return list of track hubs that are turned on by user in cart. */
 
+struct hubConnectStatus *hubConnectStatusListFromCartAll(struct cart *cart);
+/* Return list of all track hubs that are referenced by cart. */
+
 #define hubConnectTrackHubsVarName "trackHubs"
 /* Name of cart variable with list of track hubs. */
 
@@ -73,6 +76,9 @@ boolean hubConnectTableExists();
 
 struct slName  *hubConnectHubsInCart(struct cart *cart);
 /* Return list of track hub ids that are turned on by user. */
+
+int hubIdFromCartName(char *trackName);
+/* Given something like "hgHubConnect.hub.123" return 123 */
 
 int hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
@@ -98,6 +104,9 @@ unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
 void hubClearStatus(char *url);
 /* delete the status for this hub from the status table */
 
-void hubCheckForNew(char *database, struct cart *cart);
-/* see if the user just typed in a new hub url */
+void hubDisconnect(struct cart *cart, char *url);
+/* disconnect this hub (remove from status and cart) */
+
+boolean hubCheckForNew(char *database, struct cart *cart);
+/* see if the user just typed in a new hub url, return TRUE if so */
 #endif /* HUBCONNECT_H */

@@ -4032,7 +4032,11 @@ else
     for (i=0; i<len; i++)
         paddedLabel[i+1] = label[i];
     }
+#ifdef IN_PLACE_UPDATE
+hButtonWithOnClick(var, paddedLabel, NULL, "return navigateButtonClick(this);");
+#else
 hButton(var, paddedLabel);
+#endif
 }
 
 void limitSuperTrackVis(struct track *track)
@@ -4142,9 +4146,6 @@ for (track = trackList; track != NULL; track = track->next)
 	    compositeTrackVis(track);
 	}
     }
-if (measureTiming)
-    uglyTime("getTrackList");
-
 return trackList;
 }
 
@@ -4232,17 +4233,11 @@ static void pruneRedundantCartVis(struct track *trackList)
  * more common case where track visibilities are tweaked. */
 {
 struct track *track;
-if (measureTiming)
-    uglyTime("Done with trackForm");
 for (track = trackList; track != NULL; track = track->next)
     {
     char *cartVis = cartOptionalString(cart, track->track);
     if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
     cartRemove(cart, track->track);
-    }
-if (measureTiming)
-    {
-    uglyTime("Pruned redundant vis from cart");
     }
 }
 
@@ -4604,7 +4599,11 @@ if (!hideControls)
 if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
+if (measureTiming)
+    uglyTime("getTrackList");
 makeGlobalTrackHash(trackList);
+/* Tell tracks to load their items. */
+
 
 // honor defaultImgOrder
 if(cgiVarExists("hgt.defaultImgOrder"))
@@ -4614,6 +4613,8 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     cartRemoveLike(cart, wildCard);
     }
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+if (measureTiming)
+    uglyTime("parentChildCartCleanup");
 
 
 /* Honor hideAll and visAll variables */
@@ -4654,8 +4655,6 @@ if (!isEmpty(jsCommand))
    jsCommandDispatch(jsCommand, trackList);
    }
 
-
-/* Tell tracks to load their items. */
 
 /* adjust visibility */
 for (track = trackList; track != NULL; track = track->next)
@@ -4719,6 +4718,8 @@ if (ptMax > 0)
     {
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+    if (measureTiming)
+	uglyTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
     }
 
 printTrackInitJavascript(trackList);
@@ -4758,7 +4759,12 @@ if(theImgBox)
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
-if(trackImgOnly)
+// info for drag selection javascript
+jsAddNumber(jsVarsHash, "winStart", winStart);
+jsAddNumber(jsVarsHash, "winEnd", winEnd);
+jsAddString(jsVarsHash, "chromName", chromName);
+
+if(trackImgOnly && !ideogramToo)
     {
     struct track *ideoTrack = chromIdeoTrack(trackList);
     if (ideoTrack)
@@ -4813,12 +4819,21 @@ if (!hideControls)
     /* Put up scroll and zoom controls. */
 #ifndef USE_NAVIGATION_LINKS
     hWrites("move ");
+#ifdef IN_PLACE_UPDATE
+    hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right", "return navigateButtonClick(this);");
+#else
     hButtonWithMsg("hgt.left3", "<<<", "move 95% to the left");
     hButtonWithMsg("hgt.left2", " <<", "move 47.5% to the left");
     hButtonWithMsg("hgt.left1", " < ", "move 10% to the left");
     hButtonWithMsg("hgt.right1", " > ", "move 10% to the right");
     hButtonWithMsg("hgt.right2", ">> ", "move 47.5% to the right");
     hButtonWithMsg("hgt.right3", ">>>", "move 95% to the right");
+#endif
     hWrites(" zoom in ");
     /* use button maker that determines padding, so we can share constants */
     topButton("hgt.in1", ZOOM_1PT5X);
@@ -4888,10 +4903,6 @@ if (!hideControls)
 	hButton("hgTracksConfigPage", "configure");
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
-	// info for drag selection javascript
-	jsAddNumber(jsVarsHash, "winStart", winStart);
-	jsAddNumber(jsVarsHash, "winEnd", winEnd);
-	jsAddString(jsVarsHash, "chromName", chromName);
 	hPutc('\n');
 	}
     }
@@ -5229,6 +5240,8 @@ cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
 pruneRedundantCartVis(trackList);
+if (measureTiming)
+    uglyTime("Done with trackForm");
 }
 
 static void toggleRevCmplDisp()
