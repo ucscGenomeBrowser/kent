@@ -293,6 +293,10 @@ ${BIN_DIR}/hacTreeTest: hacTreeTest.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} -o ${BIN_DIR}/hacTreeTest hacTreeTest.o ${MYLIBS} ${L}
 
+# udc (not part of the top-level test target at this point):
+udcTest: udcTest.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/udcTest udcTest.o ${MYLIBS} ${L}
+	${BIN_DIR}/udcTest
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest

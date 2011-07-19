@@ -106,6 +106,7 @@ void hubClearStatus(char *url);
 
 void hubDisconnect(struct cart *cart, char *url);
 /* disconnect this hub (remove from status and cart) */
-void hubCheckForNew(char *database, struct cart *cart);
-/* see if the user just typed in a new hub url */
+
+boolean hubCheckForNew(char *database, struct cart *cart);
+/* see if the user just typed in a new hub url, return TRUE if so */
 #endif /* HUBCONNECT_H */

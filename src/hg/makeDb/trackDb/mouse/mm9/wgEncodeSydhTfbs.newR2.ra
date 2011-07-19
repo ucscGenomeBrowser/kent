@@ -205,15 +205,14 @@ html wgEncodeSydhTfbs.new
         # subId=3089 dateSubmitted=2010-12-10
         # was wgEncodeSydhTfbsMelP300StdPk vsmalladi Wed Jun 29 08:39:09 2011
 
-        track wgEncodeSydhTfbsMelCtcfsc15914IggrabPk
+        track wgEncodeSydhTfbsMelCtcfbIggrabPk
         parent wgEncodeSydhTfbsViewPeaks
         shortLabel MEL CTCF Pk
         longLabel MEL CTCF TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
         subGroups view=Peaks factor=CTCFSC15914 cellType=MEL control=IGGrab treatment=zNone
         type narrowPeak
         color 86,180,233
-        # subId=3087 dateSubmitted=2010-12-10
-        # was wgEncodeSydhTfbsMelCtcfStdPk vsmalladi Wed Jun 29 08:54:54 2011
+		# subId=4610 dateSubmitted=2011-07-19
 
         track wgEncodeSydhTfbsCh12Chd2ab68301IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -352,14 +351,15 @@ html wgEncodeSydhTfbs.new
     		type narrowPeak
     		color 86,180,233
 
-		#### Submission 1156 ####
 		track wgEncodeSydhTfbsCh12TbpIggmusPk
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel CH12 TBP Pk
-            longLabel CH12 TBP TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=TBP cellType=CH12 control=IGGmus treatment=zNone
-    		type narrowPeak
-    		color 86,180,233
+    	subTrack wgEncodeSydhTfbs off
+    	shortLabel CH12 TBP Pk
+		longLabel CH12 TBP TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+    	subGroups view=Peaks factor=TBP cellType=CH12 control=IGGmus treatment=zNone
+    	type narrowPeak
+    	color 86,180,233
+        # subId=4610 dateSubmitted=2011-07-19
+
 
 		#### Submission 1157 ####
 		track wgEncodeSydhTfbsCh12CjunIggrabPk
@@ -379,14 +379,14 @@ html wgEncodeSydhTfbs.new
     		type narrowPeak
     		color 86,180,233
 		
-		#### Submission 1160 ####
-    		track wgEncodeSydhTfbsMelTbpIggmusPk
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel MEL TBP Pk
-            longLabel MEL TBP TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=TBP cellType=MEL control=IGGmus treatment=zNone
-    		type narrowPeak
-    		color 86,180,233
+    	track wgEncodeSydhTfbsMelTbpIggmusPk
+    	subTrack wgEncodeSydhTfbs off
+    	shortLabel MEL TBP Pk
+		longLabel MEL TBP TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+    	subGroups view=Peaks factor=TBP cellType=MEL control=IGGmus treatment=zNone
+    	type narrowPeak
+    	color 86,180,233
+        # subId=4610 dateSubmitted=2011-07-19
 	
 		#### Submission 1161 ####
     		track wgEncodeSydhTfbsMelPol2IggmusPk
@@ -398,25 +398,23 @@ html wgEncodeSydhTfbs.new
     		color 86,180,233
 
 
-		#### Submission 1163 ####
-    		track wgEncodeSydhTfbsMelCmycIggrabPk
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel MEL c-Myc Pk
-            longLabel MEL c-Myc TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=cMYC cellType=MEL control=IGGrab treatment=zNone
-    		type narrowPeak
-    		color 86,180,233
+    	track wgEncodeSydhTfbsMelCmycIggrabPk
+    	subTrack wgEncodeSydhTfbs off
+    	shortLabel MEL c-Myc Pk
+		longLabel MEL c-Myc TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+    	subGroups view=Peaks factor=cMYC cellType=MEL control=IGGrab treatment=zNone
+    	type narrowPeak
+    	color 86,180,233
+        # subId=4610 dateSubmitted=2011-07-19
 
-
-		#### Submission 1165 ####
-    		track wgEncodeSydhTfbsMelGata1IggratPk
-    		subTrack wgEncodeSydhTfbs 
-    		shortLabel MEL GATA-1 Pk
-            longLabel MEL GATA-1 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=GATA1SC265 cellType=MEL control=IGGrat treatment=zNone
-    		type narrowPeak
-    		color 86,180,233
-		
+    	track wgEncodeSydhTfbsMelGata1IggratPk
+    	subTrack wgEncodeSydhTfbs 
+    	shortLabel MEL GATA-1 Pk
+		longLabel MEL GATA-1 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+    	subGroups view=Peaks factor=GATA1SC265 cellType=MEL control=IGGrat treatment=zNone
+    	type narrowPeak
+    	color 86,180,233
+        # subId=4610 dateSubmitted=2011-07-19		
 
 
 		#### Submission 1192 ####
