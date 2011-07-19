@@ -155,5 +155,8 @@ void jsAddBoolean(struct hash *h, char *name, boolean val);
 void jsPrintHash(struct hash *hash, char *name, int indentLevel);
 // prints a hash as a javascript variable
 
+void jsonErrPrintf(struct dyString *ds, char *format, ...);
+//  Printf a json error to a dyString for communicating with ajax code; format is:
+//  {"error": error message here}
 
 #endif /* JSHELPER_H */
