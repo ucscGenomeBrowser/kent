@@ -240,6 +240,7 @@ fprintf(f,"function hideWarnBox() {"
             "var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);"
             "if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }"
           "}\n"); // Note that the OK button goes to prev page when this page is interrupted by the error.
+fprintf(f,"window.onunload = function(){}; // Trick to avoid FF back button issue.\n");
 fprintf(f,"</script>\n");
 }
 

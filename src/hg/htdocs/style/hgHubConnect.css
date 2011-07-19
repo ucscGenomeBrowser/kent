@@ -1,9 +1,18 @@
+/* 
+   Style Sheet for hgHubConnect
+   by Greg Roe                   
+   Last update: 2011-7-18 (greg)   
+*/
 
-<style> 
+#tabs {
+	font-size: 100%;
+	margin-top: 5px;
+}
+
 .hubList table {
     width: 930px;
     border-collapse: collapse;
-    }
+}
 
 /* Creating rounded corners at the tops of tables - works with all CSS3 supporting browsers, degrades gracefully */
 .hubList table tr:first-child th:first-child {-webkit-border-top-left-radius: 5px; -moz-border-radius-topleft: 5px; border-top-left-radius: 5px;}
@@ -18,12 +27,12 @@
 
 .hubList table tbody tr {background-color: #fffef8;}
 .selectedRow {background-color: #99dd9a !important;}
-.hoverRow {background-color: #fbff83 !important;}
+.hoverRow {background-color: #fdffb7 !important;}
 .hubList td {border-top: 1px solid #d5cd9e; border-bottom: 1px solid #d5cd9e;}
 .centeredCol {text-align: center;}
 #addHubBar {background-color: #bfbfb2; line-height: 2.3em;}
 #hubURL {line-height: 0.9em; color: #1c1d22;}
-/* .hubList input {font-weight: bold;} */
+.hubList input {margin: 3px; font-size: 0.8em;}
 .submitHub {margin: 10px;}
 .hubList .small {margin: 2px 40px; font-size: 0.8em;}
-</style>
+

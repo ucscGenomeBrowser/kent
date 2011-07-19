@@ -130,62 +130,65 @@ for (ff = ali; ff != NULL; ff = nextFf)
 /* if (score >= minMatch) Moved to higher level */
     {
     int gaps = nInsertCount + (stringency == ffCdna ? 0: hInsertCount);
-    int id = roundingScale(1000, matchCount + repMatch - 2*gaps, matchCount + repMatch + mismatchCount);
-    if (id >= minIdentity)
+    if ((matchCount + repMatch + mismatchCount) > 0)
 	{
-	if (isRc)
+	int id = roundingScale(1000, matchCount + repMatch - 2*gaps, matchCount + repMatch + mismatchCount);
+	if (id >= minIdentity)
 	    {
-	    int temp;
-	    int oSize = qSeq->size;
-	    temp = nStart;
-	    nStart = oSize - nEnd;
-	    nEnd = oSize - temp;
-	    }
-	if (targetIsRc)
-	    {
-	    int temp;
-	    temp = hStart;
-	    hStart = chromSize - hEnd;
-	    hEnd = chromSize - temp;
-	    }
-	fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%c",
-	    matchCount, mismatchCount, repMatch, countNs, nInsertCount, nInsertBaseCount, hInsertCount, hInsertBaseCount,
-	    (isRc ? '-' : '+'));
-	if (reportTargetStrand)
-	    fprintf(f, "%c", (targetIsRc ? '-' : '+') );
-	fprintf(f, "\t%s\t%d\t%d\t%d\t"
-		     "%s\t%d\t%d\t%d\t%d\t",
-	    qSeq->name, qSeq->size, nStart, nEnd,
-	    chromName, chromSize, hStart, hEnd,
-	    ffAliCount(ali));
-	for (ff = ali; ff != NULL; ff = ff->right)
-	    fprintf(f, "%ld,", (long)(ff->nEnd - ff->nStart));
-	fprintf(f, "\t");
-	for (ff = ali; ff != NULL; ff = ff->right)
-	    fprintf(f, "%ld,", (long)(ff->nStart - needle));
-	fprintf(f, "\t");
-	for (ff = ali; ff != NULL; ff = ff->right)
-	    fprintf(f, "%d,", trans3GenoPos(ff->hStart, tSeq, t3List, FALSE) + chromOffset);
-	if (saveSeq)
-	    {
-	    fputc('\t', f);
-	    for (ff = ali; ff != NULL; ff = ff->right)
+	    if (isRc)
 		{
-		mustWrite(f, ff->nStart, ff->nEnd - ff->nStart);
-		fputc(',', f);
+		int temp;
+		int oSize = qSeq->size;
+		temp = nStart;
+		nStart = oSize - nEnd;
+		nEnd = oSize - temp;
 		}
-	    fputc('\t', f);
-	    for (ff = ali; ff != NULL; ff = ff->right)
+	    if (targetIsRc)
 		{
-		mustWrite(f, ff->hStart, ff->hEnd - ff->hStart);
-		fputc(',', f);
+		int temp;
+		temp = hStart;
+		hStart = chromSize - hEnd;
+		hEnd = chromSize - temp;
 		}
-	    }
-	fprintf(f, "\n");
-	if (ferror(f))
-	    {
-	    perror("");
-	    errAbort("Write error to .psl");
+	    fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%c",
+		matchCount, mismatchCount, repMatch, countNs, nInsertCount, nInsertBaseCount, hInsertCount, hInsertBaseCount,
+		(isRc ? '-' : '+'));
+	    if (reportTargetStrand)
+		fprintf(f, "%c", (targetIsRc ? '-' : '+') );
+	    fprintf(f, "\t%s\t%d\t%d\t%d\t"
+			 "%s\t%d\t%d\t%d\t%d\t",
+		qSeq->name, qSeq->size, nStart, nEnd,
+		chromName, chromSize, hStart, hEnd,
+		ffAliCount(ali));
+	    for (ff = ali; ff != NULL; ff = ff->right)
+		fprintf(f, "%ld,", (long)(ff->nEnd - ff->nStart));
+	    fprintf(f, "\t");
+	    for (ff = ali; ff != NULL; ff = ff->right)
+		fprintf(f, "%ld,", (long)(ff->nStart - needle));
+	    fprintf(f, "\t");
+	    for (ff = ali; ff != NULL; ff = ff->right)
+		fprintf(f, "%d,", trans3GenoPos(ff->hStart, tSeq, t3List, FALSE) + chromOffset);
+	    if (saveSeq)
+		{
+		fputc('\t', f);
+		for (ff = ali; ff != NULL; ff = ff->right)
+		    {
+		    mustWrite(f, ff->nStart, ff->nEnd - ff->nStart);
+		    fputc(',', f);
+		    }
+		fputc('\t', f);
+		for (ff = ali; ff != NULL; ff = ff->right)
+		    {
+		    mustWrite(f, ff->hStart, ff->hEnd - ff->hStart);
+		    fputc(',', f);
+		    }
+		}
+	    fprintf(f, "\n");
+	    if (ferror(f))
+		{
+		perror("");
+		errAbort("Write error to .psl");
+		}
 	    }
 	}
     }

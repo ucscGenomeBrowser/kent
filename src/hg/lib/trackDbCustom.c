@@ -485,7 +485,7 @@ char *trackDbRequiredSetting(struct trackDb *tdb, char *name)
 {
 char *ret = trackDbSetting(tdb, name);
 if (ret == NULL)
-   errAbort("Missing required %s setting in %s track", name, tdb->track);
+   errAbort("Missing required '%s' setting in %s track", name, tdb->track);
 return ret;
 }
 
