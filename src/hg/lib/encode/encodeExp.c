@@ -913,6 +913,8 @@ void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
                                 int id, char *var, char *newVal, char *oldVal)
 /* Update field in encodeExp or var in expVars, identified by id with value.
  * If oldVal is non-NULL, verify it matches experiment, as a safety check.
+ * OldVal of ENCODE_EXP_NO_VAR allows adding expVar.
+ * TODO: Setting newVal to ENCODE_EXP_NO_VAR will remove expVar.  
  * Abort if experiment is accessioned (must deaccession first) */
 {
 char *val = NULL;
@@ -950,18 +952,32 @@ else
     /* must be an expVar -- extract all expVars for this experiment */
     struct slPair *varPairs = slPairListFromString(exp->expVars,FALSE);
     struct slPair *pair = slPairFind(varPairs, var);
-    if (pair == NULL)
-        errAbort("Attempt to change experiment %d with unknown expVar %s in table %s",
-                    id, var, tableName);
-    // TODO: allow adding a new expVar
-    if (oldVal)
+    if (pair != NULL)
         {
-        val = (char *)pair->val;
-        if (differentString(val, oldVal))
-            errAbort("Mismatch: id %d has %s=%s, not %s in table %s", id, var, val, oldVal, tableName);
+        /* change the designated var */
+        if (oldVal)
+            {
+            // TODO: remove expVar if newVal == None
+            val = (char *)pair->val;
+            if (differentString(val, oldVal))
+                errAbort("Mismatch: id %d has %s=%s, not %s in table %s", 
+                        id, var, val, oldVal, tableName);
+            }
+        pair->val = newVal;
         }
-    /* change the designated var */
-    pair->val = newVal;
+    else 
+        {
+        // this var not found in this experiment - add new var
+        if (oldVal && differentString(oldVal, ENCODE_EXP_NO_VAR))
+            {
+            errAbort("Attempt to change expVar %s from value %s not found in experiment %d",
+                    var, oldVal, id);
+            }
+        verbose(3, "Adding %s=%s to experiment %d\n", var, newVal, id);
+        slPairAdd(&varPairs, var, newVal);
+        slPairSortCase(&varPairs);
+        verbose(1, "WARNING: not verifying %s is valid expVar for this experiment\n", var);
+        }
     char *expVars = slPairListToString(varPairs, FALSE);
     dy = dyStringCreate("update %s set %s=\'%s\' ", tableName, ENCODE_EXP_FIELD_FACTORS, expVars);
     }

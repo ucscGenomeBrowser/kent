@@ -1023,7 +1023,7 @@ termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
 sex M
 tier 3
-protocol Stam:BJ-tert_Stam_protocol.pdf
+#protocol Stam:BJ-tert_Stam_protocol.pdf
 # JEFF:  Please read and find which of these protocols is correct for BJ and label it appropriately
 
 #These terms seem to have a lot of confusion and no one is currently using these cell lines.  We are commenting out until resovled see Bug#4536
@@ -5824,6 +5824,7 @@ type Antibody
 target HMGN3
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry.
 targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 to 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
+# wrong orderUrl: mixing vendorName and vendorIds
 orderUrl http://www.acris-antibodies.com/NB100-61076.htm
 vendorName Acris Antibodies
 vendorId NB100-61076
@@ -7171,8 +7172,8 @@ vendorId ZNF217
 orderUrl http://stemcellcenter.berkeley.edu/PIs/yaswen.html
 lab Farnham
 lots N/A
-targetId GeneCards:Genecard:ZNF217
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:ZNF217
+targetId GeneCards:ZNF217
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF217
 validation ZNF217_(WesternBlot,SiRNA):human_ZNF217_validation_Farnham.pdf
 
 term ZNF263

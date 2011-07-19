@@ -4336,6 +4336,7 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
 {
+struct lm *lm = lmInit(0);	/* Speed tweak cleanup with scatch memory pool. */
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
@@ -4343,7 +4344,7 @@ for (;track != NULL; track = track->next)
     boolean cleanedByContainerSettings = FALSE;
 
     // Top-down 'cleanup' MUST GO BEFORE bottom up reshaping.
-    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars, lm);
 
     if (tdbIsContainer(track->tdb))
         {
@@ -4367,6 +4368,7 @@ for (;track != NULL; track = track->next)
             }
         }
     }
+lmCleanup(&lm);
 }
 
 

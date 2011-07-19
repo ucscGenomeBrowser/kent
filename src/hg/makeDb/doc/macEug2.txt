@@ -1,0 +1,290 @@
+# for emacs: -*- mode: sh; -*-
+
+#       $Id: macEug2.txt,v 1.6 2010/05/06 16:27:44 chinhli Exp $
+
+# Macropus eugenii (wallaby) - TWGSC  Meug_1.1 (2009-09-29)
+
+
+# file template copied from susScr2.txt
+
+DATE:	29-SEP-2009
+ORGANISM:	Macropus eugenii
+TAXID:	9315
+ASSEMBLY LONG NAME:	Meug_1.1
+ASSEMBLY SHORT NAME:	Meug_1.1
+ASSEMBLY SUBMITTER:	Tammar Wallaby Genome Sequencing Consortium
+ASSEMBLY TYPE:	Haploid
+NUMBER OF ASSEMBLY-UNITS:	1
+Assembly Accession:	GCA_000004035.1
+
+
+#  Macropus eugenii 
+#   (NCBI Project ID: 12586, Accession: GCA_000004035.1) 
+#   by Tammar Wallaby Genome Sequencing Consortium
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Macropus_eugenii/Meug_1.1/
+
+##########################################################################
+# Download sequence (DONE- 2010-10-22 - Chin)
+    mkdir /hive/data/genomes/macEug2
+    cd /hive/data/genomes/macEug2
+    mkdir genbank
+    cd genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Macropus_eugenii/Meug_1.1/*"
+    # FINISHED --2010-10-22 08:54:16--
+    # Downloaded: 12 files, 1.0G in 13m 49s (1.28 MB/s)
+    # Read ASSEMBLY_INFO 
+ 
+    # stay at genbank directory
+    # Process the unplaced scaffolds, filter out the  
+    #   The ".1" at the end (i.e. ABQO010000034.1) of contig name, since
+    #   MySQL does not allow "." as part of the table name and 
+    #   will casue problems in genbank task step later
+
+    export S=Primary_Assembly/unplaced_scaffolds
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > macEug2.agp 
+    # append the gap records
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
+    	    | sed  -e "s/\.1//"  >> macEug2.agp
+    gzip macEug2.agp &
+    
+    zcat ${S}/FASTA/unplaced.scaf.fa.gz \
+    	    | sed -e "s#^>.*|gb|#>#; s#|.*##"  -e "s/\.1//"  \
+    	    | gzip > macEug2.fa.gz
+    zcat macEug2.fa.gz | grep "^>" | wc
+    # 277711  277711 5189116
+
+   faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+   # 3075184024 bases (539107070 N's 2536076954 real 2536076954 upper
+   #   0 lower) in 277711 sequences in 1 files
+
+
+
+    # N50
+    mkdir N50
+    faCount  macEug2.fa | awk ' /^(GL|ABQO)/ {print $1, $2}' > N50/chrom.sizes
+    n50.pl N50/chrom.sizes
+#       reading: N50/chrom.sizes
+#       contig count: 277711, total size: 3075184024, one half size:
+#       1537592012
+# cumulative    N50 count       contig  contig size
+1537563674      24532   GL116276        36603
+1537592012 one half size
+1537600276      24533   GL121428        36602
+
+
+#########################################################################
+# Initial makeGenomeDb.pl (DONE - 2010-11-04 - Chin)
+    cd /hive/data/genomes/macEug2
+    cat << '_EOF_' > macEug2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db macEug2
+clade mammal
+genomeCladePriority 67
+scientificName Macropus eugenii 
+commonName Wallaby
+assemblyDate Sep. 2009
+assemblyLabel TWGS (NCBI Project ID: 12586, Accession: GCA_000004035.1) 
+assemblyShortLabel TWGS Meug_1.1
+orderKey 278
+mitoAcc none
+fastaFiles /hive/data/genomes/macEug2/genbank/macEug2.fa.gz
+agpFiles /hive/data/genomes/macEug2/genbank/macEug2.agp.gz
+# qualFiles none
+dbDbSpeciesDir wallaby
+taxId 9315
+'_EOF_'
+    # << happy emacs
+    time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev macEug2.config.ra \
+	> makeGenomeDb.log 2>&1 &
+    # real  26m19.911s
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/macEug2.unmasked.2bit /gbdb/macEug2/macEug2.2bit
+
+    #  Per instructions in makeGenomeDb.log:
+    mkdir -p  ~/kent/src/hg/makeDb/trackDb/wallaby/macEug2
+    cd /cluster/data/macEug2/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/wallaby/macEug2
+    cp *.*  ~/kent/src/hg/makeDb/trackDb/wallaby/macEug2 
+    cd ~/kent/src/hg/makeDb/trackDb
+    #  edit makefile to add macEug2 to DBS.
+    # git add wallaby/macEug2/*.{ra,html}
+    # git commit -m "Added macEug2 to DBS." makefile
+    # git commit -m "Initial descriptions for macEug2." wallaby/macEug2/*.{ra,html}
+    # git pull; git push
+    # Run make update DBS=macEug2 and make alpha when done.
+    # (optional) Clean up /cluster/data/macEug2/TemporaryTrackDbCheckout
+
+
+#########################################################################
+# RepeatMasker (DONE - 2010-11-05 - Chin)
+    mkdir /hive/data/genomes/macEug2/bed/repeatMasker
+    cd /hive/data/genomes/macEug2/bed/repeatMasker
+
+    time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
+	-workhorse=hgwdev -bigClusterHub=swarm -noSplit macEug2 > do.log 2>&1 &
+    #   real     294m1.203s
+    cat faSize.rmsk.txt
+    # 3075184024 bases (539107070 N's 2536076954 real 1334921991 upper 
+    # 1201154963 lower) in 277711 sequences in 1 files
+    # %39.06 masked total, %47.36 masked real
+
+#########################################################################
+# simpleRepeats (DONE - 2010-11-06 - Chin)
+    mkdir /hive/data/genomes/macEug2/bed/simpleRepeat
+    cd /hive/data/genomes/macEug2/bed/simpleRepeat
+
+    time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-bigClusterHub=pk -smallClusterHub=pk macEug2 > do.log 2>&1 &
+    #   real     175m13.951s     
+    cat fb.simpleRepeat 
+    # 38604856 bases of 2536076957 (1.522%) in intersection
+
+    #	add to the repeatMasker
+    cd /hive/data/genomes/macEug2
+    twoBitMask macEug2.rmsk.2bit -add bed/simpleRepeat/trfMask.bed macEug2.2bit
+    #	safe to ignore warnings about >=13 fields
+    twoBitToFa macEug2.2bit stdout | faSize stdin > macEug2.2bit.faSize.txt
+    cat macEug2.2bit.faSize.txt
+    # 3075184024 bases (539107070 N's 2536076954 real 1334271294 upper 
+    # 1201805660 lower) in 277711 sequences in 1 files
+    # %39.08 masked total, %47.39 masked real
+
+#########################################################################
+# Marking *all* gaps - they are all in the AGP file
+#	(working - 2010-11-08 - Chin)
+    mkdir /hive/data/genomes/macEug2/bed/allGaps
+    cd /hive/data/genomes/macEug2/bed/allGaps
+
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../macEug2.unmasked.2bit > findMotif.txt 2>&1
+    #   real     1m46.677s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits macEug2 -not gap -bed=notGap.bed
+    #  2536076957 bases of 2536076957 (100.000%) in intersection
+    featureBits macEug2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 3 bases of 2536076957 (0.000%) in intersection
+    hgsql -N -e "select ix from gap;" macEug2 | sort -n | tail -1
+    #	273
+
+
+########################################################################
+# Create kluster run files (????  - 201???  - Chin)
+    # numerator is macEug2 gapless bases "real" as reported by: 
+    featureBits -noRandom -noHap macEug2 gap
+    #     1600136831 bases of 1184628269 (135.075%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #	featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1184628269 / 2861349177 \) \* 1024
+    #   ( 1184628269 / 2861349177 ) * 1024 = 423.946632
+    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
+    #	and rounded down to nearest 50
+    cd /hive/data/genomes/macEug2
+    blat macEug2.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/macEug2.11.ooc \
+	-repMatch=400 &
+    #	Wrote 19704 overused 11-mers to jkStuff/macEug2.11.ooc
+    mkdir /hive/data/staging/data/macEug2
+    cp -p macEug2.2bit jkStuff/macEug2.11.ooc /hive/data/staging/data/macEug2
+    cp -p chrom.sizes /hive/data/staging/data/macEug2
+    #	check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+	-e 'select * from gap where bridge="no" order by size;' macEug2 \
+	| sort -k7,7nr
+    #   most gaps have size > 100,000
+    #	decide on a minimum gap for this break
+    gapToLift -verbose=2 -minGap=20000 macEug2 jkStuff/nonBridged.lft \
+	-bedFile=jkStuff/nonBridged.bed
+    cp -p jkStuff/nonBridged.lft \
+	/hive/data/staging/data/macEug2/macEug2.nonBridged.lft
+    # ask cluster-admin to copy (evry time if any file chsnged)
+    #    /hive/data/staging/data/macEug2 directory to cluster nodes
+    #    /scratch/data/macEug2
+
+########################################################################
+# GENBANK AUTO UPDATE (working - ???? - Chin)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+
+    # edit etc/genbank.conf to add macEug2 just before susScr2
+
+# macEug2 (wallaby)
+macEug2.serverGenome = /hive/data/genomes/macEug2/macEug2.2bit
+macEug2.clusterGenome = /scratch/data/macEug2/macEug2.2bit
+macEug2.ooc = /scratch/data/macEug2/macEug2.11.ooc
+macEug2.lift = no
+macEug2.perChromTables = no
+macEug2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+macEug2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+macEug2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+macEug2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+macEug2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+macEug2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+macEug2.downloadDir = macEug2
+macEug2.refseq.mrna.native.load  = yes
+macEug2.refseq.mrna.xeno.load = yes
+macEug2.refseq.mrna.xeno.loadDesc  = yes
+macEug2.genbank.est.native.load = yes
+macEug1.upstreamGeneTbl = xenoRefGene
+
+    git add etc/genbank.conf
+    git commit -m "Added macEug2" etc/genbank.conf
+    git pull
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+
+# Edit src/lib/gbGenome.c to add new species.  With these two lines:
+# static char *oviAriNames[] = {"Ovis aries", NULL};
+#   ... later ...
+#    {"macEug2", macEug2Names},
+#  gbGenome.c is  in
+#  /cluster/home/chinhli/kent/src/hg/makeDb/genbank/src/lib
+# make and checkin
+
+    make install-server
+    git add src/lib/gbGenome.c
+    git commit -m "adding macEug2 Wallby" src/lib/gbGenome.c
+    git pull
+    git push
+
+    ssh genbank
+    screen      #  control this business with a screen since it takes a while
+
+
+
+    ssh genbank
+    screen	#  control this business with a screen since it takes a while
+
+
+    cd /cluster/data/genbank
+     time nice -n +19 ./bin/gbAlignStep -initial macEug2 &
+    #   logFile: var/build/logs/2010.04.16-10:04:13.macEug2.initalign.log
+    #   real    365m55.393s
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/data/aligned/genbank.176.0/macEug2
+
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad macEug2 &
+    #    logFile: var/dbload/hgwdev/logs/2010.04.19-08:17:28.dbload.log
+    #   real    37m49.454s
+
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add macEug2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added macEug2 - Sheep" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################

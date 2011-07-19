@@ -110,6 +110,7 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 #define ENCODE_EXP_ORGANISM_MOUSE       "mouse"
 
 #define ENCODE_EXP_NO_CELL              "None"
+#define ENCODE_EXP_NO_VAR               "None"
 
 #define ENCODE_EXP_TABLE        "encodeExp"
 #define ENCODE_EXP_DATABASE     "hgFixed"
