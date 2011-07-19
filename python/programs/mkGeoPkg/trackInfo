@@ -159,15 +159,14 @@ def createMappings(mdb):
 		if 'expId' not in stanza:
 			print stanza.name + ': no expId'
 			continue
-
-		if 'geoSampleAccession' not in stanza:
-			# if this hasn't been submitted to GEO yet, we'll add it to the submission list
-			if stanza['expId'] not in expIds:
-				expIds[stanza['expId']] = list()
-				
-			expIds[stanza['expId']].append(stanza)
 		
-		else:
+			# if this hasn't been submitted to GEO yet, we'll add it to the submission list
+		if stanza['expId'] not in expIds:
+			expIds[stanza['expId']] = list()
+			
+		expIds[stanza['expId']].append(stanza)
+		
+		if 'geoSampleAccession' in stanza:
 			# otherwise we keep track of the geo number for partially submitted samples
 			if stanza['expId'] not in geoMapping:
 				geoMapping[stanza['expId']] = stanza['geoSampleAccession']
