@@ -24,8 +24,8 @@ type bed 3
 origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1HESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELAS3=HeLa-S3&nbsp;(Tier_2) HEPG2=HEPG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) FetalPBDE=FetalPBDE GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE PBMC=PBMC Raji=Raji SHSY5Y=SH-SY5Y tHEK293=T-REx-HEK293  U2OS=U2OS 
-subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800)  BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS  CHD2AB68301=CHD2_(AB68301) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179)  HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3  JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max  Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC582=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>)  zInputucd=Input_(<i>UCDavis</i>)
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1HESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELAS3=HeLa-S3&nbsp;(Tier_2) HEPG2=HEPG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) FetalPBDE=FetalPBDE GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE PBMC=PBMC Raji=Raji SHSY5Y=SH-SY5Y tHEK293=T-REx-HEK293 U2OS=U2OS 
+subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800) BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS CHD2AB68301=CHD2_(AB68301) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179) HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3 JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC582=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>) zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGMUS=IgG-mus IGGRAB=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
 subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=4-hydroxytamoxifen TNFa=TNFa
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
@@ -33,6 +33,7 @@ dimensionZchecked aNone
 dimensionAchecked std,IGGmus,IGGrab,UCD
 filterComposite dimZ=one dimA=multi
 sortOrder cellType=+ factor=+ control=+ treatment=+ view=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View control=Control setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
 visibilityViewDefaults Peaks=pack  Signal=full
@@ -3186,13 +3187,14 @@ wgEncode 1
         type bigWig 0.000000 9122.299805
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm10847InputIggrabSig
+        track wgEncodeSydhTfbsGm10847InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM47 Inpt IgGr
-        longLabel GM10847 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM10847 control=IGGRAB treatment=aNone
+        shortLabel GM47 Inpt TNF Igr
+        longLabel GM10847 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM10847 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 8241.500000
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm10847InputIggrabSig wong Mon Jul 18 14:01:38 2011
 
         track wgEncodeSydhTfbsGm10847NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3237,6 +3239,8 @@ wgEncode 1
         type bigWig 0.000000 8421.900391
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm12878InputIggrabSig wong Mon Jul 18 14:43:21 2011
+        # was wgEncodeSydhTfbsGm12878InputTnfaIggrabSig wong Mon Jul 18 15:19:22 2011
 
         track wgEncodeSydhTfbsGm12878InputStdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3364,13 +3368,14 @@ wgEncode 1
         type bigWig 0.000000 10997.200195
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12891InputIggrabSig
+        track wgEncodeSydhTfbsGm12891InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM91 Inpt IgGr
-        longLabel GM12891 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM12891 control=IGGRAB treatment=aNone
+        shortLabel GM91 Inpt TNF Igr
+        longLabel GM12891 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM12891 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 12307.200195
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm12891InputIggrabSig wong Mon Jul 18 14:01:38 2011
 
         track wgEncodeSydhTfbsGm12891NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3397,13 +3402,14 @@ wgEncode 1
         type bigWig 0.000000 6636.100098
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12892InputIggrabSig
+        track wgEncodeSydhTfbsGm12892InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM92 Inpt IgGr
-        longLabel GM12892 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM12892 control=IGGRAB treatment=aNone
+        shortLabel GM92 Inpt TNF Igr
+        longLabel GM12892 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM12892 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 10143.200195
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm12892InputIggrabSig wong Mon Jul 18 14:01:39 2011
 
         track wgEncodeSydhTfbsGm12892NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3430,13 +3436,14 @@ wgEncode 1
         type bigWig 0.000000 10053.500000
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm15510InputIggrabSig
+        track wgEncodeSydhTfbsGm15510InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM10 Inpt IgGr
-        longLabel GM15510 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM15510 control=IGGRAB treatment=aNone
+        shortLabel GM10 Inpt TNF Igr
+        longLabel GM15510 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM15510 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 9380.400391
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm15510InputIggrabSig wong Mon Jul 18 14:01:39 2011
 
         track wgEncodeSydhTfbsGm15510NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3463,13 +3470,14 @@ wgEncode 1
         type bigWig 0.000000 106648.500000
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm18505InputIggrabSig
+        track wgEncodeSydhTfbsGm18505InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM05 Inpt IgGr
-        longLabel GM18505 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM18505 control=IGGRAB treatment=aNone
+        shortLabel GM05 Inpt TNF Igr
+        longLabel GM18505 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM18505 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 9532.299805
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm18505InputIggrabSig wong Mon Jul 18 14:01:39 2011
 
         track wgEncodeSydhTfbsGm18505NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3496,13 +3504,14 @@ wgEncode 1
         type bigWig 0.000000 12202.799805
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm18526InputIggrabSig
+        track wgEncodeSydhTfbsGm18526InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM26 Inpt IgGr
-        longLabel GM18526 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM18526 control=IGGRAB treatment=aNone
+        shortLabel GM26 Inpt TNF Igr
+        longLabel GM18526 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM18526 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 13078.500000
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm18526InputIggrabSig wong Mon Jul 18 14:01:39 2011
 
         track wgEncodeSydhTfbsGm18526NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3529,13 +3538,14 @@ wgEncode 1
         type bigWig 0.000000 9889.299805
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm18951InputIggrabSig
+        track wgEncodeSydhTfbsGm18951InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM51 Inpt IgGr
-        longLabel GM18951 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM18951 control=IGGRAB treatment=aNone
+        shortLabel GM51 Inpt TNF Igr
+        longLabel GM18951 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM18951 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 8158.299805
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm18951InputIggrabSig wong Mon Jul 18 14:01:40 2011
 
         track wgEncodeSydhTfbsGm18951NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3562,13 +3572,14 @@ wgEncode 1
         type bigWig 0.000000 10618.599609
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm19099InputIggrabSig
+        track wgEncodeSydhTfbsGm19099InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM99 Inpt IgGr
-        longLabel GM19099 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM19099 control=IGGRAB treatment=aNone
+        shortLabel GM99 Inpt TNF Igr
+        longLabel GM19099 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM19099 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 12792.200195
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm19099InputIggrabSig wong Mon Jul 18 14:01:40 2011
 
         track wgEncodeSydhTfbsGm19099NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3595,13 +3606,14 @@ wgEncode 1
         type bigWig 0.000000 9534.299805
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm19193InputIggrabSig
+        track wgEncodeSydhTfbsGm19193InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM93 Inpt IgGr
-        longLabel GM19193 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=GM19193 control=IGGRAB treatment=aNone
+        shortLabel GM93 Inpt TNF Igr
+        longLabel GM19193 Input IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=GM19193 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 8317.400391
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsGm19193InputIggrabSig wong Mon Jul 18 14:01:40 2011
 
         track wgEncodeSydhTfbsGm19193NkfbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -5078,13 +5090,14 @@ wgEncode 1
         type bigWig 1.000000 9027.000000
         # subId=3498 dateSubmitted=2011-02-03
 
-        track wgEncodeSydhTfbsMcf10aesInputUcdSig
+        track wgEncodeSydhTfbsMcf10aesInputStdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel MCF1 Inpt UCD
-        longLabel MCF10A Input UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputucd cellType=MCF10AES control=UCD treatment=aNone
+        shortLabel MCF1 Inpt Std
+        longLabel MCF10A Input Standard ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputstd cellType=MCF10AES control=std treatment=aNone
         type bigWig 1.000000 35209.000000
         # subId=3497 dateSubmitted=2011-02-03
+        # was wgEncodeSydhTfbsMcf10aesInputUcdSig wong Mon Jul 18 13:25:03 2011
 
         track wgEncodeSydhTfbsK562Bhlhe40nb100IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
