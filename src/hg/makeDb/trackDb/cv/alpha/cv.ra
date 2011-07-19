@@ -1023,7 +1023,7 @@ termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
 sex M
 tier 3
-protocol Stam:BJ-tert_Stam_protocol.pdf
+#protocol Stam:BJ-tert_Stam_protocol.pdf
 # JEFF:  Please read and find which of these protocols is correct for BJ and label it appropriately
 
 #These terms seem to have a lot of confusion and no one is currently using these cell lines.  We are commenting out until resovled see Bug#4536
@@ -2527,7 +2527,7 @@ description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 lineage mesoderm
 vendorName Refer to the protocol documents for differing sources
-vendorId HSMM
+vendorId CC-2580
 #orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
@@ -2540,11 +2540,11 @@ term HSMMtube
 tag HSMMt
 type Cell Line
 organism human
-description Normal Human Skeletal Muscle Myotubes
+description PROVISIONAL Normal human skeletal muscle myotubes differentiated from the HSMM cell line
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
-vendorId (missing)
+vendorId See HSMM
 orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
@@ -3768,8 +3768,8 @@ tissue Skeletal Muscle
 category cellLine
 age immortalized
 strain C3H
-description Myoblast cell line derived from thigh muscle of C3H mice after crush injury (PROVISIONAL)
-vendorName 	Barbara Wold lab
+description Myoblast cell line derived from thigh muscle of C3H mice after crush injury 
+vendorName Barbara Wold lab
 vendorId C2C12
 termId 7125
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
@@ -4098,8 +4098,7 @@ termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 102,50,200
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR(Ren):Limb_Ren_protocol.pdf
+protocol Ren:Limb_Ren_protocol.pdf
 
 term Liver
 tag LIVER
@@ -4332,8 +4331,7 @@ termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR:Placenta_Ren_protocol.pdf
+protocol Ren:Placenta_Ren_protocol.pdf
 
 #Shortened term
 term SmIntestine
@@ -5826,6 +5824,7 @@ type Antibody
 target HMGN3
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry.
 targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 to 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
+# wrong orderUrl: mixing vendorName and vendorIds
 orderUrl http://www.acris-antibodies.com/NB100-61076.htm
 vendorName Acris Antibodies
 vendorId NB100-61076
@@ -7173,8 +7172,8 @@ vendorId ZNF217
 orderUrl http://stemcellcenter.berkeley.edu/PIs/yaswen.html
 lab Farnham
 lots N/A
-targetId GeneCards:Genecard:ZNF217
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:ZNF217
+targetId GeneCards:ZNF217
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF217
 validation ZNF217_(WesternBlot,SiRNA):human_ZNF217_validation_Farnham.pdf
 
 term ZNF263
@@ -7660,6 +7659,11 @@ tag R2X75
 type readType
 description Paired 75 n.t. reads
 
+term 2x76D
+tag R2X76D
+type readType
+description Paired 76 n.t. directed reads
+
 #### insertLength
 #### This is being used by the Wold lab as a variable.
 #### I do not think that it needs to be controlled. - Cricket
@@ -7944,7 +7948,7 @@ description The reference human genome is currently hg18 - March 2006 (NCBI Buil
 term RevXlinkChromatin 
 tag RXLCH
 type control
-description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. (PROVISIONAL)
+description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. 
 
 term None
 tag NONE
@@ -8381,12 +8385,11 @@ type view
 label Exons Gencode V3c
 description Expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
-#provisional still - matt
 term ExonsGencV7
 tag EXONGENCV7
 type view
 label Exons Gencode V7
-description Provisional entry for Gencode V7
+description Expression level estimates for GENCODE V7 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
 term Fasta3p
 tag FASTA3P
@@ -8446,7 +8449,7 @@ term GeneGencV7
 tag GENEGENCV7 
 type view
 label Genes Gencode V7 
-description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format (Provisional)
+description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format 
 
 term GeneGencV3c
 tag GENEGENCV3C
@@ -8561,13 +8564,13 @@ term RepPeaks
 tag REPPEAKS
 type view
 label Replicate Peaks
-description Peaks determined by Replicate (PROVISIONAL)
+description Peaks determined per individual replicate  
 
 term RepSignal
 tag REPSIGNAL
 type view
 label Replicate Signal
-description Signal determined by Replicate (PROVISONAL)
+description Signal determined per individual replicate 
 
 term Signal
 tag SIG
@@ -8615,7 +8618,7 @@ term TranscriptGencV7
 tag TRANSGENCV7 
 type view
 label Transcript Gencode V7 
-description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format (Provisional)
+description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format 
 
 term TranscriptGencV3c
 tag TRANSGENCV3C
@@ -8629,17 +8632,23 @@ type view
 label Transfrags
 description Transfrags
 
-term TSS
-tag TSS
+term TssGencV3c
+tag TssV3c
 type view
-label TSS
-description Expression level estimates for GENCODE CRCh37.v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+label TSS Gencode V3c
+description Expression level estimates for GENCODE v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+
+term TssGencV7
+tag TssV7 
+type view
+label TSS Gencode V7
+description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
 
 term Uniqueness
 tag UNQ
 type view
 label Uniqueness
-description (PROVISIONAL)Displays how unique is each sequence on the positive strand starting at a particular base and of a particular length.  The score of 1 represents completely unique, 0.5 occurs exactly twice, 0.33 three times, 0.25 four times and 0 occurs > 4 times (excluding chrN_random and alternative haplotypes).  The Duke uniqueness tracks were generated for the ENCODE project.
+description Displays how unique is each sequence on the positive strand starting at a particular base and of a particular length.  The score of 1 represents completely unique, 0.5 occurs exactly twice, 0.33 three times, 0.25 four times and 0 occurs > 4 times (excluding chrN_random and alternative haplotypes).  The Duke uniqueness tracks were generated for the ENCODE project.
 
 term Validation
 tag VALIDATION
@@ -8841,13 +8850,6 @@ tag  RIPSEQ
 type dataType
 label RIP-seq
 description RNA-seq on RIP-chip data
-
-#term Snp
-#tag SNP
-#type dataType
-#label SNPs
-#description PROVISIONAL Single-nucleotide polymorphism
-# I would like to take this out and replace with Genotype as a more general datatype to match the composite
 
 term Switchgear
 tag SWITCHGEAR
@@ -10149,17 +10151,6 @@ priority 500
 validate none # Perhaps could add a validte option to restrict/require this var for objType=composite
 # Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 
-term fileIndex
-tag FILEINDEX
-type typeOfTerm
-label BAM Index file
-description  The name of the index file (.bai) that is associated with a particular bam file.
-searchable no
-cvDefined no
-validate exists # Matches the fileName prefix with the suffix .bai
-#hidden yes
-priority 990
-
 term fileName
 tag FILENAME
 type typeOfTerm
@@ -10195,7 +10186,7 @@ validate regex: ^[0-9]*k$
 priority 500
 # With more investigation, this could be collapsed in with fragLength (11/19/10)
 
-term geoSample
+term geoSampleAccession
 tag GEOSAMPLE
 type typeOfTerm
 label GEO sample accession
@@ -10205,7 +10196,7 @@ cvDefined no
 validate regex: ^GSM[0-9]*$
 priority 345
 
-term geoSeries
+term geoSeriesAccession
 tag GEOSERIES
 type typeOfTerm
 label GEO series accession
@@ -10337,18 +10328,6 @@ cvDefined no
 validate list: hg18,hg19,mm9
 priority 305
 # Could be cv.ra term
-
-term parentTable
-tag PARENTTABLE
-type typeOfTerm
-label Closest related table
-description A data file available for downloads may not be directly associated with a track in the UCSC Genome Browser.  If this is the case, this term will identify the closest track or table related to this file.
-searchable no
-cvDefined no
-validate none
-hidden yes
-priority 920
-# On its way out (11/3/10)
 
 term phase
 tag PHASE
@@ -10599,6 +10578,18 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 470
+
+term type
+tag TYPE
+type typeOfTerm
+label File type
+description The type of the primary file associated with the object PROVISIONAL
+searchable multiSelect
+cvDefined no
+validate None
+priority 900 
+#I do not know how to set the priority
+
 
 term uniqueness
 tag UNIQUENESS

@@ -32,7 +32,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEH001199
-dccNotes was subId 3160
+dccInternalNotes was subId 3160
 expId 1199
 fileName wgEncodeUncBsuProtGm12878NucleusSig.peptideMapping.gz
 grant Giddings
@@ -115,7 +115,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEH001200
-dccNotes was subId 3238
+dccInternalNotes was subId 3238
 expId 1200
 fileName wgEncodeUncBsuProtK562MembranefractionSig.peptideMapping.gz
 grant Giddings
@@ -210,4 +210,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -909812704
+# MAGIC: 492202650

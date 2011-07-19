@@ -4351,4 +4351,18 @@ see doc/builds.txt for specific details.
     ssh hgwdev
     cd /cluster/data/genbank
    ./bin/gbDbLoadStep -byPassGbLoaded -reload -srcDb=refseq cavPor3
+
+############################################################################
+# liftOver for hg19 (DONE - 2011-07-14 - Hiram)
+    cd /hive/data/genomes/cavPor3/bed/blastz.hg19.swap/axtChain
+    ln -s `pwd`/cavPor3.hg19.over.chain.gz \
+	/gbdb/cavPor3/liftOver/cavPor3ToHg19.over.chain.gz
+    hgAddLiftOverChain -minMatch=0.1 -multiple \
+	-path=/gbdb/cavPor3/liftOver/cavPor3ToHg19.over.chain.gz \
+	cavPor3 hg19
+     ln -s `pwd`/cavPor3.hg19.over.chain.gz \
+	/usr/local/apache/htdocs-hgdownload/goldenPath/cavPor3/liftOver/cavPor3ToHg19.over.chain.gz
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/cavPor3/liftOver
+    md5sum cavPor3ToHg19.over.chain.gz >> md5sum.txt
+
 ############################################################################

@@ -194,6 +194,32 @@ printf("<tr><th>CCDS<td>%s<td></tr>\n", transAttrs->ccdsId);
 printf("</tbody></table>\n");
 }
 
+static void writeSequenceHtml(struct trackDb *tdb, char *gencodeId, struct genePred *transAnno)
+/* write links to get sequences */
+{
+printf("<table class=\"hgcCcds\"><thead>\n");
+printf("<tr><th colspan=\"2\">Sequences</tr>\n");
+printf("</thead><tbody>\n");
+if (transAnno->cdsStart < transAnno->cdsEnd)
+    {
+    // protein coding
+    printf("<tr><td>");
+    hgcAnchorSomewhere("htcGeneMrna", gencodeId, tdb->table, seqName);
+    printf("Predicted mRNA</a>");
+    printf("<td>");
+    hgcAnchorSomewhere("htcTranslatedPredMRna", gencodeId, "translate", seqName);
+    printf("Predicted protein</a></tr>\n");
+    }
+else
+    {
+    // non-protein coding
+    printf("<tr><td>");
+    hgcAnchorSomewhere("htcGeneMrna", gencodeId, tdb->table, seqName);
+    printf("Predicted mRNA</a><td></tr>\n");
+    }
+printf("</tbody></table>\n");
+}
+
 static void writePdbLinkHtml(struct wgEncodeGencodePdb *pdbs)
 /* write HTML links to PDB */
 {
@@ -413,7 +439,7 @@ return supportEvids;
 static void writeSupportExidenceEntry(struct supportEvid *supportEvid)
 /* write HTML table entry  for a supporting evidence */
 {
-// FIXME: should like to sources when possible
+// FIXME: should link to sources when possible
 printf("<td>%s", supportEvid->seqSrc);
 printf("<td>%s", supportEvid->seqId);
 }
@@ -513,13 +539,13 @@ cartWebStart(cart, database, "%s", header);
 printf("<H2> %s</H2>\n", header);
 
 writeBasicInfoHtml(tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource);
-/* FIXME: sequence links */
+writeTagLinkHtml(tags);
+writeSequenceHtml(tdb, gencodeId, transAnno);
 writePdbLinkHtml(pdbs);
 writePubMedLinkHtml(pubMeds);
 writeRefSeqLinkHtml(refSeqs);
 writeUniProtLinkHtml(uniProts);
 writeSupportingEvidenceLinkHtml(transcriptSupports, exonSupports);
-writeTagLinkHtml(tags);
 wgEncodeGencodeAttrsFree(&transAttrs);
 wgEncodeGencodeGeneSourceFreeList(&geneSource);
 wgEncodeGencodeTranscriptSourceFreeList(&transcriptSource);
