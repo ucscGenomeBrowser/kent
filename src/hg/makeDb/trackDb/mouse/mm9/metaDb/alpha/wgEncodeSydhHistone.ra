@@ -454,7 +454,7 @@ subId 4316
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistMelH3k4me3IggyalePk
+metaObject wgEncodeSydhHistMelH3k04me3IggyalePk
 objType table
 age immortalized
 antibody H3K4me3
@@ -463,21 +463,21 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
 expId 2002
-fileName wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
+fileName wgEncodeSydhHistMelH3k04me3IggyalePk.narrowPeak.gz
 grant Snyder
 lab Yale-m
-labVersion PeakSeq1.0
 project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1166
-tableName wgEncodeSydhHistMelH3k4me3IggyalePk
+subId 4611
+tableName wgEncodeSydhHistMelH3k04me3IggyalePk
 treatment None
 view Peaks
 
@@ -721,4 +721,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 812928455
+# MAGIC: -753750636
