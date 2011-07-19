@@ -1,6 +1,6 @@
 # Data Agreement File for UW RNA-seq experiments for mm9  
 
-#$Revision: 1.1 $
+#$Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -39,7 +39,7 @@ group             Expression
 variables         cell,localization,rnaExtract,sex,age,strain
 assembly          mm9
 
-validationSettings validateFiles.bam:mismatches=2;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mismatches=5,bamPercent=99.9;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Signal
@@ -47,6 +47,19 @@ longLabelPrefix  UW RNA-seq Signal
 type             bigWig
 hasReplicates    yes
 required         yes
+
+view             PlusRawSignal
+longLabelPrefix  UW RNA-seq Plus Strand Raw Signal
+type             bigWig
+hasReplicates    yes
+required         yes
+
+view             MinusRawSignal
+longLabelPrefix  UW RNA-seq Minus Strand Raw Signal
+type             bigWig
+hasReplicates    yes
+required         yes
+
 
 view             Alignments
 longLabelPrefix  UW RNA-seq Alignments

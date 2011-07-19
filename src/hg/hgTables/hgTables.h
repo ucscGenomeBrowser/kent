@@ -756,6 +756,11 @@ int bigWigOutRegion(char *table, struct sqlConnection *conn,
 void doSummaryStatsBigWig(struct sqlConnection *conn);
 /* Put up page showing summary stats for bigWig track. */
 
+struct bed *bigWigIntervalsToBed(struct sqlConnection *conn, char *table, struct region *region,
+				 struct lm *lm);
+/* Return a list of unfiltered, unintersected intervals in region as bed (for
+ * secondary table in intersection). */
+
 /* ----------- BigBed business in bigBed.c -------------------- */
 boolean isBigBed(char *database, char *table, struct trackDb *parent, 
 	struct customTrack *(*ctLookupName)(char *table));

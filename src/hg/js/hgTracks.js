@@ -5,11 +5,7 @@ var originalPosition;
 var originalSize;
 var originalCursor;
 var originalMouseOffset = {x:0, y:0};
-var clickClipHeight;
-var revCmplDisp;
-var insideX;
 var startDragZoom = null;
-var newWinWidth;
 var imageV2 = false;
 var imgBoxPortal = false;
 var blockUseMap = false;
@@ -26,7 +22,6 @@ var currentMapItem;
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;
-var newJQuery = false;       // temporary #define for use while testing jQuery 1.5/jQuery UI 1.8 in dev trees
 
 function initVars(img)
 {
@@ -126,8 +121,8 @@ function checkPosition(img, selection)
 
     // We ignore clicks in the gray tab and track title column (we really should suppress all drag activity there,
     // but I don't know how to do that with imgAreaSelect).
-    var leftX = revCmplDisp ? imgOfs.left - slop : imgOfs.left + insideX - slop;
-    var rightX = revCmplDisp ? imgOfs.left + imgWidth - insideX + slop : imgOfs.left + imgWidth + slop;
+    var leftX = hgTracks.revCmplDisp ? imgOfs.left - slop : imgOfs.left + hgTracks.insideX - slop;
+    var rightX = hgTracks.revCmplDisp ? imgOfs.left + imgWidth - hgTracks.insideX + slop : imgOfs.left + imgWidth + slop;
 
     return (selection.event.pageX >= leftX) && (selection.event.pageX < rightX)
         && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop));
@@ -136,29 +131,28 @@ function checkPosition(img, selection)
 function pixelsToBases(img, selStart, selEnd, winStart, winEnd)
 // Convert image coordinates to chromosome coordinates
 {
-var insideX = parseInt(document.getElementById("hgt.insideX").value);
-var imgWidth = jQuery(img).width() - insideX;
-var width = winEnd - winStart;
+var imgWidth = jQuery(img).width() - hgTracks.insideX;
+var width = hgTracks.winEnd - hgTracks.winStart;
 var mult = width / imgWidth;   // mult is bp/pixel multiplier
 var startDelta;                // startDelta is how many bp's to the right/left
-if(revCmplDisp) {
+if(hgTracks.revCmplDisp) {
     var x1 = Math.min(imgWidth, selStart);
     startDelta = Math.floor(mult * (imgWidth - x1));
 } else {
-    var x1 = Math.max(insideX, selStart);
-    startDelta = Math.floor(mult * (x1 - insideX));
+    var x1 = Math.max(hgTracks.insideX, selStart);
+    startDelta = Math.floor(mult * (x1 - hgTracks.insideX));
 }
 var endDelta;
-if(revCmplDisp) {
+if(hgTracks.revCmplDisp) {
     endDelta = startDelta;
     var x2 = Math.min(imgWidth, selEnd);
     startDelta = Math.floor(mult * (imgWidth - x2));
 } else {
-    var x2 = Math.max(insideX, selEnd);
-    endDelta = Math.floor(mult * (x2 - insideX));
+    var x2 = Math.max(hgTracks.insideX, selEnd);
+    endDelta = Math.floor(mult * (x2 - hgTracks.insideX));
 }
-var newStart = winStart + startDelta;
-var newEnd = winStart + 1 + endDelta;
+var newStart = hgTracks.winStart + startDelta;
+var newEnd = hgTracks.winStart + 1 + endDelta;
 if(newEnd > winEnd) {
     newEnd = winEnd;
 }
@@ -168,29 +162,20 @@ return {chromStart : newStart, chromEnd : newEnd};
 function selectionPixelsToBases(img, selection)
 // Convert selection x1/x2 coordinates to chromStart/chromEnd.
 {
-var winStart = parseInt(document.getElementById("hgt.winStart").value);
-var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
-return pixelsToBases(img, selection.x1, selection.x2, winStart, winEnd);
+return pixelsToBases(img, selection.x1, selection.x2, hgTracks.winStart, hgTracks.winEnd);
 }
 
 function updatePosition(img, selection, singleClick)
 {
-var chromName = document.getElementById("hgt.chromName").value;
-var winStart = parseInt(document.getElementById("hgt.winStart").value);
-var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
-var pos = pixelsToBases(img, selection.x1, selection.x2, winStart, winEnd);
-if(typeof imgBoxPortalStart != "undefined" && imgBoxPortalStart) {
-    winStart = imgBoxPortalStart;
-    winEnd = imgBoxPortalEnd;
-}
-// singleClick is true when the mouse hasn't moved (or has only moved a small amount).
-if(singleClick) {
-    var center = (pos.chromStart + pos.chromEnd)/2;
-    pos.chromStart = Math.floor(center - newWinWidth/2);
-    pos.chromEnd = pos.chromStart + newWinWidth;
-}
-setPositionByCoordinates(chromName, pos.chromStart+1, pos.chromEnd);
-return true;
+    var pos = pixelsToBases(img, selection.x1, selection.x2, hgTracks.winStart, hgTracks.winEnd);
+    // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
+    if(singleClick) {
+        var center = (pos.chromStart + pos.chromEnd)/2;
+        pos.chromStart = Math.floor(center - hgTracks.newWinWidth/2);
+        pos.chromEnd = pos.chromStart + hgTracks.newWinWidth;
+    }
+    setPositionByCoordinates(hgTracks.chromName, pos.chromStart+1, pos.chromEnd);
+    return true;
 }
 
 function selectChange(img, selection)
@@ -217,7 +202,7 @@ function selectEnd(img, selection)
     if(autoHideSetting && checkPosition(img, selection)) {
        // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in selectStart
        // doesn't occur when the user single clicks).
-       doIt = startDragZoom != null || selection.y1 <= clickClipHeight;
+       doIt = startDragZoom != null || selection.y1 <= hgTracks.clickClipHeight;
     }
     if(doIt) {
         // startDragZoom is null if mouse has never been moved
@@ -295,11 +280,8 @@ $(window).load(function () {
 
 function loadImgAreaSelect(firstTime)
 {
-    var rulerEle = document.getElementById("hgt.rulerClickHeight");
-    var dragSelectionEle = document.getElementById("hgt.dragSelection");
-
     // disable if ruler is not visible.
-    if((dragSelectionEle != null) && (dragSelectionEle.value == '1') && (rulerEle != null)) {
+    if(typeof(hgTracks) != "undefined" && hgTracks.dragSelection && hgTracks.rulerClickHeight > 0) {
         var imgHeight = 0;
         trackImg = $('#img_data_ruler');
 
@@ -314,16 +296,11 @@ function loadImgAreaSelect(firstTime)
             imgHeight = trackImgTbl.height();
         }
 
-        clickClipHeight = parseInt(rulerEle.value);
-        newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
-        revCmplDisp = parseInt(document.getElementById("hgt.revCmplDisp").value) == 0 ? false : true;
-        insideX = parseInt(document.getElementById("hgt.insideX").value);
-
         imgAreaSelect = jQuery((trackImgTbl || trackImg).imgAreaSelect({ selectionColor: 'blue', outerColor: '',
             minHeight: imgHeight, maxHeight: imgHeight,
             onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
             autoHide: autoHideSetting, movable: false,
-            clickClipHeight: clickClipHeight}));
+            clickClipHeight: hgTracks.rulerClickHeight}));
     }
 }
 
@@ -332,10 +309,9 @@ function makeItemsEnd(img, selection)
 var image = $(img);
 var imageId = image.attr('id');
 var trackName = imageId.substring('img_data_'.length);
-var chrom = document.getElementById("hgt.chromName").value;
 var pos = selectionPixelsToBases(image, selection);
 var command = document.getElementById('hgt_doJsCommand');
-command.value = "makeItems " + trackName + " " + chrom + " " + pos.chromStart + " " + pos.chromEnd;
+command.value = "makeItems " + trackName + " " + hgTracks.chromName + " " + pos.chromStart + " " + pos.chromEnd;
 document.TrackHeaderForm.submit();
 return true;
 }
@@ -486,9 +462,7 @@ this.each(function(){
                 if(mouseHasMoved == false) { // Not else because small drag turns this off
 
                     hiliteShow(pxUp,pxUp);
-                    var curBeg = parseInt($("#hgt\\.winStart").val());  // Note the escaped '.'
-                    var curEnd = parseInt($("#hgt\\.winEnd").val());
-                    var curWidth = curEnd - curBeg;
+                    var curWidth = hgTracks.winEnd - hgTracks.winStart;
                     selRange.beg = convertToBases(pxUp) - Math.round(curWidth/2); // Notice that beg is based upon up position
                     selRange.end  = selRange.beg + curWidth;
                 }
@@ -1086,7 +1060,7 @@ this.each(function(){
         if(newPortalStart > 0) {
             // XXXX ? imgBoxPortalStart = newPortalStart;
             // XXXX ? imgBoxPortalEnd = newPortalEnd;
-            var newPos = document.getElementById("hgt.chromName").value + ":" + commify(newPortalStart) + "-" + commify(newPortalEnd);
+            var newPos = hgTracks.chromName + ":" + commify(newPortalStart) + "-" + commify(newPortalEnd);
             setPosition(newPos, (newPortalEnd - newPortalStart + 1));
         }
         return true;
@@ -1256,15 +1230,24 @@ function postToSaveSettings(obj)
 $(document).ready(function()
 {
     var db = getDb();
-    if(document.getElementById("hgt.newJQuery") != null) {
-        newJQuery = true;
-    }
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         if(newJQuery) {
             $('input#suggest').autocomplete({
                                                 delay: 500,
                                                 minLength: 2,
                                                 source: ajaxGet(function () {return db;}, new Object, true),
+                                                open: function(event, ui) {
+                                                    var pos = $(this).offset().top + $(this).height();
+                                                    if (!isNaN(pos)) {
+                                                        var maxHeight = $(window).height() - pos - 30;  // take off a little more because IE needs it
+                                                        var auto = $('.ui-autocomplete');
+                                                        var curHeight = $(auto).children().length * 21;
+                                                        if (curHeight > maxHeight)
+                                                            $(auto).css({maxHeight: maxHeight+'px',overflow:'scroll'});
+                                                        else
+                                                            $(auto).css({maxHeight: 'none',overflow:'hidden'});
+                                                    }
+                                                },
                                                 select: function (event, ui) {
                                                         setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
                                                         makeSureSuggestTrackIsVisible();
@@ -1597,7 +1580,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
             var chromStart, chromEnd;
             var a = /hgg_chrom=(\w+)&/.exec(href);
             // Many links leave out the chrom (b/c it's in the server side cart as "c")
-            var chrom = document.getElementById("hgt.chromName").value;
+            var chrom = hgTracks.chromName;
             if(a) {
                 if(a && a[1])
                     chrom = a[1];
@@ -1807,6 +1790,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                 for (var ix=rows.length - 1; ix >= 0; ix--) { // from bottom, just in case remove screws with us
                     $(rows[ix]).remove();
                 }
+            var selectUpdated = updateVisibility(rec.parentTrack, 'hide');
             setCartVar(rec.parentTrack, 'hide' );
             initImgTblButtons();
             loadImgAreaSelect(false);
@@ -1887,7 +1871,7 @@ function makeImgTag(img)
 // Return img tag with explicit dimensions for img (dimensions are currently hardwired).
 // This fixes the "weird shadow problem when first loading the right-click menu" seen in FireFox 3.X,
 // which occurred b/c FF doesn't actually fetch the image until the menu is being shown.
-    return "<img width='16px' height='16px' src='../images/" + img + "' />";
+    return "<img style='width:16px; height:16px; border-style:none;' src='../images/" + img + "' />";
 }
 
 function loadContextMenu(img)
@@ -1938,6 +1922,7 @@ function loadContextMenu(img)
                     if (offerHideSubset) {
                         var o = new Object();
                         o[blankImg + " hide track subset (green)"] = {onclick: makeContextMenuHitCallback('hideSet')};
+                        //o[makeImgTag("highliteGreenX.png") + " hide track subset"] = {onclick: makeContextMenuHitCallback('hideSet')};
                         menu.push(o);
                     }
 
@@ -1946,6 +1931,7 @@ function loadContextMenu(img)
                     if (offerHideSubset)
                         str += " (blue)";
                     o[str] = {onclick: makeContextMenuHitCallback('hideComposite')};
+                    //o[makeImgTag("btnBlueX.png") + " hide track set"] = {onclick: makeContextMenuHitCallback('hideComposite')};
                     menu.push(o);
                 }
 
@@ -2293,7 +2279,7 @@ function handleTrackUi(response, status)
     var cssFiles = cleanHtml.match(shlurpPattern);
     cleanHtml = cleanHtml.replace(shlurpPattern,"");
 
-    $('#hgTrackUiDialog').html("<div id='pop'>" + cleanHtml + "</div>");
+    $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>" + cleanHtml + "</div>");
 
     // Strategy for poups with js:
     // - jsFiles and CSS should not be included in html.  Here they are shluped out.
@@ -2323,20 +2309,36 @@ function handleTrackUi(response, status)
         popSaveAllVars = getAllVars( $('#hgTrackUiDialog'), subtrack );  // Saves the vars that may get changed by the popup cfg.
 
         // -- popup.ready() -- Here is the place to do things that might otherwise go into a $('#pop').ready() routine!
-        $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
-        });
+        if (!newJQuery) {
+            $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
+                $(this).dropdownchecklist({ firstItemChecksAll: true,
+                        noneIsAll: $(this).hasClass('filterBy'),
+                        maxDropHeight: filterByMaxHeight(this),
+                        emptyText: "Please select ...",
+                        textFormatFunction: ddclTextFormatter });
+            });
+        }
     }
+
+    // Searching for some selblance of size suitability
+    var popMaxHeight = ($(window).height() - 40);
+    var popMaxWidth  = ($(window).width() - 40);
+    var popWidth     = 740;
+    if (popWidth > popMaxWidth)
+        popWidth > popMaxWidth;
+
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
                                    cache: true
                                },
-                               resizable: popUpTrackDescriptionOnly,
-                               height: 'auto',
-                               width: 'auto',
+                               resizable: true,
+                               height: (popUpTrackDescriptionOnly ? popMaxHeight : 'auto'), // Let description scroll vertically
+                               width: popWidth,
                                minHeight: 200,
                                minWidth: 700,
+                               maxHeight: popMaxHeight,
+                               maxWidth: popMaxWidth,
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
@@ -2350,6 +2352,18 @@ function handleTrackUi(response, status)
                                //     var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
                                //     popSaveAllVars = getAllVars( $('#pop'), subtrack );
                                //},
+                               open: function () {
+                                    if (newJQuery) {
+                                        if( ! popUpTrackDescriptionOnly ) {
+                                            $('#hgTrackUiDialog').find('.filterBy,.filterComp').each( function(i) {
+                                                if ($(this).hasClass('filterComp'))
+                                                    ddcl.setup(this);
+                                                else
+                                                    ddcl.setup(this, 'noneIsAll');
+                                            });
+                                        }
+                                    }
+                               },
                                close: function() {
                                    popUpBoxCleanup();
                                }
@@ -2428,19 +2442,19 @@ function handleUpdateTrackMap(response, status)
         if(json) {
             if(this.id != null) {
                 if(json[this.id]) {
-                    var visibility = visibilityStrsOrder[json[this.id].visibility];
-                    var limitedVis;
-                    if(json[this.id].limitedVis)
-                        limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
-                    if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
-                        alert("There are too many items to display the track in " + this.newVisibility + " mode.");
-                    var rec = trackDbJson[this.id];
-                    rec.limitedVis = json[this.id].limitedVis;
-                    updateVisibility(this.id, visibility);
-                 } else {
-                    showWarning("Invalid trackDbJson received from the server");
-                 }
-            } else {
+            var visibility = visibilityStrsOrder[json[this.id].visibility];
+            var limitedVis;
+            if(json[this.id].limitedVis)
+                limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
+            if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
+                alert("There are too many items to display the track in " + this.newVisibility + " mode.");
+            var rec = trackDbJson[this.id];
+            rec.limitedVis = json[this.id].limitedVis;
+            updateVisibility(this.id, visibility);
+        } else {
+            showWarning("Invalid trackDbJson received from the server");
+        }
+    } else {
                  trackDbJson = json;
             }
         } else {
@@ -2459,8 +2473,8 @@ function handleUpdateTrackMap(response, status)
           if(updateTrackImgForId(response, id)) {
                afterImgTblReload();
           } else {
-              showWarning("Couldn't parse out new image for id: " + id);
-              //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
+               showWarning("Couldn't parse out new image for id: " + id);
+               //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
           }
     } else {
         if(imageV2) {
@@ -2471,19 +2485,14 @@ function handleUpdateTrackMap(response, status)
                     //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                 }
             }
-            // parse out and reset position info.
-            a = /<INPUT [^>]*NAME=["']position['"] VALUE=['"]([^'"]+)/.exec(response);
-            if(a != null && a[1] != null) {
-                var o = parsePosition(a[1]);
-                setPosition(a[1], commify(o.end - o.start + 1));
-                $("#hgt\\.winStart").val(o.start - 1);
-                $("#hgt\\.winEnd").val(o.end);
+            var json = scrapeVariable(response, "hgTracks");
+            if(json != undefined) {
+                hgTracks.winStart = json.winStart;
+                hgTracks.winEnd = json.winEnd;
+                hgTracks.newWinWidth = json.newWinWidth;
+                setPositionByCoordinates(json.chromName, hgTracks.winStart + 1, hgTracks.winEnd);
             } else {
                 showWarning("Couldn't parse out new position info");
-            }
-            a = /<input [^>]*id=["']hgt\.newWinWidth['"][^>]*value=['"]([^'"]+)/.exec(response);
-            if(a != null && a[1] != null) {
-                $("#hgt\\.newWinWidth").val(a[1]);
             }
             afterImgTblReload();
         } else {

@@ -2951,17 +2951,6 @@ priority 0
 track eponine override
 priority 0
 
-track omimGene
-shortLabel OMIM Genes
-longLabel OMIM-Associated Genes
-group phenDis
-priority 29.6
-visibility hide
-color 0, 0, 200
-type bed 4
-hgsid on
-url http://www.ncbi.nlm.nih.gov/omim/
-
 track omimLocation
 shortLabel OMIM Pheno Loci
 longLabel OMIM Phenotypes - Gene Unknown
@@ -2997,6 +2986,25 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser off omimAv omimAvRepl
+
+track cosmic
+shortLabel COSMIC
+longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
+group phenDis
+priority 29.80
+visibility hide
+color 200, 0, 0
+type bed 4
+hgsid on
+url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
+
+searchName cosmicId
+searchTable cosmic
+searchMethod exact
+searchType bed
+searchPriority 10
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex COSM*
 
 searchTable wgRnaOld
 searchMethod fuzzy
@@ -3907,64 +3915,85 @@ termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 #NumtS track
-track NumtSeq
+track numtSeq
 compositeTrack on
-shortLabel NumtSeq
+shortLabel NumtS Sequence
 longLabel Human NumtS mitochondrial sequence
 group varRep
 priority 500.5
 visibility hide
 noInherit on
 type bed 3 .
+#configurable on
 html numtSeq
 
     track numtS
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS
     longLabel Human NumtS
     color 0,60,120
      #itemRgb on
     useScore 1
+    #noScoreFilter .
     priority 1
     type bed 6 .
     html numtSeq
 
     track numtSAssembled
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS assembled
     longLabel Human NumtS assembled
     color 0,60,120
     priority 2
     useScore 1
+    #noScoreFilter .
     type bed 12 .
     html numtSeq
 
     track numtSMitochondrion
-    parent NumtSeq
-    shortLabel NumtS on mitochondrion
+    parent numtSeq
+    shortLabel NumtS on mitochon
     longLabel Human NumtS on mitochondrion
     useScore 1
+    #noScoreFilter .
     color 0,60,120
     priority 3
     type bed 6 .
     html numtSeq
 
     track numtSMitochondrionChrPlacement
-    parent NumtSeq
-    shortLabel Human NumtS on mitochondrion with chr placement
-    longLabel NumtS on mitochondrion with chr placement
+    parent numtSeq
+    longLabel Human NumtS on mitochondrion with chromosome placement
+    shortLabel NumtS chr colored
     priority 4
     itemRgb on
     type bed 9 .
     html numtSeq
 
     track  bamAllNumtSSorted
-    parent NumtSeq
+    parent numtSeq
     shortLabel NumtS SNPs
-    longLabel Human NumtS SNPs
+    longLabel Human NumtS on mitochondrion SNPs
     priority 5
     visibility pack
+    configurable on
     type bam
+    bamSkipPrintQualScore .
+    chromosomes chrM
+    pairEndsByName on
+    showNames on
+    noColorTag .
+    bamColorMode strand
+    bamGrayMode aliQual
+    aliQualRange 0:255
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    maxWindowToDraw 1000000
+
 
 
 searchTable numtSMitochondrionChrPlacement

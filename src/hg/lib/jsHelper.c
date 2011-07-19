@@ -211,9 +211,9 @@ hPrintf("<SCRIPT>var %s=%d;</SCRIPT>\n", jsVar, oldVal);
 hPrintf("<INPUT TYPE=CHECKBOX NAME=%s VALUE=1", cgiVar);
 if (oldVal)
     hPrintf(" CHECKED");
-hPrintf(" onClick=\"%s=%d;\"", jsVar, !oldVal);
+hPrintf(" onClick=\"%s=(%s+1)%%2;\"", jsVar, jsVar);
 hPrintf(">");
-sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), cgiVar);
+safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), cgiVar);
 cgiMakeHiddenVar(buf, "0");
 }
 
@@ -487,3 +487,68 @@ void jsEndCollapsibleSection()
 puts("</TD></TR>");
 }
 
+void jsAddString(struct hash *h, char *name, char *val)
+{
+// Add a string to a hash which will be used to print a javascript object;
+// existing values are replaced.
+char *str = needMem(strlen(val) + 3);
+val = javaScriptLiteralEncode(val);
+sprintf(str, "'%s'", val);
+freez(&val);
+hashReplace(h, name, str);
+}
+
+void jsAddNumber(struct hash *h, char *name, long val)
+{
+// Add a number to a hash which will be used to print a javascript object;
+// existing values are replaced.
+char buf[256];
+safef(buf, sizeof(buf), "%ld", val);
+hashReplace(h, name, cloneString(buf));
+}
+
+void jsAddBoolean(struct hash *h, char *name, boolean val)
+{
+// Add a boolean to a hash which will be used to print a javascript object;
+// existing values are replaced.
+hashReplace(h, name, cloneString(val ? "true" : "false"));
+}
+
+void jsPrintHash(struct hash *hash, char *name, int indentLevel)
+{
+// prints a hash as a javascript variable
+
+int i;
+char *indentBuf;
+indentBuf = needMem(indentLevel + 1);
+for (i = 0; i < indentLevel; i++)
+    indentBuf[i] = '\t';
+indentBuf[i] = 0;
+if(hashNumEntries(hash))
+    {
+    struct hashEl *el, *list = hashElListHash(hash);
+    slSort(&list, hashElCmp);
+    // We add START and END comments to facilitate scraping out this variable by javascript.
+    hPrintf("// START %s\n%svar %s = {\n", name, indentBuf, name);
+    for (el = list; el != NULL; el = el->next)
+        {
+        hPrintf("%s\t\"%s\": %s%s\n", indentBuf, el->name, (char *) el->val, el->next == NULL ? "" : ",");
+        }
+    hPrintf("%s};\n// END %s\n", indentBuf, name);
+    hashElFreeList(&list);
+    }
+}
+
+void jsonErrPrintf(struct dyString *ds, char *format, ...)
+//  Printf a json error to a dyString for communicating with ajax code; format is:
+//  {"error": error message here}
+{
+va_list args;
+va_start(args, format);
+dyStringPrintf(ds, "{\"error\": \"");
+struct dyString *buf = newDyString(1000);
+dyStringVaPrintf(buf, format, args);
+dyStringAppend(ds, javaScriptLiteralEncode(dyStringCannibalize(&buf)));
+dyStringPrintf(ds, "\"}");
+va_end(args);
+}

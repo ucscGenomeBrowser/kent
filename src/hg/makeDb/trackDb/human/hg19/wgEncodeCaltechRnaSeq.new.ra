@@ -12,7 +12,7 @@ subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
 dimensions dimensionX=readType dimensionY=cellType dimensionA=rep
 dimensionAchecked rep1
 sortOrder cellType=+ readType=+ view=+ rep=+
-fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length view=View replicate=Rep mapAlgorithm=Map_Algorithm dccAccession=UCSC_Accession geoAccession=GEO_Accession origAssembly=Original_Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length view=View replicate=Rep mapAlgorithm=Map_Algorithm labExpId=Lab_Exp_ID dccAccession=UCSC_Accession geoAccession=GEO_Accession origAssembly=Original_Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 controlledVocabulary encode/cv.ra cellType=cell readType=readType insertLength=insertLength
 dragAndDrop subTracks
 priority 0

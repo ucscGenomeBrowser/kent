@@ -873,8 +873,8 @@ char query[256];
 struct encodeExp *exp2 = encodeExpGetByIdFromTable(conn, tableName, exp->ix);
 if (encodeExpSame(exp, exp2))
     {
-    safef(query, sizeof(query), "delete from %s where %s=%d", 
-                                tableName, ENCODE_EXP_FIELD_IX, exp->ix); 
+    safef(query, sizeof(query), "delete from %s where %s=%d",
+                                tableName, ENCODE_EXP_FIELD_IX, exp->ix);
     sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
     sqlUpdate(conn, query);
     encodeExpAddUserToLatestHistory(conn, tableName, exp->ix);
@@ -893,6 +893,22 @@ return (sameString(var, ENCODE_EXP_FIELD_LAB) ||
     sameString(var, ENCODE_EXP_FIELD_CELL_TYPE));
 }
 
+static boolean cvTermIsValid(char *type, char *val)
+/* Determine if term is valid for CV type of term
+ * TODO:  This really belongs in cv.ra, but this limited version used just by encodeExp
+ *  For now, addng special cases as needed -- e.g. allow control term for antibody type
+ */
+{
+if (cvOneTermHash(type, val))
+    return TRUE;
+if (sameString(type, CV_TERM_ANTIBODY))
+    {
+    if (cvOneTermHash(CV_TERM_CONTROL, val))
+        return TRUE;
+    }
+return FALSE;
+}
+
 void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
                                 int id, char *var, char *newVal, char *oldVal)
 /* Update field in encodeExp or var in expVars, identified by id with value.
@@ -903,12 +919,12 @@ char *val = NULL;
 struct dyString *dy = NULL;
 
 /* verify new value is valid term in CV */
-char *type = cvTermNormalized(var);
+char *type = (char *)cvTermNormalized(var);
 if (type == NULL)
     errAbort("Attempt to update encodeExp experiment with unknown CV type %s", var);
-if (cvOneTermHash(type, newVal) == NULL)
-    errAbort("Attempt to update encodeExp experiment with unknown CV term %s of type %s", newVal, var);
-
+if (!cvTermIsValid(type, newVal))
+    errAbort("Attempt to update encodeExp experiment with unknown CV term %s of type %s", 
+                newVal, var);
 struct encodeExp *exp = encodeExpGetByIdFromTable(conn, tableName, id);
 if (exp == NULL)
     errAbort("Id %d not found in experiment table %s", id, tableName);
@@ -1010,7 +1026,7 @@ else
     dyStringAppend(dy, "=");
     dyStringQuoteString(dy, '\'', slPairListToString(varPairs, FALSE));
     }
-verbose(2, "query: %s\n", dy->string);
+verbose(4, "query: %s\n", dy->string);
 exps = encodeExpLoadByQuery(conn, dyStringCannibalize(&dy));
 sqlDisconnect(&conn);
 return exps;

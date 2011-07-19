@@ -16,6 +16,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM002004
+expId 2004
 fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
@@ -41,6 +43,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM002004
+expId 2004
 fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep2.bam
 grant Snyder
 lab Yale-m
@@ -65,6 +69,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM002004
+expId 2004
 fileName wgEncodeSydhHistCh12H3k4me3IggyalePk.narrowPeak.gz
 grant Snyder
 lab Yale-m
@@ -90,6 +96,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM002004
+expId 2004
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep1.fastq.gz
 grant Snyder
 lab Yale-m
@@ -114,6 +122,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM002004
+expId 2004
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep2.fastq.gz
 grant Snyder
 lab Yale-m
@@ -138,6 +148,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM002004
+expId 2004
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleSig.bigWig
 grant Snyder
 lab Yale-m
@@ -164,6 +176,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM002001
+expId 2001
 fileName wgEncodeSydhHistCh12InputIggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
@@ -188,6 +202,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM002001
+expId 2001
 fileName wgEncodeSydhHistCh12InputIggyaleRawData.fastq.gz
 grant Snyder
 lab Yale-m
@@ -211,6 +227,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM002001
+expId 2001
 fileName wgEncodeSydhHistCh12InputIggyaleSig.bigWig
 grant Snyder
 lab Yale-m
@@ -236,9 +254,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM002005
+expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 1
 setType exp
@@ -260,9 +280,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM002005
+expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 2
 setType exp
@@ -284,9 +306,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM002005
+expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyalePk.narrowPeak.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -309,9 +333,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM002005
+expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleRawDataRep1.fastq.tgz
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 1
 setType exp
@@ -333,9 +359,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM002005
+expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleRawDataRep2.fastq.tgz
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 2
 setType exp
@@ -357,9 +385,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM002005
+expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleSig.bigWig
 grant Snyder
-lab Stanford-m
+lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -383,9 +413,11 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM002002
+expId 2002
 fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 1
 setType exp
@@ -408,9 +440,11 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM002002
+expId 2002
 fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 2
 setType exp
@@ -432,9 +466,11 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM002002
+expId 2002
 fileName wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -457,9 +493,11 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM002002
+expId 2002
 fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 1
 setType exp
@@ -481,9 +519,11 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM002002
+expId 2002
 fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 2
 setType exp
@@ -505,9 +545,11 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM002002
+expId 2002
 fileName wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig
 grant Snyder
-lab Stanford-m
+lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -516,6 +558,88 @@ strain Unknown
 subId 1166
 tableName wgEncodeSydhHistMelH3k4me3IggyaleSig
 treatment None
+view Signal
+
+metaObject wgEncodeSydhHistMelInputDm2p5dIggyaleAlnRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-16
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+dccAccession wgEncodeEM001963
+expId 1963
+fileName wgEncodeSydhHistMelInputDm2p5dIggyaleAlnRep1.bam
+grant Snyder
+lab Yale-m
+project wgEncode
+replicate 1
+setType input
+sex M
+strain Unknown
+subId 4326
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelInputDm2p5dIggyaleRawDataRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-16
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+dccAccession wgEncodeEM001963
+expId 1963
+fileName wgEncodeSydhHistMelInputDm2p5dIggyaleRawDataRep1.fastq.tgz
+grant Snyder
+lab Yale-m
+project wgEncode
+replicate 1
+setType input
+sex M
+strain Unknown
+subId 4326
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelInputDm2p5dIggyaleSig
+objType table
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-16
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+dccAccession wgEncodeEM001963
+expId 1963
+fileName wgEncodeSydhHistMelInputDm2p5dIggyaleSig.bigWig
+grant Snyder
+lab Yale-m
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+sex M
+strain Unknown
+subId 4326
+tableName wgEncodeSydhHistMelInputDm2p5dIggyaleSig
+treatment DMSO_2.0pct
 view Signal
 
 metaObject wgEncodeSydhHistMelInputIggyaleAlnRep1
@@ -531,9 +655,11 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
+dccAccession wgEncodeEM002003
+expId 2003
 fileName wgEncodeSydhHistMelInputIggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 replicate 1
 setType input
@@ -555,9 +681,11 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
+dccAccession wgEncodeEM002003
+expId 2003
 fileName wgEncodeSydhHistMelInputIggyaleRawData.fastq.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
 project wgEncode
 setType input
 sex M
@@ -578,9 +706,11 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
+dccAccession wgEncodeEM002003
+expId 2003
 fileName wgEncodeSydhHistMelInputIggyaleSig.bigWig
 grant Snyder
-lab Stanford-m
+lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -591,4 +721,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 499831946
+# MAGIC: 812928455

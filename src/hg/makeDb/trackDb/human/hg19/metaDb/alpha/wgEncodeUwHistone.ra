@@ -3,6 +3,322 @@ objType composite
 composite wgEncodeUwHistone
 expVars lab,dataType,cell,antibody
 
+metaObject wgEncodeUwHistoneA549H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4367
+view Alignments
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4366
+view Alignments
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4367
+tableName wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4366
+tableName wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4367
+tableName wgEncodeUwHistoneA549H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4366
+tableName wgEncodeUwHistoneA549H3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4367
+view RawData
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4366
+view RawData
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4367
+tableName wgEncodeUwHistoneA549H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneA549H3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001905
+expId 1905
+fileName wgEncodeUwHistoneA549H3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4366
+tableName wgEncodeUwHistoneA549H3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneA549InputStdAlnRep1
+objType file
+antibody Input
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH001904
+expId 1904
+fileName wgEncodeUwHistoneA549InputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4349
+view Alignments
+
+metaObject wgEncodeUwHistoneA549InputStdRawDataRep1
+objType file
+antibody Input
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH001904
+expId 1904
+fileName wgEncodeUwHistoneA549InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4349
+view RawData
+
+metaObject wgEncodeUwHistoneA549InputStdRawRep1
+objType table
+antibody Input
+cell A549
+composite wgEncodeUwHistone
+control std
+controlId A549/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH001904
+expId 1904
+fileName wgEncodeUwHistoneA549InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4349
+tableName wgEncodeUwHistoneA549InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -1899,6 +2215,322 @@ subId 2612
 tableName wgEncodeUwHistoneAoafInputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4396
+view Alignments
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4397
+view Alignments
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4396
+tableName wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4397
+tableName wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4396
+tableName wgEncodeUwHistoneBe2cH3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4397
+tableName wgEncodeUwHistoneBe2cH3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4396
+view RawData
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4397
+view RawData
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4396
+tableName wgEncodeUwHistoneBe2cH3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneBe2cH3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001906
+expId 1906
+fileName wgEncodeUwHistoneBe2cH3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4397
+tableName wgEncodeUwHistoneBe2cH3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneBe2cInputStdAlnRep1
+objType file
+antibody Input
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001892
+expId 1892
+fileName wgEncodeUwHistoneBe2cInputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4352
+view Alignments
+
+metaObject wgEncodeUwHistoneBe2cInputStdRawDataRep1
+objType file
+antibody Input
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001892
+expId 1892
+fileName wgEncodeUwHistoneBe2cInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4352
+view RawData
+
+metaObject wgEncodeUwHistoneBe2cInputStdRawRep1
+objType table
+antibody Input
+cell BE2_C
+composite wgEncodeUwHistone
+control std
+controlId BE2_C/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001892
+expId 1892
+fileName wgEncodeUwHistoneBe2cInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4352
+tableName wgEncodeUwHistoneBe2cInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneBjH3k27me3StdAlnRep1
 objType file
 antibody H3K27me3
@@ -1913,7 +2545,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000424
 expId 424
-fileIndex wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -1939,7 +2570,6 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000424
 expId 424
-fileIndex wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -2165,7 +2795,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000443
 expId 443
-fileIndex wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -2191,7 +2820,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000443
 expId 443
-fileIndex wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -2417,7 +3045,6 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000416
 expId 416
-fileIndex wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -2443,7 +3070,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000416
 expId 416
-fileIndex wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -2669,7 +3295,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000453
 expId 453
-fileIndex wgEncodeUwHistoneBjInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -2743,7 +3368,6 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000425
 expId 425
-fileIndex wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -2769,7 +3393,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000425
 expId 425
-fileIndex wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -2995,7 +3618,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000426
 expId 426
-fileIndex wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -3021,7 +3643,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000426
 expId 426
-fileIndex wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -3247,7 +3868,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000407
 expId 407
-fileIndex wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -3273,7 +3893,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000407
 expId 407
-fileIndex wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -3499,7 +4118,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000454
 expId 454
-fileIndex wgEncodeUwHistoneCaco2InputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3574,7 +4192,6 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000427
 expId 427
-fileIndex wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -3600,7 +4217,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000427
 expId 427
-fileIndex wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -3826,7 +4442,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000444
 expId 444
-fileIndex wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -3852,7 +4467,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000444
 expId 444
-fileIndex wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -4078,7 +4692,6 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000417
 expId 417
-fileIndex wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -4104,7 +4717,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000417
 expId 417
-fileIndex wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -4330,7 +4942,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000455
 expId 455
-fileIndex wgEncodeUwHistoneGm06990InputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -4405,7 +5016,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000428
 expId 428
-fileIndex wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -4431,7 +5041,6 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000428
 expId 428
-fileIndex wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -4657,7 +5266,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000445
 expId 445
-fileIndex wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -4683,7 +5291,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000445
 expId 445
-fileIndex wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -4909,7 +5516,6 @@ dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 dccAccession wgEncodeEH000395
 expId 395
-fileIndex wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -4935,7 +5541,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000395
 expId 395
-fileIndex wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -5162,7 +5767,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000463
 expId 463
-fileIndex wgEncodeUwHistoneGm12878InputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -5236,7 +5840,6 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000923
 expId 923
-fileIndex wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -5261,7 +5864,6 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000923
 expId 923
-fileIndex wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -5482,7 +6084,6 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000924
 expId 924
-fileIndex wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -5507,7 +6108,6 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000924
 expId 924
-fileIndex wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -5728,7 +6328,6 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000925
 expId 925
-fileIndex wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -5753,7 +6352,6 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000925
 expId 925
-fileIndex wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -5974,7 +6572,6 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000926
 expId 926
-fileIndex wgEncodeUwHistoneH7esInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneH7esInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -6032,6 +6629,250 @@ replicate 1
 setType input
 subId 2033
 tableName wgEncodeUwHistoneH7esInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4369
+view Alignments
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4368
+view Alignments
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4369
+tableName wgEncodeUwHistoneHacH3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4368
+tableName wgEncodeUwHistoneHacH3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4369
+tableName wgEncodeUwHistoneHacH3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4368
+tableName wgEncodeUwHistoneHacH3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4369
+view RawData
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4368
+view RawData
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4369
+tableName wgEncodeUwHistoneHacH3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneHacH3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001907
+expId 1907
+fileName wgEncodeUwHistoneHacH3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4368
+tableName wgEncodeUwHistoneHacH3k04me3StdRawRep2
 view RawSignal
 
 metaObject wgEncodeUwHistoneHaspH3k4me3StdAlnRep1
@@ -8698,7 +9539,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000464
 expId 464
-fileIndex wgEncodeUwHistoneHek293InputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -8773,7 +9613,6 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000442
 expId 442
-fileIndex wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -8799,7 +9638,6 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000442
 expId 442
-fileIndex wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -9025,7 +9863,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000432
 expId 432
-fileIndex wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -9051,7 +9888,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000432
 expId 432
-fileIndex wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -9277,7 +10113,6 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000423
 expId 423
-fileIndex wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -9303,7 +10138,6 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000423
 expId 423
-fileIndex wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -9529,7 +10363,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000469
 expId 469
-fileIndex wgEncodeUwHistoneHelas3InputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -9604,7 +10437,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000433
 expId 433
-fileIndex wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -9630,7 +10462,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000433
 expId 433
-fileIndex wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -9856,7 +10687,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000446
 expId 446
-fileIndex wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -9881,7 +10711,6 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000446
 expId 446
-fileIndex wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -10107,7 +10936,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000413
 expId 413
-fileIndex wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -10133,7 +10961,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000413
 expId 413
-fileIndex wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -10359,7 +11186,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000470
 expId 470
-fileIndex wgEncodeUwHistoneHepg2InputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -10420,6 +11246,322 @@ subId 1435
 tableName wgEncodeUwHistoneHepg2InputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4370
+view Alignments
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4371
+view Alignments
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4370
+tableName wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4371
+tableName wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4370
+tableName wgEncodeUwHistoneHffmycH3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4371
+tableName wgEncodeUwHistoneHffmycH3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4370
+view RawData
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4371
+view RawData
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4370
+tableName wgEncodeUwHistoneHffmycH3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneHffmycH3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001908
+expId 1908
+fileName wgEncodeUwHistoneHffmycH3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4371
+tableName wgEncodeUwHistoneHffmycH3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneHffmycInputStdAlnRep1
+objType file
+antibody Input
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001896
+expId 1896
+fileName wgEncodeUwHistoneHffmycInputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4353
+view Alignments
+
+metaObject wgEncodeUwHistoneHffmycInputStdRawDataRep1
+objType file
+antibody Input
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001896
+expId 1896
+fileName wgEncodeUwHistoneHffmycInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4353
+view RawData
+
+metaObject wgEncodeUwHistoneHffmycInputStdRawRep1
+objType table
+antibody Input
+cell HFF-Myc
+composite wgEncodeUwHistone
+control std
+controlId HFF-Myc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001896
+expId 1896
+fileName wgEncodeUwHistoneHffmycInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4353
+tableName wgEncodeUwHistoneHffmycInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneHl60H3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -10434,7 +11576,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000418
 expId 418
-fileIndex wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -10460,7 +11601,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000418
 expId 418
-fileIndex wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -10686,7 +11826,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000465
 expId 465
-fileIndex wgEncodeUwHistoneHl60InputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -10761,7 +11900,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000408
 expId 408
-fileIndex wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -11132,7 +12270,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000466
 expId 466
-fileIndex wgEncodeUwHistoneHmecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -12155,7 +13292,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000429
 expId 429
-fileIndex wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -12181,7 +13317,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000429
 expId 429
-fileIndex wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -12407,7 +13542,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000430
 expId 430
-fileIndex wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -12433,7 +13567,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000430
 expId 430
-fileIndex wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -12659,7 +13792,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000409
 expId 409
-fileIndex wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -12685,7 +13817,6 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000409
 expId 409
-fileIndex wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -12911,7 +14042,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000467
 expId 467
-fileIndex wgEncodeUwHistoneHreInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -13302,7 +14432,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000411
 expId 411
-fileIndex wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -13328,7 +14457,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000411
 expId 411
-fileIndex wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -13555,7 +14683,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000431
 expId 431
-fileIndex wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -13581,7 +14708,6 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000431
 expId 431
-fileIndex wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -13807,7 +14933,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000412
 expId 412
-fileIndex wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -13833,7 +14958,6 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000412
 expId 412
-fileIndex wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -14059,7 +15183,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000468
 expId 468
-fileIndex wgEncodeUwHistoneHuvecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -14766,7 +15889,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000434
 expId 434
-fileIndex wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -14792,7 +15914,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000434
 expId 434
-fileIndex wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -15018,7 +16139,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000435
 expId 435
-fileIndex wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -15044,7 +16164,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000435
 expId 435
-fileIndex wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -15270,7 +16389,6 @@ dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 dccAccession wgEncodeEH000400
 expId 400
-fileIndex wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -15296,7 +16414,6 @@ dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
 dccAccession wgEncodeEH000400
 expId 400
-fileIndex wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -15524,7 +16641,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000471
 expId 471
-fileIndex wgEncodeUwHistoneK562InputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -15583,6 +16699,322 @@ replicate 1
 setType input
 subId 1308
 tableName wgEncodeUwHistoneK562InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4373
+view Alignments
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4372
+view Alignments
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4373
+tableName wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4372
+tableName wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4373
+tableName wgEncodeUwHistoneLncapH3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4372
+tableName wgEncodeUwHistoneLncapH3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4373
+view RawData
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4372
+view RawData
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4373
+tableName wgEncodeUwHistoneLncapH3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneLncapH3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001909
+expId 1909
+fileName wgEncodeUwHistoneLncapH3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4372
+tableName wgEncodeUwHistoneLncapH3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneLncapInputStdAlnRep1
+objType file
+antibody Input
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001897
+expId 1897
+fileName wgEncodeUwHistoneLncapInputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4354
+view Alignments
+
+metaObject wgEncodeUwHistoneLncapInputStdRawDataRep1
+objType file
+antibody Input
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001897
+expId 1897
+fileName wgEncodeUwHistoneLncapInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4354
+view RawData
+
+metaObject wgEncodeUwHistoneLncapInputStdRawRep1
+objType table
+antibody Input
+cell LNCaP
+composite wgEncodeUwHistone
+control std
+controlId LNCaP/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001897
+expId 1897
+fileName wgEncodeUwHistoneLncapInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4354
+tableName wgEncodeUwHistoneLncapInputStdRawRep1
 view RawSignal
 
 metaObject wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1
@@ -16303,7 +17735,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000436
 expId 436
-fileIndex wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -16329,7 +17760,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000436
 expId 436
-fileIndex wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -16555,7 +17985,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000414
 expId 414
-fileIndex wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -16581,7 +18010,6 @@ dateSubmitted 2010-06-15
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000414
 expId 414
-fileIndex wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -16808,7 +18236,6 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000415
 expId 415
-fileIndex wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -16834,7 +18261,6 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000415
 expId 415
-fileIndex wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -17060,7 +18486,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000472
 expId 472
-fileIndex wgEncodeUwHistoneNhekInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -17121,6 +18546,638 @@ subId 1317
 tableName wgEncodeUwHistoneNhekInputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4375
+view Alignments
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4374
+view Alignments
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4375
+tableName wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4374
+tableName wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4375
+tableName wgEncodeUwHistoneNhlfH3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4374
+tableName wgEncodeUwHistoneNhlfH3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4375
+view RawData
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4374
+view RawData
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4375
+tableName wgEncodeUwHistoneNhlfH3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneNhlfH3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001910
+expId 1910
+fileName wgEncodeUwHistoneNhlfH3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4374
+tableName wgEncodeUwHistoneNhlfH3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneNhlfInputStdAlnRep1
+objType file
+antibody Input
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001899
+expId 1899
+fileName wgEncodeUwHistoneNhlfInputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4355
+view Alignments
+
+metaObject wgEncodeUwHistoneNhlfInputStdRawDataRep1
+objType file
+antibody Input
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001899
+expId 1899
+fileName wgEncodeUwHistoneNhlfInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4355
+view RawData
+
+metaObject wgEncodeUwHistoneNhlfInputStdRawRep1
+objType table
+antibody Input
+cell NHLF
+composite wgEncodeUwHistone
+control std
+controlId NHLF/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001899
+expId 1899
+fileName wgEncodeUwHistoneNhlfInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4355
+tableName wgEncodeUwHistoneNhlfInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4377
+view Alignments
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4376
+view Alignments
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4377
+tableName wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4376
+tableName wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4377
+tableName wgEncodeUwHistonePanc1H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4376
+tableName wgEncodeUwHistonePanc1H3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4377
+view RawData
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4376
+view RawData
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4377
+tableName wgEncodeUwHistonePanc1H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistonePanc1H3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001911
+expId 1911
+fileName wgEncodeUwHistonePanc1H3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4376
+tableName wgEncodeUwHistonePanc1H3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistonePanc1InputStdAlnRep1
+objType file
+antibody Input
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001900
+expId 1900
+fileName wgEncodeUwHistonePanc1InputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4356
+view Alignments
+
+metaObject wgEncodeUwHistonePanc1InputStdRawDataRep1
+objType file
+antibody Input
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001900
+expId 1900
+fileName wgEncodeUwHistonePanc1InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4356
+view RawData
+
+metaObject wgEncodeUwHistonePanc1InputStdRawRep1
+objType table
+antibody Input
+cell PANC-1
+composite wgEncodeUwHistone
+control std
+controlId PANC-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001900
+expId 1900
+fileName wgEncodeUwHistonePanc1InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4356
+tableName wgEncodeUwHistonePanc1InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneSaecH3k27me3StdAlnRep1
 objType file
 antibody H3K27me3
@@ -17135,7 +19192,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000420
 expId 420
-fileIndex wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -17161,7 +19217,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000420
 expId 420
-fileIndex wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -17387,7 +19442,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000438
 expId 438
-fileIndex wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -17413,7 +19467,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000438
 expId 438
-fileIndex wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -17639,7 +19692,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000421
 expId 421
-fileIndex wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -17665,7 +19717,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000421
 expId 421
-fileIndex wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -17891,7 +19942,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000473
 expId 473
-fileIndex wgEncodeUwHistoneSaecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -17952,6 +20002,322 @@ subId 1318
 tableName wgEncodeUwHistoneSaecInputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4378
+view Alignments
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4379
+view Alignments
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4378
+tableName wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4379
+tableName wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4378
+tableName wgEncodeUwHistoneSknmcH3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4379
+tableName wgEncodeUwHistoneSknmcH3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4378
+view RawData
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4379
+view RawData
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4378
+tableName wgEncodeUwHistoneSknmcH3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneSknmcH3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001912
+expId 1912
+fileName wgEncodeUwHistoneSknmcH3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4379
+tableName wgEncodeUwHistoneSknmcH3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneSknmcInputStdAlnRep1
+objType file
+antibody Input
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001901
+expId 1901
+fileName wgEncodeUwHistoneSknmcInputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4357
+view Alignments
+
+metaObject wgEncodeUwHistoneSknmcInputStdRawDataRep1
+objType file
+antibody Input
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001901
+expId 1901
+fileName wgEncodeUwHistoneSknmcInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4357
+view RawData
+
+metaObject wgEncodeUwHistoneSknmcInputStdRawRep1
+objType table
+antibody Input
+cell SK-N-MC
+composite wgEncodeUwHistone
+control std
+controlId SK-N-MC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001901
+expId 1901
+fileName wgEncodeUwHistoneSknmcInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4357
+tableName wgEncodeUwHistoneSknmcInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1
 objType file
 antibody H3K27me3
@@ -17966,7 +20332,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000440
 expId 440
-fileIndex wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -17992,7 +20357,6 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000440
 expId 440
-fileIndex wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -18218,7 +20582,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000441
 expId 441
-fileIndex wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -18244,7 +20607,6 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000441
 expId 441
-fileIndex wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -18470,7 +20832,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000422
 expId 422
-fileIndex wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam
 grant Stam
 lab UW
@@ -18496,7 +20857,6 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000422
 expId 422
-fileIndex wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam
 grant Stam
 lab UW
@@ -18722,7 +21082,6 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000474
 expId 474
-fileIndex wgEncodeUwHistoneSknshraInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -18783,4 +21142,564 @@ subId 1319
 tableName wgEncodeUwHistoneSknshraInputStdRawRep1
 view RawSignal
 
-# MAGIC: -779173116
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4381
+view Alignments
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4380
+view Alignments
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4381
+tableName wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4380
+tableName wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4381
+tableName wgEncodeUwHistoneWerirb1H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4380
+tableName wgEncodeUwHistoneWerirb1H3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4381
+view RawData
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4380
+view RawData
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4381
+tableName wgEncodeUwHistoneWerirb1H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001913
+expId 1913
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4380
+tableName wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4383
+view Alignments
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4382
+view Alignments
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4383
+tableName wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4382
+tableName wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4383
+tableName wgEncodeUwHistoneWi38H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4382
+tableName wgEncodeUwHistoneWi38H3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4383
+view RawData
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4382
+view RawData
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4383
+tableName wgEncodeUwHistoneWi38H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneWi38H3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001914
+expId 1914
+fileName wgEncodeUwHistoneWi38H3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4382
+tableName wgEncodeUwHistoneWi38H3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneWi38InputStdAlnRep1
+objType file
+antibody Input
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001903
+expId 1903
+fileName wgEncodeUwHistoneWi38InputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4358
+view Alignments
+
+metaObject wgEncodeUwHistoneWi38InputStdRawDataRep1
+objType file
+antibody Input
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001903
+expId 1903
+fileName wgEncodeUwHistoneWi38InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4358
+view RawData
+
+metaObject wgEncodeUwHistoneWi38InputStdRawRep1
+objType table
+antibody Input
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-25
+dateUnrestricted 2012-03-24
+dccAccession wgEncodeEH001903
+expId 1903
+fileName wgEncodeUwHistoneWi38InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4358
+tableName wgEncodeUwHistoneWi38InputStdRawRep1
+view RawSignal
+
+# MAGIC: 485928076

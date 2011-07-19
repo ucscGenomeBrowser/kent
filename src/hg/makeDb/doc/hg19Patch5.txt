@@ -1,0 +1,632 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how we made the browser database on
+# the Patch 5 release for the NCBI build 37 (February 2009 freeze) aka:
+#	GRCh37.p5 - Genome Reference Consortium Human Reference 37
+
+############################################################################
+# gather sequence and AGP definitions (DONE - 2011-07-07 - Hiram)
+    mkdir -p /hive/data/genomes/hg19Patch5/sequence
+    cd /hive/data/genomes/hg19Patch5/sequence
+    # a round about way here since patch5 sequence was already assembled.
+    # there are perl and shell scripts in
+    # ../../hg19/bed/additionalSequence/patch5
+    #	which created the fasta file with UCSC names
+    # see also in hg19.txt:
+    # NCBI patch 5 (WORKING - 2011-07-01 - Hiram)
+
+    ln -s ../../hg19/bed/additionalSequence/patch5/hg19.patch5.fa .
+
+    cat << '_EOF_' > patch5Agp.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    printf STDERR "usage: ./patch5Agp.pl ../../hg19/bed/additionalSequence/patch5/patches.chrom.sizes \\\n";
+    printf STDERR " ../../hg19/bed/additionalSequence/patches/ucscNames.patch5.txt \\\n";
+    printf STDERR " ../../hg19/bed/additionalSequence/patches/patch_release_2/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc < 3) {
+    usage;
+    exit 255;
+}
+
+my $sizes = shift;	# patches.chrom.sizes
+my $names = shift;	# patches/ucscNames.txt
+my $agpFile = shift;	# alt.scaf.agp.gz
+
+my %glToChr;
+my %chrToCtg;
+my %fastaToChr;
+my %chrToSize;
+
+open(FH, "<$sizes") or die "can not read $sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chrToSize{$chr} = $size;
+}
+close (FH);
+
+open(FH, "<$names");
+while (my $line = <FH>) {
+    chomp $line;
+    my ($faName, $ctg, $cmName, $chr) = split('\s+', $line);
+    $faName =~ s/.*gb.GL/GL/;
+    my $size = $chrToSize{$chr};
+    if (exists($glToChr{$faName})) {
+	if ($glToChr{$faName} ne $chr) {
+	    printf STDERR "ERROR: contig name: $faName was chr name: $glToChr{$faName}\n";
+	    printf STDERR " now claiming to be chr name: $chr\n";
+	    exit 255;
+	}
+    } else {
+	$glToChr{$faName} = $chr;
+    }
+    die "not defined faName" if (!defined($faName));
+    die "not defined $faName $chr size" if (!defined($size));
+}
+close (FH);
+
+my $prevObj = "";
+my $newIx = 1;
+open (FH,"zcat $agpFile|") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^\s*#/);
+    chomp $line;
+    my ($object, $objStart, $objEnd, $ix, $type, $frag, $fragStart, $fragEnd, $strand) = split('\s+', $line);
+    die "ERROR: can not find contig $object to chr name"
+	if (!exists($glToChr{$object}));
+    $newIx = 1 if ($prevObj ne $object);
+    my $chr = $glToChr{$object};
+    if ($type eq "N") {
+	# frag is size, fragStart is type of gap, and fragEnd is bridged y/n
+	printf "%s\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+	    $chr, $objStart, $objEnd, $newIx, $type, $frag, $fragStart,
+	    $fragEnd;
+    } else {
+	printf "%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+	    $chr, $objStart, $objEnd, $newIx, $type, $frag, $fragStart,
+	    $fragEnd, $strand;
+    }
+    ++$newIx;
+    $prevObj = $object;
+#    printf "%s\n", $line;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x patch5Agp.pl
+
+    zcat \
+../../hg19/bed/additionalSequence/patches/patch_release_1/AGP/alt.scaf.agp.gz \
+    | grep "^GL" | sed -e "s/GL339449.1/chr5_ctg1_gl339449/; s/GL339450.1/chr9_gl339450/" > hg19Patch5.agp
+
+    ./patch5Agp.pl \
+	../../hg19/bed/additionalSequence/patch5/patches.chrom.sizes \
+	../../hg19/bed/additionalSequence/patch5/ucscNames.patch5.txt \
+        ../../hg19/bed/additionalSequence/patch5/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz \
+    > hg19Patch5.agp
+
+for H in chr17_ctg5_hap1 chr4_ctg9_hap1 chr6_apd_hap1 chr6_cox_hap2 \
+        chr6_dbb_hap3 chr6_mann_hap4 chr6_mcf_hap5 chr6_qbl_hap6 \
+        chr6_ssto_hap7
+do
+    grep "^${H}" /hive/data/genomes/hg19/hg19.agp
+    twoBitToFa ../../hg19/hg19.2bit:${H} ${H}.fa
+done >> hg19Patch5.agp
+
+    echo -e "chrM_rCRS\t1\t16569\t1\tF\tNC_012920\t1\t16569\t+" \
+	>> hg19Patch5.agp
+
+    sed -e "s/^>.*/>chrM_rCRS/" \
+	../../hg19/bed/additionalSequence/chrM/NC_012920.1.fa > chrM_rCRS.fa
+
+    # verify we have correct sequence and AGP file:
+    faToTwoBit *.fa patch5.2bit
+    checkAgpAndFa  hg19Patch5.agp patch5.2bit
+    # All AGP and FASTA entries agree - both files are valid
+
+###########################################################################
+# Build the browser (DONE - 2011-07-07 - Hiram)
+    cd /hive/data/genomes/hg19Patch5
+    cat << '_EOF_' > hg19Patch5.config.ra
+# Config parameters for makeGenomeDb.pl:
+db hg19Patch5
+scientificName Homo sapiens
+commonName GRCh37.p5
+assemblyDate Jun. 2011
+assemblyLabel GRCh37 Patch 5 Genome Reference Consortium Human Reference 37 (GCA_000001405.6)
+orderKey 14
+mitoAcc none
+fastaFiles /hive/data/genomes/hg19Patch5/sequence/*.fa
+agpFiles /hive/data/genomes/hg19Patch5/sequence/hg19Patch5.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+taxId   9606
+clade haplotypes
+genomeCladePriority 138
+assemblyShortLabel GRCh37.p5
+'_EOF_'
+    # << happy emacs
+
+    # you need to have the clade and genomeCladePriority since this unique
+    # db name hg19Patch5 is always a 'new' genome
+
+    # stop after agp to verify agp and fasta agree properly
+    makeGenomeDb.pl -dbHost=hgwdev -fileServer=hgwdev -workhorse=hgwdev \
+	-stop=agp hg19Patch5.config.ra > makeGenomeDb.log 2>&1
+    makeGenomeDb.pl -dbHost=hgwdev -fileServer=hgwdev -workhorse=hgwdev \
+	-continue=db hg19Patch5.config.ra > makeGenomeDb.db.log 2>&1
+    makeGenomeDb.pl -dbHost=hgwdev -fileServer=hgwdev -workhorse=hgwdev \
+	-continue=dbDb hg19Patch5.config.ra > makeGenomeDb.dbDb.log 2>&1
+
+    featureBits -countGaps hg19Patch5 gap
+    #	8443321 bases of 66156573 (12.763%) in intersection
+
+###########################################################################
+# RepeatMasker (WORKING - 2011-07-07 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch5/bed/repeatMasker
+    cd /hive/data/genomes/hg19Patch5/bed/repeatMasker
+    time doRepeatMasker.pl hg19Patch5 -buildDir=`pwd` -noSplit \
+	-bigClusterHub=encodek \
+        -dbHost=hgwdev -workhorse=hgwdev > do.log 2>&1 &
+    #	real    468m40.073s
+XXX - running - Thu Jul  7 17:06:44 PDT 2011
+    cat faSize.rmsk.txt
+# 66156573 bases (8443322 N's 57713251 real 27755471 upper 29957780 lower)
+#	in 115 sequences in 1 files
+# %45.28 masked total, %51.91 masked real
+
+###########################################################################
+# TRF simple repeats (WORKING - 2011-07-07 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch5/bed/simpleRepeat
+    cd /hive/data/genomes/hg19Patch5/bed/simpleRepeat
+    time doSimpleRepeat.pl hg19Patch5 -buildDir=`pwd` -dbHost=hgwdev \
+        -smallClusterHub=encodek -workhorse=hgwdev > do.log 2>&1 &
+    #	real    6m50.932s
+    cat fb.simpleRepeat 
+# 2026309 bases of 57713252 (3.511%) in intersection
+XXX ready for masking
+
+    cd /hive/data/genomes/hg19Patch5
+    twoBitMask hg19Patch5.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed hg19Patch5.2bit
+    # safe to ignore warning: has >=13 fields
+    twoBitToFa hg19Patch5.2bit stdout | faSize stdin \
+	> faSize.hg19Patch5.2bit.txt
+# 66156573 bases (8443322 N's 57713251 real 27726967 upper 29986284 lower)
+#	in 115 sequences in 1 files
+# %45.33 masked total, %51.96 masked real
+
+    time blat hg19Patch5.2bit \
+        /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/hg19Patch5.11.ooc \
+	-repMatch=1024
+# Wrote 121 overused 11-mers to jkStuff/hg19Patch5.11.ooc
+    mkdir /hive/data/staging/data/hg19Patch5
+    cp -p hg19Patch5.2bit jkStuff/hg19Patch5.11.ooc chrom.sizes \
+	/hive/data/staging/data/hg19Patch5
+
+    rm /gbdb/hg19Patch5/hg19Patch5.2bit
+    ln -s `pwd`/hg19Patch5.2bit /gbdb/hg19Patch5/
+
+    # the makeGenomeDb.pl script changed the case of the genome name:
+    hgsql -e 'update dbDb set genome="GRCh37.p5" where name="hg19Patch5";' \
+	hgcentraltest
+
+###########################################################################
+# ctgPos track (DONE - 2011-07-07 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch5/bed/ctgPos
+    cd /hive/data/genomes/hg19Patch5/bed/ctgPos
+    for C in `cut -f1 ../../chrom.sizes | grep -v chrM_rCRS`
+do
+    ctgPos=`hgsql -N -e 'select * from ctgPos where chrom="'$C'";' hg19`
+    if [ "x${ctgPos}y" = "xy" ]; then
+        GL=`echo $C | sed -e "s/.*_gl//"`
+        glAcc=`grep ${GL} ../../../hg19/bed/additionalSequence/patch5/PATCHES/scaffold_localID2acc | cut -f2`
+        glSize=`grep ${GL} ../../chrom.sizes | cut -f2`
+        echo -e "$glAcc\t$glSize\t${C}\t0\t$glSize"
+    else
+        echo "$ctgPos"
+    fi
+done > ctgPos.txt
+
+    echo -e "NC_012920.1\t16569\tchrM_rCRS\t0\t16569" >> ctgPos.txt
+
+    # check length of ctg names:
+    cut -f 1 ctgPos.txt | awk '{print length($0)}' | sort -n | tail -1
+    #	11
+    # and length of chrom names:
+    cut -f 3 ctgPos.txt | awk '{print length($0)}' | sort -n | tail -1
+    #	25
+    # set those lengths in the indexes for the SQL create:
+    sed -e "s/14/11/; s/16/25/" $HOME/kent/src/hg/lib/ctgPos.sql > ctgPos.sql
+
+    hgLoadSqlTab hg19Patch5 ctgPos ctgPos.sql ctgPos.txt
+    # should be %100 with gaps:
+    featureBits -countGaps hg19Patch5 ctgPos
+    #	66156573 bases of 66156573 (100.000%) in intersection
+
+###########################################################################
+# ctgPos2 track (WORKING - 2011-07-07 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch5/bed/ctgPos2
+    cd /hive/data/genomes/hg19Patch5/bed/ctgPos2
+
+for C in `cut -f1 ../../chrom.sizes | grep -v chrM_rCRS`
+do
+    ctgPos2=`hgsql -N -e 'select * from ctgPos2 where chrom="'$C'";' hg19`
+    if [ "x${ctgPos}y" = "xy" ]; then
+        GL=`echo $C | sed -e "s/.*_gl//"`
+        glSize=`grep ${GL} /hive/data/genomes/hg19Patch5/chrom.sizes | cut -f2`
+        ncbiChrName=`grep ${GL} ../../../hg19/bed/additionalSequence/patch5/PATCHES/scaffold_localID2acc | cut -f1`
+        if [ "x${ncbiChrName}y" = "xy" ]; then
+            GL=`echo $C | sed -e "s/_hap.*//" | sed -e "s/chr.*_/_/" | tr '[a-z]' '[A-Z]'`
+            ncbiChrName=`grep -h ${GL} /hive/data/genomes/hg19/download/alternate_loci/ALT_REF_LOCI_?/localID2acc | cut -f1`
+        fi
+        echo -e "$ncbiChrName\t$glSize\t${C}\t0\t$glSize\tF"
+    else
+        echo -e "$ctgPos2\tF"
+    fi
+done > ctgPos2.tab
+
+    echo -e "NC_012920.1\t16569\tchrM_rCRS\t0\t16569\tF" >> ctgPos2.tab
+
+    # check length of ctg names:
+    cut -f 1 ctgPos2.tab | awk '{print length($0)}' | sort -n | tail -1
+    # 23
+    # and length of chrom names:
+    cut -f 3 ctgPos2.tab | awk '{print length($0)}' | sort -n | tail -1
+    # 25
+
+    sed -e "s/20/23/; s/16/25/" $HOME/kent/src/hg/lib/ctgPos2.sql \
+	> ctgPos2.sql
+    hgLoadSqlTab hg19Patch5 ctgPos2 ctgPos2.sql ctgPos2.tab
+
+    # should be %100 with gaps
+    featureBits -countGaps hg19Patch5 ctgPos2
+    #	66156573 bases of 66156573 (100.000%) in intersection
+
+###########################################################################
+# altSequence track (WORKING - 2011-07-12 - Hiram)
+    # provide links to locations on reference genome where these patches and
+    # haplotypes belong
+    mkdir /hive/data/genomes/hg19Patch5/bed/altSequence
+    cd /hive/data/genomes/hg19Patch5/bed/altSequence
+    ln -s ../../../hg19/bed/additionalSequence/patch5/altSequence.bed \
+	altSeq.bed.0
+
+    cat altSeq.bed.0 | while read L
+do
+    C=`echo "${L}" | awk '{print $4}'`
+    hg19C=`echo "${L}" | awk '{print $1}'`
+    hg19S=`echo "${L}" | awk '{print $2}'`
+    hg19E=`echo "${L}" | awk '{print $3}'`
+    S=`grep "^${C}" ../../chrom.sizes | cut -f2`
+    echo $C $S $hg19C $hg19S $hg19E | awk '{printf "%s\t0\t%d\t%s:%d-%d\t", $1, $2, $3, $4, $5}'
+    echo "${L}" | awk '{printf "%d\t%s\t%d\t%d\t%s\n", $5,$6,$7,$8,$9}'
+done | grep -v "chrM_rCRS:" > altSequence.tab
+
+    hgLoadBed hg19Patch5 altSequence altSequence.tab
+    # Loaded 115 elements of size 9
+    featureBits -countGaps hg19Patch5 altSequence
+    #	66156573 bases of 66156573 (100.000%) in intersection
+
+############################################################################
+# create lift file on unBridged gaps for genbank splits (2011-07-12 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch5/bed/gap
+    cd /hive/data/genomes/hg19Patch5/bed/gap
+    # verify all gaps are properly in the gap table:
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../hg19Patch5.2bit > findMotif.txt 2>&1
+    #	real    0m7.967s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits hg19Patch5 -not gap -bed=notGap.bed
+    featureBits hg19Patch5 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # this indicates only one base is not marked:
+# chrM_rCRS       3106    3107
+    # we can leave that as-is
+
+    # construct an unBridged gap file for genbank (there are no unbridged gaps)
+    gapToLift hg19Patch5 hg19Patch5.unBridged.lift -bedFile=unBridged.lift.bed
+    cp -p hg19Patch5.unBridged.lift ../../jkStuff
+    cp -p hg19Patch5.unBridged.lift /hive/data/staging/data/hg19Patch5
+
+###########################################################################
+# AUTO UPDATE GENBANK RUN  (WORKING - 2011-07-12,13 - Hiram)
+    # align with latest genbank process.
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add hg19Patch5 just before hg19Patch2
+
+# hg19Patch5 - GRCh37.p5 - Genome Reference Consortium Human Reference 37
+hg19Patch5.serverGenome = /hive/data/genomes/hg19Patch5/hg19Patch5.2bit
+hg19Patch5.clusterGenome = /scratch/data/hg19Patch5/hg19Patch5.2bit
+hg19Patch5.ooc = /scratch/data/hg19Patch5/hg19Patch5.11.ooc
+hg19Patch5.lift = /hive/data/genomes/hg19Patch5/jkStuff/hg19Patch5.unBridged.lift
+hg19Patch5.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+hg19Patch5.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+hg19Patch5.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+hg19Patch5.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+hg19Patch5.genbank.est.native.pslCDnaFilter = ${finished.genbank.est.native.pslCDnaFilter}
+hg19Patch5.genbank.est.xeno.pslCDnaFilter   = ${finished.genbank.est.xeno.pslCDnaFilter}
+hg19Patch5.genbank.est.xeno.load = no
+hg19Patch5.genbank.est.xeno.loadDesc = no
+hg19Patch5.genbank.mrna.xeno.load = no
+hg19Patch5.genbank.mrna.xeno.loadDesc = no
+hg19Patch5.refseq.mrna.xeno.load  = no
+hg19Patch5.refseq.mrna.xeno.loadDesc = no
+hg19Patch5.mgc = yes
+hg19Patch5.orfeome = yes
+hg19Patch5.downloadDir = hg19Patch5
+hg19Patch5.genbank.mrna.blatTargetDb = yes
+hg19Patch5.perChromTables = no
+
+    git commit -m "adding hg19Patch5" etc/genbank.conf
+    git push
+
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh hgwdev		#	genbank procedure only functions on hgwdev
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial hg19Patch5 &
+    #	logFile: var/build/logs/2011.07.12-13:04:17.hg19Patch5.initalign.log
+    #	real      667m37.192s
+
+    # load database when finished
+    ssh hgwdev
+    screen	# use screen to manage this long running command
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad hg19Patch5 &
+    #	logFile: var/dbload/hgwdev/logs/2011.07.13-09:59:27.dbload.log
+    #	real    51m17.530s
+
+    # the following has not been done, XXX - 2011-07-13 - Hiram
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add hg19Patch5 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added hg19Patch5 - Human - GRCh37.p5" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# new blat server for the hg19.patch5 sequence (WORKING - 2011-07-13 - Hiram)
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg19Patch5", "blatx", "17838", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg19Patch5", "blatx", "17839", "0", "1");' \
+	    hgcentraltest
+
+############################################################################
+# lastz alignment to hg19 (WORKING - 2011-07-12 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12
+    cd /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12
+    #	construct a 2bit file of just the hg19 reference sequences
+    # and all the business to run lastz on each haplotype with its
+    # corresponding target sequence in hg19
+
+rm -fr hg19Bits run.blastz hg19Bits.lift
+mkdir hg19Bits
+mkdir -p run.blastz/tParts
+mkdir -p run.blastz/qParts
+awk '{print $1}' ../altSequence/altSequence.tab | sort -u | while read H
+do
+    P=`grep "^${H}" ../altSequence/altSequence.tab | head -1 | awk '{print $4}'`
+    HE=`grep "^${H}" ../altSequence/altSequence.tab | head -1 | awk '{print $3}'`
+    C=`echo ${P} | sed -e "s/:.*//"`
+    CE=`grep "^${C}" /hive/data/genomes/hg19/chrom.sizes | cut -f2 | head -1`
+    SE=`echo ${P} | sed -e "s/.*://"`
+    S=`echo ${SE} | sed -e "s/-.*//" | awk '{printf "%d", $1-1}'`
+    if [ "${S}" -lt 0 ]; then
+       S=0
+    fi
+    E=`echo ${SE} | sed -e "s/.*-//"`
+    size=`echo $E $S | awk '{printf "%d", $1-$2}'`
+    echo -e "$S\t$C.$S-$E\t$size\t$C\t$CE"
+    echo hg19.2bit:${C}:$S-$E 1>&2
+    if [ ! -s hg19Bits/$C.$S-$E.fa ]; then
+	echo ">$C.$S-$E" > hg19Bits/$C.$S-$E.fa
+	twoBitToFa /gbdb/hg19/hg19.2bit:${C}:$S-$E stdout \
+	    | grep -v "^>" >> hg19Bits/$C.$S-$E.fa
+    fi
+    echo -e "/hive/data/genomes/hg19Patch5/hg19Patch5.2bit:$H:0-$HE" \
+        > run.blastz/tParts/$H.lst
+    echo -e "/hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/hg19Bits.2bit:$C.$S-$E:0-$size" \
+        > run.blastz/qParts/$H.lst
+    echo -e "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/$H.lst qParts/$H.lst ../DEF {check out exists ../psl/$H.psl}" \
+	>> run.blastz/jobList
+done | sort -u > hg19Bits.lift
+
+    faToTwoBit hg19Bits/chr*.fa hg19Bits.2bit
+    twoBitInfo hg19Bits.2bit stdout | sort -k2nr > hg19Bits.chrom.sizes
+
+    cat << '_EOF_' > DEF
+# human vs human
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+# lastz does not like the O= and E= lines in the matrix file
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from hg18 vs venter1 lastz on advice from Webb
+BLASTZ_K=10000
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19Patch5
+SEQ1_DIR=/scratch/data/hg19Patch5/hg19Patch5.2bit
+SEQ1_LEN=/scratch/data/hg19Patch5/chrom.sizes
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+SEQ1_LIMIT=2
+
+# QUERY: Human Hg19
+SEQ2_DIR=/scratch/data/hg19/hg19.2bit
+SEQ2_LEN=/scratch/data/hg19/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/hg19Bits.2bit
+SEQ2_CTGLEN=/hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/hg19Bits.chrom.sizes
+SEQ2_LIFT=/hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/hg19Bits.lift
+SEQ2_CHUNK=5000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+SEQ2_LIMIT=2
+
+BASE=/hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    ssh swarm
+    cd /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/run.blastz
+    mkdir ../psl
+    para create jobList
+    para try ... check ... push
+    para time
+# Completed: 115 of 115 jobs
+# CPU time in finished jobs:        224s       3.74m     0.06h    0.00d  0.000 y
+# IO & Wait Time:                   359s       5.98m     0.10h    0.00d  0.000 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:            93s       1.55m     0.03h    0.00d
+
+
+    #	put together the individual results:
+    cd /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12
+    mkdir pslParts
+    cat psl/chr*.psl | gzip -c > pslParts/hg19Patch5.hg19.psl.gz
+
+    #	constructing a chain from those results
+    mkdir -p /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/axtChain/run
+    cd /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/axtChain/run
+zcat ../../pslParts/hg19Patch5.hg19.psl.gz \
+| axtChain -psl -verbose=0 -scoreScheme=/scratch/data/blastz/human_chimp.v2.q -minScore=2000 -linearGap=medium stdin \
+    /scratch/data/hg19Patch5/hg19Patch5.2bit \
+    /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/hg19Bits.2bit \
+    stdout \
+| chainAntiRepeat /scratch/data/hg19Patch5/hg19Patch5.2bit \
+    /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/hg19Bits.2bit \
+    stdin hg19Patch5.hg19.preLift.chain
+liftUp -chainQ hg19Patch5.hg19.lifted.chain \
+    ../../hg19Bits.lift carry hg19Patch5.hg19.preLift.chain
+
+    # constructing the net files:
+cd /hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/axtChain
+
+chainMergeSort run/hg19Patch5.hg19.lifted.chain | nice gzip -c > hg19Patch5.hg19.all.chain.gz
+chainSplit chain hg19Patch5.hg19.all.chain.gz
+# Make nets ("noClass", i.e. without rmsk/class stats which are added later):
+chainPreNet  hg19Patch5.hg19.all.chain.gz /scratch/data/hg19Patch5/chrom.sizes /scratch/data/hg19/chrom.sizes stdout \
+| chainNet  stdin -minSpace=1 /scratch/data/hg19Patch5/chrom.sizes /scratch/data/hg19/chrom.sizes stdout /dev/null \
+| netSyntenic stdin noClass.net
+
+# Make liftOver chains:
+netChainSubset -verbose=0 noClass.net hg19Patch5.hg19.all.chain.gz stdout \
+| chainStitchId stdin stdout | gzip -c > hg19Patch5.hg19.over.chain.gz
+
+# Make axtNet for download: one .axt per hg19Patch5 seq.
+netSplit noClass.net net
+cd ..
+mkdir -p axtNet
+foreach f (axtChain/net/*.net)
+netToAxt $f axtChain/chain/$f:t:r.chain \
+  /scratch/data/hg19Patch5/hg19Patch5.2bit /scratch/data/hg19/hg19.2bit stdout \
+  | axtSort stdin stdout \
+  | gzip -c > axtNet/$f:t:r.hg19Patch5.hg19.net.axt.gz
+end
+
+# Make mafNet for multiz: one .maf per hg19Patch5 seq.
+mkdir -p mafNet
+foreach f (axtNet/*.hg19Patch5.hg19.net.axt.gz)
+  axtToMaf -tPrefix=hg19Patch5. -qPrefix=hg19. $f \
+        /scratch/data/hg19Patch5/chrom.sizes /scratch/data/hg19/chrom.sizes \
+        stdout \
+  | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
+end
+
+    # swap that business to hg19
+    mkdir /hive/data/genomes/hg19/bed/blastz.hg19Patch5.swap
+    cd /hive/data/genomes/hg19/bed/blastz.hg19Patch5.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19Patch5/bed/lastzHg19.2011-07-12/DEF \
+	-swap -noDbNameCheck  -stop=load \
+	-noLoadChainSplit -chainMinScore=2000 \
+	-chainLinearGap=medium -workhorse=hgwdev \
+	-smallClusterHub=encodek -bigClusterHub=swarm > swap.load.log 2>&1
+    #	real    1m46.542s
+    cat fb.hg19.chainHg19Patch5Link.txt 
+    #	29949262 bases of 2897316137 (1.034%) in intersection
+
+    # and then fixup the chains to include the haplotypes
+    cd /hive/data/genomes/hg19/bed/blastz.hg19Patch5.swap/axtChain
+    # split up each chain by the hg19Patch5 query sequences
+    mkdir -p queryChains
+    chainSplit -q queryChains hg19.hg19Patch5.all.chain.gz
+
+    # then run a 'lift over' chain/net on each single one
+    mkdir -p singleLiftOver
+
+for F in queryChains/*.chain
+do
+    C=`basename ${F}`
+    B=`echo ${C} | sed -e "s/.chain//"`
+    chainPreNet -inclHap ${F} /scratch/data/hg19/chrom.sizes \
+        /scratch/data/hg19Patch5/chrom.sizes stdout \
+    | chainNet -inclHap stdin -minSpace=1 /scratch/data/hg19/chrom.sizes \
+        /scratch/data/hg19Patch5/chrom.sizes singleLiftOver/${B}.raw.net \
+        /dev/null
+    netSyntenic singleLiftOver/${B}.raw.net singleLiftOver/${B}.noClass.net
+    netFilter -chimpSyn singleLiftOver/${B}.noClass.net > singleLiftOver/${B}.chimpSyn.net
+    netChainSubset -verbose=0 singleLiftOver/${B}.noClass.net \
+        ${F} stdout \
+    | chainStitchId stdin stdout > singleLiftOver/${C}
+    echo "${F} -> singleLiftOver/${C}"
+done
+    # put the chains together into one file
+    chainMergeSort singleLiftOver/chr*.chain | gzip -c \
+	> hg19.hg19Patch5.single.over.chain.gz
+
+    # construct psl files from those chains
+    chainToPsl hg19.hg19Patch5.single.over.chain.gz \
+	/hive/data/genomes/hg19/chrom.sizes \
+        /hive/data/genomes/hg19Patch5/chrom.sizes \
+        /hive/data/genomes/hg19/hg19.2bit \
+        /hive/data/genomes/hg19Patch5/hg19Patch5.2bit \
+        hg19.hg19Patch5.over.psl
+    # chainToPsl appears to have a problem, note errors from pslCheck:
+    pslCheck -db=hg19 hg19.hg19Patch5.over.psl
+# Error: invalid PSL: chr6_ssto_hap7:3797750-3798078 chr6:32538701-32539032 + hg19.hg19Patch5.over.psl:362
+# alignment size (328) doesn't match counts (0)
+    pslRecalcMatch hg19.hg19Patch5.over.psl \
+	/hive/data/genomes/hg19/hg19.2bit \
+	/hive/data/genomes/hg19Patch5/hg19Patch5.2bit \
+	fixup.hg19.hg19Patch5.over.psl
+    pslCheck -db=hg19 fixup.hg19.hg19Patch5.over.psl
+    checked: 764 failed: 0 errors: 0
+
+    # load this PSL track
+    hgLoadPsl hg19 -table=altSeqLiftOverPslP5 fixup.hg19.hg19Patch5.over.psl
+    # to replace this table in the current track:
+    hgLoadPsl hg19 -table=altSeqLiftOverPsl fixup.hg19.hg19Patch5.over.psl
+
+############################################################################
+# Add this sequence to hg19 (DONE - 2011-07-13 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch5/bed/altSequence/seqExt
+    cd /hive/data/genomes/hg19Patch5/bed/altSequence/seqExt
+    twoBitToFa ../../../hg19Patch5.2bit hg19Patch5.fa
+    mkdir -p /gbdb/hg19/hg19Patch5 hg19Patch5
+    faSplit byname hg19Patch5.fa ./hg19Patch5/
+    ln -s `pwd`/hg19Patch5/*.fa /gbdb/hg19/hg19Patch5
+    hgLoadSeq -drop -seqTbl=seqHg19Patch5 -extFileTbl=extHg19Patch5 hg19 /gbdb/hg19/hg19Patch5/*.fa
+
+############################################################################

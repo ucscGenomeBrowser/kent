@@ -14,7 +14,7 @@ control reads were identified.
 The sequence reads with quality scores (fastq files) and alignment 
 coordinates (BAM files) from these experiments are available for download.
 </P>
-<h2>Track Conventions</h2>
+<h2>Display Conventions and Configuration</h2>
 <p>
 This track is a multi-view composite track that contains multiple data types
 (<EM>views</EM>).  For each view, there are multiple subtracks that
@@ -38,9 +38,9 @@ and the read density computed as reads per million</DD>
 <a name="Methods"></a><h2> Methods </h2>
 Cells were grown according to the approved
 <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
-Cross-linked chromatin was immunoprecipitated with antibody, the protien:
-DNA corsslinks were reversed and the DNA fragments were recovered and sequenced.
-  Please see protocol notes below and go <A HREF="http://hudsonalpha.org/myers-lab/
+Cross-linked chromatin was immunoprecipitated with an antibody. The Protein:DNA
+crosslinks were then reversed and the DNA fragments were recovered and sequenced.
+Please see protocol notes below and go <A HREF="http://hudsonalpha.org/myers-lab/
 protocols" TARGET=_BLANK>here</A> for the most current version of the protocol.
 Biological replicates from each experiment were completed.
 </p></p>
@@ -64,30 +64,7 @@ MACS also uses a dynamic Poisson distribution to capture local biases in the gen
 allowing for  more robust predictions (Zhang Y,<em> et al.</em>, 2008).
 </p>
 
-<h2> Validation</h2>
-<p>
-First, we used the <A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html"
-TARGET=_BLANK>MACS</A> peak caller to call significant peaks on the
-individual replicates of a ChIP-Seq experiment.   We then used the
-irreproducible discovery rate (IDR) method developed by
-Li <em> et al.</em> (submitted) to quantify the consistency between pairs
-of ranked peaks lists from replicates.  The IDR methods learns a model that
-assumes that the ranked lists of peaks in a pair of replicates consist of
-two groups - a reproducible group and an irreproducible group. 
-In general, the signals in the reproducible group are more consistent (i.e.
-with a larger rank correlation coefficient) and are ranked
-higher than the irreproducible group.  The proportion of peaks that
-belong to the irreproducible component and the correlation of the reproducible 
-component are estimated adaptively from the data.  The model also provides
-an IDR score for each peak, which reflects the posterior probability
-of the peak belonging to the irreproducible group.  We pool the 
-aligned reads from all replicates and use the MACS peak caller to call 
-significant peaks on the pooled data.  Only datasets that have at
-least 100 peaks passing the IDR threshold are considered valid and submitted
-for release. 
-</p>
-
-<h2> Protocol Notes </h2>
+<h4> Protocol Notes </h4>
 <p> 
 Several changes and improvements were made to the original ChIP-Seq protocol
 (Jonshon <em>et al.</em>,2008).  The major differences between protocols are the number
@@ -99,7 +76,7 @@ here</A>.  The protocol field for each file denotes the
 version of the protocol used as being PCR1x, PCR2x or a version number
 (for examples, v041610.1).
 
-</p><p> The sequencing libraries labeld as PCR2x were made with two rounds
+</p><p> The sequencing libraries labeled as PCR2x were made with two rounds
 of amplification (25 and 15 cycles) and those labeled as PCR1x were made with
 one 15-cycle round of amplification.  These experiments were
 completed prior to January 2010 and were originally aligned to NCBI Build36
@@ -110,6 +87,29 @@ The libraries labeled with a protocol version number were competed after
 January 2010 and were only aligned to NCBI Build37 (hg19).  Please
 refer to the <A HREF="http://hudsonalpha.org/myers-lab/protocols" 
 TARGET=_BLANK>Myers Lab website</A> for details on each protocol version.
+</p>
+
+<h2>Verification</h2>
+<p>
+The <A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html"
+TARGET=_BLANK>MACS</A> peak caller was used to call significant peaks on the
+individual replicates of a ChIP-Seq experiment. Afterwards, the
+irreproducible discovery rate (IDR) method, developed by
+Li <em> et al.</em> (submitted), was used to quantify the consistency between pairs
+of ranked peaks lists from replicates.  The IDR methods uses a model that
+assumes that the ranked lists of peaks in a pair of replicates consist of
+two groups - a reproducible group and an irreproducible group. 
+In general, the signals in the reproducible group are more consistent (i.e.
+with a larger rank correlation coefficient) and are ranked
+higher than the irreproducible group.  The proportion of peaks that
+belong to the irreproducible component and the correlation of the reproducible 
+component are estimated adaptively from the data.  The model also provides
+an IDR score for each peak, which reflects the posterior probability
+of the peak belonging to the irreproducible group.  The 
+aligned reads were pooled from all replicates and the MACS peak caller was used to call 
+significant peaks on the pooled data.  Only datasets containing at
+least 100 peaks passing the IDR threshold are considered valid and submitted
+for release. 
 </p>
 
 <a name="Credits"></a><h2> Credits </h2>
@@ -139,12 +139,12 @@ TARGET=_blank>Genome-wide mapping of in vivo protein-DNA interactions</a>.
 Langmead B, Trapnell C, Pop M, Salzberg SL.
 <A HREF="http://genomebiology.com/2009/10/3/R25" TARGET=_BLANK>
 Ultrafast and memory-efficient alignment of short DNA sequences 
-to the human genome</A><em>Genome Biology</em> 10:R25.
+to the human genome</A>.<em>Genome Biology</em> 10:R25.
 </p>
 <p>
 Li Q, Brown JB, Huang H, Bickel PJ.
 Measuring Reproducibility of High-throughput experiments
-(Submitted to the Annals of Applied Statistics)
+(Submitted to the Annals of Applied Statistics).
 </p>
 <p>
 Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein B,

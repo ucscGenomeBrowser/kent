@@ -42,6 +42,7 @@ set melInc melInc1
 set melHap melHap1
 set mm mm6,mm7,mm8,mm9
 set monDom monDom1,monDom4,monDom5
+set myoLuc myoLuc1,myoLuc2
 set ornAna ornAna1
 set oryCun oryCun2
 set oryLat oryLat2
@@ -60,14 +61,14 @@ set tetNig tetNig1,tetNig2
 set xenTro xenTro1,xenTro2
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
-set wgs $rn,$panTro,$galGal,$melGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
+set wgs $rn,$panTro,$galGal,$melGal,$myoLuc,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $panTro,$galGal,$melGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal
+set xrg $panTro,$galGal,$melGal,$myoLuc,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,mm9
@@ -106,7 +107,7 @@ databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch2,hg19Patch2i,hg19snp131,hg19snp132,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
 
 # Define various non-self chains
-set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,PanTro3,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,DanRer7,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,ApiMel3,TetNig1,TetNig2,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,FelCat4,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,Ce9,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap3,CaeJap1,Cb3,PriPac2,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CalJac3,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,GorGor2,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr2,LoxAfr3,SusScr1,SusScr2,AilMel1,CanFamPoodle1,ChoHof1,DasNov2,DipOrd1,EchTel1,EriEur1,MacEug1,MyoLuc1,OchPri2,OryCun1,OryCun2,ProCap1,PteVam1,SorAra1,SpeTri1,TupBel1,TurTru1,VicPac1,BruMal1,HaeCon1,MelHap1,MelInc1,Hg19Patch2
+set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,PanTro3,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,DanRer7,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,ApiMel3,TetNig1,TetNig2,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,FelCat4,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,Ce9,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap3,CaeJap1,Cb3,PriPac2,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CalJac3,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,GorGor2,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr2,LoxAfr3,SusScr1,SusScr2,AilMel1,CanFamPoodle1,ChoHof1,DasNov2,DipOrd1,EchTel1,EriEur1,MacEug1,MyoLuc1,OchPri2,OryCun1,OryCun2,ProCap1,PteVam1,SorAra1,SpeTri1,TupBel1,TurTru1,VicPac1,BruMal1,HaeCon1,MelHap1,MelInc1,Hg19Patch2,OviAri1,MelGal1,BosTau6,MyoLuc2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -643,6 +644,91 @@ identifier wgEncodeGencodeYalePseudoV4
     hg19.wgEncodeGencodeManualV4.name unique
     hg19.wgEncodeGencodePolyaV4.name unique
     panTro2.wgEncodeNhgriBip.name unique
+
+# begin Gencode V7
+
+#  = gencode genepreds with joining through wgEncodeGencodeAttrsV7
+# wgEncodeGencodeBasicV7
+# wgEncodeGencodeCompV7
+# wgEncodeGencodePseudoGeneV7
+
+#  = gencode genepreds with no associations
+# wgEncodeGencodePolyaV7
+# wgEncodeGencode2wayConsPseudoV7
+
+# gencode association tables (joined through wgEncodeGencodeAttrsV7)
+#wgEncodeGencodeAttrsV7
+#wgEncodeGencodeExonSupportV7
+#wgEncodeGencodeGeneSourceV7
+#wgEncodeGencodePdbV7
+#wgEncodeGencodePubMedV7
+#wgEncodeGencodeRefSeqV7
+#wgEncodeGencodeTagV7
+#wgEncodeGencodeTranscriptSourceV7
+#wgEncodeGencodeTranscriptSupportV7
+#wgEncodeGencodeUniProtV7
+
+identifier wgEncodeGencodeBasicAttrsV7
+"Link together Gencode Basic Table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeAttrsV7.transcriptId
+    hg19.wgEncodeGencodeBasicV7.name
+
+identifier wgEncodeGencodeCompAttrsV7
+"Link together Gencode Comprehensive Table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeAttrsV7.transcriptId
+    hg19.wgEncodeGencodeCompV7.name
+
+identifier wgEncodeGencodePseudoGeneAttrsV7
+"Link together Gencode PseudoGene Table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeAttrsV7.transcriptId
+    hg19.wgEncodeGencodePseudoGeneV7.name
+
+identifier wgEncodeGencodeExonSupportV7
+"Link together Gencode Exon Support table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeExonSupportV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.98202
+
+identifier wgEncodeGencodeGeneSourceV7
+"Link together Gencode Gene Source table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeGeneSourceV7.geneId
+    hg19.wgEncodeGencodeAttrsV7.geneId
+
+identifier wgEncodeGencodePdbV7
+"Link together Gencode Pdb table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodePdbV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.0397575
+
+identifier wgEncodeGencodePubMedV7
+"Link together Gencode Pubmed table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodePubMedV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId  minCheck=0.635488
+
+identifier wgEncodeGencodeRefSeqV7
+"Link together Gencode RefSeq table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeRefSeqV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.185827
+
+identifier wgEncodeGencodeTagV7
+"Link together Gencode Tag table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeTagV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.373378
+
+identifier wgEncodeGencodeTranscriptSourceV7
+"Link together Gencode Transcript Source table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeTranscriptSourceV7.transcriptId
+    hg19.wgEncodeGencodeAttrsV7.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportV7
+"Link together Gencode Transcript Support table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeTranscriptSupportV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.333503
+
+identifier wgEncodeGencodeUniProtV7
+"Link together Gencode UniProt Support table with Attributes table for May 2011 Data Version"
+    hg19.wgEncodeGencodeUniProtV7.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV7.transcriptId minCheck=0.358209
+
+# end Gencode V7
 
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
@@ -1985,6 +2071,12 @@ identifier rgdSslpId external=RGD
     $rn.rgdSslpLink.name
 
 
+# New RGD Genes Family Identifiers
+
+identifier rgdGene2Id external=RGD
+"RGD Genes ID"
+    $rn.rgdGene2.name
+
 # The Ensembl Gmish
 
 identifier ensemblGeneId external=Ensembl
@@ -2290,7 +2382,7 @@ identifier locusLinkId external=LocusLink
 identifier omimLocationId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) Location ID"
     $hg.omimLocation.name dupeOk exclude=0
-    $hg.omimGeneMap.omimId minCheck=0.08
+    $hg.omimGeneMap.omimId full minCheck=0.08 
 
 identifier omimAvSnpId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) AV SNP ID"
@@ -2309,14 +2401,6 @@ identifier omimAvId external=OMIM
     $hg.omimAv.avId dupeOk exclude=0
     $hg.omimAvRepl.avId minCheck=0.90
     $hg.omimAvSnp.name minCheck=0.90
-
-identifier omimGeneId
-"omimGene ID"
-    $hg.omimGene.name dupeOk
-    $hg.omimGeneMap.omimId minCheck=0.80
-    $hg.refLink.omimId exclude=0 minCheck=0.95
-    $hg.omimMorbidMap.omimId minCheck=0.75
-    $hg.omimToKnownCanonical.omimId
 
 identifier omimGene2Id
 "omimGene2 ID"
@@ -2652,8 +2736,6 @@ identifier jaxAlleleName external=MGI
     $mm.jaxAllelePheno.allele dupeOk
     $mm.jaxAlleleInfo.name minCheck=0.9
     $mm.jaxAllele.name minCheck=0.9
-    $mm.jaxGeneTrapInfo.name minCheck=0.000001
-    $mm.jaxGeneTrap.name minCheck=0.000001
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
@@ -3304,6 +3386,7 @@ tablesIgnored hg18
 
 tablesIgnored hg19
     affyExonProbe%
+    allHg19RS_BW
     altSeqHaplotypes
     altSeqLiftOverPsl
     altSeqPatches
@@ -3358,6 +3441,7 @@ tablesIgnored hg19
     uMassBrainHistone%
 
 tablesIgnored mm9
+	allMm9RS_BW
     crgMapability%
     rest
 
@@ -3478,6 +3562,7 @@ tablesIgnored $hg
     cccTrendPvalRa
     cccTrendPvalT1d
     cccTrendPvalT2d
+    ceuBcellRNASeqBW
     cnpFosmid
     cnpIafrate
     cnpIafrate2
@@ -3627,6 +3712,3 @@ tablesIgnored calJac3
 
 tablesIgnored rheMac2
     refSeqAnno
-
-tablesIgnored $hg
-    ceuBcellRNASeqBW

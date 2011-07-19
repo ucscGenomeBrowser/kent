@@ -55,8 +55,9 @@ static struct genePred *transAnnoLoad(struct sqlConnection *conn, struct trackDb
 /* load the gencode annotations and sort the one corresponding to the one that was clicked on is
  * first.  Should only have one or two. */
 {
+// must check chrom due to PAR
 char where[256];
-safef(where, sizeof(where), "name=\"%s\"", gencodeId);
+safef(where, sizeof(where), "(chrom = \"%s\") and (name = \"%s\")", seqName, gencodeId);
 struct genePred *transAnno = genePredReaderLoadQuery(conn, tdb->track, where);
 slSort(&transAnno, transAnnoCmp);
 return transAnno;
@@ -68,6 +69,25 @@ static struct wgEncodeGencodeAttrs *transAttrsLoad(struct trackDb *tdb, struct s
 return sqlQueryObjs(conn, (sqlLoadFunc)wgEncodeGencodeAttrsLoad, sqlQuerySingle|sqlQueryMust,
                     "select * from %s where transcriptId = \"%s\"",
                     getGencodeTable(tdb, "wgEncodeGencodeAttrs"), gencodeId);
+}
+
+static void getGeneBounds(struct trackDb *tdb, struct sqlConnection *conn, struct genePred *transAnno,
+                          int *geneChromStart, int *geneChromEnd)
+/* find bounds for the gene */
+{
+// must check chrom due to PAR
+char where[256];
+safef(where, sizeof(where), "(chrom = \"%s\") and (name2 = \"%s\")", seqName, transAnno->name2);
+struct genePred *geneAnnos = genePredReaderLoadQuery(conn, tdb->track, where);
+struct genePred *geneAnno;
+*geneChromStart = transAnno->txStart;
+*geneChromEnd = transAnno->txEnd;
+for (geneAnno = geneAnnos; geneAnno != NULL; geneAnno = geneAnno->next)
+    {
+    *geneChromStart = min(*geneChromStart, geneAnno->txStart);
+    *geneChromEnd = max(*geneChromEnd, transAnno->txEnd);
+    }
+genePredFreeList(&geneAnnos);
 }
 
 static void *metaDataLoad(struct trackDb *tdb, struct sqlConnection *conn, char *gencodeId, char *tableBase, char *keyCol, unsigned queryOpts, sqlLoadFunc loadFunc)
@@ -123,7 +143,16 @@ printf("<td>");
 prExtIdAnchor(tdb, id, settingName);
 }
 
+static void writePosLink(char *chrom, int chromStart, int chromEnd)
+/* write link to a genomic position */
+{
+printf("<a href=\"%s&db=%s&position=%s%%3A%d-%d\" target=_blank>%s:%d-%d</A>",
+       hgTracksPathAndSettings(), database,
+       chrom, chromStart, chromEnd, chrom, chromStart+1, chromEnd);
+}
+
 static void writeBasicInfoHtml(struct trackDb *tdb, char *gencodeId, struct genePred *transAnno, struct wgEncodeGencodeAttrs *transAttrs,
+                               int geneChromStart, int geneChromEnd,
                                struct wgEncodeGencodeGeneSource *geneSource, struct wgEncodeGencodeTranscriptSource *transcriptSource)
 /* write basic HTML info for all genes */
 {
@@ -137,6 +166,13 @@ static void writeBasicInfoHtml(struct trackDb *tdb, char *gencodeId, struct gene
 printf("<table class=\"hgcCcds\"><thead>\n");
 printf("<tr><th><th>Transcript<th>Gene</tr>\n");
 printf("</thead><tbody>\n");
+
+printf("<tr><th>Position");
+printf("<td>");
+writePosLink(transAnno->chrom, transAnno->txStart, transAnno->txEnd);
+printf("<td>");
+writePosLink(transAnno->chrom, geneChromStart, geneChromEnd);
+printf("</tr>\n");
 
 printf("<tr><th>HAVANA manual");
 prTdExtIdAnchor(tdb, transAttrs->havanaTranscriptId, "vegaTranscriptIdUrl");
@@ -155,6 +191,32 @@ printf("<tr><th>Method<td>%s<td>%s</tr>\n", getMethodDesc(transcriptSource->sour
 printf("<tr><th>HUGO gene<td colspan=2>%s</tr>\n", transAttrs->geneName);
 printf("<tr><th>CCDS<td>%s<td></tr>\n", transAttrs->ccdsId);
 // FIXME: add sequence here??
+printf("</tbody></table>\n");
+}
+
+static void writeSequenceHtml(struct trackDb *tdb, char *gencodeId, struct genePred *transAnno)
+/* write links to get sequences */
+{
+printf("<table class=\"hgcCcds\"><thead>\n");
+printf("<tr><th colspan=\"2\">Sequences</tr>\n");
+printf("</thead><tbody>\n");
+if (transAnno->cdsStart < transAnno->cdsEnd)
+    {
+    // protein coding
+    printf("<tr><td>");
+    hgcAnchorSomewhere("htcGeneMrna", gencodeId, tdb->table, seqName);
+    printf("Predicted mRNA</a>");
+    printf("<td>");
+    hgcAnchorSomewhere("htcTranslatedPredMRna", gencodeId, "translate", seqName);
+    printf("Predicted protein</a></tr>\n");
+    }
+else
+    {
+    // non-protein coding
+    printf("<tr><td>");
+    hgcAnchorSomewhere("htcGeneMrna", gencodeId, tdb->table, seqName);
+    printf("Predicted mRNA</a><td></tr>\n");
+    }
 printf("</tbody></table>\n");
 }
 
@@ -377,7 +439,7 @@ return supportEvids;
 static void writeSupportExidenceEntry(struct supportEvid *supportEvid)
 /* write HTML table entry  for a supporting evidence */
 {
-// FIXME: should like to sources when possible
+// FIXME: should link to sources when possible
 printf("<td>%s", supportEvid->seqSrc);
 printf("<td>%s", supportEvid->seqId);
 }
@@ -463,6 +525,9 @@ struct wgEncodeGencodeTranscriptSupport *transcriptSupports = metaDataLoad(tdb, 
 struct wgEncodeGencodeExonSupport *exonSupports = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeExonSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeExonSupportLoad);
 struct wgEncodeGencodeUniProt *uniProts = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeUniProt", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeUniProtLoad);
 slSort(&uniProts, uniProtDatasetCmp);
+int geneChromStart, geneChromEnd;
+getGeneBounds(tdb, conn, transAnno, &geneChromStart, &geneChromEnd);
+
 char *title = "GENCODE Transcript Annotation";
 char header[256];
 safef(header, sizeof(header), "%s %s", title, gencodeId);
@@ -473,14 +538,14 @@ else
 cartWebStart(cart, database, "%s", header);
 printf("<H2> %s</H2>\n", header);
 
-writeBasicInfoHtml(tdb, gencodeId, transAnno, transAttrs, geneSource, transcriptSource);
-/* FIXME: sequence links */
+writeBasicInfoHtml(tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource);
+writeTagLinkHtml(tags);
+writeSequenceHtml(tdb, gencodeId, transAnno);
 writePdbLinkHtml(pdbs);
 writePubMedLinkHtml(pubMeds);
 writeRefSeqLinkHtml(refSeqs);
 writeUniProtLinkHtml(uniProts);
 writeSupportingEvidenceLinkHtml(transcriptSupports, exonSupports);
-writeTagLinkHtml(tags);
 wgEncodeGencodeAttrsFree(&transAttrs);
 wgEncodeGencodeGeneSourceFreeList(&geneSource);
 wgEncodeGencodeTranscriptSourceFreeList(&transcriptSource);

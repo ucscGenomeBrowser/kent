@@ -41,7 +41,7 @@ subGroup2 cellType Cell_Line CH12=CH12 G1E=G1E G1E_ER4_E2=G1E-ER4+E2 MEL=MEL
 subGroup3 factor Factor Input=Input CTCF=CTCF POL24H8=Pol2-4H8 GATA1SC265=GATA1_(SC-265) TAL1SC12984=TAL1_(SC-12984)
 subGroup4 sex Sex F=F M=M
 subGroup5 age Age immortal=immortalized E0=E0
-subGroup6 strain Strain 2a4b=B10.H-2aH-4bp/Wts S129=129 C57BL6=C57BL/6
+subGroup6 strain Strain 2a4b=B10.H-2aH-4bp/Wts S129=129 C57BL6=C57BL/6 UKN=Unknown
 subGroup7 control Control Input=Input
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ sex=+ age=+ strain=+ control=+ view=+
@@ -117,19 +117,20 @@ wgEncode 1
 		parent wgEncodePsuTfbsViewPeaks 
 		shortLabel MEL CTCF Pk
 		longLabel MEL CTCF TFBS ChIP-seq Peaks from ENCODE/PSU
-		subGroups view=Peaks age=immortal factor=CTCF cellType=MEL control=Input sex=M strain=C57BL6
-		type broadPeak
-		color 46,0,184
-		# subId=3044 dateSubmitted=2010-12-01
-
+        subGroups view=Peaks age=immortal factor=CTCF cellType=MEL control=Input sex=M strain=UKN
+        type broadPeak
+        color 46,0,184
+        # subId=3044 dateSubmitted=2011-03-25
+		
 		track wgEncodePsuTfbsG1eTal1sc12984ME0S129InputPk
 		parent wgEncodePsuTfbsViewPeaks
 		shortLabel G1E TAL1 Pk
 		longLabel G1E TAL1_(SC-12984) TFBS ChIP-seq Peaks from ENCODE/PSU
-		subGroups view=Peaks age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
-		type broadPeak
-		color 153,38,0
-		# subId=3052 dateSubmitted=2011-02-11
+        subGroups view=Peaks age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=3052 dateSubmitted=2011-03-29
+
 
 	#####Signal Tracks###########
 	track wgEncodePsuViewSignal
@@ -192,16 +193,17 @@ wgEncode 1
 		parent wgEncodePsuViewSignal 
 		shortLabel MEL CTCF Sg
 		longLabel MEL CTCF TFBS ChIP-seq Signal from ENCODE/PSU
-		subGroups view=Signal age=immortal factor=CTCF cellType=MEL control=Input sex=M strain=C57BL6
-		type bigWig 1.000000 227.000000
-		color 46,0,184
-		# subId=3044 dateSubmitted=2010-12-01
+        subGroups view=Signal age=immortal factor=CTCF cellType=MEL control=Input sex=M strain=UKN
+        type bigWig 1.000000 254.000000
+        color 46,0,184
+        # subId=3044 dateSubmitted=2011-03-25
 
 		track wgEncodePsuTfbsG1eTal1sc12984ME0S129InputSig
 		parent wgEncodePsuViewSignal
 		shortLabel G1E TAL1 Sg
 		longLabel G1E TAL1_(SC-12984) TFBS ChIP-seq Signal from ENCODE/PSU
-		subGroups view=Signal age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
-		type bigWig 1.000000 212.000000
-		color 153,38,0	
-		# subId=3052 dateSubmitted=2011-02-11
+        subGroups view=Signal age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
+        type bigWig 1.000000 308.000000
+        color 153,38,0
+        # subId=3052 dateSubmitted=2011-03-29
+

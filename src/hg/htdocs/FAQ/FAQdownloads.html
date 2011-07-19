@@ -55,6 +55,8 @@
                 <LI><A HREF="#download21">Mapping UCSC STS marker IDS to those of other groups</A>
                 <LI><A HREF="#download22">deCODE map data</A>
                 <LI><A HREF="#download29">Direct MySQL access to data</A>
+		<LI><A HREF="#download34">Name of fourth column in BED output</A>
+
 		</UL>
 		<A HREF="index.html">Return to FAQ Table of Contents</A>
 		<BR>
@@ -1795,6 +1797,79 @@
 	    <br></TD></TR>
 	</TABLE>
 	</TD></TR>
+    </TABLE>
+    <BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="download34"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+            <TR><TD>                
+            <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+                <TR><TD>                
+                <!--cheap trick to get background on row to be continuous-->
+                <TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+                    <TR><TD ALIGN="left">
+                    <FONT SIZE="4"><b>&nbsp; Name of fourth column in BED output</b></FONT></TD>
+                    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+                    </TD></TR>
+                </TABLE>
+                </TD></TR>
+            </TABLE>
+            <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+                    <TD>
+                    <P>
+                        <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+                        "When using the Table Browser to extract exons from a Gene track, what does the 'Name' column (fourth BED column) refer to?"
+                        <P>
+                        <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+			<BR> The fourth column of the BED output contains a lot of information separated by underscores. For example:<BR>
+                        <PRE>
+     uc009vjk.2_cds_1_0_chr1_324343_f</PRE>
+                        
+                        This information is represented as follows:<BR>
+                        <PRE>
+     ucscId_sequenceType_sequenceTypeNumber_basesAdded_chromosome_positionOfFirstBaseOfItem_strand</PRE>
+			<UL>
+			<LI>
+			UCSC ID: our identification for the transcripts in the UCSC Genes track.
+			<LI>
+			Sequence Type: exons, introns, cds, utr5, etc.
+			<LI>
+			Sequence Type Number: for every transcript, there will be a row for 
+			each sequence type (cds or intron) and this identifies which is represented in this 
+			row;  the first is denoted with 0. So, if you requested exons, and a particular 
+			transcript has 10 exons, you will see a row for each one and in this position 
+			they will be numbered 0-9.
+			<LI>
+			Bases Added: number of bases added to the regions requested.
+			<LI>
+			Chromosome: chromosome number the item is on.
+			<LI>
+			Position of First Base of Item: if you have specified bases added to the 
+			requested features (for example, Exons plus 10 bases on each end), then 
+			columns 2 and 3 of the output wouldn't be the exact coordinates of the exon, 
+			they would start and end 10 bases before/after the exon. So, this part of 
+			the information is an easy way to see where the actual feature starts as 
+			displayed in the browser. It is "as displayed in the browser" because the 
+			coordinates in our tables almost always have 0-based starts (as they do 
+			in columns 2 and 3 of this output) but display as 1-based in the browser 
+			(for more info see this <A HREF=http://genome.ucsc.edu/FAQ/FAQtracks.html#tracks1>FAQ</A>), 
+			but this start position listed in this section of the 4th column is actually 1 based. 
+			It will be the exact coordinate the feature starts on as displayed in the browser.
+			<LI>
+			Strand: forward(f) or reverse(-) strand.
+			</UL>
+		    </TD><TD WIDTH=15></TD>
+                </TR>
+            </TABLE>
+            <br></TD></TR>
+        </TABLE>
+        </TD></TR>
     </TABLE>
 
     </TD><TD WIDTH=15></TD></TR>

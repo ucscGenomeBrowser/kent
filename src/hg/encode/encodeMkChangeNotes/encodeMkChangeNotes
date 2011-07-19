@@ -148,7 +148,7 @@ def main(argv=None):
     addition_files = []
 
     # some re we will be using
-    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedRrbs|bedGraph\d+|bed\d*|bedLogR|pairedTagAlign|shortFrags|peptideMapping)$")
+    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedRnaElements|bedRrbs|bedGraph\d+|bed\d*|bedLogR|pairedTagAlign|shortFrags|peptideMapping)$")
     gbdb = re.compile("^(wig|tagAlign|bigWig|bam)$")
     file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|junction|fpkm|fpkm1|fpkm2|insDistrib|insDist|junction|txt)$")
 
@@ -214,14 +214,14 @@ def main(argv=None):
             unchanged_files_list.append(path_prefix + f)
             if type == "bam":
                 if os.path.exists(path_prefix + f + ".bai"):
-                    new_files_list.append(path_prefix + f + ".bai")
+                    unchanged_files_list.append(path_prefix + f + ".bai")
                 else:
                     warn = "could not find .bai file for bam file %s" % f
                     warnings.append(warn)
                     print >>sys.stderr, warn
                 gbdb_path = get_gbdb_pathname(database, name)
                 if gbdb_path != None and os.path.exists(gbdb_path + ".bai"):
-                    new_gbdbs_list.append(gbdb_path + ".bai")
+                    unchanged_gbdbs_list.append(gbdb_path + ".bai")
                 else:
                     warn = "could not find %s file for %s" % (str(gbdb_path) + ".bai", f)
                     warnings.append(warn)
@@ -267,16 +267,16 @@ def main(argv=None):
             removed_files_list.append(path_prefix + f)
             if type == "bam":
                 if os.path.exists(path_prefix + f + ".bai"):
-                    new_files_list.append(path_prefix + f + ".bai")
+                    removed_files_list.append(path_prefix + f + ".bai")
                 else:
                     warn = "could not find .bai file for bam file %s" % f
                     warnings.append(warn)
                     print >>sys.stderr, warn
                 gbdb_path = get_gbdb_pathname(database, name)
                 if gbdb_path != None and os.path.exists(gbdb_path + ".bai"):
-                    new_gbdbs_list.append(gbdb_path + ".bai")
+                    removed_gbdbs_list.append(gbdb_path + ".bai")
                 else:
-                    warn = "could not find %s file for %s" % (gbdb_path + ".bai", f)
+                    warn = "could not find %s file for %s" % (str(gbdb_path) + ".bai", f)
                     warnings.append(warn)
                     print >>sys.stderr, warn
 

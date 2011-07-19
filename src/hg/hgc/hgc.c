@@ -9104,6 +9104,140 @@ printGadDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
+void printCosmicDetails(struct trackDb *tdb, char *itemName)
+/* Print details of a COSMIC entry. */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
+char query[1024];
+char query2[1024];
+struct sqlResult *sr;
+struct sqlResult *sr2;
+char **row;
+char **row2;
+
+char *chp;
+char indent1[40] = {"&nbsp;&nbsp;&nbsp;&nbsp;"};
+char indent2[40] = {""};
+
+char *source, *cosmic_mutation_id, *gene_name, *accession_number;
+char *mut_description, *mut_syntax_cds, *mut_syntax_aa;
+char *chromosome, *grch37_start, *grch37_stop, *mut_nt;
+char *mut_aa, *tumour_site, *mutated_samples, *examined_samples, *mut_freq;
+char *url = tdb->url;
+
+char *chrom, *chromStart, *chromEnd;
+chrom      = cartOptionalString(cart, "c");
+chromStart = cartOptionalString(cart, "o");
+chromEnd   = cartOptionalString(cart, "t");
+
+safef(query, sizeof(query), 
+      "select %s,%s from cosmicRaw where cosmic_mutation_id='%s'",
+      "source,cosmic_mutation_id,gene_name,accession_number,mut_description,mut_syntax_cds,mut_syntax_aa",
+      "chromosome,grch37_start,grch37_stop,mut_nt,mut_aa,tumour_site,mutated_samples,examined_samples,mut_freq",
+      itemName);
+
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    int ii;
+    boolean multipleTumorSites;
+    char *indentString;
+
+    ii=0;
+    
+    source 		= row[ii];ii++;
+    cosmic_mutation_id  = row[ii];ii++;
+    gene_name 		= row[ii];ii++;
+    accession_number 	= row[ii];ii++;
+    mut_description 	= row[ii];ii++;
+    mut_syntax_cds 	= row[ii];ii++;
+    mut_syntax_aa 	= row[ii];ii++;
+
+    chromosome  	= row[ii];ii++;
+    grch37_start  	= row[ii];ii++;
+    grch37_stop  	= row[ii];ii++;
+    mut_nt  		= row[ii];ii++;
+    mut_aa  		= row[ii];ii++;
+    tumour_site  	= row[ii];ii++;
+    mutated_samples  	= row[ii];ii++;
+    examined_samples  	= row[ii];ii++;
+    mut_freq  		= row[ii];ii++;
+
+    chp = strstr(itemName, "COSM")+strlen("COSM");
+    printf("<B>COSMIC ID:</B> %s", chp);
+    
+    printf(" (click <A HREF=\"%s&id=%s\" TARGET=_BLANK>here</A> for more details at COSMIC site)\n", url, chp);
+
+    printf("<BR><B>Source:</B> %s\n", source);
+    printf("<BR><B>Gene Name:</B> %s\n", gene_name);
+    printf("<BR><B>Accession Number:</B> %s\n", accession_number);
+    printf("<BR><B>Genomic Position:</B> %s:%s-%s", chromosome, grch37_start, grch37_stop);
+    printf("<BR><B>Mutation Description:</B> %s\n", mut_description);
+    printf("<BR><B>Mutation Syntax CDS:</B> %s\n", mut_syntax_cds);
+    printf("<BR><B>Mutation Syntax AA:</B> %s\n", mut_syntax_aa);
+    printf("<BR><B>Mutation NT:</B> %s\n", mut_nt);
+    printf("<BR><B>Mutation AA:</B> %s\n", mut_aa);
+
+    safef(query2, sizeof(query2), 
+      "select count(tumour_site) from cosmicRaw where cosmic_mutation_id='%s'", itemName);
+
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if ((atoi(row2[0])) > 1) 
+    	{
+	multipleTumorSites = TRUE;
+        indentString = indent1;
+	}
+    else
+    	{
+        multipleTumorSites = FALSE;
+	indentString = indent2;
+	}
+    sqlFreeResult(&sr2);
+    
+    safef(query2, sizeof(query2), 
+      "select %s from cosmicRaw where cosmic_mutation_id='%s' order by tumour_site",
+      "tumour_site,mutated_samples,examined_samples,mut_freq ",
+      itemName);
+
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    while (row2 != NULL)
+    	{
+    	int ii;
+   	ii=0;
+    	tumour_site  		= row2[ii];ii++;
+    	mutated_samples  	= row2[ii];ii++;
+    	examined_samples  	= row2[ii];ii++;
+    	mut_freq  		= row2[ii];ii++;
+        
+	if (multipleTumorSites) printf("<BR>");
+    	printf("<BR><B>%sTumour Site:</B> %s\n", 	indentString, tumour_site);
+    	printf("<BR><B>%sMutated Samples:</B> %s\n", 	indentString, mutated_samples);
+    	printf("<BR><B>%sExamined Samples:</B> %s\n", 	indentString, examined_samples);
+    	printf("<BR><B>%sMutation Frequency:</B> %s\n", indentString, mut_freq);
+    	row2 = sqlNextRow(sr2);
+	}
+    sqlFreeResult(&sr2);
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+   
+printf("<HR>");
+printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+}
+
+void doCosmic(struct trackDb *tdb, char *item)
+/* Put up COSMIC track info. */
+{
+genericHeader(tdb, item);
+printCosmicDetails(tdb, item);
+printTrackHtml(tdb);
+}
+
 void printDecipherDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of a DECIPHER entry. */
 {
@@ -23450,126 +23584,65 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 
-
-if (sameString("numtS", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtSMitochondrionChrPlacement where ( "
-        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    clickMsg = openMsgM;
-    }
-else if (sameString("numtSAssembled", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtSMitochondrionChrPlacement where ( "
-        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    clickMsg = openMsgM;
-    }
-else if (sameString("numtSMitochondrion", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtS where ( "
-        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    clickMsg = openMsg1;
-    }
-else if (sameString("numtSMitochondrionChrPlacement", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtS where ( "
-        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    clickMsg = openMsg1;
-    }
-    sr = sqlGetResult(conn, query);
-    firstTime = TRUE;
-
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        printf("<PRE><TT>");
-        if (firstTime)
-            {
-            firstTime = FALSE;
-        printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
-
-            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
-            printf("--------|--------------------------------------------------------------------------------------------\n");
-
-            }
-        bed = bedLoad6(row);
-        printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
-               hgTracksPathAndSettings(), database,
-               bed->chrom, bed->chromStart+1, bed->chromEnd);
-
-        printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
-            bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
-            (bed->chromEnd - bed->chromStart),bed->score, bed->strand);
-
-        printf("</TT></PRE>");
-        }
-
- printf("<BR>");
- printTrackHtml(tdb);
- hFreeConn(&conn);
+if (sameString("hg18", database))
+{
+  if (sameString("numtS", table))
+      {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtSMitochondrionChrPlacement where ( "
+          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
+      clickMsg = openMsgM;
+      }
+    else if (sameString("numtSAssembled", table))
+      {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtSMitochondrionChrPlacement where ( "
+          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
+      clickMsg = openMsgM;
+      }
+    else if (sameString("numtSMitochondrion", table))
+      {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtS where ( "
+          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
+      clickMsg = openMsg1;
+      } 
+    else if (sameString("numtSMitochondrionChrPlacement", table))
+      {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtS where ( "
+          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
+      clickMsg = openMsg1;
+      }
+} else {
+  if (sameString("numtS", table) || sameString("numtSAssembled", table))
+     {
+     safef(query, sizeof(query),
+         "select  chrom, chromStart, chromEnd, name, score, strand "
+         "from numtSMitochondrion where name = '%s'  ", itemName);
+     clickMsg = openMsgM;
+     }
+  else if (sameString("numtSMitochondrion", table))
+     {
+      safef(query, sizeof(query),
+          "select  chrom, chromStart, chromEnd, name, score, strand "
+          "from numtS where name = '%s'", itemName);
+      clickMsg = openMsg1;
+     }
 }
 
-
-void doNumtSHg19Mm9(struct trackDb *tdb, char *itemName)
-/* Put up page for NumtS. */
-{
-char *table = tdb->table;
-struct sqlConnection *conn = hAllocConn(database);
-struct bed *bed;
-char query[512];
-struct sqlResult *sr;
-char **row;
-boolean firstTime = TRUE;
-int start = cartInt(cart, "o");
-int num = 6;
-/* message strings */
-char *clickMsg = NULL;
-char *openMsg1 = "Click 'browser' link below to open Genome Browser at genomic position where";
-char *openMsg2 = "maps\n";
-char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochondrial position where";
-
-genericHeader(tdb, itemName);
-genericBedClick(conn, tdb, itemName, start, num);
-
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s where name='%s'",
-      table, itemName);
-sr = sqlGetResult(conn, query);
-int sSize=0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-        bed = bedLoad6(row);
-        sSize = bed->chromEnd - bed->chromStart;
-        /* printf("sSize is: %5d <BR>", sSize); */
-    }
-
-if (sameString("numtS", table) || sameString("numtSAssembled", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtSMitochondrion where name = '%s'  ", itemName);
-    clickMsg = openMsgM;
-    }
-else if (sameString("numtSMitochondrion", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtS where name = '%s'", itemName);
-    clickMsg = openMsg1;
-    }
     sr = sqlGetResult(conn, query);
     firstTime = TRUE;
 
@@ -23697,8 +23770,9 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
         tdb = hashFindVal(trackHash, track);
 	if (tdb == NULL)
 	    {
-	    if (sameString(track, "mrna"))
-		tdb = hashFindVal(trackHash, "all_mrna");/* Oh what a tangled web we weave. */
+	    if (startsWith("all_mrna", track))       
+		tdb = hashFindVal(trackHash, "mrna");
+                  /* Oh what a tangled web we weave. */
 	    }
 	}
     }
@@ -24806,19 +24880,14 @@ else if (tdb != NULL && startsWith("bedDetail", tdb->type))
     {
     doBedDetail(tdb, NULL, item);
     }
-else if (startsWith("numtS", table) && sameString("hg18", database))
-       //  && (!sameString("numtSAssembled", table)))
+else if (startsWith("numtS", table))
     {
-    //genericHeader(tdb, item);
-    //genericClickHandler(tdb, item, NULL);
     doNumtS(tdb, item);
     }
-else if (startsWith("numtS", table) && 
-     (sameString("hg19", database) || sameString("mm9", database)))
+else if (startsWith("cosmic", table))
     {
-    doNumtSHg19Mm9(tdb, item);
+    doCosmic(tdb, item);
     }
-
 else if (tdb != NULL)
     {
     genericClickHandler(tdb, item, NULL);

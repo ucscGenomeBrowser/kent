@@ -1,4 +1,4 @@
-<h2> Release Notes</h2>
+<h2>Description</h2>
 <p>
 The GENCODE Genes track (version 7, May 2011) shows high-quality manual
 annotations merged with evidence-based automated annotations across the entire
@@ -11,11 +11,19 @@ ENSEMBL annotations when there are no corresponding manual annotations.
 The annotation was carried out on genome assembly GRCh37 (hg19).
 </p>
 <p>
-Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
+<B>NOTE</B>: Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
 (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
 GENCODE mitochondrial sequences are not available in the UCSC Genome Browser.
 These annotations are available for download in the GENCODE GTF files.
 </p>
+
+<p>
+<B>NOTE</B>: We try and synchronize the release cycles for GENCODE, Havana and
+Ensembl. This GENCODE version 7 corresponds to Ensembl 62 from 13 April 2011
+and Vega 23-03-2011.  Also see:
+<a href="http://www.gencodegenes.org/" target="_blank">GENCODE project</a>.
+</p>
+
 
 <h2> Display Conventions and Configuration </h2>
 <p>
@@ -29,10 +37,10 @@ The available tracks are:
 </p>
 <ul>
   <li><em>GENCODE Basic set</em> - subset of the GENCODE coding and non-coding
-    transcript annotations, inluding polymorphic pseudogenes.  This includes
+    transcript annotations, including polymorphic pseudogenes.  This includes
     both manual and automatic annotations.  The selection criteria is
     described in the <a href="#basicSetSelection">next section</a>.
-    This is super-set of the <em>comprehensive set</em>.
+    This is subset of the <em>comprehensive set</em>.
 
   <li><em>GENCODE Comprehensive set</em> - all GENCODE coding and non-code transcript annotations,
     including polymorphic pseudogenes.  This includes both manual and
@@ -42,8 +50,8 @@ The available tracks are:
 
   <li><em>GENCODE 2-way Pseudogenes</em> - Pseudogenes predicted by the Yale
     Pseudopipe and UCSC Retrofinder pipelines, but not annotated by the HAVANA
-    manual annotation process.  The set was derived by looking for a 50 bp
-    overlap between pseudogenes derived from both sets based on their genomic
+    manual annotation process.  The set was derived by looking for a 50 base pairs
+    of overlap between pseudogenes derived from both sets based on their genomic
     locations i.e. chromosomal coordinates.  When multiple Pseudopipe
     predictions map to a single Retrofinder prediction, only one match is kept
     for the 2-way consensus set.
@@ -71,14 +79,14 @@ each locus.
       <li> If there are any full length coding transcripts that are not
         nonsense-mediated decay or problem transcripts, then only they are
         included in the basic set.
-      <li> Otherwise use the coding transcript with the largest CDS.
+      <li> Otherwise, use the coding transcript with the largest CDS.
     </ul>
   <li> Non-coding transcripts:
     <ul>
       <li> If there are any full length non-coding transcripts and they have a
-        well characterized BioType (see below), then only they included in the
+        well characterized BioType (see below), then only they are included in the
         basic set.
-      <li> Otherwise use the largest non-coding transcript.
+      <li> Otherwise, use the largest non-coding transcript.
     </ul>
 </ul>
 
@@ -94,14 +102,38 @@ and the following criteria:
   <li> poorly characterized: <em>non_coding, processed_transcript,
       retrotransposed, misc_RNA</em>
 </ul>
-
-
+ 
+<h4>Filtering</h4>
 <p>
-<B>NOTE</B>: We try and synchronize the release cycles for GENCODE, Havana and
-Ensembl. This GENCODE version 7 corresponds to Ensembl 62 from 13 April 2011
-and Vega 23-03-2011.  Also see:
-<a href="http://www.gencodegenes.org/" target="_blank">GENCODE project</a>.
+Items in the GENCODE Basic, Comprehensive and Pseudogene tracks
+can be filter using the following criteria:
 </p>
+<ul>
+  <li> Transcript class: Filter by the basic biological function of a transcript
+    annotation.
+    <ul>
+     <li> All - Don't filter by transcript class.
+     <li> coding - Display protein coding transcripts, including polymorphic pseudogenes.
+     <li> nonCoding - Display non-protein coding transcripts.
+     <li> pseudo - Display pseudogene transcript annotations.
+     <li> problem - Display problem transcripts.
+   </ul>
+
+  <li> Annotation Method: Filter by the method used to create the annotation.
+   <ul>
+     <li> All - Don't filter by transcript class.
+     <li> manual - display manually created annotations, including those that are 
+       also created automatically.
+     <li> automatic - display automatically created annotations, including those that are 
+       also created manually.
+     <li> manual_only - display manually created annotations there were
+       not annotated by the automatic method.
+     <li> automatic_only - display automatically created annotations there were
+       not annotated by the manual method.
+   </ul>
+
+  <li> Transcript Type: filter transcripts by <a href="http://www.gencodegenes.org/gencode_biotypes.html">BioType</a>.
+</ul>
 
 <h4>Coloring</h4>
 <p>
@@ -121,6 +153,7 @@ The gene annotations are colored based on the annotation type:
       <td colspan="4"><font color="#000000">all</font>
   </tr>
 </table>
+
 <h2>Methods</h2>
 
 <p>
@@ -144,7 +177,10 @@ techniques.
 <h2>Credits</h2>
 
 <p> This GENCODE release is the result of a collaborative effort among
-the following laboratories: (contact: <a href="mailto:gencode@sanger.ac.uk">gencode@sanger.ac.uk</A>)
+the following laboratories: (contact: <A HREF="mailto:&#103;&#101;n&#99;o&#100;&#101;&#64;&#115;an&#103;&#101;&#114;.
+&#97;&#99;.
+u&#107;">GENCODE at the Sanger Institute</A>.
+<!-- above address is gencode at sanger.ac.uk -->)
 </p>
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
@@ -154,8 +190,8 @@ the following laboratories: (contact: <a href="mailto:gencode@sanger.ac.uk">genc
       <td style="vertical-align: top; text-align: left;"><b>Contributors</b></td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: left;">GENCODE Principal Investigator</td>
-      <td style="vertical-align: top;"><a href="http://www.sanger.ac.uk/research/faculty/thubbard/" target="_blank">Tim Hubbard</a></td>
+      <td style="vertical-align: top; text-align: left;"><a href="http://www.sanger.ac.uk/research/faculty/thubbard/" target="_blank">GENCODE Principal Investigator</a></td>
+      <td style="vertical-align: top;">Tim Hubbard</td>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: left;"><a href="http://www.sanger.ac.uk/HGP/havana/havana.shtml" target="_blank">HAVANA manual annotation group</a>,
@@ -206,15 +242,16 @@ Structural Computational Biology Group</a>, Centro Natcional de Investigaciones 
 
 <h2>References</h2>
 
+<p> Flicek <em>et al</em>.
+<a href="http://nar.oxfordjournals.org/content/39/suppl_1/D800.full" target="_blank">Ensembl 2011</a>.
+<em>Nucleic Acids Research</em>. 2011;39 Database issue:D800-D806
+</p>
+
 <p> Harrow J, Denoeud F, Frankish A, Reymond A, Chen CK, Chrast J, Lagarde J, Gilbert JG, Storey R, Swarbreck D <em>et al</em>.
 <a href="http://genomebiology.com/2006/7/S1/S4" target="_blank">GENCODE: producing a reference annotation
 for ENCODE</a>. <em>Genome Biol</em>. 2006;7 Suppl
 1:S4.1-9.</p>
 
-<p> Flicek <em>et al</em>.
-<a href="http://nar.oxfordjournals.org/content/39/suppl_1/D800.full" target="_blank">Ensembl 2011</a>
-<em>Nucleic Acids Research</em> 2011 39 Database issue:D800-D806
-</p>
 
 <h2> Data Release Policy </h2>
 
@@ -224,3 +261,6 @@ nine months following the release of the dataset.  This date is listed in
 the <EM>Restricted Until</EM> column on the track configuration page and
 the download page.  The full data release policy for ENCODE is available
 <a HREF="../ENCODE/terms.html" TARGET=_BLANK>here</a>.</p>
+
+<!--  LocalWords:  pseudogenes Pseudopipe Retrofinder GENCODE
+ -->

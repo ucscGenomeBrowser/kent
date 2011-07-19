@@ -4,8 +4,8 @@
 
 track wgEncodeSydhNsome
 compositeTrack on
-shortLabel Stanford Nucleosome
-longLabel ENCODE Stanford Snyder Nucleosome
+shortLabel Stanf Nucleosome
+longLabel Nucleosome Position by MNase-seq from ENCODE/Stanford/BYU
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
@@ -30,23 +30,24 @@ noInherit on
     	maxHeightPixels 100:32:16
     	windowingFunction mean+whiskers
 
-		track wgEncodeSydhNsomeGm12878Sig
-        	parent wgEncodeSydhNsomeViewSignal
-        	shortLabel GM12878 Sig1
-        	longLabel GM12878 Nucleosome Signal from ENCODE/SYDH
-        	subGroups view=Signal cellType=GM12878
-        	type bigWig 0.000000 16392.599609
-        	origAssembly hg19
-        	color 153,38,0
-	        # subId=3329 dateSubmitted=2011-01-24
+        track wgEncodeSydhNsomeK562Sig
+        parent wgEncodeSydhNsomeViewSignal
+        shortLabel K562 Sig
+        longLabel K562 Nucleosome Signal from ENCODE/Stanford/BYU
+	subGroups view=Signal cellType=K562
+        type bigWig 0.000000 31303.900391
+        origAssembly hg19
+        color 46,0,184
+        # subId=4351 dateSubmitted=2011-06-24
 
-		track wgEncodeSydhNsomeK562Sig
-	        parent wgEncodeSydhNsomeViewSignal
-	        shortLabel K562 Sig1
-	        longLabel K562 Nucleosome Signal from ENCODE/SYDH
-	        subGroups view=Signal cellType=K562
-	        type bigWig 0.000000 31177.300781
-	        origAssembly hg19
-	        color 46,0,184
-	        # subId=3431 dateSubmitted=2011-01-22
+        track wgEncodeSydhNsomeGm12878Sig
+        parent wgEncodeSydhNsomeViewSignal
+        shortLabel GM12878 Sig
+        longLabel GM12878 Nucleosome Signal from ENCODE/Stanford/BYU
+	subGroups view=Signal cellType=GM12878
+        type bigWig 0.000000 16392.599609
+        origAssembly hg19
+        color 153,38,0
+        # subId=4351 dateSubmitted=2011-06-24
+
 

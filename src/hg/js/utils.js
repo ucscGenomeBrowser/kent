@@ -418,11 +418,22 @@ function validateFloat(obj,min,max)
     }
 }
 
+
+function metadataIsVisible(trackName)
+{
+    var divit = $("#div_"+trackName+"_meta");
+    if (divit == undefined || divit.length == 0)
+        return false;
+    return ($(divit).css('display') != 'none');
+}
+
 function metadataShowHide(trackName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+trackName+"_meta");
+    if (divit == undefined || divit.length == 0)
+        return false;
     var img = $(divit).prev('a').find("img");
     if (img != undefined && $(img).length == 1) {
         img = $(img)[0];
@@ -537,6 +548,19 @@ function warn(msg)
         else
             alert(msg);
     }
+}
+
+var gWarnSinceMSecs = 0;
+function warnSince(msg)
+{   // Warn messages with msecs since last warnSince msg
+    // This is necessary because IE Developer tools are hanging
+    var now = new Date();
+    var msecs = now.getTime();
+    var since = 0;
+    if (gWarnSinceMSecs > 0)
+        since = msecs - gWarnSinceMSecs;
+    gWarnSinceMSecs = msecs;
+    warn('['+since+'] '+msg);
 }
 
 function cgiBooleanShadowPrefix()
@@ -916,15 +940,16 @@ function waitMaskSetup(timeOutInMs)
         // create the waitMask
         $("body").append("<div id='waitMask' class='waitMask');'></div>");
         waitMask = $('#waitMask');
-        // Special for IE
+        // Special for IE, since it takes so long, make mask obvious
         if ($.browser.msie)
-            $(waitMask).css('filter','alpha(opacity= 0)');
+            $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
     }
     $(waitMask).css('display','block');
 
     // Things could fail, so always have a timeout.
     if(timeOutInMs == undefined || timeOutInMs <=0)
-        timeOutInMs = 5000; // Don't ever leave this as infinite
+        timeOutInMs = 30000; // IE can take forever!
+
     setTimeout('waitMaskClear();',timeOutInMs); // Just in case
 }
 
@@ -975,7 +1000,7 @@ function waitOnFunction(func)
         return false;
     }
 
-    waitMaskSetup(5000);  // Find or create the waitMask (which masks the whole page) but gives up after 5sec
+    waitMaskSetup(0);  // Find or create the waitMask (which masks the whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
     if(arguments.length > 1 && arguments[1].type != undefined) {
@@ -990,8 +1015,39 @@ function waitOnFunction(func)
     }
     gWaitFunc = func;
 
-    setTimeout('_launchWaitOnFunction();',50);
+    setTimeout('_launchWaitOnFunction();',10);
 
+}
+
+// --- yielding iterator ---
+function _yieldingIteratorObject(yieldingFunc)
+{ // This is the "recusive object" or ro which is instantiated in waitOnIteratingFunction
+  // yieldingFunc is passed in from waitOnIteratingFunction
+  // and will recurse which recursively calls an iterator
+    this.step = function(msecs,args) {
+        setTimeout(function() { yieldingFunc(args); }, msecs); // recursive timeouts
+        return;
+    }
+}
+
+function yieldingIterator(interatingFunc,continuingFunc,args)
+{   // Will run interatingFunc function with "yields", then run continuingFunc
+    // Based upon design by Guido Tapia, PicNet
+    // interatingFunc must return number of msecs to pause before next interation.
+    //                return 0 ends iteration with call to continuingFunc
+    //                return < 0 ends iteration with no call to continuingFunc
+    // Both interatingFunc and continuingFunc will receive the single "args" param.
+    // Hint. for multiple args, create a single struct object
+
+    var ro = new _yieldingIteratorObject(function() {
+            var msecs = interatingFunc(args);
+            if (msecs > 0)
+                ro.step(msecs,args);      // recursion
+            else if (msecs == 0)
+                continuingFunc(args);     // completion
+            // else (msec < 0) // abandon
+        });
+    ro.step(1,args);                      // kick-off
 }
 
 function showLoadingImage(id)
@@ -1760,6 +1816,7 @@ function findTracksMdbVarChanged(obj)
                    type: "GET",
                    url: "../cgi-bin/hgApi",
                    data: cgiVars,
+                   dataType: 'html',
                    trueSuccess: findTracksHandleNewMdbVals,
                    success: catchErrorOrDispatch,
                    error: errorHandler,
@@ -1768,7 +1825,9 @@ function findTracksMdbVarChanged(obj)
                    num: num
                });
     }
-    //findTracksSearchButtonsEnable(true);
+    // NOTE: with newJquery, the response is getting a new error (missing ; before statement)
+    //       There were also several XML parsing errors.
+    // This error is fixed with the addition of "dataType: 'html'," above.
 }
 
 function findTracksHandleNewMdbVals(response, status)
@@ -1793,7 +1852,10 @@ function findTracksHandleNewMdbVals(response, status)
         }
         $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             if (usesFilterBy) {
-                $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+                if (newJQuery)
+                    ddcl.setup(this,'noneIsAll');
+                else
+                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
             } else {
                 $(this).attr("multiple",false);
                 $(this).removeClass('filterBy');
@@ -1819,9 +1881,11 @@ function findTracksMdbValChanged(obj)
             $("select.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").each( function (i) {
                 $(this).val(newVal);
                 if ($(this).hasClass('filterBy')) {
-                    //$(this).dropdownchecklist("refresh");  // requires v1.1
                     $(this).dropdownchecklist("destroy");
-                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+                    if (newJQuery)
+                        ddcl.setup(this,'noneIsAll');
+                    else
+                        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
                 }
             });
         }
@@ -2011,6 +2075,9 @@ function filterByMaxHeight(multiSel)
     var selHeight = $(multiSel).children().length * 21;
     if (maxHeight > selHeight)
         maxHeight = null;
+    //else if($.browser.msie && maxHeight > 500)  // DDCL bug on IE only.
+    //    maxHeight = 500;          // Seems to be solved by disbling DDCL's window.resize event for IE
+
     return maxHeight;
 }
 
@@ -2023,7 +2090,11 @@ function findTracksClear()
     $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
         //$(this).dropdownchecklist("refresh");  // requires v1.1
         $(this).dropdownchecklist("destroy");
-        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+        $(this).show();
+        if (newJQuery)
+            ddcl.setup(this,'noneIsAll');
+        else
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
     });
 
     $('select.groupSearch').attr('selectedIndex',0);
@@ -2080,17 +2151,35 @@ function findTracksMdbSelectPlusMinus(obj, rowNum)
 { // Now [+][-] mdb var rows with javascript rather than cgi roundtrip
   // Will remove row or clone new one.  Complication is that 'advanced' and 'files' tab duplicate the tables!
 
-    var objId = $(obj).attr('id');
+ var objId = $(obj).attr('id');
     rowNum = objId.substring(objId.length - 1);
     if ($(obj).val() == '+') {
         var buttons = $("input#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
         if (buttons.length > 0) {
+            var table = null;
             $(buttons).each(function (i) {
                 var tr = $(this).parents('tr.mdbSelect')[0];
-                if (tr != undefined)
-                    $(tr).after( $(tr).clone() );
-                findTracksMdbSelectRowsNormalize($(tr).parents('table')[0]); // magic is in this function
+                if (tr != undefined) {
+                    table = $(tr).parents('table')[0];
+                    if(newJQuery) {
+                        var newTr = $(tr).clone();
+                        var element = $(newTr).find("select.mdbVar")[0];
+                        if (element != undefined)
+                            $(element).attr('selectedIndex',-1);
+
+                        element = $(newTr).find("td[id^='hgt_mdbVal']")[0];
+                        if (element != undefined)
+                            $(element).empty();
+                        element = $(newTr).find("td[id^='isLike']")[0];
+                        if (element != undefined)
+                            $(element).empty();
+                        $(tr).after( newTr );
+                    } else
+                        $(tr).after( $(tr).clone() );
+                }
             });
+            if (table)
+                findTracksMdbSelectRowsNormalize(table); // magic is in this function
             return false;
         }
     } else { // == '-'
@@ -2119,6 +2208,7 @@ function findTracksMdbSelectPlusMinus(obj, rowNum)
 function findTracksMdbSelectRowsNormalize(table)
 { // Called when [-][+] buttons changed the number of mdbSelects in findTracks\
   // Will walk through each row and get the numberings of addressable elements correct.
+    //var table = $('table#'+tableId);
     if (table != undefined) {
         var mdbSelectRows = $(table).find('tr.mdbSelect');
         var needMinus = (mdbSelectRows.length > 2);
@@ -2129,8 +2219,9 @@ function findTracksMdbSelectRowsNormalize(table)
             var plusButton = $(this).find("input[value='+']")[0];
             if (plusButton != undefined) {
                 $(plusButton).attr('id',"plusButton"+rowNum);
-                $(plusButton).unbind('click')
-                $(plusButton).click(function() { return findTracksMdbSelectPlusMinus($(plusButton), rowNum); });
+                // rebinding click appears to be not needed and screws up IE as well.
+                //$(plusButton).unbind('click')
+                //$(plusButton).click(function() { return findTracksMdbSelectPlusMinus($(plusButton), rowNum); });
                 var minusButton = $(this).find("input[value='-']")[0];
                 if (needMinus) {
                     if (minusButton == undefined) {
@@ -2171,6 +2262,10 @@ function findTracksSwitchTabs(ui)
 
     if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
         setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
+    } else if( ui.panel.id == 'advancedTab') {
+        // Advanced tab has DDCL wigets which were sized badly because the hidden width was unknown
+        // delay necessary, since select event not afterSelect event
+        setTimeout("ddcl.reinit($('div#advancedTab').find('select.filterBy'),false);",20);
     }
     if( $('div#filesFound').length == 1) {
         if( ui.panel.id == 'filesTab')
@@ -2199,12 +2294,199 @@ function filterTableFilterVar(filter)
 
     // Find the var for this filter
     var classes = $(filter).attr("class").split(' ');
-    classes = aryRemove(classes,"filterBy","filterTable");
+    classes = aryRemove(classes,"filterBy","filterTable","noneIsAll");
     if (classes.length > 1 ) {
         warn('Too many classes for filterBy: ' + classes);
         return undefined;
     }
     return classes.pop();
+}
+
+/* // This version of filterTable() uses the yieldingIterator methods.
+   // These methods and the yieldingIterator were developed because IE was so slow.
+   // HOWEVER: IE was sped up by avoiding .add() and .parent(),
+   // so I reverted to simpler code but wish to retain this example for
+   // future reference of how to deael with slow javascript.
+
+function _filterTableByClassesIterative(args)
+{ // Applies a single class filter to a filterTable TRs
+  // Called via yieldingIterator
+    if (args.curIx >= args.classes.length)
+        return 0;
+
+    var tds = $(args.tdsRemaining).filter('.' + args.classes[args.curIx]);
+    if (tds.length > 0) {
+        if (args.tdsFiltered == null)
+            args.tdsFiltered = tds;
+        else
+            args.tdsFiltered = jQuery.merge( args.tdsFiltered, tds );  // This one takes too long in IE!
+    }
+    //warnSince("Iterating class:"+args.curIx);
+    args.curIx++;
+    if (args.curIx >= args.classes.length)
+        return 0;
+    return 1;
+}
+
+function _filterTableByClassesComplete(args)
+{ // Continues after filterTableByClassesIterative
+  // Called via yieldingIterator
+    var filtersStruct = args.filtersStruct;
+
+    //warnSince("Completing classes...");
+    if (args.tdsFiltered == null)
+        filtersStruct.trsRemaining = null;
+    else {
+        //filtersStruct.trsRemaining = $(args.tdsFiltered).parent(); // Very slow in IE!!!
+        var tds = args.tdsFiltered;
+        var trs = [];
+        $(tds).each(function (ix) {
+            trs[ix] = this.parentNode;
+        });
+        filtersStruct.trsRemaining = trs;
+    }
+    //warnSince("Mostly complete classes...");
+    filtersStruct.curIx++;
+    yieldingIterator(_filterTableIterative,_filterTableComplete,filtersStruct);
+    //warnSince("Really complete classes.");
+}
+
+function _filterTableIterative(args)
+{ // Applies a single filter to a filterTable TRs
+  // Called via yieldingIterator
+
+    //warnSince("Filter "+args.curIx+" iterating...");
+    if (args.curIx >= args.filters.length)
+        return 0;
+
+    var filter = args.filters[args.curIx];
+
+    var classes = $(filter).val();
+    if (classes == null || classes.length == 0)
+        {
+        args.trsRemaining = null;
+        return 0; // Nothing selected so exclude all rows
+        }
+
+    if(classes[0] != 'All') { // nothing excluded by this filter
+        // Get the filter variable
+        var filterVar = filterTableFilterVar(filter);
+        if (filterVar != undefined) {// No filter variable?!
+            if ($.browser.msie) {   // Special for IE, since it takes so long
+                var classesStruct = new Object;
+                classesStruct.filtersStruct = args;
+                classesStruct.classes       = classes;
+                classesStruct.curIx         = 0;
+                classesStruct.tdsRemaining = $(args.trsRemaining).children('td.' + filterVar);
+                classesStruct.tdsFiltered = null;
+                yieldingIterator(_filterTableByClassesIterative,_filterTableByClassesComplete,classesStruct);
+                return -1; // Stops itteration now, but will be resumed in _filterTableByClassesComplete
+            } else {
+                var varTds = $(args.trsRemaining).children('td.' + filterVar);
+                var filteredTrs = null;
+                for(var ix=0;ix<classes.length;ix++) {
+                    var tds = $(varTds).filter('.' + classes[ix]);
+                    if (tds.length > 0) {
+                        var trs = [];
+                        $(tds).each(function (ix) {
+                            trs[ix] = this.parentNode;
+                        });
+                        if (filteredTrs == null)
+                            filteredTrs = trs; // $(tds).parent('tr'); // parent() takes too long in IE
+                        else
+                            filteredTrs = jQuery.merge( filteredTrs, trs );// $(tds).parent() );  // takes too long in IE!
+                    }
+                }
+                args.trsRemaining = filteredTrs;
+            }
+        }
+    }
+    args.curIx++;
+    if (args.curIx >= args.filters.length)
+        return 0;
+    return 1;
+}
+
+function _filterTableComplete(args)
+{ // Continuation after all the filters have been applied
+  // Called via yieldingIterator
+
+    //warnSince("Completing...");
+    //$('tr.filterable').hide();  // <========= This is what is taking so long!
+    $('tr.filterable').css('display', 'none');
+
+    if (args.trsRemaining != null) {
+        //$(args.trsRemaining).show();
+        $(args.trsRemaining).css('display', '');
+
+        // Update count
+        var counter = $('.filesCount');
+        if(counter != undefined)
+            $(counter).text($(args.trsRemaining).length + " / ");
+    } else {
+        var counter = $('.filesCount');
+        if(counter != undefined)
+            $(counter).text(0 + " / ");
+    }
+
+    var tbody = $( $('tr.filterable')[0] ).parent('tbody.sorting');
+    if (tbody != undefined)
+         $(tbody).removeClass('sorting');
+    //warnSince("Really complete.");
+}
+
+function _filterTableYielding()
+{ // Called by filter onchange event.  Will show/hide trs based upon all filters
+    var trsAll = $('tr.filterable'); // Default all
+    if (trsAll.length == 0)
+        return undefined;
+
+    // Find all filters
+    var filters = $("select.filterBy");
+    if (filters.length == 0)
+        return undefined;
+
+    var filtersStruct = new Object;
+    filtersStruct.filters = filters;
+    filtersStruct.curIx = 0;
+    filtersStruct.trsRemaining = trsAll;
+
+    yieldingIterator(_filterTableIterative,_filterTableComplete,filtersStruct);
+}
+*/
+
+function filterTablesApplyOneFilter(filter,remainingTrs)
+{ // Applies a single filter to a filterTables TRs
+    var classes = $(filter).val();
+    if (classes == null || classes.length == 0)
+        return null; // Nothing selected so exclude all rows
+
+    if(classes[0] == 'All')
+        return remainingTrs;  // nothing excluded by this filter
+
+    // Get the filter variable
+    var filterVar = filterTableFilterVar(filter);
+    if (filterVar == undefined)
+        return null;
+
+    var varTds = $(remainingTrs).children('td.' + filterVar);
+    var filteredTrs = null;
+    var ix =0;
+    for(;ix<classes.length;ix++) {
+        var tds = $(varTds).filter('.' + classes[ix]);
+        if (tds.length > 0) {
+            var trs = [];
+            $(tds).each(function (ix) {
+                trs[ix] = this.parentNode;
+            });
+
+            if (filteredTrs == null)
+                filteredTrs = trs;
+            else
+                filteredTrs = jQuery.merge( filteredTrs, trs );  // This one takes too long in IE!
+        }
+    }
+    return filteredTrs;
 }
 
 function filterTablesTrsSurviving(filterClass)
@@ -2225,61 +2507,31 @@ function filterTablesTrsSurviving(filterClass)
     if (filterClass != undefined && filterClass.length > 0)
         filters = $(filters).not('.' + filterClass);
 
-    // For each filter, filter the list of trs that matches that filter
-    $(filters).each(function (i) {
-        var val = $(this).val();
-        if (val == null || val.length == 0)
-            return;
-        val = val.join();
-        if(val.indexOf("All") == 0)
-            return;
-
-        // Get the filter variable
-        var filterVar = filterTableFilterVar(this);
-        if (filterVar == undefined)
-            return;
-
-        // Get the selected values for this filter
-        var classes = $(this).val();
-        if (classes.length == 0)
-            return;
-
-        var varTds = $(showTrs).children('td.' + filterVar);
-        var filteredTrs = new Array;
-        var ix =0;
-        for(;ix<classes.length;ix++) {
-            var tds = $(varTds).filter('.' + classes[ix]);
-            if (tds.length > 0) {
-                if (filteredTrs.length == 0)
-                    filteredTrs = $(tds).parent('tr').get();
-                else
-                    filteredTrs = filteredTrs.concat( $(tds).parent('tr').get() );
-            }
-        }
-        // The following tighter code may take too long
-        //var filterVals = 'td.'+filterVar+'.' + classes.join(',td.'+filterVar+'.');   // "td.cell.GM12878,td.cell.K562,td.cell.H1-hESC"
-        //var filteredTrs = $(showTrs).filter(":has(" + filterVals + ")");
-
-        if (filteredTrs.length > 0)
-            showTrs = filteredTrs;
-    });
+    for(var ix =0;showTrs != null && ix < filters.length;ix++) {
+        showTrs = filterTablesApplyOneFilter(filters[ix],showTrs)
+    }
     return showTrs;
 }
 
 function _filterTable()
 { // Called by filter onchange event.  Will show/hide trs based upon all filters
     var showTrs = filterTablesTrsSurviving();
-    if (showTrs == undefined)
-        return;
     //$('tr.filterable').hide();  // <========= This is what is taking so long!
     $('tr.filterable').css('display', 'none')
 
-    $(showTrs).show();
+    if (showTrs != undefined && showTrs.length > 0) {
+        //$(showTrs).show();
+        $(showTrs).css('display', '');
 
-    // Update count
-    var counter = $('.filesCount');
-    if(counter != undefined)
-        $(counter).text($(showTrs).length + " / ");
+        // Update count
+        var counter = $('.filesCount');
+        if(counter != undefined)
+            $(counter).text($(showTrs).length + " / ");
+    } else {
+        var counter = $('.filesCount');
+        if(counter != undefined)
+            $(counter).text(0 + " / ");
+    }
 
     var tbody = $( $('tr.filterable')[0] ).parent('tbody.sorting');
     if (tbody != undefined)
@@ -2292,18 +2544,40 @@ function filterTableTrigger()
     if (tbody != undefined)
          $(tbody).addClass('sorting');
 
-    setTimeout('_filterTable();',10); // Just in case
+    waitOnFunction(_filterTable);
 }
 
-function filterTable()
+function filterTableDone(event)
+{ // Called by custom 'done' event
+    event.stopImmediatePropagation();
+    $(this).unbind( event );
+    filterTableTrigger();
+}
+
+function filterTable(multiSelect)
 { // Called by filter onchange event.  Will show/hide trs based upon all filters
-    waitOnFunction(filterTableTrigger );
+    // IE takes tooo long, so this should be called only when leaving the filterBy box
+    if ( $('tr.filterable').length > 300) {
+        //if ($.browser.msie) { // IE takes tooo long, so this should be called only when leaving the filterBy box
+            $(multiSelect).one('done',filterTableDone);
+            return;
+        //}
+    } else
+        filterTableTrigger();
 }
 
 function filterTableExcludeOptions(filter)
 { // bound to 'click' event inside ui.dorpdownchecklist.js.
   // Will mark all options in one filterBy box that are inconsistent with the current
   // selections in other filterBy boxes.  Mark with class ".excluded"
+
+    // Compare to the list of all trs
+    var allTrs = $('tr.filterable'); // Default all
+    if (allTrs.length == 0)
+        return false;
+
+    if ($.browser.msie && $(allTrs).length > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
+        return false;
 
     // Find the var for this filter
     var filterVar = filterTableFilterVar(filter);
@@ -2315,10 +2589,9 @@ function filterTableExcludeOptions(filter)
     if (visibleTrs == undefined)
         return false;
 
-    // Compare to the list of all trs
-    var allTrs = $('tr.filterable'); // Default all
-    if (allTrs.length == 0)
-        return false;
+    //if ($.browser.msie && $(visibleTrs).length > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
+    //    return false;
+
     if (allTrs.length == visibleTrs.length) {
         $(filter).children('option.excluded').removeClass('excluded');   // remove .excluded" from all
         return true;  // Nothing more to do.  All are already excluded
@@ -2352,6 +2625,14 @@ function filterTableExcludeOptions(filter)
         else
             $(this).addClass('excluded');    // add .excluded" to non-matching
     });
+
+    // If all options except "all" are included then all should nt be excluded
+    var excluded = $(filter).children('option.excluded');
+    if (excluded.length == 1) {
+        var text = $(excluded[0]).text();
+        if (text == 'All' || text == 'Any')
+            $(excluded[0]).removeClass('excluded');
+    }
     return true;
 }
 
