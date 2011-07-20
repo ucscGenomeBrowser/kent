@@ -87,7 +87,7 @@ wgEncode 1
 		
 		#### Submission 1194 ####
 		track wgEncodeSydhHistCh12H3k4me3IggyalePk
-		subTrack wgEncodeSydhHist 
+		subTrack wgEncodeSydhHistViewPeaks 
 		shortLabel CH12 H3K4me3
 		longLabel CH12 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=H3K4me3 cellType=CH12 control=IGGYale treatment=zNone
