@@ -489,10 +489,10 @@ for my $key (keys %ra) {
                 }
 
                 # Now lets tgz all the sources
-                my $cmd = "/bin/tar -c";
+                my $cmd = "cd $submitPath ; /bin/tar -c";
 
                 for my $file (@files) {
-                    $cmd .= " $submitPath/$file";
+                    $cmd .= " $file";
                 }
                 $cmd .= " | /usr/bin/pigz -c > $targetFile";  # pigz will parallelize and is faster!
 
