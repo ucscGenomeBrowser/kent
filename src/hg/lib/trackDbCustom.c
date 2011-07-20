@@ -715,7 +715,9 @@ else if(startsWith("bed ", type))
     char *words[3];
     chopLine(cloneString( type), words);
     if (trackDbSetting(tdb, "bedFilter") != NULL)
-	   cType = cfgBedFilt;
+        cType = cfgBedFilt;
+    else if (trackDbSettingClosestToHome(tdb, "filterBy") != NULL)
+        cType = cfgBedScore;
     else if (atoi(words[1]) >= 5 && trackDbSettingClosestToHome(tdb, "noScoreFilter") == NULL)
         cType = cfgBedScore;
     }

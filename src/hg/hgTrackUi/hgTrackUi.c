@@ -2424,7 +2424,10 @@ void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack
 {
 char *track = tdb->track;
 
-if (sameString(track, "stsMap"))
+eCfgType cType = cfgTypeFromTdb(tdb,FALSE);
+if (ajax && cType != cfgNone)
+    cfgByCfgType(cType,database,cart,tdb,tdb->track,NULL,FALSE);
+else if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
     affyTxnPhase2Ui(tdb);
@@ -2864,7 +2867,7 @@ if (!tdbIsDownloadsOnly(tdb))
         }
     }
 
-if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
+if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
     if (trackDbSetting(tdb, "dimensions") || (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))

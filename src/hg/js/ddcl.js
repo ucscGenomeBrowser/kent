@@ -23,7 +23,7 @@
 // allCheckboxes: one to one correspondence with selectOptions
 
 var ddcl = {
-    mySelf: null,
+    //mySelf: null, // There is no need for a "mySelf" unless this object is being instantiated.
 
     textOfObjWrappedInStyle: function (obj)
     { // returns the obj text and if there is obj style, the text gets span wrapped with it
@@ -48,14 +48,14 @@ var ddcl = {
         if(chosenCount == 0) {
             msg = 'Please select...';
         } else if(chosenCount == 1) {
-            msg = mySelf.textOfObjWrappedInStyle(chosen[0]);
+            msg = ddcl.textOfObjWrappedInStyle(chosen[0]);
         } else if(chosenCount == options.length) {
-            msg = mySelf.textOfObjWrappedInStyle(options[0]);
+            msg = ddcl.textOfObjWrappedInStyle(options[0]);
         } else {
             for(var ix=0;ix<chosenCount;ix++) {
                 if (ix > 0)
                     msg += "<BR>";
-                msg += mySelf.textOfObjWrappedInStyle(chosen[ix]);
+                msg += ddcl.textOfObjWrappedInStyle(chosen[ix]);
             }
         }
         return msg;
@@ -80,7 +80,7 @@ var ddcl = {
 
         // Set the label
         var control = $(controlSelector).parent();
-        mySelf.labelSet(control,"Select multiple...",'#000088','Selecting...');
+        ddcl.labelSet(control,"Select multiple...",'#000088','Selecting...');
 
         // Find the active 'items' and original 'options'
         var id = $(control).attr('id').substring('ddcl-'.length);
@@ -149,7 +149,7 @@ var ddcl = {
             newColor = '#AA0000'; // red
         //else if (msg.search(/color:/i) == -1)
         //    newColor = 'black';
-        mySelf.labelSet(control,msg,newColor,'Click to select...');
+        ddcl.labelSet(control,msg,newColor,'Click to select...');
 
         // Notice special handling for a custom event
         $(multiSelect).trigger('done',multiSelect);
@@ -188,7 +188,7 @@ var ddcl = {
 
     setup: function (obj) {
         // Initialize the multiselect as a DDCL (drop-down checkbox-list)
-        mySelf = this;
+        //mySelf = this; // There is no need for a "mySelf" unless this object is being instantiated.
 
         // Defaults
         var myFirstIsAll = true;
@@ -252,11 +252,11 @@ var ddcl = {
                             emptyText: myEmptyText,
                             explicitClose: myClose,
                             textFormatFunction: function () { return 'selecting...'; } ,
-                            onComplete: mySelf.onComplete
+                            onComplete: ddcl.onComplete
         });
         if (myNoneIsAll)
             $(obj).addClass('noneIsAll'); // Declare this as none selected same as all selected
-        mySelf.onComplete(obj); // shows selected items in multiple lines
+        ddcl.onComplete(obj); // shows selected items in multiple lines
 
         // Set up the selector (control seen always and replacing select)
         control = $('#ddcl-' + id);
@@ -265,7 +265,7 @@ var ddcl = {
             return;
         }
         var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
-        $(controlSelector).click(mySelf.onOpen);
+        $(controlSelector).click(ddcl.onOpen);
         $(controlSelector).css({width:maxWidth+'px'});
         var controlText = $(control).find(".ui-dropdownchecklist-text");
         $(controlText).css({width:maxWidth+'px'});
@@ -316,14 +316,19 @@ var ddcl = {
             }
         }
 
+    },
+
+    start: function () {  // necessary to delay startup till all selects get ids.
+        $('.filterBy,.filterComp').each( function(i) {
+            if ($(this).hasClass('filterComp'))
+                ddcl.setup(this); // Not nonIsAll
+            else
+                ddcl.setup(this,'noneIsAll')
+        });
     }
 };
 
 $(document).ready(function() {
-    $('.filterBy,.filterComp').each( function(i) {
-        if ($(this).hasClass('filterComp'))
-            ddcl.setup(this); // Not nonIsAll
-        else
-            ddcl.setup(this,'noneIsAll')
-    });
+
+    setTimeout('ddcl.start();',2);  // necessary to delay startup till all selects get ids.
 });

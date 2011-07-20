@@ -28,6 +28,7 @@
 #include "fileUi.h"
 #include "bigBed.h"
 #include "bigWig.h"
+#include "regexHelper.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -50,7 +51,7 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
-//#define SUBTRACK_CFG_POPUP
+#define SUBTRACK_CFG
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -3501,7 +3502,8 @@ if(dyStringLen(dyClause) == 0)
 return dyStringCannibalize(&dyClause);
 }
 
-void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet, boolean onOneLine)
+void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
+                      filterBy_t *filterBySet, boolean onOneLine)
 /* Does the UI for a list of filterBy structure */
 {
 if(filterBySet == NULL)
@@ -3515,11 +3517,14 @@ else
     printf("<B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
 
 filterBy_t *filterBy = NULL;
-webIncludeResourceFile("ui.dropdownchecklist.css");
-jsIncludeFile("ui.dropdownchecklist.js",NULL);
+if(cartOptionalString(cart, "ajax") == NULL)
+    {
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
 #ifdef NEW_JQUERY
-jsIncludeFile("ddcl.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
 #endif///def NEW_JQUERY
+    }
 
 int ix=0;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
@@ -3810,16 +3815,14 @@ if (date != NULL)
 return date;
 }
 
+#ifndef SUBTRACK_CFG
 static void cfgLinkToDependentCfgs(struct cart *cart, struct trackDb *tdb,char *prefix)
 /* Link composite or view level controls to all associateled lower level controls */
 {
 if (!cartVarExists(cart, "ajax") && tdbIsComposite(tdb))
-#ifdef SUBTRACK_CFG_POPUP
-    printf("<script type='text/javascript'>registerViewOnchangeAction('%s')</script>\n",prefix);
-#else///ifndef SUBTRACK_CFG_POPUP
     printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
-#endif///ndef SUBTRACK_CFG_POPUP
 }
+#endif///ndef SUBTRACK_CFG
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,struct hash *trackHash)
 /* Display list of subtracks and descriptions with checkboxes to control visibility and possibly other
@@ -3832,9 +3835,9 @@ struct dyString *dyHtml = newDyString(SMALLBUF);
 char *colors[2]   = { "bgLevel1",
                       "bgLevel1" };
 int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
-#ifndef SUBTRACK_CFG_POPUP
+#ifndef SUBTRACK_CFG
 boolean dependentCfgsNeedBinding = FALSE;
-#endif///ndef SUBTRACK_CFG_POPUP
+#endif///ndef SUBTRACK_CFG
 
 // Get list of leaf subtracks to work with
 struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
@@ -4024,13 +4027,19 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     boolean checkedCB = fourStateChecked(fourState);
     boolean enabledCB = fourStateEnabled(fourState);
     eCfgType cType = cfgTypeFromTdb(subtrack,FALSE);
-#ifdef SUBTRACK_CFG_POPUP
-    // Turn this off only if configurable explicitly set to off
-    if (trackDbSettingClosestToHome(subtrack, "configurable") && trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
-#else///ifndef SUBTRACK_CFG_POPUP
-    if (trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
-#endif///ndef SUBTRACK_CFG_POPUP
-        cType = cfgNone;
+    if (cType != cfgNone)
+        {
+    #ifdef SUBTRACK_CFG
+        // Turn off configuring for certain track type or if explicitly turned off
+        if (regexMatch(subtrack->track, "^snp[0-9]+")     // Special cases to be removed
+        ||  regexMatch(subtrack->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
+        ||  regexMatch(subtrack->track, "^multiz")
+        ||  SETTING_IS_OFF(trackDbSettingClosestToHome(subtrack, "configureByPopup")))
+    #else///ifndef SUBTRACK_CFG
+        if (trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
+    #endif///ndef SUBTRACK_CFG
+            cType = cfgNone;
+        }
     membership_t *membership = subgroupMembershipGet(subtrack);
 
     if (sortOrder == NULL && !useDragAndDrop)
@@ -4067,7 +4076,17 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     if (useDragAndDrop)
         printf("&nbsp;");
 
-    // TODO: make a "view" dropdown (fake to save rendering time) and a configurable wrench here right after the checkbox
+#ifdef SUBTRACK_CFG
+    if (cType != cfgNone)  // make a wrench
+        {
+        // TODO: make vis dd or vis text inp or vis img.  Alternatively, make '*' to denote there are subtrack level differences.
+        enum trackVisibility vis = tdbVisLimitedByAncestry(cart, subtrack, TRUE);
+        #define SUBTRACK_CFG_WRENCH "<a href='#a_cfg' onclick='return scm.cfgToggle(\"%s\");' title='Configure this %s subtrack'><img src='../images/wrench.png'></a>\n"
+        printf(SUBTRACK_CFG_WRENCH,subtrack->track,hStringFromTv(vis));
+        //#define SUBTRACK_CFG_WRENCH "<a href='#a_cfg' onclick='return scm.cfgToggle(\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></a>\n"
+        //printf(SUBTRACK_CFG_WRENCH,subtrack->track);
+        }
+#endif///def SUBTRACK_CFG
 
     // A hidden field to keep track of subtrack order if it could change
     if (sortOrder != NULL || useDragAndDrop)
@@ -4083,16 +4102,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         printf("<TD BGCOLOR='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
                 subtrack->colorR, subtrack->colorG, subtrack->colorB);
         }
-
-    // Subtrack configuration requires a field that is a link to an embedded (or popup) dialog
-#ifdef SUBTRACK_CFG_POPUP
-    #define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return popUpSubtrackCfg(\"%s\",\"%s\");' title='%s'>%s</A>"
-    #define MAKE_CFG_SUBTRACK_LINK(table,label,title) printf(CFG_SUBTRACK_LINK, (table),(table),(label),(label),(title))
-    struct dyString *dyLabel = newDyString(128);
-#else///ifndef SUBTRACK_CFG_POPUP
-    #define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return subtrackCfgShow(\"%s\");' title='Subtrack Configuration'>%s</A>"
-    #define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
-#endif///ndef SUBTRACK_CFG_POPUP
 
     // If sortable, then there must be a column per sortable dimension
     if (sortOrder != NULL)
@@ -4110,18 +4119,13 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     titleRoot = labelRoot(membership->titles[ix],NULL);
                 // Each sortable column requires hidden goop (in the "abbr" field currently) which is the actual sort on value
                 printf ("<TD id='%s_%s' abbr='%s' align='left'>&nbsp;",subtrack->track,sortOrder->column[sIx],membership->membership[ix]);
-            #ifdef SUBTRACK_CFG_POPUP
-                dyStringPrintf(dyLabel,"%s ",titleRoot);
-                if (cType != cfgNone && sameString("view",sortOrder->column[sIx])) // configure link is on view currenntly  TODO: make a wrench next to check box/view
-                    {
-                    dyStringAppend(dyLabel,"Configuration");
-                    MAKE_CFG_SUBTRACK_LINK(subtrack->track,dyStringContents(dyLabel),titleRoot);
-                    }
-            #else///ifndef SUBTRACK_CFG_POPUP
-                if (cType != cfgNone && sameString("view",sortOrder->column[sIx]))
-                    MAKE_CFG_SUBTRACK_LINK(subtrack->track,titleRoot);  // FIXME: Currently configurable under sort only supported when multiview
-            #endif///ndef SUBTRACK_CFG_POPUP
+            #ifndef SUBTRACK_CFG
+                #define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return subtrackCfgShow(\"%s\");' title='Subtrack Configuration'>%s</A>"
+                #define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
+                if (cType != cfgNone && sameString("view",sortOrder->column[sIx])) // configure link is on view currently
+                    MAKE_CFG_SUBTRACK_LINK(subtrack->track,titleRoot);
                 else
+            #endif///ndef SUBTRACK_CFG
                     printf("%s",titleRoot);
                 puts ("</TD>");
                 freeMem(titleRoot);
@@ -4132,20 +4136,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         {
         printf ("<TD>&nbsp;");
         indentIfNeeded(hierarchy,membership);
-    #ifdef SUBTRACK_CFG_POPUP
-        if (cType != cfgNone && cType != cfgWigMaf)  // FIXME: wigMaf restriction is temporary until configureByPopup off is set
-            MAKE_CFG_SUBTRACK_LINK(subtrack->track,subtrack->shortLabel,subtrack->shortLabel);
-    #else///ifndef SUBTRACK_CFG_POPUP
+    #ifndef SUBTRACK_CFG
         if (cType != cfgNone)
             MAKE_CFG_SUBTRACK_LINK(subtrack->track,subtrack->shortLabel);
-    #endif///ndef SUBTRACK_CFG_POPUP
         else
+    #endif///ndef SUBTRACK_CFG
             printf("%s",subtrack->shortLabel);
         puts ("</TD>");
         }
-#ifdef SUBTRACK_CFG_POPUP
-    dyStringFree(&dyLabel);
-#endif///def SUBTRACK_CFG_POPUP
 
     // The long label column (note that it may have a "..." that allows getting at all the metadata)
     printf ("<TD title='select to copy'>&nbsp;%s", subtrack->longLabel);
@@ -4154,21 +4152,30 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     compositeMetadataToggle(db,subtrack,NULL,TRUE,FALSE, trackHash);
     printf("&nbsp;");
 
-#ifndef SUBTRACK_CFG_POPUP
     // Embedded cfg dialogs are within the TD that contains the longLabel.  This allows a wide item to be embedded in the table
     if (cType != cfgNone)
         {
+    #ifdef SUBTRACK_CFG
+        // How to make this thing float to the left?  Container is overflow:visible
+        // and contained (made in js) is position:relative; left: -{some pixels}
+        #define CFG_SUBTRACK_DIV "<DIV id='div_cfg_%s' class='subCfg %s' style='display:none; overflow:visible;'></DIV>"
+        #define MAKE_CFG_SUBTRACK_DIV(table,view) printf(CFG_SUBTRACK_DIV,(table),(view)?(view):"noView")
+        char * view = NULL;
+        if (membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
+            view = membership->membership[ix];
+        MAKE_CFG_SUBTRACK_DIV(subtrack->track,view);
+    #else///ifndef SUBTRACK_CFG
         dependentCfgsNeedBinding = TRUE; // configurable subtrack needs to be bound to composite settings
-    #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
-    #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
+        #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
+        #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
         safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->track);
         boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
         MAKE_CFG_SUBTRACK_DIV(subtrack->track,htmlIdentifier,open);
         safef(htmlIdentifier,sizeof(htmlIdentifier),"%s",subtrack->track);
         cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
         printf("</DIV>");
+    #endif///ndef SUBTRACK_CFG
         }
-#endif///ndef SUBTRACK_CFG_POPUP
 
     // A schema link for each track
     printf("</td>\n<TD>&nbsp;");
@@ -4217,10 +4224,10 @@ if (sortOrder == NULL)
 
 // Tying subtracks with matrix and subtrack cfgs with views requires javascript help
 puts("<script type='text/javascript'>matInitializeMatrix();</script>");
-#ifndef SUBTRACK_CFG_POPUP
+#ifndef SUBTRACK_CFG
 if (dependentCfgsNeedBinding)
     cfgLinkToDependentCfgs(cart,parentTdb,parentTdb->track);
-#endif//ndef SUBTRACK_CFG_POPUP
+#endif//ndef SUBTRACK_CFG
 
 // Finally we are free of all this
 membersForAllSubGroupsFree(parentTdb,&membersForAll);
@@ -4886,7 +4893,7 @@ if(filterBySet != NULL)
 
     if (!isBoxOpened)   // Note filterBy boxes are not double "boxed", if there are no other filters
         printf("<BR>");
-    filterBySetCfgUi(tdb,filterBySet,TRUE);
+    filterBySetCfgUi(cart,tdb,filterBySet,TRUE);
     filterBySetFree(&filterBySet);
     skipScoreFilter = TRUE;
     }
@@ -5368,7 +5375,7 @@ if (cartOptionalString(cart, "ajax") == NULL)
     if(filterBySet != NULL)
         {
         printf("<BR>");
-        filterBySetCfgUi(tdb,filterBySet,FALSE);
+        filterBySetCfgUi(cart,tdb,filterBySet,FALSE);
         filterBySetFree(&filterBySet);
         }
     }
@@ -6105,7 +6112,9 @@ if(makeCfgRows)
                 {
                 cfgByCfgType(configurable[ix],db,cart,view->subtracks,varName,
                         membersOfView->titles[ix],TRUE);
+            #ifndef SUBTRACK_CFG
                 cfgLinkToDependentCfgs(cart,parentTdb,varName);
+            #endif///ndef SUBTRACK_CFG
                 }
             }
         }
@@ -6436,12 +6445,15 @@ static boolean compositeUiByFilter(char *db, struct cart *cart, struct trackDb *
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,cart);
 if(membersForAll == NULL || membersForAll->filters == FALSE) // Not Matrix or filters
     return FALSE;
-jsIncludeFile("ui.core.js",NULL);
-webIncludeResourceFile("ui.dropdownchecklist.css");
-jsIncludeFile("ui.dropdownchecklist.js",NULL);
+if(cartOptionalString(cart, "ajax") == NULL)
+    {
+    jsIncludeFile("ui.core.js",NULL);
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
 #ifdef NEW_JQUERY
-jsIncludeFile("ddcl.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
 #endif///def NEW_JQUERY
+    }
 
 cgiDown(0.7);
 printf("<B>Filter subtracks %sby:</B> (select multiple %sitems - %s)<BR>\n",
@@ -6897,24 +6909,20 @@ bool hasSubgroups = (trackDbSetting(tdb, "subGroup1") != NULL);
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
 
-if (primarySubtrack == NULL)
+if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     {
-    if (!cartVarExists(cart, "ajax"))
-        {
-        if(trackDbSetting(tdb, "dragAndDrop") != NULL)
-            jsIncludeFile("jquery.tablednd.js", NULL);
-        jsIncludeFile("ajax.js",NULL);
-        #ifdef TABLE_SCROLL
-        jsIncludeFile("jquery.fixedtable.js",NULL);
-        #endif//def TABLE_SCROLL
-        }
+    if(trackDbSetting(tdb, "dragAndDrop") != NULL)
+        jsIncludeFile("jquery.tablednd.js", NULL);
+    jsIncludeFile("ajax.js",NULL);
+    #ifdef TABLE_SCROLL
+    jsIncludeFile("jquery.fixedtable.js",NULL);
+    #endif//def TABLE_SCROLL
     jsIncludeFile("hui.js",NULL);
     }
 
-#ifdef SUBTRACK_CFG_POPUP
-printf("<div id='popit' style='display: none'></div>");
-cgiMakeHiddenVar("db", db);
-printf("<input type=HIDDEN id='track' value='%s';</input>\n",tdb->track);
+#ifdef SUBTRACK_CFG
+cgiMakeHiddenVar("db", db); // TODO: Change these to json vars as per Larry's new method
+printf("<input type=HIDDEN id='track' value='%s'>\n",tdb->track);
 #endif
 cgiDown(0.7);
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
@@ -6952,11 +6960,6 @@ if(primarySubtrack == NULL)
             compositeUiByMatrix(db, cart, tdb, formName);
 	    }
         }
-#ifdef SUBTRACK_CFG_POPUP
-    if(primarySubtrack == NULL)
-        cfgLinkToDependentCfgs(cart,tdb,tdb->track);  // Must be after views are set up to get view vis
-    printf("<script type='text/javascript'>registerFormSubmit('mainForm');</script>\n");
-#endif
     }
 
 cartSaveSession(cart);
