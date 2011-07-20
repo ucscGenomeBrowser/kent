@@ -1325,5 +1325,7 @@ int gCmpPriority(const void *va, const void *vb);
 int tgCmpPriority(const void *va, const void *vb);
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
 
+#define measureTime uglyTime
+
 #endif /* HGTRACKS_H */
 
