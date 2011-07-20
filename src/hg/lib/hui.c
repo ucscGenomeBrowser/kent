@@ -276,20 +276,6 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash)
 /* Show downlaods, schema and metadata links where appropriate */
 {
-if (trackDbSetting(tdb, "wgEncode") != NULL)
-    {
-    if (hIsPreviewHost())
-        {
-        printf("<P><B>WARNING</B>: This data is provided for early access via the Preview Browser -- it is unreviewed and subject to change. For high quality reviewed annotations, see the <A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTracks?db=%s'>Genome Browser</A>.",
-            "genome.ucsc.edu", db);
-        }
-    else
-        {
-        // TODO: use hTrackUiName()
-        printf("<P><B>NOTE</B>: Early access to additional track data may be available on the <A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s'>Preview Browser</A>.",
-            "genome-preview.ucsc.edu", db, tdb->track);
-        }
-    }
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
                   && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
