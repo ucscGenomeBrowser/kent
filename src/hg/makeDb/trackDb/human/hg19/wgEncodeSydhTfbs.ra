@@ -227,10 +227,10 @@ wgEncode 1
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel HVEC GAT2 UCD
         longLabel HUVEC GATA2 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=GATA2 cellType=2HUVECcontrol=UCD treatment=aNone
+        subGroups view=Peaks factor=GATA2 cellType=2HUVEC control=UCD treatment=aNone
         type narrowPeak
         color 224,75,0
-        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=2HUVECantibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdPk fileName=wgEncodeSydhTfbsHuvecGata2UcdPk.narrowPeak.gz
+        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=2HUVEC antibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdPk fileName=wgEncodeSydhTfbsHuvecGata2UcdPk.narrowPeak.gz
 
         track wgEncodeSydhTfbsH1hescMaxUcdPk
         subTrack wgEncodeSydhTfbsViewPeaks off
@@ -664,7 +664,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HVEC cFOS UCD
         longLabel HUVEC c-FOS UC Davis ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=cFOS cellType=2HUVECcontrol=UCD treatment=aNone
+        subGroups view=Peaks factor=cFOS cellType=2HUVEC control=UCD treatment=aNone
         type narrowPeak
         color 224,75,0
         # subId=3250 dateSubmitted=2011-01-13
@@ -1149,7 +1149,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HVEC Max Std
         longLabel HUVEC Max Standard ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=MAX cellType=2HUVECcontrol=std treatment=aNone
+        subGroups view=Peaks factor=MAX cellType=2HUVEC control=std treatment=aNone
         type narrowPeak
         color 224,75,0
         # subId=4165 dateSubmitted=2011-06-03
@@ -1158,7 +1158,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HVEC cJun Std
         longLabel HUVEC c-Jun Standard ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=cJUN cellType=2HUVECcontrol=std treatment=aNone
+        subGroups view=Peaks factor=cJUN cellType=2HUVEC control=std treatment=aNone
         type narrowPeak
         color 224,75,0
         # subId=4165 dateSubmitted=2011-06-03
@@ -2007,7 +2007,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HVEC Pol2 Std
         longLabel HUVEC Pol2 Standard ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=POL2 cellType=2HUVECcontrol=std treatment=aNone
+        subGroups view=Peaks factor=POL2 cellType=2HUVEC control=std treatment=aNone
         type narrowPeak
         color 224,75,0
         # subId=4165 dateSubmitted=2011-06-03
@@ -2605,16 +2605,16 @@ wgEncode 1
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HUVEC   GATA2  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GATA-2 in HUVEC cells)
-#        subGroups view=Signal factor=GATA2 cellType=2HUVECcontrol=UCD treatment=aNone
+#        subGroups view=Signal factor=GATA2 cellType=2HUVEC control=UCD treatment=aNone
 #        type bigWig 1.000000 14280.000000
 #        color 224,75,0
-#        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=2HUVECantibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdSig fileName=wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig.gz
+#        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=2HUVEC antibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdSig fileName=wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsHuvecGata2UcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HVEC GAT2 UCD
         longLabel HUVEC GATA2 UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=GATA2 cellType=2HUVECcontrol=UCD treatment=aNone
+        subGroups view=Signal factor=GATA2 cellType=2HUVEC control=UCD treatment=aNone
         type bigWig 0.000000 8893.500000
         color 224,75,0
         # subId=3072 dateSubmitted=2010-12-06
@@ -2641,16 +2641,16 @@ wgEncode 1
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HUVEC   Input  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HUVEC cells)
-#        subGroups view=Signal factor=zInputucd cellType=2HUVECcontrol=UCD treatment=aNone
+#        subGroups view=Signal factor=zInputucd cellType=2HUVEC control=UCD treatment=aNone
 #        type bigWig 1.000000 21529.000000
 #        color 224,75,0
-#        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=2HUVECantibody=Input setType=input treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1207 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecInputUcdSig fileName=wgEncodeSydhTfbsHuvecInputUcdSig.bigWig.gz
+#        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=2HUVEC antibody=Input setType=input treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1207 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecInputUcdSig fileName=wgEncodeSydhTfbsHuvecInputUcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsHuvecInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HVEC Inpt UCD
         longLabel HUVEC Input UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputucd cellType=2HUVECcontrol=UCD treatment=aNone
+        subGroups view=Signal factor=zInputucd cellType=2HUVEC control=UCD treatment=aNone
         type bigWig 0.000000 16949.099609
         color 224,75,0
         # subId=3072 dateSubmitted=2010-12-06
@@ -4103,7 +4103,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HVEC cJun Std
         longLabel HUVEC c-Jun Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=cJUN cellType=2HUVECcontrol=std treatment=aNone
+        subGroups view=Signal factor=cJUN cellType=2HUVEC control=std treatment=aNone
         type bigWig 0.000000 12070.400391
         color 224,75,0
         # subId=3055 dateSubmitted=2010-12-02
@@ -4112,7 +4112,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HVEC Inpt Std
         longLabel HUVEC Input Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputstd cellType=2HUVECcontrol=std treatment=aNone
+        subGroups view=Signal factor=zInputstd cellType=2HUVEC control=std treatment=aNone
         type bigWig 0.000000 14303.700195
         color 224,75,0
         # subId=3055 dateSubmitted=2010-12-02
@@ -4121,7 +4121,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HVEC Max Std
         longLabel HUVEC Max Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=MAX cellType=2HUVECcontrol=std treatment=aNone
+        subGroups view=Signal factor=MAX cellType=2HUVEC control=std treatment=aNone
         type bigWig 0.000000 13383.500000
         color 224,75,0
         # subId=3055 dateSubmitted=2010-12-02
@@ -4130,7 +4130,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HVEC Pol2 Std
         longLabel HUVEC Pol2 Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=POL2 cellType=2HUVECcontrol=std treatment=aNone
+        subGroups view=Signal factor=POL2 cellType=2HUVEC control=std treatment=aNone
         type bigWig 0.000000 29937.699219
         color 224,75,0
         # subId=3055 dateSubmitted=2010-12-02
@@ -4710,7 +4710,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HVEC cFOS UCD
         longLabel HUVEC c-FOS UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=cFOS cellType=2HUVECcontrol=UCD treatment=aNone
+        subGroups view=Signal factor=cFOS cellType=2HUVEC control=UCD treatment=aNone
         type bigWig 1.000000 18203.000000
         color 224,75,0
         # subId=3250 dateSubmitted=2011-01-13

@@ -45,7 +45,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
-uglyTime(NULL);
+measureTime(NULL);
 browserName = hBrowserName();
 organization = "UCSC";
 
