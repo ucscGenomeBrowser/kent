@@ -10151,17 +10151,6 @@ priority 500
 validate none # Perhaps could add a validte option to restrict/require this var for objType=composite
 # Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 
-term fileIndex
-tag FILEINDEX
-type typeOfTerm
-label BAM Index file
-description  The name of the index file (.bai) that is associated with a particular bam file.
-searchable no
-cvDefined no
-validate exists # Matches the fileName prefix with the suffix .bai
-#hidden yes
-priority 990
-
 term fileName
 tag FILENAME
 type typeOfTerm
@@ -10197,7 +10186,7 @@ validate regex: ^[0-9]*k$
 priority 500
 # With more investigation, this could be collapsed in with fragLength (11/19/10)
 
-term geoSample
+term geoSampleAccession
 tag GEOSAMPLE
 type typeOfTerm
 label GEO sample accession
@@ -10207,7 +10196,7 @@ cvDefined no
 validate regex: ^GSM[0-9]*$
 priority 345
 
-term geoSeries
+term geoSeriesAccession
 tag GEOSERIES
 type typeOfTerm
 label GEO series accession
@@ -10339,18 +10328,6 @@ cvDefined no
 validate list: hg18,hg19,mm9
 priority 305
 # Could be cv.ra term
-
-term parentTable
-tag PARENTTABLE
-type typeOfTerm
-label Closest related table
-description A data file available for downloads may not be directly associated with a track in the UCSC Genome Browser.  If this is the case, this term will identify the closest track or table related to this file.
-searchable no
-cvDefined no
-validate none
-hidden yes
-priority 920
-# On its way out (11/3/10)
 
 term phase
 tag PHASE
@@ -10601,6 +10578,18 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 470
+
+term type
+tag TYPE
+type typeOfTerm
+label File type
+description The type of the primary file associated with the object PROVISIONAL
+searchable multiSelect
+cvDefined no
+validate None
+priority 900 
+#I do not know how to set the priority
+
 
 term uniqueness
 tag UNIQUENESS
