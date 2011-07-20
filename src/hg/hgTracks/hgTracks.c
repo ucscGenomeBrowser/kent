@@ -4599,10 +4599,10 @@ if (userSeqString && !ssFilesExist(userSeqString))
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
 if (measureTiming)
-    uglyTime("Time before getTrackList");
+    measureTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
 if (measureTiming)
-    uglyTime("getTrackList");
+    measureTime("getTrackList");
 makeGlobalTrackHash(trackList);
 /* Tell tracks to load their items. */
 
@@ -4616,7 +4616,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     }
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 if (measureTiming)
-    uglyTime("parentChildCartCleanup");
+    measureTime("parentChildCartCleanup");
 
 
 /* Honor hideAll and visAll variables */
@@ -4721,7 +4721,7 @@ if (ptMax > 0)
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
     if (measureTiming)
-	uglyTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
+	measureTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
     }
 
 printTrackInitJavascript(trackList);
@@ -5243,7 +5243,7 @@ hPrintf("</FORM>\n");
 
 pruneRedundantCartVis(trackList);
 if (measureTiming)
-    uglyTime("Done with trackForm");
+    measureTime("Done with trackForm");
 }
 
 static void toggleRevCmplDisp()
