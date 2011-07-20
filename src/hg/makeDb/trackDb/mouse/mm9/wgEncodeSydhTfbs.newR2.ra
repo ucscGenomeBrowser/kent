@@ -333,7 +333,6 @@ html wgEncodeSydhTfbs.new
 		# subId=4451 dateSubmitted=2011-06-29
 
 
-		#### Submission 1153 ####
 		track wgEncodeSydhTfbsCh12E2f4IggrabPk
 		parent wgEncodeSydhTfbsViewPeaks off
 		shortLabel CH12 E2F4 Pk
@@ -341,8 +340,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Peaks factor=E2F4 cellType=CH12 control=IGGrab treatment=zNone
 		type narrowPeak
 		color 86,180,233
+		# subId=1153
 
-		#### Submission 1155 ####
 		track wgEncodeSydhTfbsCh12Pol2IggmusPk
 		parent wgEncodeSydhTfbsViewPeaks
 		shortLabel CH12 Pol2 Pk
@@ -350,6 +349,7 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Peaks factor=POL2 cellType=CH12 control=IGGmus treatment=zNone
 		type narrowPeak
 		color 86,180,233
+		# subId=1155
 
 		track wgEncodeSydhTfbsCh12TbpIggmusPk
     	parent wgEncodeSydhTfbsViewPeaks off
@@ -361,7 +361,6 @@ html wgEncodeSydhTfbs.new
 		# subId=4610 dateSubmitted=2011-07-19
 
 
-		#### Submission 1157 ####
 		track wgEncodeSydhTfbsCh12CjunIggrabPk
 		parent wgEncodeSydhTfbsViewPeaks
 		shortLabel CH12 c-Jun Pk
@@ -369,8 +368,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Peaks factor=cJUN cellType=CH12 control=IGGrab treatment=zNone
 		type narrowPeak
 		color 86,180,233
+		# subId=1157
 
-		#### Submission 1159 ####
 		track wgEncodeSydhTfbsCh12CmycIggrabPk
 		parent wgEncodeSydhTfbsViewPeaks off
 		shortLabel CH12 c-Myc Pk
@@ -378,6 +377,7 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Peaks factor=cMYC cellType=CH12 control=IGGrab treatment=zNone
 		type narrowPeak
 		color 86,180,233
+		# subId=1159
 		
     	track wgEncodeSydhTfbsMelTbpIggmusPk
     	parent wgEncodeSydhTfbsViewPeaks off
@@ -388,7 +388,6 @@ html wgEncodeSydhTfbs.new
     	color 86,180,233
 		# subId=4610 dateSubmitted=2011-07-19
 	
-		#### Submission 1161 ####
 		track wgEncodeSydhTfbsMelPol2IggmusPk
 		parent wgEncodeSydhTfbsViewPeaks
 		shortLabel MEL Pol2 Pk
@@ -396,7 +395,7 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Peaks factor=POL2 cellType=MEL control=IGGmus treatment=zNone
 		type narrowPeak
 		color 86,180,233
-
+		# subId=1161
 
     	track wgEncodeSydhTfbsMelCmycIggrabPk
     	parent wgEncodeSydhTfbsViewPeaks off
@@ -417,7 +416,6 @@ html wgEncodeSydhTfbs.new
 		# subId=4610 dateSubmitted=2011-07-19		
 
 
-		#### Submission 1192 ####
 		track wgEncodeSydhTfbsMelJundIggrabPk
 		parent wgEncodeSydhTfbsViewPeaks off
 		shortLabel MEL JunD Pk
@@ -425,8 +423,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Peaks factor=JUND cellType=MEL control=IGGrab treatment=zNone
 		type narrowPeak
 		color 86,180,233
+		# subId=1192
 
-		#### Submission 1193 ####
 		track wgEncodeSydhTfbsMelE2f4IggrabPk
 		parent wgEncodeSydhTfbsViewPeaks off
 		shortLabel MEL E2F4 Pk
@@ -434,6 +432,7 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Peaks factor=E2F4 cellType=MEL control=IGGrab treatment=zNone
 		type narrowPeak
 		color 86,180,233
+		# subId=1193
 
 	#####Signal Tracks###########
 	track wgEncodeSydhTfbsViewSig
@@ -442,12 +441,11 @@ html wgEncodeSydhTfbs.new
 	visibility full
 	#viewUi
 	parent wgEncodeSydhTfbs
-    	viewLimits 2:20
-    	autoScale off
-    	maxHeightPixels 100:16:16
-    	windowingFunction mean+whiskers
+	viewLimits 2:20
+	autoScale off
+	maxHeightPixels 100:16:16
+	windowingFunction mean+whiskers
 	
-		#### Submission 1125 ####
 		track wgEncodeSydhTfbsCh12InputIggrabSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 IgG-rab Sg
@@ -455,8 +453,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=zInputIGGRAB cellType=CH12 control=IGGrab treatment=zNone
 		type bigWig 1 66328
 		color 86,180,233
+		# subId=1125
 
-		#### Submission 1126 ####
 		track wgEncodeSydhTfbsCh12JundIggrabSig
 		parent wgEncodeSydhTfbsViewSig off 
 		shortLabel CH12 JunD Sg
@@ -464,8 +462,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=JUND cellType=CH12 control=IGGrab treatment=zNone
 		type bigWig 1 63771
 		color 86,180,233
-		
-		#### Submission 1153 ####
+		# subId=1126	
+	
 		track wgEncodeSydhTfbsCh12E2f4IggrabSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 E2F4 Sg
@@ -473,8 +471,9 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=E2F4 cellType=CH12 control=IGGrab treatment=zNone
 		type bigWig 1 79444
 		color 86,180,233
-		
-		#### Sumission 1154 ####
+		# subId=1153	
+
+	
 		track wgEncodeSydhTfbsCh12InputIggmusSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 IgG-mus Sg
@@ -482,8 +481,9 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=zInputIGGMUS cellType=CH12 control=IGGmus treatment=zNone
 		type bigWig 1 71455
 		color 86,180,233
+		# subId=1154
 
-		#### Submission 1155 ####		
+
 		track wgEncodeSydhTfbsCh12Pol2IggmusSig
 		parent wgEncodeSydhTfbsViewSig 
 		shortLabel CH12 Pol2 Sg
@@ -491,8 +491,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=POL2 cellType=CH12 control=IGGmus treatment=zNone
 		type bigWig 1 14925
 		color 86,180,233
+		# subId=1155
 
-		#### Submission 1156 ####
 		track wgEncodeSydhTfbsCh12TbpIggmusSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 TBP Sg
@@ -500,8 +500,9 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=TBP cellType=CH12 control=IGGmus treatment=zNone
 		type bigWig 1 52209
 		color 86,180,233
+		# subId=1156
 
-		#### Submission 1157 ####
+
  		track wgEncodeSydhTfbsCh12CjunIggrabSig
 		parent wgEncodeSydhTfbsViewSig
 		shortLabel CH12 c-Jun Sg
@@ -509,8 +510,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=cJUN cellType=CH12 control=IGGrab treatment=zNone
 		type bigWig 1 57353
 		color 86,180,233
-		
-		#### Submission 1159 ####	
+		# subId=1157	
+	
 		track wgEncodeSydhTfbsCh12CmycIggrabSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 c-Myc Sg
@@ -518,8 +519,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=cMYC cellType=CH12 control=IGGrab treatment=zNone
 		type bigWig 1 56356
 		color 86,180,233
+		# subId=1159
 
-		#### Submission 1160 ####
 		track wgEncodeSydhTfbsMelTbpIggmusSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel MEL TBP Sg
@@ -527,8 +528,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=TBP cellType=MEL control=IGGmus treatment=zNone
 		type bigWig 1 60278
 		color 86,180,233
+		# subId=1160
 
-		#### Submission 1161 ####
 		track wgEncodeSydhTfbsMelPol2IggmusSig
 		parent wgEncodeSydhTfbsViewSig 
 		shortLabel MEL Pol2 Sg
@@ -536,8 +537,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=POL2 cellType=MEL control=IGGmus treatment=zNone
 		type bigWig 1 13695
 		color 86,180,233
+		# subId=1161
 
-		#### Submission 1162 ####
 		track wgEncodeSydhTfbsMelInputIggmusSig
 		parent wgEncodeSydhTfbsViewSig off 
 		shortLabel MEL IgG-mus Sg
@@ -545,8 +546,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=zInputIGGMUS cellType=MEL control=IGGmus treatment=zNone
 		type bigWig 1 78618
 		color 86,180,233
+		# subId=1162
 
-		#### Submission 1163 ####
 		track wgEncodeSydhTfbsMelCmycIggrabSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel MEL c-Myc Sg
@@ -554,9 +555,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=cMYC cellType=MEL control=IGGrab treatment=zNone
 		type bigWig 1 61932
 		color 86,180,233
+		# subId=1163
 
-
-		#### Submission 1164 ####
 		track wgEncodeSydhTfbsMelInputIggrabSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel MEL IgG-rab Sg
@@ -564,8 +564,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=zInputIGGRAB cellType=MEL control=IGGrab treatment=zNone
 		type bigWig 1 103648
 		color 86,180,233
+		# subId=1164
 
-		#### Submission 1165 ####
  		track wgEncodeSydhTfbsMelGata1IggratSig
 		parent wgEncodeSydhTfbsViewSig
 		shortLabel MEL GATA-1 Sg
@@ -573,8 +573,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=GATA1SC265 cellType=MEL control=IGGrat treatment=zNone
 		type bigWig 1 56526
 		color 86,180,233
+		# subId=1165
 
-		#### Submission 1167 ####
 		track wgEncodeSydhTfbsMelInputIggratSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel MEL IgG-rat Sg
@@ -582,9 +582,9 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGrat treatment=zNone
 		type bigWig 1 90844
 		color 86,180,233
+		# subId=1167
 
 
-		##### Submission 1192 #####
 		track wgEncodeSydhTfbsMelJundIggrabSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel MEL JunD Sg
@@ -592,8 +592,8 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=JUND cellType=MEL control=IGGrab treatment=zNone
 		type bigWig 1.000000 71501.000000
 		color 86,180,233
+		# subId=1192
 
-		#### Submission 1193 #####
 		track wgEncodeSydhTfbsMelE2f4IggrabSig
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel MEL E2F4 Sg
@@ -601,6 +601,7 @@ html wgEncodeSydhTfbs.new
 		subGroups view=Signal factor=E2F4 cellType=MEL control=IGGrab treatment=zNone
 		type bigWig 1.000000 91713.000000
 		color 86,180,233
+		# subId=1193
 
 		track wgEncodeSydhTfbsCh12P300sc584IggrabSig
 		parent wgEncodeSydhTfbsViewSig 
