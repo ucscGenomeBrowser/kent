@@ -78,7 +78,7 @@ LI {		line-height: 1.5;
 
 
 /*** used by CCDS details page in hgc *** */
-    
+
 /* give the tables some breathing room and a consistent width */
 TABLE.hgcCcds {
     margin-bottom: 30px;
@@ -270,3 +270,5 @@ tbody.sorting { color: #DDDDDD; cursor: wait;  }
         margin: 0;
         text-align: center;
 }
+
+.clickable:hover { cursor: pointer; }
