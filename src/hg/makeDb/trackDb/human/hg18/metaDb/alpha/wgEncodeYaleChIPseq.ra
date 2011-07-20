@@ -1358,7 +1358,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Hek293InputV2
 objType file
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -1382,7 +1382,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Hek293Pol2V2
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -5269,7 +5269,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2Hek293Pol2V2
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -8280,7 +8280,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep3Hek293Pol2V2
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -9986,7 +9986,7 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksHek293Pol2V2
 objType table
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -12265,7 +12265,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataHek293Input
 objType file
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -13759,7 +13759,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1Hek293Pol2
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -17348,7 +17348,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2Hek293Pol2
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -20201,7 +20201,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep3Hek293Pol2
 objType file
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -21165,7 +21165,7 @@ view Signal
 metaObject wgEncodeYaleChIPseqRel2SignalHek293Input
 objType table
 antibody Input
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -21190,7 +21190,7 @@ view Signal
 metaObject wgEncodeYaleChIPseqRel2SignalHek293Pol2
 objType table
 antibody Pol2
-cell HEK293(b)
+cell HEK293
 composite wgEncodeYaleChIPseq
 control std
 controlId HEK293/None/Input/std
@@ -25122,4 +25122,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 1208888727
+# MAGIC: 1141466152

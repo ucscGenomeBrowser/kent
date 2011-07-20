@@ -31,7 +31,7 @@ wgEncodeSydhHistCh12H3k4me3IggyaleSig
 wgEncodeSydhHistCh12InputIggyaleSig
 wgEncodeSydhHistMelH3k04me3Dm2p5dIggyalePk
 wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleSig
-wgEncodeSydhHistMelH3k4me3IggyalePk
+wgEncodeSydhHistMelH3k04me3IggyalePk
 wgEncodeSydhHistMelH3k4me3IggyaleSig
 wgEncodeSydhHistMelInputDm2p5dIggyaleSig
 wgEncodeSydhHistMelInputIggyaleSig
@@ -66,7 +66,7 @@ C') New files (36 downloadables, 6 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release1/wgEncodeSydhHistMelH3k04me3IggyaleAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release1/wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release1/wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release1/wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release1/wgEncodeSydhHistMelH3k04me3IggyalePk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release1/wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release1/wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release1/wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig

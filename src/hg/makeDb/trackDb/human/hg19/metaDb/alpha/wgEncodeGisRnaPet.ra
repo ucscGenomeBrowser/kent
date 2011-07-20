@@ -37,8 +37,7 @@ cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-22
-dateResumbitted 2011-05-05
+dateResubmitted 2011-05-05
 dateSubmitted 10-08-13
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000248
@@ -92,8 +91,7 @@ cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-22
-dateResumbitted 2011-05-05
+dateResubmitted 2011-05-05
 dateSubmitted 10-08-13
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000248
@@ -145,7 +143,7 @@ cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResumbitted 2011-05-05
+dateResubmitted 2011-05-05
 dateSubmitted 10-08-13
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000248
@@ -196,7 +194,7 @@ cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResumbitted 2011-05-05
+dateResubmitted 2011-05-05
 dateSubmitted 10-08-13
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000248
@@ -222,7 +220,7 @@ cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResumbitted 2011-05-05
+dateResubmitted 2011-05-05
 dateSubmitted 10-08-13
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000248
@@ -276,7 +274,7 @@ cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResumbitted 2011-05-05
+dateResubmitted 2011-05-05
 dateSubmitted 10-08-13
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000248
@@ -2893,7 +2891,6 @@ metaObject wgEncodeGisRnaPetNhekNucleusPapAlnRep1
 objType table
 bioRep gen0158N
 cell NHEK
-cloned clone-free
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
@@ -2921,7 +2918,6 @@ metaObject wgEncodeGisRnaPetNhekNucleusPapClustersRep1
 objType table
 bioRep gen0158N
 cell NHEK
-cloned clone-free
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
@@ -2949,7 +2945,6 @@ metaObject wgEncodeGisRnaPetNhekNucleusPapFastqRd1Rep1
 objType file
 bioRep gen0158N
 cell NHEK
-cloned clone-free
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
@@ -2975,7 +2970,6 @@ metaObject wgEncodeGisRnaPetNhekNucleusPapFastqRd2Rep1
 objType file
 bioRep gen0158N
 cell NHEK
-cloned clone-free
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
@@ -3001,7 +2995,6 @@ metaObject wgEncodeGisRnaPetNhekNucleusPapMinusRawRep1
 objType table
 bioRep gen0158N
 cell NHEK
-cloned clone-free
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
@@ -3028,7 +3021,6 @@ metaObject wgEncodeGisRnaPetNhekNucleusPapPlusRawRep1
 objType table
 bioRep gen0158N
 cell NHEK
-cloned clone-free
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
@@ -3209,4 +3201,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 376580537
+# MAGIC: 1452108021
