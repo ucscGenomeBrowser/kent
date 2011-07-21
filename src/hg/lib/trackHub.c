@@ -491,6 +491,9 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
+if (hub == NULL)
+    return 1;
+
 verbose(2, "hub %s\nshortLabel %s\nlongLabel %s\n", hubUrl, hub->shortLabel, hub->longLabel);
 verbose(2, "%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
 struct trackHubGenome *genome;
