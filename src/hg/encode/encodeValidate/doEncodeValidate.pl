@@ -23,7 +23,7 @@ use warnings;
 use warnings FATAL => 'all';
 use strict;
 
-#use DataBrowser;
+#use DataBrowser qw(browse);
 use File::stat;
 use File::Basename;
 use Getopt::Long;
@@ -156,6 +156,10 @@ sub dieTellWrangler
 # daf is daf hash
 
 # dispatch table
+# modified some validators for specific types, it no longer validates orControl across the board, 
+# orControl is now only used for antibody. 
+# a new validator OrNone was created to handle 'None' as a value for white listed fields
+
 our %validators = (
     files => \&validateFiles,
     view => \&validateControlledVocab,
@@ -170,19 +174,20 @@ our %validators = (
     rank => \&validateNoValidation,
     fragLength => \&validateNoValidation,
     setType => \&validateSetType,
-    cell => \&validateControlledVocabOrControl,
+    cell => \&validateControlledVocabOrNone,
     antibody => \&validateControlledVocabOrControl,
-    ripAntibody => \&validateControlledVocabOrControl,
-    ripTgtProtein => \&validateControlledVocabOrControl,
-    treatment => \&validateControlledVocabOrControl,
-    protocol => \&validateControlledVocabOrControl,
-    phase => \&validateControlledVocabOrControl,
-    restrictionEnzyme => \&validateControlledVocabOrControl,
+    ripAntibody => \&validateControlledVocabOrNone,
+    ripTgtProtein => \&validateControlledVocabOrNone,
+    treatment => \&validateControlledVocabOrNone,
+    protocol => \&validateControlledVocabOrNone,
+    phase => \&validateControlledVocabOrNone,
+    restrictionEnzyme => \&validateControlledVocabOrNone,
     obtainedBy => \&validateObtainedBy,
     md5sum => \&validateNoValidation,
     bioRep => \&validateNoValidation,
-    tissueSourceType => \&validateControlledVocabOrControl,
+    tissueSourceType => \&validateControlledVocabOrNone,
     spikeInPool => \&validateNoValidation,
+    readType => \&validateControlledVocabOrNone,
     default => \&validateControlledVocab,
     );
 
@@ -264,15 +269,25 @@ sub validateSetType {
 
 
 # project-specific validators
+sub validateControlledVocabOrNone {
+
+	my ($val, $type) = @_;
+	#correction for how cell is termed in the CV
+	if($type eq 'cell') {
+        $type = 'Cell Line';
+    }
+    if ($val eq "None"){return ()}
+	return defined($terms{$type}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
+
+}
 
 sub validateControlledVocabOrControl {
     my ($val, $type) = @_;
-    if($type eq 'cell') {
-        $type = 'Cell Line';
-    } elsif ($type eq 'antibody') {
+    if ($type eq 'antibody') {
         $type = 'Antibody';
+        return defined($terms{$type}{$val} || $terms{'control'}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
     }
-    return defined($terms{$type}{$val} || $terms{'control'}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
+    return defined($terms{$type}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
 sub validateControlledVocab {
@@ -1591,7 +1606,7 @@ if(@errors) {
 }
 
 %terms = Encode::getControlledVocab($configPath);
-#DataBrowser::browse(\%terms);
+
 
 my @variables;
 if (defined($daf->{variables})) {
@@ -1626,6 +1641,18 @@ while (@{$lines}) {
         pushError(\@errors, "$errorPrefix line has no tabs; the DDF is required to be tab delimited");
         next;
     }
+    
+    #I added a function top check if the lines after the ddf header had more values than the ddf header had fields
+    #previously it would just throw a runtime error, as $i is just incremented along with the values of $line
+    #if @ddfHeader didn't have a matching index location, which would only happen at the end, the program would die.
+    #now it throws an error into @errors, and skips the ddf line
+    my @linetest = split "\t", $line;
+    my $linamt = scalar(@linetest);
+    my $ddfamt = scalar(@ddfHeader);
+    if ($linamt > $ddfamt){
+    	pushError(\@errors, "$errorPrefix has too many fields Line:$linamt DDF:$ddfamt");
+    	next;
+    }
     my $i = 0;
     my %line;
     for my $val (split('\t', $line)) {
@@ -1645,7 +1672,7 @@ while (@{$lines}) {
         pushError(\@errors, $errorPrefix . "\n" . join("\n", @tmp));
         next;
     }
-
+	
     my $view = $line{view};
     HgAutomate::verbose(2,"Parsing $view\n");
     if($daf->{TRACKS}{$view}) {
@@ -1667,11 +1694,23 @@ while (@{$lines}) {
         }
         $line{files} = \@filenames;
         my @metadataErrors;
+        
+        
         for my $field (keys %line) {
+        
+        	#the next two condotionals evaluate whether a field value is blank, if the field is required throw an error,
+        	#if not, then skip validation, and pass the blank value through
+        	if ($line{$field} eq "" && !($fields->{$field}{required})){
+        		next;
+        	} elsif ($line{$field} eq "" && $fields->{$field}{required}){
+				push (@errors, "Missing value for required field '$field' on ddf line $ddfLineNumber");
+				next;
+        	}
             my $cell = $line{cell};
 			my $sex = $line{sex};
             push(@metadataErrors, validateDdfField($field, $line{$field}, $view, $daf, $cell,$sex));
         }
+        
         if(@metadataErrors) {
             pushError(\@errors, @metadataErrors);
         } else {
@@ -1913,7 +1952,7 @@ foreach my $ddfLine (@ddfLines) {
         && $key ne 'softwareVersion'
         && $key ne 'origAssembly') {
             $metadata .= " $key=$value"; # and the rest
-        }
+    	}
     }
     if($daf->{dataType} =~/ChIPseq/i) {
         if(!$ddfLine->{setType}) {
