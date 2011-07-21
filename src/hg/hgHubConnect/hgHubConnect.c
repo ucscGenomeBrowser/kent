@@ -139,10 +139,7 @@ for(hub = hubList; hub; hub = hub->next)
 	    "document.disconnectHubForm.submit();return true;\" "
 	    "class=\"hubField\" type=\"button\" value=\"X\">"
 	    , hub->hubUrl);
-    //cgiMakeButton("Submit", "X");
     ourCellEnd();
-    //hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
-
     }
 
 printf("</TR></tbody></TABLE>\n");
