@@ -20,10 +20,10 @@ This track is a multi-view composite track that contains multiple data types
 (<EM>views</EM>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
 tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-ENCODE tracks typically contain one or more of the following views:
+This track contains the following views:
 <DL>
 <DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
-(usually normalized data from pooled replicates). ENCODE Peaks tables contain
+(normalized data from pooled replicates). ENCODE Peaks tables contain
 fields for statistical significance, including FDR
 (<A HREF="../../goldenPath/help/qValue.html" TARGET=_BLANK>qValue</A>).</DD>
 <DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
@@ -47,9 +47,9 @@ to the human genome. From the mapped tags a signal map of ChIP DNA fragments
 overlapping fragments at each nucleotide position in the genome.
 </P>
 <P>
-For each 1 Mb segment of each chromosome a peak height threshold was determined
+For each 1 Mb segment of each chromosome, a peak height threshold was determined
  by requiring a false discovery rate &lt;= 0.01 when comparing the number of peaks
- above threshold as compared the number obtained from multiple simulations of a
+ above said threshold to the number of peaks obtained from multiple simulations of a
  random null background with the same number of mapped reads (also accounting 
 for the fraction of mapable bases for sequence tags in that 1 Mb segment). The
  number of mapped tags in a putative binding region is compared to the normalized
@@ -65,8 +65,8 @@ enriched compared to the input DNA control.
 <A HREF="http://snyderlab.stanford.edu/"
   class="external text" title="http://snyderlab.stanford.edu/"
   rel="nofollow" TARGET = _BLANK>Michael Snyder</a> at Stanford University and
-<A HREF="http://info.med.yale.edu/bcmm/SMW/SMWhome2.html"
-  class="external text" title="http://info.med.yale.edu/bcmm/SMW/SMWhome2.html"
+<A HREF="http://medicine.yale.edu/genetics/people/sherman_weissman.profile"
+  class="external text" title="http://medicine.yale.edu/genetics/people/sherman_weissman.profile"
   rel="nofollow" TARGET = _BLANK>Sherman Weissman</a> at Yale University.
 &nbsp;&nbsp;
 Contact: <A 
@@ -87,30 +87,8 @@ Lefrançois P, Struhl K, Gerstein M, Snyder M.
 	class="external text"
 	title="http://www.pnas.org/content/106/35/14926.abstract"
 	rel="noFollow" TARGET = _BLANK>Mapping accessible chromatin regions using
- Sono-Seq.</A>
+ Sono-Seq</A>.
 <EM> Proc Natl Acad Sci U S A.</EM> 2009 Sep 1;106(35):14926-31.
-</P>
-
-<P>
-Rozowsky J, Euskirchen G, Auerbach RK, Zhang ZD, Gibson T, Bjornson R, 
-Carriero N, Snyder M, Gerstein MB. 
- <A HREF="http://www.nature.com/nbt/journal/v27/n1/abs/nbt.1518.html#abs"
-	class="external text"
-	title="http://www.nature.com/nbt/journal/v27/n1/abs/nbt.1518.html#abs"
-	rel="noFollow" TARGET= _BLANK>PeakSeq enables systematic scoring of 
-ChIP-seq experiments relative to controls.</A>
-<EM> Nature Biotech.</EM> 2009;27:66-75
-</P>
-
-<P>
-Robertson G, Hirst M, Bainbridge M, Bilenky M, Zhao Y, Zeng T, Euskirchen G,
-Bernier B, Varhol R, Delaney A <EM>et al.</EM>
- <A HREF="http://www.nature.com/nmeth/journal/v4/n8/abs/nmeth1068.html"
-	class="external text"
-	title="http://www.nature.com/nmeth/journal/v4/n8/abs/nmeth1068.html"
-	rel="noFollow" TARGET= _BLANK>Genome-wide profiles of STAT1 DNA association
- using chromatin immunoprecipitation and massively parallel sequencing.</A> 
-<EM>Nat. Methods.</EM> 2007;4:651-7. 
 </P>
 
 <P>
@@ -121,7 +99,7 @@ Stolc V, Weissman S, Gerstein MB <EM>et al.</EM>
 	title="http://genome.cshlp.org/content/17/6/898.abstract"
 	rel="noFollow" TARGET= _BLANK>Mapping of transcription factor binding 
 regions in mammalian cells by ChIP: comparison of array- and sequencing-based 
-technologies.</A>
+technologies</A>.
 <EM>Genome Res.</EM> 2007;17:898-909. 
 </P>
 
@@ -132,10 +110,31 @@ Martone R, Euskirchen G, Bertone P, Hartman S, Royce TE, Luscombe NM, Rinn JL,
 	class="external text"
 	title="http://www.pnas.org/content/100/21/12247.abstract"
 	rel="noFollow" TARGET= _BLANK>Distribution of NF-kappaB-binding sites 
-across human chromosome 22.</A> 
+across human chromosome 22</A>. 
 <EM>Proc Natl Acad Sci U S A.</EM> 2003 Oct;100(21):12247-52.
 </P> 
 
+<P>
+Robertson G, Hirst M, Bainbridge M, Bilenky M, Zhao Y, Zeng T, Euskirchen G,
+Bernier B, Varhol R, Delaney A <EM>et al.</EM>
+ <A HREF="http://www.nature.com/nmeth/journal/v4/n8/abs/nmeth1068.html"
+	class="external text"
+	title="http://www.nature.com/nmeth/journal/v4/n8/abs/nmeth1068.html"
+	rel="noFollow" TARGET= _BLANK>Genome-wide profiles of STAT1 DNA association
+ using chromatin immunoprecipitation and massively parallel sequencing</A>. 
+<EM>Nat. Methods.</EM> 2007;4:651-7. 
+</P>
+
+<P>
+Rozowsky J, Euskirchen G, Auerbach RK, Zhang ZD, Gibson T, Bjornson R, 
+Carriero N, Snyder M, Gerstein MB. 
+ <A HREF="http://www.nature.com/nbt/journal/v27/n1/abs/nbt.1518.html#abs"
+	class="external text"
+	title="http://www.nature.com/nbt/journal/v27/n1/abs/nbt.1518.html#abs"
+	rel="noFollow" TARGET= _BLANK>PeakSeq enables systematic scoring of 
+ChIP-seq experiments relative to controls</A>.
+<EM> Nature Biotech.</EM> 2009;27:66-75
+</P>
 
 <H2> Data Release Policy </H2>
 
