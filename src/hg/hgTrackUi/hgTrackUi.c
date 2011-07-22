@@ -2886,7 +2886,7 @@ if (!tdbIsDownloadsOnly(tdb))
         }
     }
 
-if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
+if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
     if (trackDbSetting(tdb, "dimensions") || (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))
