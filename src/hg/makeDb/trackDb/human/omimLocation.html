@@ -11,19 +11,19 @@ the gene is unknown.
 <H2>Display Conventions and Configuration</H2>
 
 <P>Cytogenetic locations of OMIM entries are displayed as solid
-blocks.  The entries are colored according to the OMIM phenotype class of associated disorders:
+blocks.  The entries are colored according to the OMIM phenotype map key of associated disorders:
 
 <UL>
-<LI><B><FONT COLOR="#AAC4AA">Lighter Green</FONT></B> for Class 1 OMIM records
+<LI><B><FONT COLOR="#AAC4AA">Lighter Green</FONT></B> for phenotype map key 1 OMIM records
 -  the disorder has been placed on the map based on its association with
 a gene, but the underlying defect is not known.
-<LI><B><FONT COLOR="#669666">Light Green</FONT></B> for Class 2 OMIM records
+<LI><B><FONT COLOR="#669666">Light Green</FONT></B> for phenotype map key 2 OMIM records
 - the disorder has been placed on the map by linkage; no mutation has
 been found.
-<LI><B><FONT COLOR="#005000">Dark Green</FONT></B> for Class 3 OMIM records
+<LI><B><FONT COLOR="#005000">Dark Green</FONT></B> for phenotype map key 3 OMIM records
 - the molecular basis for the disorder is known; a mutation has been
 found in the gene.
-<LI><B><FONT COLOR="#69329B">Purple</FONT></B> for Class 4 OMIM records
+<LI><B><FONT COLOR="#69329B">Purple</FONT></B> for phenotype map key 4 OMIM records
 - a contiguous gene deletion or duplication syndrome; multiple genes
 are deleted or duplicated causing the phenotype.
 </UL>
@@ -31,7 +31,7 @@ are deleted or duplicated causing the phenotype.
 </P>
 <P>The descriptions of OMIM entries are shown on the main browser display when Full display
 mode is chosen.  In Pack mode, the descriptions are shown when mousing over each entry. Items
-displayed can be filtered according to phenotype class on the track controls page.
+displayed can be filtered according to phenotype map key on the track controls page.
 </P>
 
 <H2>Methods</H2>
@@ -44,7 +44,7 @@ This track was constructed as follows:
 parsed and converted into genomic start and end positions based on the <TT>cytoBand</TT> table.
 These genomic positions, together with the corresponding OMIM IDs, were loaded into the
 <TT>omimLocation</TT> table.
-<LI>All entries with no associated phenotype class and all OMIM gene entries as reported in the
+<LI>All entries with no associated phenotype map key and all OMIM gene entries as reported in the
 &quot;OMIM Genes&quot; track were then excluded from the <TT>omimLocation</TT> table.
 </UL>
 
