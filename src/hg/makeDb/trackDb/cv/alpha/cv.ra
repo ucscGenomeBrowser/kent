@@ -8501,6 +8501,18 @@ type view
 label Peaks
 description Regions of enriched signal in experiment
 
+term PeakSeqConservPeaks
+tag PSCPEAKS
+type view
+label PeakSeq Conserved Peaks
+description Regions of conserved enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+
+term PeakSeqOptimalPeak
+tag PSOPEAKS
+type view
+label PeakSeq Optimal Peaks
+description Regions of optimal enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+
 term PeptideMapping
 tag PEPTIDEMAP
 type view
@@ -8609,6 +8621,18 @@ type view
 label Splices
 description Subset of aligned reads that cross splice junctions
 
+term SppConservPeaks
+tag SCPPEAKS
+type view
+label Spp Conservative Peaks
+description Regions of optimal enriched signal in experiment performed by Spp (PROVISIONAL)
+
+term SppOptimalPeaks
+tag SOPPEAKS
+type view
+label SPP Optimal Peaks
+description Regions of conserved enriched signal in experiment performed by SPP (PROVISIONAL)
+
 term TranscriptDeNovo
 tag TRANSDENOVO
 type view
@@ -8644,6 +8668,12 @@ tag TssV7
 type view
 label TSS Gencode V7
 description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+
+term UniformSignal
+tag UNISIG
+type view
+label Uniform Signal by AWG
+description Uniform Signal (PROVISIONAL)
 
 term Uniqueness
 tag UNQ
