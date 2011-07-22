@@ -4080,11 +4080,22 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     if (cType != cfgNone)  // make a wrench
         {
         // TODO: make vis dd or vis text inp or vis img.  Alternatively, make '*' to denote there are subtrack level differences.
-    //#define SUBTRACK_CFG_VIS_SEEN
+    #define SUBTRACK_CFG_VIS_SEEN
     #ifdef SUBTRACK_CFG_VIS_SEEN
         enum trackVisibility vis = tdbVisLimitedByAncestry(cart, subtrack, TRUE);
-        #define SUBTRACK_CFG_WRENCH "<a href='#a_cfg' onclick='return scm.cfgToggle(\"%s\");' title='Configure this %s subtrack'><img src='../images/wrench.png'></a>\n"
-        printf(SUBTRACK_CFG_WRENCH,subtrack->track,hStringFromTv(vis));
+        if (fourStateVisible(fourState))
+            {
+            safef(htmlIdentifier, sizeof(htmlIdentifier), " onclick='return scm.cfgToggle(\"%s\");'%s",subtrack->track,(fourStateVisible(fourState) ?"":" disabled"));
+            hTvDropDownClassVisOnlyAndExtra(subtrack->track,vis,TRUE,"normalText subVisDD", NULL,htmlIdentifier);
+            }
+        else
+            {
+            #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='clickable fauxInput%s' style='width:65px;' onclick='return scm.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
+            printf(SUBTRACK_CFG_VIS,subtrack->track,(fourStateVisible(fourState) ?"":" disabled"),subtrack->track,hStringFromTv(vis));
+            }
+        #define SUBTRACK_CFG_WRENCH "<a href='#a_cfg' onclick='return scm.cfgToggle(\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></a>\n"
+        printf(SUBTRACK_CFG_WRENCH,subtrack->track);
+        // HAIB TFBS: wrench:7s  text:9s  dd:11s  none:7s
         // TODO: all of this
     #else///ifndef SUBTRACK_CFG_VIS_SEEN
         #define SUBTRACK_CFG_STARRED

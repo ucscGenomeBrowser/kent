@@ -1159,6 +1159,7 @@ var scm = { // subtrack config module.
 
     // There is one instance and these vars are page wide
     compositeId: null,
+    visIndependent: false,
     viewIds: [],
 
     markChange: function (obj)
@@ -1662,11 +1663,26 @@ var scm = { // subtrack config module.
                 alert("cssFiles:'"+cssFiles+"'\n---------------\n"+cleanHtml);
         // DEBUG -------------
         cleanHtml = cleanHtml.replace(shlurpPattern,"");
-        var ix = cleanHtml.indexOf('<B>Display&nbsp;mode:&nbsp;</B>');
-        if (ix > 0)
-            cleanHtml = cleanHtml.substring(ix+'<B>Display&nbsp;mode:&nbsp;</B>'.length);
+        if (scm.visIndependent) {
+            ix = cleanHtml.indexOf('</SELECT>');
+            if (ix > 0)
+                cleanHtml = cleanHtml.substring(ix+'</SELECT>'.length);
+            while(cleanHtml.length > 0) {
+                ix = cleanHtml.search("<");
+                cleanHtml = cleanHtml.substring(ix);
+                ix = cleanHtml.search(/\<BR\>/i);
+                if (ix != 0)
+                    break; // Not found or not at start.
+                else
+                    cleanHtml = cleanHtml.substring(4); // skip past <BR> and continue
+            }
+        } else {
+            var ix = cleanHtml.indexOf('<B>Display&nbsp;mode:&nbsp;</B>');
+            if (ix > 0)
+                cleanHtml = cleanHtml.substring(ix+'<B>Display&nbsp;mode:&nbsp;</B>'.length);
+        }
             //cleanHtml = cleanHtml.substring(ix);
-        ix = cleanHtml.indexOf('</FORM>');
+        ix = cleanHtml.indexOf('</FORM>'); // start of form already chipped off
         if (ix > 0)
             cleanHtml = cleanHtml.substring(0,ix - 1);
 
@@ -1717,7 +1733,11 @@ var scm = { // subtrack config module.
         // Tricks to get this in the size and position I want
         $(cfg).css({ position: 'absolute'});
         var myWidth = $(cfg).width();
-        var shiftLeft = ($(cfg).position().left - 40) * -1;
+        var shiftLeft = -1;
+        if (scm.visIndependent)
+            shiftLeft *= ($(cfg).position().left - 125);
+        else
+            shiftLeft *= ($(cfg).position().left - 40);
         $(cfg).css({ width: myWidth+'px',position: 'relative', left: shiftLeft + 'px' });
 
         // Setting up filterBys must follow show because sizing requires visibility
@@ -1730,6 +1750,7 @@ var scm = { // subtrack config module.
             });
         }
     },
+
     cfgPopulate: function (cfg,subtrack)
     { // Populates a subtrack cfg dialog via ajax and update from composite/view parents
         scm.currentCfg = cfg;
@@ -1744,6 +1765,37 @@ var scm = { // subtrack config module.
             cmd: "cfg",
             cache: false
         });
+    },
+
+    replaceWithVis: function (obj,subtrack,open)
+    { // Replaces the current fauxVis object with a true visibility selector
+
+        var selectHtml = "<SELECT id='"+subtrack+"' class='normalText subVisDD' style='width: 70px'>";
+        var selected = $(obj).text();
+        if (selected == 'hide')
+            selectHtml += "<OPTION SELECTED>hide</OPTION><OPTION>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
+        else if (selected == 'dense')
+            selectHtml += "<OPTION>hide</OPTION><OPTION SELECTED>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
+        else if (selected == 'squish')
+            selectHtml += "<OPTION>hide</OPTION><OPTION>dense</OPTION><OPTION SELECTED>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
+        else if (selected == 'full')
+            selectHtml += "<OPTION>hide</OPTION><OPTION>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION SELECTED>full</OPTION>";
+        else
+            selectHtml += "<OPTION>hide</OPTION><OPTION>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
+        selectHtml += "</SELECT>";
+        $(obj).replaceWith(selectHtml);
+        if (open) {
+            var newObj = $('select#'+subtrack);
+            $(newObj).attr('size',5)
+            $(newObj).one('blur',function (e) {
+                $(this).attr('size',1);
+                $(this).unbind()
+            });
+            $(newObj).one('change',function (e) {
+                $(this).attr('size',1);
+            });
+            $(newObj).focus();
+        }
     },
 
     cfgToggle: function (subtrack)
@@ -1825,6 +1877,7 @@ var scm = { // subtrack config module.
     { // unnames all composite controls and then all view controls
         // mySelf = this; // There is no need for a "mySelf" unless this object is being instantiated.
         scm.compositeId = $('.visDD').first().attr('name');
+        scm.visIndependent = ($('.subVisDD').length > 0);
 
         // Find all appropriate controls and unname
 
