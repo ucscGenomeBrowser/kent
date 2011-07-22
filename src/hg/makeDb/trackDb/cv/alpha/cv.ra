@@ -2540,7 +2540,7 @@ term HSMMtube
 tag HSMMt
 type Cell Line
 organism human
-description PROVISIONAL Normal human skeletal muscle myotubes differentiated from the HSMM cell line
+description Normal human skeletal muscle myotubes differentiated from the HSMM cell line
 tissue Muscle
 lineage mesoderm
 vendorName Lonza
@@ -8309,15 +8309,16 @@ tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
-term UW-5C-Myc-Region
-tag UW5CMYC
-type region
-description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+#removed per Redmine #222
+#term UW-5C-Myc-Region
+#tag UW5CMYC
+#type region
+#description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
 
-term UW-5C-Gene-Regions
-tag UW5CGENE
-type region
-description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+#term UW-5C-Gene-Regions
+#tag UW5CGENE
+#type region
+#description Set of 25 regions interrogated in UW 5C gene-targeted experiments
 
 
 ### restrictionEnzyme
@@ -8341,7 +8342,7 @@ term Alignability
 tag ALIGNABI
 type view
 label Alignability
-description PROVISIONAL Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mapability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project. 
+description Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mapability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project. 
 
 term Alignments
 tag ALN
@@ -8500,6 +8501,18 @@ type view
 label Peaks
 description Regions of enriched signal in experiment
 
+term PeakSeqConservPeaks
+tag PSCPEAKS
+type view
+label PeakSeq Conserved Peaks
+description Regions of conserved enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+
+term PeakSeqOptimalPeak
+tag PSOPEAKS
+type view
+label PeakSeq Optimal Peaks
+description Regions of optimal enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+
 term PeptideMapping
 tag PEPTIDEMAP
 type view
@@ -8608,6 +8621,18 @@ type view
 label Splices
 description Subset of aligned reads that cross splice junctions
 
+term SppConservPeaks
+tag SCPPEAKS
+type view
+label Spp Conservative Peaks
+description Regions of optimal enriched signal in experiment performed by Spp (PROVISIONAL)
+
+term SppOptimalPeaks
+tag SOPPEAKS
+type view
+label SPP Optimal Peaks
+description Regions of conserved enriched signal in experiment performed by SPP (PROVISIONAL)
+
 term TranscriptDeNovo
 tag TRANSDENOVO
 type view
@@ -8643,6 +8668,12 @@ tag TssV7
 type view
 label TSS Gencode V7
 description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+
+term UniformSignal
+tag UNISIG
+type view
+label Uniform Signal by AWG
+description Uniform Signal (PROVISIONAL)
 
 term Uniqueness
 tag UNQ
@@ -9909,8 +9940,8 @@ projectName UNC-Giddings
 #         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500  expVars:500
 #         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
 #       At End:
-#         dccInternalNotes:910  parentTable:920  sourceObj:921 tableName:970  fileName:980
-#         fileIndex:990 category:991
+#         dccInternalNotes:910 sourceObj:921 tableName:970  fileName:980 type:985
+#         category:991
 
 term typeOfTerm
 tag TYPEOFTERM
@@ -10583,19 +10614,18 @@ term type
 tag TYPE
 type typeOfTerm
 label File type
-description The type of the primary file associated with the object PROVISIONAL
+description The type of the primary file associated with the object 
 searchable multiSelect
 cvDefined no
 validate None
-priority 900 
-#I do not know how to set the priority
+priority 985 
 
 
 term uniqueness
 tag UNIQUENESS
 type typeOfTerm
 label Mapability Distinctions
-description (PRIVISIONAL) Degree of region uniqueness or mapability disctinctions
+description Degree of region uniqueness or mapability disctinctions
 searchable no
 cvDefined no
 validate none

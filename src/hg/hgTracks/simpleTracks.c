@@ -10854,6 +10854,11 @@ hFreeConn(&conn);
 return(dy->string);
 }
 
+// old name to be changed later
+#define omimPhenotypeClassColName "phenotypeClass"
+// new name to be used later
+//#define omimPhenotypeClassColName "omimPhenoMapKey"
+
 boolean isOmimOtherClass(char *omimId)
 /* check if this omimId belongs to the "Others" phenotype class */
 
@@ -10870,7 +10875,9 @@ char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 safef(query,sizeof(query),
-      "select phenotypeClass from omimPhenotype where omimId =%s and (phenotypeClass=1 or phenotypeClass=2 or phenotypeClass=3 or phenotypeClass=4)", omimId);
+      "select %s from omimPhenotype where omimId =%s and (%s=1 or %s=2 or %s=3 or %s=4)", 
+      omimPhenotypeClassColName, omimId, omimPhenotypeClassColName, omimPhenotypeClassColName, omimPhenotypeClassColName, 
+      omimPhenotypeClassColName);
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
 
 if (ret == NULL)
@@ -10893,8 +10900,8 @@ char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 safef(query,sizeof(query),
-      "select phenotypeClass from omimPhenotype where omimId =%s and phenotypeClass=%d", omimId, 
-      targetClass);
+      "select %s from omimPhenotype where omimId =%s and %s=%d", omimPhenotypeClassColName,omimId,omimPhenotypeClassColName,targetClass);
+
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
 
 if (ret == NULL)
@@ -11052,7 +11059,9 @@ class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
 
 safef(query, sizeof(query),
-      "select omimId, phenotypeClass from omimPhenotype where omimId=%s order by phenotypeClass desc", el->name);
+      "select omimId, %s from omimPhenotype where omimId=%s order by %s desc", 
+      omimPhenotypeClassColName, el->name, omimPhenotypeClassColName);
+
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -11156,17 +11165,117 @@ if (useGeneSymbol)
     	dyStringAppendC(name, '/');
     else 
     	labelStarted = TRUE;
-    // get gene symbol(s) from omimGeneMap table.
-    // Note: some entries are not in omimGeneMap and/or does not have gene symbol(s)
+    // get appoved gene symbol from omim2gene table first, if not available then get it from omimGeneMap table.
     char query[256];
-    safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
+    safef(query, sizeof(query), "select approvedGeneSymbol from omim2gene where omimId = %s", el->name);
     geneSymbol = sqlQuickString(conn, query);
-    if (geneSymbol && differentString(geneSymbol, "0"))
+    if (geneSymbol && differentString(geneSymbol, "-"))
         dyStringAppend(name, geneSymbol);
+    else
+    	{
+	char *chp;
+    	safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
+    	geneSymbol = sqlQuickString(conn, query);
+	if (geneSymbol && differentString(geneSymbol, "0"))
+            {
+	    // pick the first one, if multiple gene symbols exist
+    	    chp = strstr(geneSymbol, ",");
+	    if (chp != NULL) *chp = '\0';
+	    dyStringAppend(name, geneSymbol);
+	    }
+	}
     }
 
 hFreeConn(&conn);
 return(name->string);
+}
+
+static char *cosmicTissueList(char *name)
+/* Return list of tumor tissues associated with a COSMIC entry.  Do not free result! */
+{
+static struct dyString *dy = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+
+if (dy == NULL)
+    dy = dyStringNew(0);
+dyStringClear(dy);
+
+char query[256];
+safef(query,sizeof(query),
+        "select concat(gene_name,' ',mut_syntax_aa) from cosmicRaw where cosmic_mutation_id ='%s'", name);
+char buf[256];
+char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
+
+if (isNotEmpty(ret))
+    dyStringAppend(dy, ret);
+
+safef(query, sizeof(query), 
+      "select sum(mutated_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      name);
+ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
+if (isNotEmpty(ret))
+    {
+    dyStringAppend(dy, " ");
+    dyStringAppend(dy, ret);
+    }
+
+safef(query, sizeof(query), 
+      "select sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      name);
+ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
+    {
+    dyStringAppend(dy, "/");
+    dyStringAppend(dy, ret);
+    }
+
+safef(query, sizeof(query), 
+      "select sum(mutated_samples)*100/sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      name);
+ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
+
+char *chp = strstr(ret, ".");
+
+if (isNotEmpty(ret))
+    {
+    // cut off digits after .xxx
+    if ((chp != NULL) && (strlen(chp) > 3))
+    	{
+    	chp++;
+    	chp++;
+    	chp++;
+    	chp++;
+    	*chp = '\0';
+    	}
+    dyStringAppend(dy, " (");
+    dyStringAppend(dy, ret);
+    dyStringAppend(dy, "\%)");
+    }
+
+safef(query,sizeof(query),
+        "select tumour_site from cosmicRaw where cosmic_mutation_id ='%s' order by tumour_site", name);
+char *disorders = collapseRowsFromQuery(query, ",", 4);
+if (isNotEmpty(disorders))
+    {
+    dyStringAppend(dy, " ");
+    dyStringAppend(dy, disorders);
+    }
+hFreeConn(&conn);
+return(dy->string);
+}
+
+static void cosmicLoad(struct track *tg)
+/* Load COSMIC items, storing long label from cosmicTissueList */
+{
+bedPlusLabelLoad(tg, cosmicTissueList);
+}
+
+void cosmicMethods (struct track *tg)
+/* Methods for COSMIC track. */
+{
+tg->loadItems	  = cosmicLoad;
+tg->drawItemAt    = bedPlusLabelDrawAt;
+tg->mapItem       = bedPlusLabelMapItem;
+tg->nextPrevExon  = simpleBedNextPrevEdge;
 }
 
 void omimGene2Methods (struct track *tg)
@@ -11288,7 +11397,7 @@ classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
 struct sqlConnection *conn = hAllocConn(database);
 
 safef(query, sizeof(query),
-      "select omimId, phenotypeClass from omimPhenotype where omimId=%s", el->name);
+      "select omimId, %s from omimPhenotype where omimId=%s", omimPhenotypeClassColName, el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -12825,6 +12934,7 @@ registerTrackHandler("omimGene2", omimGene2Methods);
 registerTrackHandler("omimAvSnp", omimAvSnpMethods);
 registerTrackHandler("omimLocation", omimLocationMethods);
 registerTrackHandler("omimComposite", omimGene2Methods);
+registerTrackHandler("cosmic", cosmicMethods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
 }
