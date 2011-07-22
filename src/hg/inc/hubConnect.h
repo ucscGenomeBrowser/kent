@@ -101,11 +101,13 @@ unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
     char *url, char **errorMessage);
 /* find or add a URL to the status table */
 
-void hubClearStatus(char *url);
-/* delete the status for this hub from the status table */
+unsigned hubClearStatus(char *url);
+/* drop the information about this url from the hubStatus table,return the id */
 
 void hubDisconnect(struct cart *cart, char *url);
-/* disconnect this hub (remove from status and cart) */
-void hubCheckForNew(char *database, struct cart *cart);
-/* see if the user just typed in a new hub url */
+/* drop the information about this url from the hubStatus table, and 
+ * the cart variable the references this hub */
+
+boolean hubCheckForNew(char *database, struct cart *cart);
+/* see if the user just typed in a new hub url, return TRUE if so */
 #endif /* HUBCONNECT_H */

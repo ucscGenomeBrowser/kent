@@ -9107,11 +9107,18 @@ printTrackHtml(tdb);
 void printCosmicDetails(struct trackDb *tdb, char *itemName)
 /* Print details of a COSMIC entry. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 char query[1024];
+char query2[1024];
 struct sqlResult *sr;
+struct sqlResult *sr2;
 char **row;
+char **row2;
+
 char *chp;
+char indent1[40] = {"&nbsp;&nbsp;&nbsp;&nbsp;"};
+char indent2[40] = {""};
 
 char *source, *cosmic_mutation_id, *gene_name, *accession_number;
 char *mut_description, *mut_syntax_cds, *mut_syntax_aa;
@@ -9135,6 +9142,9 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     int ii;
+    boolean multipleTumorSites;
+    char *indentString;
+
     ii=0;
     
     source 		= row[ii];ii++;
@@ -9156,9 +9166,14 @@ if (row != NULL)
     mut_freq  		= row[ii];ii++;
 
     chp = strstr(itemName, "COSM")+strlen("COSM");
-    printf("<B>COSMIC ID:</B> <A HREF=\"%s&id=%s\" TARGET=_BLANK>%s</A>\n", url, chp, chp);
+    printf("<B>COSMIC ID:</B> %s", chp);
     
-    printf("<BR><B>Source:</B> %s\n", source);
+    printf(" (click <A HREF=\"%s&id=%s\" TARGET=_BLANK>here</A> for more details at COSMIC site)\n", url, chp);
+
+    // Embed URL to COSMIC site per COSMICT request.
+    printf("<BR><B>Source:</B> ");
+    printf("<A HREF=\"http://www.sanger.ac.uk/cosmic/\" TARGET=_BLANK>%s</A>\n", source);
+    
     printf("<BR><B>Gene Name:</B> %s\n", gene_name);
     printf("<BR><B>Accession Number:</B> %s\n", accession_number);
     printf("<BR><B>Genomic Position:</B> %s:%s-%s", chromosome, grch37_start, grch37_stop);
@@ -9167,11 +9182,99 @@ if (row != NULL)
     printf("<BR><B>Mutation Syntax AA:</B> %s\n", mut_syntax_aa);
     printf("<BR><B>Mutation NT:</B> %s\n", mut_nt);
     printf("<BR><B>Mutation AA:</B> %s\n", mut_aa);
-    printf("<BR><B>Tumour Site:</B> %s\n", tumour_site);
-    printf("<BR><B>Mutated Samples:</B> %s\n", mutated_samples);
-    printf("<BR><B>Examined Samples:</B> %s\n", examined_samples);
-    printf("<BR><B>Mutation Frequency:</B> %s\n", mut_freq);
+
+    safef(query2, sizeof(query2), 
+      "select count(tumour_site) from cosmicRaw where cosmic_mutation_id='%s'", itemName);
+
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if ((atoi(row2[0])) > 1) 
+    	{
+	multipleTumorSites = TRUE;
+        indentString = indent1;
+	}
+    else
+    	{
+        multipleTumorSites = FALSE;
+	indentString = indent2;
+	}
+    sqlFreeResult(&sr2);
+    
+    safef(query2, sizeof(query2), 
+      "select %s from cosmicRaw where cosmic_mutation_id='%s' order by tumour_site",
+      "tumour_site,mutated_samples,examined_samples,mut_freq ",
+      itemName);
+
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    while (row2 != NULL)
+    	{
+    	int ii;
+   	ii=0;
+    	tumour_site  		= row2[ii];ii++;
+    	mutated_samples  	= row2[ii];ii++;
+    	examined_samples  	= row2[ii];ii++;
+    	mut_freq  		= row2[ii];ii++;
+        
+	if (multipleTumorSites) printf("<BR>");
+    	printf("<BR><B>%sTumour Site:</B> %s\n", 	indentString, tumour_site);
+    	printf("<BR><B>%sMutated Samples:</B> %s\n", 	indentString, mutated_samples);
+    	printf("<BR><B>%sExamined Samples:</B> %s\n", 	indentString, examined_samples);
+    	printf("<BR><B>%sMutation Frequency:</B> %s\n", indentString, mut_freq);
+    	row2 = sqlNextRow(sr2);
+	}
+    sqlFreeResult(&sr2);
+    
+    safef(query2, sizeof(query2), 
+      "select sum(mutated_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      itemName);
+
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if (row2 != NULL)
+    	{
+    	printf("<BR><BR><B>Total Mutated Samples:</B> %s\n", row2[0]);
+	//printf("<br>%s ", row2[0]);
+	}
+    sqlFreeResult(&sr2);
+    
+    safef(query2, sizeof(query2), 
+      "select sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      itemName);
+//printf("<br>%s\n", query2);fflush(stdout);
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if (row2 != NULL)
+    	{
+    	printf("<BR><B>Total Examined Samples:</B> %s\n", row2[0]);
+	//printf("%s", row2[0]);
+	//fflush(stdout);
+	}
+    sqlFreeResult(&sr2);
+    safef(query2, sizeof(query2), 
+      "select sum(mutated_samples)*100/sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      itemName);
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if (row2 != NULL)
+    	{
+    	char *chp;
+	chp = strstr(row2[0], ".");
+	if ((chp != NULL) && (strlen(chp) > 3))
+	   {
+	   chp++;
+	   chp++;
+	   chp++;
+	   chp++;
+	   *chp = '\0';
+	   }
+	printf("<BR><B>Total Mutation Frequency:</B> %s%c\n", row2[0], '%');
+	//printf("<br>%s", row2[0]);
+	}
+    sqlFreeResult(&sr2);
+
     }
+
 sqlFreeResult(&sr);
 hFreeConn(&conn);
    
@@ -9462,6 +9565,11 @@ printf("<HR>");
 printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
+// old name to be changed later
+#define omimPhenotypeClassColName "phenotypeClass"
+// new name to be used later
+//#define omimPhenotypeClassColName "omimPhenoMapKey"
+
 void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an omimGene2 entry. */
 {
@@ -9528,9 +9636,9 @@ if (url != NULL && url[0] != 0)
 
 	/* display disorder(s) */
     	safef(query, sizeof(query),
-	      "select description, phenotypeClass, phenotypeId from omimPhenotype where omimId=%s order by description",
-	      itemName);
-    	sr = sqlMustGetResult(conn, query);
+	      "select description, %s, phenotypeId from omimPhenotype where omimId=%s order by description",
+	      omimPhenotypeClassColName, itemName);
+	sr = sqlMustGetResult(conn, query);
 	disorderShown = FALSE;
         while ((row = sqlNextRow(sr)) != NULL)
     	    {
@@ -9707,8 +9815,8 @@ if (url != NULL && url[0] != 0)
 
 	/* display disorder for genes in morbidmap */
     	safef(query, sizeof(query),
-	 "select description, phenotypeClass, phenotypeId from omimPhenotype where omimId=%s order by description",
-	 itemName);
+	      "select description, %s, phenotypeId from omimPhenotype where omimId=%s order by description",
+	      omimPhenotypeClassColName, itemName);
     	sr = sqlMustGetResult(conn, query);
  	printf("<B>Disorder(s):</B><UL>\n");
         while ((row = sqlNextRow(sr)) != NULL)
@@ -9858,6 +9966,10 @@ chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
 avId       = strdup(itemName);
+
+chp = strstr(avId, "-");
+if (chp != NULL) *chp = '\0';
+
 safef(avString, sizeof(avString), "%s", itemName);
 
 chp = strstr(itemName, ".");

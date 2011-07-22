@@ -2992,11 +2992,19 @@ shortLabel COSMIC
 longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
 group phenDis
 priority 29.80
-visibility pack
+visibility hide
 color 200, 0, 0
 type bed 4
 hgsid on
 url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
+
+searchName cosmicId
+searchTable cosmic
+searchMethod exact
+searchType bed
+searchPriority 10
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex COSM*
 
 searchTable wgRnaOld
 searchMethod fuzzy

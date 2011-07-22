@@ -82,7 +82,7 @@ if (count == 0)
     {
     // nothing to see here
     printf(
-	"<tr><th>No Track Hubs for this genome assembly</th></tr>"
+	"<tr><td>No Track Hubs for this genome assembly</td></tr>"
 	"</td></table>");
     cgiMakeButton("Submit", "Return to Genome Browser");
     printf("</div>");
@@ -92,7 +92,7 @@ if (count == 0)
 // time to output the big table.  First the header
 printf(
     "<tr> "
-	"<th>Active?</th> "
+	"<th>Display</th> "
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
 	"<th>URL</th> "
@@ -139,10 +139,7 @@ for(hub = hubList; hub; hub = hub->next)
 	    "document.disconnectHubForm.submit();return true;\" "
 	    "class=\"hubField\" type=\"button\" value=\"X\">"
 	    , hub->hubUrl);
-    //cgiMakeButton("Submit", "X");
     ourCellEnd();
-    //hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
-
     }
 
 printf("</TR></tbody></TABLE>\n");
@@ -186,7 +183,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
 	    printf("<table id=\"publicHubsTable\"> "
 		"<thead><tr> "
-		    "<th>Active?</th> "
+		    "<th>Display</th> "
 		    "<th>Hub Name</th> "
 		    "<th>Description</th> "
 		    "<th>URL</th> "
@@ -241,7 +238,7 @@ else
     cgiMakeButton("Submit", "Return to Genome Browser");
     }
 
-printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\"> genome@soe.ucsc.edu </A>to add a public hub.</span>\n");
+printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</A> to add a public hub.</span>\n");
 printf("</div>");
 
 hDisconnectCentral(&conn);
@@ -310,7 +307,7 @@ printf("</div>\n");
 makeGenomePrint();
 
 // check to see if we have any new hubs
-hubCheckForNew(database, cart);
+boolean gotNew = hubCheckForNew(database, cart);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
@@ -334,10 +331,18 @@ printf("<div id=\"tabs\">"
        "<ul> <li><a href=\"#publicHubs\">Public Hubs</a></li>"
        "<li><a href=\"#unlistedHubs\">My Hubs</a></li> "
        "</ul> ");
-			     
+
 hgHubConnectPublic();
 hgHubConnectUnlisted();
 printf("</div>");
+
+if (gotNew) // make MyHubs the default tab
+    {
+    printf("<script type='text/javascript'>\n ");
+    printf("var $tabs = $('#tabs').tabs();\n");
+    printf(" $tabs.tabs('select',1);\n");
+    printf("</script>\n");
+    }
 
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 

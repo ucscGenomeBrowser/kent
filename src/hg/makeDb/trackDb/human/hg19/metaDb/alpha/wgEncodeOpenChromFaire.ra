@@ -159,7 +159,6 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
-fileIndex wgEncodeOpenChromFaireAstrocyAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
 grant Crawford
 lab UNC
@@ -181,7 +180,6 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
-fileIndex wgEncodeOpenChromFaireAstrocyAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
 grant Crawford
 lab UNC
@@ -306,7 +304,6 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
-fileIndex wgEncodeOpenChromFaireGlioblaAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
 grant Crawford
 lab UNC
@@ -328,7 +325,6 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
-fileIndex wgEncodeOpenChromFaireGlioblaAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
 grant Crawford
 lab UNC
@@ -350,7 +346,6 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
-fileIndex wgEncodeOpenChromFaireGlioblaAlnRep3.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
 grant Crawford
 lab UNC
@@ -496,7 +491,6 @@ dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
-fileIndex wgEncodeOpenChromFaireGm12878AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam
 grant Crawford
 lab UNC
@@ -519,7 +513,6 @@ dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
-fileIndex wgEncodeOpenChromFaireGm12878AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam
 grant Crawford
 lab UNC
@@ -542,7 +535,6 @@ dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
-fileIndex wgEncodeOpenChromFaireGm12878AlnRep3.bam.bai
 fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam
 grant Crawford
 lab UNC
@@ -712,7 +704,6 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
-fileIndex wgEncodeOpenChromFaireGm12891AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
 grant Crawford
 lab UNC
@@ -734,7 +725,6 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
-fileIndex wgEncodeOpenChromFaireGm12891AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
 grant Crawford
 lab UNC
@@ -859,7 +849,6 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
-fileIndex wgEncodeOpenChromFaireGm12892AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
 grant Crawford
 lab UNC
@@ -881,7 +870,6 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
-fileIndex wgEncodeOpenChromFaireGm12892AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
 grant Crawford
 lab UNC
@@ -1027,7 +1015,6 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
-fileIndex wgEncodeOpenChromFaireGm18507AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam
 grant Crawford
 lab UNC
@@ -1050,7 +1037,6 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
-fileIndex wgEncodeOpenChromFaireGm18507AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam
 grant Crawford
 lab UNC
@@ -1203,7 +1189,6 @@ dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
-fileIndex wgEncodeOpenChromFaireGm19239AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam
 grant Crawford
 lab UNC
@@ -1226,7 +1211,6 @@ dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
-fileIndex wgEncodeOpenChromFaireGm19239AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam
 grant Crawford
 lab UNC
@@ -1379,7 +1363,6 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
-fileIndex wgEncodeOpenChromFaireH1hescAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam
 grant Crawford
 lab UNC
@@ -1402,7 +1385,6 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
-fileIndex wgEncodeOpenChromFaireH1hescAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam
 grant Crawford
 lab UNC
@@ -1535,7 +1517,6 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
-fileIndex wgEncodeOpenChromFaireHelas3AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam
 grant Crawford
 lab UNC
@@ -1558,7 +1539,6 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
-fileIndex wgEncodeOpenChromFaireHelas3AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam
 grant Crawford
 lab UNC
@@ -1603,7 +1583,6 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000587
 expId 587
-fileIndex wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam
 grant Crawford
 lab UNC
@@ -1627,7 +1606,6 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000587
 expId 587
-fileIndex wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam
 grant Crawford
 lab UNC
@@ -1764,7 +1742,6 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000588
 expId 588
-fileIndex wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam
 grant Crawford
 lab UNC
@@ -1788,7 +1765,6 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000588
 expId 588
-fileIndex wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2031,7 +2007,6 @@ dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
-fileIndex wgEncodeOpenChromFaireHepg2AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam
 grant Crawford
 lab UNC
@@ -2054,7 +2029,6 @@ dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
-fileIndex wgEncodeOpenChromFaireHepg2AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam
 grant Crawford
 lab UNC
@@ -2077,7 +2051,6 @@ dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
-fileIndex wgEncodeOpenChromFaireHepg2AlnRep3.bam.bai
 fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam
 grant Crawford
 lab UNC
@@ -2394,7 +2367,6 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
-fileIndex wgEncodeOpenChromFaireHuvecAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2417,7 +2389,6 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
-fileIndex wgEncodeOpenChromFaireHuvecAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2570,7 +2541,6 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
-fileIndex wgEncodeOpenChromFaireK562AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562AlnRep1.bam
 grant Crawford
 lab UNC
@@ -2593,7 +2563,6 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
-fileIndex wgEncodeOpenChromFaireK562AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562AlnRep2.bam
 grant Crawford
 lab UNC
@@ -2637,7 +2606,6 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
-fileIndex wgEncodeOpenChromFaireK562NabutAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2661,7 +2629,6 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
-fileIndex wgEncodeOpenChromFaireK562NabutAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2795,7 +2762,6 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
-fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2819,7 +2785,6 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
-fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
 grant Crawford
 lab UNC
@@ -3210,7 +3175,6 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
-fileIndex wgEncodeOpenChromFaireMedulloAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
 grant Crawford
 lab UNC
@@ -3232,7 +3196,6 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
-fileIndex wgEncodeOpenChromFaireMedulloAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
 grant Crawford
 lab UNC
@@ -3509,7 +3472,6 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
-fileIndex wgEncodeOpenChromFaireNhekAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireNhekAlnRep1.bam
 grant Crawford
 lab UNC
@@ -3532,7 +3494,6 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
-fileIndex wgEncodeOpenChromFaireNhekAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireNhekAlnRep2.bam
 grant Crawford
 lab UNC
@@ -3685,7 +3646,6 @@ dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
 dccAccession wgEncodeEH000573
 expId 573
-fileIndex wgEncodeOpenChromFairePanisletsAlnRep1.bam.bai
 fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam
 grant Crawford
 lab UNC
@@ -4081,4 +4041,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 576396270
+# MAGIC: 1486757852

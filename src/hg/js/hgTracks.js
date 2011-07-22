@@ -21,7 +21,7 @@ var mapIsUpdateable = true;
 var currentMapItem;
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
-var supportZoomCodon = false;
+var supportZoomCodon = false;  // turn on experimental zoom-to-codon functionality (currently only on in larrym's tree).
 
 function initVars(img)
 {
@@ -238,6 +238,9 @@ $(window).load(function () {
     // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
     // though if you look in the DOM the changes are there); so we have to do a full form submission when the
     // user changes visibility settings or track configuration.
+    // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
+    // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately, logs for 7/2011 show vast majority of safari users 
+    // are pre-5.1 (5.0.5 is by far the most common).
     //
     // Chrome used to have this problem too, but this  problem seems to have gone away as of
     // Chrome 5.0.335.1 (or possibly earlier).
@@ -1626,21 +1629,11 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                             name = a[1];
                         }
                     }
-                    if(browser == "safari" || imageV2) {
-                        // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
-                        // See comments below on safari problems.
-                        jQuery('body').css('cursor', 'wait');
-                        var ele;
-                        if(document.TrackForm)
-                            ele = document.TrackForm;
-                        else
-                            ele = document.TrackHeaderForm;
-                        if(name)
-                            $(ele).append("<input type='hidden' name='hgFind.matches' value='" + name + "'>");
-                        ele.submit();
-                    } else {
-                        // XXXX This attempt to "update whole track image in place" didn't work for a variety of reasons, so this is dead code, but
-                        // I'm leaving it in case we try to implement this functionality in the future.
+                    if(false && mapIsUpdateable) {
+                        // XXXX This attempt to "update whole track image in place" didn't work for a variety of reasons
+                        // (e.g. safari doesn't parse map when we update on the client side), so this is currently dead code.
+                        // However, this now works in all other browsers, so we may turn this on for non-safari browsers
+                        // (see redmine #4667).
                         jQuery('body').css('cursor', '');
                         var data = "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid();
                         if(name)
@@ -1654,31 +1647,43 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                                    success: catchErrorOrDispatch,
                                    error: errorHandler,
                                    cmd: cmd,
+                                   loadingId: showLoadingImage("imgTbl"),
                                    cache: false
                                });
+                    } else {
+                        // do a full page refresh to update hgTracks image
+                        jQuery('body').css('cursor', 'wait');
+                        var ele;
+                        if(document.TrackForm)
+                            ele = document.TrackForm;
+                        else
+                            ele = document.TrackHeaderForm;
+                        if(name)
+                            $(ele).append("<input type='hidden' name='hgFind.matches' value='" + name + "'>");
+                        ele.submit();
                     }
                 }
             }
     } else if (cmd == 'zoomCodon' || cmd == 'zoomExon') {
-        var num, ajaxCmd;
+        var num, ajaxCmd, msg;
         if(cmd == 'zoomCodon') {
-            num = prompt("Please enter the codon number to jump to:");
+            msg = "Please enter the codon number to jump to:";
             ajaxCmd = 'codonToPos';
         } else {
-            num = prompt("Please enter the exon number to jump to:");
+            msg = "Please enter the exon number to jump to:";
             ajaxCmd = 'exonToPos';
         }
-        if(num) {
+        myPrompt(msg, function(results) {
             $.ajax({
                        type: "GET",
                        url: "../cgi-bin/hgApi",
-                       data: "db=" + getDb() +  "&cmd=" + ajaxCmd + "&num=" + num + "&table=" + args.table + "&name=" + args.name,
+                       data: "db=" + getDb() +  "&cmd=" + ajaxCmd + "&num=" + results + "&table=" + args.table + "&name=" + args.name,
                        trueSuccess: handleZoomCodon,
                        success: catchErrorOrDispatch,
                        error: errorHandler,
                        cache: true
                    });
-        }
+                 });
     } else if (cmd == 'hgTrackUi_popup') {
 
         hgTrackUiPopUp( selectedMenuItem.id, false );  // Launches the popup but shields the ajax with a waitOnFunction
@@ -1858,6 +1863,23 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
     }
 }
 
+function myPrompt(msg, callback)
+{
+// replacement for prompt; avoids misleading/confusing security warnings which are caused by prompt in IE 7+
+// callback is called if user presses "OK".
+    $("body").append("<div id = 'myPrompt'><div id='dialog' title='Basic dialog'><form>" + msg + "<input id='myPromptText' value=''></form>");
+    $("#myPrompt").dialog({
+                              modal: true,
+                              closeOnEscape: true,
+                              buttons: { "OK": function() {
+                                                            var myPromptText = $("#myPromptText").val();
+                                                            $(this).dialog("close");
+                                                            callback(myPromptText);
+                                                          }
+                                       }
+                          });
+}
+    
 function makeContextMenuHitCallback(title)
 {
 // stub to avoid problem with a function closure w/n a loop
@@ -2425,15 +2447,6 @@ function handleUpdateTrackMap(response, status)
 // this.cmd can be used to figure out which menu item triggered this.
 // this.id == appropriate track if we are retrieving just a single track.
 
-    // Parse out new ideoGram url (if available)
-    // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
-    var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
-    if(a && a[1]) {
-        b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
-        if(b[1]) {
-            $('#chrom').attr('src', b[1]);
-        }
-    }
     // update local trackDbJson to reflect possible side-effects of ajax request.
     var re = /<\!-- trackDbJson -->\n<script>var trackDbJson = ([\S\s]+)<\/script>\n<\!-- trackDbJson -->/m;
     a = re.exec(response);
@@ -2478,7 +2491,9 @@ function handleUpdateTrackMap(response, status)
           }
     } else {
         if(imageV2) {
-            // We update row's one at a time (updating the whole imgTable at one time doesn't work in IE).
+            // Implement in-place updating of hgTracks image
+            //
+            // We update rows one at a time (updating the whole imgTable at one time doesn't work in IE).
             for (id in trackDbJson) {
                 if(!updateTrackImgForId(response, id)) {
                     showWarning("Couldn't parse out new image for id: " + id);
@@ -2487,10 +2502,14 @@ function handleUpdateTrackMap(response, status)
             }
             var json = scrapeVariable(response, "hgTracks");
             if(json != undefined) {
+                hgTracks.chromName = json.chromName;
                 hgTracks.winStart = json.winStart;
                 hgTracks.winEnd = json.winEnd;
+                $("input[name='c']").val(json.chromName);
+                $("input[name='l']").val(json.winStart);
+                $("input[name='r']").val(json.winEnd);
                 hgTracks.newWinWidth = json.newWinWidth;
-                setPositionByCoordinates(json.chromName, hgTracks.winStart + 1, hgTracks.winEnd);
+                setPositionByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd);
             } else {
                 showWarning("Couldn't parse out new position info");
             }
@@ -2538,6 +2557,16 @@ function handleUpdateTrackMap(response, status)
             parseMap($map, true);
         } else {
             showWarning("Couldn't parse out map");
+        }
+    }
+    // Parse out new ideoGram url (if available)
+    // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
+    // We do this last b/c it's least important.
+    var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
+    if(a && a[1]) {
+        b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
+        if(b[1]) {
+            $('#chrom').attr('src', b[1]);
         }
     }
     jQuery('body').css('cursor', '');
@@ -2611,8 +2640,6 @@ function searchKeydown(event)
         // $('#searchSubmit').click();
     }
 }
-
-/////////////////////////////////////////////////////
 
 function windowOpenFailedMsg()
 {
@@ -2688,21 +2715,34 @@ function navigateButtonClick(ele)
 // code to update just the imgTbl in response to navigation buttons (zoom-out etc.).
 // currently experimental code (live only in larrym's tree).
     if(mapIsUpdateable) {
-        jQuery('body').css('cursor', '');
-        $.ajax({
-                   type: "GET",
-                   url: "../cgi-bin/hgTracks",
-                   data: ele.name + "=" + ele.value + "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid(),
-                   dataType: "html",
-                   trueSuccess: handleUpdateTrackMap,
-                   success: catchErrorOrDispatch,
-                   error: errorHandler,
-                   cmd: 'wholeImage',
-                   loadingId: showLoadingImage("imgTbl"),
-                   cache: false
-               });
+        var params = ele.name + "=" + ele.value;
+        // dinking navigation needs additional data
+        if(ele.name == "hgt.dinkLL" || ele.name == "hgt.dinkLR") {
+            params += "&dinkL=" + $("input[name='dinkL']").val();
+        } else if(ele.name == "hgt.dinkRL" || ele.name == "hgt.dinkRR") {
+            params += "&dinkR=" + $("input[name='dinkR']").val();
+        }
+        navigateInPlace(params);
         return false;
     } else {
         return true;
     }
+}
+
+function navigateInPlace(params)
+{
+// request an hgTracks image, using params
+    jQuery('body').css('cursor', '');
+    $.ajax({
+               type: "GET",
+               url: "../cgi-bin/hgTracks",
+               data: params + "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid(),
+               dataType: "html",
+               trueSuccess: handleUpdateTrackMap,
+               success: catchErrorOrDispatch,
+               error: errorHandler,
+               cmd: 'wholeImage',
+               loadingId: showLoadingImage("imgTbl"),
+               cache: false
+           });
 }

@@ -481,19 +481,23 @@ if ((id = getHubId(url, errorMessage)) == 0)
 return id;
 }
 
-void hubCheckForNew(char *database, struct cart *cart)
-/* see if the user just typed in a new hub url */
+boolean hubCheckForNew(char *database, struct cart *cart)
+/* see if the user just typed in a new hub url, return TRUE if so */
 {
 char *url = cartOptionalString(cart, hgHubDataText);
 
 if (url != NULL)
     {
+    trimSpaces(url);
     getAndSetHubStatus(database, cart, url, TRUE, TRUE);
     cartRemove(cart, hgHubDataText);
+    return TRUE;
     }
+return FALSE;
 }
 
-void hubClearStatus(char *url)
+unsigned hubClearStatus(char *url)
+/* drop the information about this url from the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
@@ -509,27 +513,19 @@ safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", hubStatusTab
 
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
+
+return id;
 }
 
 void hubDisconnect(struct cart *cart, char *url)
+/* drop the information about this url from the hubStatus table, and 
+ * the cart variable the references this hub */
 {
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
+/* clear the hubStatus table */
+unsigned id = hubClearStatus(url);
 
-safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", hubStatusTableName, url);
-unsigned id = sqlQuickNum(conn, query);
-
-if (id == 0)
-    errAbort("could not find url %s in status table (%s)\n", 
-	url, hubStatusTableName);
-
-safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", hubStatusTableName, url);
-
-sqlUpdate(conn, query);
-hDisconnectCentral(&conn);
-
+/* remove the cart variable */
 char buffer[1024];
-
 safef(buffer, sizeof buffer, "hgHubConnect.hub.%d", id);
 cartRemove(cart, buffer);
 }

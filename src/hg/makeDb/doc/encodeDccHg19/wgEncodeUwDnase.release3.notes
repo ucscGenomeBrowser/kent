@@ -1,0 +1,2017 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release3 of the "ENCODE wgEncodeUwDnase"
+The composite track is wgEncodeUwDnase
+# WARNINGS #################################################
+1 - could not find None.bai file for wgEncodeUwDnaseWi38OhtamAlnRep1.bam
+2 - table wgEncodeUwDnaseWi38OhtamAlnRep1 does not exist, from filetype bam
+3 - could not find None.bai file for wgEncodeUwDnaseNhaAlnRep2.bam
+4 - table wgEncodeUwDnaseNhaAlnRep2 does not exist, from filetype bam
+5 - could not find None.bai file for wgEncodeUwDnaseHreAlnRep2.bam
+6 - table wgEncodeUwDnaseHreAlnRep2 does not exist, from filetype bam
+7 - could not find None.bai file for wgEncodeUwDnaseHepg2AlnRep2.bam
+8 - table wgEncodeUwDnaseHepg2AlnRep2 does not exist, from filetype bam
+9 - could not find None.bai file for wgEncodeUwDnasePanc1AlnRep2.bam
+10 - table wgEncodeUwDnasePanc1AlnRep2 does not exist, from filetype bam
+11 - could not find None.bai file for wgEncodeUwDnaseAg04449AlnRep1.bam
+12 - table wgEncodeUwDnaseAg04449AlnRep1 does not exist, from filetype bam
+13 - could not find None.bai file for wgEncodeUwDnaseAg04450AlnRep1.bam
+14 - table wgEncodeUwDnaseAg04450AlnRep1 does not exist, from filetype bam
+15 - table wgEncodeUwDnaseMonocd14HotspotsRep1 does not exist, from filetype broadPeak
+16 - could not find None.bai file for wgEncodeUwDnaseBe2cAlnRep2.bam
+17 - table wgEncodeUwDnaseBe2cAlnRep2 does not exist, from filetype bam
+18 - could not find None.bai file for wgEncodeUwDnaseHmfAlnRep1.bam
+19 - table wgEncodeUwDnaseHmfAlnRep1 does not exist, from filetype bam
+20 - could not find None.bai file for wgEncodeUwDnaseHaspAlnRep1.bam
+21 - table wgEncodeUwDnaseHaspAlnRep1 does not exist, from filetype bam
+22 - could not find None.bai file for wgEncodeUwDnaseNhdfadAlnRep2.bam
+23 - table wgEncodeUwDnaseNhdfadAlnRep2 does not exist, from filetype bam
+24 - could not find None.bai file for wgEncodeUwDnaseSaecAlnRep1.bam
+25 - table wgEncodeUwDnaseSaecAlnRep1 does not exist, from filetype bam
+26 - could not find None.bai file for wgEncodeUwDnaseHffAlnRep1.bam
+27 - table wgEncodeUwDnaseHffAlnRep1 does not exist, from filetype bam
+28 - could not find None.bai file for wgEncodeUwDnaseH7esAlnRep2.bam
+29 - table wgEncodeUwDnaseH7esAlnRep2 does not exist, from filetype bam
+30 - could not find None.bai file for wgEncodeUwDnaseNb4AlnRep2.bam
+31 - table wgEncodeUwDnaseNb4AlnRep2 does not exist, from filetype bam
+32 - could not find None.bai file for wgEncodeUwDnaseA549AlnRep2.bam
+33 - table wgEncodeUwDnaseA549AlnRep2 does not exist, from filetype bam
+34 - could not find None.bai file for wgEncodeUwDnaseBjAlnRep1.bam
+35 - table wgEncodeUwDnaseBjAlnRep1 does not exist, from filetype bam
+36 - could not find None.bai file for wgEncodeUwDnaseHmveclblAlnRep1.bam
+37 - table wgEncodeUwDnaseHmveclblAlnRep1 does not exist, from filetype bam
+38 - could not find None.bai file for wgEncodeUwDnaseWi38OhtamAlnRep2.bam
+39 - table wgEncodeUwDnaseWi38OhtamAlnRep2 does not exist, from filetype bam
+40 - could not find None.bai file for wgEncodeUwDnaseAg09309AlnRep1.bam
+41 - table wgEncodeUwDnaseAg09309AlnRep1 does not exist, from filetype bam
+42 - could not find None.bai file for wgEncodeUwDnaseH7esAlnRep1.bam
+43 - table wgEncodeUwDnaseH7esAlnRep1 does not exist, from filetype bam
+44 - could not find None.bai file for wgEncodeUwDnaseWerirb1AlnRep2.bam
+45 - table wgEncodeUwDnaseWerirb1AlnRep2 does not exist, from filetype bam
+46 - could not find None.bai file for wgEncodeUwDnaseHreAlnRep1.bam
+47 - table wgEncodeUwDnaseHreAlnRep1 does not exist, from filetype bam
+48 - could not find None.bai file for wgEncodeUwDnaseHmvecdneoAlnRep2.bam
+49 - table wgEncodeUwDnaseHmvecdneoAlnRep2 does not exist, from filetype bam
+50 - could not find None.bai file for wgEncodeUwDnaseWi38AlnRep1.bam
+51 - table wgEncodeUwDnaseWi38AlnRep1 does not exist, from filetype bam
+52 - could not find None.bai file for wgEncodeUwDnaseGm12865AlnRep1.bam
+53 - table wgEncodeUwDnaseGm12865AlnRep1 does not exist, from filetype bam
+54 - could not find None.bai file for wgEncodeUwDnaseHvmfAlnRep1.bam
+55 - table wgEncodeUwDnaseHvmfAlnRep1 does not exist, from filetype bam
+56 - could not find None.bai file for wgEncodeUwDnaseSkmcAlnRep2.bam
+57 - table wgEncodeUwDnaseSkmcAlnRep2 does not exist, from filetype bam
+58 - could not find None.bai file for wgEncodeUwDnaseAg04450AlnRep2.bam
+59 - table wgEncodeUwDnaseAg04450AlnRep2 does not exist, from filetype bam
+60 - could not find None.bai file for wgEncodeUwDnaseHcmAlnRep1.bam
+61 - table wgEncodeUwDnaseHcmAlnRep1 does not exist, from filetype bam
+62 - could not find None.bai file for wgEncodeUwDnaseHffmycAlnRep1.bam
+63 - table wgEncodeUwDnaseHffmycAlnRep1 does not exist, from filetype bam
+64 - could not find None.bai file for wgEncodeUwDnaseK562AlnRep1.bam
+65 - table wgEncodeUwDnaseK562AlnRep1 does not exist, from filetype bam
+66 - could not find None.bai file for wgEncodeUwDnaseHconfAlnRep2.bam
+67 - table wgEncodeUwDnaseHconfAlnRep2 does not exist, from filetype bam
+68 - could not find None.bai file for wgEncodeUwDnaseHsmmAlnRep1.bam
+69 - table wgEncodeUwDnaseHsmmAlnRep1 does not exist, from filetype bam
+70 - could not find None.bai file for wgEncodeUwDnaseHcfAlnRep1.bam
+71 - table wgEncodeUwDnaseHcfAlnRep1 does not exist, from filetype bam
+72 - could not find None.bai file for wgEncodeUwDnaseGm06990AlnRep1.bam
+73 - table wgEncodeUwDnaseGm06990AlnRep1 does not exist, from filetype bam
+74 - could not find None.bai file for wgEncodeUwDnaseHmecAlnRep2.bam
+75 - table wgEncodeUwDnaseHmecAlnRep2 does not exist, from filetype bam
+76 - could not find None.bai file for wgEncodeUwDnaseHuvecAlnRep2.bam
+77 - table wgEncodeUwDnaseHuvecAlnRep2 does not exist, from filetype bam
+78 - could not find None.bai file for wgEncodeUwDnaseHffAlnRep2.bam
+79 - table wgEncodeUwDnaseHffAlnRep2 does not exist, from filetype bam
+80 - could not find None.bai file for wgEncodeUwDnaseMonocd14AlnRep1.bam
+81 - table wgEncodeUwDnaseMonocd14AlnRep1 does not exist, from filetype bam
+82 - could not find None.bai file for wgEncodeUwDnaseHahAlnRep1.bam
+83 - table wgEncodeUwDnaseHahAlnRep1 does not exist, from filetype bam
+84 - could not find None.bai file for wgEncodeUwDnaseHmvecdneoAlnRep1.bam
+85 - table wgEncodeUwDnaseHmvecdneoAlnRep1 does not exist, from filetype bam
+86 - could not find None.bai file for wgEncodeUwDnaseHvmfAlnRep2.bam
+87 - table wgEncodeUwDnaseHvmfAlnRep2 does not exist, from filetype bam
+88 - could not find None.bai file for wgEncodeUwDnaseCmkAlnRep1.bam
+89 - table wgEncodeUwDnaseCmkAlnRep1 does not exist, from filetype bam
+90 - could not find None.bai file for wgEncodeUwDnaseHrpeAlnRep1.bam
+91 - table wgEncodeUwDnaseHrpeAlnRep1 does not exist, from filetype bam
+92 - could not find None.bai file for wgEncodeUwDnaseHct116AlnRep1.bam
+93 - table wgEncodeUwDnaseHct116AlnRep1 does not exist, from filetype bam
+94 - could not find None.bai file for wgEncodeUwDnaseNhdfneoAlnRep1.bam
+95 - table wgEncodeUwDnaseNhdfneoAlnRep1 does not exist, from filetype bam
+96 - could not find None.bai file for wgEncodeUwDnaseHgfAlnRep1.bam
+97 - table wgEncodeUwDnaseHgfAlnRep1 does not exist, from filetype bam
+98 - could not find None.bai file for wgEncodeUwDnaseSknshraAlnRep1.bam
+99 - table wgEncodeUwDnaseSknshraAlnRep1 does not exist, from filetype bam
+100 - could not find None.bai file for wgEncodeUwDnaseHeeAlnRep2.bam
+101 - table wgEncodeUwDnaseHeeAlnRep2 does not exist, from filetype bam
+102 - table wgEncodeUwDnaseMonocd14RawRep1 does not exist, from filetype bigWig
+103 - could not find None.bai file for wgEncodeUwDnaseNhdfneoAlnRep2.bam
+104 - table wgEncodeUwDnaseNhdfneoAlnRep2 does not exist, from filetype bam
+105 - could not find None.bai file for wgEncodeUwDnaseHcmAlnRep2.bam
+106 - table wgEncodeUwDnaseHcmAlnRep2 does not exist, from filetype bam
+107 - could not find None.bai file for wgEncodeUwDnaseHbmecAlnRep1.bam
+108 - table wgEncodeUwDnaseHbmecAlnRep1 does not exist, from filetype bam
+109 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyadAlnRep2.bam
+110 - table wgEncodeUwDnaseHmvecdlyadAlnRep2 does not exist, from filetype bam
+111 - could not find None.bai file for wgEncodeUwDnaseHmvecllyAlnRep1.bam
+112 - table wgEncodeUwDnaseHmvecllyAlnRep1 does not exist, from filetype bam
+113 - could not find None.bai file for wgEncodeUwDnaseHipeAlnRep2.bam
+114 - table wgEncodeUwDnaseHipeAlnRep2 does not exist, from filetype bam
+115 - could not find None.bai file for wgEncodeUwDnaseNhekAlnRep1.bam
+116 - table wgEncodeUwDnaseNhekAlnRep1 does not exist, from filetype bam
+117 - could not find None.bai file for wgEncodeUwDnaseHpfAlnRep2.bam
+118 - table wgEncodeUwDnaseHpfAlnRep2 does not exist, from filetype bam
+119 - could not find None.bai file for wgEncodeUwDnaseHcpeAlnRep2.bam
+120 - table wgEncodeUwDnaseHcpeAlnRep2 does not exist, from filetype bam
+121 - could not find None.bai file for wgEncodeUwDnaseHconfAlnRep1.bam
+122 - table wgEncodeUwDnaseHconfAlnRep1 does not exist, from filetype bam
+123 - could not find None.bai file for wgEncodeUwDnasePanc1AlnRep1.bam
+124 - table wgEncodeUwDnasePanc1AlnRep1 does not exist, from filetype bam
+125 - could not find None.bai file for wgEncodeUwDnaseJurkatAlnRep2.bam
+126 - table wgEncodeUwDnaseJurkatAlnRep2 does not exist, from filetype bam
+127 - could not find None.bai file for wgEncodeUwDnaseCaco2AlnRep2.bam
+128 - table wgEncodeUwDnaseCaco2AlnRep2 does not exist, from filetype bam
+129 - could not find None.bai file for wgEncodeUwDnaseMcf7AlnRep1.bam
+130 - table wgEncodeUwDnaseMcf7AlnRep1 does not exist, from filetype bam
+131 - could not find None.bai file for wgEncodeUwDnaseHpafAlnRep1.bam
+132 - table wgEncodeUwDnaseHpafAlnRep1 does not exist, from filetype bam
+133 - could not find None.bai file for wgEncodeUwDnaseA549AlnRep1.bam
+134 - table wgEncodeUwDnaseA549AlnRep1 does not exist, from filetype bam
+135 - could not find None.bai file for wgEncodeUwDnaseGm12865AlnRep2.bam
+136 - table wgEncodeUwDnaseGm12865AlnRep2 does not exist, from filetype bam
+137 - could not find None.bai file for wgEncodeUwDnaseK562AlnRep2.bam
+138 - table wgEncodeUwDnaseK562AlnRep2 does not exist, from filetype bam
+139 - could not find None.bai file for wgEncodeUwDnaseRptecAlnRep2.bam
+140 - table wgEncodeUwDnaseRptecAlnRep2 does not exist, from filetype bam
+141 - could not find None.bai file for wgEncodeUwDnaseHacAlnRep2.bam
+142 - table wgEncodeUwDnaseHacAlnRep2 does not exist, from filetype bam
+143 - could not find None.bai file for wgEncodeUwDnaseHelas3AlnRep2.bam
+144 - table wgEncodeUwDnaseHelas3AlnRep2 does not exist, from filetype bam
+145 - could not find None.bai file for wgEncodeUwDnaseAg10803AlnRep2.bam
+146 - table wgEncodeUwDnaseAg10803AlnRep2 does not exist, from filetype bam
+147 - could not find None.bai file for wgEncodeUwDnaseAoafAlnRep1.bam
+148 - table wgEncodeUwDnaseAoafAlnRep1 does not exist, from filetype bam
+149 - could not find None.bai file for wgEncodeUwDnaseNhlfAlnRep2.bam
+150 - table wgEncodeUwDnaseNhlfAlnRep2 does not exist, from filetype bam
+151 - could not find None.bai file for wgEncodeUwDnaseHaeAlnRep2.bam
+152 - table wgEncodeUwDnaseHaeAlnRep2 does not exist, from filetype bam
+153 - could not find None.bai file for wgEncodeUwDnaseGm12864AlnRep1.bam
+154 - table wgEncodeUwDnaseGm12864AlnRep1 does not exist, from filetype bam
+155 - could not find None.bai file for wgEncodeUwDnaseHahAlnRep2.bam
+156 - table wgEncodeUwDnaseHahAlnRep2 does not exist, from filetype bam
+157 - could not find None.bai file for wgEncodeUwDnaseSknmcAlnRep2.bam
+158 - table wgEncodeUwDnaseSknmcAlnRep2 does not exist, from filetype bam
+159 - could not find None.bai file for wgEncodeUwDnaseHuvecAlnRep1.bam
+160 - table wgEncodeUwDnaseHuvecAlnRep1 does not exist, from filetype bam
+161 - could not find None.bai file for wgEncodeUwDnaseHaspAlnRep2.bam
+162 - table wgEncodeUwDnaseHaspAlnRep2 does not exist, from filetype bam
+163 - could not find None.bai file for wgEncodeUwDnaseGm12878AlnRep2.bam
+164 - table wgEncodeUwDnaseGm12878AlnRep2 does not exist, from filetype bam
+165 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam
+166 - table wgEncodeUwDnaseHmvecdlyneoAlnRep2 does not exist, from filetype bam
+167 - could not find None.bai file for wgEncodeUwDnaseLncapAlnRep1.bam
+168 - table wgEncodeUwDnaseLncapAlnRep1 does not exist, from filetype bam
+169 - could not find None.bai file for wgEncodeUwDnaseHmvecllyAlnRep2.bam
+170 - table wgEncodeUwDnaseHmvecllyAlnRep2 does not exist, from filetype bam
+171 - could not find None.bai file for wgEncodeUwDnaseHnpceAlnRep2.bam
+172 - table wgEncodeUwDnaseHnpceAlnRep2 does not exist, from filetype bam
+173 - could not find None.bai file for wgEncodeUwDnaseHmvecdbladAlnRep1.bam
+174 - table wgEncodeUwDnaseHmvecdbladAlnRep1 does not exist, from filetype bam
+175 - could not find None.bai file for wgEncodeUwDnaseWi38AlnRep2.bam
+176 - table wgEncodeUwDnaseWi38AlnRep2 does not exist, from filetype bam
+177 - could not find None.bai file for wgEncodeUwDnaseNhdfadAlnRep1.bam
+178 - table wgEncodeUwDnaseNhdfadAlnRep1 does not exist, from filetype bam
+179 - could not find None.bai file for wgEncodeUwDnaseHrceAlnRep2.bam
+180 - table wgEncodeUwDnaseHrceAlnRep2 does not exist, from filetype bam
+181 - could not find None.bai file for wgEncodeUwDnaseHeeAlnRep1.bam
+182 - table wgEncodeUwDnaseHeeAlnRep1 does not exist, from filetype bam
+183 - could not find None.bai file for wgEncodeUwDnaseHffmycAlnRep2.bam
+184 - table wgEncodeUwDnaseHffmycAlnRep2 does not exist, from filetype bam
+185 - could not find None.bai file for wgEncodeUwDnaseHipeAlnRep1.bam
+186 - table wgEncodeUwDnaseHipeAlnRep1 does not exist, from filetype bam
+187 - could not find None.bai file for wgEncodeUwDnaseHcfAlnRep2.bam
+188 - table wgEncodeUwDnaseHcfAlnRep2 does not exist, from filetype bam
+189 - could not find None.bai file for wgEncodeUwDnaseHmveclblAlnRep2.bam
+190 - table wgEncodeUwDnaseHmveclblAlnRep2 does not exist, from filetype bam
+191 - could not find None.bai file for wgEncodeUwDnaseHpdlfAlnRep2.bam
+192 - table wgEncodeUwDnaseHpdlfAlnRep2 does not exist, from filetype bam
+193 - could not find None.bai file for wgEncodeUwDnaseHpafAlnRep2.bam
+194 - table wgEncodeUwDnaseHpafAlnRep2 does not exist, from filetype bam
+195 - could not find None.bai file for wgEncodeUwDnaseHsmmAlnRep2.bam
+196 - table wgEncodeUwDnaseHsmmAlnRep2 does not exist, from filetype bam
+197 - could not find None.bai file for wgEncodeUwDnaseNhekAlnRep2.bam
+198 - table wgEncodeUwDnaseNhekAlnRep2 does not exist, from filetype bam
+199 - table wgEncodeUwDnaseMonocd14PkRep1 does not exist, from filetype narrowPeak
+200 - could not find None.bai file for wgEncodeUwDnaseHrceAlnRep1.bam
+201 - table wgEncodeUwDnaseHrceAlnRep1 does not exist, from filetype bam
+202 - could not find None.bai file for wgEncodeUwDnaseHnpceAlnRep1.bam
+203 - table wgEncodeUwDnaseHnpceAlnRep1 does not exist, from filetype bam
+204 - could not find None.bai file for wgEncodeUwDnaseHsmmtAlnRep1.bam
+205 - table wgEncodeUwDnaseHsmmtAlnRep1 does not exist, from filetype bam
+206 - could not find None.bai file for wgEncodeUwDnaseCaco2AlnRep1.bam
+207 - table wgEncodeUwDnaseCaco2AlnRep1 does not exist, from filetype bam
+208 - could not find None.bai file for wgEncodeUwDnaseHbmecAlnRep2.bam
+209 - table wgEncodeUwDnaseHbmecAlnRep2 does not exist, from filetype bam
+210 - could not find None.bai file for wgEncodeUwDnaseHl60AlnRep2.bam
+211 - table wgEncodeUwDnaseHl60AlnRep2 does not exist, from filetype bam
+212 - could not find None.bai file for wgEncodeUwDnaseAg10803AlnRep1.bam
+213 - table wgEncodeUwDnaseAg10803AlnRep1 does not exist, from filetype bam
+214 - could not find None.bai file for wgEncodeUwDnaseGm12878AlnRep1.bam
+215 - table wgEncodeUwDnaseGm12878AlnRep1 does not exist, from filetype bam
+216 - could not find None.bai file for wgEncodeUwDnaseH1hescAlnRep1.bam
+217 - table wgEncodeUwDnaseH1hescAlnRep1 does not exist, from filetype bam
+218 - could not find None.bai file for wgEncodeUwDnaseNhaAlnRep1.bam
+219 - table wgEncodeUwDnaseNhaAlnRep1 does not exist, from filetype bam
+220 - could not find None.bai file for wgEncodeUwDnaseHelas3AlnRep1.bam
+221 - table wgEncodeUwDnaseHelas3AlnRep1 does not exist, from filetype bam
+222 - could not find None.bai file for wgEncodeUwDnaseAg09319AlnRep2.bam
+223 - table wgEncodeUwDnaseAg09319AlnRep2 does not exist, from filetype bam
+224 - could not find None.bai file for wgEncodeUwDnaseSaecAlnRep2.bam
+225 - table wgEncodeUwDnaseSaecAlnRep2 does not exist, from filetype bam
+226 - could not find None.bai file for wgEncodeUwDnaseHpdlfAlnRep1.bam
+227 - table wgEncodeUwDnaseHpdlfAlnRep1 does not exist, from filetype bam
+228 - could not find None.bai file for wgEncodeUwDnaseTh2AlnRep1.bam
+229 - table wgEncodeUwDnaseTh2AlnRep1 does not exist, from filetype bam
+230 - could not find None.bai file for wgEncodeUwDnaseMcf7AlnRep2.bam
+231 - table wgEncodeUwDnaseMcf7AlnRep2 does not exist, from filetype bam
+232 - could not find None.bai file for wgEncodeUwDnaseGm06990AlnRep2.bam
+233 - table wgEncodeUwDnaseGm06990AlnRep2 does not exist, from filetype bam
+234 - could not find None.bai file for wgEncodeUwDnaseHmecAlnRep1.bam
+235 - table wgEncodeUwDnaseHmecAlnRep1 does not exist, from filetype bam
+236 - could not find None.bai file for wgEncodeUwDnaseSknmcAlnRep1.bam
+237 - table wgEncodeUwDnaseSknmcAlnRep1 does not exist, from filetype bam
+238 - could not find None.bai file for wgEncodeUwDnaseAoafAlnRep2.bam
+239 - table wgEncodeUwDnaseAoafAlnRep2 does not exist, from filetype bam
+240 - could not find None.bai file for wgEncodeUwDnaseHct116AlnRep2.bam
+241 - table wgEncodeUwDnaseHct116AlnRep2 does not exist, from filetype bam
+242 - could not find None.bai file for wgEncodeUwDnaseHmvecdbladAlnRep2.bam
+243 - table wgEncodeUwDnaseHmvecdbladAlnRep2 does not exist, from filetype bam
+244 - could not find None.bai file for wgEncodeUwDnaseSkmcAlnRep1.bam
+245 - table wgEncodeUwDnaseSkmcAlnRep1 does not exist, from filetype bam
+246 - could not find None.bai file for wgEncodeUwDnaseHrgecAlnRep1.bam
+247 - table wgEncodeUwDnaseHrgecAlnRep1 does not exist, from filetype bam
+248 - could not find None.bai file for wgEncodeUwDnaseSknshraAlnRep2.bam
+249 - table wgEncodeUwDnaseSknshraAlnRep2 does not exist, from filetype bam
+250 - could not find None.bai file for wgEncodeUwDnaseHcfaaAlnRep2.bam
+251 - table wgEncodeUwDnaseHcfaaAlnRep2 does not exist, from filetype bam
+252 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam
+253 - table wgEncodeUwDnaseHmvecdlyneoAlnRep1 does not exist, from filetype bam
+254 - could not find None.bai file for wgEncodeUwDnaseNhlfAlnRep1.bam
+255 - table wgEncodeUwDnaseNhlfAlnRep1 does not exist, from filetype bam
+256 - could not find None.bai file for wgEncodeUwDnaseAg04449AlnRep2.bam
+257 - table wgEncodeUwDnaseAg04449AlnRep2 does not exist, from filetype bam
+258 - could not find None.bai file for wgEncodeUwDnaseAg09319AlnRep1.bam
+259 - table wgEncodeUwDnaseAg09319AlnRep1 does not exist, from filetype bam
+260 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyadAlnRep1.bam
+261 - table wgEncodeUwDnaseHmvecdlyadAlnRep1 does not exist, from filetype bam
+262 - could not find None.bai file for wgEncodeUwDnaseHepg2AlnRep1.bam
+263 - table wgEncodeUwDnaseHepg2AlnRep1 does not exist, from filetype bam
+264 - could not find None.bai file for wgEncodeUwDnaseHacAlnRep1.bam
+265 - table wgEncodeUwDnaseHacAlnRep1 does not exist, from filetype bam
+266 - could not find None.bai file for wgEncodeUwDnaseHrgecAlnRep2.bam
+267 - table wgEncodeUwDnaseHrgecAlnRep2 does not exist, from filetype bam
+268 - could not find None.bai file for wgEncodeUwDnaseJurkatAlnRep1.bam
+269 - table wgEncodeUwDnaseJurkatAlnRep1 does not exist, from filetype bam
+270 - could not find None.bai file for wgEncodeUwDnaseHaeAlnRep1.bam
+271 - table wgEncodeUwDnaseHaeAlnRep1 does not exist, from filetype bam
+272 - could not find None.bai file for wgEncodeUwDnaseHmvecdblneoAlnRep1.bam
+273 - table wgEncodeUwDnaseHmvecdblneoAlnRep1 does not exist, from filetype bam
+274 - could not find None.bai file for wgEncodeUwDnaseHmfAlnRep2.bam
+275 - table wgEncodeUwDnaseHmfAlnRep2 does not exist, from filetype bam
+276 - could not find None.bai file for wgEncodeUwDnaseBe2cAlnRep1.bam
+277 - table wgEncodeUwDnaseBe2cAlnRep1 does not exist, from filetype bam
+278 - could not find None.bai file for wgEncodeUwDnaseHrpeAlnRep2.bam
+279 - table wgEncodeUwDnaseHrpeAlnRep2 does not exist, from filetype bam
+280 - could not find None.bai file for wgEncodeUwDnaseRptecAlnRep1.bam
+281 - table wgEncodeUwDnaseRptecAlnRep1 does not exist, from filetype bam
+282 - could not find None.bai file for wgEncodeUwDnaseLncapAlnRep2.bam
+283 - table wgEncodeUwDnaseLncapAlnRep2 does not exist, from filetype bam
+284 - could not find None.bai file for wgEncodeUwDnaseHcfaaAlnRep1.bam
+285 - table wgEncodeUwDnaseHcfaaAlnRep1 does not exist, from filetype bam
+286 - could not find None.bai file for wgEncodeUwDnaseHcpeAlnRep1.bam
+287 - table wgEncodeUwDnaseHcpeAlnRep1 does not exist, from filetype bam
+288 - could not find None.bai file for wgEncodeUwDnaseHl60AlnRep1.bam
+289 - table wgEncodeUwDnaseHl60AlnRep1 does not exist, from filetype bam
+290 - could not find None.bai file for wgEncodeUwDnaseHgfAlnRep2.bam
+291 - table wgEncodeUwDnaseHgfAlnRep2 does not exist, from filetype bam
+292 - could not find None.bai file for wgEncodeUwDnaseBjAlnRep2.bam
+293 - table wgEncodeUwDnaseBjAlnRep2 does not exist, from filetype bam
+294 - could not find None.bai file for wgEncodeUwDnaseTh1AlnRep1.bam
+295 - table wgEncodeUwDnaseTh1AlnRep1 does not exist, from filetype bam
+296 - could not find None.bai file for wgEncodeUwDnaseWerirb1AlnRep1.bam
+297 - table wgEncodeUwDnaseWerirb1AlnRep1 does not exist, from filetype bam
+298 - could not find None.bai file for wgEncodeUwDnaseHmvecdblneoAlnRep2.bam
+299 - table wgEncodeUwDnaseHmvecdblneoAlnRep2 does not exist, from filetype bam
+300 - could not find None.bai file for wgEncodeUwDnaseAg09309AlnRep2.bam
+301 - table wgEncodeUwDnaseAg09309AlnRep2 does not exist, from filetype bam
+302 - could not find None.bai file for wgEncodeUwDnaseNb4AlnRep1.bam
+303 - table wgEncodeUwDnaseNb4AlnRep1 does not exist, from filetype bam
+304 - could not find None.bai file for wgEncodeUwDnaseHpfAlnRep1.bam
+305 - table wgEncodeUwDnaseHpfAlnRep1 does not exist, from filetype bam
+306 - could not find gbdb path in table hg19.wgEncodeUwDnaseMonocd14AlnRep1V2
+307 - table wgEncodeUwDnaseMonocd14AlnRep1V2 does not exist, from filetype bam
+308 - could not find gbdb path in table hg19.wgEncodeUwDnaseNt2d1AlnRep1
+309 - table wgEncodeUwDnaseNt2d1AlnRep1 does not exist, from filetype bam
+310 - could not find gbdb path in table hg19.wgEncodeUwDnaseHpaecAlnRep1
+311 - table wgEncodeUwDnaseHpaecAlnRep1 does not exist, from filetype bam
+312 - could not find gbdb path in table hg19.wgEncodeUwDnasePrecAlnRep1
+313 - table wgEncodeUwDnasePrecAlnRep1 does not exist, from filetype bam
+314 - could not find gbdb path in table hg19.wgEncodeUwDnasePrecAlnRep2
+315 - table wgEncodeUwDnasePrecAlnRep2 does not exist, from filetype bam
+316 - could not find gbdb path in table hg19.wgEncodeUwDnaseCd34mobilizedAlnRep1
+317 - table wgEncodeUwDnaseCd34mobilizedAlnRep1 does not exist, from filetype bam
+318 - could not find gbdb path in table hg19.wgEncodeUwDnaseMonocd14AlnRep2
+319 - table wgEncodeUwDnaseMonocd14AlnRep2 does not exist, from filetype bam
+320 - could not find gbdb path in table hg19.wgEncodeUwDnaseHsmmtAlnRep2
+321 - table wgEncodeUwDnaseHsmmtAlnRep2 does not exist, from filetype bam
+322 - could not find gbdb path in table hg19.wgEncodeUwDnaseHmvecdadAlnRep2
+323 - table wgEncodeUwDnaseHmvecdadAlnRep2 does not exist, from filetype bam
+324 - could not find gbdb path in table hg19.wgEncodeUwDnaseCd20PosAlnRep2
+325 - table wgEncodeUwDnaseCd20PosAlnRep2 does not exist, from filetype bam
+326 - could not find gbdb path in table hg19.wgEncodeUwDnaseHmvecdadAlnRep1
+327 - table wgEncodeUwDnaseHmvecdadAlnRep1 does not exist, from filetype bam
+328 - could not find gbdb path in table hg19.wgEncodeUwDnaseNt2d1AlnRep2
+329 - table wgEncodeUwDnaseNt2d1AlnRep2 does not exist, from filetype bam
+############################################################
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release3 (new+untouched):
+    Tables: 486
+    Files: 983
+    Gbdbs: 162
+
+A) Untouched Tables (450):
+wgEncodeUwDnaseA549HotspotsRep1
+wgEncodeUwDnaseA549HotspotsRep2
+wgEncodeUwDnaseA549PkRep1
+wgEncodeUwDnaseA549PkRep2
+wgEncodeUwDnaseA549RawRep1
+wgEncodeUwDnaseA549RawRep2
+wgEncodeUwDnaseAg04449HotspotsRep1
+wgEncodeUwDnaseAg04449HotspotsRep2
+wgEncodeUwDnaseAg04449PkRep1
+wgEncodeUwDnaseAg04449PkRep2
+wgEncodeUwDnaseAg04449RawRep1
+wgEncodeUwDnaseAg04449RawRep2
+wgEncodeUwDnaseAg04450HotspotsRep1
+wgEncodeUwDnaseAg04450HotspotsRep2
+wgEncodeUwDnaseAg04450PkRep1
+wgEncodeUwDnaseAg04450PkRep2
+wgEncodeUwDnaseAg04450RawRep1
+wgEncodeUwDnaseAg04450RawRep2
+wgEncodeUwDnaseAg09309HotspotsRep1
+wgEncodeUwDnaseAg09309HotspotsRep2
+wgEncodeUwDnaseAg09309PkRep1
+wgEncodeUwDnaseAg09309PkRep2
+wgEncodeUwDnaseAg09309RawRep1
+wgEncodeUwDnaseAg09309RawRep2
+wgEncodeUwDnaseAg09319HotspotsRep1
+wgEncodeUwDnaseAg09319HotspotsRep2
+wgEncodeUwDnaseAg09319PkRep1V2
+wgEncodeUwDnaseAg09319PkRep2
+wgEncodeUwDnaseAg09319RawRep1
+wgEncodeUwDnaseAg09319RawRep2
+wgEncodeUwDnaseAg10803HotspotsRep1
+wgEncodeUwDnaseAg10803HotspotsRep2
+wgEncodeUwDnaseAg10803PkRep1
+wgEncodeUwDnaseAg10803PkRep2
+wgEncodeUwDnaseAg10803RawRep1
+wgEncodeUwDnaseAg10803RawRep2
+wgEncodeUwDnaseAoafHotspotsRep1
+wgEncodeUwDnaseAoafHotspotsRep2
+wgEncodeUwDnaseAoafPkRep1
+wgEncodeUwDnaseAoafPkRep2
+wgEncodeUwDnaseAoafRawRep1
+wgEncodeUwDnaseAoafRawRep2
+wgEncodeUwDnaseBe2cHotspotsRep1
+wgEncodeUwDnaseBe2cHotspotsRep2
+wgEncodeUwDnaseBe2cPkRep1
+wgEncodeUwDnaseBe2cPkRep2
+wgEncodeUwDnaseBe2cRawRep1
+wgEncodeUwDnaseBe2cRawRep2
+wgEncodeUwDnaseBjHotspotsRep1
+wgEncodeUwDnaseBjHotspotsRep2
+wgEncodeUwDnaseBjPkRep1
+wgEncodeUwDnaseBjPkRep2
+wgEncodeUwDnaseBjRawRep1
+wgEncodeUwDnaseBjRawRep2
+wgEncodeUwDnaseCaco2HotspotsRep1
+wgEncodeUwDnaseCaco2HotspotsRep2
+wgEncodeUwDnaseCaco2PkRep1
+wgEncodeUwDnaseCaco2PkRep2
+wgEncodeUwDnaseCaco2RawRep1
+wgEncodeUwDnaseCaco2RawRep2
+wgEncodeUwDnaseCmkHotspotsRep1
+wgEncodeUwDnaseCmkPkRep1
+wgEncodeUwDnaseCmkRawRep1
+wgEncodeUwDnaseGm06990HotspotsRep1
+wgEncodeUwDnaseGm06990HotspotsRep2
+wgEncodeUwDnaseGm06990PkRep1
+wgEncodeUwDnaseGm06990PkRep2
+wgEncodeUwDnaseGm06990RawRep1
+wgEncodeUwDnaseGm06990RawRep2
+wgEncodeUwDnaseGm12864HotspotsRep1
+wgEncodeUwDnaseGm12864PkRep1
+wgEncodeUwDnaseGm12864RawRep1
+wgEncodeUwDnaseGm12865HotspotsRep1
+wgEncodeUwDnaseGm12865HotspotsRep2
+wgEncodeUwDnaseGm12865PkRep1
+wgEncodeUwDnaseGm12865PkRep2
+wgEncodeUwDnaseGm12865RawRep1
+wgEncodeUwDnaseGm12865RawRep2
+wgEncodeUwDnaseGm12878HotspotsRep1
+wgEncodeUwDnaseGm12878HotspotsRep2
+wgEncodeUwDnaseGm12878PkRep1
+wgEncodeUwDnaseGm12878PkRep2
+wgEncodeUwDnaseGm12878RawRep1
+wgEncodeUwDnaseGm12878RawRep2
+wgEncodeUwDnaseH1hescHotspotsRep1
+wgEncodeUwDnaseH1hescPkRep1
+wgEncodeUwDnaseH1hescRawRep1
+wgEncodeUwDnaseH7esHotspotsRep1
+wgEncodeUwDnaseH7esHotspotsRep2
+wgEncodeUwDnaseH7esPkRep1V2
+wgEncodeUwDnaseH7esPkRep2
+wgEncodeUwDnaseH7esRawRep1
+wgEncodeUwDnaseH7esRawRep2
+wgEncodeUwDnaseHacHotspotsRep1
+wgEncodeUwDnaseHacHotspotsRep2
+wgEncodeUwDnaseHacPkRep1
+wgEncodeUwDnaseHacPkRep2
+wgEncodeUwDnaseHacRawRep1
+wgEncodeUwDnaseHacRawRep2
+wgEncodeUwDnaseHaeHotspotsRep1
+wgEncodeUwDnaseHaeHotspotsRep2
+wgEncodeUwDnaseHaePkRep1
+wgEncodeUwDnaseHaePkRep2
+wgEncodeUwDnaseHaeRawRep1
+wgEncodeUwDnaseHaeRawRep2
+wgEncodeUwDnaseHahHotspotsRep1
+wgEncodeUwDnaseHahHotspotsRep2
+wgEncodeUwDnaseHahPkRep1
+wgEncodeUwDnaseHahPkRep2
+wgEncodeUwDnaseHahRawRep1
+wgEncodeUwDnaseHahRawRep2
+wgEncodeUwDnaseHaspHotspotsRep1
+wgEncodeUwDnaseHaspHotspotsRep2
+wgEncodeUwDnaseHaspPkRep1
+wgEncodeUwDnaseHaspPkRep2
+wgEncodeUwDnaseHaspRawRep1
+wgEncodeUwDnaseHaspRawRep2
+wgEncodeUwDnaseHbmecHotspotsRep1
+wgEncodeUwDnaseHbmecHotspotsRep2
+wgEncodeUwDnaseHbmecPkRep1
+wgEncodeUwDnaseHbmecPkRep2
+wgEncodeUwDnaseHbmecRawRep1
+wgEncodeUwDnaseHbmecRawRep2
+wgEncodeUwDnaseHcfHotspotsRep1
+wgEncodeUwDnaseHcfHotspotsRep2
+wgEncodeUwDnaseHcfPkRep1
+wgEncodeUwDnaseHcfPkRep2
+wgEncodeUwDnaseHcfRawRep1
+wgEncodeUwDnaseHcfRawRep2
+wgEncodeUwDnaseHcfaaHotspotsRep1
+wgEncodeUwDnaseHcfaaHotspotsRep2
+wgEncodeUwDnaseHcfaaPkRep1
+wgEncodeUwDnaseHcfaaPkRep2
+wgEncodeUwDnaseHcfaaRawRep1
+wgEncodeUwDnaseHcfaaRawRep2
+wgEncodeUwDnaseHcmHotspotsRep1
+wgEncodeUwDnaseHcmHotspotsRep2
+wgEncodeUwDnaseHcmPkRep1
+wgEncodeUwDnaseHcmPkRep2
+wgEncodeUwDnaseHcmRawRep1
+wgEncodeUwDnaseHcmRawRep2
+wgEncodeUwDnaseHconfHotspotsRep1
+wgEncodeUwDnaseHconfHotspotsRep2
+wgEncodeUwDnaseHconfPkRep1
+wgEncodeUwDnaseHconfPkRep2
+wgEncodeUwDnaseHconfRawRep1
+wgEncodeUwDnaseHconfRawRep2
+wgEncodeUwDnaseHcpeHotspotsRep1
+wgEncodeUwDnaseHcpeHotspotsRep2
+wgEncodeUwDnaseHcpePkRep1
+wgEncodeUwDnaseHcpePkRep2
+wgEncodeUwDnaseHcpeRawRep1
+wgEncodeUwDnaseHcpeRawRep2
+wgEncodeUwDnaseHct116HotspotsRep1
+wgEncodeUwDnaseHct116HotspotsRep2
+wgEncodeUwDnaseHct116PkRep1
+wgEncodeUwDnaseHct116PkRep2
+wgEncodeUwDnaseHct116RawRep1
+wgEncodeUwDnaseHct116RawRep2
+wgEncodeUwDnaseHeeHotspotsRep1
+wgEncodeUwDnaseHeeHotspotsRep2
+wgEncodeUwDnaseHeePkRep1
+wgEncodeUwDnaseHeePkRep2
+wgEncodeUwDnaseHeeRawRep1
+wgEncodeUwDnaseHeeRawRep2
+wgEncodeUwDnaseHelas3HotspotsRep1
+wgEncodeUwDnaseHelas3HotspotsRep2
+wgEncodeUwDnaseHelas3PkRep1
+wgEncodeUwDnaseHelas3PkRep2
+wgEncodeUwDnaseHelas3RawRep1
+wgEncodeUwDnaseHelas3RawRep2
+wgEncodeUwDnaseHepg2HotspotsRep1
+wgEncodeUwDnaseHepg2HotspotsRep2
+wgEncodeUwDnaseHepg2PkRep1
+wgEncodeUwDnaseHepg2PkRep2
+wgEncodeUwDnaseHepg2RawRep1
+wgEncodeUwDnaseHepg2RawRep2
+wgEncodeUwDnaseHffHotspotsRep1
+wgEncodeUwDnaseHffHotspotsRep2
+wgEncodeUwDnaseHffPkRep1
+wgEncodeUwDnaseHffPkRep2
+wgEncodeUwDnaseHffRawRep1
+wgEncodeUwDnaseHffRawRep2
+wgEncodeUwDnaseHffmycHotspotsRep1
+wgEncodeUwDnaseHffmycHotspotsRep2
+wgEncodeUwDnaseHffmycPkRep1
+wgEncodeUwDnaseHffmycPkRep2
+wgEncodeUwDnaseHffmycRawRep1
+wgEncodeUwDnaseHffmycRawRep2
+wgEncodeUwDnaseHgfHotspotsRep1
+wgEncodeUwDnaseHgfHotspotsRep2
+wgEncodeUwDnaseHgfPkRep1
+wgEncodeUwDnaseHgfPkRep2
+wgEncodeUwDnaseHgfRawRep1
+wgEncodeUwDnaseHgfRawRep2
+wgEncodeUwDnaseHipeHotspotsRep1
+wgEncodeUwDnaseHipeHotspotsRep2
+wgEncodeUwDnaseHipePkRep1
+wgEncodeUwDnaseHipePkRep2
+wgEncodeUwDnaseHipeRawRep1
+wgEncodeUwDnaseHipeRawRep2
+wgEncodeUwDnaseHl60HotspotsRep1
+wgEncodeUwDnaseHl60HotspotsRep2
+wgEncodeUwDnaseHl60PkRep1
+wgEncodeUwDnaseHl60PkRep2
+wgEncodeUwDnaseHl60RawRep1
+wgEncodeUwDnaseHl60RawRep2
+wgEncodeUwDnaseHmecHotspotsRep1
+wgEncodeUwDnaseHmecHotspotsRep2
+wgEncodeUwDnaseHmecPkRep1
+wgEncodeUwDnaseHmecPkRep2
+wgEncodeUwDnaseHmecRawRep1
+wgEncodeUwDnaseHmecRawRep2
+wgEncodeUwDnaseHmfHotspotsRep1
+wgEncodeUwDnaseHmfHotspotsRep2
+wgEncodeUwDnaseHmfPkRep1
+wgEncodeUwDnaseHmfPkRep2
+wgEncodeUwDnaseHmfRawRep1
+wgEncodeUwDnaseHmfRawRep2
+wgEncodeUwDnaseHmvecdbladHotspotsRep1
+wgEncodeUwDnaseHmvecdbladHotspotsRep2
+wgEncodeUwDnaseHmvecdbladPkRep1
+wgEncodeUwDnaseHmvecdbladPkRep2
+wgEncodeUwDnaseHmvecdbladRawRep1
+wgEncodeUwDnaseHmvecdbladRawRep2
+wgEncodeUwDnaseHmvecdblneoHotspotsRep1
+wgEncodeUwDnaseHmvecdblneoHotspotsRep2
+wgEncodeUwDnaseHmvecdblneoPkRep1
+wgEncodeUwDnaseHmvecdblneoPkRep2
+wgEncodeUwDnaseHmvecdblneoRawRep1
+wgEncodeUwDnaseHmvecdblneoRawRep2
+wgEncodeUwDnaseHmvecdlyadHotspotsRep1
+wgEncodeUwDnaseHmvecdlyadHotspotsRep2
+wgEncodeUwDnaseHmvecdlyadPkRep1
+wgEncodeUwDnaseHmvecdlyadPkRep2
+wgEncodeUwDnaseHmvecdlyadRawRep1
+wgEncodeUwDnaseHmvecdlyadRawRep2
+wgEncodeUwDnaseHmvecdlyneoHotspotsRep1
+wgEncodeUwDnaseHmvecdlyneoHotspotsRep2
+wgEncodeUwDnaseHmvecdlyneoPkRep1
+wgEncodeUwDnaseHmvecdlyneoPkRep2
+wgEncodeUwDnaseHmvecdlyneoRawRep1
+wgEncodeUwDnaseHmvecdlyneoRawRep2
+wgEncodeUwDnaseHmvecdneoHotspotsRep1
+wgEncodeUwDnaseHmvecdneoHotspotsRep2
+wgEncodeUwDnaseHmvecdneoPkRep1
+wgEncodeUwDnaseHmvecdneoPkRep2
+wgEncodeUwDnaseHmvecdneoRawRep1
+wgEncodeUwDnaseHmvecdneoRawRep2
+wgEncodeUwDnaseHmveclblHotspotsRep1
+wgEncodeUwDnaseHmveclblHotspotsRep2
+wgEncodeUwDnaseHmveclblPkRep1
+wgEncodeUwDnaseHmveclblPkRep2
+wgEncodeUwDnaseHmveclblRawRep1
+wgEncodeUwDnaseHmveclblRawRep2
+wgEncodeUwDnaseHmvecllyHotspotsRep1
+wgEncodeUwDnaseHmvecllyHotspotsRep2
+wgEncodeUwDnaseHmvecllyPkRep1
+wgEncodeUwDnaseHmvecllyPkRep2
+wgEncodeUwDnaseHmvecllyRawRep1
+wgEncodeUwDnaseHmvecllyRawRep2
+wgEncodeUwDnaseHnpceHotspotsRep1
+wgEncodeUwDnaseHnpceHotspotsRep2
+wgEncodeUwDnaseHnpcePkRep1
+wgEncodeUwDnaseHnpcePkRep2V2
+wgEncodeUwDnaseHnpceRawRep1
+wgEncodeUwDnaseHnpceRawRep2
+wgEncodeUwDnaseHpafHotspotsRep1
+wgEncodeUwDnaseHpafHotspotsRep2
+wgEncodeUwDnaseHpafPkRep1
+wgEncodeUwDnaseHpafPkRep2
+wgEncodeUwDnaseHpafRawRep1
+wgEncodeUwDnaseHpafRawRep2
+wgEncodeUwDnaseHpdlfHotspotsRep1
+wgEncodeUwDnaseHpdlfHotspotsRep2
+wgEncodeUwDnaseHpdlfPkRep1
+wgEncodeUwDnaseHpdlfPkRep2
+wgEncodeUwDnaseHpdlfRawRep1
+wgEncodeUwDnaseHpdlfRawRep2
+wgEncodeUwDnaseHpfHotspotsRep1
+wgEncodeUwDnaseHpfHotspotsRep2
+wgEncodeUwDnaseHpfPkRep1
+wgEncodeUwDnaseHpfPkRep2
+wgEncodeUwDnaseHpfRawRep1
+wgEncodeUwDnaseHpfRawRep2
+wgEncodeUwDnaseHrceHotspotsRep1
+wgEncodeUwDnaseHrceHotspotsRep2
+wgEncodeUwDnaseHrcePkRep1
+wgEncodeUwDnaseHrcePkRep2
+wgEncodeUwDnaseHrceRawRep1
+wgEncodeUwDnaseHrceRawRep2
+wgEncodeUwDnaseHreHotspotsRep1
+wgEncodeUwDnaseHreHotspotsRep2
+wgEncodeUwDnaseHrePkRep1V2
+wgEncodeUwDnaseHrePkRep2V2
+wgEncodeUwDnaseHreRawRep1
+wgEncodeUwDnaseHreRawRep2
+wgEncodeUwDnaseHrgecHotspotsRep1
+wgEncodeUwDnaseHrgecHotspotsRep2
+wgEncodeUwDnaseHrgecPkRep1
+wgEncodeUwDnaseHrgecPkRep2
+wgEncodeUwDnaseHrgecRawRep1
+wgEncodeUwDnaseHrgecRawRep2
+wgEncodeUwDnaseHrpeHotspotsRep1
+wgEncodeUwDnaseHrpeHotspotsRep2
+wgEncodeUwDnaseHrpePkRep1V2
+wgEncodeUwDnaseHrpePkRep2V2
+wgEncodeUwDnaseHrpeRawRep1
+wgEncodeUwDnaseHrpeRawRep2
+wgEncodeUwDnaseHsmmHotspotsRep1
+wgEncodeUwDnaseHsmmHotspotsRep2
+wgEncodeUwDnaseHsmmPkRep1
+wgEncodeUwDnaseHsmmPkRep2
+wgEncodeUwDnaseHsmmRawRep1
+wgEncodeUwDnaseHsmmRawRep2
+wgEncodeUwDnaseHsmmtHotspotsRep1
+wgEncodeUwDnaseHsmmtPkRep1
+wgEncodeUwDnaseHsmmtRawRep1
+wgEncodeUwDnaseHuvecHotspotsRep1
+wgEncodeUwDnaseHuvecHotspotsRep2
+wgEncodeUwDnaseHuvecPkRep1V2
+wgEncodeUwDnaseHuvecPkRep2
+wgEncodeUwDnaseHuvecRawRep1
+wgEncodeUwDnaseHuvecRawRep2
+wgEncodeUwDnaseHvmfHotspotsRep1
+wgEncodeUwDnaseHvmfHotspotsRep2
+wgEncodeUwDnaseHvmfPkRep1
+wgEncodeUwDnaseHvmfPkRep2
+wgEncodeUwDnaseHvmfRawRep1
+wgEncodeUwDnaseHvmfRawRep2
+wgEncodeUwDnaseJurkatHotspotsRep1
+wgEncodeUwDnaseJurkatHotspotsRep2
+wgEncodeUwDnaseJurkatPkRep1
+wgEncodeUwDnaseJurkatPkRep2
+wgEncodeUwDnaseJurkatRawRep1
+wgEncodeUwDnaseJurkatRawRep2
+wgEncodeUwDnaseK562HotspotsRep1
+wgEncodeUwDnaseK562HotspotsRep2
+wgEncodeUwDnaseK562PkRep1
+wgEncodeUwDnaseK562PkRep2
+wgEncodeUwDnaseK562RawRep1
+wgEncodeUwDnaseK562RawRep2
+wgEncodeUwDnaseLncapHotspotsRep1
+wgEncodeUwDnaseLncapHotspotsRep2
+wgEncodeUwDnaseLncapPkRep1
+wgEncodeUwDnaseLncapPkRep2
+wgEncodeUwDnaseLncapRawRep1
+wgEncodeUwDnaseLncapRawRep2
+wgEncodeUwDnaseMcf7HotspotsRep1
+wgEncodeUwDnaseMcf7HotspotsRep2
+wgEncodeUwDnaseMcf7PkRep1
+wgEncodeUwDnaseMcf7PkRep2
+wgEncodeUwDnaseMcf7RawRep1
+wgEncodeUwDnaseMcf7RawRep2
+wgEncodeUwDnaseNb4HotspotsRep1
+wgEncodeUwDnaseNb4HotspotsRep2
+wgEncodeUwDnaseNb4PkRep1
+wgEncodeUwDnaseNb4PkRep2
+wgEncodeUwDnaseNb4RawRep1
+wgEncodeUwDnaseNb4RawRep2
+wgEncodeUwDnaseNhaHotspotsRep1
+wgEncodeUwDnaseNhaHotspotsRep2
+wgEncodeUwDnaseNhaPkRep1
+wgEncodeUwDnaseNhaPkRep2
+wgEncodeUwDnaseNhaRawRep1
+wgEncodeUwDnaseNhaRawRep2
+wgEncodeUwDnaseNhdfadHotspotsRep1
+wgEncodeUwDnaseNhdfadHotspotsRep2
+wgEncodeUwDnaseNhdfadPkRep1
+wgEncodeUwDnaseNhdfadPkRep2
+wgEncodeUwDnaseNhdfadRawRep1
+wgEncodeUwDnaseNhdfadRawRep2
+wgEncodeUwDnaseNhdfneoHotspotsRep1
+wgEncodeUwDnaseNhdfneoHotspotsRep2
+wgEncodeUwDnaseNhdfneoPkRep1
+wgEncodeUwDnaseNhdfneoPkRep2
+wgEncodeUwDnaseNhdfneoRawRep1
+wgEncodeUwDnaseNhdfneoRawRep2
+wgEncodeUwDnaseNhekHotspotsRep1
+wgEncodeUwDnaseNhekHotspotsRep2
+wgEncodeUwDnaseNhekPkRep1
+wgEncodeUwDnaseNhekPkRep2
+wgEncodeUwDnaseNhekRawRep1
+wgEncodeUwDnaseNhekRawRep2
+wgEncodeUwDnaseNhlfHotspotsRep1
+wgEncodeUwDnaseNhlfHotspotsRep2
+wgEncodeUwDnaseNhlfPkRep1
+wgEncodeUwDnaseNhlfPkRep2
+wgEncodeUwDnaseNhlfRawRep1
+wgEncodeUwDnaseNhlfRawRep2
+wgEncodeUwDnasePanc1HotspotsRep1
+wgEncodeUwDnasePanc1HotspotsRep2
+wgEncodeUwDnasePanc1PkRep1
+wgEncodeUwDnasePanc1PkRep2
+wgEncodeUwDnasePanc1RawRep1
+wgEncodeUwDnasePanc1RawRep2
+wgEncodeUwDnaseRptecHotspotsRep1
+wgEncodeUwDnaseRptecHotspotsRep2
+wgEncodeUwDnaseRptecPkRep1
+wgEncodeUwDnaseRptecPkRep2
+wgEncodeUwDnaseRptecRawRep1
+wgEncodeUwDnaseRptecRawRep2
+wgEncodeUwDnaseSaecHotspotsRep1
+wgEncodeUwDnaseSaecHotspotsRep2
+wgEncodeUwDnaseSaecPkRep1
+wgEncodeUwDnaseSaecPkRep2
+wgEncodeUwDnaseSaecRawRep1
+wgEncodeUwDnaseSaecRawRep2
+wgEncodeUwDnaseSkmcHotspotsRep1
+wgEncodeUwDnaseSkmcHotspotsRep2
+wgEncodeUwDnaseSkmcPkRep1
+wgEncodeUwDnaseSkmcPkRep2
+wgEncodeUwDnaseSkmcRawRep1
+wgEncodeUwDnaseSkmcRawRep2
+wgEncodeUwDnaseSknmcHotspotsRep1
+wgEncodeUwDnaseSknmcHotspotsRep2
+wgEncodeUwDnaseSknmcPkRep1
+wgEncodeUwDnaseSknmcPkRep2
+wgEncodeUwDnaseSknmcRawRep1
+wgEncodeUwDnaseSknmcRawRep2
+wgEncodeUwDnaseSknshraHotspotsRep1
+wgEncodeUwDnaseSknshraHotspotsRep2
+wgEncodeUwDnaseSknshraPkRep1
+wgEncodeUwDnaseSknshraPkRep2
+wgEncodeUwDnaseSknshraRawRep1
+wgEncodeUwDnaseSknshraRawRep2
+wgEncodeUwDnaseTh1HotspotsRep1
+wgEncodeUwDnaseTh1PkRep1
+wgEncodeUwDnaseTh1RawRep1
+wgEncodeUwDnaseTh2HotspotsRep1
+wgEncodeUwDnaseTh2PkRep1
+wgEncodeUwDnaseTh2RawRep1
+wgEncodeUwDnaseWerirb1HotspotsRep1
+wgEncodeUwDnaseWerirb1HotspotsRep2
+wgEncodeUwDnaseWerirb1PkRep1
+wgEncodeUwDnaseWerirb1PkRep2
+wgEncodeUwDnaseWerirb1RawRep1
+wgEncodeUwDnaseWerirb1RawRep2
+wgEncodeUwDnaseWi38HotspotsRep1
+wgEncodeUwDnaseWi38HotspotsRep2
+wgEncodeUwDnaseWi38OhtamHotspotsRep1
+wgEncodeUwDnaseWi38OhtamHotspotsRep2
+wgEncodeUwDnaseWi38OhtamPkRep1
+wgEncodeUwDnaseWi38OhtamPkRep2
+wgEncodeUwDnaseWi38OhtamRawRep1
+wgEncodeUwDnaseWi38OhtamRawRep2
+wgEncodeUwDnaseWi38PkRep1
+wgEncodeUwDnaseWi38PkRep2
+wgEncodeUwDnaseWi38RawRep1
+wgEncodeUwDnaseWi38RawRep2
+
+A') Untouched Files (908 downloadables, 150 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release3/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
+
+wgEncodeUwDnaseA549AlnRep1.bam
+wgEncodeUwDnaseA549AlnRep1.bam.bai
+wgEncodeUwDnaseA549AlnRep2.bam
+wgEncodeUwDnaseA549AlnRep2.bam.bai
+wgEncodeUwDnaseA549HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseA549HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseA549PkRep1.narrowPeak.gz
+wgEncodeUwDnaseA549PkRep2.narrowPeak.gz
+wgEncodeUwDnaseA549RawDataRep1.fastq.gz
+wgEncodeUwDnaseA549RawDataRep2.fastq.gz
+wgEncodeUwDnaseA549RawRep1.bigWig
+wgEncodeUwDnaseA549RawRep2.bigWig
+wgEncodeUwDnaseAg04449AlnRep1.bam
+wgEncodeUwDnaseAg04449AlnRep1.bam.bai
+wgEncodeUwDnaseAg04449AlnRep2.bam
+wgEncodeUwDnaseAg04449AlnRep2.bam.bai
+wgEncodeUwDnaseAg04449HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseAg04449HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseAg04449PkRep1.narrowPeak.gz
+wgEncodeUwDnaseAg04449PkRep2.narrowPeak.gz
+wgEncodeUwDnaseAg04449RawDataRep1.fastq.gz
+wgEncodeUwDnaseAg04449RawDataRep2.fastq.gz
+wgEncodeUwDnaseAg04449RawRep1.bigWig
+wgEncodeUwDnaseAg04449RawRep2.bigWig
+wgEncodeUwDnaseAg04450AlnRep1.bam
+wgEncodeUwDnaseAg04450AlnRep1.bam.bai
+wgEncodeUwDnaseAg04450AlnRep2.bam
+wgEncodeUwDnaseAg04450AlnRep2.bam.bai
+wgEncodeUwDnaseAg04450HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseAg04450HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseAg04450PkRep1.narrowPeak.gz
+wgEncodeUwDnaseAg04450PkRep2.narrowPeak.gz
+wgEncodeUwDnaseAg04450RawDataRep1.fastq.gz
+wgEncodeUwDnaseAg04450RawDataRep2.fastq.gz
+wgEncodeUwDnaseAg04450RawRep1.bigWig
+wgEncodeUwDnaseAg04450RawRep2.bigWig
+wgEncodeUwDnaseAg09309AlnRep1.bam
+wgEncodeUwDnaseAg09309AlnRep1.bam.bai
+wgEncodeUwDnaseAg09309AlnRep2.bam
+wgEncodeUwDnaseAg09309AlnRep2.bam.bai
+wgEncodeUwDnaseAg09309HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseAg09309HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseAg09309PkRep1.narrowPeak.gz
+wgEncodeUwDnaseAg09309PkRep2.narrowPeak.gz
+wgEncodeUwDnaseAg09309RawDataRep1.fastq.gz
+wgEncodeUwDnaseAg09309RawDataRep2.fastq.gz
+wgEncodeUwDnaseAg09309RawRep1.bigWig
+wgEncodeUwDnaseAg09309RawRep2.bigWig
+wgEncodeUwDnaseAg09319AlnRep1.bam
+wgEncodeUwDnaseAg09319AlnRep1.bam.bai
+wgEncodeUwDnaseAg09319AlnRep2.bam
+wgEncodeUwDnaseAg09319AlnRep2.bam.bai
+wgEncodeUwDnaseAg09319HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseAg09319HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseAg09319PkRep1V2.narrowPeak.gz
+wgEncodeUwDnaseAg09319PkRep2.narrowPeak.gz
+wgEncodeUwDnaseAg09319RawDataRep1.fastq.gz
+wgEncodeUwDnaseAg09319RawDataRep2.fastq.gz
+wgEncodeUwDnaseAg09319RawRep1.bigWig
+wgEncodeUwDnaseAg09319RawRep2.bigWig
+wgEncodeUwDnaseAg10803AlnRep1.bam
+wgEncodeUwDnaseAg10803AlnRep1.bam.bai
+wgEncodeUwDnaseAg10803AlnRep2.bam
+wgEncodeUwDnaseAg10803AlnRep2.bam.bai
+wgEncodeUwDnaseAg10803HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseAg10803HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseAg10803PkRep1.narrowPeak.gz
+wgEncodeUwDnaseAg10803PkRep2.narrowPeak.gz
+wgEncodeUwDnaseAg10803RawDataRep1.fastq.gz
+wgEncodeUwDnaseAg10803RawDataRep2.fastq.gz
+wgEncodeUwDnaseAg10803RawRep1.bigWig
+wgEncodeUwDnaseAg10803RawRep2.bigWig
+wgEncodeUwDnaseAoafAlnRep1.bam
+wgEncodeUwDnaseAoafAlnRep1.bam.bai
+wgEncodeUwDnaseAoafAlnRep2.bam
+wgEncodeUwDnaseAoafAlnRep2.bam.bai
+wgEncodeUwDnaseAoafHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseAoafHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseAoafPkRep1.narrowPeak.gz
+wgEncodeUwDnaseAoafPkRep2.narrowPeak.gz
+wgEncodeUwDnaseAoafRawDataRep1.fastq.gz
+wgEncodeUwDnaseAoafRawDataRep2.fastq.gz
+wgEncodeUwDnaseAoafRawRep1.bigWig
+wgEncodeUwDnaseAoafRawRep2.bigWig
+wgEncodeUwDnaseBe2cAlnRep1.bam
+wgEncodeUwDnaseBe2cAlnRep1.bam.bai
+wgEncodeUwDnaseBe2cAlnRep2.bam
+wgEncodeUwDnaseBe2cAlnRep2.bam.bai
+wgEncodeUwDnaseBe2cHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseBe2cHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseBe2cPkRep1.narrowPeak.gz
+wgEncodeUwDnaseBe2cPkRep2.narrowPeak.gz
+wgEncodeUwDnaseBe2cRawDataRep1.fastq.gz
+wgEncodeUwDnaseBe2cRawDataRep2.fastq.gz
+wgEncodeUwDnaseBe2cRawRep1.bigWig
+wgEncodeUwDnaseBe2cRawRep2.bigWig
+wgEncodeUwDnaseBjAlnRep1.bam
+wgEncodeUwDnaseBjAlnRep1.bam.bai
+wgEncodeUwDnaseBjAlnRep2.bam
+wgEncodeUwDnaseBjAlnRep2.bam.bai
+wgEncodeUwDnaseBjHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseBjHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseBjPkRep1.narrowPeak.gz
+wgEncodeUwDnaseBjPkRep2.narrowPeak.gz
+wgEncodeUwDnaseBjRawDataRep1.fastq.gz
+wgEncodeUwDnaseBjRawDataRep2.fastq.gz
+wgEncodeUwDnaseBjRawRep1.bigWig
+wgEncodeUwDnaseBjRawRep2.bigWig
+wgEncodeUwDnaseBjtertRawDataRep1.fastq.gz
+wgEncodeUwDnaseBjtertRawDataRep2.fastq.gz
+wgEncodeUwDnaseCaco2AlnRep1.bam
+wgEncodeUwDnaseCaco2AlnRep1.bam.bai
+wgEncodeUwDnaseCaco2AlnRep2.bam
+wgEncodeUwDnaseCaco2AlnRep2.bam.bai
+wgEncodeUwDnaseCaco2HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseCaco2HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseCaco2PkRep1.narrowPeak.gz
+wgEncodeUwDnaseCaco2PkRep2.narrowPeak.gz
+wgEncodeUwDnaseCaco2RawDataRep1.fastq.gz
+wgEncodeUwDnaseCaco2RawDataRep2.fastq.gz
+wgEncodeUwDnaseCaco2RawRep1.bigWig
+wgEncodeUwDnaseCaco2RawRep2.bigWig
+wgEncodeUwDnaseCmkAlnRep1.bam
+wgEncodeUwDnaseCmkAlnRep1.bam.bai
+wgEncodeUwDnaseCmkHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseCmkPkRep1.narrowPeak.gz
+wgEncodeUwDnaseCmkRawDataRep1.fastq.gz
+wgEncodeUwDnaseCmkRawRep1.bigWig
+wgEncodeUwDnaseGm06990AlnRep1.bam
+wgEncodeUwDnaseGm06990AlnRep1.bam.bai
+wgEncodeUwDnaseGm06990AlnRep2.bam
+wgEncodeUwDnaseGm06990AlnRep2.bam.bai
+wgEncodeUwDnaseGm06990HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseGm06990HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseGm06990PkRep1.narrowPeak.gz
+wgEncodeUwDnaseGm06990PkRep2.narrowPeak.gz
+wgEncodeUwDnaseGm06990RawDataRep1.fastq.gz
+wgEncodeUwDnaseGm06990RawDataRep2.fastq.gz
+wgEncodeUwDnaseGm06990RawRep1.bigWig
+wgEncodeUwDnaseGm06990RawRep2.bigWig
+wgEncodeUwDnaseGm12864AlnRep1.bam
+wgEncodeUwDnaseGm12864AlnRep1.bam.bai
+wgEncodeUwDnaseGm12864HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseGm12864PkRep1.narrowPeak.gz
+wgEncodeUwDnaseGm12864RawDataRep1.fastq.gz
+wgEncodeUwDnaseGm12864RawRep1.bigWig
+wgEncodeUwDnaseGm12865AlnRep1.bam
+wgEncodeUwDnaseGm12865AlnRep1.bam.bai
+wgEncodeUwDnaseGm12865AlnRep2.bam
+wgEncodeUwDnaseGm12865AlnRep2.bam.bai
+wgEncodeUwDnaseGm12865HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseGm12865HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseGm12865PkRep1.narrowPeak.gz
+wgEncodeUwDnaseGm12865PkRep2.narrowPeak.gz
+wgEncodeUwDnaseGm12865RawDataRep1.fastq.gz
+wgEncodeUwDnaseGm12865RawDataRep2.fastq.gz
+wgEncodeUwDnaseGm12865RawRep1.bigWig
+wgEncodeUwDnaseGm12865RawRep2.bigWig
+wgEncodeUwDnaseGm12878AlnRep1.bam
+wgEncodeUwDnaseGm12878AlnRep1.bam.bai
+wgEncodeUwDnaseGm12878AlnRep2.bam
+wgEncodeUwDnaseGm12878AlnRep2.bam.bai
+wgEncodeUwDnaseGm12878HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseGm12878HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseGm12878PkRep1.narrowPeak.gz
+wgEncodeUwDnaseGm12878PkRep2.narrowPeak.gz
+wgEncodeUwDnaseGm12878RawDataRep1.fastq.gz
+wgEncodeUwDnaseGm12878RawDataRep2.fastq.gz
+wgEncodeUwDnaseGm12878RawRep1.bigWig
+wgEncodeUwDnaseGm12878RawRep2.bigWig
+wgEncodeUwDnaseH1hescAlnRep1.bam
+wgEncodeUwDnaseH1hescAlnRep1.bam.bai
+wgEncodeUwDnaseH1hescHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseH1hescPkRep1.narrowPeak.gz
+wgEncodeUwDnaseH1hescRawDataRep1.fastq.gz
+wgEncodeUwDnaseH1hescRawRep1.bigWig
+wgEncodeUwDnaseH7esAlnRep1.bam
+wgEncodeUwDnaseH7esAlnRep1.bam.bai
+wgEncodeUwDnaseH7esAlnRep2.bam
+wgEncodeUwDnaseH7esAlnRep2.bam.bai
+wgEncodeUwDnaseH7esHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseH7esHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseH7esPkRep1V2.narrowPeak.gz
+wgEncodeUwDnaseH7esPkRep2.narrowPeak.gz
+wgEncodeUwDnaseH7esRawDataRep1.fastq.gz
+wgEncodeUwDnaseH7esRawDataRep2.fastq.gz
+wgEncodeUwDnaseH7esRawRep1.bigWig
+wgEncodeUwDnaseH7esRawRep2.bigWig
+wgEncodeUwDnaseHacAlnRep1.bam
+wgEncodeUwDnaseHacAlnRep1.bam.bai
+wgEncodeUwDnaseHacAlnRep2.bam
+wgEncodeUwDnaseHacAlnRep2.bam.bai
+wgEncodeUwDnaseHacHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHacHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHacPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHacPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHacRawDataRep1.fastq.gz
+wgEncodeUwDnaseHacRawDataRep2.fastq.gz
+wgEncodeUwDnaseHacRawRep1.bigWig
+wgEncodeUwDnaseHacRawRep2.bigWig
+wgEncodeUwDnaseHaeAlnRep1.bam
+wgEncodeUwDnaseHaeAlnRep1.bam.bai
+wgEncodeUwDnaseHaeAlnRep2.bam
+wgEncodeUwDnaseHaeAlnRep2.bam.bai
+wgEncodeUwDnaseHaeHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHaeHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHaePkRep1.narrowPeak.gz
+wgEncodeUwDnaseHaePkRep2.narrowPeak.gz
+wgEncodeUwDnaseHaeRawDataRep1.fastq.gz
+wgEncodeUwDnaseHaeRawDataRep2.fastq.gz
+wgEncodeUwDnaseHaeRawRep1.bigWig
+wgEncodeUwDnaseHaeRawRep2.bigWig
+wgEncodeUwDnaseHahAlnRep1.bam
+wgEncodeUwDnaseHahAlnRep1.bam.bai
+wgEncodeUwDnaseHahAlnRep2.bam
+wgEncodeUwDnaseHahAlnRep2.bam.bai
+wgEncodeUwDnaseHahHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHahHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHahPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHahPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHahRawDataRep1.fastq.gz
+wgEncodeUwDnaseHahRawDataRep2.fastq.gz
+wgEncodeUwDnaseHahRawRep1.bigWig
+wgEncodeUwDnaseHahRawRep2.bigWig
+wgEncodeUwDnaseHaspAlnRep1.bam
+wgEncodeUwDnaseHaspAlnRep1.bam.bai
+wgEncodeUwDnaseHaspAlnRep2.bam
+wgEncodeUwDnaseHaspAlnRep2.bam.bai
+wgEncodeUwDnaseHaspHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHaspHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHaspPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHaspPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHaspRawDataRep1.fastq.gz
+wgEncodeUwDnaseHaspRawDataRep2.fastq.gz
+wgEncodeUwDnaseHaspRawRep1.bigWig
+wgEncodeUwDnaseHaspRawRep2.bigWig
+wgEncodeUwDnaseHbmecAlnRep1.bam
+wgEncodeUwDnaseHbmecAlnRep1.bam.bai
+wgEncodeUwDnaseHbmecAlnRep2.bam
+wgEncodeUwDnaseHbmecAlnRep2.bam.bai
+wgEncodeUwDnaseHbmecHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHbmecHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHbmecPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHbmecPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHbmecRawDataRep1.fastq.gz
+wgEncodeUwDnaseHbmecRawDataRep2.fastq.gz
+wgEncodeUwDnaseHbmecRawRep1.bigWig
+wgEncodeUwDnaseHbmecRawRep2.bigWig
+wgEncodeUwDnaseHcfAlnRep1.bam
+wgEncodeUwDnaseHcfAlnRep1.bam.bai
+wgEncodeUwDnaseHcfAlnRep2.bam
+wgEncodeUwDnaseHcfAlnRep2.bam.bai
+wgEncodeUwDnaseHcfHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHcfHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHcfPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHcfPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHcfRawDataRep1.fastq.gz
+wgEncodeUwDnaseHcfRawDataRep2.fastq.gz
+wgEncodeUwDnaseHcfRawRep1.bigWig
+wgEncodeUwDnaseHcfRawRep2.bigWig
+wgEncodeUwDnaseHcfaaAlnRep1.bam
+wgEncodeUwDnaseHcfaaAlnRep1.bam.bai
+wgEncodeUwDnaseHcfaaAlnRep2.bam
+wgEncodeUwDnaseHcfaaAlnRep2.bam.bai
+wgEncodeUwDnaseHcfaaHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHcfaaHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHcfaaPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHcfaaPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHcfaaRawDataRep1.fastq.gz
+wgEncodeUwDnaseHcfaaRawDataRep2.fastq.gz
+wgEncodeUwDnaseHcfaaRawRep1.bigWig
+wgEncodeUwDnaseHcfaaRawRep2.bigWig
+wgEncodeUwDnaseHcmAlnRep1.bam
+wgEncodeUwDnaseHcmAlnRep1.bam.bai
+wgEncodeUwDnaseHcmAlnRep2.bam
+wgEncodeUwDnaseHcmAlnRep2.bam.bai
+wgEncodeUwDnaseHcmHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHcmHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHcmPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHcmPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHcmRawDataRep1.fastq.gz
+wgEncodeUwDnaseHcmRawDataRep2.fastq.gz
+wgEncodeUwDnaseHcmRawRep1.bigWig
+wgEncodeUwDnaseHcmRawRep2.bigWig
+wgEncodeUwDnaseHconfAlnRep1.bam
+wgEncodeUwDnaseHconfAlnRep1.bam.bai
+wgEncodeUwDnaseHconfAlnRep2.bam
+wgEncodeUwDnaseHconfAlnRep2.bam.bai
+wgEncodeUwDnaseHconfHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHconfHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHconfPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHconfPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHconfRawDataRep1.fastq.gz
+wgEncodeUwDnaseHconfRawDataRep2.fastq.gz
+wgEncodeUwDnaseHconfRawRep1.bigWig
+wgEncodeUwDnaseHconfRawRep2.bigWig
+wgEncodeUwDnaseHcpeAlnRep1.bam
+wgEncodeUwDnaseHcpeAlnRep1.bam.bai
+wgEncodeUwDnaseHcpeAlnRep2.bam
+wgEncodeUwDnaseHcpeAlnRep2.bam.bai
+wgEncodeUwDnaseHcpeHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHcpeHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHcpePkRep1.narrowPeak.gz
+wgEncodeUwDnaseHcpePkRep2.narrowPeak.gz
+wgEncodeUwDnaseHcpeRawDataRep1.fastq.gz
+wgEncodeUwDnaseHcpeRawDataRep2.fastq.gz
+wgEncodeUwDnaseHcpeRawRep1.bigWig
+wgEncodeUwDnaseHcpeRawRep2.bigWig
+wgEncodeUwDnaseHct116AlnRep1.bam
+wgEncodeUwDnaseHct116AlnRep1.bam.bai
+wgEncodeUwDnaseHct116AlnRep2.bam
+wgEncodeUwDnaseHct116AlnRep2.bam.bai
+wgEncodeUwDnaseHct116HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHct116HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHct116PkRep1.narrowPeak.gz
+wgEncodeUwDnaseHct116PkRep2.narrowPeak.gz
+wgEncodeUwDnaseHct116RawDataRep1.fastq.gz
+wgEncodeUwDnaseHct116RawDataRep2.fastq.gz
+wgEncodeUwDnaseHct116RawRep1.bigWig
+wgEncodeUwDnaseHct116RawRep2.bigWig
+wgEncodeUwDnaseHeeAlnRep1.bam
+wgEncodeUwDnaseHeeAlnRep1.bam.bai
+wgEncodeUwDnaseHeeAlnRep2.bam
+wgEncodeUwDnaseHeeAlnRep2.bam.bai
+wgEncodeUwDnaseHeeHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHeeHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHeePkRep1.narrowPeak.gz
+wgEncodeUwDnaseHeePkRep2.narrowPeak.gz
+wgEncodeUwDnaseHeeRawDataRep1.fastq.gz
+wgEncodeUwDnaseHeeRawDataRep2.fastq.gz
+wgEncodeUwDnaseHeeRawRep1.bigWig
+wgEncodeUwDnaseHeeRawRep2.bigWig
+wgEncodeUwDnaseHelas3AlnRep1.bam
+wgEncodeUwDnaseHelas3AlnRep1.bam.bai
+wgEncodeUwDnaseHelas3AlnRep2.bam
+wgEncodeUwDnaseHelas3AlnRep2.bam.bai
+wgEncodeUwDnaseHelas3HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHelas3HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHelas3PkRep1.narrowPeak.gz
+wgEncodeUwDnaseHelas3PkRep2.narrowPeak.gz
+wgEncodeUwDnaseHelas3RawDataRep1.fastq.gz
+wgEncodeUwDnaseHelas3RawDataRep2.fastq.gz
+wgEncodeUwDnaseHelas3RawRep1.bigWig
+wgEncodeUwDnaseHelas3RawRep2.bigWig
+wgEncodeUwDnaseHepg2AlnRep1.bam
+wgEncodeUwDnaseHepg2AlnRep1.bam.bai
+wgEncodeUwDnaseHepg2AlnRep2.bam
+wgEncodeUwDnaseHepg2AlnRep2.bam.bai
+wgEncodeUwDnaseHepg2HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHepg2HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHepg2PkRep1.narrowPeak.gz
+wgEncodeUwDnaseHepg2PkRep2.narrowPeak.gz
+wgEncodeUwDnaseHepg2RawDataRep1.fastq.gz
+wgEncodeUwDnaseHepg2RawDataRep2.fastq.gz
+wgEncodeUwDnaseHepg2RawRep1.bigWig
+wgEncodeUwDnaseHepg2RawRep2.bigWig
+wgEncodeUwDnaseHffAlnRep1.bam
+wgEncodeUwDnaseHffAlnRep1.bam.bai
+wgEncodeUwDnaseHffAlnRep2.bam
+wgEncodeUwDnaseHffAlnRep2.bam.bai
+wgEncodeUwDnaseHffHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHffHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHffPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHffPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHffRawDataRep1.fastq.gz
+wgEncodeUwDnaseHffRawDataRep2.fastq.gz
+wgEncodeUwDnaseHffRawRep1.bigWig
+wgEncodeUwDnaseHffRawRep2.bigWig
+wgEncodeUwDnaseHffmycAlnRep1.bam
+wgEncodeUwDnaseHffmycAlnRep1.bam.bai
+wgEncodeUwDnaseHffmycAlnRep2.bam
+wgEncodeUwDnaseHffmycAlnRep2.bam.bai
+wgEncodeUwDnaseHffmycHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHffmycHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHffmycPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHffmycPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHffmycRawDataRep1.fastq.gz
+wgEncodeUwDnaseHffmycRawDataRep2.fastq.gz
+wgEncodeUwDnaseHffmycRawRep1.bigWig
+wgEncodeUwDnaseHffmycRawRep2.bigWig
+wgEncodeUwDnaseHgfAlnRep1.bam
+wgEncodeUwDnaseHgfAlnRep1.bam.bai
+wgEncodeUwDnaseHgfAlnRep2.bam
+wgEncodeUwDnaseHgfAlnRep2.bam.bai
+wgEncodeUwDnaseHgfHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHgfHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHgfPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHgfPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHgfRawDataRep1.fastq.gz
+wgEncodeUwDnaseHgfRawDataRep2.fastq.gz
+wgEncodeUwDnaseHgfRawRep1.bigWig
+wgEncodeUwDnaseHgfRawRep2.bigWig
+wgEncodeUwDnaseHipeAlnRep1.bam
+wgEncodeUwDnaseHipeAlnRep1.bam.bai
+wgEncodeUwDnaseHipeAlnRep2.bam
+wgEncodeUwDnaseHipeAlnRep2.bam.bai
+wgEncodeUwDnaseHipeHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHipeHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHipePkRep1.narrowPeak.gz
+wgEncodeUwDnaseHipePkRep2.narrowPeak.gz
+wgEncodeUwDnaseHipeRawDataRep1.fastq.gz
+wgEncodeUwDnaseHipeRawDataRep2.fastq.gz
+wgEncodeUwDnaseHipeRawRep1.bigWig
+wgEncodeUwDnaseHipeRawRep2.bigWig
+wgEncodeUwDnaseHl60AlnRep1.bam
+wgEncodeUwDnaseHl60AlnRep1.bam.bai
+wgEncodeUwDnaseHl60AlnRep2.bam
+wgEncodeUwDnaseHl60AlnRep2.bam.bai
+wgEncodeUwDnaseHl60HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHl60HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHl60PkRep1.narrowPeak.gz
+wgEncodeUwDnaseHl60PkRep2.narrowPeak.gz
+wgEncodeUwDnaseHl60RawDataRep1V2.fastq.gz
+wgEncodeUwDnaseHl60RawDataRep2.fastq.gz
+wgEncodeUwDnaseHl60RawRep1.bigWig
+wgEncodeUwDnaseHl60RawRep2.bigWig
+wgEncodeUwDnaseHmecAlnRep1.bam
+wgEncodeUwDnaseHmecAlnRep1.bam.bai
+wgEncodeUwDnaseHmecAlnRep2.bam
+wgEncodeUwDnaseHmecAlnRep2.bam.bai
+wgEncodeUwDnaseHmecHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmecHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmecPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmecPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmecRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmecRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmecRawRep1.bigWig
+wgEncodeUwDnaseHmecRawRep2.bigWig
+wgEncodeUwDnaseHmfAlnRep1.bam
+wgEncodeUwDnaseHmfAlnRep1.bam.bai
+wgEncodeUwDnaseHmfAlnRep2.bam
+wgEncodeUwDnaseHmfAlnRep2.bam.bai
+wgEncodeUwDnaseHmfHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmfHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmfPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmfPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmfRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmfRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmfRawRep1.bigWig
+wgEncodeUwDnaseHmfRawRep2.bigWig
+wgEncodeUwDnaseHmvecdbladAlnRep1.bam
+wgEncodeUwDnaseHmvecdbladAlnRep1.bam.bai
+wgEncodeUwDnaseHmvecdbladAlnRep2.bam
+wgEncodeUwDnaseHmvecdbladAlnRep2.bam.bai
+wgEncodeUwDnaseHmvecdbladHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmvecdbladHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmvecdbladPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmvecdbladPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmvecdbladRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmvecdbladRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmvecdbladRawRep1.bigWig
+wgEncodeUwDnaseHmvecdbladRawRep2.bigWig
+wgEncodeUwDnaseHmvecdblneoAlnRep1.bam
+wgEncodeUwDnaseHmvecdblneoAlnRep1.bam.bai
+wgEncodeUwDnaseHmvecdblneoAlnRep2.bam
+wgEncodeUwDnaseHmvecdblneoAlnRep2.bam.bai
+wgEncodeUwDnaseHmvecdblneoHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmvecdblneoHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmvecdblneoPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmvecdblneoPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmvecdblneoRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmvecdblneoRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmvecdblneoRawRep1.bigWig
+wgEncodeUwDnaseHmvecdblneoRawRep2.bigWig
+wgEncodeUwDnaseHmvecdlyadAlnRep1.bam
+wgEncodeUwDnaseHmvecdlyadAlnRep1.bam.bai
+wgEncodeUwDnaseHmvecdlyadAlnRep2.bam
+wgEncodeUwDnaseHmvecdlyadAlnRep2.bam.bai
+wgEncodeUwDnaseHmvecdlyadHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmvecdlyadHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmvecdlyadPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmvecdlyadPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmvecdlyadRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmvecdlyadRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmvecdlyadRawRep1.bigWig
+wgEncodeUwDnaseHmvecdlyadRawRep2.bigWig
+wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam
+wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam.bai
+wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam
+wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam.bai
+wgEncodeUwDnaseHmvecdlyneoHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmvecdlyneoHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmvecdlyneoPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmvecdlyneoPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmvecdlyneoRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmvecdlyneoRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmvecdlyneoRawRep1.bigWig
+wgEncodeUwDnaseHmvecdlyneoRawRep2.bigWig
+wgEncodeUwDnaseHmvecdneoAlnRep1.bam
+wgEncodeUwDnaseHmvecdneoAlnRep1.bam.bai
+wgEncodeUwDnaseHmvecdneoAlnRep2.bam
+wgEncodeUwDnaseHmvecdneoAlnRep2.bam.bai
+wgEncodeUwDnaseHmvecdneoHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmvecdneoHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmvecdneoPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmvecdneoPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmvecdneoRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmvecdneoRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmvecdneoRawRep1.bigWig
+wgEncodeUwDnaseHmvecdneoRawRep2.bigWig
+wgEncodeUwDnaseHmveclblAlnRep1.bam
+wgEncodeUwDnaseHmveclblAlnRep1.bam.bai
+wgEncodeUwDnaseHmveclblAlnRep2.bam
+wgEncodeUwDnaseHmveclblAlnRep2.bam.bai
+wgEncodeUwDnaseHmveclblHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmveclblHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmveclblPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmveclblPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmveclblRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmveclblRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmveclblRawRep1.bigWig
+wgEncodeUwDnaseHmveclblRawRep2.bigWig
+wgEncodeUwDnaseHmvecllyAlnRep1.bam
+wgEncodeUwDnaseHmvecllyAlnRep1.bam.bai
+wgEncodeUwDnaseHmvecllyAlnRep2.bam
+wgEncodeUwDnaseHmvecllyAlnRep2.bam.bai
+wgEncodeUwDnaseHmvecllyHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmvecllyHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmvecllyPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmvecllyPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmvecllyRawDataRep1.fastq.gz
+wgEncodeUwDnaseHmvecllyRawDataRep2.fastq.gz
+wgEncodeUwDnaseHmvecllyRawRep1.bigWig
+wgEncodeUwDnaseHmvecllyRawRep2.bigWig
+wgEncodeUwDnaseHnpceAlnRep1.bam
+wgEncodeUwDnaseHnpceAlnRep1.bam.bai
+wgEncodeUwDnaseHnpceAlnRep2.bam
+wgEncodeUwDnaseHnpceAlnRep2.bam.bai
+wgEncodeUwDnaseHnpceHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHnpceHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHnpcePkRep1.narrowPeak.gz
+wgEncodeUwDnaseHnpcePkRep2V2.narrowPeak.gz
+wgEncodeUwDnaseHnpceRawDataRep1.fastq.gz
+wgEncodeUwDnaseHnpceRawDataRep2.fastq.gz
+wgEncodeUwDnaseHnpceRawRep1.bigWig
+wgEncodeUwDnaseHnpceRawRep2.bigWig
+wgEncodeUwDnaseHpafAlnRep1.bam
+wgEncodeUwDnaseHpafAlnRep1.bam.bai
+wgEncodeUwDnaseHpafAlnRep2.bam
+wgEncodeUwDnaseHpafAlnRep2.bam.bai
+wgEncodeUwDnaseHpafHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHpafHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHpafPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHpafPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHpafRawDataRep1.fastq.gz
+wgEncodeUwDnaseHpafRawDataRep2.fastq.gz
+wgEncodeUwDnaseHpafRawRep1.bigWig
+wgEncodeUwDnaseHpafRawRep2.bigWig
+wgEncodeUwDnaseHpdlfAlnRep1.bam
+wgEncodeUwDnaseHpdlfAlnRep1.bam.bai
+wgEncodeUwDnaseHpdlfAlnRep2.bam
+wgEncodeUwDnaseHpdlfAlnRep2.bam.bai
+wgEncodeUwDnaseHpdlfHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHpdlfHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHpdlfPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHpdlfPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHpdlfRawDataRep1.fastq.gz
+wgEncodeUwDnaseHpdlfRawDataRep2.fastq.gz
+wgEncodeUwDnaseHpdlfRawRep1.bigWig
+wgEncodeUwDnaseHpdlfRawRep2.bigWig
+wgEncodeUwDnaseHpfAlnRep1.bam
+wgEncodeUwDnaseHpfAlnRep1.bam.bai
+wgEncodeUwDnaseHpfAlnRep2.bam
+wgEncodeUwDnaseHpfAlnRep2.bam.bai
+wgEncodeUwDnaseHpfHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHpfHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHpfPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHpfPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHpfRawDataRep1.fastq.gz
+wgEncodeUwDnaseHpfRawDataRep2.fastq.gz
+wgEncodeUwDnaseHpfRawRep1.bigWig
+wgEncodeUwDnaseHpfRawRep2.bigWig
+wgEncodeUwDnaseHrceAlnRep1.bam
+wgEncodeUwDnaseHrceAlnRep1.bam.bai
+wgEncodeUwDnaseHrceAlnRep2.bam
+wgEncodeUwDnaseHrceAlnRep2.bam.bai
+wgEncodeUwDnaseHrceHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHrceHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHrcePkRep1.narrowPeak.gz
+wgEncodeUwDnaseHrcePkRep2.narrowPeak.gz
+wgEncodeUwDnaseHrceRawDataRep1.fastq.gz
+wgEncodeUwDnaseHrceRawDataRep2.fastq.gz
+wgEncodeUwDnaseHrceRawRep1.bigWig
+wgEncodeUwDnaseHrceRawRep2.bigWig
+wgEncodeUwDnaseHreAlnRep1.bam
+wgEncodeUwDnaseHreAlnRep1.bam.bai
+wgEncodeUwDnaseHreAlnRep2.bam
+wgEncodeUwDnaseHreAlnRep2.bam.bai
+wgEncodeUwDnaseHreHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHreHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHrePkRep1V2.narrowPeak.gz
+wgEncodeUwDnaseHrePkRep2V2.narrowPeak.gz
+wgEncodeUwDnaseHreRawDataRep1.fastq.gz
+wgEncodeUwDnaseHreRawDataRep2.fastq.gz
+wgEncodeUwDnaseHreRawRep1.bigWig
+wgEncodeUwDnaseHreRawRep2.bigWig
+wgEncodeUwDnaseHrgecAlnRep1.bam
+wgEncodeUwDnaseHrgecAlnRep1.bam.bai
+wgEncodeUwDnaseHrgecAlnRep2.bam
+wgEncodeUwDnaseHrgecAlnRep2.bam.bai
+wgEncodeUwDnaseHrgecHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHrgecHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHrgecPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHrgecPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHrgecRawDataRep1.fastq.gz
+wgEncodeUwDnaseHrgecRawDataRep2.fastq.gz
+wgEncodeUwDnaseHrgecRawRep1.bigWig
+wgEncodeUwDnaseHrgecRawRep2.bigWig
+wgEncodeUwDnaseHrpeAlnRep1.bam
+wgEncodeUwDnaseHrpeAlnRep1.bam.bai
+wgEncodeUwDnaseHrpeAlnRep2.bam
+wgEncodeUwDnaseHrpeAlnRep2.bam.bai
+wgEncodeUwDnaseHrpeHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHrpeHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHrpePkRep1V2.narrowPeak.gz
+wgEncodeUwDnaseHrpePkRep2V2.narrowPeak.gz
+wgEncodeUwDnaseHrpeRawDataRep1.fastq.gz
+wgEncodeUwDnaseHrpeRawDataRep2.fastq.gz
+wgEncodeUwDnaseHrpeRawRep1.bigWig
+wgEncodeUwDnaseHrpeRawRep2.bigWig
+wgEncodeUwDnaseHsmmAlnRep1.bam
+wgEncodeUwDnaseHsmmAlnRep1.bam.bai
+wgEncodeUwDnaseHsmmAlnRep2.bam
+wgEncodeUwDnaseHsmmAlnRep2.bam.bai
+wgEncodeUwDnaseHsmmHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHsmmHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHsmmPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHsmmPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHsmmRawDataRep1.fastq.gz
+wgEncodeUwDnaseHsmmRawDataRep2.fastq.gz
+wgEncodeUwDnaseHsmmRawRep1.bigWig
+wgEncodeUwDnaseHsmmRawRep2.bigWig
+wgEncodeUwDnaseHsmmtAlnRep1.bam
+wgEncodeUwDnaseHsmmtAlnRep1.bam.bai
+wgEncodeUwDnaseHsmmtHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHsmmtPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHsmmtRawDataRep1.fastq.gz
+wgEncodeUwDnaseHsmmtRawRep1.bigWig
+wgEncodeUwDnaseHuvecAlnRep1.bam
+wgEncodeUwDnaseHuvecAlnRep1.bam.bai
+wgEncodeUwDnaseHuvecAlnRep2.bam
+wgEncodeUwDnaseHuvecAlnRep2.bam.bai
+wgEncodeUwDnaseHuvecHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHuvecHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHuvecPkRep1V2.narrowPeak.gz
+wgEncodeUwDnaseHuvecPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHuvecRawDataRep1.fastq.gz
+wgEncodeUwDnaseHuvecRawDataRep2.fastq.gz
+wgEncodeUwDnaseHuvecRawRep1.bigWig
+wgEncodeUwDnaseHuvecRawRep2.bigWig
+wgEncodeUwDnaseHvmfAlnRep1.bam
+wgEncodeUwDnaseHvmfAlnRep1.bam.bai
+wgEncodeUwDnaseHvmfAlnRep2.bam
+wgEncodeUwDnaseHvmfAlnRep2.bam.bai
+wgEncodeUwDnaseHvmfHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHvmfHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHvmfPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHvmfPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHvmfRawDataRep1.fastq.gz
+wgEncodeUwDnaseHvmfRawDataRep2.fastq.gz
+wgEncodeUwDnaseHvmfRawRep1.bigWig
+wgEncodeUwDnaseHvmfRawRep2.bigWig
+wgEncodeUwDnaseJurkatAlnRep1.bam
+wgEncodeUwDnaseJurkatAlnRep1.bam.bai
+wgEncodeUwDnaseJurkatAlnRep2.bam
+wgEncodeUwDnaseJurkatAlnRep2.bam.bai
+wgEncodeUwDnaseJurkatHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseJurkatHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseJurkatPkRep1.narrowPeak.gz
+wgEncodeUwDnaseJurkatPkRep2.narrowPeak.gz
+wgEncodeUwDnaseJurkatRawDataRep1.fastq.gz
+wgEncodeUwDnaseJurkatRawDataRep2.fastq.gz
+wgEncodeUwDnaseJurkatRawRep1.bigWig
+wgEncodeUwDnaseJurkatRawRep2.bigWig
+wgEncodeUwDnaseK562AlnRep1.bam
+wgEncodeUwDnaseK562AlnRep1.bam.bai
+wgEncodeUwDnaseK562AlnRep2.bam
+wgEncodeUwDnaseK562AlnRep2.bam.bai
+wgEncodeUwDnaseK562HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseK562HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseK562PkRep1.narrowPeak.gz
+wgEncodeUwDnaseK562PkRep2.narrowPeak.gz
+wgEncodeUwDnaseK562RawDataRep1.fastq.gz
+wgEncodeUwDnaseK562RawDataRep2.fastq.gz
+wgEncodeUwDnaseK562RawRep1.bigWig
+wgEncodeUwDnaseK562RawRep2.bigWig
+wgEncodeUwDnaseLncapAlnRep1.bam
+wgEncodeUwDnaseLncapAlnRep1.bam.bai
+wgEncodeUwDnaseLncapAlnRep2.bam
+wgEncodeUwDnaseLncapAlnRep2.bam.bai
+wgEncodeUwDnaseLncapHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseLncapHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseLncapPkRep1.narrowPeak.gz
+wgEncodeUwDnaseLncapPkRep2.narrowPeak.gz
+wgEncodeUwDnaseLncapRawDataRep1.fastq.gz
+wgEncodeUwDnaseLncapRawDataRep2.fastq.gz
+wgEncodeUwDnaseLncapRawRep1.bigWig
+wgEncodeUwDnaseLncapRawRep2.bigWig
+wgEncodeUwDnaseMcf7AlnRep1.bam
+wgEncodeUwDnaseMcf7AlnRep1.bam.bai
+wgEncodeUwDnaseMcf7AlnRep2.bam
+wgEncodeUwDnaseMcf7AlnRep2.bam.bai
+wgEncodeUwDnaseMcf7HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseMcf7HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseMcf7PkRep1.narrowPeak.gz
+wgEncodeUwDnaseMcf7PkRep2.narrowPeak.gz
+wgEncodeUwDnaseMcf7RawDataRep1.fastq.gz
+wgEncodeUwDnaseMcf7RawDataRep2.fastq.gz
+wgEncodeUwDnaseMcf7RawRep1.bigWig
+wgEncodeUwDnaseMcf7RawRep2.bigWig
+wgEncodeUwDnaseMonocd14AlnRep1.bam
+wgEncodeUwDnaseMonocd14AlnRep1.bam.bai
+wgEncodeUwDnaseMonocd14HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseMonocd14PkRep1.narrowPeak.gz
+wgEncodeUwDnaseMonocd14RawDataRep1.fastq.gz
+wgEncodeUwDnaseMonocd14RawRep1.bigWig
+wgEncodeUwDnaseNb4AlnRep1.bam
+wgEncodeUwDnaseNb4AlnRep1.bam.bai
+wgEncodeUwDnaseNb4AlnRep2.bam
+wgEncodeUwDnaseNb4AlnRep2.bam.bai
+wgEncodeUwDnaseNb4HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseNb4HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseNb4PkRep1.narrowPeak.gz
+wgEncodeUwDnaseNb4PkRep2.narrowPeak.gz
+wgEncodeUwDnaseNb4RawDataRep1V2.fastq.gz
+wgEncodeUwDnaseNb4RawDataRep2.fastq.gz
+wgEncodeUwDnaseNb4RawRep1.bigWig
+wgEncodeUwDnaseNb4RawRep2.bigWig
+wgEncodeUwDnaseNhaAlnRep1.bam
+wgEncodeUwDnaseNhaAlnRep1.bam.bai
+wgEncodeUwDnaseNhaAlnRep2.bam
+wgEncodeUwDnaseNhaAlnRep2.bam.bai
+wgEncodeUwDnaseNhaHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseNhaHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseNhaPkRep1.narrowPeak.gz
+wgEncodeUwDnaseNhaPkRep2.narrowPeak.gz
+wgEncodeUwDnaseNhaRawDataRep1.fastq.gz
+wgEncodeUwDnaseNhaRawDataRep2.fastq.gz
+wgEncodeUwDnaseNhaRawRep1.bigWig
+wgEncodeUwDnaseNhaRawRep2.bigWig
+wgEncodeUwDnaseNhdfadAlnRep1.bam
+wgEncodeUwDnaseNhdfadAlnRep1.bam.bai
+wgEncodeUwDnaseNhdfadAlnRep2.bam
+wgEncodeUwDnaseNhdfadAlnRep2.bam.bai
+wgEncodeUwDnaseNhdfadHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseNhdfadHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseNhdfadPkRep1.narrowPeak.gz
+wgEncodeUwDnaseNhdfadPkRep2.narrowPeak.gz
+wgEncodeUwDnaseNhdfadRawDataRep1.fastq.gz
+wgEncodeUwDnaseNhdfadRawDataRep2.fastq.gz
+wgEncodeUwDnaseNhdfadRawRep1.bigWig
+wgEncodeUwDnaseNhdfadRawRep2.bigWig
+wgEncodeUwDnaseNhdfneoAlnRep1.bam
+wgEncodeUwDnaseNhdfneoAlnRep1.bam.bai
+wgEncodeUwDnaseNhdfneoAlnRep2.bam
+wgEncodeUwDnaseNhdfneoAlnRep2.bam.bai
+wgEncodeUwDnaseNhdfneoHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseNhdfneoHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseNhdfneoPkRep1.narrowPeak.gz
+wgEncodeUwDnaseNhdfneoPkRep2.narrowPeak.gz
+wgEncodeUwDnaseNhdfneoRawDataRep1.fastq.gz
+wgEncodeUwDnaseNhdfneoRawDataRep2.fastq.gz
+wgEncodeUwDnaseNhdfneoRawRep1.bigWig
+wgEncodeUwDnaseNhdfneoRawRep2.bigWig
+wgEncodeUwDnaseNhekAlnRep1.bam
+wgEncodeUwDnaseNhekAlnRep1.bam.bai
+wgEncodeUwDnaseNhekAlnRep2.bam
+wgEncodeUwDnaseNhekAlnRep2.bam.bai
+wgEncodeUwDnaseNhekHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseNhekHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseNhekPkRep1.narrowPeak.gz
+wgEncodeUwDnaseNhekPkRep2.narrowPeak.gz
+wgEncodeUwDnaseNhekRawDataRep1.fastq.gz
+wgEncodeUwDnaseNhekRawDataRep2.fastq.gz
+wgEncodeUwDnaseNhekRawRep1.bigWig
+wgEncodeUwDnaseNhekRawRep2.bigWig
+wgEncodeUwDnaseNhlfAlnRep1.bam
+wgEncodeUwDnaseNhlfAlnRep1.bam.bai
+wgEncodeUwDnaseNhlfAlnRep2.bam
+wgEncodeUwDnaseNhlfAlnRep2.bam.bai
+wgEncodeUwDnaseNhlfHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseNhlfHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseNhlfPkRep1.narrowPeak.gz
+wgEncodeUwDnaseNhlfPkRep2.narrowPeak.gz
+wgEncodeUwDnaseNhlfRawDataRep1.fastq.gz
+wgEncodeUwDnaseNhlfRawDataRep2.fastq.gz
+wgEncodeUwDnaseNhlfRawRep1.bigWig
+wgEncodeUwDnaseNhlfRawRep2.bigWig
+wgEncodeUwDnasePanc1AlnRep1.bam
+wgEncodeUwDnasePanc1AlnRep1.bam.bai
+wgEncodeUwDnasePanc1AlnRep2.bam
+wgEncodeUwDnasePanc1AlnRep2.bam.bai
+wgEncodeUwDnasePanc1HotspotsRep1.broadPeak.gz
+wgEncodeUwDnasePanc1HotspotsRep2.broadPeak.gz
+wgEncodeUwDnasePanc1PkRep1.narrowPeak.gz
+wgEncodeUwDnasePanc1PkRep2.narrowPeak.gz
+wgEncodeUwDnasePanc1RawDataRep1.fastq.gz
+wgEncodeUwDnasePanc1RawDataRep2.fastq.gz
+wgEncodeUwDnasePanc1RawRep1.bigWig
+wgEncodeUwDnasePanc1RawRep2.bigWig
+wgEncodeUwDnaseRptecAlnRep1.bam
+wgEncodeUwDnaseRptecAlnRep1.bam.bai
+wgEncodeUwDnaseRptecAlnRep2.bam
+wgEncodeUwDnaseRptecAlnRep2.bam.bai
+wgEncodeUwDnaseRptecHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseRptecHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseRptecPkRep1.narrowPeak.gz
+wgEncodeUwDnaseRptecPkRep2.narrowPeak.gz
+wgEncodeUwDnaseRptecRawDataRep1.fastq.gz
+wgEncodeUwDnaseRptecRawDataRep2.fastq.gz
+wgEncodeUwDnaseRptecRawRep1.bigWig
+wgEncodeUwDnaseRptecRawRep2.bigWig
+wgEncodeUwDnaseSaecAlnRep1.bam
+wgEncodeUwDnaseSaecAlnRep1.bam.bai
+wgEncodeUwDnaseSaecAlnRep2.bam
+wgEncodeUwDnaseSaecAlnRep2.bam.bai
+wgEncodeUwDnaseSaecHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseSaecHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseSaecPkRep1.narrowPeak.gz
+wgEncodeUwDnaseSaecPkRep2.narrowPeak.gz
+wgEncodeUwDnaseSaecRawDataRep1.fastq.gz
+wgEncodeUwDnaseSaecRawDataRep2.fastq.gz
+wgEncodeUwDnaseSaecRawRep1.bigWig
+wgEncodeUwDnaseSaecRawRep2.bigWig
+wgEncodeUwDnaseSkmcAlnRep1.bam
+wgEncodeUwDnaseSkmcAlnRep1.bam.bai
+wgEncodeUwDnaseSkmcAlnRep2.bam
+wgEncodeUwDnaseSkmcAlnRep2.bam.bai
+wgEncodeUwDnaseSkmcHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseSkmcHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseSkmcPkRep1.narrowPeak.gz
+wgEncodeUwDnaseSkmcPkRep2.narrowPeak.gz
+wgEncodeUwDnaseSkmcRawDataRep1V2.fastq.gz
+wgEncodeUwDnaseSkmcRawDataRep2.fastq.gz
+wgEncodeUwDnaseSkmcRawRep1.bigWig
+wgEncodeUwDnaseSkmcRawRep2.bigWig
+wgEncodeUwDnaseSknmcAlnRep1.bam
+wgEncodeUwDnaseSknmcAlnRep1.bam.bai
+wgEncodeUwDnaseSknmcAlnRep2.bam
+wgEncodeUwDnaseSknmcAlnRep2.bam.bai
+wgEncodeUwDnaseSknmcHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseSknmcHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseSknmcPkRep1.narrowPeak.gz
+wgEncodeUwDnaseSknmcPkRep2.narrowPeak.gz
+wgEncodeUwDnaseSknmcRawDataRep1.fastq.gz
+wgEncodeUwDnaseSknmcRawDataRep2.fastq.gz
+wgEncodeUwDnaseSknmcRawRep1.bigWig
+wgEncodeUwDnaseSknmcRawRep2.bigWig
+wgEncodeUwDnaseSknshraAlnRep1.bam
+wgEncodeUwDnaseSknshraAlnRep1.bam.bai
+wgEncodeUwDnaseSknshraAlnRep2.bam
+wgEncodeUwDnaseSknshraAlnRep2.bam.bai
+wgEncodeUwDnaseSknshraHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseSknshraHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseSknshraPkRep1.narrowPeak.gz
+wgEncodeUwDnaseSknshraPkRep2.narrowPeak.gz
+wgEncodeUwDnaseSknshraRawDataRep1.fastq.gz
+wgEncodeUwDnaseSknshraRawDataRep2V2.fastq.gz
+wgEncodeUwDnaseSknshraRawRep1.bigWig
+wgEncodeUwDnaseSknshraRawRep2.bigWig
+wgEncodeUwDnaseTh1AlnRep1.bam
+wgEncodeUwDnaseTh1AlnRep1.bam.bai
+wgEncodeUwDnaseTh1HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseTh1PkRep1.narrowPeak.gz
+wgEncodeUwDnaseTh1RawDataRep1.fastq.gz
+wgEncodeUwDnaseTh1RawRep1.bigWig
+wgEncodeUwDnaseTh2AlnRep1.bam
+wgEncodeUwDnaseTh2AlnRep1.bam.bai
+wgEncodeUwDnaseTh2HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseTh2PkRep1.narrowPeak.gz
+wgEncodeUwDnaseTh2RawDataRep1.fastq.gz
+wgEncodeUwDnaseTh2RawRep1.bigWig
+wgEncodeUwDnaseWerirb1AlnRep1.bam
+wgEncodeUwDnaseWerirb1AlnRep1.bam.bai
+wgEncodeUwDnaseWerirb1AlnRep2.bam
+wgEncodeUwDnaseWerirb1AlnRep2.bam.bai
+wgEncodeUwDnaseWerirb1HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseWerirb1HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseWerirb1PkRep1.narrowPeak.gz
+wgEncodeUwDnaseWerirb1PkRep2.narrowPeak.gz
+wgEncodeUwDnaseWerirb1RawDataRep1.fastq.gz
+wgEncodeUwDnaseWerirb1RawDataRep2.fastq.gz
+wgEncodeUwDnaseWerirb1RawRep1.bigWig
+wgEncodeUwDnaseWerirb1RawRep2.bigWig
+wgEncodeUwDnaseWi38AlnRep1.bam
+wgEncodeUwDnaseWi38AlnRep1.bam.bai
+wgEncodeUwDnaseWi38AlnRep2.bam
+wgEncodeUwDnaseWi38AlnRep2.bam.bai
+wgEncodeUwDnaseWi38HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseWi38HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseWi38OhtamAlnRep1.bam
+wgEncodeUwDnaseWi38OhtamAlnRep1.bam.bai
+wgEncodeUwDnaseWi38OhtamAlnRep2.bam
+wgEncodeUwDnaseWi38OhtamAlnRep2.bam.bai
+wgEncodeUwDnaseWi38OhtamHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseWi38OhtamHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseWi38OhtamPkRep1.narrowPeak.gz
+wgEncodeUwDnaseWi38OhtamPkRep2.narrowPeak.gz
+wgEncodeUwDnaseWi38OhtamRawDataRep1.fastq.gz
+wgEncodeUwDnaseWi38OhtamRawDataRep2.fastq.gz
+wgEncodeUwDnaseWi38OhtamRawRep1.bigWig
+wgEncodeUwDnaseWi38OhtamRawRep2.bigWig
+wgEncodeUwDnaseWi38PkRep1.narrowPeak.gz
+wgEncodeUwDnaseWi38PkRep2.narrowPeak.gz
+wgEncodeUwDnaseWi38RawDataRep1.fastq.gz
+wgEncodeUwDnaseWi38RawDataRep2.fastq.gz
+wgEncodeUwDnaseWi38RawRep1.bigWig
+wgEncodeUwDnaseWi38RawRep2.bigWig
+
+/gbdb/hg19/bbi/wgEncodeUwDnaseA549RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseA549RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg04449RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg04449RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg04450RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg04450RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg09309RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg09309RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg09319RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg09319RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg10803RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAg10803RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAoafRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseAoafRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseBe2cRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseBe2cRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseBjRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseBjRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseCaco2RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseCaco2RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseCmkRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseGm06990RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseGm06990RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseGm12864RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseGm12865RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseGm12865RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseGm12878RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseGm12878RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseH1hescRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseH7esRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseH7esRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHacRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHacRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHaeRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHaeRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHahRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHahRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHaspRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHaspRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHbmecRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHbmecRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHcfRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHcfRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHcfaaRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHcfaaRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHcmRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHcmRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHconfRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHconfRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHcpeRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHcpeRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHct116RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHct116RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHeeRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHeeRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHelas3RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHelas3RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHepg2RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHepg2RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHffRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHffRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHffmycRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHffmycRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHgfRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHgfRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHipeRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHipeRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHl60RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHl60RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmecRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmecRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmfRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmfRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdbladRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdbladRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdblneoRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdblneoRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdlyadRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdlyadRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdlyneoRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdlyneoRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdneoRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdneoRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmveclblRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmveclblRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecllyRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecllyRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHnpceRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHnpceRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHpafRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHpafRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHpdlfRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHpdlfRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHpfRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHpfRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHrceRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHrceRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHreRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHreRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHrgecRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHrgecRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHrpeRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHrpeRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHsmmRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHsmmRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHsmmtRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHuvecRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHuvecRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHvmfRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHvmfRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseJurkatRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseJurkatRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseK562RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseK562RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseLncapRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseLncapRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseMcf7RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseMcf7RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNb4RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNb4RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhaRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhaRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhdfadRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhdfadRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhdfneoRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhdfneoRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhekRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhekRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhlfRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNhlfRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnasePanc1RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnasePanc1RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseRptecRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseRptecRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseSaecRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseSaecRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseSkmcRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseSkmcRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseSknmcRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseSknmcRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseSknshraRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseSknshraRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseTh1RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseTh2RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseWerirb1RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseWerirb1RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseWi38OhtamRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseWi38OhtamRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseWi38RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseWi38RawRep2.bigWig
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
+    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release2/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
+
+
+
+C) New tables (36):
+wgEncodeUwDnaseCd20PosHotspotsRep2
+wgEncodeUwDnaseCd20PosPkRep2
+wgEncodeUwDnaseCd20PosRawRep2
+wgEncodeUwDnaseCd34mobilizedHotspotsRep1
+wgEncodeUwDnaseCd34mobilizedPkRep1
+wgEncodeUwDnaseCd34mobilizedRawRep1
+wgEncodeUwDnaseHmvecdadHotspotsRep1
+wgEncodeUwDnaseHmvecdadHotspotsRep2
+wgEncodeUwDnaseHmvecdadPkRep1
+wgEncodeUwDnaseHmvecdadPkRep2
+wgEncodeUwDnaseHmvecdadRawRep1
+wgEncodeUwDnaseHmvecdadRawRep2
+wgEncodeUwDnaseHpaecHotspotsRep1
+wgEncodeUwDnaseHpaecPkRep1
+wgEncodeUwDnaseHpaecRawRep1
+wgEncodeUwDnaseHsmmtHotspotsRep2
+wgEncodeUwDnaseHsmmtPkRep2
+wgEncodeUwDnaseHsmmtRawRep2
+wgEncodeUwDnaseMonocd14HotspotsRep1V2
+wgEncodeUwDnaseMonocd14HotspotsRep2
+wgEncodeUwDnaseMonocd14PkRep1V2
+wgEncodeUwDnaseMonocd14PkRep2
+wgEncodeUwDnaseMonocd14RawRep1V2
+wgEncodeUwDnaseMonocd14RawRep2
+wgEncodeUwDnaseNt2d1HotspotsRep1
+wgEncodeUwDnaseNt2d1HotspotsRep2
+wgEncodeUwDnaseNt2d1PkRep1
+wgEncodeUwDnaseNt2d1PkRep2
+wgEncodeUwDnaseNt2d1RawRep1
+wgEncodeUwDnaseNt2d1RawRep2
+wgEncodeUwDnasePrecHotspotsRep1
+wgEncodeUwDnasePrecHotspotsRep2
+wgEncodeUwDnasePrecPkRep1
+wgEncodeUwDnasePrecPkRep2
+wgEncodeUwDnasePrecRawRep1
+wgEncodeUwDnasePrecRawRep2
+
+C') New files (72 downloadables, 12 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release3/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
+
+wgEncodeUwDnaseCd20PosAlnRep2.bam
+wgEncodeUwDnaseCd20PosAlnRep2.bam.bai
+wgEncodeUwDnaseCd20PosHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseCd20PosPkRep2.narrowPeak.gz
+wgEncodeUwDnaseCd20PosRawDataRep2.fastq.tgz
+wgEncodeUwDnaseCd20PosRawRep2.bigWig
+wgEncodeUwDnaseCd34mobilizedAlnRep1.bam
+wgEncodeUwDnaseCd34mobilizedAlnRep1.bam.bai
+wgEncodeUwDnaseCd34mobilizedHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseCd34mobilizedPkRep1.narrowPeak.gz
+wgEncodeUwDnaseCd34mobilizedRawDataRep1.fastq.tgz
+wgEncodeUwDnaseCd34mobilizedRawRep1.bigWig
+wgEncodeUwDnaseHmvecdadAlnRep1.bam
+wgEncodeUwDnaseHmvecdadAlnRep1.bam.bai
+wgEncodeUwDnaseHmvecdadAlnRep2.bam
+wgEncodeUwDnaseHmvecdadAlnRep2.bam.bai
+wgEncodeUwDnaseHmvecdadHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHmvecdadHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHmvecdadPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHmvecdadPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHmvecdadRawDataRep1.fastq.tgz
+wgEncodeUwDnaseHmvecdadRawDataRep2.fastq.tgz
+wgEncodeUwDnaseHmvecdadRawRep1.bigWig
+wgEncodeUwDnaseHmvecdadRawRep2.bigWig
+wgEncodeUwDnaseHpaecAlnRep1.bam
+wgEncodeUwDnaseHpaecAlnRep1.bam.bai
+wgEncodeUwDnaseHpaecHotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseHpaecPkRep1.narrowPeak.gz
+wgEncodeUwDnaseHpaecRawDataRep1.fastq.tgz
+wgEncodeUwDnaseHpaecRawRep1.bigWig
+wgEncodeUwDnaseHsmmtAlnRep2.bam
+wgEncodeUwDnaseHsmmtAlnRep2.bam.bai
+wgEncodeUwDnaseHsmmtHotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseHsmmtPkRep2.narrowPeak.gz
+wgEncodeUwDnaseHsmmtRawDataRep2.fastq.tgz
+wgEncodeUwDnaseHsmmtRawRep2.bigWig
+wgEncodeUwDnaseMonocd14AlnRep1V2.bam
+wgEncodeUwDnaseMonocd14AlnRep1V2.bam.bai
+wgEncodeUwDnaseMonocd14AlnRep2.bam
+wgEncodeUwDnaseMonocd14AlnRep2.bam.bai
+wgEncodeUwDnaseMonocd14HotspotsRep1V2.broadPeak.gz
+wgEncodeUwDnaseMonocd14HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseMonocd14PkRep1V2.narrowPeak.gz
+wgEncodeUwDnaseMonocd14PkRep2.narrowPeak.gz
+wgEncodeUwDnaseMonocd14RawDataRep1V2.fastq.tgz
+wgEncodeUwDnaseMonocd14RawDataRep2.fastq.tgz
+wgEncodeUwDnaseMonocd14RawRep1V2.bigWig
+wgEncodeUwDnaseMonocd14RawRep2.bigWig
+wgEncodeUwDnaseNt2d1AlnRep1.bam
+wgEncodeUwDnaseNt2d1AlnRep1.bam.bai
+wgEncodeUwDnaseNt2d1AlnRep2.bam
+wgEncodeUwDnaseNt2d1AlnRep2.bam.bai
+wgEncodeUwDnaseNt2d1HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseNt2d1HotspotsRep2.broadPeak.gz
+wgEncodeUwDnaseNt2d1PkRep1.narrowPeak.gz
+wgEncodeUwDnaseNt2d1PkRep2.narrowPeak.gz
+wgEncodeUwDnaseNt2d1RawDataRep1.fastq.tgz
+wgEncodeUwDnaseNt2d1RawDataRep2.fastq.gz
+wgEncodeUwDnaseNt2d1RawRep1.bigWig
+wgEncodeUwDnaseNt2d1RawRep2.bigWig
+wgEncodeUwDnasePrecAlnRep1.bam
+wgEncodeUwDnasePrecAlnRep1.bam.bai
+wgEncodeUwDnasePrecAlnRep2.bam
+wgEncodeUwDnasePrecAlnRep2.bam.bai
+wgEncodeUwDnasePrecHotspotsRep1.broadPeak.gz
+wgEncodeUwDnasePrecHotspotsRep2.broadPeak.gz
+wgEncodeUwDnasePrecPkRep1.narrowPeak.gz
+wgEncodeUwDnasePrecPkRep2.narrowPeak.gz
+wgEncodeUwDnasePrecRawDataRep1.fastq.tgz
+wgEncodeUwDnasePrecRawDataRep2.fastq.tgz
+wgEncodeUwDnasePrecRawRep1.bigWig
+wgEncodeUwDnasePrecRawRep2.bigWig
+
+/gbdb/hg19/bbi/wgEncodeUwDnaseCd20PosRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseCd34mobilizedRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdadRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdadRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHpaecRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseHsmmtRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseMonocd14RawRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseMonocd14RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNt2d1RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseNt2d1RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnasePrecRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnasePrecRawRep2.bigWig
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release3/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
+
+index.html
+files.txt
+md5sum.txt

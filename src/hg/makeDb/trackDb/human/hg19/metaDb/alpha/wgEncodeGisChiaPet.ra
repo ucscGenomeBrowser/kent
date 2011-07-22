@@ -13,7 +13,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005584
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005584.fastq.gz
 grant Ruan
@@ -24,7 +23,6 @@ project wgEncode
 replicate 1
 run 3r32
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA003-PE-R00032.l(5).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -38,7 +36,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005585
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005585.fastq.gz
 grant Ruan
@@ -49,7 +46,6 @@ project wgEncode
 replicate 1
 run 3r32
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA003-PE-R00032.l(5).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -63,7 +59,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005586
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005586.fastq.gz
 grant Ruan
@@ -74,7 +69,6 @@ project wgEncode
 replicate 1
 run 4r32
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA004-PE-R00032.l(5-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -88,7 +82,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005587
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005587.fastq.gz
 grant Ruan
@@ -99,7 +92,6 @@ project wgEncode
 replicate 1
 run 4r32
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA004-PE-R00032.l(5-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -113,7 +105,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005588
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005588.fastq.gz
 grant Ruan
@@ -124,7 +115,6 @@ project wgEncode
 replicate 1
 run 5r51
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA005-PE-R00051.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -138,7 +128,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005589
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005589.fastq.gz
 grant Ruan
@@ -149,7 +138,6 @@ project wgEncode
 replicate 1
 run 5r51
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA005-PE-R00051.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -163,7 +151,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005590
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005590.bam
 grant Ruan
@@ -174,7 +161,6 @@ project wgEncode
 replicate 1
 run 3r32
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524_3r32.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -188,7 +174,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005591
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005591.bam
 grant Ruan
@@ -199,7 +184,6 @@ project wgEncode
 replicate 1
 run 4r32
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524_4r32.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -213,7 +197,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005592
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005592.bam
 grant Ruan
@@ -224,7 +207,6 @@ project wgEncode
 replicate 1
 run 5r51
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524_5r51.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -238,7 +220,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-04
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001427
-docId wgEncodeGisChiaPetHCT116D000005593
 expId 1427
 fileName wgEncodeGisChiaPetHCT116D000005593.bed.gz
 grant Ruan
@@ -248,7 +229,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 3267
-submitPath gisChIA-PET_RNAPII_HCT116/CHH524T.chromInteractons.bed
 tableName wgEncodeGisChiaPetHCT116D000005593
 type bed 12
 view Interactions
@@ -263,7 +243,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005563
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005563.fastq.gz
 grant Ruan
@@ -274,7 +253,6 @@ project wgEncode
 replicate 1
 run 1r78
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA001-PE-R00078.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -288,7 +266,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005564
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005564.fastq.gz
 grant Ruan
@@ -299,7 +276,6 @@ project wgEncode
 replicate 1
 run 1r78
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA001-PE-R00078.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -313,7 +289,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005565
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005565.fastq.gz
 grant Ruan
@@ -324,7 +299,6 @@ project wgEncode
 replicate 1
 run 2r35
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA002-PE-R00035.l(1).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -338,7 +312,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005566
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005566.fastq.gz
 grant Ruan
@@ -349,7 +322,6 @@ project wgEncode
 replicate 1
 run 2r35
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA002-PE-R00035.l(1).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -363,7 +335,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005567
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005567.fastq.gz
 grant Ruan
@@ -374,7 +345,6 @@ project wgEncode
 replicate 1
 run 3r56
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA003-PE-R00056.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -388,7 +358,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005568
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005568.fastq.gz
 grant Ruan
@@ -399,7 +368,6 @@ project wgEncode
 replicate 1
 run 3r56
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA003-PE-R00056.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -413,7 +381,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005569
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005569.bam
 grant Ruan
@@ -424,7 +391,6 @@ project wgEncode
 replicate 1
 run 1r78
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025_1r78.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -438,7 +404,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005570
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005570.bam
 grant Ruan
@@ -449,7 +414,6 @@ project wgEncode
 replicate 1
 run 2r35
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025_2r35.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -463,7 +427,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005571
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005571.bam
 grant Ruan
@@ -474,7 +437,6 @@ project wgEncode
 replicate 1
 run 3r56
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025_3r56.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -488,7 +450,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001426
-docId wgEncodeGisChiaPetHeLaS3D000005572
 expId 1426
 fileName wgEncodeGisChiaPetHeLaS3D000005572.bed.gz
 grant Ruan
@@ -498,7 +459,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 3266
-submitPath gisChIA-PET_RNAPII_HeLa/IHH025T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetHeLaS3D000005572
 type bed 12
 view Interactions
@@ -513,7 +473,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005622
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005622.fastq.gz
 grant Ruan
@@ -524,7 +483,6 @@ project wgEncode
 replicate 1
 run 1r119
 subId 3276
-submitPath gisChIA-PET_RNAPII_K562_1/CHK004.GA001-PE-R00119.l(3-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -538,7 +496,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005623
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005623.fastq.gz
 grant Ruan
@@ -549,7 +506,6 @@ project wgEncode
 replicate 1
 run 1r119
 subId 3276
-submitPath gisChIA-PET_RNAPII_K562_1/CHK004.GA001-PE-R00119.l(3-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -563,7 +519,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005624
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005624.fastq.gz
 grant Ruan
@@ -574,7 +529,6 @@ project wgEncode
 replicate 1
 run 5r35
 subId 3276
-submitPath gisChIA-PET_RNAPII_K562_1/CHK004.GA005-PE-R00035.l(7).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -588,7 +542,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005625
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005625.fastq.gz
 grant Ruan
@@ -599,7 +552,6 @@ project wgEncode
 replicate 1
 run 5r35
 subId 3276
-submitPath gisChIA-PET_RNAPII_K562_1/CHK004.GA005-PE-R00035.l(7).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -613,7 +565,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005626
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005626.bam
 grant Ruan
@@ -624,7 +575,6 @@ project wgEncode
 replicate 1
 run 1r119
 subId 3276
-submitPath gisChIA-PET_RNAPII_K562_1/CHK004_1r119.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -638,7 +588,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005627
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005627.bam
 grant Ruan
@@ -649,7 +598,6 @@ project wgEncode
 replicate 1
 run 5r35
 subId 3276
-submitPath gisChIA-PET_RNAPII_K562_1/CHK004_5r35.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -663,7 +611,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005628
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005628.bed.gz
 grant Ruan
@@ -673,7 +620,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 3276
-submitPath gisChIA-PET_RNAPII_K562_1/CHK004T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetK562D000005628
 type bed 12
 view Interactions
@@ -688,7 +634,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005636
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005636.fastq.gz
 grant Ruan
@@ -699,7 +644,6 @@ project wgEncode
 replicate 2
 run 1r132
 subId 3282
-submitPath gisChIA-PET_RNAPII_K562_2/CHK016.GA001-PE-R00132.l(7).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -713,7 +657,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005637
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005637.fastq.gz
 grant Ruan
@@ -724,7 +667,6 @@ project wgEncode
 replicate 2
 run 1r132
 subId 3282
-submitPath gisChIA-PET_RNAPII_K562_2/CHK016.GA001-PE-R00132.l(7).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -738,7 +680,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005638
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005638.fastq.gz
 grant Ruan
@@ -749,7 +690,6 @@ project wgEncode
 replicate 2
 run 3r62
 subId 3282
-submitPath gisChIA-PET_RNAPII_K562_2/CHK016.GA003-PE-R00062.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -763,7 +703,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005639
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005639.fastq.gz
 grant Ruan
@@ -774,7 +713,6 @@ project wgEncode
 replicate 2
 run 3r62
 subId 3282
-submitPath gisChIA-PET_RNAPII_K562_2/CHK016.GA003-PE-R00062.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -788,7 +726,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005640
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005640.bam
 grant Ruan
@@ -799,7 +736,6 @@ project wgEncode
 replicate 2
 run 1r132
 subId 3282
-submitPath gisChIA-PET_RNAPII_K562_2/CHK016_1r132.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -813,7 +749,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005641
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005641.bam
 grant Ruan
@@ -824,7 +759,6 @@ project wgEncode
 replicate 2
 run 3r62
 subId 3282
-submitPath gisChIA-PET_RNAPII_K562_2/CHK016_3r62.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -838,7 +772,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000005642
 expId 1428
 fileName wgEncodeGisChiaPetK562D000005642.bed.gz
 grant Ruan
@@ -848,7 +781,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 3282
-submitPath gisChIA-PET_RNAPII_K562_2/CHK016T_L9.chromInteractons.bed
 tableName wgEncodeGisChiaPetK562D000005642
 type bed 12
 view Interactions
@@ -863,7 +795,6 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-23
 dateUnrestricted 2011-11-23
 dccAccession wgEncodeEH001428
-docId wgEncodeGisChiaPetK562D000006820
 expId 1428
 fileName wgEncodeGisChiaPetK562D000006820.bed.gz
 grant Ruan
@@ -871,9 +802,7 @@ lab GIS-Ruan
 labVersion RNAPII_K562
 origAssembly hg19
 project wgEncode
-replicate pooled
 subId 3382
-submitPath gisChIA-PET_RNAPII_K562_combined/RNAPII_K562T.chromInteractons.bed
 type bed 12
 view Interactions
 
@@ -887,7 +816,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005608
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005608.fastq.gz
 grant Ruan
@@ -898,7 +826,6 @@ project wgEncode
 replicate 1
 run 1r114
 subId 3279
-submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040.GA001-PE-R00114.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -912,7 +839,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005609
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005609.fastq.gz
 grant Ruan
@@ -923,7 +849,6 @@ project wgEncode
 replicate 1
 run 1r114
 subId 3279
-submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040.GA001-PE-R00114.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -937,7 +862,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005610
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005610.fastq.gz
 grant Ruan
@@ -948,7 +872,6 @@ project wgEncode
 replicate 1
 run 4r32
 subId 3279
-submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040.GA004-PE-R00032.l(3).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -962,7 +885,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005611
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005611.fastq.gz
 grant Ruan
@@ -973,7 +895,6 @@ project wgEncode
 replicate 1
 run 4r32
 subId 3279
-submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040.GA004-PE-R00032.l(3).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -987,7 +908,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005612
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005612.bam
 grant Ruan
@@ -998,7 +918,6 @@ project wgEncode
 replicate 1
 run 1r114
 subId 3279
-submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040_1r114.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1012,7 +931,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005613
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005613.bam
 grant Ruan
@@ -1023,7 +941,6 @@ project wgEncode
 replicate 1
 run 4r32
 subId 3279
-submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040_4r32.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1037,7 +954,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005614
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005614.bed.gz
 grant Ruan
@@ -1047,7 +963,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 3279
-submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetMCF7D000005614
 type bed 12
 view Interactions
@@ -1062,7 +977,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005629
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005629.fastq.gz
 grant Ruan
@@ -1073,7 +987,6 @@ project wgEncode
 replicate 2
 run 4r39
 subId 3281
-submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053.GA004-PE-R00039.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1087,7 +1000,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005630
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005630.fastq.gz
 grant Ruan
@@ -1098,7 +1010,6 @@ project wgEncode
 replicate 2
 run 4r39
 subId 3281
-submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053.GA004-PE-R00039.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1112,7 +1023,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005631
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005631.fastq.gz
 grant Ruan
@@ -1123,7 +1033,6 @@ project wgEncode
 replicate 2
 run 5r35
 subId 3281
-submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053.GA005-PE-R00035.l(2).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1137,7 +1046,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005632
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005632.fastq.gz
 grant Ruan
@@ -1148,7 +1056,6 @@ project wgEncode
 replicate 2
 run 5r35
 subId 3281
-submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053.GA005-PE-R00035.l(2).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1162,7 +1069,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005633
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005633.bam
 grant Ruan
@@ -1173,7 +1079,6 @@ project wgEncode
 replicate 2
 run 4r39
 subId 3281
-submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053_4r39.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1187,7 +1092,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005634
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005634.bam
 grant Ruan
@@ -1198,7 +1102,6 @@ project wgEncode
 replicate 2
 run 5r35
 subId 3281
-submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053_5r35.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1212,7 +1115,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000005635
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005635.bed.gz
 grant Ruan
@@ -1222,7 +1124,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 3281
-submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetMCF7D000005635
 type bed 12
 view Interactions
@@ -1237,7 +1138,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005643
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005643.fastq.gz
 grant Ruan
@@ -1248,7 +1148,6 @@ project wgEncode
 replicate 1
 run 1r56
 subId 3284
-submitPath gisChIA-PET_ER_MCF7_1/IHM001.GA001-PE-R00056.s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1262,7 +1161,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005644
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005644.fastq.gz
 grant Ruan
@@ -1273,7 +1171,6 @@ project wgEncode
 replicate 1
 run 1r56
 subId 3284
-submitPath gisChIA-PET_ER_MCF7_1/IHM001.GA001-PE-R00056.s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1287,7 +1184,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005645
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005645.fastq.gz
 grant Ruan
@@ -1298,7 +1194,6 @@ project wgEncode
 replicate 1
 run 1r63
 subId 3284
-submitPath gisChIA-PET_ER_MCF7_1/IHM001.GA001-PE-R00063.s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1312,7 +1207,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005646
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005646.fastq.gz
 grant Ruan
@@ -1323,7 +1217,6 @@ project wgEncode
 replicate 1
 run 1r63
 subId 3284
-submitPath gisChIA-PET_ER_MCF7_1/IHM001.GA001-PE-R00063.s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1337,7 +1230,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005647
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005647.bam
 grant Ruan
@@ -1348,7 +1240,6 @@ project wgEncode
 replicate 1
 run 1r56
 subId 3284
-submitPath gisChIA-PET_ER_MCF7_1/IHM001_1r56.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1362,7 +1253,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005648
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005648.bam
 grant Ruan
@@ -1373,7 +1263,6 @@ project wgEncode
 replicate 1
 run 1r63
 subId 3284
-submitPath gisChIA-PET_ER_MCF7_1/IHM001_1r63.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1387,7 +1276,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005649
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005649.bed.gz
 grant Ruan
@@ -1397,7 +1285,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 3284
-submitPath gisChIA-PET_ER_MCF7_1/IHM001T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetMCF7D000005649
 type bed 12
 view Interactions
@@ -1412,7 +1299,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005650
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005650.fastq.gz
 grant Ruan
@@ -1423,7 +1309,6 @@ project wgEncode
 replicate 2
 run 1r56
 subId 3285
-submitPath gisChIA-PET_ER_MCF7_2/IHH015.GA001-PE-R00056.s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1437,7 +1322,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005651
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005651.fastq.gz
 grant Ruan
@@ -1448,7 +1332,6 @@ project wgEncode
 replicate 2
 run 1r56
 subId 3285
-submitPath gisChIA-PET_ER_MCF7_2/IHH015.GA001-PE-R00056.s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1462,7 +1345,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005652
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005652.fastq.gz
 grant Ruan
@@ -1473,7 +1355,6 @@ project wgEncode
 replicate 2
 run 1r63
 subId 3285
-submitPath gisChIA-PET_ER_MCF7_2/IHH015.GA001-PE-R00063.s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1487,7 +1368,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005653
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005653.fastq.gz
 grant Ruan
@@ -1498,7 +1378,6 @@ project wgEncode
 replicate 2
 run 1r63
 subId 3285
-submitPath gisChIA-PET_ER_MCF7_2/IHH015.GA001-PE-R00063.s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1512,7 +1391,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005654
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005654.bam
 grant Ruan
@@ -1523,7 +1401,6 @@ project wgEncode
 replicate 2
 run 1r56
 subId 3285
-submitPath gisChIA-PET_ER_MCF7_2/IHH015_1r56.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1537,7 +1414,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005655
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005655.bam
 grant Ruan
@@ -1548,7 +1424,6 @@ project wgEncode
 replicate 2
 run 1r63
 subId 3285
-submitPath gisChIA-PET_ER_MCF7_2/IHH015_1r63.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1562,7 +1437,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005656
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005656.bed.gz
 grant Ruan
@@ -1572,7 +1446,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 3285
-submitPath gisChIA-PET_ER_MCF7_2/IHH015T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetMCF7D000005656
 type bed 12
 view Interactions
@@ -1587,7 +1460,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005657
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005657.fastq.gz
 grant Ruan
@@ -1598,7 +1470,6 @@ project wgEncode
 replicate 3
 run 2r35
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA002-PE-R00035.s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1612,7 +1483,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005658
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005658.fastq.gz
 grant Ruan
@@ -1623,7 +1493,6 @@ project wgEncode
 replicate 3
 run 2r35
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA002-PE-R00035.s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1637,7 +1506,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005659
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005659.fastq.gz
 grant Ruan
@@ -1648,7 +1516,6 @@ project wgEncode
 replicate 3
 run 3r31
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA003-PE-R00031.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1662,7 +1529,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005660
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005660.fastq.gz
 grant Ruan
@@ -1673,7 +1539,6 @@ project wgEncode
 replicate 3
 run 3r31
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA003-PE-R00031.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1687,7 +1552,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005661
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005661.fastq.gz
 grant Ruan
@@ -1698,7 +1562,6 @@ project wgEncode
 replicate 3
 run 3r36
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA003-PE-R00036.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1712,7 +1575,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005662
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005662.fastq.gz
 grant Ruan
@@ -1723,7 +1585,6 @@ project wgEncode
 replicate 3
 run 3r36
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA003-PE-R00036.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1737,7 +1598,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005663
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005663.fastq.gz
 grant Ruan
@@ -1748,7 +1608,6 @@ project wgEncode
 replicate 3
 run 5r2
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA005-PE-R00002.s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1762,7 +1621,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005664
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005664.fastq.gz
 grant Ruan
@@ -1773,7 +1631,6 @@ project wgEncode
 replicate 3
 run 5r2
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA005-PE-R00002.s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -1787,7 +1644,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005665
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005665.bam
 grant Ruan
@@ -1798,7 +1654,6 @@ project wgEncode
 replicate 3
 run 2r35
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096_2r35.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1812,7 +1667,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005666
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005666.bam
 grant Ruan
@@ -1823,7 +1677,6 @@ project wgEncode
 replicate 3
 run 3r31
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096_3r31.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1837,7 +1690,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005667
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005667.bam
 grant Ruan
@@ -1848,7 +1700,6 @@ project wgEncode
 replicate 3
 run 3r36
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096_3r36.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1862,7 +1713,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005668
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005668.bam
 grant Ruan
@@ -1873,7 +1723,6 @@ project wgEncode
 replicate 3
 run 5r2
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096_5r2.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -1887,7 +1736,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000005669
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000005669.bed.gz
 grant Ruan
@@ -1897,7 +1745,6 @@ origAssembly hg19
 project wgEncode
 replicate 3
 subId 3286
-submitPath gisChIA-PET_ER_MCF7_3/IHM096T.chromInteractons.bed
 tableName wgEncodeGisChiaPetMCF7D000005669
 type bed 12
 view Interactions
@@ -1912,7 +1759,6 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-23
 dateUnrestricted 2011-11-23
 dccAccession wgEncodeEH001430
-docId wgEncodeGisChiaPetMCF7D000006821
 expId 1430
 fileName wgEncodeGisChiaPetMCF7D000006821.bed.gz
 grant Ruan
@@ -1920,9 +1766,7 @@ lab GIS-Ruan
 labVersion RNAPII
 origAssembly hg19
 project wgEncode
-replicate pooled
 subId 3383
-submitPath gisChIA-PET_RNAPII_MCF7_combined/RNAPII.chromInteractons.bed
 type bed 12
 view Interactions
 
@@ -1936,7 +1780,6 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-23
 dateUnrestricted 2011-11-23
 dccAccession wgEncodeEH001429
-docId wgEncodeGisChiaPetMCF7D000006822
 expId 1429
 fileName wgEncodeGisChiaPetMCF7D000006822.bed.gz
 grant Ruan
@@ -1944,9 +1787,7 @@ lab GIS-Ruan
 labVersion ER
 origAssembly hg19
 project wgEncode
-replicate pooled
 subId 3385
-submitPath gisChIA-PET_ER_MCF7_combined/ER.chromInteractons.bed
 type bed 12
 view Interactions
 
@@ -1960,7 +1801,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005594
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005594.fastq.gz
 grant Ruan
@@ -1971,7 +1811,6 @@ project wgEncode
 replicate 1
 run 2r53
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA002-PE-R00053.l(1).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -1985,7 +1824,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005595
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005595.fastq.gz
 grant Ruan
@@ -1996,7 +1834,6 @@ project wgEncode
 replicate 1
 run 2r53
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA002-PE-R00053.l(1).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -2010,7 +1847,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005596
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005596.fastq.gz
 grant Ruan
@@ -2021,7 +1857,6 @@ project wgEncode
 replicate 1
 run 6r12
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA006-PE-R00012.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -2035,7 +1870,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005597
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005597.fastq.gz
 grant Ruan
@@ -2046,7 +1880,6 @@ project wgEncode
 replicate 1
 run 6r12
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA006-PE-R00012.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -2060,7 +1893,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005598
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005598.fastq.gz
 grant Ruan
@@ -2071,7 +1903,6 @@ project wgEncode
 replicate 1
 run 6r14
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA006-PE-R00014.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -2085,7 +1916,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005599
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005599.fastq.gz
 grant Ruan
@@ -2096,7 +1926,6 @@ project wgEncode
 replicate 1
 run 6r14
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA006-PE-R00014.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -2110,7 +1939,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005600
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005600.bam
 grant Ruan
@@ -2121,7 +1949,6 @@ project wgEncode
 replicate 1
 run 2r53
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009_2r53.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -2135,7 +1962,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005601
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005601.bam
 grant Ruan
@@ -2146,7 +1972,6 @@ project wgEncode
 replicate 1
 run 6r12
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009_6r12.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -2160,7 +1985,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005602
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005602.bam
 grant Ruan
@@ -2171,7 +1995,6 @@ project wgEncode
 replicate 1
 run 6r14
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009_6r14.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -2185,7 +2008,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005603
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005603.bed.gz
 grant Ruan
@@ -2195,7 +2017,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 3268
-submitPath gisChIA-PET_RNAPII_NB4_1/IHN009T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetNB4D000005603
 type bed 12
 view Interactions
@@ -2210,7 +2031,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005615
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005615.fastq.gz
 grant Ruan
@@ -2221,7 +2041,6 @@ project wgEncode
 replicate 2
 run 2r53
 subId 3280
-submitPath gisChIA-PET_RNAPII_NB4_2/IHN010.GA002-PE-R00053.l(2).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -2235,7 +2054,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005616
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005616.fastq.gz
 grant Ruan
@@ -2246,7 +2064,6 @@ project wgEncode
 replicate 2
 run 2r53
 subId 3280
-submitPath gisChIA-PET_RNAPII_NB4_2/IHN010.GA002-PE-R00053.l(2).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -2260,7 +2077,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005617
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005617.fastq.gz
 grant Ruan
@@ -2271,7 +2087,6 @@ project wgEncode
 replicate 2
 run 3r30
 subId 3280
-submitPath gisChIA-PET_RNAPII_NB4_2/IHN010.GA003-PE-R00030.l(1-8).s1.fastq.txt.gz
 type fastq
 view FastqRd1
 
@@ -2285,7 +2100,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005618
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005618.fastq.gz
 grant Ruan
@@ -2296,7 +2110,6 @@ project wgEncode
 replicate 2
 run 3r30
 subId 3280
-submitPath gisChIA-PET_RNAPII_NB4_2/IHN010.GA003-PE-R00030.l(1-8).s2.fastq.txt.gz
 type fastq
 view FastqRd2
 
@@ -2310,7 +2123,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005619
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005619.bam
 grant Ruan
@@ -2321,7 +2133,6 @@ project wgEncode
 replicate 2
 run 2r53
 subId 3280
-submitPath gisChIA-PET_RNAPII_NB4_2/IHN010_2r53.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -2335,7 +2146,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005620
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005620.bam
 grant Ruan
@@ -2346,7 +2156,6 @@ project wgEncode
 replicate 2
 run 3r30
 subId 3280
-submitPath gisChIA-PET_RNAPII_NB4_2/IHN010_3r30.unfiltered.hg19.bam
 type bam
 view Alignments
 
@@ -2360,7 +2169,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000005621
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000005621.bed.gz
 grant Ruan
@@ -2370,7 +2178,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 3280
-submitPath gisChIA-PET_RNAPII_NB4_2/IHN010T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetNB4D000005621
 type bed 12
 view Interactions
@@ -2385,7 +2192,6 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-23
 dateUnrestricted 2011-11-23
 dccAccession wgEncodeEH001431
-docId wgEncodeGisChiaPetNB4D000006819
 expId 1431
 fileName wgEncodeGisChiaPetNB4D000006819.bed.gz
 grant Ruan
@@ -2393,10 +2199,8 @@ lab GIS-Ruan
 labVersion RNAPII_NB4
 origAssembly hg19
 project wgEncode
-replicate pooled
 subId 3381
-submitPath gisChIA-PET_RNAPII_NB4_combined/RNAPII_NB4T.chromInteractons.bed
 type bed 12
 view Interactions
 
-# MAGIC: 582591792
+# MAGIC: 897639778

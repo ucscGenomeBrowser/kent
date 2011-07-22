@@ -4146,9 +4146,6 @@ for (track = trackList; track != NULL; track = track->next)
 	    compositeTrackVis(track);
 	}
     }
-if (measureTiming)
-    uglyTime("getTrackList");
-
 return trackList;
 }
 
@@ -4236,17 +4233,11 @@ static void pruneRedundantCartVis(struct track *trackList)
  * more common case where track visibilities are tweaked. */
 {
 struct track *track;
-if (measureTiming)
-    uglyTime("Done with trackForm");
 for (track = trackList; track != NULL; track = track->next)
     {
     char *cartVis = cartOptionalString(cart, track->track);
     if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
     cartRemove(cart, track->track);
-    }
-if (measureTiming)
-    {
-    uglyTime("Pruned redundant vis from cart");
     }
 }
 
@@ -4345,6 +4336,7 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
 {
+struct lm *lm = lmInit(0);	/* Speed tweak cleanup with scatch memory pool. */
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
@@ -4352,7 +4344,7 @@ for (;track != NULL; track = track->next)
     boolean cleanedByContainerSettings = FALSE;
 
     // Top-down 'cleanup' MUST GO BEFORE bottom up reshaping.
-    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars, lm);
 
     if (tdbIsContainer(track->tdb))
         {
@@ -4376,6 +4368,7 @@ for (;track != NULL; track = track->next)
             }
         }
     }
+lmCleanup(&lm);
 }
 
 
@@ -4606,9 +4599,13 @@ if (userSeqString && !ssFilesExist(userSeqString))
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
 if (measureTiming)
-    uglyTime("Time before getTrackList");
+    measureTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
+if (measureTiming)
+    measureTime("getTrackList");
 makeGlobalTrackHash(trackList);
+/* Tell tracks to load their items. */
+
 
 // honor defaultImgOrder
 if(cgiVarExists("hgt.defaultImgOrder"))
@@ -4618,6 +4615,8 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     cartRemoveLike(cart, wildCard);
     }
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+if (measureTiming)
+    measureTime("parentChildCartCleanup");
 
 
 /* Honor hideAll and visAll variables */
@@ -4658,8 +4657,6 @@ if (!isEmpty(jsCommand))
    jsCommandDispatch(jsCommand, trackList);
    }
 
-
-/* Tell tracks to load their items. */
 
 /* adjust visibility */
 for (track = trackList; track != NULL; track = track->next)
@@ -4723,6 +4720,8 @@ if (ptMax > 0)
     {
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+    if (measureTiming)
+	measureTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
     }
 
 printTrackInitJavascript(trackList);
@@ -4962,9 +4961,15 @@ if (!hideControls)
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
+#ifdef IN_PLACE_UPDATE
+    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return navigateButtonClick(this);");
+    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
+    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return navigateButtonClick(this);");
+#else
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
+#endif
     hPrintf("</TD>");
     hPrintf("<td width='30'>&nbsp;</td>\n");
 #endif//ndef USE_NAVIGATION_LINKS
@@ -4982,9 +4987,15 @@ if (!hideControls)
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
+#ifdef IN_PLACE_UPDATE
+    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return navigateButtonClick(this);");
+    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
+    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return navigateButtonClick(this);");
+#else
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButton("hgt.dinkRR", " > ");
+#endif
     hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
@@ -5243,6 +5254,8 @@ cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
 pruneRedundantCartVis(trackList);
+if (measureTiming)
+    measureTime("Done with trackForm");
 }
 
 static void toggleRevCmplDisp()
