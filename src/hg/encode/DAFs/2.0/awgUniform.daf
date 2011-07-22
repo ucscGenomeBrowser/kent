@@ -1,0 +1,54 @@
+# Data Agreement For AWG Uniform Peak and Signal  experiments 
+
+# $Revision: 1.1 $
+
+
+# The header for the associated DDF should look like this:
+# files	view	lab	dataType	cell	antibody	treatment	protocol	control	 softwareVersion	labVersion
+
+#Explanation of DDF terms
+#files: The name of the files to be associated with this data
+#view: The type of view that these files are. The options are listed in this DAF
+#lab: The lab that originally submitted the data. The lab registered vocabulary can be found at:  http://hgwdev.cse.ucsc.edu/cgi-bin/hgEncodeVocab?type=%22lab%22
+#dataType: The data-type of the files. The dataType controlled vocabulary can be found at: http://hgwdev.cse.ucsc.edu/cgi-bin/hgEncodeVocab?type=%22dataType%22
+#cell: The cell name. The cell registered vocbulary is found at: http://hgwdev.cse.ucsc.edu/ENCODE/cellTypes.html
+#antibody: The antibody used for a specific target.The antibody registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Antibodies
+#treatment: The treatment used to treat a specific cell. The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
+#protocol: The specific PCR protocol used. The protocol registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Protocols
+#control: The specific control used for ChIP-Seq experiments. The control registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
+#softwareVersion: Free text for the lab to keep track of software used in processed data. Can track which version of SPP and PeakSeq used.
+#labVersion: Free text for the lab to keep track of any other data. Track IDR threshold
+
+
+# Lab and general info
+grant             Birney
+lab               DAC-Stanford
+dataType          Combined
+variables         cell,lab,datatype,treatment,antibody,control,protocol
+compositeSuffix   AwgUan
+group             regulation
+assembly          hg19
+dafVersion        2.0
+validationSettings validateFiles.bigWig;validateFiles.narrowPeak
+
+# Track/view definition
+view             SppConservPeaks 
+longLabelPrefix  SPP Conserved Peaks
+type             narrowPeak
+hasReplicates    no
+required         no
+downloadOnly	 yes
+
+view             SppOptimalPeaks
+longLabelPrefix  SPP Optimal Peaks
+type             narrowPeak
+hasReplicates    no
+required         no
+
+view             UniformSignal
+longLabelPrefix  AWG Uniform Signal
+type             bigWig
+hasReplicates    no
+required         yes
+
+
