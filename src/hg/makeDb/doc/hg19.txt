@@ -12373,13 +12373,20 @@ pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons ${tResult} \
     time pslSort dirs raw.psl /scratch/tmp psl/ch* > sort.log 2>&1 &
     # 340470 files in 873 dirs
     # Got 340470 files 583 files per mid file
+    #	real    291m28.005s
+# -rw-rw-r--   1 11527396213 Jul 13 14:53 raw.psl
 
-XXX - running Wed Jul  6 15:40:10 PDT 2011
 
     # and now that all those individual results are together, filter all
     # of them
-    pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons raw.psl \
-                        hg19.fosEnds.psl /dev/null
+    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds
+    time pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons \
+	run4M/raw.psl hg19.fosEnds.psl /dev/null
+    #	Processed 64042919 alignments
+    #	real    11m9.402s
+    #	-rw-rw-r-- 1   299504257 Jul 13 15:18 hg19.fosEnds.psl
+
+XXX - running - Wed Jul 13 15:08:08 PDT 2011
 
     # FYI: to see all minimum covers:
 grep "^[0-9]" raw.psl \
@@ -12399,13 +12406,14 @@ grep "^[0-9]" raw.psl \
     -tInsert=5000 -minId=0.94 -noBin -min=30000 -max=50000 -slop -short \
 	-long -orphan -mismatch -verbose mapEnds/hg19.fosEnds.psl \
 	/hive/data/outside/fosends.4/endPairs.txt all_fosends hg19.fosEnds
-    #	real    0m6.712s
+    #	real    0m10.042s
     # filter for score over 300
     awk '$5 >= 300' hg19.fosEnds.pairs | sort -k1,1 -k2,2n \
 	> hg19.fosEndPairs.bed
     wc -l hg19.fosEnds.pairs hg19.fosEndPairs.bed
-    #	184223 hg19.fosEnds.pairs
-    #	184108 hg19.fosEndPairs.bed
+    #	230791 hg19.fosEnds.pairs
+    #	230583 hg19.fosEndPairs.bed
+
     awk '$5 >= 300' hg19.fosEnds.slop hg19.fosEnds.short hg19.fosEnds.long \
 	hg19.fosEnds.mismatch hg19.fosEnds.orphan | sort -k1,1 -k2,2n \
 	> hg19.fosEndPairsBad.bed
@@ -12427,8 +12435,18 @@ grep "^[0-9]" raw.psl \
     sed -e "s/all_fosends/hg19AllFosEnds/" hg19.fosEndPairs.bed \
 	| sort -u | hgLoadBed -notItemRgb hg19 hg19FosEndPairs stdin \
 	    -sqlTable=hg19FosEndPairs.sql 
-    # Loaded 184108 elements
-    # this is about half of what was in previous fosEnd tracks
+    # Loaded 229708 elements
+    # why so few compared to before:
+    hgsql -e "select count(*) from fosEndPairs" hg19
+    #	384442
+    wc -l /hive/data/genomes/hg17/bed/fosends/fosEndPairs.bed
+    #	384558 /hive/data/genomes/hg17/bed/fosends/fosEndPairs.bed
+    # looking at one of those pairs that did not map:
+    # G248P800001RA7 G248P800001FA7
+    # compared to /hive/data/outside/fosends.2/fosEnds.fa
+    # and /hive/data/outside/fosends.3/fosEnds.fa
+    # the end sequences in those old files is shorter than the new ones
+    # those shorter sequences more easily pass the minCover filter
 
     # note - this track isn't pushed to RR, just used for assembly QA
     sed -e "s/fosEndPairsBad/hg19FosEndPairsBad/" \
@@ -12437,10 +12455,20 @@ grep "^[0-9]" raw.psl \
     sed -e "s/all_fosends/hg19AllFosEnds/" hg19.fosEndPairsBad.bed \
 	| sort -u | hgLoadBed -notItemRgb hg19 hg19FosEndPairsBad \
 	    hg19.fosEndPairsBad.bed stdin -sqlTable=hg19FosEndPairsBad.sql
-    #	Loaded 229304 elements of size 11
-    # this is about 10 times more than previous fosEnd tracks
+    #	Loaded 198665 elements of size 11
+    # why do we have so many more ?
+    wc -l /hive/data/genomes/hg17/bed/fosends/fosEndPairsBad.bed
+    #	30830 /hive/data/genomes/hg17/bed/fosends/fosEndPairsBad.bed
+
     time hgLoadPsl hg19 -table=hg19AllFosEnds hg19.fosEnds.load.psl
-    #	real    0m27.288s
+    #	load of hg19AllFosEnds did not go as planned: 1160639 record(s),
+    #	0 row(s) skipped, 229 warning(s) loading psl.tab
+    #	real    0m35.096s
+    #	with some warnings such as:
+# Warning 1264 Out of range value adjusted for column 'qBaseInsert' at row 3053
+# Warning 1264 Out of range value adjusted for column 'qBaseInsert' at row 10569
+# Warning 1264 Out of range value adjusted for column 'qBaseInsert' at row 13642
+# ...
 
 # the sequences are already loaded from the hg18 lift:
     grep "^>" /gbdb/hg19/fosends/fosEnds.fromHg18.fa | sed -e 's/>//' \
@@ -12470,27 +12498,6 @@ grep "^[0-9]" raw.psl \
     time hgLoadSeq hg19 /gbdb/hg19/fosends/hg19FosEndPairs.fa
     #	1615492 sequences
     #	real    1m26.084s
-
-    cd /hive/data/genomes/hg19/bed/fosEndPairs/mapEnds/run/reps
-    time /cluster/home/hiram/bin/x86_64/pslPairs \
-	-tInsert=5000 -minId=0.94 -noBin -min=30000 -max=50000 -slop -short \
-	-long -orphan -mismatch -verbose repsSort.psl \
-	/hive/data/outside/fosends.4/endPairs.txt hg19AllFosEnds hg19.fosEnds
-    #	real    0m44.577s
-    # filter for score over 300
-    awk '$5 >= 300' hg19.fosEnds.pairs | sort -k1,1 -k2,2n \
-	> hg19.fosEndPairs.bed
-    wc -l hg19.fosEnds.pairs hg19.fosEndPairs.bed
-    #	184342 hg19.fosEnds.pairs
-    #	184227 hg19.fosEndPairs.bed
-
-    sed -e "s/_T0//; s/_T1//; s/_T2//;" repsSort.psl > cleanEndIds.psl
-    time /cluster/home/hiram/bin/x86_64/pslPairs \
-	-tInsert=5000 -minId=0.94 -noBin -min=30000 -max=50000 -slop -short \
-	-long -orphan -mismatch -verbose cleanEndIds.psl \
-	/hive/data/outside/fosends.4/endPairs.txt hg19AllFosEnds \
-	hg19.cleanEnd.fosEnds
-## empty results ?
 
 ##############################################################################
 # hg18 <-> hg19 difference tracks (DONE - 2010-09-03 - Hiram)
@@ -16295,6 +16302,26 @@ hgsql hg19 -e "delete from omimLocation where name='${1}'"
     hgBbiDbLink hg19 bamAllNumtSSorted /gbdb/hg19/NumtS/allNumtS.sorted.bam 
 
     # setup trackDb for hg19
+
+############################################################################
+# Add Gene name search to Ensembl gene track (DONE - 2011-07-22 - Hiram)
+    cd /hive/data/genomes/hg19/bed/ensGene.62/process
+    cut -f1,9 infoOut.txt | grep -v "^#" | sort > ensemblToGeneName.tab
+    NL=`awk '{print length($1)}' ensemblToGeneName.tab | sort -rn | head -1`
+    VL=`awk '{print length($2)}' ensemblToGeneName.tab | sort -rn | head -1`
+    sed -e "s/ knownTo / ensemblToGeneName /; s/known gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name($NL)/; s/value(12)/value($VL)/" \
+	$HOME/kent/src/hg/lib/knownTo.sql > ensemblToGeneName.sql
+
+    hgLoadSqlTab hg19 ensemblToGeneName ensemblToGeneName.sql ensemblToGeneName.tab
+
+    # add this search specification to trackDb.ra
+searchName ensGeneName
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+xrefTable ensemblToGeneName
+xrefQuery select name,value from %s where value like '%%%s%%'
+searchPriority 50
 
 ############################################################################
 
