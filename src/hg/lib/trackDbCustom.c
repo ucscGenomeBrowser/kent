@@ -858,7 +858,7 @@ void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value)
 {
 if(tdb->extras == NULL)
     {
-    tdb->extras = hashNew(0);
+    tdb->extras = hashNew(7);
     hashAdd(tdb->extras, name, value);
     }
 else
