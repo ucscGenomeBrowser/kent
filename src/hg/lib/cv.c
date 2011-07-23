@@ -113,7 +113,7 @@ else if (sameString(term,CV_TERM_ANTIBODY))
     term = CV_UGLY_TERM_ANTIBODY;
 
 if (cvHashOfHashOfHashes == NULL)
-    cvHashOfHashOfHashes = hashNew(0);
+    cvHashOfHashOfHashes = hashNew(4);
 
 struct hash *cvHashForTerm = hashFindVal(cvHashOfHashOfHashes,(char *)term);
 // Establish cv hash of Term Types if it doesn't already exist

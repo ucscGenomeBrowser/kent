@@ -1,0 +1,2212 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release2 of the "ENCODE wgEncodeUwHistone"
+The composite track is wgEncodeUwHistone
+# WARNINGS #################################################
+1 - could not find None.bai file for wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam
+2 - table wgEncodeUwHistoneHpfH3k4me3StdAlnRep2 does not exist, from filetype bam
+3 - could not find None.bai file for wgEncodeUwHistoneHl60InputStdAlnRep1.bam
+4 - table wgEncodeUwHistoneHl60InputStdAlnRep1 does not exist, from filetype bam
+5 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam
+6 - table wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2 does not exist, from filetype bam
+7 - could not find None.bai file for wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam
+8 - table wgEncodeUwHistoneBjH3k27me3StdAlnRep1 does not exist, from filetype bam
+9 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam
+10 - table wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2 does not exist, from filetype bam
+11 - could not find None.bai file for wgEncodeUwHistoneAg10803InputStdAlnRep1.bam
+12 - table wgEncodeUwHistoneAg10803InputStdAlnRep1 does not exist, from filetype bam
+13 - could not find None.bai file for wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam
+14 - table wgEncodeUwHistoneHaspH3k4me3StdAlnRep2 does not exist, from filetype bam
+15 - could not find None.bai file for wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam
+16 - table wgEncodeUwHistoneHreH3k27me3StdAlnRep1 does not exist, from filetype bam
+17 - could not find None.bai file for wgEncodeUwHistoneHbmecInputStdAlnRep1.bam
+18 - table wgEncodeUwHistoneHbmecInputStdAlnRep1 does not exist, from filetype bam
+19 - could not find None.bai file for wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
+20 - table wgEncodeUwHistoneSknshraInputStdAlnRep1 does not exist, from filetype bam
+21 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam
+22 - table wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2 does not exist, from filetype bam
+23 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam
+24 - table wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1 does not exist, from filetype bam
+25 - could not find None.bai file for wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam
+26 - table wgEncodeUwHistoneHaspH3k4me3StdAlnRep1 does not exist, from filetype bam
+27 - could not find None.bai file for wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam
+28 - table wgEncodeUwHistoneH7esH3k36me3StdAlnRep1 does not exist, from filetype bam
+29 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam
+30 - table wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2 does not exist, from filetype bam
+31 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam
+32 - table wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2 does not exist, from filetype bam
+33 - could not find None.bai file for wgEncodeUwHistoneHmfInputStdAlnRep1.bam
+34 - table wgEncodeUwHistoneHmfInputStdAlnRep1 does not exist, from filetype bam
+35 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam
+36 - table wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1 does not exist, from filetype bam
+37 - could not find None.bai file for wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam
+38 - table wgEncodeUwHistoneNb4H3k4me3StdAlnRep1 does not exist, from filetype bam
+39 - could not find None.bai file for wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam
+40 - table wgEncodeUwHistoneH7esH3k4me3StdAlnRep1 does not exist, from filetype bam
+41 - could not find None.bai file for wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam
+42 - table wgEncodeUwHistoneSaecH3k27me3StdAlnRep1 does not exist, from filetype bam
+43 - could not find None.bai file for wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam
+44 - table wgEncodeUwHistoneHmecH3k4me3StdAlnRep2 does not exist, from filetype bam
+45 - could not find None.bai file for wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
+46 - table wgEncodeUwHistoneK562H3k27me3StdAlnRep2 does not exist, from filetype bam
+47 - could not find None.bai file for wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
+48 - table wgEncodeUwHistoneHuvecInputStdAlnRep1 does not exist, from filetype bam
+49 - could not find None.bai file for wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam
+50 - table wgEncodeUwHistoneK562H3k36me3StdAlnRep1 does not exist, from filetype bam
+51 - could not find None.bai file for wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam
+52 - table wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2 does not exist, from filetype bam
+53 - could not find None.bai file for wgEncodeUwHistoneHpfInputStdAlnRep1.bam
+54 - table wgEncodeUwHistoneHpfInputStdAlnRep1 does not exist, from filetype bam
+55 - could not find None.bai file for wgEncodeUwHistoneHpafInputStdAlnRep1.bam
+56 - table wgEncodeUwHistoneHpafInputStdAlnRep1 does not exist, from filetype bam
+57 - could not find None.bai file for wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam
+58 - table wgEncodeUwHistoneHreH3k27me3StdAlnRep2 does not exist, from filetype bam
+59 - could not find None.bai file for wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam
+60 - table wgEncodeUwHistoneSaecH3k4me3StdAlnRep2 does not exist, from filetype bam
+61 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam
+62 - table wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2 does not exist, from filetype bam
+63 - could not find None.bai file for wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam
+64 - table wgEncodeUwHistoneNhekH3k4me3StdAlnRep1 does not exist, from filetype bam
+65 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam
+66 - table wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2 does not exist, from filetype bam
+67 - could not find None.bai file for wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam
+68 - table wgEncodeUwHistoneHcfH3k4me3StdAlnRep1 does not exist, from filetype bam
+69 - could not find None.bai file for wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam
+70 - table wgEncodeUwHistoneHpfH3k4me3StdAlnRep1 does not exist, from filetype bam
+71 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam
+72 - table wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1 does not exist, from filetype bam
+73 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam
+74 - table wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2 does not exist, from filetype bam
+75 - could not find None.bai file for wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam
+76 - table wgEncodeUwHistoneHek293H3k4me3StdAlnRep1 does not exist, from filetype bam
+77 - could not find None.bai file for wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam
+78 - table wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1 does not exist, from filetype bam
+79 - could not find None.bai file for wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam
+80 - table wgEncodeUwHistoneK562H3k4me3StdAlnRep1 does not exist, from filetype bam
+81 - could not find None.bai file for wgEncodeUwHistoneHmecInputStdAlnRep1.bam
+82 - table wgEncodeUwHistoneHmecInputStdAlnRep1 does not exist, from filetype bam
+83 - could not find None.bai file for wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam
+84 - table wgEncodeUwHistoneSaecH3k36me3StdAlnRep1 does not exist, from filetype bam
+85 - could not find None.bai file for wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam
+86 - table wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1 does not exist, from filetype bam
+87 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam
+88 - table wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1 does not exist, from filetype bam
+89 - could not find None.bai file for wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam
+90 - table wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2 does not exist, from filetype bam
+91 - could not find None.bai file for wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam
+92 - table wgEncodeUwHistoneK562H3k36me3StdAlnRep2 does not exist, from filetype bam
+93 - could not find None.bai file for wgEncodeUwHistoneHcmInputStdAlnRep1.bam
+94 - table wgEncodeUwHistoneHcmInputStdAlnRep1 does not exist, from filetype bam
+95 - could not find None.bai file for wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam
+96 - table wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2 does not exist, from filetype bam
+97 - could not find None.bai file for wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam
+98 - table wgEncodeUwHistoneHl60H3k4me3StdAlnRep1 does not exist, from filetype bam
+99 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam
+100 - table wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1 does not exist, from filetype bam
+101 - could not find None.bai file for wgEncodeUwHistoneAg04450InputStdAlnRep1.bam
+102 - table wgEncodeUwHistoneAg04450InputStdAlnRep1 does not exist, from filetype bam
+103 - could not find None.bai file for wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam
+104 - table wgEncodeUwHistoneBjH3k36me3StdAlnRep1 does not exist, from filetype bam
+105 - could not find None.bai file for wgEncodeUwHistoneHrpeInputStdAlnRep1.bam
+106 - table wgEncodeUwHistoneHrpeInputStdAlnRep1 does not exist, from filetype bam
+107 - could not find None.bai file for wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam
+108 - table wgEncodeUwHistoneH7esH3k4me3StdAlnRep2 does not exist, from filetype bam
+109 - could not find None.bai file for wgEncodeUwHistoneHvmfInputStdAlnRep1.bam
+110 - table wgEncodeUwHistoneHvmfInputStdAlnRep1 does not exist, from filetype bam
+111 - could not find None.bai file for wgEncodeUwHistoneSaecInputStdAlnRep1.bam
+112 - table wgEncodeUwHistoneSaecInputStdAlnRep1 does not exist, from filetype bam
+113 - could not find None.bai file for wgEncodeUwHistoneHcfInputStdAlnRep1.bam
+114 - table wgEncodeUwHistoneHcfInputStdAlnRep1 does not exist, from filetype bam
+115 - could not find None.bai file for wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam
+116 - table wgEncodeUwHistoneHmecH3k4me3StdAlnRep1 does not exist, from filetype bam
+117 - could not find None.bai file for wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam
+118 - table wgEncodeUwHistoneAoafH3k4me3StdAlnRep1 does not exist, from filetype bam
+119 - could not find None.bai file for wgEncodeUwHistoneAg04449InputStdAlnRep1.bam
+120 - table wgEncodeUwHistoneAg04449InputStdAlnRep1 does not exist, from filetype bam
+121 - could not find None.bai file for wgEncodeUwHistoneHeeInputStdAlnRep1.bam
+122 - table wgEncodeUwHistoneHeeInputStdAlnRep1 does not exist, from filetype bam
+123 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam
+124 - table wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2 does not exist, from filetype bam
+125 - could not find None.bai file for wgEncodeUwHistoneHreInputStdAlnRep1.bam
+126 - table wgEncodeUwHistoneHreInputStdAlnRep1 does not exist, from filetype bam
+127 - could not find None.bai file for wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam
+128 - table wgEncodeUwHistoneBjH3k4me3StdAlnRep2 does not exist, from filetype bam
+129 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam
+130 - table wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2 does not exist, from filetype bam
+131 - could not find None.bai file for wgEncodeUwHistoneJurkatInputStdAlnRep1.bam
+132 - table wgEncodeUwHistoneJurkatInputStdAlnRep1 does not exist, from filetype bam
+133 - could not find None.bai file for wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam
+134 - table wgEncodeUwHistoneHcmH3k4me3StdAlnRep2 does not exist, from filetype bam
+135 - could not find None.bai file for wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
+136 - table wgEncodeUwHistoneHepg2InputStdAlnRep1 does not exist, from filetype bam
+137 - could not find None.bai file for wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
+138 - table wgEncodeUwHistoneK562H3k27me3StdAlnRep1 does not exist, from filetype bam
+139 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam
+140 - table wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1 does not exist, from filetype bam
+141 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam
+142 - table wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1 does not exist, from filetype bam
+143 - could not find None.bai file for wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam
+144 - table wgEncodeUwHistoneSaecH3k36me3StdAlnRep2 does not exist, from filetype bam
+145 - could not find None.bai file for wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam
+146 - table wgEncodeUwHistoneNhekH3k4me3StdAlnRep2 does not exist, from filetype bam
+147 - could not find None.bai file for wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam
+148 - table wgEncodeUwHistoneHeeH3k4me3StdAlnRep2 does not exist, from filetype bam
+149 - could not find None.bai file for wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam
+150 - table wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2 does not exist, from filetype bam
+151 - could not find None.bai file for wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam
+152 - table wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1 does not exist, from filetype bam
+153 - could not find None.bai file for wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam
+154 - table wgEncodeUwHistoneBjH3k36me3StdAlnRep2 does not exist, from filetype bam
+155 - could not find None.bai file for wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam
+156 - table wgEncodeUwHistoneH7esH3k27me3StdAlnRep2 does not exist, from filetype bam
+157 - could not find None.bai file for wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
+158 - table wgEncodeUwHistoneCaco2InputStdAlnRep1 does not exist, from filetype bam
+159 - could not find None.bai file for wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam
+160 - table wgEncodeUwHistoneHct116H3k4me3StdAlnRep1 does not exist, from filetype bam
+161 - could not find None.bai file for wgEncodeUwHistoneHct116InputStdAlnRep1.bam
+162 - table wgEncodeUwHistoneHct116InputStdAlnRep1 does not exist, from filetype bam
+163 - could not find None.bai file for wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam
+164 - table wgEncodeUwHistoneHpafH3k4me3StdAlnRep2 does not exist, from filetype bam
+165 - could not find None.bai file for wgEncodeUwHistoneHek293InputStdAlnRep1.bam
+166 - table wgEncodeUwHistoneHek293InputStdAlnRep1 does not exist, from filetype bam
+167 - could not find None.bai file for wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam
+168 - table wgEncodeUwHistoneH7esH3k27me3StdAlnRep1 does not exist, from filetype bam
+169 - could not find None.bai file for wgEncodeUwHistoneAoafInputStdAlnRep1.bam
+170 - table wgEncodeUwHistoneAoafInputStdAlnRep1 does not exist, from filetype bam
+171 - could not find None.bai file for wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam
+172 - table wgEncodeUwHistoneHek293H3k4me3StdAlnRep2 does not exist, from filetype bam
+173 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam
+174 - table wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1 does not exist, from filetype bam
+175 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam
+176 - table wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2 does not exist, from filetype bam
+177 - could not find None.bai file for wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam
+178 - table wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2 does not exist, from filetype bam
+179 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam
+180 - table wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1 does not exist, from filetype bam
+181 - could not find None.bai file for wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam
+182 - table wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2 does not exist, from filetype bam
+183 - could not find None.bai file for wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam
+184 - table wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1 does not exist, from filetype bam
+185 - could not find None.bai file for wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam
+186 - table wgEncodeUwHistoneBjH3k4me3StdAlnRep1 does not exist, from filetype bam
+187 - could not find None.bai file for wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam
+188 - table wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1 does not exist, from filetype bam
+189 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam
+190 - table wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1 does not exist, from filetype bam
+191 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam
+192 - table wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1 does not exist, from filetype bam
+193 - could not find None.bai file for wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam
+194 - table wgEncodeUwHistoneHcfaaInputStdAlnRep1 does not exist, from filetype bam
+195 - could not find None.bai file for wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam
+196 - table wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2 does not exist, from filetype bam
+197 - could not find None.bai file for wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam
+198 - table wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1 does not exist, from filetype bam
+199 - could not find None.bai file for wgEncodeUwHistoneMcf7InputStdAlnRep1.bam
+200 - table wgEncodeUwHistoneMcf7InputStdAlnRep1 does not exist, from filetype bam
+201 - could not find None.bai file for wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam
+202 - table wgEncodeUwHistoneNhekH3k27me3StdAlnRep1 does not exist, from filetype bam
+203 - could not find None.bai file for wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam
+204 - table wgEncodeUwHistoneK562H3k4me3StdAlnRep2 does not exist, from filetype bam
+205 - could not find None.bai file for wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam
+206 - table wgEncodeUwHistoneAoafH3k4me3StdAlnRep2 does not exist, from filetype bam
+207 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam
+208 - table wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2 does not exist, from filetype bam
+209 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam
+210 - table wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2 does not exist, from filetype bam
+211 - could not find None.bai file for wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam
+212 - table wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1 does not exist, from filetype bam
+213 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam
+214 - table wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2 does not exist, from filetype bam
+215 - could not find None.bai file for wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam
+216 - table wgEncodeUwHistoneNhekH3k27me3StdAlnRep2 does not exist, from filetype bam
+217 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam
+218 - table wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2 does not exist, from filetype bam
+219 - could not find None.bai file for wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam
+220 - table wgEncodeUwHistoneHeeH3k4me3StdAlnRep1 does not exist, from filetype bam
+221 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam
+222 - table wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2 does not exist, from filetype bam
+223 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam
+224 - table wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1 does not exist, from filetype bam
+225 - could not find None.bai file for wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam
+226 - table wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1 does not exist, from filetype bam
+227 - could not find None.bai file for wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam
+228 - table wgEncodeUwHistoneSaecH3k27me3StdAlnRep2 does not exist, from filetype bam
+229 - could not find None.bai file for wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam
+230 - table wgEncodeUwHistoneHreH3k36me3StdAlnRep2 does not exist, from filetype bam
+231 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam
+232 - table wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1 does not exist, from filetype bam
+233 - could not find None.bai file for wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam
+234 - table wgEncodeUwHistoneHreH3k4me3StdAlnRep1 does not exist, from filetype bam
+235 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam
+236 - table wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1 does not exist, from filetype bam
+237 - could not find None.bai file for wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam
+238 - table wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2 does not exist, from filetype bam
+239 - could not find None.bai file for wgEncodeUwHistoneHaspInputStdAlnRep1.bam
+240 - table wgEncodeUwHistoneHaspInputStdAlnRep1 does not exist, from filetype bam
+241 - could not find None.bai file for wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
+242 - table wgEncodeUwHistoneHelas3InputStdAlnRep1 does not exist, from filetype bam
+243 - could not find None.bai file for wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam
+244 - table wgEncodeUwHistoneHpafH3k4me3StdAlnRep1 does not exist, from filetype bam
+245 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam
+246 - table wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2 does not exist, from filetype bam
+247 - could not find None.bai file for wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam
+248 - table wgEncodeUwHistoneNhekH3k36me3StdAlnRep1 does not exist, from filetype bam
+249 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam
+250 - table wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1 does not exist, from filetype bam
+251 - could not find None.bai file for wgEncodeUwHistoneNb4InputStdAlnRep1.bam
+252 - table wgEncodeUwHistoneNb4InputStdAlnRep1 does not exist, from filetype bam
+253 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam
+254 - table wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2 does not exist, from filetype bam
+255 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam
+256 - table wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1 does not exist, from filetype bam
+257 - could not find None.bai file for wgEncodeUwHistoneNhekInputStdAlnRep1.bam
+258 - table wgEncodeUwHistoneNhekInputStdAlnRep1 does not exist, from filetype bam
+259 - could not find None.bai file for wgEncodeUwHistoneAg09309InputStdAlnRep1.bam
+260 - table wgEncodeUwHistoneAg09309InputStdAlnRep1 does not exist, from filetype bam
+261 - could not find None.bai file for wgEncodeUwHistoneAg09319InputStdAlnRep1.bam
+262 - table wgEncodeUwHistoneAg09319InputStdAlnRep1 does not exist, from filetype bam
+263 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam
+264 - table wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2 does not exist, from filetype bam
+265 - could not find None.bai file for wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam
+266 - table wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2 does not exist, from filetype bam
+267 - could not find None.bai file for wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam
+268 - table wgEncodeUwHistoneNhekH3k36me3StdAlnRep2 does not exist, from filetype bam
+269 - could not find None.bai file for wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
+270 - table wgEncodeUwHistoneGm12878InputStdAlnRep1 does not exist, from filetype bam
+271 - could not find None.bai file for wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam
+272 - table wgEncodeUwHistoneHcmH3k4me3StdAlnRep1 does not exist, from filetype bam
+273 - could not find None.bai file for wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam
+274 - table wgEncodeUwHistoneHcfH3k4me3StdAlnRep2 does not exist, from filetype bam
+275 - could not find None.bai file for wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
+276 - table wgEncodeUwHistoneGm06990InputStdAlnRep1 does not exist, from filetype bam
+277 - could not find None.bai file for wgEncodeUwHistoneHcpeInputStdAlnRep1.bam
+278 - table wgEncodeUwHistoneHcpeInputStdAlnRep1 does not exist, from filetype bam
+279 - could not find None.bai file for wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam
+280 - table wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2 does not exist, from filetype bam
+281 - could not find None.bai file for wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam
+282 - table wgEncodeUwHistoneHct116H3k4me3StdAlnRep2 does not exist, from filetype bam
+283 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam
+284 - table wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1 does not exist, from filetype bam
+285 - could not find None.bai file for wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam
+286 - table wgEncodeUwHistoneBjH3k27me3StdAlnRep2 does not exist, from filetype bam
+287 - could not find None.bai file for wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam
+288 - table wgEncodeUwHistoneHmfH3k4me3StdAlnRep1 does not exist, from filetype bam
+289 - could not find None.bai file for wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam
+290 - table wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2 does not exist, from filetype bam
+291 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam
+292 - table wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1 does not exist, from filetype bam
+293 - could not find None.bai file for wgEncodeUwHistoneH7esInputStdAlnRep1.bam
+294 - table wgEncodeUwHistoneH7esInputStdAlnRep1 does not exist, from filetype bam
+295 - could not find None.bai file for wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam
+296 - table wgEncodeUwHistoneHmecH3k27me3StdAlnRep1 does not exist, from filetype bam
+297 - could not find None.bai file for wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam
+298 - table wgEncodeUwHistoneHreH3k36me3StdAlnRep1 does not exist, from filetype bam
+299 - could not find None.bai file for wgEncodeUwHistoneBjInputStdAlnRep1.bam
+300 - table wgEncodeUwHistoneBjInputStdAlnRep1 does not exist, from filetype bam
+301 - could not find None.bai file for wgEncodeUwHistoneK562InputStdAlnRep1.bam
+302 - table wgEncodeUwHistoneK562InputStdAlnRep1 does not exist, from filetype bam
+303 - could not find None.bai file for wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam
+304 - table wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1 does not exist, from filetype bam
+305 - could not find None.bai file for wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam
+306 - table wgEncodeUwHistoneNhdfneoInputStdAlnRep1 does not exist, from filetype bam
+307 - could not find None.bai file for wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam
+308 - table wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1 does not exist, from filetype bam
+309 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam
+310 - table wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2 does not exist, from filetype bam
+311 - could not find None.bai file for wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam
+312 - table wgEncodeUwHistoneH7esH3k36me3StdAlnRep2 does not exist, from filetype bam
+313 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam
+314 - table wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1 does not exist, from filetype bam
+315 - could not find None.bai file for wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam
+316 - table wgEncodeUwHistoneSaecH3k4me3StdAlnRep1 does not exist, from filetype bam
+317 - could not find None.bai file for wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam
+318 - table wgEncodeUwHistoneHreH3k4me3StdAlnRep2 does not exist, from filetype bam
+319 - could not find None.bai file for wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam
+320 - table wgEncodeUwHistoneHmfH3k4me3StdAlnRep2 does not exist, from filetype bam
+321 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam
+322 - table wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1 does not exist, from filetype bam
+323 - could not find None.bai file for wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam
+324 - table wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1 does not exist, from filetype bam
+325 - could not find None.bai file for wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam
+326 - table wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1 does not exist, from filetype bam
+327 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam
+328 - table wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1 does not exist, from filetype bam
+329 - could not find None.bai file for wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam
+330 - table wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1 does not exist, from filetype bam
+331 - could not find None.bai file for wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam
+332 - table wgEncodeUwHistoneHl60H3k4me3StdAlnRep2 does not exist, from filetype bam
+333 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam
+334 - table wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2 does not exist, from filetype bam
+335 - could not find gbdb path in table hg19.wgEncodeUwHistoneLncapH3k04me3StdAlnRep2
+336 - table wgEncodeUwHistoneLncapH3k04me3StdAlnRep2 does not exist, from filetype bam
+337 - could not find gbdb path in table hg19.wgEncodeUwHistoneLncapH3k04me3StdAlnRep1
+338 - table wgEncodeUwHistoneLncapH3k04me3StdAlnRep1 does not exist, from filetype bam
+339 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38H3k04me3StdAlnRep1
+340 - table wgEncodeUwHistoneWi38H3k04me3StdAlnRep1 does not exist, from filetype bam
+341 - could not find gbdb path in table hg19.wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1
+342 - table wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1 does not exist, from filetype bam
+343 - could not find gbdb path in table hg19.wgEncodeUwHistoneHffmycInputStdAlnRep1
+344 - table wgEncodeUwHistoneHffmycInputStdAlnRep1 does not exist, from filetype bam
+345 - could not find gbdb path in table hg19.wgEncodeUwHistoneNhlfInputStdAlnRep1
+346 - table wgEncodeUwHistoneNhlfInputStdAlnRep1 does not exist, from filetype bam
+347 - could not find gbdb path in table hg19.wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1
+348 - table wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1 does not exist, from filetype bam
+349 - could not find gbdb path in table hg19.wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2
+350 - table wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2 does not exist, from filetype bam
+351 - could not find gbdb path in table hg19.wgEncodeUwHistoneA549InputStdAlnRep1
+352 - table wgEncodeUwHistoneA549InputStdAlnRep1 does not exist, from filetype bam
+353 - could not find gbdb path in table hg19.wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2
+354 - table wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2 does not exist, from filetype bam
+355 - could not find gbdb path in table hg19.wgEncodeUwHistoneHacH3k04me3StdAlnRep2
+356 - table wgEncodeUwHistoneHacH3k04me3StdAlnRep2 does not exist, from filetype bam
+357 - could not find gbdb path in table hg19.wgEncodeUwHistonePanc1InputStdAlnRep1
+358 - table wgEncodeUwHistonePanc1InputStdAlnRep1 does not exist, from filetype bam
+359 - could not find gbdb path in table hg19.wgEncodeUwHistoneHacH3k04me3StdAlnRep1
+360 - table wgEncodeUwHistoneHacH3k04me3StdAlnRep1 does not exist, from filetype bam
+361 - could not find gbdb path in table hg19.wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1
+362 - table wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1 does not exist, from filetype bam
+363 - could not find gbdb path in table hg19.wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1
+364 - table wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1 does not exist, from filetype bam
+365 - could not find gbdb path in table hg19.wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2
+366 - table wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2 does not exist, from filetype bam
+367 - could not find gbdb path in table hg19.wgEncodeUwHistoneLncapInputStdAlnRep1
+368 - table wgEncodeUwHistoneLncapInputStdAlnRep1 does not exist, from filetype bam
+369 - could not find gbdb path in table hg19.wgEncodeUwHistoneA549H3k04me3StdAlnRep1
+370 - table wgEncodeUwHistoneA549H3k04me3StdAlnRep1 does not exist, from filetype bam
+371 - could not find gbdb path in table hg19.wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2
+372 - table wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2 does not exist, from filetype bam
+373 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38InputStdAlnRep1
+374 - table wgEncodeUwHistoneWi38InputStdAlnRep1 does not exist, from filetype bam
+375 - could not find gbdb path in table hg19.wgEncodeUwHistonePanc1H3k04me3StdAlnRep1
+376 - table wgEncodeUwHistonePanc1H3k04me3StdAlnRep1 does not exist, from filetype bam
+377 - could not find gbdb path in table hg19.wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2
+378 - table wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2 does not exist, from filetype bam
+379 - could not find gbdb path in table hg19.wgEncodeUwHistonePanc1H3k04me3StdAlnRep2
+380 - table wgEncodeUwHistonePanc1H3k04me3StdAlnRep2 does not exist, from filetype bam
+381 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38H3k04me3StdAlnRep2
+382 - table wgEncodeUwHistoneWi38H3k04me3StdAlnRep2 does not exist, from filetype bam
+383 - could not find gbdb path in table hg19.wgEncodeUwHistoneSknmcInputStdAlnRep1
+384 - table wgEncodeUwHistoneSknmcInputStdAlnRep1 does not exist, from filetype bam
+385 - could not find gbdb path in table hg19.wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1
+386 - table wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1 does not exist, from filetype bam
+387 - could not find gbdb path in table hg19.wgEncodeUwHistoneBe2cInputStdAlnRep1
+388 - table wgEncodeUwHistoneBe2cInputStdAlnRep1 does not exist, from filetype bam
+389 - could not find gbdb path in table hg19.wgEncodeUwHistoneA549H3k04me3StdAlnRep2
+390 - table wgEncodeUwHistoneA549H3k04me3StdAlnRep2 does not exist, from filetype bam
+############################################################
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release2 (new+untouched):
+    Tables: 491
+    Files: 1079
+    Gbdbs: 195
+
+A) Untouched Tables (423):
+wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneAg04449H3k4me3StdPkRep1
+wgEncodeUwHistoneAg04449H3k4me3StdPkRep2
+wgEncodeUwHistoneAg04449H3k4me3StdRawRep1
+wgEncodeUwHistoneAg04449H3k4me3StdRawRep2
+wgEncodeUwHistoneAg04449InputStdRawRep1
+wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneAg04450H3k4me3StdPkRep1
+wgEncodeUwHistoneAg04450H3k4me3StdPkRep2
+wgEncodeUwHistoneAg04450H3k4me3StdRawRep1
+wgEncodeUwHistoneAg04450H3k4me3StdRawRep2
+wgEncodeUwHistoneAg04450InputStdRawRep1
+wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneAg09309H3k4me3StdPkRep1
+wgEncodeUwHistoneAg09309H3k4me3StdPkRep2
+wgEncodeUwHistoneAg09309H3k4me3StdRawRep1
+wgEncodeUwHistoneAg09309H3k4me3StdRawRep2
+wgEncodeUwHistoneAg09309InputStdRawRep1
+wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneAg09319H3k4me3StdPkRep1
+wgEncodeUwHistoneAg09319H3k4me3StdPkRep2
+wgEncodeUwHistoneAg09319H3k4me3StdRawRep1
+wgEncodeUwHistoneAg09319H3k4me3StdRawRep2
+wgEncodeUwHistoneAg09319InputStdRawRep1
+wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneAg10803H3k4me3StdPkRep1
+wgEncodeUwHistoneAg10803H3k4me3StdPkRep2
+wgEncodeUwHistoneAg10803H3k4me3StdRawRep1
+wgEncodeUwHistoneAg10803H3k4me3StdRawRep2
+wgEncodeUwHistoneAg10803InputStdRawRep1
+wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneAoafH3k4me3StdPkRep1
+wgEncodeUwHistoneAoafH3k4me3StdPkRep2
+wgEncodeUwHistoneAoafH3k4me3StdRawRep1
+wgEncodeUwHistoneAoafH3k4me3StdRawRep2
+wgEncodeUwHistoneAoafInputStdRawRep1
+wgEncodeUwHistoneBjH3k27me3StdHotspotsRep1
+wgEncodeUwHistoneBjH3k27me3StdHotspotsRep2
+wgEncodeUwHistoneBjH3k27me3StdPkRep1
+wgEncodeUwHistoneBjH3k27me3StdPkRep2
+wgEncodeUwHistoneBjH3k27me3StdRawRep1
+wgEncodeUwHistoneBjH3k27me3StdRawRep2
+wgEncodeUwHistoneBjH3k36me3StdHotspotsRep1
+wgEncodeUwHistoneBjH3k36me3StdHotspotsRep2
+wgEncodeUwHistoneBjH3k36me3StdPkRep1
+wgEncodeUwHistoneBjH3k36me3StdPkRep2
+wgEncodeUwHistoneBjH3k36me3StdRawRep1
+wgEncodeUwHistoneBjH3k36me3StdRawRep2
+wgEncodeUwHistoneBjH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneBjH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneBjH3k4me3StdPkRep1
+wgEncodeUwHistoneBjH3k4me3StdPkRep2
+wgEncodeUwHistoneBjH3k4me3StdRawRep1
+wgEncodeUwHistoneBjH3k4me3StdRawRep2
+wgEncodeUwHistoneBjInputStdRawRep1
+wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep1
+wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep2
+wgEncodeUwHistoneCaco2H3k27me3StdPkRep1
+wgEncodeUwHistoneCaco2H3k27me3StdPkRep2
+wgEncodeUwHistoneCaco2H3k27me3StdRawRep1
+wgEncodeUwHistoneCaco2H3k27me3StdRawRep2
+wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep1
+wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep2
+wgEncodeUwHistoneCaco2H3k36me3StdPkRep1
+wgEncodeUwHistoneCaco2H3k36me3StdPkRep2
+wgEncodeUwHistoneCaco2H3k36me3StdRawRep1
+wgEncodeUwHistoneCaco2H3k36me3StdRawRep2
+wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneCaco2H3k4me3StdPkRep1
+wgEncodeUwHistoneCaco2H3k4me3StdPkRep2
+wgEncodeUwHistoneCaco2H3k4me3StdRawRep1
+wgEncodeUwHistoneCaco2H3k4me3StdRawRep2
+wgEncodeUwHistoneCaco2InputStdRawRep1
+wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep1
+wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep2
+wgEncodeUwHistoneGm06990H3k27me3StdPkRep1
+wgEncodeUwHistoneGm06990H3k27me3StdPkRep2
+wgEncodeUwHistoneGm06990H3k27me3StdRawRep1
+wgEncodeUwHistoneGm06990H3k27me3StdRawRep2
+wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep1
+wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep2
+wgEncodeUwHistoneGm06990H3k36me3StdPkRep1
+wgEncodeUwHistoneGm06990H3k36me3StdPkRep2
+wgEncodeUwHistoneGm06990H3k36me3StdRawRep1
+wgEncodeUwHistoneGm06990H3k36me3StdRawRep2
+wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneGm06990H3k4me3StdPkRep1
+wgEncodeUwHistoneGm06990H3k4me3StdPkRep2
+wgEncodeUwHistoneGm06990H3k4me3StdRawRep1
+wgEncodeUwHistoneGm06990H3k4me3StdRawRep2
+wgEncodeUwHistoneGm06990InputStdRawRep1
+wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep1
+wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep2
+wgEncodeUwHistoneGm12878H3k27me3StdPkRep1
+wgEncodeUwHistoneGm12878H3k27me3StdPkRep2
+wgEncodeUwHistoneGm12878H3k27me3StdRawRep1
+wgEncodeUwHistoneGm12878H3k27me3StdRawRep2
+wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep1
+wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep2
+wgEncodeUwHistoneGm12878H3k36me3StdPkRep1
+wgEncodeUwHistoneGm12878H3k36me3StdPkRep2
+wgEncodeUwHistoneGm12878H3k36me3StdRawRep1
+wgEncodeUwHistoneGm12878H3k36me3StdRawRep2
+wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneGm12878H3k4me3StdPkRep1
+wgEncodeUwHistoneGm12878H3k4me3StdPkRep2
+wgEncodeUwHistoneGm12878H3k4me3StdRawRep1
+wgEncodeUwHistoneGm12878H3k4me3StdRawRep2
+wgEncodeUwHistoneGm12878InputStdRawRep1
+wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep1
+wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep2
+wgEncodeUwHistoneH7esH3k27me3StdPkRep1
+wgEncodeUwHistoneH7esH3k27me3StdPkRep2
+wgEncodeUwHistoneH7esH3k27me3StdRawRep1
+wgEncodeUwHistoneH7esH3k27me3StdRawRep2
+wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep1
+wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep2
+wgEncodeUwHistoneH7esH3k36me3StdPkRep1
+wgEncodeUwHistoneH7esH3k36me3StdPkRep2
+wgEncodeUwHistoneH7esH3k36me3StdRawRep1
+wgEncodeUwHistoneH7esH3k36me3StdRawRep2
+wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneH7esH3k4me3StdPkRep1
+wgEncodeUwHistoneH7esH3k4me3StdPkRep2
+wgEncodeUwHistoneH7esH3k4me3StdRawRep1
+wgEncodeUwHistoneH7esH3k4me3StdRawRep2
+wgEncodeUwHistoneH7esInputStdRawRep1
+wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHaspH3k4me3StdPkRep1
+wgEncodeUwHistoneHaspH3k4me3StdPkRep2
+wgEncodeUwHistoneHaspH3k4me3StdRawRep1
+wgEncodeUwHistoneHaspH3k4me3StdRawRep2
+wgEncodeUwHistoneHaspInputStdRawRep1
+wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHbmecH3k4me3StdPkRep1
+wgEncodeUwHistoneHbmecH3k4me3StdPkRep2
+wgEncodeUwHistoneHbmecH3k4me3StdRawRep1
+wgEncodeUwHistoneHbmecH3k4me3StdRawRep2
+wgEncodeUwHistoneHbmecInputStdRawRep1
+wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHcfH3k4me3StdPkRep1
+wgEncodeUwHistoneHcfH3k4me3StdPkRep2
+wgEncodeUwHistoneHcfH3k4me3StdRawRep1
+wgEncodeUwHistoneHcfH3k4me3StdRawRep2
+wgEncodeUwHistoneHcfInputStdRawRep1
+wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1
+wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1
+wgEncodeUwHistoneHcfaaInputStdRawRep1
+wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHcmH3k4me3StdPkRep1
+wgEncodeUwHistoneHcmH3k4me3StdPkRep2
+wgEncodeUwHistoneHcmH3k4me3StdRawRep1
+wgEncodeUwHistoneHcmH3k4me3StdRawRep2
+wgEncodeUwHistoneHcmInputStdRawRep1
+wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHcpeH3k4me3StdPkRep1
+wgEncodeUwHistoneHcpeH3k4me3StdPkRep2
+wgEncodeUwHistoneHcpeH3k4me3StdRawRep1
+wgEncodeUwHistoneHcpeH3k4me3StdRawRep2
+wgEncodeUwHistoneHcpeInputStdRawRep1
+wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHct116H3k4me3StdPkRep1
+wgEncodeUwHistoneHct116H3k4me3StdPkRep2
+wgEncodeUwHistoneHct116H3k4me3StdRawRep1
+wgEncodeUwHistoneHct116H3k4me3StdRawRep2
+wgEncodeUwHistoneHct116InputStdRawRep1
+wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHeeH3k4me3StdPkRep1
+wgEncodeUwHistoneHeeH3k4me3StdPkRep2
+wgEncodeUwHistoneHeeH3k4me3StdRawRep1
+wgEncodeUwHistoneHeeH3k4me3StdRawRep2
+wgEncodeUwHistoneHeeInputStdRawRep1
+wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHek293H3k4me3StdPkRep1
+wgEncodeUwHistoneHek293H3k4me3StdPkRep2
+wgEncodeUwHistoneHek293H3k4me3StdRawRep1
+wgEncodeUwHistoneHek293H3k4me3StdRawRep2
+wgEncodeUwHistoneHek293InputStdRawRep1
+wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep1
+wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep2
+wgEncodeUwHistoneHelas3H3k27me3StdPkRep1
+wgEncodeUwHistoneHelas3H3k27me3StdPkRep2
+wgEncodeUwHistoneHelas3H3k27me3StdRawRep1
+wgEncodeUwHistoneHelas3H3k27me3StdRawRep2
+wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep1
+wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep2
+wgEncodeUwHistoneHelas3H3k36me3StdPkRep1
+wgEncodeUwHistoneHelas3H3k36me3StdPkRep2
+wgEncodeUwHistoneHelas3H3k36me3StdRawRep1
+wgEncodeUwHistoneHelas3H3k36me3StdRawRep2
+wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHelas3H3k4me3StdPkRep1
+wgEncodeUwHistoneHelas3H3k4me3StdPkRep2
+wgEncodeUwHistoneHelas3H3k4me3StdRawRep1
+wgEncodeUwHistoneHelas3H3k4me3StdRawRep2
+wgEncodeUwHistoneHelas3InputStdRawRep1
+wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep1
+wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep2
+wgEncodeUwHistoneHepg2H3k27me3StdPkRep1
+wgEncodeUwHistoneHepg2H3k27me3StdPkRep2
+wgEncodeUwHistoneHepg2H3k27me3StdRawRep1
+wgEncodeUwHistoneHepg2H3k27me3StdRawRep2
+wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep1
+wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep2
+wgEncodeUwHistoneHepg2H3k36me3StdPkRep1
+wgEncodeUwHistoneHepg2H3k36me3StdPkRep2
+wgEncodeUwHistoneHepg2H3k36me3StdRawRep1
+wgEncodeUwHistoneHepg2H3k36me3StdRawRep2
+wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHepg2H3k4me3StdPkRep1
+wgEncodeUwHistoneHepg2H3k4me3StdPkRep2
+wgEncodeUwHistoneHepg2H3k4me3StdRawRep1
+wgEncodeUwHistoneHepg2H3k4me3StdRawRep2
+wgEncodeUwHistoneHepg2InputStdRawRep1
+wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHl60H3k4me3StdPkRep1
+wgEncodeUwHistoneHl60H3k4me3StdPkRep2
+wgEncodeUwHistoneHl60H3k4me3StdRawRep1
+wgEncodeUwHistoneHl60H3k4me3StdRawRep2
+wgEncodeUwHistoneHl60InputStdRawRep1
+wgEncodeUwHistoneHmecH3k27me3StdHotspotsRep1
+wgEncodeUwHistoneHmecH3k27me3StdPkRep1
+wgEncodeUwHistoneHmecH3k27me3StdRawRep1
+wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHmecH3k4me3StdPkRep1
+wgEncodeUwHistoneHmecH3k4me3StdPkRep2
+wgEncodeUwHistoneHmecH3k4me3StdRawRep1
+wgEncodeUwHistoneHmecH3k4me3StdRawRep2
+wgEncodeUwHistoneHmecInputStdRawRep1
+wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHmfH3k4me3StdPkRep1
+wgEncodeUwHistoneHmfH3k4me3StdPkRep2
+wgEncodeUwHistoneHmfH3k4me3StdRawRep1
+wgEncodeUwHistoneHmfH3k4me3StdRawRep2
+wgEncodeUwHistoneHmfInputStdRawRep1
+wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHpafH3k4me3StdPkRep1
+wgEncodeUwHistoneHpafH3k4me3StdPkRep2
+wgEncodeUwHistoneHpafH3k4me3StdRawRep1
+wgEncodeUwHistoneHpafH3k4me3StdRawRep2
+wgEncodeUwHistoneHpafInputStdRawRep1
+wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHpfH3k4me3StdPkRep1
+wgEncodeUwHistoneHpfH3k4me3StdPkRep2
+wgEncodeUwHistoneHpfH3k4me3StdRawRep1
+wgEncodeUwHistoneHpfH3k4me3StdRawRep2
+wgEncodeUwHistoneHpfInputStdRawRep1
+wgEncodeUwHistoneHreH3k27me3StdHotspotsRep1
+wgEncodeUwHistoneHreH3k27me3StdHotspotsRep2
+wgEncodeUwHistoneHreH3k27me3StdPkRep1
+wgEncodeUwHistoneHreH3k27me3StdPkRep2
+wgEncodeUwHistoneHreH3k27me3StdRawRep1
+wgEncodeUwHistoneHreH3k27me3StdRawRep2
+wgEncodeUwHistoneHreH3k36me3StdHotspotsRep1
+wgEncodeUwHistoneHreH3k36me3StdHotspotsRep2
+wgEncodeUwHistoneHreH3k36me3StdPkRep1
+wgEncodeUwHistoneHreH3k36me3StdPkRep2
+wgEncodeUwHistoneHreH3k36me3StdRawRep1
+wgEncodeUwHistoneHreH3k36me3StdRawRep2
+wgEncodeUwHistoneHreH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHreH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHreH3k4me3StdPkRep1
+wgEncodeUwHistoneHreH3k4me3StdPkRep2
+wgEncodeUwHistoneHreH3k4me3StdRawRep1
+wgEncodeUwHistoneHreH3k4me3StdRawRep2
+wgEncodeUwHistoneHreInputStdRawRep1
+wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHrpeH3k4me3StdPkRep1
+wgEncodeUwHistoneHrpeH3k4me3StdPkRep2
+wgEncodeUwHistoneHrpeH3k4me3StdRawRep1
+wgEncodeUwHistoneHrpeH3k4me3StdRawRep2
+wgEncodeUwHistoneHrpeInputStdRawRep1
+wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep1
+wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep2
+wgEncodeUwHistoneHuvecH3k27me3StdPkRep1
+wgEncodeUwHistoneHuvecH3k27me3StdPkRep2
+wgEncodeUwHistoneHuvecH3k27me3StdRawRep1
+wgEncodeUwHistoneHuvecH3k27me3StdRawRep2
+wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep1
+wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep2
+wgEncodeUwHistoneHuvecH3k36me3StdPkRep1
+wgEncodeUwHistoneHuvecH3k36me3StdPkRep2
+wgEncodeUwHistoneHuvecH3k36me3StdRawRep1
+wgEncodeUwHistoneHuvecH3k36me3StdRawRep2
+wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHuvecH3k4me3StdPkRep1
+wgEncodeUwHistoneHuvecH3k4me3StdPkRep2
+wgEncodeUwHistoneHuvecH3k4me3StdRawRep1
+wgEncodeUwHistoneHuvecH3k4me3StdRawRep2
+wgEncodeUwHistoneHuvecInputStdRawRep1
+wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneHvmfH3k4me3StdPkRep1
+wgEncodeUwHistoneHvmfH3k4me3StdPkRep2
+wgEncodeUwHistoneHvmfH3k4me3StdRawRep1
+wgEncodeUwHistoneHvmfH3k4me3StdRawRep2
+wgEncodeUwHistoneHvmfInputStdRawRep1
+wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneJurkatH3k4me3StdPkRep1
+wgEncodeUwHistoneJurkatH3k4me3StdPkRep2
+wgEncodeUwHistoneJurkatH3k4me3StdRawRep1
+wgEncodeUwHistoneJurkatH3k4me3StdRawRep2
+wgEncodeUwHistoneJurkatInputStdRawRep1
+wgEncodeUwHistoneK562H3k27me3StdHotspotsRep1
+wgEncodeUwHistoneK562H3k27me3StdHotspotsRep2
+wgEncodeUwHistoneK562H3k27me3StdPkRep1
+wgEncodeUwHistoneK562H3k27me3StdPkRep2
+wgEncodeUwHistoneK562H3k27me3StdRawRep1
+wgEncodeUwHistoneK562H3k27me3StdRawRep2
+wgEncodeUwHistoneK562H3k36me3StdHotspotsRep1
+wgEncodeUwHistoneK562H3k36me3StdHotspotsRep2
+wgEncodeUwHistoneK562H3k36me3StdPkRep1
+wgEncodeUwHistoneK562H3k36me3StdPkRep2
+wgEncodeUwHistoneK562H3k36me3StdRawRep1
+wgEncodeUwHistoneK562H3k36me3StdRawRep2
+wgEncodeUwHistoneK562H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneK562H3k4me3StdHotspotsRep2
+wgEncodeUwHistoneK562H3k4me3StdPkRep1
+wgEncodeUwHistoneK562H3k4me3StdPkRep2
+wgEncodeUwHistoneK562H3k4me3StdRawRep1
+wgEncodeUwHistoneK562H3k4me3StdRawRep2
+wgEncodeUwHistoneK562InputStdRawRep1
+wgEncodeUwHistoneMcf7H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneMcf7H3k4me3StdPkRep1
+wgEncodeUwHistoneMcf7H3k4me3StdRawRep1
+wgEncodeUwHistoneMcf7InputStdRawRep1
+wgEncodeUwHistoneNb4H3k4me3StdHotspotsRep1
+wgEncodeUwHistoneNb4H3k4me3StdPkRep1
+wgEncodeUwHistoneNb4H3k4me3StdRawRep1
+wgEncodeUwHistoneNb4InputStdRawRep1
+wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneNhdfneoH3k4me3StdPkRep1
+wgEncodeUwHistoneNhdfneoH3k4me3StdPkRep2
+wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep1
+wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep2
+wgEncodeUwHistoneNhdfneoInputStdRawRep1
+wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep1
+wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep2
+wgEncodeUwHistoneNhekH3k27me3StdPkRep1
+wgEncodeUwHistoneNhekH3k27me3StdPkRep2
+wgEncodeUwHistoneNhekH3k27me3StdRawRep1
+wgEncodeUwHistoneNhekH3k27me3StdRawRep2
+wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep1
+wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep2
+wgEncodeUwHistoneNhekH3k36me3StdPkRep1
+wgEncodeUwHistoneNhekH3k36me3StdPkRep2
+wgEncodeUwHistoneNhekH3k36me3StdRawRep1
+wgEncodeUwHistoneNhekH3k36me3StdRawRep2
+wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneNhekH3k4me3StdPkRep1
+wgEncodeUwHistoneNhekH3k4me3StdPkRep2
+wgEncodeUwHistoneNhekH3k4me3StdRawRep1
+wgEncodeUwHistoneNhekH3k4me3StdRawRep2
+wgEncodeUwHistoneNhekInputStdRawRep1
+wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep1
+wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep2
+wgEncodeUwHistoneSaecH3k27me3StdPkRep1
+wgEncodeUwHistoneSaecH3k27me3StdPkRep2
+wgEncodeUwHistoneSaecH3k27me3StdRawRep1
+wgEncodeUwHistoneSaecH3k27me3StdRawRep2
+wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep1
+wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep2
+wgEncodeUwHistoneSaecH3k36me3StdPkRep1
+wgEncodeUwHistoneSaecH3k36me3StdPkRep2
+wgEncodeUwHistoneSaecH3k36me3StdRawRep1
+wgEncodeUwHistoneSaecH3k36me3StdRawRep2
+wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneSaecH3k4me3StdPkRep1
+wgEncodeUwHistoneSaecH3k4me3StdPkRep2
+wgEncodeUwHistoneSaecH3k4me3StdRawRep1
+wgEncodeUwHistoneSaecH3k4me3StdRawRep2
+wgEncodeUwHistoneSaecInputStdRawRep1
+wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep1
+wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep2
+wgEncodeUwHistoneSknshraH3k27me3StdPkRep1
+wgEncodeUwHistoneSknshraH3k27me3StdPkRep2
+wgEncodeUwHistoneSknshraH3k27me3StdRawRep1
+wgEncodeUwHistoneSknshraH3k27me3StdRawRep2
+wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep1
+wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep2
+wgEncodeUwHistoneSknshraH3k36me3StdPkRep1
+wgEncodeUwHistoneSknshraH3k36me3StdPkRep2
+wgEncodeUwHistoneSknshraH3k36me3StdRawRep1
+wgEncodeUwHistoneSknshraH3k36me3StdRawRep2
+wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep1
+wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep2
+wgEncodeUwHistoneSknshraH3k4me3StdPkRep1
+wgEncodeUwHistoneSknshraH3k4me3StdPkRep2
+wgEncodeUwHistoneSknshraH3k4me3StdRawRep1
+wgEncodeUwHistoneSknshraH3k4me3StdRawRep2
+wgEncodeUwHistoneSknshraInputStdRawRep1
+
+A') Untouched Files (924 downloadables, 167 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release2/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/
+
+wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneAg04449H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneAg04449H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneAg04449H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg04449H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneAg04449H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneAg04449H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneAg04449InputStdAlnRep1.bam
+wgEncodeUwHistoneAg04449InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneAg04449InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg04449InputStdRawRep1.bigWig
+wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneAg04450H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneAg04450H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneAg04450H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg04450H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneAg04450H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneAg04450H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneAg04450InputStdAlnRep1.bam
+wgEncodeUwHistoneAg04450InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneAg04450InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg04450InputStdRawRep1.bigWig
+wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneAg09309H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneAg09309H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneAg09309H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg09309H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneAg09309H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneAg09309H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneAg09309InputStdAlnRep1.bam
+wgEncodeUwHistoneAg09309InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneAg09309InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg09309InputStdRawRep1.bigWig
+wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneAg09319H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneAg09319H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneAg09319H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg09319H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneAg09319H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneAg09319H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneAg09319InputStdAlnRep1.bam
+wgEncodeUwHistoneAg09319InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneAg09319InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg09319InputStdRawRep1.bigWig
+wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneAg10803H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneAg10803H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneAg10803H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg10803H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneAg10803H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneAg10803H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneAg10803InputStdAlnRep1.bam
+wgEncodeUwHistoneAg10803InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneAg10803InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAg10803InputStdRawRep1.bigWig
+wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneAoafH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneAoafH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneAoafH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAoafH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneAoafH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneAoafH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneAoafInputStdAlnRep1.bam
+wgEncodeUwHistoneAoafInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneAoafInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneAoafInputStdRawRep1.bigWig
+wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneBjH3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneBjH3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneBjH3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneBjH3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneBjH3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneBjH3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneBjH3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneBjH3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneBjH3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneBjH3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneBjH3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneBjH3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneBjH3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneBjH3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneBjH3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneBjH3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneBjH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneBjH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneBjH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneBjH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneBjH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneBjH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneBjH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneBjH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneBjInputStdAlnRep1.bam
+wgEncodeUwHistoneBjInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneBjInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneBjInputStdRawRep1.bigWig
+wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneCaco2H3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneCaco2H3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneCaco2H3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneCaco2H3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneCaco2H3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneCaco2H3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneCaco2H3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneCaco2H3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneCaco2H3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneCaco2H3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneCaco2H3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneCaco2H3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneCaco2H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneCaco2H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneCaco2H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneCaco2H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneCaco2H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneCaco2H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
+wgEncodeUwHistoneCaco2InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneCaco2InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneCaco2InputStdRawRep1.bigWig
+wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneGm06990H3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneGm06990H3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneGm06990H3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneGm06990H3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneGm06990H3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneGm06990H3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneGm06990H3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneGm06990H3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneGm06990H3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneGm06990H3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneGm06990H3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneGm06990H3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneGm06990H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneGm06990H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneGm06990H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneGm06990H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneGm06990H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneGm06990H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
+wgEncodeUwHistoneGm06990InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneGm06990InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneGm06990InputStdRawRep1.bigWig
+wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneGm12878H3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneGm12878H3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneGm12878H3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneGm12878H3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneGm12878H3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneGm12878H3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneGm12878H3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneGm12878H3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneGm12878H3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneGm12878H3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneGm12878H3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneGm12878H3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneGm12878H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneGm12878H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneGm12878H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneGm12878H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneGm12878H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneGm12878H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
+wgEncodeUwHistoneGm12878InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneGm12878InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneGm12878InputStdRawRep1.bigWig
+wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneH7esH3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneH7esH3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneH7esH3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneH7esH3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneH7esH3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneH7esH3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneH7esH3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneH7esH3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneH7esH3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneH7esH3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneH7esH3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneH7esH3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneH7esH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneH7esH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneH7esH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneH7esH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneH7esH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneH7esH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneH7esInputStdAlnRep1.bam
+wgEncodeUwHistoneH7esInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneH7esInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneH7esInputStdRawRep1.bigWig
+wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHaspH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHaspH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHaspH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHaspH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHaspH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHaspH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHaspInputStdAlnRep1.bam
+wgEncodeUwHistoneHaspInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHaspInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHaspInputStdRawRep1.bigWig
+wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHbmecH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHbmecH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHbmecH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHbmecH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHbmecH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHbmecH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHbmecInputStdAlnRep1.bam
+wgEncodeUwHistoneHbmecInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHbmecInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHbmecInputStdRawRep1.bigWig
+wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHcfH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHcfH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHcfH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHcfH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHcfH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHcfH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHcfInputStdAlnRep1.bam
+wgEncodeUwHistoneHcfInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHcfInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHcfInputStdRawRep1.bigWig
+wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHcfaaH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam
+wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHcfaaInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHcfaaInputStdRawRep1.bigWig
+wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHcmH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHcmH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHcmH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHcmH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHcmH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHcmH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHcmInputStdAlnRep1.bam
+wgEncodeUwHistoneHcmInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHcmInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHcmInputStdRawRep1.bigWig
+wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHcpeH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHcpeH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHcpeH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHcpeH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHcpeH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHcpeH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHcpeInputStdAlnRep1.bam
+wgEncodeUwHistoneHcpeInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHcpeInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHcpeInputStdRawRep1.bigWig
+wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHct116H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHct116H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHct116H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHct116H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHct116H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHct116H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHct116InputStdAlnRep1.bam
+wgEncodeUwHistoneHct116InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHct116InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHct116InputStdRawRep1.bigWig
+wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHeeH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHeeH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHeeH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHeeH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHeeH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHeeH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHeeInputStdAlnRep1.bam
+wgEncodeUwHistoneHeeInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHeeInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHeeInputStdRawRep1.bigWig
+wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHek293H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHek293H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHek293H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHek293H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHek293H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHek293H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHek293InputStdAlnRep1.bam
+wgEncodeUwHistoneHek293InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHek293InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHek293InputStdRawRep1.bigWig
+wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHelas3H3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHelas3H3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHelas3H3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHelas3H3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHelas3H3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneHelas3H3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHelas3H3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHelas3H3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHelas3H3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHelas3H3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHelas3H3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneHelas3H3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHelas3H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHelas3H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHelas3H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHelas3H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHelas3H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHelas3H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
+wgEncodeUwHistoneHelas3InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHelas3InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHelas3InputStdRawRep1.bigWig
+wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHepg2H3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHepg2H3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHepg2H3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHepg2H3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHepg2H3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneHepg2H3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHepg2H3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHepg2H3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHepg2H3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHepg2H3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHepg2H3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneHepg2H3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHepg2H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHepg2H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHepg2H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHepg2H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHepg2H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHepg2H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
+wgEncodeUwHistoneHepg2InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHepg2InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHepg2InputStdRawRep1.bigWig
+wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHl60H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHl60H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHl60H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHl60H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHl60H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHl60H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHl60InputStdAlnRep1.bam
+wgEncodeUwHistoneHl60InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHl60InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHl60InputStdRawRep1.bigWig
+wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHmecH3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHmecH3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHmecH3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHmecH3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHmecH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHmecH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHmecH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHmecH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHmecH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHmecH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHmecInputStdAlnRep1.bam
+wgEncodeUwHistoneHmecInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHmecInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHmecInputStdRawRep1.bigWig
+wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHmfH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHmfH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHmfH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHmfH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHmfH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHmfH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHmfInputStdAlnRep1.bam
+wgEncodeUwHistoneHmfInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHmfInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHmfInputStdRawRep1.bigWig
+wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHpafH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHpafH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHpafH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHpafH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHpafH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHpafH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHpafInputStdAlnRep1.bam
+wgEncodeUwHistoneHpafInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHpafInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHpafInputStdRawRep1.bigWig
+wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHpfH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHpfH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHpfH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHpfH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHpfH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHpfH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHpfInputStdAlnRep1.bam
+wgEncodeUwHistoneHpfInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHpfInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHpfInputStdRawRep1.bigWig
+wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHreH3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHreH3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHreH3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHreH3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHreH3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHreH3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHreH3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneHreH3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHreH3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHreH3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHreH3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHreH3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHreH3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHreH3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHreH3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneHreH3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHreH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHreH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHreH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHreH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHreH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHreH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHreH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHreH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHreInputStdAlnRep1.bam
+wgEncodeUwHistoneHreInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHreInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHreInputStdRawRep1.bigWig
+wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHrpeH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHrpeH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHrpeH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHrpeH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHrpeH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHrpeH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHrpeInputStdAlnRep1.bam
+wgEncodeUwHistoneHrpeInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHrpeInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHrpeInputStdRawRep1.bigWig
+wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHuvecH3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHuvecH3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHuvecH3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHuvecH3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHuvecH3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneHuvecH3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHuvecH3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHuvecH3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHuvecH3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHuvecH3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHuvecH3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneHuvecH3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHuvecH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHuvecH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHuvecH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHuvecH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHuvecH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHuvecH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
+wgEncodeUwHistoneHuvecInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHuvecInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHuvecInputStdRawRep1.bigWig
+wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHvmfH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHvmfH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHvmfH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHvmfH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHvmfH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneHvmfH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneHvmfInputStdAlnRep1.bam
+wgEncodeUwHistoneHvmfInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHvmfInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHvmfInputStdRawRep1.bigWig
+wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneJurkatH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneJurkatH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneJurkatH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneJurkatH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneJurkatH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneJurkatH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneJurkatInputStdAlnRep1.bam
+wgEncodeUwHistoneJurkatInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneJurkatInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneJurkatInputStdRawRep1.bigWig
+wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneK562H3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneK562H3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneK562H3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneK562H3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneK562H3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneK562H3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneK562H3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneK562H3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneK562H3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneK562H3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneK562H3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneK562H3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneK562H3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneK562H3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneK562H3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneK562H3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneK562H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneK562H3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneK562H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneK562H3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneK562H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneK562H3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneK562H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneK562H3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneK562InputStdAlnRep1.bam
+wgEncodeUwHistoneK562InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneK562InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneK562InputStdRawRep1.bigWig
+wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneMcf7H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneMcf7H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneMcf7H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneMcf7H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneMcf7InputStdAlnRep1.bam
+wgEncodeUwHistoneMcf7InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneMcf7InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneMcf7InputStdRawRep1.bigWig
+wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneNb4H3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneNb4H3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneNb4H3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNb4H3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneNb4InputStdAlnRep1.bam
+wgEncodeUwHistoneNb4InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneNb4InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNb4InputStdRawRep1.bigWig
+wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneNhdfneoH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneNhdfneoH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneNhdfneoH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNhdfneoH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam
+wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneNhdfneoInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNhdfneoInputStdRawRep1.bigWig
+wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneNhekH3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneNhekH3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneNhekH3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNhekH3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneNhekH3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneNhekH3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneNhekH3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneNhekH3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneNhekH3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNhekH3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneNhekH3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneNhekH3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneNhekH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneNhekH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneNhekH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNhekH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneNhekH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneNhekH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneNhekInputStdAlnRep1.bam
+wgEncodeUwHistoneNhekInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneNhekInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNhekInputStdRawRep1.bigWig
+wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneSaecH3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneSaecH3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneSaecH3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSaecH3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneSaecH3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneSaecH3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneSaecH3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneSaecH3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneSaecH3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSaecH3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneSaecH3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneSaecH3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneSaecH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneSaecH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneSaecH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSaecH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneSaecH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneSaecH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneSaecInputStdAlnRep1.bam
+wgEncodeUwHistoneSaecInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneSaecInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSaecInputStdRawRep1.bigWig
+wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam
+wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneSknshraH3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneSknshraH3k27me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneSknshraH3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSknshraH3k27me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneSknshraH3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneSknshraH3k27me3StdRawRep2.bigWig
+wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam
+wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam
+wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneSknshraH3k36me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneSknshraH3k36me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneSknshraH3k36me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSknshraH3k36me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneSknshraH3k36me3StdRawRep1.bigWig
+wgEncodeUwHistoneSknshraH3k36me3StdRawRep2.bigWig
+wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam
+wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam
+wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneSknshraH3k4me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneSknshraH3k4me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneSknshraH3k4me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSknshraH3k4me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneSknshraH3k4me3StdRawRep1.bigWig
+wgEncodeUwHistoneSknshraH3k4me3StdRawRep2.bigWig
+wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
+wgEncodeUwHistoneSknshraInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneSknshraInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSknshraInputStdRawRep1.bigWig
+
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg04449H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg04449H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg04449InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg04450H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg04450H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg04450InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg09309H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg09309H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg09309InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg09319H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg09319H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg09319InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg10803H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg10803H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAg10803InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAoafH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAoafH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneAoafInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBjH3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBjH3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBjH3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBjH3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBjH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBjH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBjInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCaco2H3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCaco2H3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCaco2H3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCaco2H3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCaco2H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCaco2H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCaco2InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm06990H3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm06990H3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm06990H3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm06990H3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm06990H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm06990H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm06990InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm12878H3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm12878H3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm12878H3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm12878H3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm12878H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm12878H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneGm12878InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneH7esInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHaspH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHaspH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHaspInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHbmecH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHbmecH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHbmecInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcfH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcfH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcfInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcfaaInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcmH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcmH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcmInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcpeH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcpeH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHcpeInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHct116H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHct116H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHct116InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHeeH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHeeH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHeeInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHek293H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHek293H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHek293InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHelas3H3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHelas3H3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHelas3H3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHelas3H3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHelas3H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHelas3H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHelas3InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHepg2H3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHepg2H3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHepg2H3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHepg2H3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHepg2H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHepg2H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHepg2InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHl60H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHl60H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHl60InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHmecH3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHmecH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHmecH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHmecInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHmfH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHmfH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHmfInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHpafH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHpafH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHpafInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHpfH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHpfH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHpfInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHreH3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHreH3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHreH3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHreH3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHreH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHreH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHreInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHrpeH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHrpeH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHrpeInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHuvecH3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHuvecH3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHuvecH3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHuvecH3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHuvecH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHuvecH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHuvecInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHvmfH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHvmfH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHvmfInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneJurkatH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneJurkatH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneJurkatInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneMcf7H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneMcf7InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNb4H3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNb4InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhdfneoInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhekH3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhekH3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhekH3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhekH3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhekH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhekH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhekInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSaecH3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSaecH3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSaecH3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSaecH3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSaecH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSaecH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSaecInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknshraH3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknshraH3k27me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknshraH3k36me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknshraH3k36me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknshraH3k4me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknshraH3k4me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknshraInputStdRawRep1.bigWig
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
+    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release1/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/
+
+
+
+C) New tables (68):
+wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1
+wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2
+wgEncodeUwHistoneA549H3k04me3StdPkRep1
+wgEncodeUwHistoneA549H3k04me3StdPkRep2
+wgEncodeUwHistoneA549H3k04me3StdRawRep1
+wgEncodeUwHistoneA549H3k04me3StdRawRep2
+wgEncodeUwHistoneA549InputStdRawRep1
+wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep1
+wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep2
+wgEncodeUwHistoneBe2cH3k04me3StdPkRep1
+wgEncodeUwHistoneBe2cH3k04me3StdPkRep2
+wgEncodeUwHistoneBe2cH3k04me3StdRawRep1
+wgEncodeUwHistoneBe2cH3k04me3StdRawRep2
+wgEncodeUwHistoneBe2cInputStdRawRep1
+wgEncodeUwHistoneHacH3k04me3StdHotspotsRep1
+wgEncodeUwHistoneHacH3k04me3StdHotspotsRep2
+wgEncodeUwHistoneHacH3k04me3StdPkRep1
+wgEncodeUwHistoneHacH3k04me3StdPkRep2
+wgEncodeUwHistoneHacH3k04me3StdRawRep1
+wgEncodeUwHistoneHacH3k04me3StdRawRep2
+wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep1
+wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep2
+wgEncodeUwHistoneHffmycH3k04me3StdPkRep1
+wgEncodeUwHistoneHffmycH3k04me3StdPkRep2
+wgEncodeUwHistoneHffmycH3k04me3StdRawRep1
+wgEncodeUwHistoneHffmycH3k04me3StdRawRep2
+wgEncodeUwHistoneHffmycInputStdRawRep1
+wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep1
+wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep2
+wgEncodeUwHistoneLncapH3k04me3StdPkRep1
+wgEncodeUwHistoneLncapH3k04me3StdPkRep2
+wgEncodeUwHistoneLncapH3k04me3StdRawRep1
+wgEncodeUwHistoneLncapH3k04me3StdRawRep2
+wgEncodeUwHistoneLncapInputStdRawRep1
+wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep1
+wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep2
+wgEncodeUwHistoneNhlfH3k04me3StdPkRep1
+wgEncodeUwHistoneNhlfH3k04me3StdPkRep2
+wgEncodeUwHistoneNhlfH3k04me3StdRawRep1
+wgEncodeUwHistoneNhlfH3k04me3StdRawRep2
+wgEncodeUwHistoneNhlfInputStdRawRep1
+wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep1
+wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep2
+wgEncodeUwHistonePanc1H3k04me3StdPkRep1
+wgEncodeUwHistonePanc1H3k04me3StdPkRep2
+wgEncodeUwHistonePanc1H3k04me3StdRawRep1
+wgEncodeUwHistonePanc1H3k04me3StdRawRep2
+wgEncodeUwHistonePanc1InputStdRawRep1
+wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep1
+wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep2
+wgEncodeUwHistoneSknmcH3k04me3StdPkRep1
+wgEncodeUwHistoneSknmcH3k04me3StdPkRep2
+wgEncodeUwHistoneSknmcH3k04me3StdRawRep1
+wgEncodeUwHistoneSknmcH3k04me3StdRawRep2
+wgEncodeUwHistoneSknmcInputStdRawRep1
+wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep1
+wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep2
+wgEncodeUwHistoneWerirb1H3k04me3StdPkRep1
+wgEncodeUwHistoneWerirb1H3k04me3StdPkRep2
+wgEncodeUwHistoneWerirb1H3k04me3StdRawRep1
+wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2
+wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep1
+wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep2
+wgEncodeUwHistoneWi38H3k04me3StdPkRep1
+wgEncodeUwHistoneWi38H3k04me3StdPkRep2
+wgEncodeUwHistoneWi38H3k04me3StdRawRep1
+wgEncodeUwHistoneWi38H3k04me3StdRawRep2
+wgEncodeUwHistoneWi38InputStdRawRep1
+
+C') New files (152 downloadables, 28 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release2/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/
+
+wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneA549H3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneA549H3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneA549H3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneA549H3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneA549H3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneA549H3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneA549InputStdAlnRep1.bam
+wgEncodeUwHistoneA549InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneA549InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneA549InputStdRawRep1.bigWig
+wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneBe2cH3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneBe2cH3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneBe2cH3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneBe2cH3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneBe2cH3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneBe2cH3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneBe2cInputStdAlnRep1.bam
+wgEncodeUwHistoneBe2cInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneBe2cInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneBe2cInputStdRawRep1.bigWig
+wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHacH3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHacH3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHacH3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHacH3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHacH3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHacH3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHacH3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneHacH3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneHffmycH3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneHffmycH3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneHffmycH3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHffmycH3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneHffmycH3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneHffmycH3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneHffmycInputStdAlnRep1.bam
+wgEncodeUwHistoneHffmycInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneHffmycInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneHffmycInputStdRawRep1.bigWig
+wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneLncapH3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneLncapH3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneLncapH3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneLncapH3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneLncapH3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneLncapH3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneLncapInputStdAlnRep1.bam
+wgEncodeUwHistoneLncapInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneLncapInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneLncapInputStdRawRep1.bigWig
+wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneNhlfH3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneNhlfH3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneNhlfH3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNhlfH3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneNhlfH3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneNhlfH3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneNhlfInputStdAlnRep1.bam
+wgEncodeUwHistoneNhlfInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneNhlfInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneNhlfInputStdRawRep1.bigWig
+wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam
+wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam
+wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistonePanc1H3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistonePanc1H3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistonePanc1H3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistonePanc1H3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistonePanc1H3k04me3StdRawRep1.bigWig
+wgEncodeUwHistonePanc1H3k04me3StdRawRep2.bigWig
+wgEncodeUwHistonePanc1InputStdAlnRep1.bam
+wgEncodeUwHistonePanc1InputStdAlnRep1.bam.bai
+wgEncodeUwHistonePanc1InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistonePanc1InputStdRawRep1.bigWig
+wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneSknmcH3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneSknmcH3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneSknmcH3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSknmcH3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneSknmcH3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneSknmcH3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneSknmcInputStdAlnRep1.bam
+wgEncodeUwHistoneSknmcInputStdAlnRep1.bam.bai
+wgEncodeUwHistoneSknmcInputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneSknmcInputStdRawRep1.bigWig
+wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneWerirb1H3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneWerirb1H3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneWerirb1H3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneWerirb1H3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneWerirb1H3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneWi38H3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneWi38H3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneWi38H3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneWi38H3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneWi38H3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneWi38H3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneWi38InputStdAlnRep1.bam
+wgEncodeUwHistoneWi38InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneWi38InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneWi38InputStdRawRep1.bigWig
+
+/gbdb/hg19/bbi/wgEncodeUwHistoneA549H3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneA549H3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneA549InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBe2cH3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBe2cH3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneBe2cInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHacH3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHacH3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHffmycH3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHffmycH3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneHffmycInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneLncapH3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneLncapH3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneLncapInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhlfH3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhlfH3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneNhlfInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistonePanc1H3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistonePanc1H3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistonePanc1InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknmcH3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknmcH3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneSknmcInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneWerirb1H3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneWi38H3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneWi38H3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneWi38InputStdRawRep1.bigWig
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release2/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/
+
+index.html
+files.txt
+md5sum.txt
