@@ -5,7 +5,7 @@ superTrack wgEncodeRnaSeqSuper
 shortLabel CSHL Long RNA-seq
 longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
-subGroup1 view Views Contigs=Contigs PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal Alignments=Alignments TRANSGENCV7=TranscriptGencV7 Junctions=Splice_Junctions
+subGroup1 view Views Contigs=Contigs PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal Junctions=Splice_Junctions Alignments=Alignments
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLaS3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC HSMM=HSMM MCF7=MCF-7 NHEK=NHEK  NHLF=NHLF SKNSHRA=SK-N-SH_<i>retinoic_acid</i>
 subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol NUCLEUS=Nucleus POLYSOME=Polysome NUCLEOPLASM=Nucleoplasm CHROMATIN=Chromatin NUCLEOLUS=Nucleolos
 subGroup4 rnaExtract RNA_Extract PAP=PolyA+ PAM=PolyA- TOTAL=Total_RNA
@@ -3539,7 +3539,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqViewContigs
     shortLabel Contigs 
     view Contigs 
-    visibility hide
+    visibility pack
     subTrack wgEncodeCshlLongRnaSeq
     #scoreFilter 0
     #scoreFilterLimits 0:1000
