@@ -190,16 +190,19 @@ boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
 char *cartMinStr = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MIN_Y);
 char *cartMaxStr = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MAX_Y);
 double cartMin = 0.0, cartMax = 0.0;
-if (cartMinStr && cartMaxStr)
-    {
+
+if(cartMinStr)
     *retMin = atof(cartMinStr);
+if(cartMaxStr)
     *retMax = atof(cartMaxStr);
+if (cartMinStr && cartMaxStr)
     correctOrder(*retMin, *retMax);
-    // If it weren't for the the allowance for missing data range values,
-    // we could set retAbs* and be done here.
+// If it weren't for the the allowance for missing data range values,
+// we could set retAbs* and be done here.
+if(cartMinStr)
     cartMin = *retMin;
+if(cartMaxStr)
     cartMax = *retMax;
-    }
 
 // Get trackDb defaults, and resolve missing wiggle data range if necessary.
 char *defaultViewLimits = trackDbSettingClosestToHomeOrDefault(tdb, DEFAULTVIEWLIMITS, NULL);
@@ -254,11 +257,10 @@ if (retAbsMax)
 viewLimitsCompositeOverride(tdb, name, retMin, retMax, retAbsMin, retAbsMax);
 
 // And as the final word after composite override, reset retMin and retMax if from cart:
-if (cartMinStr && cartMaxStr)
-    {
+if (cartMinStr)
     *retMin = cartMin;
+if (cartMaxStr)
     *retMax = cartMax;
-    }
 }	/*	void wigFetchMinMaxYWithCart()	*/
 
 void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,int *Min, int *Max, int *Default)
