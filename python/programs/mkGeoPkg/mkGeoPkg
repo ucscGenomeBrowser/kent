@@ -158,14 +158,14 @@ def createMappings(mdb):
 			print stanza.name + ': no expId'
 			continue
 
-		#if 'geoSampleAccession' not in stanza:
+		if 'geoSampleAccession' not in stanza:
 			# if this hasn't been submitted to GEO yet, we'll add it to the submission list
-		if stanza['expId'] not in expIds:
-			expIds[stanza['expId']] = list()
-			
-		expIds[stanza['expId']].append(stanza)
+			if stanza['expId'] not in expIds:
+				expIds[stanza['expId']] = list()
+				
+			expIds[stanza['expId']].append(stanza)
 		
-		if 'geoSampleAccession' in stanza:
+		else:
 			# otherwise we keep track of the geo number for partially submitted samples
 			if stanza['expId'] not in geoMapping:
 				geoMapping[stanza['expId']] = stanza['geoSampleAccession']
@@ -236,12 +236,13 @@ def createHighThroughputSoftFile(database, composite, organism, compositeUrl, md
 		firstStanza = expId[0]
 		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
 		sample = HighThroughputSampleStanza()
-		sample['^SAMPLE'] = firstStanza['metaObject']
-		sample['!Sample_type'] = 'SRA'
 		
 		concat = expVars[0]
 		for expVar in expVars[1:len(expVars)]:
 			concat += '_' + firstStanza[expVar]
+			
+		sample['^SAMPLE'] = concat
+		sample['!Sample_type'] = 'SRA'
 		sample['!Sample_title'] = concat
 		
 		if 'geoSeriesAccession' in series:
@@ -360,17 +361,17 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 		firstStanza = expId[0]
 		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
 		sample = MicroArraySampleStanza()
-		sample['^SAMPLE'] = firstStanza['accession']
+		
+		concat = expVars[0]
+		for expVar in expVars[1:len(expVars)]:
+			concat += '_' + firstStanza[expVar]
+			
+		sample['^SAMPLE'] = concat
 		
 		if 'geoSeriesAccession' in series:
-			sample['!Sample_series_id'] = series['geoSeriesAccession']
-
-		#concat = expVars[0]
-		#for expVar in expVars[1:len(expVars)]:
-		#	concat += '_' + firstStanza[expVar]
-		#sample['!Sample_title'] = concat
-		
-		sample['!Sample_geo_accession'] = firstStanza['accession']
+			sample['!Sample_series_id'] = series['geoSeriesAccession']	
+			
+		sample['!Sample_title'] = concat
 		
 		count = 1
 			
@@ -384,58 +385,34 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 				elif md5sums != None and stanza['fileName'] in md5sums:
 					sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
 				
-				# sample['!Sample_supplementary_file_build_' + str(count)] = database
-				
 				fileList.append(stanza['fileName'])
 				count = count + 1
-				
-		softfile[firstStanza['accession']] = sample
 
 		# sample['!Sample_table'] = KeyOptional # CEL file
-		# sample['!Sample_source_name_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_organism_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_characteristics_ch'] = KeyOnePlusNumbered
+		sample['!Sample_source_name_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_organism_ch'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_characteristics_ch'] = '[REPLACE]' #KeyOnePlusNumbered
 		# sample['!Sample_biomaterial_provider_ch'] = KeyZeroPlusNumbered
 		# sample['!Sample_treatment_protocol_ch'] = KeyZeroPlusNumbered
 		# sample['!Sample_growth_protocol_ch'] = KeyZeroPlusNumbered
-		# sample['!Sample_molecule_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_extract_protocol_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_label_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_label_protocol_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_hyb_protocol'] = KeyOnePlus
-		# sample['!Sample_scan_protocol'] = KeyOnePlus
-		# sample['!Sample_data_processing'] = KeyOnePlus
-		# sample['!Sample_description'] = KeyZeroPlus
-		# sample['!Sample_platform_id'] = KeyRequired
+		sample['!Sample_molecule_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_extract_protocol_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_label_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_label_protocol_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_hyb_protocol'] = '[REPLACE]' #KeyOnePlus
+		sample['!Sample_scan_protocol'] = '[REPLACE]' #KeyOnePlus
+		sample['!Sample_data_processing'] = '[REPLACE]' #KeyOnePlus
+		sample['!Sample_description'] = '[REPLACE]' #KeyZeroPlus
+		sample['!Sample_platform_id'] = '[REPLACE]'
 		# sample['!Sample_geo_accession'] = KeyOptional
-		# sample['!Sample_anchor'] = KeyRequired
-		# sample['!Sample_type'] = KeyRequired
-		# sample['!Sample_tag_count'] = KeyRequired
-		# sample['!Sample_tag_length'] = KeyRequired
-		# sample['!Sample_table_begin'] = KeyRequired
-		# sample['!Sample_table_end'] = KeyRequired
+		# sample['!Sample_anchor'] = KeyRequired SAGE ONLY
+		# sample['!Sample_type'] = KeyRequired SAGE ONLY
+		# sample['!Sample_tag_count'] = KeyRequired SAGE ONLY
+		# sample['!Sample_tag_length'] = KeyRequired SAGE ONLY
+		sample['!Sample_table_begin'] = ''
+		sample['!Sample_table_end'] = ''
 	
-	# for idk:
-	
-		# platform = PlatformStanza()
-		
-		# platform['^PLATFORM'] = KeyRequired
-		# platform['!Platform_title'] = KeyRequired
-		# platform['!Platform_distribution'] = KeyRequired
-		# platform['!Platform_technology'] = KeyRequired
-		# platform['!Platform_organism'] = KeyOnePlus
-		# platform['!Platform_manufacturer'] = KeyRequired
-		# platform['!Platform_manufacture_protocol'] = KeyOnePlus
-		# platform['!Platform_catalog_number'] = KeyZeroPlus
-		# platform['!Platform_web_link'] = KeyZeroPlus
-		# platform['!Platform_support'] = KeyOptional
-		# platform['!Platform_coating'] = KeyOptional
-		# platform['!Platform_description'] = KeyZeroPlus
-		# platform['!Platform_contributor'] = KeyZeroPlus
-		# platform['!Platform_pubmed_id'] = KeyZeroPlus
-		# platform['!Platform_geo_accession'] = KeyOptional
-		# platform['!Platform_table_begin'] = KeyRequired
-		# platform['!Platform_table_end'] = KeyRequired
+		softfile[firstStanza['accession']] = sample
 		
 	return softfile, fileList
 	
@@ -532,7 +509,7 @@ def main():
 		submission[expId] = expIds[expId]
 
 	if datatype.soft == HighThroughputSoftFile:
-		softfile, fileList = createSpecialSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype)
+		softfile, fileList = createHighThroughputSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype)
 	elif datatype.soft == MicroArraySoftFile:
 		softfile, fileList = createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype)
 	else:
@@ -545,6 +522,8 @@ def main():
 	
 	fileString = outfileName
 	for file in fileList:
+		if not os.path.exists(file):
+			raise IOError(file)
 		fileString = fileString + ' ' + downloadsDirectory + file
 		
 	fileString.strip()
