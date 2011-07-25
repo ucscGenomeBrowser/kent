@@ -450,34 +450,34 @@ return count;
 }
 
 static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
+// Replacement for preamble.html which should expose parent dir, files.txt and supplemental, but
+// not have any specialized notes per composite.  Specialized notes belong in track description.
 {
-// Do not bother getting preamble.html
-// 1) It isn't on the RR (yet)
-// 2) It will likely refer back to the composite for Description info which is included in this page
-// 3) The rsync-to-tmp-file hurdle isn't worth the effort.
-cgiDown(0.7);
-puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
-puts("in publication  until the restriction date noted for the given data file.</B>");
-
 char *server = hDownloadsServer();
 char *subDir = "";
 if (hIsBetaHost())
     {
-    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-    subDir = "/beta";
+    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think
+    subDir = "/beta";                        // it's downloads server is "hgdownload.cse.ucsc.edu"
     }
+
+printf("<BR><A HREF='http://%s/goldenPath/%s/%s/'><img src='../images/ab_up.gif'>Parent directory</A> for %s downloads.<BR>\n",
+                server,db,ENCODE_DCC_DOWNLOADS,db);
+cgiDown(0.9);
+puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
+puts("in publication  until the restriction date noted for the given data file.</B>");
 
 cgiDown(0.7);
 puts("Supporting documents:");
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> is a tab-separated file with the name and metadata for each download.</LI>\n",
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> is a tab-separated file with the name and metadata for each download.\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.</LI>\n",
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>Supplemental materials</A></B> contains additional files provided by the laboratory related to these downloads.</LI>\n",
+    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>Supplemental materials</A></B> contains additional files provided by the laboratory related to these downloads.\n",
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
 }

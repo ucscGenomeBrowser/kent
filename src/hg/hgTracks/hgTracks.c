@@ -2469,6 +2469,7 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 hPrintf("</MAP>\n");
 
 jsAddBoolean(jsVarsHash, "dragSelection", dragZooming);
+jsAddBoolean(jsVarsHash, "inPlaceUpdate", IN_PLACE_UPDATE);
 
 if(rulerClickHeight)
     {
@@ -4032,7 +4033,7 @@ else
     for (i=0; i<len; i++)
         paddedLabel[i+1] = label[i];
     }
-#ifdef IN_PLACE_UPDATE
+#if IN_PLACE_UPDATE
 hButtonWithOnClick(var, paddedLabel, NULL, "return navigateButtonClick(this);");
 #else
 hButton(var, paddedLabel);
@@ -4821,7 +4822,7 @@ if (!hideControls)
     /* Put up scroll and zoom controls. */
 #ifndef USE_NAVIGATION_LINKS
     hWrites("move ");
-#ifdef IN_PLACE_UPDATE
+#if IN_PLACE_UPDATE
     hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return navigateButtonClick(this);");
     hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return navigateButtonClick(this);");
     hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return navigateButtonClick(this);");
@@ -4961,7 +4962,7 @@ if (!hideControls)
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
-#ifdef IN_PLACE_UPDATE
+#if IN_PLACE_UPDATE
     hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return navigateButtonClick(this);");
@@ -4987,7 +4988,7 @@ if (!hideControls)
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
-#ifdef IN_PLACE_UPDATE
+#if IN_PLACE_UPDATE
     hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return navigateButtonClick(this);");
@@ -5034,6 +5035,9 @@ if (!hideControls)
             revCmplDisp?"Show forward strand at this location":"Show reverse strand at this location");
         hPrintf(" ");
 	}
+
+    hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
+    hPrintf(" ");
 
     hButtonWithMsg("hgt.refresh", "refresh","Refresh image");
 
@@ -5823,6 +5827,10 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
+measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
+if (measureTiming)
+    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount, 
+	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
@@ -5850,7 +5858,6 @@ if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 
 initTl();
-measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 
