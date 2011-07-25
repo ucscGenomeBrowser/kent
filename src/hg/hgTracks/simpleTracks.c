@@ -10875,8 +10875,8 @@ char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 safef(query,sizeof(query),
-      "select %s from omimPhenotype where omimId =%s and (%s=1 or %s=2 or %s=3 or %s=4)", 
-      omimPhenotypeClassColName, omimId, omimPhenotypeClassColName, omimPhenotypeClassColName, omimPhenotypeClassColName, 
+      "select %s from omimPhenotype where omimId =%s and (%s=1 or %s=2 or %s=3 or %s=4)",
+      omimPhenotypeClassColName, omimId, omimPhenotypeClassColName, omimPhenotypeClassColName, omimPhenotypeClassColName,
       omimPhenotypeClassColName);
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
 
@@ -10945,7 +10945,7 @@ for (label = omimLocationLabels; label != NULL; label = label->next)
 	if (strstr(label->name, "class") != NULL) gotClassLabel = TRUE;
 	}
 /* if user has not made selection(s) from the phenotype class filter, enable every item */
-if (!gotClassLabel) return(TRUE);	
+if (!gotClassLabel) return(TRUE);
 
 /* check which classes have been selected */
 for (label = omimLocationLabels; label != NULL; label = label->next)
@@ -11028,9 +11028,9 @@ struct rgbColor lightest;
 Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
 
 /* color scheme:
-    
+
     Lighter Green:
-    	for Class 1 OMIM records 
+    	for Class 1 OMIM records
     Light Green:
     	for Class 2 OMIM records
     Dark Green:
@@ -11059,7 +11059,7 @@ class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
 
 safef(query, sizeof(query),
-      "select omimId, %s from omimPhenotype where omimId=%s order by %s desc", 
+      "select omimId, %s from omimPhenotype where omimId=%s order by %s desc",
       omimPhenotypeClassColName, el->name, omimPhenotypeClassColName);
 
 sr = sqlMustGetResult(conn, query);
@@ -11100,13 +11100,13 @@ else
 	{
 	// set to the color for phenClass 4
         sqlFreeResult(&sr);
-	return class4Clr; 
+	return class4Clr;
 	}
     else
 	{
 	// set to the color for Others
         sqlFreeResult(&sr);
-	return classOtherClr; 
+	return classOtherClr;
 	}
     }
 }
@@ -11142,8 +11142,8 @@ else
     	else if (endsWith(label->name, "omimId") && differentString(label->val, "0"))
     	    {
             useOmimId = TRUE;
-	    }  
-    	}	
+	    }
+    	}
     }
 
 struct dyString *name = dyStringNew(SMALLDYBUF);
@@ -11161,9 +11161,9 @@ if (useOmimId)
 
 if (useGeneSymbol)
     {
-    if (labelStarted) 
+    if (labelStarted)
     	dyStringAppendC(name, '/');
-    else 
+    else
     	labelStarted = TRUE;
     // get appoved gene symbol from omim2gene table first, if not available then get it from omimGeneMap table.
     char query[256];
@@ -11209,7 +11209,7 @@ char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
 
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
       "select sum(mutated_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11219,7 +11219,7 @@ if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
     }
 
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
       "select sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11228,7 +11228,7 @@ ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
     dyStringAppend(dy, ret);
     }
 
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
       "select sum(mutated_samples)*100/sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11367,9 +11367,9 @@ struct rgbColor lightest;
 Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
 
 /* color scheme:
-    
+
     Lighter Green:
-    	for Class 1 OMIM records 
+    	for Class 1 OMIM records
     Light Green:
     	for Class 2 OMIM records
     Dark Green:
@@ -11426,7 +11426,7 @@ else
     	    {
 	    // set to light green for class 2
 	    sqlFreeResult(&sr);
-	    return class2Clr; 
+	    return class2Clr;
     	    }
 	else
 	    {
@@ -11437,16 +11437,16 @@ else
 	    	return class1Clr;
     	    	}
     	    else if (sameWord(phenClass, "4"))
-		{	
+		{
 		// set to the color for phenClass 4
         	sqlFreeResult(&sr);
-		return class4Clr; 
-		}	
+		return class4Clr;
+		}
     	    else
 		{
 		// set to the color for Others
         	sqlFreeResult(&sr);
-		return classOtherClr; 
+		return classOtherClr;
 		}
 	    }
 	}
@@ -12538,7 +12538,6 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
-tdbExtrasAddOrUpdate(tdb,"track",track); // Be able to find track struct from tdb
 
 /* Handle remote database settings - just a JK experiment at the moment. */
 track->remoteSqlHost = trackDbSetting(tdb, "sqlHost");
@@ -12957,3 +12956,4 @@ for(name = nameList; name != NULL; name = name->next)
 slFreeList(&nameList);
 }
 
+                                                                                    
