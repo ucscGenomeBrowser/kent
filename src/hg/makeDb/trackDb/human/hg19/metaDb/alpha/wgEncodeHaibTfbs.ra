@@ -16407,7 +16407,6 @@ fileName wgEncodeHaibTfbsH1hescJundV0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2690
-parentTable wgEncodeHaibTfbsH1hescJundV0416102AlnRep1
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -16432,7 +16431,6 @@ fileName wgEncodeHaibTfbsH1hescJundV0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3065
-parentTable wgEncodeHaibTfbsH1hescJundV0416102AlnRep2
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -30119,7 +30117,6 @@ fileName wgEncodeHaibTfbsK562Ets1V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2262
-parentTable wgEncodeHaibTfbsK562Ets1V0416101AlnRep1
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -30144,7 +30141,6 @@ fileName wgEncodeHaibTfbsK562Ets1V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3182
-parentTable wgEncodeHaibTfbsK562Ets1V0416101AlnRep2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -31929,7 +31925,6 @@ fileName wgEncodeHaibTfbsK562Pol24h8V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2939
-parentTable wgEncodeHaibTfbsK562Pol24h8V0416101AlnRep1
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -31954,7 +31949,6 @@ fileName wgEncodeHaibTfbsK562Pol24h8V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2940
-parentTable wgEncodeHaibTfbsK562Pol24h8V0416101AlnRep2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -32535,7 +32529,6 @@ fileName wgEncodeHaibTfbsK562Rad21V0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2947
-parentTable wgEncodeHaibTfbsK562Rad21V0416102AlnRep1
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -32560,7 +32553,6 @@ fileName wgEncodeHaibTfbsK562Rad21V0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3072
-parentTable wgEncodeHaibTfbsK562Rad21V0416102AlnRep2
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -33790,7 +33782,6 @@ fileName wgEncodeHaibTfbsK562Sp1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1197
-parentTable wgEncodeHaibTfbsK562Sp1Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -33815,7 +33806,6 @@ fileName wgEncodeHaibTfbsK562Sp1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1510
-parentTable wgEncodeHaibTfbsK562Sp1Pcr1xAlnRep2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -34388,7 +34378,6 @@ fileName wgEncodeHaibTfbsK562Taf1V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2941
-parentTable wgEncodeHaibTfbsK562Taf1V0416101AlnRep1
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -34413,7 +34402,6 @@ fileName wgEncodeHaibTfbsK562Taf1V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2942
-parentTable wgEncodeHaibTfbsK562Taf1V0416101AlnRep2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -34984,7 +34972,6 @@ fileName wgEncodeHaibTfbsK562Usf1V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3163
-parentTable wgEncodeHaibTfbsK562Usf1V0416101AlnRep1
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -35009,7 +34996,6 @@ fileName wgEncodeHaibTfbsK562Usf1V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3166
-parentTable wgEncodeHaibTfbsK562Usf1V0416101AlnRep2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -35184,7 +35170,6 @@ fileName wgEncodeHaibTfbsK562Yy1V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2203
-parentTable wgEncodeHaibTfbsK562Yy1V0416101AlnRep1
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -35209,7 +35194,6 @@ fileName wgEncodeHaibTfbsK562Yy1V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2944
-parentTable wgEncodeHaibTfbsK562Yy1V0416101AlnRep2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -42513,4 +42497,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 456501747
+# MAGIC: 234300027
