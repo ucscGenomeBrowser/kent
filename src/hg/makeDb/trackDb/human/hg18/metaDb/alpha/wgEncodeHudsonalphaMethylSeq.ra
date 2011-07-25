@@ -1243,7 +1243,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378639
+dccInternalNotes GSM378639
 expId 279
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es.bed9.gz
 grant Myers
@@ -1262,7 +1262,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378640
+dccInternalNotes GSM378640
 expId 280
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd.bed9.gz
 grant Myers
@@ -1359,7 +1359,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378632
+dccInternalNotes GSM378632
 expId 281
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9es.bed9.gz
 grant Myers
@@ -1378,7 +1378,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378635
+dccInternalNotes GSM378635
 expId 283
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg.bed9.gz
 grant Myers
@@ -1397,7 +1397,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378634
+dccInternalNotes GSM378634
 expId 282
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos.bed9.gz
 grant Myers
@@ -1416,7 +1416,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378637
+dccInternalNotes GSM378637
 expId 284
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm.bed9.gz
 grant Myers
@@ -1435,7 +1435,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378633
+dccInternalNotes GSM378633
 expId 285
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese.bed9.gz
 grant Myers
@@ -1454,7 +1454,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378636
+dccInternalNotes GSM378636
 expId 286
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb.bed9.gz
 grant Myers
@@ -1473,7 +1473,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378638
+dccInternalNotes GSM378638
 expId 287
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd.bed9.gz
 grant Myers
@@ -1492,7 +1492,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378644
+dccInternalNotes GSM378644
 expId 288
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hal.bed9.gz
 grant Myers
@@ -1511,7 +1511,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378628
+dccInternalNotes GSM378628
 expId 289
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116.bed9.gz
 grant Myers
@@ -1574,7 +1574,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378642
+dccInternalNotes GSM378642
 expId 290
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w.bed9.gz
 grant Myers
@@ -1593,7 +1593,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378643
+dccInternalNotes GSM378643
 expId 291
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w.bed9.gz
 grant Myers
@@ -1631,7 +1631,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378641
+dccInternalNotes GSM378641
 expId 280
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd.bed9.gz
 grant Myers
@@ -1728,7 +1728,7 @@ dataType MethylSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-02-10
 dateUnrestricted 2009-11-10
-dccNotes GSM378629
+dccInternalNotes GSM378629
 expId 289
 fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116.bed9.gz
 grant Myers
@@ -1802,4 +1802,4 @@ subId 387
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep2K562
 view Regions
 
-# MAGIC: -2120146068
+# MAGIC: -194965505

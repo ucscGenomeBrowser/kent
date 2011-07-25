@@ -24,7 +24,7 @@
 // UNCOMMENT  USE_NAVIGATION_LINKS for so far experimental UI changes to replace buttons at top with more streamlined links
 //#define USE_NAVIGATION_LINKS
 
-//#define IN_PLACE_UPDATE  // update the hgTracks image in-place in the client (currently turned off everywhere except for larrym's tree).
+#define IN_PLACE_UPDATE  0 // update the hgTracks image in-place in the client (currently turned off everywhere except for larrym's tree).
 
 // CURRENT PROBLEMS:
 // o FIXED: some map items span both sideLabel and data!!

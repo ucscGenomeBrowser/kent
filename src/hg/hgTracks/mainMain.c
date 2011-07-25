@@ -38,14 +38,14 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	    "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
 	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
 	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
-	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack",
+            "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             NULL };
 
 int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
-uglyTime(NULL);
+measureTime(NULL);
 browserName = hBrowserName();
 organization = "UCSC";
 

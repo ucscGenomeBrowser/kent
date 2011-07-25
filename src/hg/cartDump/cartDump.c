@@ -47,7 +47,11 @@ if (cgiVarExists("noDisplay"))
         char *db = cartString(cart, "db");
         struct trackDb *tdb = hTrackDbForTrack(db, trackName);
         if(tdb != NULL && tdbIsComposite(tdb))
-            cartTdbTreeCleanupOverrides(tdb,cart,oldVars);
+	    {
+	    struct lm *lm = lmInit(0);
+            cartTdbTreeCleanupOverrides(tdb,cart,oldVars,lm);
+	    lmCleanup(&lm);
+	    }
         }
 
     return;
