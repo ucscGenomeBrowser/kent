@@ -250,7 +250,7 @@ static void jsonTdbSettingsInit(struct dyString **jsonTdbSettingsString)
 // Inititializes trackDbJson
 {
 *jsonTdbSettingsString = newDyString(1024);
-dyStringPrintf(*jsonTdbSettingsString, "<!-- trackDbJson -->\n<script>var trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d, \"configureBy\": \"popup\", \"kindOfParent\": 0}", rulerMode);
+dyStringPrintf(*jsonTdbSettingsString, "<script type='text/javascript'>\n// START trackDbJson\nvar trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d, \"configureBy\": \"popup\", \"kindOfParent\": 0}", rulerMode);
 }
 
 void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable)
@@ -309,7 +309,7 @@ dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"visibility\": %d\n\t}", track->v
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
 // Closes and returns the contents of the jsonTdbSettingsString
 {
-dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n<!-- trackDbJson -->\n");
+dyStringAppend(*jsonTdbSettingsString, "};\n// END trackDbJson\n</script>\n");
 return dyStringCannibalize(jsonTdbSettingsString);
 }
 
