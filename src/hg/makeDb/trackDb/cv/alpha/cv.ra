@@ -8309,15 +8309,16 @@ tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
-term UW-5C-Myc-Region
-tag UW5CMYC
-type region
-description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+#removed per Redmine #222
+#term UW-5C-Myc-Region
+#tag UW5CMYC
+#type region
+#description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
 
-term UW-5C-Gene-Regions
-tag UW5CGENE
-type region
-description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+#term UW-5C-Gene-Regions
+#tag UW5CGENE
+#type region
+#description Set of 25 regions interrogated in UW 5C gene-targeted experiments
 
 
 ### restrictionEnzyme
@@ -8500,6 +8501,18 @@ type view
 label Peaks
 description Regions of enriched signal in experiment
 
+term PeakSeqConservPeaks
+tag PSCPEAKS
+type view
+label PeakSeq Conserved Peaks
+description Regions of conserved enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+
+term PeakSeqOptimalPeak
+tag PSOPEAKS
+type view
+label PeakSeq Optimal Peaks
+description Regions of optimal enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+
 term PeptideMapping
 tag PEPTIDEMAP
 type view
@@ -8608,6 +8621,18 @@ type view
 label Splices
 description Subset of aligned reads that cross splice junctions
 
+term SppConservPeaks
+tag SCPPEAKS
+type view
+label Spp Conservative Peaks
+description Regions of optimal enriched signal in experiment performed by Spp (PROVISIONAL)
+
+term SppOptimalPeaks
+tag SOPPEAKS
+type view
+label SPP Optimal Peaks
+description Regions of conserved enriched signal in experiment performed by SPP (PROVISIONAL)
+
 term TranscriptDeNovo
 tag TRANSDENOVO
 type view
@@ -8643,6 +8668,12 @@ tag TssV7
 type view
 label TSS Gencode V7
 description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
+
+term UniformSignal
+tag UNISIG
+type view
+label Uniform Signal by AWG
+description Uniform Signal (PROVISIONAL)
 
 term Uniqueness
 tag UNQ
@@ -10586,7 +10617,7 @@ label File type
 description The type of the primary file associated with the object 
 searchable multiSelect
 cvDefined no
-validate None
+validate none
 priority 985 
 
 
