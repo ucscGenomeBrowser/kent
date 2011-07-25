@@ -81,7 +81,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K27m3 Ht 1
-        longLabel BJ H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel BJ H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=BJ rep=1
         type broadPeak
         origAssembly hg18
@@ -90,7 +90,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K4m3 Ht 1
-        longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel BJ H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=BJ rep=1
         type broadPeak
         origAssembly hg18
@@ -99,7 +99,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K36m3 Ht 1
-        longLabel BJ H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel BJ H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=BJ rep=1
         type broadPeak
         origAssembly hg18
@@ -108,7 +108,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K4m3 Ht 1
-        longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel Caco-2 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=Caco2 rep=1
         type broadPeak
         origAssembly hg18
@@ -117,7 +117,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K27m3 Ht 1
-        longLabel Caco-2 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel Caco-2 H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=Caco2 rep=1
         type broadPeak
         origAssembly hg18
@@ -126,7 +126,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K36m3 Ht 1
-        longLabel Caco-2 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel Caco-2 H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=Caco2 rep=1
         type broadPeak
         origAssembly hg18
@@ -134,8 +134,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06 H3K4m3 Ht 1
-        longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel GM90 H3K4m3 Ht 1
+        longLabel GM06990 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=GM06990 rep=1
         type broadPeak
         origAssembly hg18
@@ -144,7 +144,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K27m3 Ht 2
-        longLabel BJ H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel BJ H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=BJ rep=2
         type broadPeak
         origAssembly hg18
@@ -153,7 +153,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K27m3 Ht 2
-        longLabel Caco-2 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel Caco-2 H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=Caco2 rep=2
         type broadPeak
         origAssembly hg18
@@ -162,7 +162,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K4m3 Ht 2
-        longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel BJ H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=BJ rep=2
         type broadPeak
         origAssembly hg18
@@ -171,7 +171,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K36m3 Ht 2
-        longLabel BJ H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel BJ H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=BJ rep=2
         type broadPeak
         origAssembly hg18
@@ -180,7 +180,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K36m3 Ht 2
-        longLabel Caco-2 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel Caco-2 H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=Caco2 rep=2
         type broadPeak
         origAssembly hg18
@@ -188,8 +188,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06 H3K4m3 Ht 2
-        longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        shortLabel GM90 H3K4m3 Ht 2
+        longLabel GM06990 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=GM06990 rep=2
         type broadPeak
         origAssembly hg18
@@ -197,8 +197,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06 H3K27m3 Ht 2
-        longLabel GM06990 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        shortLabel GM90 H3K27m3 Ht 2
+        longLabel GM06990 H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=GM06990 rep=2
         type broadPeak
         origAssembly hg18
@@ -206,8 +206,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06 H3K27m3 Ht 1
-        longLabel GM06990 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel GM90 H3K27m3 Ht 1
+        longLabel GM06990 H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=GM06990 rep=1
         type broadPeak
         origAssembly hg18
@@ -215,8 +215,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06 H3K36m3 Ht 1
-        longLabel GM06990 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel GM90 H3K36m3 Ht 1
+        longLabel GM06990 H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=GM06990 rep=1
         type broadPeak
         origAssembly hg18
@@ -224,8 +224,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot
-        shortLabel GM12 H3K4m3 Ht 1
-        longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel GM78 H3K4m3 Ht 1
+        longLabel GM12878 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=1GM12878 rep=1
         type broadPeak
         origAssembly hg18
@@ -234,8 +234,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot
-        shortLabel GM12 H3K27m3 Ht 1
-        longLabel GM12878 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel GM78 H3K27m3 Ht 1
+        longLabel GM12878 H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=1GM12878 rep=1
         type broadPeak
         origAssembly hg18
@@ -244,8 +244,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot
-        shortLabel GM12 H3K36m3 Ht 1
-        longLabel GM12878 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel GM78 H3K36m3 Ht 1
+        longLabel GM12878 H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=1GM12878 rep=1
         type broadPeak
         origAssembly hg18
@@ -255,7 +255,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K4m3 Ht 1
-        longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=2HELA rep=1
         type broadPeak
         origAssembly hg18
@@ -265,7 +265,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K36m3 Ht 1
-        longLabel HeLa-S3 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=2HELA rep=1
         type broadPeak
         origAssembly hg18
@@ -275,7 +275,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K27m3 Ht 1
-        longLabel HeLa-S3 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=2HELA rep=1
         type broadPeak
         origAssembly hg18
@@ -285,7 +285,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K4m3 Ht 1
-        longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HepG2 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=2HEPG2 rep=1
         type broadPeak
         origAssembly hg18
@@ -295,7 +295,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K27m3 Ht 1
-        longLabel HepG2 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HepG2 H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=2HEPG2 rep=1
         type broadPeak
         origAssembly hg18
@@ -305,7 +305,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K36m3 Ht 1
-        longLabel HepG2 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HepG2 H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=2HEPG2 rep=1
         type broadPeak
         origAssembly hg18
@@ -314,8 +314,8 @@ noInherit on
 
         track wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HL60 H3K4m3 Ht 1
-        longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel HL-60 H3K4m3 Ht 1
+        longLabel HL-60 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HL60 rep=1
         type broadPeak
         origAssembly hg18
@@ -324,7 +324,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMEC H3K27m3 Ht 1
-        longLabel HMEC H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HMEC H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HMEC rep=1
         type broadPeak
         origAssembly hg18
@@ -333,7 +333,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K36m3 Ht 1
-        longLabel HRE H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HRE H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HRE rep=1
         type broadPeak
         origAssembly hg18
@@ -342,7 +342,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K27m3 Ht 1
-        longLabel HRE H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HRE H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HRE rep=1
         type broadPeak
         origAssembly hg18
@@ -351,7 +351,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K4m3 Ht 1
-        longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HUVEC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=2HUVEC rep=1
         type broadPeak
         origAssembly hg18
@@ -361,7 +361,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K27m3 Ht 1
-        longLabel HUVEC H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HUVEC H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=2HUVEC rep=1
         type broadPeak
         origAssembly hg18
@@ -371,7 +371,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K36m3 Ht 1
-        longLabel HUVEC H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HUVEC H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=2HUVEC rep=1
         type broadPeak
         origAssembly hg18
@@ -381,7 +381,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot
         shortLabel K562 H3K4m3 Ht 1
-        longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel K562 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=1K562 rep=1
         type broadPeak
         origAssembly hg18
@@ -391,7 +391,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot
         shortLabel K562 H3K27m3 Ht 1
-        longLabel K562 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel K562 H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=1K562 rep=1
         type broadPeak
         origAssembly hg18
@@ -401,7 +401,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot
         shortLabel K562 H3K36m3 Ht 1
-        longLabel K562 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel K562 H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=1K562 rep=1
         type broadPeak
         origAssembly hg18
@@ -411,7 +411,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K4m3 Ht 1
-        longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel NHEK H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=NHEK rep=1
         type broadPeak
         origAssembly hg18
@@ -421,7 +421,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K27m3 Ht 1
-        longLabel NHEK H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel NHEK H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=NHEK rep=1
         type broadPeak
         origAssembly hg18
@@ -431,7 +431,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K36m3 Ht 1
-        longLabel NHEK H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel NHEK H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=NHEK rep=1
         type broadPeak
         origAssembly hg18
@@ -441,7 +441,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K4m3 Ht 1
-        longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel SAEC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=SAEC rep=1
         type broadPeak
         origAssembly hg18
@@ -450,7 +450,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K27m3 Ht 1
-        longLabel SAEC H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel SAEC H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=SAEC rep=1
         type broadPeak
         origAssembly hg18
@@ -459,7 +459,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K36m3 Ht 1
-        longLabel SAEC H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel SAEC H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=SAEC rep=1
         type broadPeak
         origAssembly hg18
@@ -468,7 +468,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K4m3 Ht 1
-        longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel SK-N-SH RA H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=SKNSHRA rep=1
         type broadPeak
         origAssembly hg18
@@ -477,7 +477,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K27m3 Ht 1
-        longLabel SK-N-SH_RA H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel SK-N-SH RA H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=SKNSHRA rep=1
         type broadPeak
         origAssembly hg18
@@ -486,7 +486,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K36m3 Ht 1
-        longLabel SK-N-SH_RA H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel SK-N-SH RA H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=SKNSHRA rep=1
         type broadPeak
         origAssembly hg18
@@ -495,7 +495,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K4m3 Ht 2
-        longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel Caco-2 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=Caco2 rep=2
         type broadPeak
         origAssembly hg18
@@ -503,8 +503,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06 H3K36m3 Ht 2
-        longLabel GM06990 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        shortLabel GM90 H3K36m3 Ht 2
+        longLabel GM06990 H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=GM06990 rep=2
         type broadPeak
         origAssembly hg18
@@ -512,8 +512,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot 
-        shortLabel GM12 H3K4m3 Ht 2
-        longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        shortLabel GM78 H3K4m3 Ht 2
+        longLabel GM12878 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=1GM12878 rep=2
         type broadPeak
         origAssembly hg18
@@ -522,8 +522,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot 
-        shortLabel GM12 H3K36m3 Ht 2
-        longLabel GM12878 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        shortLabel GM78 H3K36m3 Ht 2
+        longLabel GM12878 H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=1GM12878 rep=2
         type broadPeak
         origAssembly hg18
@@ -532,8 +532,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot 
-        shortLabel GM12 H3K27m3 Ht 2
-        longLabel GM12878 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        shortLabel GM78 H3K27m3 Ht 2
+        longLabel GM12878 H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=1GM12878 rep=2
         type broadPeak
         origAssembly hg18
@@ -543,7 +543,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K4m3 Ht 2
-        longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HeLa-S3 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=2HELA rep=2
         type broadPeak
         origAssembly hg18
@@ -553,7 +553,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K27m3 Ht 2
-        longLabel HeLa-S3 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HeLa-S3 H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=2HELA rep=2
         type broadPeak
         origAssembly hg18
@@ -563,7 +563,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K36m3 Ht 2
-        longLabel HeLa-S3 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HeLa-S3 H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=2HELA rep=2
         type broadPeak
         origAssembly hg18
@@ -573,7 +573,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K4m3 Ht 2
-        longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HepG2 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=2HEPG2 rep=2
         type broadPeak
         origAssembly hg18
@@ -583,7 +583,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K27m3 Ht 2
-        longLabel HepG2 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HepG2 H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=2HEPG2 rep=2
         type broadPeak
         origAssembly hg18
@@ -592,8 +592,8 @@ noInherit on
 
         track wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HL60 H3K4m3 Ht 2
-        longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        shortLabel HL-60 H3K4m3 Ht 2
+        longLabel HL-60 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HL60 rep=2
         type broadPeak
         origAssembly hg18
@@ -602,7 +602,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K4m3 Ht 2
-        longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HRE H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HRE rep=2
         type broadPeak
         origAssembly hg18
@@ -611,7 +611,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K27m3 Ht 2
-        longLabel HRE H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HRE H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HRE rep=2
         type broadPeak
         origAssembly hg18
@@ -620,7 +620,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K36m3 Ht 2
-        longLabel HRE H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HRE H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HRE rep=2
         type broadPeak
         origAssembly hg18
@@ -629,7 +629,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K4m3 Ht 2
-        longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HUVEC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=2HUVEC rep=2
         type broadPeak
         origAssembly hg18
@@ -639,7 +639,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K27m3 Ht 2
-        longLabel HUVEC H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HUVEC H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=2HUVEC rep=2
         type broadPeak
         origAssembly hg18
@@ -649,7 +649,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K36m3 Ht 2
-        longLabel HUVEC H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HUVEC H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=2HUVEC rep=2
         type broadPeak
         origAssembly hg18
@@ -659,7 +659,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot 
         shortLabel K562 H3K4m3 Ht 2
-        longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel K562 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=1K562 rep=2
         type broadPeak
         origAssembly hg18
@@ -669,7 +669,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot 
         shortLabel K562 H3K27m3 Ht 2
-        longLabel K562 H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel K562 H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=1K562 rep=2
         type broadPeak
         origAssembly hg18
@@ -679,7 +679,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot 
         shortLabel K562 H3K36m3 Ht 2
-        longLabel K562 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel K562 H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=1K562 rep=2
         type broadPeak
         origAssembly hg18
@@ -689,7 +689,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K4m3 Ht 2
-        longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel NHEK H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=NHEK rep=2
         type broadPeak
         origAssembly hg18
@@ -699,7 +699,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K36m3 Ht 2
-        longLabel NHEK H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel NHEK H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=NHEK rep=2
         type broadPeak
         origAssembly hg18
@@ -709,7 +709,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K4m3 Ht 2
-        longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel SAEC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=SAEC rep=2
         type broadPeak
         origAssembly hg18
@@ -718,7 +718,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K27m3 Ht 2
-        longLabel SAEC H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel SAEC H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=SAEC rep=2
         type broadPeak
         origAssembly hg18
@@ -727,7 +727,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K36m3 Ht 2
-        longLabel SAEC H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel SAEC H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=SAEC rep=2
         type broadPeak
         origAssembly hg18
@@ -736,7 +736,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K4m3 Ht 2
-        longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel SK-N-SH RA H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=SKNSHRA rep=2
         type broadPeak
         origAssembly hg18
@@ -745,7 +745,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K27m3 Ht 2
-        longLabel SK-N-SH_RA H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel SK-N-SH RA H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=SKNSHRA rep=2
         type broadPeak
         origAssembly hg18
@@ -754,7 +754,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K36m3 Ht 2
-        longLabel SK-N-SH_RA H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel SK-N-SH RA H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=SKNSHRA rep=2
         type broadPeak
         origAssembly hg18
@@ -763,7 +763,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K4m3 Ht 1
-        longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HRE H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HRE rep=1
         type broadPeak
         origAssembly hg18
@@ -772,7 +772,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K27m3 Ht 2
-        longLabel NHEK H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel NHEK H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=NHEK rep=2
         type broadPeak
         origAssembly hg18
@@ -782,7 +782,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K4m3 Ht 1
-        longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel H7-hESC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7es rep=1
         type broadPeak
         origAssembly hg19
@@ -791,7 +791,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K27m3 Ht 1
-        longLabel H7-hESC H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel H7-hESC H3K27me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=H7es rep=1
         type broadPeak
         origAssembly hg19
@@ -800,7 +800,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K27m3 Ht 2
-        longLabel H7-hESC H3K27me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel H7-hESC H3K27me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=H7es rep=2
         type broadPeak
         origAssembly hg19
@@ -809,7 +809,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K36m3 Ht 2
-        longLabel H7-hESC H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel H7-hESC H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=H7es rep=2
         type broadPeak
         origAssembly hg19
@@ -818,7 +818,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K4m3 Ht 2
-        longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel H7-hESC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7es rep=2
         type broadPeak
         origAssembly hg19
@@ -827,7 +827,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K36m3 Ht 1
-        longLabel H7-hESC H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel H7-hESC H3K36me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=H7es rep=1
         type broadPeak
         origAssembly hg19
@@ -836,7 +836,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K36m3 Ht 2
-        longLabel HepG2 H3K36me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HepG2 H3K36me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=2HEPG2 rep=2
         type broadPeak
         origAssembly hg19
@@ -846,7 +846,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG49 H3K4m3 Ht 1
-        longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel AG04449 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG04449 rep=1
         type broadPeak
         origAssembly hg19
@@ -855,7 +855,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG49 H3K4m3 Ht 2
-        longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel AG04449 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG04449 rep=2
         type broadPeak
         origAssembly hg19
@@ -864,7 +864,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG50 H3K4m3 Ht 1
-        longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel AG04450 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG04450 rep=1
         type broadPeak
         origAssembly hg19
@@ -873,7 +873,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG50 H3K4m3 Ht 2
-        longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel AG04450 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG04450 rep=2
         type broadPeak
         origAssembly hg19
@@ -882,7 +882,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG09 H3K4m3 Ht 2
-        longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel AG09309 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG09309 rep=2
         type broadPeak
         origAssembly hg19
@@ -891,7 +891,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG09 H3K4m3 Ht 1
-        longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel AG09309 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG09309 rep=1
         type broadPeak
         origAssembly hg19
@@ -900,7 +900,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG19 H3K4m3 Ht 1
-        longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel AG09319 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG09319 rep=1
         type broadPeak
         origAssembly hg19
@@ -909,7 +909,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG19 H3K4m3 Ht 2
-        longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel AG09319 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG09319 rep=2
         type broadPeak
         origAssembly hg19
@@ -918,7 +918,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG03 H3K4m3 Ht 1
-        longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel AG10803 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG10803 rep=1
         type broadPeak
         origAssembly hg19
@@ -927,7 +927,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG03 H3K4m3 Ht 2
-        longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel AG10803 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AG10803 rep=2
         type broadPeak
         origAssembly hg19
@@ -936,7 +936,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel AoAF H3K4m3 Ht 2
-        longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel AoAF H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AOAF rep=2
         type broadPeak
         origAssembly hg19
@@ -945,7 +945,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel AoAF H3K4m3 Ht 1
-        longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel AoAF H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=AOAF rep=1
         type broadPeak
         origAssembly hg19
@@ -954,7 +954,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCM H3K4m3 Ht 1
-        longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HCM H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCM rep=1
         type broadPeak
         origAssembly hg19
@@ -963,7 +963,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HBMEC H3K4m3 Ht 2
-        longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HBMEC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HBMEC rep=2
         type broadPeak
         origAssembly hg19
@@ -972,7 +972,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HBMEC H3K4m3 Ht 1
-        longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HBMEC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HBMEC rep=1
         type broadPeak
         origAssembly hg19
@@ -980,8 +980,8 @@ noInherit on
 
         track wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCFaa H3K4m3 Ht 1
-        longLabel HCFaa H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel HCFa H3K4m3 Ht 1
+        longLabel HCFaa H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCFaa rep=1
         type broadPeak
         origAssembly hg19
@@ -990,7 +990,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCF H3K4m3 Ht 1
-        longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HCF H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCF rep=1
         type broadPeak
         origAssembly hg19
@@ -999,7 +999,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCF H3K4m3 Ht 2
-        longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HCF H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCF rep=2
         type broadPeak
         origAssembly hg19
@@ -1008,7 +1008,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCM H3K4m3 Ht 2
-        longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HCM H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCM rep=2
         type broadPeak
         origAssembly hg19
@@ -1017,7 +1017,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCPE H3K4m3 Ht 2
-        longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HCPEpiC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCPE rep=2
         type broadPeak
         origAssembly hg19
@@ -1026,7 +1026,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCPE H3K4m3 Ht 1
-        longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HCPEpiC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCPE rep=1
         type broadPeak
         origAssembly hg19
@@ -1035,7 +1035,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCT16 H3K4m3 Ht 2
-        longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HCT-116 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCT116 rep=2
         type broadPeak
         origAssembly hg19
@@ -1044,7 +1044,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCT16 H3K4m3 Ht 1
-        longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HCT-116 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HCT116 rep=1
         type broadPeak
         origAssembly hg19
@@ -1053,7 +1053,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEE H3K4m3 Ht 1
-        longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HEEpIC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HEE rep=1
         type broadPeak
         origAssembly hg19
@@ -1062,7 +1062,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEE H3K4m3 Ht 2
-        longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HEEpIC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HEE rep=2
         type broadPeak
         origAssembly hg19
@@ -1071,7 +1071,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEK H3K4m3 Ht 2
-        longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HEK293 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HEK293 rep=2
         type broadPeak
         origAssembly hg19
@@ -1080,7 +1080,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEK H3K4m3 Ht 1
-        longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HEK293 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HEK293 rep=1
         type broadPeak
         origAssembly hg19
@@ -1089,7 +1089,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMEC H3K4m3 Ht 2
-        longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HMEC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HMEC rep=2
         type broadPeak
         origAssembly hg19
@@ -1098,7 +1098,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMEC H3K4m3 Ht 1
-        longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HMEC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HMEC rep=1
         type broadPeak
         origAssembly hg19
@@ -1107,7 +1107,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMF H3K4m3 Ht 1
-        longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HMF H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HMF rep=1
         type broadPeak
         origAssembly hg19
@@ -1116,7 +1116,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMF H3K4m3 Ht 2
-        longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HMF H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HMF rep=2
         type broadPeak
         origAssembly hg19
@@ -1125,7 +1125,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPAF H3K4m3 Ht 1
-        longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HPAF H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HPAF rep=1
         type broadPeak
         origAssembly hg19
@@ -1134,7 +1134,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPAF H3K4m3 Ht 2
-        longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HPAF H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HPAF rep=2
         type broadPeak
         origAssembly hg19
@@ -1143,7 +1143,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPF H3K4m3 Ht 2
-        longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HPF H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HPF rep=2
         type broadPeak
         origAssembly hg19
@@ -1152,7 +1152,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPF H3K4m3 Ht 1
-        longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HPF H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HPF rep=1
         type broadPeak
         origAssembly hg19
@@ -1161,7 +1161,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRPE H3K4m3 Ht 2
-        longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HRPEpIC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HRPE rep=2
         type broadPeak
         origAssembly hg19
@@ -1170,7 +1170,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRPE H3K4m3 Ht 1
-        longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HRPEpIC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HRPE rep=1
         type broadPeak
         origAssembly hg19
@@ -1179,7 +1179,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HVMF H3K4m3 Ht 2
-        longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HVMF H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HVMF rep=2
         type broadPeak
         origAssembly hg19
@@ -1188,7 +1188,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HVMF H3K4m3 Ht 1
-        longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HVMF H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HVMF rep=1
         type broadPeak
         origAssembly hg19
@@ -1197,7 +1197,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel Jurk H3K4m3 Ht 2
-        longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel Jurkat H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=Jurkat rep=2
         type broadPeak
         origAssembly hg19
@@ -1206,7 +1206,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel Jurk H3K4m3 Ht 1
-        longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel Jurkat H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=Jurkat rep=1
         type broadPeak
         origAssembly hg19
@@ -1214,8 +1214,8 @@ noInherit on
 
         track wgEncodeUwHistoneMcf7H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel MCF-7 H3K4m3 Ht 1
-        longLabel MCF-7 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        shortLabel MCF7 H3K4m3 Ht 1
+        longLabel MCF-7 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=MCF7 rep=1
         type broadPeak
         origAssembly hg19
@@ -1224,7 +1224,7 @@ noInherit on
         track wgEncodeUwHistoneNb4H3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel NB4 H3K4m3 Ht 1
-        longLabel NB4 H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel NB4 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=NB4 rep=1
         type broadPeak
         origAssembly hg19
@@ -1233,7 +1233,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHDFn H3K4m3 Ht 1
-        longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel NHDF-neo H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=NHDF-neo rep=1
         type broadPeak
         origAssembly hg19
@@ -1242,7 +1242,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHDFn H3K4m3 Ht 2
-        longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel NHDF-neo H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=NHDF-neo rep=2
         type broadPeak
         origAssembly hg19
@@ -1251,7 +1251,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
         shortLabel HAsp H3K4m3 Ht 1
-        longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 1 from ENCODE/UW
+        longLabel HA-sp H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HA-sp rep=1
         type broadPeak
         origAssembly hg19
@@ -1260,7 +1260,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
         shortLabel HAsp H3K4m3 Ht 2
-        longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Hotspots Rep 2 from ENCODE/UW
+        longLabel HA-sp H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HA-sp  rep=2
         type broadPeak
         origAssembly hg19
@@ -1268,8 +1268,8 @@ noInherit on
 
         track wgEncodeUwHistoneHacH3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HAc H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in HAc cells)
+        shortLabel HAc H3K4m3 Ht 2
+        longLabel HAc H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HAC rep=2
         type broadPeak
         origAssembly hg19
@@ -1277,8 +1277,8 @@ noInherit on
 
         track wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel A549 H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in A549 cells)
+        shortLabel A549 H3K4m3 Ht 2
+        longLabel A549 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=A549 rep=2
         type broadPeak
         origAssembly hg19
@@ -1286,8 +1286,8 @@ noInherit on
 
         track wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel A549 H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in A549 cells)
+        shortLabel A549 H3K4m3 Ht 1
+        longLabel A549 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=A549 rep=1
         type broadPeak
         origAssembly hg19
@@ -1295,8 +1295,8 @@ noInherit on
 
         track wgEncodeUwHistoneHacH3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HAc H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in HAc cells)
+        shortLabel HAc H3K4m3 Ht 1
+        longLabel HAc H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HAC rep=1
         type broadPeak
         origAssembly hg19
@@ -1304,8 +1304,8 @@ noInherit on
 
         track wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HFF-Myc H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in HFF-Myc cells)
+        shortLabel HFMc H3K4m3 Ht 1
+        longLabel HFFMyc H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HFFMYC rep=1
         type broadPeak
         origAssembly hg19
@@ -1313,8 +1313,8 @@ noInherit on
 
         track wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel LNCaP H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in LNCaP cells)
+        shortLabel LNCP H3K4m3 Ht 2
+        longLabel LNCaP H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=LNCAP rep=2
         type broadPeak
         origAssembly hg19
@@ -1323,8 +1323,8 @@ noInherit on
 
         track wgEncodeUwHistoneLncapH3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel LNCaP H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in LNCaP cells)
+        shortLabel LNCP H3K4m3 Ht 1
+        longLabel LNCaP H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=LNCAP rep=1
         type broadPeak
         origAssembly hg19
@@ -1333,8 +1333,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHLF H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in NHLF cells)
+        shortLabel NHLF H3K4m3 Ht 2
+        longLabel NHLF H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=NHLF rep=2
         type broadPeak
         origAssembly hg19
@@ -1342,8 +1342,8 @@ noInherit on
 
         track wgEncodeUwHistoneHffmycH3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HFF-Myc H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in HFF-Myc cells)
+        shortLabel HFMc H3K4m3 Ht 2
+        longLabel HFFMyc H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=HFFMYC rep=2
         type broadPeak
         origAssembly hg19
@@ -1351,8 +1351,8 @@ noInherit on
 
         track wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel PANC-1 H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in PANC-1 cells)
+        shortLabel PANC1 H3K4m3 Ht 2
+        longLabel PANC-1 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=PANC1 rep=2
         type broadPeak
         origAssembly hg19
@@ -1360,8 +1360,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHLF H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in NHLF cells)
+        shortLabel NHLF H3K4m3 Ht 1
+        longLabel NHLF H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=NHLF rep=1
         type broadPeak
         origAssembly hg19
@@ -1369,8 +1369,8 @@ noInherit on
 
         track wgEncodeUwHistonePanc1H3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel PANC-1 H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in PANC-1 cells)
+        shortLabel PANC1 H3K4m3 Ht 1
+        longLabel PANC-1 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=PANC1 rep=1
         type broadPeak
         origAssembly hg19
@@ -1378,8 +1378,8 @@ noInherit on
 
         track wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel WERI-Rb-1 H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in WERI-Rb-1 cells)
+        shortLabel WERI H3K4m3 Ht 2
+        longLabel WERI-Rb-1 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=WERIRB1 rep=2
         type broadPeak
         origAssembly hg19
@@ -1387,8 +1387,8 @@ noInherit on
 
         track wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SK-N-MC H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in SK-N-MC cells)
+        shortLabel SKNMC H3K4m3 Ht 1
+        longLabel SK-N-MC H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=SKNMC rep=1
         type broadPeak
         origAssembly hg19
@@ -1396,8 +1396,8 @@ noInherit on
 
         track wgEncodeUwHistoneWerirb1H3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel WERI-Rb-1 H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in WERI-Rb-1 cells)
+        shortLabel WERI H3K4m3 Ht 1
+        longLabel WERI-Rb-1 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=WERIRB1 rep=1
         type broadPeak
         origAssembly hg19
@@ -1405,8 +1405,8 @@ noInherit on
 
         track wgEncodeUwHistoneSknmcH3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SK-N-MC H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in SK-N-MC cells)
+        shortLabel SKNMC H3K4m3 Ht 2
+        longLabel SK-N-MC H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=SKNMC rep=2
         type broadPeak
         origAssembly hg19
@@ -1414,8 +1414,8 @@ noInherit on
 
         track wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel WI-38 H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in WI-38 cells)
+        shortLabel WI38 H3K4m3 Ht 2
+        longLabel WI-38 H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=WI38 rep=2
         type broadPeak
         origAssembly hg19
@@ -1423,8 +1423,8 @@ noInherit on
 
         track wgEncodeUwHistoneWi38H3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel WI-38 H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in WI-38 cells)
+        shortLabel WI38 H3K4m3 Ht 1
+        longLabel WI-38 H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=WI38 rep=1
         type broadPeak
         origAssembly hg19
@@ -1432,8 +1432,8 @@ noInherit on
 
         track wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel BE2_C H3K4me3 1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in BE2_C cells)
+        shortLabel BE2c H3K4m3 Ht 1
+        longLabel BE2c H3K4me3 Histone Mods by ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=BE2C rep=1
         type broadPeak
         origAssembly hg19
@@ -1441,8 +1441,8 @@ noInherit on
 
         track wgEncodeUwHistoneBe2cH3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel BE2_C H3K4me3 2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in BE2_C cells)
+        shortLabel BE2c H3K4m3 Ht 2
+        longLabel BE2c H3K4me3 Histone Mods by ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=BE2C rep=2
         type broadPeak
         origAssembly hg19
@@ -1513,7 +1513,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k4me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06 H3K4m3 Pk 1
+        shortLabel GM90 H3K4m3 Pk 1
         longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=GM06990 rep=1
         type narrowPeak
@@ -1567,7 +1567,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k4me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06 H3K4m3 Pk 2
+        shortLabel GM90 H3K4m3 Pk 2
         longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=GM06990 rep=2
         type narrowPeak
@@ -1576,7 +1576,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k27me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06 H3K27m3 Pk 2
+        shortLabel GM90 H3K27m3 Pk 2
         longLabel GM06990 H3K27me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=GM06990 rep=2
         type narrowPeak
@@ -1585,7 +1585,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k27me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06 H3K27m3 Pk 1
+        shortLabel GM90 H3K27m3 Pk 1
         longLabel GM06990 H3K27me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=GM06990 rep=1
         type narrowPeak
@@ -1594,7 +1594,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k36me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06 H3K36m3 Pk 1
+        shortLabel GM90 H3K36m3 Pk 1
         longLabel GM06990 H3K36me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=GM06990 rep=1
         type narrowPeak
@@ -1603,7 +1603,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k4me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel GM12 H3K4m3 Pk 1
+        shortLabel GM78 H3K4m3 Pk 1
         longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=1GM12878 rep=1
         type narrowPeak
@@ -1613,7 +1613,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k27me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel GM12 H3K27m3 Pk 1
+        shortLabel GM78 H3K27m3 Pk 1
         longLabel GM12878 H3K27me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=1GM12878 rep=1
         type narrowPeak
@@ -1623,7 +1623,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k36me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel GM12 H3K36m3 Pk 1
+        shortLabel GM78 H3K36m3 Pk 1
         longLabel GM12878 H3K36me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=1GM12878 rep=1
         type narrowPeak
@@ -1693,7 +1693,7 @@ noInherit on
 
         track wgEncodeUwHistoneHl60H3k4me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HL60 H3K4m3 Pk 1
+        shortLabel HL-60 H3K4m3 Pk 1
         longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=HL60 rep=1
         type narrowPeak
@@ -1882,7 +1882,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k36me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06 H3K36m3 Pk 2
+        shortLabel GM90 H3K36m3 Pk 2
         longLabel GM06990 H3K36me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=GM06990 rep=2
         type narrowPeak
@@ -1891,7 +1891,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k4me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel GM12 H3K4m3 Pk 2
+        shortLabel GM78 H3K4m3 Pk 2
         longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=1GM12878 rep=2
         type narrowPeak
@@ -1901,7 +1901,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k36me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel GM12 H3K36m3 Pk 2
+        shortLabel GM78 H3K36m3 Pk 2
         longLabel GM12878 H3K36me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=1GM12878 rep=2
         type narrowPeak
@@ -1911,7 +1911,7 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k27me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel GM12 H3K27m3 Pk 2
+        shortLabel GM78 H3K27m3 Pk 2
         longLabel GM12878 H3K27me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=1GM12878 rep=2
         type narrowPeak
@@ -1971,7 +1971,7 @@ noInherit on
 
         track wgEncodeUwHistoneHl60H3k4me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HL60 H3K4m3 Pk 2
+        shortLabel HL-60 H3K4m3 Pk 2
         longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=HL60 rep=2
         type narrowPeak
@@ -2359,7 +2359,7 @@ noInherit on
 
         track wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCFaa H3K4m3 Pk 1
+        shortLabel HCFa H3K4m3 Pk 1
         longLabel HCFaa H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=HCFaa rep=1
         type narrowPeak
@@ -2593,7 +2593,7 @@ noInherit on
 
         track wgEncodeUwHistoneMcf7H3k4me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel MCF-7 H3K4m3 Pk 1
+        shortLabel MCF7 H3K4m3 Pk 1
         longLabel MCF-7 H3K4me3 Histone Modifications by ChIP-seq Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=MCF7 rep=1
         type narrowPeak
@@ -2647,8 +2647,8 @@ noInherit on
 
         track wgEncodeUwHistoneHacH3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HAc H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in HAc cells)
+        shortLabel HAc H3K4m3 Pk 2
+        longLabel HAc H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=HAC rep=2
         type narrowPeak
         origAssembly hg19
@@ -2656,8 +2656,8 @@ noInherit on
 
         track wgEncodeUwHistoneA549H3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel A549 H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in A549 cells)
+        shortLabel A549 H3K4m3 Pk 2
+        longLabel A549 H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=A549 rep=2
         type narrowPeak
         origAssembly hg19
@@ -2665,8 +2665,8 @@ noInherit on
 
         track wgEncodeUwHistoneA549H3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel A549 H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in A549 cells)
+        shortLabel A549 H3K4m3 Pk 1
+        longLabel A549 H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=A549 rep=1
         type narrowPeak
         origAssembly hg19
@@ -2674,8 +2674,8 @@ noInherit on
 
         track wgEncodeUwHistoneHacH3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HAc H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in HAc cells)
+        shortLabel HAc H3K4m3 Pk 1
+        longLabel HAc H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=HAC rep=1
         type narrowPeak
         origAssembly hg19
@@ -2683,8 +2683,8 @@ noInherit on
 
         track wgEncodeUwHistoneHffmycH3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HFF-Myc H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in HFF-Myc cells)
+        shortLabel HFMc H3K4m3 Pk 1
+        longLabel HFFMyc H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=HFFMYC rep=1
         type narrowPeak
         origAssembly hg19
@@ -2692,8 +2692,8 @@ noInherit on
 
         track wgEncodeUwHistoneLncapH3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel LNCaP H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in LNCaP cells)
+        shortLabel LNCP H3K4m3 Pk 2
+        longLabel LNCaP H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=LNCAP rep=2
         type narrowPeak
         origAssembly hg19
@@ -2702,8 +2702,8 @@ noInherit on
 
         track wgEncodeUwHistoneLncapH3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel LNCaP H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in LNCaP cells)
+        shortLabel LNCP H3K4m3 Pk 1
+        longLabel LNCaP H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=LNCAP rep=1
         type narrowPeak
         origAssembly hg19
@@ -2712,8 +2712,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhlfH3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHLF H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in NHLF cells)
+        shortLabel NHLF H3K4m3 Pk 2
+        longLabel NHLF H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=NHLF rep=2
         type narrowPeak
         origAssembly hg19
@@ -2721,8 +2721,8 @@ noInherit on
 
         track wgEncodeUwHistoneHffmycH3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HFF-Myc H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in HFF-Myc cells)
+        shortLabel HFMc H3K4m3 Pk 2
+        longLabel HFFMyc H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=HFFMYC rep=2
         type narrowPeak
         origAssembly hg19
@@ -2730,8 +2730,8 @@ noInherit on
 
         track wgEncodeUwHistonePanc1H3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel PANC-1 H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in PANC-1 cells)
+        shortLabel PANC1 H3K4m3 Pk 2
+        longLabel PANC-1 H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=PANC1 rep=2
         type narrowPeak
         origAssembly hg19
@@ -2739,8 +2739,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhlfH3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHLF H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in NHLF cells)
+        shortLabel NHLF H3K4m3 Pk 1
+        longLabel NHLF H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=NHLF rep=1
         type narrowPeak
         origAssembly hg19
@@ -2748,8 +2748,8 @@ noInherit on
 
         track wgEncodeUwHistonePanc1H3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel PANC-1 H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in PANC-1 cells)
+        shortLabel PANC1 H3K4m3 Pk 1
+        longLabel PANC-1 H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=PANC1 rep=1
         type narrowPeak
         origAssembly hg19
@@ -2757,8 +2757,8 @@ noInherit on
 
         track wgEncodeUwHistoneWerirb1H3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel WERI-Rb-1 H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in WERI-Rb-1 cells)
+        shortLabel WERI H3K4m3 Pk 2
+        longLabel WERI-Rb-1 H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=WERIRB1 rep=2
         type narrowPeak
         origAssembly hg19
@@ -2766,8 +2766,8 @@ noInherit on
 
         track wgEncodeUwHistoneSknmcH3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SK-N-MC H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in SK-N-MC cells)
+        shortLabel SKNMC H3K4m3 Pk 1
+        longLabel SK-N-MC H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=SKNMC rep=1
         type narrowPeak
         origAssembly hg19
@@ -2775,8 +2775,8 @@ noInherit on
 
         track wgEncodeUwHistoneWerirb1H3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel WERI-Rb-1 H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in WERI-Rb-1 cells)
+        shortLabel WERI H3K4m3 Pk 1
+        longLabel WERI-Rb-1 H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=WERIRB1 rep=1
         type narrowPeak
         origAssembly hg19
@@ -2784,8 +2784,8 @@ noInherit on
 
         track wgEncodeUwHistoneSknmcH3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SK-N-MC H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in SK-N-MC cells)
+        shortLabel SKNMC H3K4m3 Pk 2
+        longLabel SK-N-MC H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=SKNMC rep=2
         type narrowPeak
         origAssembly hg19
@@ -2793,8 +2793,8 @@ noInherit on
 
         track wgEncodeUwHistoneWi38H3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel WI-38 H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in WI-38 cells)
+        shortLabel WI38 H3K4m3 Pk 2
+        longLabel WI-38 H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=WI38 rep=2
         type narrowPeak
         origAssembly hg19
@@ -2802,8 +2802,8 @@ noInherit on
 
         track wgEncodeUwHistoneWi38H3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel WI-38 H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in WI-38 cells)
+        shortLabel WI38 H3K4m3 Pk 1
+        longLabel WI-38 H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=WI38 rep=1
         type narrowPeak
         origAssembly hg19
@@ -2811,8 +2811,8 @@ noInherit on
 
         track wgEncodeUwHistoneBe2cH3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BE2_C H3K4me3 Pk 1
-        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in BE2_C cells)
+        shortLabel BE2c H3K4m3 Pk 1
+        longLabel BE2c H3K4me3 Histone Mods by ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=BE2C rep=1
         type narrowPeak
         origAssembly hg19
@@ -2820,8 +2820,8 @@ noInherit on
 
         track wgEncodeUwHistoneBe2cH3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BE2_C H3K4me3 Pk 2
-        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in BE2_C cells)
+        shortLabel BE2c H3K4m3 Pk 2
+        longLabel BE2c H3K4me3 Histone Mods by ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=BE2C rep=2
         type narrowPeak
         origAssembly hg19
@@ -2842,8 +2842,8 @@ noInherit on
 
         track wgEncodeUwHistoneBjInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ Input Sg 1
-        longLabel BJ Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel BJ In Sg 1
+        longLabel BJ Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=BJ rep=1
         type bigWig 1.000000 15966.000000
         origAssembly hg18
@@ -2852,7 +2852,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K27m3 Sg 1
-        longLabel BJ H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel BJ H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=BJ rep=1
         type bigWig 1.000000 5970.000000
         origAssembly hg18
@@ -2860,8 +2860,8 @@ noInherit on
 
         track wgEncodeUwHistoneCaco2InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco Input Sg 1
-        longLabel Caco-2 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel Caco In Sg 1
+        longLabel Caco-2 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=Caco2 rep=1
         type bigWig 1.000000 9741.000000
         origAssembly hg18
@@ -2869,8 +2869,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06 Input Sg 1
-        longLabel GM06990 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel GM90 In Sg 1
+        longLabel GM06990 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=GM06990 rep=1
         type bigWig 1.000000 8015.000000
         origAssembly hg18
@@ -2879,8 +2879,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM12 Input Sg 1
-        longLabel GM12878 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel GM78 In Sg 1
+        longLabel GM12878 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=1GM12878 rep=1
         type bigWig 1.000000 8963.000000
         origAssembly hg18
@@ -2889,8 +2889,8 @@ noInherit on
 
         track wgEncodeUwHistoneHek293InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEK Input Sg 1
-        longLabel HEK293 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HEK In Sg 1
+        longLabel HEK293 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HEK293 rep=1
         type bigWig 1.000000 8215.000000
         origAssembly hg18
@@ -2898,8 +2898,8 @@ noInherit on
 
         track wgEncodeUwHistoneHmecInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMEC Input Sg 1
-        longLabel HMEC Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HMEC In Sg 1
+        longLabel HMEC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HMEC rep=1
         type bigWig 1.000000 9968.000000
         origAssembly hg18
@@ -2907,8 +2907,8 @@ noInherit on
 
         track wgEncodeUwHistoneHreInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE Input Sg 1
-        longLabel HRE Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HRE In Sg 1
+        longLabel HRE Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HRE rep=1
         type bigWig 1.000000 7076.000000
         origAssembly hg18
@@ -2916,8 +2916,8 @@ noInherit on
 
         track wgEncodeUwHistoneK562InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel K562 Input Sg 1
-        longLabel K562 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel K562 In Sg 1
+        longLabel K562 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=1K562 rep=1
         type bigWig 1.000000 13124.000000
         origAssembly hg18
@@ -2926,8 +2926,8 @@ noInherit on
 
         track wgEncodeUwHistoneHuvecInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVE Input Sg 1
-        longLabel HUVEC Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HUVE In Sg 1
+        longLabel HUVEC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=2HUVEC rep=1
         type bigWig 1.000000 8683.000000
         origAssembly hg18
@@ -2936,8 +2936,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhekInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK Input Sg 1
-        longLabel NHEK Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel NHEK In Sg 1
+        longLabel NHEK Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=NHEK rep=1
         type bigWig 1.000000 11841.000000
         origAssembly hg18
@@ -2946,8 +2946,8 @@ noInherit on
 
         track wgEncodeUwHistoneSaecInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC Input Sg 1
-        longLabel SAEC Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel SAEC In Sg 1
+        longLabel SAEC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=SAEC rep=1
         type bigWig 1.000000 8873.000000
         origAssembly hg18
@@ -2955,8 +2955,8 @@ noInherit on
 
         track wgEncodeUwHistoneSknshraInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SKRA Input Sg 1
-        longLabel SK-N-SH_RA Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel SKRA In Sg 1
+        longLabel SK-N-SH RA Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=1
         type bigWig 1.000000 12154.000000
         origAssembly hg18
@@ -2966,7 +2966,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K4m3 Sg 1
-        longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel BJ H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=BJ rep=1
         type bigWig 1.000000 2259.000000
         origAssembly hg18
@@ -2975,7 +2975,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K36m3 Sg 1
-        longLabel BJ H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel BJ H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=BJ rep=1
         type bigWig 1.000000 8665.000000
         origAssembly hg18
@@ -2984,7 +2984,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K4m3 Sg 1
-        longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel Caco-2 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=Caco2 rep=1
         type bigWig 1.000000 1551.000000
         origAssembly hg18
@@ -2993,7 +2993,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K27m3 Sg 1
-        longLabel Caco-2 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel Caco-2 H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=Caco2 rep=1
         type bigWig 1.000000 8131.000000
         origAssembly hg18
@@ -3002,7 +3002,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K36m3 Sg 1
-        longLabel Caco-2 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel Caco-2 H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=Caco2 rep=1
         type bigWig 1.000000 7188.000000
         origAssembly hg18
@@ -3010,8 +3010,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06 H3K4m3 Sg 1
-        longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel GM90 H3K4m3 Sg 1
+        longLabel GM06990 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=GM06990 rep=1
         type bigWig 1.000000 1362.000000
         origAssembly hg18
@@ -3020,7 +3020,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K27m3 Sg 2
-        longLabel BJ H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel BJ H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=BJ rep=2
         type bigWig 1.000000 6945.000000
         origAssembly hg18
@@ -3029,7 +3029,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K27m3 Sg 2
-        longLabel Caco-2 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel Caco-2 H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=Caco2 rep=2
         type bigWig 1.000000 6994.000000
         origAssembly hg18
@@ -3038,7 +3038,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K4m3 Sg 2
-        longLabel BJ H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel BJ H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=BJ rep=2
         type bigWig 1.000000 2701.000000
         origAssembly hg18
@@ -3047,7 +3047,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K36m3 Sg 2
-        longLabel BJ H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel BJ H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=BJ rep=2
         type bigWig 1.000000 9722.000000
         origAssembly hg18
@@ -3056,7 +3056,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K36m3 Sg 2
-        longLabel Caco-2 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel Caco-2 H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=Caco2 rep=2
         type bigWig 1.000000 6954.000000
         origAssembly hg18
@@ -3064,8 +3064,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06 H3K4m3 Sg 2
-        longLabel GM06990 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        shortLabel GM90 H3K4m3 Sg 2
+        longLabel GM06990 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=GM06990 rep=2
         type bigWig 1.000000 2227.000000
         origAssembly hg18
@@ -3073,8 +3073,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06 H3K27m3 Sg 2
-        longLabel GM06990 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        shortLabel GM90 H3K27m3 Sg 2
+        longLabel GM06990 H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=GM06990 rep=2
         type bigWig 1.000000 3746.000000
         origAssembly hg18
@@ -3082,8 +3082,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06 H3K27m3 Sg 1
-        longLabel GM06990 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel GM90 H3K27m3 Sg 1
+        longLabel GM06990 H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=GM06990 rep=1
         type bigWig 1.000000 3769.000000
         origAssembly hg18
@@ -3091,8 +3091,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06 H3K36m3 Sg 1
-        longLabel GM06990 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel GM90 H3K36m3 Sg 1
+        longLabel GM06990 H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=GM06990 rep=1
         type bigWig 1.000000 4071.000000
         origAssembly hg18
@@ -3101,8 +3101,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM12 H3K4m3 Sg 1
-        longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel GM78 H3K4m3 Sg 1
+        longLabel GM12878 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=1GM12878 rep=1
         type bigWig 1.000000 2525.000000
         origAssembly hg18
@@ -3111,8 +3111,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM12 H3K27m3 Sg 1
-        longLabel GM12878 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel GM78 H3K27m3 Sg 1
+        longLabel GM12878 H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=1GM12878 rep=1
         type bigWig 1.000000 3327.000000
         origAssembly hg18
@@ -3121,8 +3121,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM12 H3K36m3 Sg 1
-        longLabel GM12878 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel GM78 H3K36m3 Sg 1
+        longLabel GM12878 H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=1GM12878 rep=1
         type bigWig 1.000000 4249.000000
         origAssembly hg18
@@ -3131,8 +3131,8 @@ noInherit on
 
         track wgEncodeUwHistoneHelas3InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLa Input Sg 1
-        longLabel HeLa-S3 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HeLa In Sg 1
+        longLabel HeLa-S3 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=2HELA rep=1
         type bigWig 1.000000 10388.000000
         origAssembly hg18
@@ -3142,7 +3142,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K4m3 Sg 1
-        longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=2HELA rep=1
         type bigWig 1.000000 3307.000000
         origAssembly hg18
@@ -3152,7 +3152,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K36m3 Sg 1
-        longLabel HeLa-S3 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=2HELA rep=1
         type bigWig 1.000000 8609.000000
         origAssembly hg18
@@ -3162,7 +3162,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K27m3 Sg 1
-        longLabel HeLa-S3 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=2HELA rep=1
         type bigWig 1.000000 6433.000000
         origAssembly hg18
@@ -3172,7 +3172,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K4m3 Sg 1
-        longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=2HEPG2 rep=1
         type bigWig 1.000000 1372.000000
         origAssembly hg18
@@ -3182,7 +3182,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K27m3 Sg 1
-        longLabel HepG2 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=2HEPG2 rep=1
         type bigWig 1.000000 2797.000000
         origAssembly hg18
@@ -3192,7 +3192,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K36m3 Sg 1
-        longLabel HepG2 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=2HEPG2 rep=1
         type bigWig 1.000000 3834.000000
         origAssembly hg18
@@ -3201,8 +3201,8 @@ noInherit on
 
         track wgEncodeUwHistoneHepg2InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG Input Sg 1
-        longLabel HepG2 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HepG In Sg 1
+        longLabel HepG2 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=2HEPG2 rep=1
         type bigWig 1.000000 7679.000000
         origAssembly hg18
@@ -3211,8 +3211,8 @@ noInherit on
 
         track wgEncodeUwHistoneHl60H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HL60 H3K4m3 Sg 1
-        longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HL-60 H3K4m3 Sg 1
+        longLabel HL-60 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HL60 rep=1
         type bigWig 1.000000 1515.000000
         origAssembly hg18
@@ -3220,8 +3220,8 @@ noInherit on
 
         track wgEncodeUwHistoneHl60InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HL60 Input Sg 1
-        longLabel HL-60 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HL-60 In Sg 1
+        longLabel HL-60 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HL60 rep=1
         type bigWig 1.000000 9223.000000
         origAssembly hg18
@@ -3230,7 +3230,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC H3K27m3 Sg 1
-        longLabel HMEC H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HMEC H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HMEC rep=1
         type bigWig 1.000000 8444.000000
         origAssembly hg18
@@ -3239,7 +3239,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K36m3 Sg 1
-        longLabel HRE H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HRE H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HRE rep=1
         type bigWig 1.000000 4359.000000
         origAssembly hg18
@@ -3248,7 +3248,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K27m3 Sg 1
-        longLabel HRE H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HRE H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HRE rep=1
         type bigWig 1.000000 4006.000000
         origAssembly hg18
@@ -3257,7 +3257,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K4m3 Sg 1
-        longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=2HUVEC rep=1
         type bigWig 1.000000 3357.000000
         origAssembly hg18
@@ -3267,7 +3267,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K27m3 Sg 1
-        longLabel HUVEC H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=2HUVEC rep=1
         type bigWig 1.000000 3857.000000
         origAssembly hg18
@@ -3277,7 +3277,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K36m3 Sg 1
-        longLabel HUVEC H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=2HUVEC rep=1
         type bigWig 1.000000 4984.000000
         origAssembly hg18
@@ -3287,7 +3287,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig
         shortLabel K562 H3K4m3 Sg 1
-        longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel K562 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=1K562 rep=1
         type bigWig 1.000000 4646.000000
         origAssembly hg18
@@ -3297,7 +3297,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig
         shortLabel K562 H3K27m3 Sg 1
-        longLabel K562 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel K562 H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=1K562 rep=1
         type bigWig 1.000000 6663.000000
         origAssembly hg18
@@ -3307,7 +3307,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig
         shortLabel K562 H3K36m3 Sg 1
-        longLabel K562 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel K562 H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=1K562 rep=1
         type bigWig 1.000000 8569.000000
         origAssembly hg18
@@ -3317,7 +3317,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K4m3 Sg 1
-        longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel NHEK H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=NHEK rep=1
         type bigWig 1.000000 1796.000000
         origAssembly hg18
@@ -3327,7 +3327,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K27m3 Sg 1
-        longLabel NHEK H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel NHEK H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=NHEK rep=1
         type bigWig 1.000000 9934.000000
         origAssembly hg18
@@ -3337,7 +3337,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K36m3 Sg 1
-        longLabel NHEK H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel NHEK H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=NHEK rep=1
         type bigWig 1.000000 4056.000000
         origAssembly hg18
@@ -3347,7 +3347,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K4m3 Sg 1
-        longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel SAEC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=SAEC rep=1
         type bigWig 1.000000 1353.000000
         origAssembly hg18
@@ -3356,7 +3356,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K27m3 Sg 1
-        longLabel SAEC H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel SAEC H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=SAEC rep=1
         type bigWig 1.000000 3822.000000
         origAssembly hg18
@@ -3365,7 +3365,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K36m3 Sg 1
-        longLabel SAEC H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel SAEC H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=SAEC rep=1
         type bigWig 1.000000 3875.000000
         origAssembly hg18
@@ -3374,7 +3374,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K4m3 Sg 1
-        longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel SK-N-SH RA H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=SKNSHRA rep=1
         type bigWig 1.000000 1354.000000
         origAssembly hg18
@@ -3383,7 +3383,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K27m3 Sg 1
-        longLabel SK-N-SH_RA H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel SK-N-SH RA H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=SKNSHRA rep=1
         type bigWig 1.000000 3475.000000
         origAssembly hg18
@@ -3392,7 +3392,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K36m3 Sg 1
-        longLabel SK-N-SH_RA H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel SK-N-SH RA H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=SKNSHRA rep=1
         type bigWig 1.000000 6275.000000
         origAssembly hg18
@@ -3401,7 +3401,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K4m3 Sg 2
-        longLabel Caco-2 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel Caco-2 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=Caco2 rep=2
         type bigWig 1.000000 2008.000000
         origAssembly hg18
@@ -3409,8 +3409,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm06990H3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06 H3K36m3 Sg 2
-        longLabel GM06990 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        shortLabel GM90 H3K36m3 Sg 2
+        longLabel GM06990 H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=GM06990 rep=2
         type bigWig 1.000000 5082.000000
         origAssembly hg18
@@ -3418,8 +3418,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig f
-        shortLabel GM12 H3K4m3 Sg 2
-        longLabel GM12878 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        shortLabel GM78 H3K4m3 Sg 2
+        longLabel GM12878 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=1GM12878 rep=2
         type bigWig 1.000000 2040.000000
         origAssembly hg18
@@ -3428,8 +3428,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig 
-        shortLabel GM12 H3K36m3 Sg 2
-        longLabel GM12878 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        shortLabel GM78 H3K36m3 Sg 2
+        longLabel GM12878 H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=1GM12878 rep=2
         type bigWig 1.000000 4313.000000
         origAssembly hg18
@@ -3438,8 +3438,8 @@ noInherit on
 
         track wgEncodeUwHistoneGm12878H3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig 
-        shortLabel GM12 H3K27m3 Sg 2
-        longLabel GM12878 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        shortLabel GM78 H3K27m3 Sg 2
+        longLabel GM12878 H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=1GM12878 rep=2
         type bigWig 1.000000 4386.000000
         origAssembly hg18
@@ -3449,7 +3449,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K4m3 Sg 2
-        longLabel HeLa-S3 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HeLa-S3 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=2HELA rep=2
         type bigWig 1.000000 4978.000000
         origAssembly hg18
@@ -3459,7 +3459,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K27m3 Sg 2
-        longLabel HeLa-S3 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HeLa-S3 H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=2HELA rep=2
         type bigWig 1.000000 7668.000000
         origAssembly hg18
@@ -3469,7 +3469,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K36m3 Sg 2
-        longLabel HeLa-S3 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HeLa-S3 H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=2HELA rep=2
         type bigWig 1.000000 8774.000000
         origAssembly hg18
@@ -3479,7 +3479,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K4m3 Sg 2
-        longLabel HepG2 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HepG2 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=2HEPG2 rep=2
         type bigWig 1.000000 1522.000000
         origAssembly hg18
@@ -3489,7 +3489,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K27m3 Sg 2
-        longLabel HepG2 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HepG2 H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=2HEPG2 rep=2
         type bigWig 1.000000 3019.000000
         origAssembly hg18
@@ -3498,8 +3498,8 @@ noInherit on
 
         track wgEncodeUwHistoneHl60H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HL60 H3K4m3 Sg 2
-        longLabel HL-60 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        shortLabel HL-60 H3K4m3 Sg 2
+        longLabel HL-60 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HL60 rep=2
         type bigWig 1.000000 1752.000000
         origAssembly hg18
@@ -3508,7 +3508,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K4m3 Sg 2
-        longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HRE H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HRE rep=2
         type bigWig 1.000000 1485.000000
         origAssembly hg18
@@ -3517,7 +3517,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K27m3 Sg 2
-        longLabel HRE H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HRE H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HRE rep=2
         type bigWig 1.000000 2575.000000
         origAssembly hg18
@@ -3526,7 +3526,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K36m3 Sg 2
-        longLabel HRE H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HRE H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HRE rep=2
         type bigWig 1.000000 4485.000000
         origAssembly hg18
@@ -3535,7 +3535,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K4m3 Sg 2
-        longLabel HUVEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HUVEC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=2HUVEC rep=2
         type bigWig 1.000000 2673.000000
         origAssembly hg18
@@ -3545,7 +3545,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K27m3 Sg 2
-        longLabel HUVEC H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HUVEC H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=2HUVEC rep=2
         type bigWig 1.000000 4013.000000
         origAssembly hg18
@@ -3555,7 +3555,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K36m3 Sg 2
-        longLabel HUVEC H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HUVEC H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=2HUVEC rep=2
         type bigWig 1.000000 4959.000000
         origAssembly hg18
@@ -3565,7 +3565,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel K562 H3K4m3 Sg 2
-        longLabel K562 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel K562 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=1K562 rep=2
         type bigWig 1.000000 4241.000000
         origAssembly hg18
@@ -3575,7 +3575,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel K562 H3K27m3 Sg 2
-        longLabel K562 H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel K562 H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=1K562 rep=2
         type bigWig 1.000000 5758.000000
         origAssembly hg18
@@ -3585,7 +3585,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel K562 H3K36m3 Sg 2
-        longLabel K562 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel K562 H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=1K562 rep=2
         type bigWig 1.000000 9619.000000
         origAssembly hg18
@@ -3595,7 +3595,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K4m3 Sg 2
-        longLabel NHEK H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel NHEK H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=NHEK rep=2
         type bigWig 1.000000 1956.000000
         origAssembly hg18
@@ -3605,7 +3605,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K36m3 Sg 2
-        longLabel NHEK H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel NHEK H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=NHEK rep=2
         type bigWig 1.000000 4145.000000
         origAssembly hg18
@@ -3615,7 +3615,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K4m3 Sg 2
-        longLabel SAEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel SAEC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=SAEC rep=2
         type bigWig 1.000000 1651.000000
         origAssembly hg18
@@ -3624,7 +3624,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K27m3 Sg 2
-        longLabel SAEC H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel SAEC H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=SAEC rep=2
         type bigWig 1.000000 4807.000000
         origAssembly hg18
@@ -3633,7 +3633,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K36m3 Sg 2
-        longLabel SAEC H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel SAEC H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=SAEC rep=2
         type bigWig 1.000000 3634.000000
         origAssembly hg18
@@ -3642,7 +3642,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K4m3 Sg 2
-        longLabel SK-N-SH_RA H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel SK-N-SH RA H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=SKNSHRA rep=2
         type bigWig 1.000000 1287.000000
         origAssembly hg18
@@ -3651,7 +3651,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K27m3 Sg 2
-        longLabel SK-N-SH_RA H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel SK-N-SH RA H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=SKNSHRA rep=2
         type bigWig 1.000000 5070.000000
         origAssembly hg18
@@ -3660,7 +3660,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K36m3 Sg 2
-        longLabel SK-N-SH_RA H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel SK-N-SH RA H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=SKNSHRA rep=2
         type bigWig 1.000000 6465.000000
         origAssembly hg18
@@ -3670,7 +3670,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K4m3 Sg 1
-        longLabel HRE H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HRE H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HRE rep=1
         type bigWig 1.000000 997.000000
         origAssembly hg18
@@ -3679,7 +3679,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K27m3 Sg 2
-        longLabel NHEK H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel NHEK H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=NHEK rep=2
         type bigWig 1.000000 3767.000000
         origAssembly hg18
@@ -3689,7 +3689,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K4m3 Sg 1
-        longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel H7-hESC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7es rep=1
         type bigWig 1.000000 1089.000000
         origAssembly hg19
@@ -3698,7 +3698,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K27m3 Sg 1
-        longLabel H7-hESC H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel H7-hESC H3K27me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=H7es rep=1
         type bigWig 1.000000 3427.000000
         origAssembly hg19
@@ -3707,7 +3707,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K27m3 Sg 2
-        longLabel H7-hESC H3K27me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel H7-hESC H3K27me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=H7es rep=2
         type bigWig 1.000000 6743.000000
         origAssembly hg19
@@ -3716,7 +3716,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K36m3 Sg 2
-        longLabel H7-hESC H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel H7-hESC H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=H7es rep=2
         type bigWig 1.000000 5883.000000
         origAssembly hg19
@@ -3724,8 +3724,8 @@ noInherit on
 
         track wgEncodeUwHistoneH7esInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7ES Input Sg 1
-        longLabel H7-hESC Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel H7ES In Sg 1
+        longLabel H7-hESC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7es rep=1
         type bigWig 1.000000 9907.000000
         origAssembly hg19
@@ -3734,7 +3734,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K4m3 Sg 2
-        longLabel H7-hESC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel H7-hESC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7es rep=2
         type bigWig 1.000000 2759.000000
         origAssembly hg19
@@ -3743,7 +3743,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K36m3 Sg 1
-        longLabel H7-hESC H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel H7-hESC H3K36me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=H7es rep=1
         type bigWig 1.000000 5084.000000
         origAssembly hg19
@@ -3752,7 +3752,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K36m3 Sg 2
-        longLabel HepG2 H3K36me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HepG2 H3K36me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=2HEPG2 rep=2
         type bigWig 1.000000 4879.000000
         origAssembly hg19
@@ -3762,7 +3762,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG49 H3K4m3 Sg 1
-        longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel AG04449 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG04449 rep=1
         type bigWig 1.000000 4247.000000
         origAssembly hg19
@@ -3771,7 +3771,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG49 H3K4m3 Sg 2
-        longLabel AG04449 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel AG04449 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG04449 rep=2
         type bigWig 1.000000 5567.000000
         origAssembly hg19
@@ -3779,8 +3779,8 @@ noInherit on
 
         track wgEncodeUwHistoneAg04449InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG49 Input Sg 1
-        longLabel AG04449 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel AG49 In Sg 1
+        longLabel AG04449 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG04449 rep=1
         type bigWig 1.000000 14656.000000
         origAssembly hg19
@@ -3789,7 +3789,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG50 H3K4m3 Sg 1
-        longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel AG04450 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG04450 rep=1
         type bigWig 1.000000 4594.000000
         origAssembly hg19
@@ -3798,7 +3798,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG50 H3K4m3 Sg 2
-        longLabel AG04450 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel AG04450 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG04450 rep=2
         type bigWig 1.000000 4459.000000
         origAssembly hg19
@@ -3806,8 +3806,8 @@ noInherit on
 
         track wgEncodeUwHistoneAg04450InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG50 Input Sg 1
-        longLabel AG04450 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel AG50 In Sg 1
+        longLabel AG04450 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG04450 rep=1
         type bigWig 1.000000 17581.000000
         origAssembly hg19
@@ -3815,8 +3815,8 @@ noInherit on
 
         track wgEncodeUwHistoneAg09309InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG09 Input Sg 1
-        longLabel AG09309 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel AG09 In Sg 1
+        longLabel AG09309 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG09309 rep=1
         type bigWig 1.000000 7173.000000
         origAssembly hg19
@@ -3825,7 +3825,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG09 H3K4m3 Sg 2
-        longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel AG09309 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG09309 rep=2
         type bigWig 1.000000 2062.000000
         origAssembly hg19
@@ -3834,7 +3834,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG09 H3K4m3 Sg 1
-        longLabel AG09309 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel AG09309 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG09309 rep=1
         type bigWig 1.000000 2329.000000
         origAssembly hg19
@@ -3843,7 +3843,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG19 H3K4m3 Sg 1
-        longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel AG09319 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG09319 rep=1
         type bigWig 1.000000 3182.000000
         origAssembly hg19
@@ -3852,7 +3852,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG19 H3K4m3 Sg 2
-        longLabel AG09319 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel AG09319 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG09319 rep=2
         type bigWig 1.000000 2278.000000
         origAssembly hg19
@@ -3860,8 +3860,8 @@ noInherit on
 
         track wgEncodeUwHistoneAg09319InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG19 Input Sg 1
-        longLabel AG09319 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel AG19 In Sg 1
+        longLabel AG09319 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG09319 rep=1
         type bigWig 1.000000 23698.000000
         origAssembly hg19
@@ -3870,7 +3870,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG03 H3K4m3 Sg 1
-        longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel AG10803 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG10803 rep=1
         type bigWig 1.000000 6328.000000
         origAssembly hg19
@@ -3879,7 +3879,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG03 H3K4m3 Sg 2
-        longLabel AG10803 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel AG10803 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AG10803 rep=2
         type bigWig 1.000000 6842.000000
         origAssembly hg19
@@ -3887,8 +3887,8 @@ noInherit on
 
         track wgEncodeUwHistoneAg10803InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG03 Input Sg 1
-        longLabel AG10803 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel AG03 In Sg 1
+        longLabel AG10803 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG10803 rep=1
         type bigWig 1.000000 21401.000000
         origAssembly hg19
@@ -3897,7 +3897,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AoAF H3K4m3 Sg 2
-        longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel AoAF H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AOAF rep=2
         type bigWig 1.000000 4590.000000
         origAssembly hg19
@@ -3906,7 +3906,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AoAF H3K4m3 Sg 1
-        longLabel AoAF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel AoAF H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=AOAF rep=1
         type bigWig 1.000000 3446.000000
         origAssembly hg19
@@ -3914,8 +3914,8 @@ noInherit on
 
         track wgEncodeUwHistoneAoafInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AoAF Input Sg 1
-        longLabel AoAF Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel AoAF In Sg 1
+        longLabel AoAF Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AOAF rep=1
         type bigWig 1.000000 17667.000000
         origAssembly hg19
@@ -3924,7 +3924,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCM H3K4m3 Sg 1
-        longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HCM H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCM rep=1
         type bigWig 1.000000 1509.000000
         origAssembly hg19
@@ -3933,7 +3933,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HBMEC H3K4m3 Sg 2
-        longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HBMEC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HBMEC rep=2
         type bigWig 1.000000 2812.000000
         origAssembly hg19
@@ -3942,7 +3942,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HBMEC H3K4m3 Sg 1
-        longLabel HBMEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HBMEC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HBMEC rep=1
         type bigWig 1.000000 2636.000000
         origAssembly hg19
@@ -3950,8 +3950,8 @@ noInherit on
 
         track wgEncodeUwHistoneHbmecInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HBMEC Input Sg 1
-        longLabel HBMEC Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HBMEC In Sg 1
+        longLabel HBMEC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HBMEC rep=1
         type bigWig 1.000000 15288.000000
         origAssembly hg19
@@ -3959,8 +3959,8 @@ noInherit on
 
         track wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCFaa H3K4m3 Sg 1
-        longLabel HCFaa H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HCFa H3K4m3 Sg 1
+        longLabel HCFaa H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCFaa rep=1
         type bigWig 1.000000 1905.000000
         origAssembly hg19
@@ -3968,8 +3968,8 @@ noInherit on
 
         track wgEncodeUwHistoneHcfaaInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCFaa Input Sg 1
-        longLabel HCFaa Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HCFa In Sg 1
+        longLabel HCFaa Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCFaa rep=1
         type bigWig 1.000000 16198.000000
         origAssembly hg19
@@ -3978,7 +3978,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCF H3K4m3 Sg 1
-        longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HCF H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCF rep=1
         type bigWig 1.000000 5505.000000
         origAssembly hg19
@@ -3987,7 +3987,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCF H3K4m3 Sg 2
-        longLabel HCF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HCF H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCF rep=2
         type bigWig 1.000000 8744.000000
         origAssembly hg19
@@ -3995,8 +3995,8 @@ noInherit on
 
         track wgEncodeUwHistoneHcfInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCF Input Sg 1
-        longLabel HCF Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HCF In Sg 1
+        longLabel HCF Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCF rep=1
         type bigWig 1.000000 19717.000000
         origAssembly hg19
@@ -4005,7 +4005,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCM H3K4m3 Sg 2
-        longLabel HCM H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HCM H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCM rep=2
         type bigWig 1.000000 2482.000000
         origAssembly hg19
@@ -4013,8 +4013,8 @@ noInherit on
 
         track wgEncodeUwHistoneHcmInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCM Input Sg 1
-        longLabel HCM Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HCM In Sg 1
+        longLabel HCM Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCM rep=1
         type bigWig 1.000000 18082.000000
         origAssembly hg19
@@ -4023,7 +4023,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCPE H3K4m3 Sg 2
-        longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HCPEpiC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCPE rep=2
         type bigWig 1.000000 3567.000000
         origAssembly hg19
@@ -4032,7 +4032,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCPE H3K4m3 Sg 1
-        longLabel HCPEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HCPEpiC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCPE rep=1
         type bigWig 1.000000 2335.000000
         origAssembly hg19
@@ -4040,8 +4040,8 @@ noInherit on
 
         track wgEncodeUwHistoneHcpeInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCPE Input Sg 1
-        longLabel HCPEpiC Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HCPE In Sg 1
+        longLabel HCPEpiC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCPE rep=1
         type bigWig 1.000000 15167.000000
         origAssembly hg19
@@ -4049,8 +4049,8 @@ noInherit on
 
         track wgEncodeUwHistoneHct116InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCT16 Input Sg 1
-        longLabel HCT-116 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HCT16 In Sg 1
+        longLabel HCT-116 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCT116 rep=1
         type bigWig 1.000000 14872.000000
         origAssembly hg19
@@ -4059,7 +4059,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCT16 H3K4m3 Sg 2
-        longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HCT-116 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCT116 rep=2
         type bigWig 1.000000 7182.000000
         origAssembly hg19
@@ -4068,7 +4068,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCT16 H3K4m3 Sg 1
-        longLabel HCT-116 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HCT-116 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HCT116 rep=1
         type bigWig 1.000000 4897.000000
         origAssembly hg19
@@ -4076,8 +4076,8 @@ noInherit on
 
         track wgEncodeUwHistoneHeeInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEE Input Sg 1
-        longLabel HEEpiC Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HEE In Sg 1
+        longLabel HEEpIC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HEE rep=1
         type bigWig 1.000000 6633.000000
         origAssembly hg19
@@ -4086,7 +4086,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEE H3K4m3 Sg 1
-        longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HEEpIC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HEE rep=1
         type bigWig 1.000000 5315.000000
         origAssembly hg19
@@ -4095,7 +4095,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEE H3K4m3 Sg 2
-        longLabel HEEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HEEpIC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HEE rep=2
         type bigWig 1.000000 6106.000000
         origAssembly hg19
@@ -4104,7 +4104,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEK H3K4m3 Sg 2
-        longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HEK293 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HEK293 rep=2
         type bigWig 1.000000 3272.000000
         origAssembly hg19
@@ -4113,7 +4113,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEK H3K4m3 Sg 1
-        longLabel HEK293 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HEK293 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HEK293 rep=1
         type bigWig 1.000000 5296.000000
         origAssembly hg19
@@ -4122,7 +4122,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC H3K4m3 Sg 2
-        longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HMEC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HMEC rep=2
         type bigWig 1.000000 3376.000000
         origAssembly hg19
@@ -4131,7 +4131,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC H3K4m3 Sg 1
-        longLabel HMEC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HMEC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HMEC rep=1
         type bigWig 1.000000 2345.000000
         origAssembly hg19
@@ -4140,7 +4140,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMF H3K4m3 Sg 1
-        longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HMF H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HMF rep=1
         type bigWig 1.000000 4301.000000
         origAssembly hg19
@@ -4149,7 +4149,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMF H3K4m3 Sg 2
-        longLabel HMF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HMF H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HMF rep=2
         type bigWig 1.000000 3836.000000
         origAssembly hg19
@@ -4157,8 +4157,8 @@ noInherit on
 
         track wgEncodeUwHistoneHmfInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMF Input Sg 1
-        longLabel HMF Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HMF In Sg 1
+        longLabel HMF Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HMF rep=1
         type bigWig 1.000000 4624.000000
         origAssembly hg19
@@ -4166,8 +4166,8 @@ noInherit on
 
         track wgEncodeUwHistoneJurkatInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Jurk Input Sg 1
-        longLabel Jurkat Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel Jurk In Sg 1
+        longLabel Jurkat Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=Jurkat rep=1
         type bigWig 1.000000 18193.000000
         origAssembly hg19
@@ -4176,7 +4176,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPAF H3K4m3 Sg 1
-        longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HPAF H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HPAF rep=1
         type bigWig 1.000000 2892.000000
         origAssembly hg19
@@ -4185,7 +4185,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPAF H3K4m3 Sg 2
-        longLabel HPAF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HPAF H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HPAF rep=2
         type bigWig 1.000000 3521.000000
         origAssembly hg19
@@ -4193,8 +4193,8 @@ noInherit on
 
         track wgEncodeUwHistoneHpafInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HPAF Input Sg 1
-        longLabel HPAF Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HPAF In Sg 1
+        longLabel HPAF Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HPAF rep=1
         type bigWig 1.000000 15992.000000
         origAssembly hg19
@@ -4202,8 +4202,8 @@ noInherit on
 
         track wgEncodeUwHistoneHpfInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HPF Input Sg 1
-        longLabel HPF Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HPF In Sg 1
+        longLabel HPF Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HPF rep=1
         type bigWig 1.000000 13754.000000
         origAssembly hg19
@@ -4212,7 +4212,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPF H3K4m3 Sg 2
-        longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HPF H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HPF rep=2
         type bigWig 1.000000 4481.000000
         origAssembly hg19
@@ -4221,7 +4221,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPF H3K4m3 Sg 1
-        longLabel HPF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HPF H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HPF rep=1
         type bigWig 1.000000 5458.000000
         origAssembly hg19
@@ -4229,8 +4229,8 @@ noInherit on
 
         track wgEncodeUwHistoneHrpeInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRPE Input Sg 1
-        longLabel HRPEpiC Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HRPE In Sg 1
+        longLabel HRPEpIC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HRPE rep=1
         type bigWig 1.000000 11983.000000
         origAssembly hg19
@@ -4239,7 +4239,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRPE H3K4m3 Sg 2
-        longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HRPEpIC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HRPE rep=2
         type bigWig 1.000000 5740.000000
         origAssembly hg19
@@ -4248,7 +4248,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRPE H3K4m3 Sg 1
-        longLabel HRPEpiC H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HRPEpIC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HRPE rep=1
         type bigWig 1.000000 4170.000000
         origAssembly hg19
@@ -4257,7 +4257,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HVMF H3K4m3 Sg 2
-        longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HVMF H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HVMF rep=2
         type bigWig 1.000000 6381.000000
         origAssembly hg19
@@ -4266,7 +4266,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HVMF H3K4m3 Sg 1
-        longLabel HVMF H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HVMF H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HVMF rep=1
         type bigWig 1.000000 4571.000000
         origAssembly hg19
@@ -4274,8 +4274,8 @@ noInherit on
 
         track wgEncodeUwHistoneHvmfInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HVMF Input Sg 1
-        longLabel HVMF Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HVMF In Sg 1
+        longLabel HVMF Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HVMF rep=1
         type bigWig 1.000000 21799.000000
         origAssembly hg19
@@ -4284,7 +4284,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Jurk H3K4m3 Sg 2
-        longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel Jurkat H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=Jurkat rep=2
         type bigWig 1.000000 6095.000000
         origAssembly hg19
@@ -4293,7 +4293,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Jurk H3K4m3 Sg 1
-        longLabel Jurkat H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel Jurkat H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=Jurkat rep=1
         type bigWig 1.000000 7505.000000
         origAssembly hg19
@@ -4301,8 +4301,8 @@ noInherit on
 
         track wgEncodeUwHistoneMcf7InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel MCF-7 Input Sg 1
-        longLabel MCF-7 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel MCF7 In Sg 1
+        longLabel MCF-7 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=MCF7 rep=1
         type bigWig 1.000000 25597.000000
         origAssembly hg19
@@ -4310,8 +4310,8 @@ noInherit on
 
         track wgEncodeUwHistoneMcf7H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel MCF-7 H3K4m3 Sg 1
-        longLabel MCF-7 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel MCF7 H3K4m3 Sg 1
+        longLabel MCF-7 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=MCF7 rep=1
         type bigWig 1.000000 12643.000000
         origAssembly hg19
@@ -4319,8 +4319,8 @@ noInherit on
 
         track wgEncodeUwHistoneNb4InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NB4 Input Sg 1
-        longLabel NB4 Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel NB4 In Sg 1
+        longLabel NB4 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=NB4 rep=1
         type bigWig 1.000000 18098.000000
         origAssembly hg19
@@ -4329,7 +4329,7 @@ noInherit on
         track wgEncodeUwHistoneNb4H3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NB4 H3K4m3 Sg 1
-        longLabel NB4 H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel NB4 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=NB4 rep=1
         type bigWig 1.000000 3916.000000
         origAssembly hg19
@@ -4337,8 +4337,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhdfneoInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHDFn Input Sg 1
-        longLabel NHDF-neo Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel NHDFn In Sg 1
+        longLabel NHDF-neo Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=NHDF-neo rep=1
         type bigWig 1.000000 26277.000000
         origAssembly hg19
@@ -4347,7 +4347,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHDFn H3K4m3 Sg 1
-        longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel NHDF-neo H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=NHDF-neo rep=1
         type bigWig 1.000000 8338.000000
         origAssembly hg19
@@ -4356,7 +4356,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHDFn H3K4m3 Sg 2
-        longLabel NHDF-neo H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel NHDF-neo H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=NHDF-neo rep=2
         type bigWig 1.000000 9369.000000
         origAssembly hg19
@@ -4364,8 +4364,8 @@ noInherit on
 
         track wgEncodeUwHistoneHaspInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HAsp Input Sg 1
-        longLabel HA-sp Input Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        shortLabel HAsp In Sg 1
+        longLabel HA-sp Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HA-sp rep=1
         type bigWig 1.000000 22062.000000
         origAssembly hg19
@@ -4374,7 +4374,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HAsp H3K4m3 Sg 1
-        longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        longLabel HA-sp H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HA-sp rep=1
         type bigWig 1.000000 5096.000000
         origAssembly hg19
@@ -4383,7 +4383,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HAsp H3K4m3 Sg 2
-        longLabel HA-sp H3K4me3 Histone Modifications by ChIP-seq Raw Signal Rep 2 from ENCODE/UW
+        longLabel HA-sp H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HA-sp rep=2
         type bigWig 1.000000 7657.000000
         origAssembly hg19
@@ -4391,8 +4391,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhlfInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHLF Input Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in NHLF cells)
+        shortLabel NHLF In Sg 1
+        longLabel NHLF Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=NHLF rep=1
         type bigWig 1.000000 29301.000000
         origAssembly hg19
@@ -4400,8 +4400,8 @@ noInherit on
 
         track wgEncodeUwHistoneBe2cInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BE2_C Input Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in BE2_C cells)
+        shortLabel BE2c In Sg 1
+        longLabel BE2c Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=BE2C rep=1
         type bigWig 1.000000 17997.000000
         origAssembly hg19
@@ -4409,8 +4409,8 @@ noInherit on
 
         track wgEncodeUwHistoneHffmycInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HFF-Myc Input Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in HFF-Myc cells)
+        shortLabel HFMc In Sg 1
+        longLabel HFFMyc Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HFFMYC rep=1
         type bigWig 1.000000 18402.000000
         origAssembly hg19
@@ -4418,8 +4418,8 @@ noInherit on
 
         track wgEncodeUwHistoneLncapInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel LNCaP Input Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in LNCaP cells)
+        shortLabel LNCP In Sg 1
+        longLabel LNCaP Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=LNCAP rep=1
         type bigWig 1.000000 21185.000000
         origAssembly hg19
@@ -4428,8 +4428,8 @@ noInherit on
 
         track wgEncodeUwHistonePanc1InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel PANC-1 Input Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in PANC-1 cells)
+        shortLabel PANC1 In Sg 1
+        longLabel PANC-1 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=PANC1 rep=1
         type bigWig 1.000000 22326.000000
         origAssembly hg19
@@ -4437,8 +4437,8 @@ noInherit on
 
         track wgEncodeUwHistoneSknmcInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-MC Input Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in SK-N-MC cells)
+        shortLabel SKNMC In Sg 1
+        longLabel SK-N-MC Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=SKNMC rep=1
         type bigWig 1.000000 15364.000000
         origAssembly hg19
@@ -4446,8 +4446,8 @@ noInherit on
 
         track wgEncodeUwHistoneWi38InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel WI-38 Input Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in WI-38 cells)
+        shortLabel WI38 In Sg 1
+        longLabel WI-38 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=WI38 rep=1
         type bigWig 1.000000 13078.000000
         origAssembly hg19
@@ -4455,8 +4455,8 @@ noInherit on
 
         track wgEncodeUwHistoneHacH3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HAc H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in HAc cells)
+        shortLabel HAc H3K4m3 Sg 2
+        longLabel HAc H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HAC rep=2
         type bigWig 1.000000 2087.000000
         origAssembly hg19
@@ -4464,8 +4464,8 @@ noInherit on
 
         track wgEncodeUwHistoneA549H3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel A549 H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in A549 cells)
+        shortLabel A549 H3K4m3 Sg 2
+        longLabel A549 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=A549 rep=2
         type bigWig 1.000000 2590.000000
         origAssembly hg19
@@ -4473,8 +4473,8 @@ noInherit on
 
         track wgEncodeUwHistoneA549H3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel A549 H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in A549 cells)
+        shortLabel A549 H3K4m3 Sg 1
+        longLabel A549 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=A549 rep=1
         type bigWig 1.000000 2317.000000
         origAssembly hg19
@@ -4482,8 +4482,8 @@ noInherit on
 
         track wgEncodeUwHistoneHacH3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HAc H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in HAc cells)
+        shortLabel HAc H3K4m3 Sg 1
+        longLabel HAc H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HAC rep=1
         type bigWig 1.000000 1453.000000
         origAssembly hg19
@@ -4491,8 +4491,8 @@ noInherit on
 
         track wgEncodeUwHistoneHffmycH3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HFF-Myc H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in HFF-Myc cells)
+        shortLabel HFMc H3K4m3 Sg 1
+        longLabel HFFMyc H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HFFMYC rep=1
         type bigWig 1.000000 1382.000000
         origAssembly hg19
@@ -4500,8 +4500,8 @@ noInherit on
 
         track wgEncodeUwHistoneLncapH3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel LNCaP H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in LNCaP cells)
+        shortLabel LNCP H3K4m3 Sg 2
+        longLabel LNCaP H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=LNCAP rep=2
         type bigWig 1.000000 3681.000000
         origAssembly hg19
@@ -4510,8 +4510,8 @@ noInherit on
 
         track wgEncodeUwHistoneLncapH3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel LNCaP H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in LNCaP cells)
+        shortLabel LNCP H3K4m3 Sg 1
+        longLabel LNCaP H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=LNCAP rep=1
         type bigWig 1.000000 3274.000000
         origAssembly hg19
@@ -4520,8 +4520,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhlfH3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHLF H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in NHLF cells)
+        shortLabel NHLF H3K4m3 Sg 2
+        longLabel NHLF H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=NHLF rep=2
         type bigWig 1.000000 6814.000000
         origAssembly hg19
@@ -4529,8 +4529,8 @@ noInherit on
 
         track wgEncodeUwHistoneHffmycH3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HFF-Myc H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in HFF-Myc cells)
+        shortLabel HFMc H3K4m3 Sg 2
+        longLabel HFFMyc H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=HFFMYC rep=2
         type bigWig 1.000000 1836.000000
         origAssembly hg19
@@ -4538,8 +4538,8 @@ noInherit on
 
         track wgEncodeUwHistonePanc1H3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel PANC-1 H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in PANC-1 cells)
+        shortLabel PANC1 H3K4m3 Sg 2
+        longLabel PANC-1 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=PANC1 rep=2
         type bigWig 1.000000 8928.000000
         origAssembly hg19
@@ -4547,8 +4547,8 @@ noInherit on
 
         track wgEncodeUwHistoneNhlfH3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHLF H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in NHLF cells)
+        shortLabel NHLF H3K4m3 Sg 1
+        longLabel NHLF H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=NHLF rep=1
         type bigWig 1.000000 3125.000000
         origAssembly hg19
@@ -4556,8 +4556,8 @@ noInherit on
 
         track wgEncodeUwHistonePanc1H3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel PANC-1 H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in PANC-1 cells)
+        shortLabel PANC1 H3K4m3 Sg 1
+        longLabel PANC-1 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=PANC1 rep=1
         type bigWig 1.000000 4927.000000
         origAssembly hg19
@@ -4565,8 +4565,8 @@ noInherit on
 
         track wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel WERI-Rb-1 H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in WERI-Rb-1 cells)
+        shortLabel WERI H3K4m3 Sg 2
+        longLabel WERI-Rb-1 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=WERIRB1 rep=2
         type bigWig 1.000000 3606.000000
         origAssembly hg19
@@ -4574,8 +4574,8 @@ noInherit on
 
         track wgEncodeUwHistoneSknmcH3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-MC H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in SK-N-MC cells)
+        shortLabel SKNMC H3K4m3 Sg 1
+        longLabel SK-N-MC H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=SKNMC rep=1
         type bigWig 1.000000 2362.000000
         origAssembly hg19
@@ -4583,8 +4583,8 @@ noInherit on
 
         track wgEncodeUwHistoneWerirb1H3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel WERI-Rb-1 H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in WERI-Rb-1 cells)
+        shortLabel WERI H3K4m3 Sg 1
+        longLabel WERI-Rb-1 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=WERIRB1 rep=1
         type bigWig 1.000000 4012.000000
         origAssembly hg19
@@ -4592,8 +4592,8 @@ noInherit on
 
         track wgEncodeUwHistoneSknmcH3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-MC H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in SK-N-MC cells)
+        shortLabel SKNMC H3K4m3 Sg 2
+        longLabel SK-N-MC H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=SKNMC rep=2
         type bigWig 1.000000 5544.000000
         origAssembly hg19
@@ -4601,8 +4601,8 @@ noInherit on
 
         track wgEncodeUwHistoneWi38H3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel WI-38 H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in WI-38 cells)
+        shortLabel WI38 H3K4m3 Sg 2
+        longLabel WI-38 H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=WI38 rep=2
         type bigWig 1.000000 3574.000000
         origAssembly hg19
@@ -4610,8 +4610,8 @@ noInherit on
 
         track wgEncodeUwHistoneWi38H3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel WI-38 H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in WI-38 cells)
+        shortLabel WI38 H3K4m3 Sg 1
+        longLabel WI-38 H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=WI38 rep=1
         type bigWig 1.000000 2490.000000
         origAssembly hg19
@@ -4619,8 +4619,8 @@ noInherit on
 
         track wgEncodeUwHistoneBe2cH3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BE2_C H3K4me3 Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in BE2_C cells)
+        shortLabel BE2c H3K4m3 Sg 1
+        longLabel BE2c H3K4me3 Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=BE2C rep=1
         type bigWig 1.000000 29611.000000
         origAssembly hg19
@@ -4628,8 +4628,8 @@ noInherit on
 
         track wgEncodeUwHistoneBe2cH3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BE2_C H3K4me3 Raw 2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in BE2_C cells)
+        shortLabel BE2c H3K4m3 Sg 2
+        longLabel BE2c H3K4me3 Histone Mods by ChIP-seq Raw Signal 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=BE2C rep=2
         type bigWig 1.000000 23372.000000
         origAssembly hg19
@@ -4637,8 +4637,8 @@ noInherit on
 
         track wgEncodeUwHistoneA549InputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel A549 Input Raw 1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in A549 cells)
+        shortLabel A549 In Sg 1
+        longLabel A549 Input Histone Mods by ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=A549 rep=1
         type bigWig 1.000000 12152.000000
         origAssembly hg19
