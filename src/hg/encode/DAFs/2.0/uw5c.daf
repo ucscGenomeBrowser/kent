@@ -10,14 +10,14 @@ grant             Stam
 lab               UW
 dataType          5C
 compositeSuffix   Uw5C
-variables         cell, region
+variables         cell, labVersion
 assembly          hg19
 
 validationSettings skipValidateFiles
 
 # Track/view definition
 view             Matrix
-type             download
+type             matrix
 downloadOnly     yes
 required         yes
 hasReplicates    yes
