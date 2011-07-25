@@ -1,0 +1,93 @@
+track decodeRmap
+compositeTrack on
+shortLabel Decode Recomb
+longLabel Decode Recombination maps
+group map
+priority 8.5
+type bigWig 0.0 113.023
+viewLimits 0:10
+maxHeightPixels 100:36:11
+windowingFunction mean
+visibility hide
+
+
+    track decodeSexAveraged
+    shortLabel Sex Average
+    longLabel Decode recombination map, sex-average, 10 kb bins, October 2010
+    parent decodeRmap
+    type bigWig 0.0 108.804
+    color 109,51,43
+    configurable on
+    priority 1
+
+    track decodeSexAveragedCarrier
+    shortLabel Sex Average Carrier
+    longLabel Decode recombination map, sex-average carrier, 10 kb bins  October 2010
+    parent decodeRmap
+    type bigWig 0.0 76.046
+    color 209,45,51
+    configurable on
+    priority 2
+
+    track decodeSexAveragedNonCarrier
+    shortLabel Sex Average Non-carrier
+    longLabel Decode recombination map, sex-average non-carrier, 10 kb bins  October 2010
+    parent decodeRmap
+    type bigWig 0.0 113.023
+    color 252,79,89
+    configurable on
+    priority 3
+
+    track decodeFemale
+    shortLabel Female
+    longLabel Decode recombination map, female, 10 kb bins  October 2010
+    parent decodeRmap
+    type bigWig 0.0 90.808
+    color 85,187,255
+    configurable on
+    priority 4
+
+    track decodeFemaleCarrier
+    shortLabel Female Carrier
+    longLabel Decode recombination map, female carrier, 10 kb bins  October 2010
+    parent decodeRmap
+    type bigWig 0.0 77.704
+    color 153,119,255
+    configurable on
+    priority 5
+
+    track decodeFemaleNonCarrier
+    shortLabel Female Non-carrier
+    longLabel Decode recombination map, female non-carrier, 10 kb bins  October 2010
+    parent decodeRmap
+    type bigWig 0.0 93.929
+    color 255,0,255
+    configurable on
+    priority 6
+
+    track decodeMale
+    shortLabel Male
+    longLabel Decode recombination map, male, 10 kb bins  October 2010
+    parent decodeRmap
+    type bigWig 0.0 144.958
+    color 0,81,186
+    configurable on
+    priority 7
+
+    track decodeMaleCarrier
+    shortLabel Male Carrier
+    longLabel Decode recombination map, male carrier, 10 kb bins  October 2010
+    parent decodeRmap
+    type bigWig 0.0 204.214
+    color 0,153,119
+    configurable on
+    priority 8
+
+    track decodeMaleNonCarrier
+    shortLabel Male Non-carrier
+    longLabel Decode recombination map, male non-carrier, 10 kb bins  October 2010
+    parent decodeRmap
+    type bigWig 0.0 151.353
+    color 84,188,0
+    configurable on
+    priority 9
