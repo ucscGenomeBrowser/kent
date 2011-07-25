@@ -142,7 +142,10 @@ freez(&defaultPosition);
 position = NULL;
 
 puts("<td align=center>\n");
-cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
+if(cartVarExists(cart, "pix"))
+    cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
+else
+    printf("<INPUT TYPE='TEXT' NAME='pix' SIZE='4'>\n");
 puts("</td>\n");
 puts("<td align=center>");
 if(supportsSuggest)
