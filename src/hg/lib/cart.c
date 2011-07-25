@@ -859,7 +859,7 @@ return cartVars;
 }
 
 struct slPair *cartVarsWithPrefixLm(struct cart *cart, char *prefix, struct lm *lm)
-/* Return list of cart vars that begin with prefix allocated in local memory. 
+/* Return list of cart vars that begin with prefix allocated in local memory.
  * Quite a lot faster than cartVarsWithPrefix. */
 {
 struct slPair *cartVars = NULL;
@@ -2287,9 +2287,8 @@ else // If no views then composite is not set to fuul but to max of subtracks
 hashFree(&subVisHash);
 
 // If reshaped, be sure to set flag to stop composite cleanup
-#define RESHAPED_COMPOSITE "reshaped"
 if (count > 0)
-    tdbExtrasAddOrUpdate(tdbContainer,RESHAPED_COMPOSITE,(void *)(long)TRUE); // Exists for the life of the cgi only
+    tdbExtrasReshapedCompositeSet(tdbContainer);
 
 return TRUE;
 }
@@ -2303,7 +2302,7 @@ if (!tdbIsContainer(tdb))
     return anythingChanged;
 
 // If composite has been reshaped then don't clean it up
-if ((boolean)(long)tdbExtrasGetOrDefault(tdb,RESHAPED_COMPOSITE,(void *)(long)FALSE))
+if (tdbExtrasReshapedComposite(tdb))
     return anythingChanged;
 
 // vis is a special additive case! composite or view level changes then remove subtrack vis
