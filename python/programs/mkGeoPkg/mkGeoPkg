@@ -523,7 +523,8 @@ def main():
 	fileString = outfileName
 	for file in fileList:
 		if not os.path.exists(file):
-			raise IOError(file)
+			#raise IOError(file)
+			print file + ' does not exist'
 		fileString = fileString + ' ' + downloadsDirectory + file
 		
 	fileString.strip()
