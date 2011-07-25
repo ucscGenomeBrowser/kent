@@ -5823,6 +5823,10 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
+measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
+if (measureTiming)
+    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount, 
+	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
@@ -5850,7 +5854,6 @@ if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 
 initTl();
-measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 
