@@ -29,7 +29,7 @@ noInherit on
     	visibility full
     	subTrack wgEncodeCshlLongRnaSeq
     	maxHeightPixels 100:24:16
-    	windowingFunction maximum
+    	windowingFunction mean+whiskers
     	transformFunc NONE
     	autoScale on
     	minLimit 0
@@ -1203,7 +1203,7 @@ noInherit on
     	visibility full
     	subTrack wgEncodeCshlLongRnaSeq
     	maxHeightPixels 100:24:16
-    	windowingFunction maximum
+    	windowingFunction mean+whiskers
     	transformFunc NONE
     	autoScale on
     	minLimit 0
@@ -4083,8 +4083,8 @@ noInherit on
     view Junctions         
     visibility hide
     subTrack wgEncodeCshlLongRnaSeq
-    #scoreFilter 0
-    #scoreFilterLimits 0:1000
+    scoreFilter 200
+    scoreFilterLimits 0:1000
 
         track wgEncodeCshlLongRnaSeqA549CellPamJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off

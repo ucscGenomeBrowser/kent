@@ -30679,6 +30679,7 @@ dccAccession wgEncodeEH000165
 dccRep 1
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3.bam
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797
@@ -30707,6 +30708,7 @@ dccAccession wgEncodeEH000165
 dccRep 2
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4.bam
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8798
@@ -30736,6 +30738,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000165
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797,LID8798
@@ -30788,6 +30791,7 @@ dccAccession wgEncodeEH000165
 dccRep 1
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797
@@ -30815,6 +30819,7 @@ dccAccession wgEncodeEH000165
 dccRep 2
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8798
@@ -30842,6 +30847,7 @@ dccAccession wgEncodeEH000165
 dccRep 1
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797
@@ -30869,6 +30875,7 @@ dccAccession wgEncodeEH000165
 dccRep 2
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8798
@@ -30895,6 +30902,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000165
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797,LID8798
@@ -30945,6 +30953,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000165
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797,LID8798
@@ -30970,6 +30979,7 @@ dccAccession wgEncodeEH000165
 dccRep 1
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep3.bigWig
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797
@@ -30998,6 +31008,7 @@ dccAccession wgEncodeEH000165
 dccRep 2
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep4.bigWig
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8798
@@ -31026,6 +31037,7 @@ dccAccession wgEncodeEH000165
 dccRep 1
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep3.bigWig
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797
@@ -31054,6 +31066,7 @@ dccAccession wgEncodeEH000165
 dccRep 2
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep4.bigWig
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8798
@@ -31081,6 +31094,7 @@ dccAccession wgEncodeEH000165
 dccRep 1
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep3.pdf.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labProtocolId 027N+
@@ -31104,6 +31118,7 @@ dccAccession wgEncodeEH000165
 dccRep 2
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep4.pdf.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labProtocolId 028N+
@@ -31129,6 +31144,7 @@ dccAccession wgEncodeEH000165
 dccRep 1
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapSpikeinsRep3.spikeins.bam.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797
@@ -31158,6 +31174,7 @@ dccAccession wgEncodeEH000165
 dccRep 2
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapSpikeinsRep4.spikeins.bam.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8798
@@ -31185,6 +31202,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000165
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797,LID8798
@@ -33405,4 +33423,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 524983388
+# MAGIC: -1929910832
