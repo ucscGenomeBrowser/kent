@@ -2531,33 +2531,27 @@ function handleUpdateTrackMap(response, status)
 // this.id == appropriate track if we are retrieving just a single track.
 
     // update local trackDbJson to reflect possible side-effects of ajax request.
-    var re = /<\!-- trackDbJson -->\n<script>var trackDbJson = ([\S\s]+)<\/script>\n<\!-- trackDbJson -->/m;
-    a = re.exec(response);
-    if(a && a[1]) {
-        var json = eval("(" + a[1] + ")");
-        if(json) {
-            if(this.id != null) {
-                if(json[this.id]) {
-            var visibility = visibilityStrsOrder[json[this.id].visibility];
-            var limitedVis;
-            if(json[this.id].limitedVis)
-                limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
-            if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
-                alert("There are too many items to display the track in " + this.newVisibility + " mode.");
-            var rec = trackDbJson[this.id];
-            rec.limitedVis = json[this.id].limitedVis;
-            updateVisibility(this.id, visibility);
-        } else {
-            showWarning("Invalid trackDbJson received from the server");
-        }
+    var json = scrapeVariable(response, "trackDbJson");
+    if(json == null) {
+        showWarning("trackDbJson is missing from the response");
     } else {
-                 trackDbJson = json;
+        if(this.id != null) {
+            if(json[this.id]) {
+                var visibility = visibilityStrsOrder[json[this.id].visibility];
+                var limitedVis;
+                if(json[this.id].limitedVis)
+                    limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
+                if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
+                    alert("There are too many items to display the track in " + this.newVisibility + " mode.");
+                var rec = trackDbJson[this.id];
+                rec.limitedVis = json[this.id].limitedVis;
+                updateVisibility(this.id, visibility);
+            } else {
+                showWarning("Invalid trackDbJson received from the server");
             }
         } else {
-            showWarning("Invalid trackDbJson received from the server");
+            trackDbJson = json;
         }
-    } else {
-        showWarning("trackDbJson is missing from the response");
     }
     if(this.loadingId) {
         hideLoadingImage(this.loadingId);
