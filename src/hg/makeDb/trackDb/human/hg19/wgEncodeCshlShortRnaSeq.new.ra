@@ -2007,7 +2007,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel H1-hESC nucleus shortTotal
         longLabel H1-hESC nucleus shortTotal RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs cellType=1H1hESC localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=4496 dateSubmitted=2011-07-12
 
@@ -2016,7 +2016,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel H1-hESC cytosol shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in H1-hESC cytosol)
         subGroups view=Contigs cellType=1H1hESC localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=4495 dateSubmitted=2011-07-12
 
@@ -2025,7 +2025,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel K562 nucleoplasm shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleoplasm)
         subGroups view=Contigs cellType=1K562 localization=nucleoplasm rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=4494 dateSubmitted=2011-07-12
 
@@ -2034,7 +2034,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel K562 cytosol shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 cytosol)
         subGroups view=Contigs cellType=1K562 localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=4493 dateSubmitted=2011-07-12
 
@@ -2043,7 +2043,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel NHEK nucleus shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK nucleus)
         subGroups view=Contigs cellType=NHEK localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=4492 dateSubmitted=2011-07-12
 
@@ -2052,7 +2052,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel MCF-7 cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in MCF-7 cell)
         subGroups view=Contigs cellType=MCF7 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         # subId=4491 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
@@ -2060,7 +2060,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel K562 nucleus shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleus)
         subGroups view=Contigs cellType=1K562 localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=4490 dateSubmitted=2011-07-12
 
@@ -2069,7 +2069,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel GM12878 cytosol shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 cytosol)
         subGroups view=Contigs cellType=1GM12878 localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 153,38,0
         # subId=4489 dateSubmitted=2011-07-12
 
@@ -2078,7 +2078,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel AG04450 cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in AG04450 cell)
         subGroups view=Contigs cellType=AG04450 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         # subId=4488 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalContigs
@@ -2086,7 +2086,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel HeLa-S3 cytosol shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 cytosol)
         subGroups view=Contigs cellType=2HeLaS3 localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=4487 dateSubmitted=2011-07-12
 
@@ -2095,7 +2095,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel HeLa-S3 cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 cell)
         subGroups view=Contigs cellType=2HeLaS3 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=4486 dateSubmitted=2011-07-12
 
@@ -2104,7 +2104,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel H1-hESC cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in H1-hESC cell)
         subGroups view=Contigs cellType=1H1hESC localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=4485 dateSubmitted=2011-07-12
 
@@ -2113,7 +2113,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel HepG2 cytosol shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HepG2 cytosol)
         subGroups view=Contigs cellType=2HepG2 localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 189,0,157
         # subId=4484 dateSubmitted=2011-07-12
 
@@ -2122,7 +2122,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel GM12878 cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 cell)
         subGroups view=Contigs cellType=1GM12878 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 153,38,0
         # subId=4482 dateSubmitted=2011-07-12
 
@@ -2131,7 +2131,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel K562 nucleolus shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleolus)
         subGroups view=Contigs cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=4481 dateSubmitted=2011-07-12
 
@@ -2140,7 +2140,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel HepG2 nucleus shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HepG2 nucleus)
         subGroups view=Contigs cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 189,0,157
         # subId=4480 dateSubmitted=2011-07-12
 
@@ -2149,7 +2149,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel HepG2 cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HepG2 cell)
         subGroups view=Contigs cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 189,0,157
         # subId=4479 dateSubmitted=2011-07-12
 
@@ -2158,7 +2158,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel A549 cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in A549 cell)
         subGroups view=Contigs cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         # subId=4478 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalContigs
@@ -2166,7 +2166,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel GM12878 nucleus shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 nucleus)
         subGroups view=Contigs cellType=1GM12878 localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 153,38,0
         # subId=4477 dateSubmitted=2011-07-12
 
@@ -2175,7 +2175,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel K562 chromatin shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 chromatin)
         subGroups view=Contigs cellType=1K562 localization=chromatin rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=4476 dateSubmitted=2011-07-12
 
@@ -2184,7 +2184,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel HUVEC nucleus shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HUVEC nucleus)
         subGroups view=Contigs cellType=2Huvec localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 224,75,0
         # subId=4475 dateSubmitted=2011-07-12
 
@@ -2193,7 +2193,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel BJ cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in BJ cell)
         subGroups view=Contigs cellType=BJ localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         # subId=4474 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalContigs
@@ -2201,7 +2201,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel NHEK cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK cell)
         subGroups view=Contigs cellType=NHEK localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=4472 dateSubmitted=2011-07-12
 
@@ -2210,7 +2210,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel SK-N-SH_RA cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in SK-N-SH_RA cell)
         subGroups view=Contigs cellType=SKNSHRA localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         # subId=4471 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalContigs
@@ -2218,7 +2218,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel HeLa-S3 nucleus shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 nucleus)
         subGroups view=Contigs cellType=2HeLaS3 localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=4470 dateSubmitted=2011-07-12
 
@@ -2227,7 +2227,7 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel NHEK cytosol shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK cytosol)
         subGroups view=Contigs cellType=NHEK localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=4469 dateSubmitted=2011-07-12
 
@@ -2236,6 +2236,6 @@ longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
         shortLabel K562 cell shortTotal
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 cell)
         subGroups view=Contigs cellType=1K562 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=4468 dateSubmitted=2011-07-12
