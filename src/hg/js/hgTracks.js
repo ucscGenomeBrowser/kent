@@ -22,6 +22,19 @@ var currentMapItem;
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;  // turn on experimental zoom-to-codon functionality (currently only on in larrym's tree).
+var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate
+
+/* Data passed in from CGI via the hgTracks object:
+ * 
+ * string chromName           // current chromosome
+ * int winStart               // genomic start coordinate (0-based, half-open)
+ * int winEnd                 // genomic end coordinate
+ * int newWinWidth            // new width if user clicks on the top ruler (in bps)
+ * boolean dragSelection      // true if we should allow drag and select
+ * boolean revCmplDisp        // true if we are in reverse display
+ * int insideX                // width of side-bar (in pixels)
+ * int rulerClickHeight       // height of ruler (in pixels)
+ */
 
 function initVars(img)
 {
@@ -174,8 +187,8 @@ function updatePosition(img, selection, singleClick)
         pos.chromStart = Math.floor(center - hgTracks.newWinWidth/2);
         pos.chromEnd = pos.chromStart + hgTracks.newWinWidth;
     }
-    setPositionByCoordinates(hgTracks.chromName, pos.chromStart+1, pos.chromEnd);
-    return true;
+    var newPosition = setPositionByCoordinates(hgTracks.chromName, pos.chromStart+1, pos.chromEnd);
+    return newPosition;
 }
 
 function selectChange(img, selection)
@@ -202,13 +215,18 @@ function selectEnd(img, selection)
     if(autoHideSetting && checkPosition(img, selection)) {
        // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in selectStart
        // doesn't occur when the user single clicks).
-       doIt = startDragZoom != null || selection.y1 <= hgTracks.clickClipHeight;
+       doIt = startDragZoom != null || selection.y1 <= hgTracks.rulerClickHeight;
     }
     if(doIt) {
         // startDragZoom is null if mouse has never been moved
-	if(updatePosition(img, selection, (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100)) {
-            jQuery('body').css('cursor', 'wait');
-	    document.TrackHeaderForm.submit();
+        newPosition = updatePosition(img, selection, (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100);
+	if(newPosition != undefined) {
+            if(inPlaceUpdate) {
+                navigateInPlace("position=" + newPosition);
+            } else {
+                jQuery('body').css('cursor', 'wait');
+	        document.TrackHeaderForm.submit();
+            }
 	}
     } else {
         setPosition(originalPosition, originalSize);
@@ -245,6 +263,7 @@ $(window).load(function () {
     // Chrome used to have this problem too, but this  problem seems to have gone away as of
     // Chrome 5.0.335.1 (or possibly earlier).
     mapIsUpdateable = browser != "safari";
+    inPlaceUpdate = hgTracks.inPlaceUpdate && mapIsUpdateable;
     loadImgAreaSelect(true);
     if($('#hgTrackUiDialog'))
         $('#hgTrackUiDialog').hide();
@@ -265,6 +284,70 @@ $(window).load(function () {
             loadContextMenu(trackImgTbl);
             //$(".trDraggable,.nodrop").each( function(t) { loadContextMenu($(this)); });
             // FIXME: why isn't rightClick for sideLabel working??? Probably because there is no link!
+            if(inPlaceUpdate) {
+                // Larry's experimental version of 1x panning (aka cheap panning).
+                var originalLeft;
+                var originalClientX;
+                var withinTrackImgTbl;
+                var last;
+                trackImgTbl.mousedown(
+                    function (e) {
+                        originalClientX = e.clientX;
+                        withinTrackImgTbl = true;
+                        last = new Date();
+                        jQuery('body').css('cursor', 'w-resize');
+                        $("img.dataImg").each( function(index, ele) {
+                                                   var left = $(ele).css('left');
+                                                   originalLeft = left.substring(0, left.length - 2)
+                                                   // we only need to look at one element, so bail out now.
+                                                   return false;
+                                               });
+                        jQuery(document).one('mouseup', function (e) {
+                                                 trackImgTbl.css('cursor', '');
+                                                 if(originalLeft != undefined) {
+                                                     if(withinTrackImgTbl && Math.abs(originalClientX - e.clientX) > 20) {
+                                                         originalLeft = undefined;
+                                                         var imgWidth = trackImgTbl.width() - hgTracks.insideX;
+                                                         var mult = (originalClientX - e.clientX) / imgWidth;
+                                                         var width = hgTracks.winEnd - hgTracks.winStart;
+                                                         hgTracks.winStart = hgTracks.winStart + Math.floor(width * mult);
+                                                         hgTracks.winEnd = hgTracks.winEnd + Math.floor(width * mult);
+                                                         setPositionByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd)
+                                                         navigateInPlace("position=" + encodeURIComponent(hgTracks.chromName + ":" + (hgTracks.winStart + 1) + "-" + hgTracks.winEnd));
+                                                         // return true in case of ajax error.
+                                                         return true;
+                                                     } else {
+                                                         $("img.dataImg").each( function(index, ele) {
+                                                                                    $(ele).css( {'left': originalLeft + "px" });
+                                                                                });
+                                                         originalLeft = undefined;
+                                                         return true;
+                                                     }
+                                                 } else {
+                                                     return true;
+                                                 }
+                                             });
+                        return true;
+                    }
+                );
+                trackImgTbl.mouseenter(function(e) { withinTrackImgTbl = true; });
+                trackImgTbl.mouseleave(function(e) { withinTrackImgTbl = false; });
+                trackImgTbl.mousemove(
+                    function (e) {
+                        var now = new Date();
+                        // date logic is an attempt to fix IE related weirdness
+                        if(originalLeft != undefined && (now - last) > 100) {
+                            last = now;
+                            trackImgTbl.css('cursor', 'w-resize');
+                            $("img.dataImg").each( function(index, ele) {
+                                                       var newPos = originalLeft - (originalClientX - e.clientX) + "px";
+                                                       $(ele).css( {'left': newPos });
+                                                   });
+                        }
+                        return true;
+                    }
+                );
+            }
         } else {
             loadContextMenu(trackImg);
             trackImg.mousemove(
@@ -2510,6 +2593,8 @@ function handleUpdateTrackMap(response, status)
                 $("input[name='r']").val(json.winEnd);
                 hgTracks.newWinWidth = json.newWinWidth;
                 setPositionByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd);
+                originalPosition = undefined;
+                initVars();
             } else {
                 showWarning("Couldn't parse out new position info");
             }
