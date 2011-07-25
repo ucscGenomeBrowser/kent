@@ -157,7 +157,7 @@ def createMappings(mdb):
 			continue
 
 		if 'expId' not in stanza:
-			print stanza.name + ': no expId'
+			#print stanza.name + ': no expId'
 			continue
 		
 			# if this hasn't been submitted to GEO yet, we'll add it to the submission list
@@ -262,7 +262,7 @@ def main():
 			else:
 			
 				st = os.stat(downloadsDirectory + stanza['fileName'])
-				out.append('  |     ' + stanza['fileName'] + ' [' + filesize(st.st_size) + ']')
+				#out.append('  |     ' + stanza['fileName'] + ' [' + filesize(st.st_size) + ']')
 
 	
 	strsub = '[Unsubmitted]'
