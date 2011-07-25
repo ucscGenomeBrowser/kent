@@ -10617,7 +10617,7 @@ label File type
 description The type of the primary file associated with the object 
 searchable multiSelect
 cvDefined no
-validate None
+validate none
 priority 985 
 
 
