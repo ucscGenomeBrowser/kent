@@ -29,6 +29,7 @@ wgEncodeDukeAffyExon.ra \
 wgEncodeBroadHmm.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeHaibTfbs.ra \
+wgEncodeSydhRnaSeq.ra \
 
 
 include ../../../../makefile.metaDb
