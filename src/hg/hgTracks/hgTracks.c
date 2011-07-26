@@ -5008,7 +5008,7 @@ if (!hideControls)
         hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
 
     hPrintf(" ");
-    hPrintf("<INPUT TYPE='button' VALUE='import tracks' onClick='document.trackHubForm.submit();return false;' title='Import tracks from hubs'>");
+    hPrintf("<INPUT TYPE='button' VALUE='track hubs' onClick='document.trackHubForm.submit();return false;' title='Import tracks from hubs'>");
 
     hPrintf(" ");
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");

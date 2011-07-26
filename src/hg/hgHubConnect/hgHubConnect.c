@@ -272,6 +272,8 @@ cartRemove(theCart, hgHubDataText);
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
+boolean gotDisconnect = FALSE;
+
 cart = theCart;
 setUdcCacheDir();
 if (cartVarExists(cart, hgHubDoClear))
@@ -282,7 +284,10 @@ if (cartVarExists(cart, hgHubDoClear))
     }
 
 if (cartVarExists(cart, hgHubDoDisconnect))
+    {
+    gotDisconnect = TRUE;
     doDisconnectHub(cart);
+    }
 
 cartWebStart(cart, NULL, "%s", pageTitle);
 jsIncludeFile("jquery.js", NULL);
@@ -339,7 +344,7 @@ hgHubConnectPublic();
 hgHubConnectUnlisted();
 printf("</div>");
 
-if (gotNew) // make MyHubs the default tab
+if (gotNew || gotDisconnect) // make MyHubs the default tab
     {
     printf("<script type='text/javascript'>\n ");
     printf("var $tabs = $('#tabs').tabs();\n");
