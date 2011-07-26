@@ -43,6 +43,7 @@ clean:
 
 SCRIPT_FILES = \
         agpToLift \
+        bedCollapse.pl \
         iSync \
         lodToBedScore \
 	mkMafFrames.pl

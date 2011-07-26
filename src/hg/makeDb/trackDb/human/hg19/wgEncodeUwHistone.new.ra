@@ -69,6 +69,7 @@ type bed 3
 wgEncode 1
 dataVersion through the ENCODE Jun 2010 Freeze
 noInherit on
+html wgEncodeUwHistone.new
 
     track wgEncodeUwHistoneViewHot
     shortLabel Hotspots
