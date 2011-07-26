@@ -773,7 +773,7 @@ hPrintf("</div>"); // Restricts to max-width:1000px;
 cgiDown(0.8);
 
 if (measureTiming)
-    uglyTime("Rendered tabs");
+    measureTime("Rendered tabs");
 
 if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
@@ -812,7 +812,7 @@ if(doSearch)
         tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,typeSearch,descSearch,groupSearch,mdbSelects);
 
     if (measureTiming)
-        uglyTime("Searched for tracks");
+        measureTime("Searched for tracks");
 
     // Sort and Print results
     if(selectedTab!=filesTab)
@@ -825,7 +825,7 @@ if(doSearch)
         displayFoundTracks(cart,tracks,tracksFound,sortBy);
 
         if (measureTiming)
-            uglyTime("Displayed found tracks");
+            measureTime("Displayed found tracks");
         }
     slPairFreeList(&mdbSelects);
     }

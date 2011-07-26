@@ -1,0 +1,31 @@
+#!/bin/bash
+usage='gencodeStats db ver
+
+Genrate statstics on a gencode for a release to include in ENCODE reports.
+ver is in the form "V7"
+'
+set -beEu -o pipefail
+
+if [ $# != 2 ] ; then
+    echo "wrong number of args: ${usage}" >&2
+    exit 1
+fi
+db="$1"
+ver="$2"
+
+# transcriptClass desc
+reportCounts() {
+    local transcriptClass="$1"
+    local baseSel="select count(attrs.transcriptId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeTranscriptSource${ver} src where attrs.transcriptClass = \"${transcriptClass}\" and src.transcriptId = attrs.transcriptId"
+    local cnt
+    cnt=$(hgsql -Ne "${baseSel} and src.source like \"ensembl_havana%\"" ${db})
+    echo "${transcriptClass}	manual+automatic	$cnt"
+    cnt=$(hgsql -Ne "${baseSel} and src.source like \"havana%\"" ${db})
+    echo "${transcriptClass}	manual-only	$cnt"
+    cnt=$(hgsql -Ne "${baseSel} and src.source not like \"havana%\"" ${db})
+    echo "${transcriptClass}	automatic-only	$cnt"
+}
+echo "transcriptClass	source	count"
+for transcriptClass in $(hgsql -Ne "select distinct(transcriptClass) from wgEncodeGencodeAttrs${ver}" ${db}) ; do
+   reportCounts ${transcriptClass}
+done

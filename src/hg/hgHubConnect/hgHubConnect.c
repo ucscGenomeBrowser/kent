@@ -67,7 +67,7 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
 		"document.addHubForm.submit();return true;\" "
 		"class=\"hubField\" type=\"button\" value=\"Add Hub\">"
 	"</th> "
-    "</tr></thead> ");
+    "</tr> ");
 
 // count up the number of unlisted hubs we currently have
 int count = 0;
@@ -85,7 +85,7 @@ if (count == 0)
 	"<tr><td>No Track Hubs for this genome assembly</td></tr>"
 	"</td></table>");
     cgiMakeButton("Submit", "Return to Genome Browser");
-    printf("</div>");
+    printf("</thead></div>");
     return;
     }
 
@@ -97,7 +97,7 @@ printf(
 	"<th>Description</th> "
 	"<th>URL</th> "
 	"<th>Disconnect</th> "
-    "</tr>\n");
+    "</tr></thead>\n");
 
 // start first row
 printf("<tbody><tr>");
@@ -139,10 +139,7 @@ for(hub = hubList; hub; hub = hub->next)
 	    "document.disconnectHubForm.submit();return true;\" "
 	    "class=\"hubField\" type=\"button\" value=\"X\">"
 	    , hub->hubUrl);
-    //cgiMakeButton("Submit", "X");
     ourCellEnd();
-    //hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
-
     }
 
 printf("</TR></tbody></TABLE>\n");

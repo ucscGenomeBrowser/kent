@@ -2469,6 +2469,7 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 hPrintf("</MAP>\n");
 
 jsAddBoolean(jsVarsHash, "dragSelection", dragZooming);
+jsAddBoolean(jsVarsHash, "inPlaceUpdate", IN_PLACE_UPDATE);
 
 if(rulerClickHeight)
     {
@@ -4032,7 +4033,7 @@ else
     for (i=0; i<len; i++)
         paddedLabel[i+1] = label[i];
     }
-#ifdef IN_PLACE_UPDATE
+#if IN_PLACE_UPDATE
 hButtonWithOnClick(var, paddedLabel, NULL, "return navigateButtonClick(this);");
 #else
 hButton(var, paddedLabel);
@@ -4336,6 +4337,7 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
 {
+struct lm *lm = lmInit(0);	/* Speed tweak cleanup with scatch memory pool. */
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
@@ -4343,7 +4345,7 @@ for (;track != NULL; track = track->next)
     boolean cleanedByContainerSettings = FALSE;
 
     // Top-down 'cleanup' MUST GO BEFORE bottom up reshaping.
-    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars, lm);
 
     if (tdbIsContainer(track->tdb))
         {
@@ -4367,6 +4369,7 @@ for (;track != NULL; track = track->next)
             }
         }
     }
+lmCleanup(&lm);
 }
 
 
@@ -4597,10 +4600,10 @@ if (userSeqString && !ssFilesExist(userSeqString))
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
 if (measureTiming)
-    uglyTime("Time before getTrackList");
+    measureTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
 if (measureTiming)
-    uglyTime("getTrackList");
+    measureTime("getTrackList");
 makeGlobalTrackHash(trackList);
 /* Tell tracks to load their items. */
 
@@ -4614,7 +4617,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     }
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 if (measureTiming)
-    uglyTime("parentChildCartCleanup");
+    measureTime("parentChildCartCleanup");
 
 
 /* Honor hideAll and visAll variables */
@@ -4719,7 +4722,7 @@ if (ptMax > 0)
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
     if (measureTiming)
-	uglyTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
+	measureTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
     }
 
 printTrackInitJavascript(trackList);
@@ -4819,7 +4822,7 @@ if (!hideControls)
     /* Put up scroll and zoom controls. */
 #ifndef USE_NAVIGATION_LINKS
     hWrites("move ");
-#ifdef IN_PLACE_UPDATE
+#if IN_PLACE_UPDATE
     hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return navigateButtonClick(this);");
     hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return navigateButtonClick(this);");
     hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return navigateButtonClick(this);");
@@ -4959,9 +4962,15 @@ if (!hideControls)
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
+#if IN_PLACE_UPDATE
+    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return navigateButtonClick(this);");
+    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
+    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return navigateButtonClick(this);");
+#else
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
+#endif
     hPrintf("</TD>");
     hPrintf("<td width='30'>&nbsp;</td>\n");
 #endif//ndef USE_NAVIGATION_LINKS
@@ -4979,9 +4988,15 @@ if (!hideControls)
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
+#if IN_PLACE_UPDATE
+    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return navigateButtonClick(this);");
+    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
+    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return navigateButtonClick(this);");
+#else
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButton("hgt.dinkRR", " > ");
+#endif
     hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
@@ -5020,6 +5035,9 @@ if (!hideControls)
             revCmplDisp?"Show forward strand at this location":"Show reverse strand at this location");
         hPrintf(" ");
 	}
+
+    hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
+    hPrintf(" ");
 
     hButtonWithMsg("hgt.refresh", "refresh","Refresh image");
 
@@ -5241,7 +5259,7 @@ hPrintf("</FORM>\n");
 
 pruneRedundantCartVis(trackList);
 if (measureTiming)
-    uglyTime("Done with trackForm");
+    measureTime("Done with trackForm");
 }
 
 static void toggleRevCmplDisp()
@@ -5809,6 +5827,10 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
+measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
+if (measureTiming)
+    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount, 
+	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
@@ -5836,7 +5858,6 @@ if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 
 initTl();
-measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 
