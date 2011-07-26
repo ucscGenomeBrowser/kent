@@ -135,11 +135,10 @@ for(hub = hubList; hub; hub = hub->next)
     ourCellStart();
     printf(
     "<input name=\"hubDisconnectButton\""
-	"onClick=\"document.disconnectHubForm.elements['hubUrl'].value='%s';"
+	"onClick=\"document.disconnectHubForm.elements['hubId'].value='%d';"
 	    "document.disconnectHubForm.submit();return true;\" "
 	    "class=\"hubField\" type=\"button\" value=\"X\">"
-	    , hub->hubUrl);
-    //cgiMakeButton("Submit", "X");
+	    , hub->id);
     ourCellEnd();
     //hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
 
@@ -261,12 +260,16 @@ printf("<pre>Completed\n");
 
 static void doDisconnectHub(struct cart *theCart)
 {
-char *url = cartOptionalString(cart, hgHubDataText);
+char *id = cartOptionalString(cart, "hubId");
 
-if (url != NULL)
-    hubDisconnect(theCart, url);
+if (id != NULL)
+    {
+    char buffer[1024];
+    safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
+    cartRemove(cart, buffer);
+    }
 
-cartRemove(theCart, hgHubDataText);
+cartRemove(theCart, "hubId");
 }
 
 void doMiddle(struct cart *theCart)
@@ -325,7 +328,7 @@ puts("</FORM>");
 
 // this the form for the disconnect hub button
 printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubConnect");
-cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar("hubId", "");
 cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
