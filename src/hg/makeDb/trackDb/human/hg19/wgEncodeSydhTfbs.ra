@@ -3231,7 +3231,7 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878InputIggrabSig
+        track wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM78 Inpt IgGr
         longLabel GM12878 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
@@ -3241,6 +3241,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm12878InputIggrabSig wong Mon Jul 18 14:43:21 2011
         # was wgEncodeSydhTfbsGm12878InputTnfaIggrabSig wong Mon Jul 18 15:19:22 2011
+        # was wgEncodeSydhTfbsGm12878InputIggrabSig wong Tue Jul 26 10:30:39 2011
 
         track wgEncodeSydhTfbsGm12878InputStdSig
         parent wgEncodeSydhTfbsViewSignal off
