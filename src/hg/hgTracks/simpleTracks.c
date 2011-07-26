@@ -10854,10 +10854,7 @@ hFreeConn(&conn);
 return(dy->string);
 }
 
-// old name to be changed later
-#define omimPhenotypeClassColName "phenotypeClass"
-// new name to be used later
-//#define omimPhenotypeClassColName "omimPhenoMapKey"
+#include "omim.h"
 
 boolean isOmimOtherClass(char *omimId)
 /* check if this omimId belongs to the "Others" phenotype class */
