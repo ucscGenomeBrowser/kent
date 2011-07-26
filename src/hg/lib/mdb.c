@@ -3099,7 +3099,7 @@ if(mdbByVarsPtr != NULL && *mdbByVarsPtr != NULL)
 // ----------------- CGI specific routines for use with tdb -----------------
 #define MDB_NOT_FOUND ((struct mdbObj *)-666)
 #define METADATA_NOT_FOUND ((struct mdbObj *)-999)
-#define MDB_OBJ_KEY "mdbObj"
+
 static struct mdbObj *metadataForTableFromTdb(struct trackDb *tdb)
 // Returns the metadata for a table from a tdb setting.
 {
@@ -3127,7 +3127,7 @@ struct mdbObj *mdbObj = NULL;
 // See of the mdbObj was already built
 if(tdb != NULL)
     {
-    mdbObj = tdbExtrasGetOrDefault(tdb, MDB_OBJ_KEY,NULL);
+    mdbObj = tdbExtrasMdb(tdb);
     if(mdbObj == METADATA_NOT_FOUND) // NOT in mtatbl, not in tdb metadata setting!
         return NULL;
     else if(mdbObj == MDB_NOT_FOUND) // looked mdb already and not found!
@@ -3150,10 +3150,10 @@ hFreeConn(&conn);
 if(tdb)
     {
     if(mdbObj != NULL)
-        tdbExtrasAddOrUpdate(tdb,MDB_OBJ_KEY,mdbObj);
+        tdbExtrasMdbSet(tdb,mdbObj);
     else
         {
-        tdbExtrasAddOrUpdate(tdb,MDB_OBJ_KEY,MDB_NOT_FOUND);
+        tdbExtrasMdbSet(tdb,MDB_NOT_FOUND);
         return metadataForTableFromTdb(tdb);  // FIXME: metadata setting in TDB is soon to be obsolete
         }
     }
@@ -3164,7 +3164,7 @@ return mdbObj;
 const char *metadataFindValue(struct trackDb *tdb, char *var)
 // Finds the val associated with the var or retruns NULL
 {
-struct mdbObj *mdbObj = tdbExtrasGetOrDefault(tdb, MDB_OBJ_KEY,NULL);
+struct mdbObj *mdbObj = tdbExtrasMdb(tdb);
 if(mdbObj == MDB_NOT_FOUND) // Note, only we if already looked for mdb (which requires db)
     mdbObj = metadataForTableFromTdb(tdb);
 if (mdbObj == NULL || mdbObj == METADATA_NOT_FOUND)

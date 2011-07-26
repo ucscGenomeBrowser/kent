@@ -372,7 +372,7 @@ noInherit on
 		# subId=2402 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 cell pA- + 1
 		longLabel K562 whole cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=CELL rnaExtract=PAM rep=rep1
@@ -801,7 +801,7 @@ noInherit on
 		# subId=2712 dateSubmitted=2010-10-25
 
 		track wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 chrm tot + 3
 		longLabel K562 chromatin total Long RNA-seq Plus strand signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
@@ -811,7 +811,7 @@ noInherit on
 		# subId=2711 dateSubmitted=2010-10-25
 
 		track wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 nplm tot + 3
 		longLabel K562 nucleoplasm total Long RNA-seq Plus strand signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep1
@@ -831,7 +831,7 @@ noInherit on
 		# subId=2709 dateSubmitted=2010-10-25
 
 		track wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 nlos tot + 3
 		longLabel K562 nucleolus total Long RNA-seq Plus strand signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
@@ -1015,7 +1015,7 @@ noInherit on
 		# subId=3146 dateSubmitted=2010-12-24
 
 		track wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 nucl pA- + 1
 		longLabel K562 nucleus polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep1
@@ -1025,7 +1025,7 @@ noInherit on
 		# subId=3145 dateSubmitted=2010-12-24
 
 		track wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off 
 		shortLabel K562 cyto pA- + 1
 		longLabel K562 cytosol polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep1
@@ -1545,7 +1545,7 @@ noInherit on
 		# subId=2402 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 cell pA- - 1
 		longLabel K562 whole cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=CELL rnaExtract=PAM rep=rep1
@@ -1974,7 +1974,7 @@ noInherit on
 		# subId=2712 dateSubmitted=2010-10-25
 
 		track wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 chrm tot - 3
 		longLabel K562 chromatin total Long RNA-seq Minus Strand Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
@@ -1984,7 +1984,7 @@ noInherit on
 		# subId=2711 dateSubmitted=2010-10-25
 
 		track wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 nplm tot - 3
 		longLabel K562 nucleoplasm total Long RNA-seq Minus Strand Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep1
@@ -2004,7 +2004,7 @@ noInherit on
 		# subId=2709 dateSubmitted=2010-10-25
 
 		track wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 nlos tot - 3
 		longLabel K562 nucleolus total Long RNA-seq Minus Strand Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
@@ -2188,7 +2188,7 @@ noInherit on
 		# subId=3146 dateSubmitted=2010-12-24
 
 		track wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 nucl pA- - 1
 		longLabel K562 nucleus polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep1
@@ -2198,7 +2198,7 @@ noInherit on
 		# subId=3145 dateSubmitted=2010-12-24
 
 		track wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 cyto pA- - 1
 		longLabel K562 cytosol polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep1
@@ -2386,7 +2386,7 @@ noInherit on
 	maxWindowToDraw 1000000
 
 		track wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
-    		parent wgEncodeCshlLongRnaSeqViewAlignments on
+    		parent wgEncodeCshlLongRnaSeqViewAlignments off
     		shortLabel K562 cell tot A 1
                 longLabel K562 whole cell total Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
     		subGroups view=Alignments cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep1
@@ -2502,7 +2502,7 @@ noInherit on
 		# subId=1919 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments on
+		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel K562 cyto pA+ A 1
 		longLabel K562 cytosol polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep1
@@ -2512,7 +2512,7 @@ noInherit on
 		# subId=1920 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments on
+		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel K562 nucl pA+ A 1
 		longLabel K562 nucleus polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep1
@@ -2720,7 +2720,7 @@ noInherit on
 		# subId=2402 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments on
+		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel K562 cell pA- A 1
 		longLabel K562 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=CELL rnaExtract=PAM rep=rep1
@@ -2961,9 +2961,9 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel NHEK nucl pA+ A 4
+		shortLabel NHEK nucl pA+ A 2
 		longLabel NHEK nucleus polyA+ Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=Alignments cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep4
+		subGroups view=Alignments cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bam
 		color 179,0,134
 		# subId=4053 dateSubmitted=2011-06-08
@@ -3022,7 +3022,7 @@ noInherit on
 		# subId=2475 dateSubmitted=2010-10-01
 
 		track wgEncodeCshlLongRnaSeqK562CellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments on
+		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel K562 cell pA+ A 1
 		longLabel K562 whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=CELL rnaExtract=PAP rep=rep1
@@ -3357,7 +3357,7 @@ noInherit on
 		# subId=3146 dateSubmitted=2010-12-24
 
 		track wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments on
+		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel K562 nucl pA- A 1
 		longLabel K562 nucleus polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep1
@@ -3367,7 +3367,7 @@ noInherit on
 		# subId=3145 dateSubmitted=2010-12-24
 
 		track wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments on
+		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel K562 cyto pA- A 1
 		longLabel K562 cytosol polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep1
@@ -3905,7 +3905,7 @@ noInherit on
         # subId=3641 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562CytosolPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs on
+        parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel K562 cyto pA- C 
         longLabel K562 cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1K562 localization=CYTOSOL rnaExtract=PAM
@@ -3941,7 +3941,7 @@ noInherit on
         # subId=3645 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562NucleusPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs on
+        parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel K562 nucl pA- C 
         longLabel K562 nucleus polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1K562 localization=NUCLEUS rnaExtract=PAM
@@ -3959,7 +3959,7 @@ noInherit on
         # subId=3647 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562CellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs on
+        parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel K562 cell pA- C 
         longLabel K562 whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1K562 localization=CELL rnaExtract=PAM

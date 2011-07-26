@@ -67,7 +67,7 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
 		"document.addHubForm.submit();return true;\" "
 		"class=\"hubField\" type=\"button\" value=\"Add Hub\">"
 	"</th> "
-    "</tr></thead> ");
+    "</tr> ");
 
 // count up the number of unlisted hubs we currently have
 int count = 0;
@@ -85,7 +85,7 @@ if (count == 0)
 	"<tr><td>No Track Hubs for this genome assembly</td></tr>"
 	"</td></table>");
     cgiMakeButton("Submit", "Return to Genome Browser");
-    printf("</div>");
+    printf("</thead></div>");
     return;
     }
 
@@ -97,7 +97,7 @@ printf(
 	"<th>Description</th> "
 	"<th>URL</th> "
 	"<th>Disconnect</th> "
-    "</tr>\n");
+    "</tr></thead>\n");
 
 // start first row
 printf("<tbody><tr>");
@@ -135,10 +135,10 @@ for(hub = hubList; hub; hub = hub->next)
     ourCellStart();
     printf(
     "<input name=\"hubDisconnectButton\""
-	"onClick=\"document.disconnectHubForm.elements['hubUrl'].value='%s';"
+	"onClick=\"document.disconnectHubForm.elements['hubId'].value='%d';"
 	    "document.disconnectHubForm.submit();return true;\" "
 	    "class=\"hubField\" type=\"button\" value=\"X\">"
-	    , hub->hubUrl);
+	    , hub->id);
     ourCellEnd();
     }
 
@@ -258,12 +258,16 @@ printf("<pre>Completed\n");
 
 static void doDisconnectHub(struct cart *theCart)
 {
-char *url = cartOptionalString(cart, hgHubDataText);
+char *id = cartOptionalString(cart, "hubId");
 
-if (url != NULL)
-    hubDisconnect(theCart, url);
+if (id != NULL)
+    {
+    char buffer[1024];
+    safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
+    cartRemove(cart, buffer);
+    }
 
-cartRemove(theCart, hgHubDataText);
+cartRemove(theCart, "hubId");
 }
 
 void doMiddle(struct cart *theCart)
@@ -317,7 +321,7 @@ puts("</FORM>");
 
 // this the form for the disconnect hub button
 printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubConnect");
-cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar("hubId", "");
 cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");

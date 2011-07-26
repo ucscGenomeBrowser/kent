@@ -1102,6 +1102,7 @@ dccAccession wgEncodeEH000179
 dccRep 1
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep1.bam
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001
@@ -1130,6 +1131,7 @@ dccAccession wgEncodeEH000179
 dccRep 2
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep2.bam
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9002
@@ -1158,6 +1160,7 @@ dccAccession wgEncodeEH000179
 dccRep 1
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001
@@ -1185,6 +1188,7 @@ dccAccession wgEncodeEH000179
 dccRep 2
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9002
@@ -1212,6 +1216,7 @@ dccAccession wgEncodeEH000179
 dccRep 1
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001
@@ -1239,6 +1244,7 @@ dccAccession wgEncodeEH000179
 dccRep 2
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9002
@@ -1266,6 +1272,7 @@ dccAccession wgEncodeEH000179
 dccRep 1
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep1.bigWig
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001
@@ -1294,6 +1301,7 @@ dccAccession wgEncodeEH000179
 dccRep 2
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep2.bigWig
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9002
@@ -1322,6 +1330,7 @@ dccAccession wgEncodeEH000179
 dccRep 1
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep1.bigWig
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001
@@ -1350,6 +1359,7 @@ dccAccession wgEncodeEH000179
 dccRep 2
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep2.bigWig
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9002
@@ -1377,6 +1387,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000179
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamContigs.bedRnaElements.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001,LID9002
@@ -1402,6 +1413,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamExonsGencV7.gtf.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001,LID9002
@@ -1428,6 +1440,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000179
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamGeneDeNovo.gtf.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001,LID9002
@@ -1452,6 +1465,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamGeneGencV7.gtf.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001,LID9002
@@ -1478,6 +1492,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000179
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamJunctions.bedRnaElements.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001,LID9002
@@ -1504,6 +1519,7 @@ dccAccession wgEncodeEH000179
 dccRep 1
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001
@@ -1533,6 +1549,7 @@ dccAccession wgEncodeEH000179
 dccRep 2
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9002
@@ -1560,6 +1577,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000179
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001,LID9002
@@ -1584,6 +1602,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
 expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001,LID9002
@@ -6318,6 +6337,7 @@ dccAccession wgEncodeEH000170
 dccRep 1
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1.bam
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532
@@ -6346,6 +6366,7 @@ dccAccession wgEncodeEH000170
 dccRep 2
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8533
@@ -6373,6 +6394,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000170
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532,LID8533
@@ -6398,6 +6420,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532,LID8533
@@ -6425,6 +6448,7 @@ dccAccession wgEncodeEH000170
 dccRep 1
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532
@@ -6452,6 +6476,7 @@ dccAccession wgEncodeEH000170
 dccRep 2
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8533
@@ -6479,6 +6504,7 @@ dccAccession wgEncodeEH000170
 dccRep 1
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532
@@ -6506,6 +6532,7 @@ dccAccession wgEncodeEH000170
 dccRep 2
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8533
@@ -6532,6 +6559,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000170
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532,LID8533
@@ -6556,6 +6584,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532,LID8533
@@ -6582,6 +6611,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000170
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532,LID8533
@@ -6607,6 +6637,7 @@ dccAccession wgEncodeEH000170
 dccRep 1
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532
@@ -6635,6 +6666,7 @@ dccAccession wgEncodeEH000170
 dccRep 2
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8533
@@ -6663,6 +6695,7 @@ dccAccession wgEncodeEH000170
 dccRep 1
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532
@@ -6691,6 +6724,7 @@ dccAccession wgEncodeEH000170
 dccRep 2
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8533
@@ -6718,6 +6752,7 @@ dccAccession wgEncodeEH000170
 dccRep 1
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labProtocolId 003N+
@@ -6741,6 +6776,7 @@ dccAccession wgEncodeEH000170
 dccRep 2
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labProtocolId 004N+
@@ -6766,6 +6802,7 @@ dccAccession wgEncodeEH000170
 dccRep 1
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532
@@ -6795,6 +6832,7 @@ dccAccession wgEncodeEH000170
 dccRep 2
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8533
@@ -6822,6 +6860,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000170
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532,LID8533
@@ -6846,6 +6885,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
 expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532,LID8533
@@ -10112,6 +10152,7 @@ dccAccession wgEncodeEH000173
 dccRep 1
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1.bam
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633
@@ -10140,6 +10181,7 @@ dccAccession wgEncodeEH000173
 dccRep 2
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep2.bam
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16634
@@ -10167,6 +10209,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000173
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633,LID16634
@@ -10192,6 +10235,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633,LID16634
@@ -10219,6 +10263,7 @@ dccAccession wgEncodeEH000173
 dccRep 1
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633
@@ -10246,6 +10291,7 @@ dccAccession wgEncodeEH000173
 dccRep 2
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16634
@@ -10273,6 +10319,7 @@ dccAccession wgEncodeEH000173
 dccRep 1
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633
@@ -10300,6 +10347,7 @@ dccAccession wgEncodeEH000173
 dccRep 2
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16634
@@ -10326,6 +10374,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000173
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633,LID16634
@@ -10350,6 +10399,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633,LID16634
@@ -10376,6 +10426,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000173
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633,LID16634
@@ -10401,6 +10452,7 @@ dccAccession wgEncodeEH000173
 dccRep 1
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633
@@ -10429,6 +10481,7 @@ dccAccession wgEncodeEH000173
 dccRep 2
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16634
@@ -10457,6 +10510,7 @@ dccAccession wgEncodeEH000173
 dccRep 1
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633
@@ -10485,6 +10539,7 @@ dccAccession wgEncodeEH000173
 dccRep 2
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16634
@@ -10512,6 +10567,7 @@ dccAccession wgEncodeEH000173
 dccRep 1
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labProtocolId 011WC+
@@ -10535,6 +10591,7 @@ dccAccession wgEncodeEH000173
 dccRep 2
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labProtocolId 012WC+
@@ -10560,6 +10617,7 @@ dccAccession wgEncodeEH000173
 dccRep 1
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633
@@ -10589,6 +10647,7 @@ dccAccession wgEncodeEH000173
 dccRep 2
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16634
@@ -10616,6 +10675,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000173
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633,LID16634
@@ -10640,6 +10700,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
 expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633,LID16634
@@ -11069,6 +11130,7 @@ dccAccession wgEncodeEH000171
 dccRep 1
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1.bam
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469
@@ -11097,6 +11159,7 @@ dccAccession wgEncodeEH000171
 dccRep 2
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep2.bam
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8470
@@ -11124,6 +11187,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000171
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469,LID8470
@@ -11149,6 +11213,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469,LID8470
@@ -11176,6 +11241,7 @@ dccAccession wgEncodeEH000171
 dccRep 1
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469
@@ -11203,6 +11269,7 @@ dccAccession wgEncodeEH000171
 dccRep 2
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8470
@@ -11230,6 +11297,7 @@ dccAccession wgEncodeEH000171
 dccRep 1
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469
@@ -11257,6 +11325,7 @@ dccAccession wgEncodeEH000171
 dccRep 2
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8470
@@ -11283,6 +11352,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000171
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469,LID8470
@@ -11307,6 +11377,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469,LID8470
@@ -11333,6 +11404,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000171
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469,LID8470
@@ -11358,6 +11430,7 @@ dccAccession wgEncodeEH000171
 dccRep 1
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469
@@ -11386,6 +11459,7 @@ dccAccession wgEncodeEH000171
 dccRep 2
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8470
@@ -11414,6 +11488,7 @@ dccAccession wgEncodeEH000171
 dccRep 1
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469
@@ -11442,6 +11517,7 @@ dccAccession wgEncodeEH000171
 dccRep 2
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8470
@@ -11469,6 +11545,7 @@ dccAccession wgEncodeEH000171
 dccRep 1
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labProtocolId 011C+
@@ -11492,6 +11569,7 @@ dccAccession wgEncodeEH000171
 dccRep 2
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labProtocolId 012C+
@@ -11517,6 +11595,7 @@ dccAccession wgEncodeEH000171
 dccRep 1
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469
@@ -11546,6 +11625,7 @@ dccAccession wgEncodeEH000171
 dccRep 2
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8470
@@ -11573,6 +11653,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000171
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469,LID8470
@@ -11597,6 +11678,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
 expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469,LID8470
@@ -12181,6 +12263,7 @@ dccAccession wgEncodeEH000172
 dccRep 1
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1.bam
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559
@@ -12209,6 +12292,7 @@ dccAccession wgEncodeEH000172
 dccRep 2
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep2.bam
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8560
@@ -12236,6 +12320,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000172
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559,LID8560
@@ -12261,6 +12346,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559,LID8560
@@ -12288,6 +12374,7 @@ dccAccession wgEncodeEH000172
 dccRep 1
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559
@@ -12315,6 +12402,7 @@ dccAccession wgEncodeEH000172
 dccRep 2
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8560
@@ -12342,6 +12430,7 @@ dccAccession wgEncodeEH000172
 dccRep 1
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559
@@ -12369,6 +12458,7 @@ dccAccession wgEncodeEH000172
 dccRep 2
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8560
@@ -12395,6 +12485,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000172
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559,LID8560
@@ -12419,6 +12510,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559,LID8560
@@ -12445,6 +12537,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000172
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559,LID8560
@@ -12470,6 +12563,7 @@ dccAccession wgEncodeEH000172
 dccRep 1
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559
@@ -12498,6 +12592,7 @@ dccAccession wgEncodeEH000172
 dccRep 2
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8560
@@ -12526,6 +12621,7 @@ dccAccession wgEncodeEH000172
 dccRep 1
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559
@@ -12554,6 +12650,7 @@ dccAccession wgEncodeEH000172
 dccRep 2
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8560
@@ -12581,6 +12678,7 @@ dccAccession wgEncodeEH000172
 dccRep 1
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labProtocolId 011N+
@@ -12604,6 +12702,7 @@ dccAccession wgEncodeEH000172
 dccRep 2
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labProtocolId 012N+
@@ -12629,6 +12728,7 @@ dccAccession wgEncodeEH000172
 dccRep 1
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559
@@ -12658,6 +12758,7 @@ dccAccession wgEncodeEH000172
 dccRep 2
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8560
@@ -12685,6 +12786,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000172
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559,LID8560
@@ -12709,6 +12811,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
 expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559,LID8560
@@ -16147,6 +16250,7 @@ dccAccession wgEncodeEH000176
 dccRep 1
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1.bam
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16175,6 +16279,7 @@ dccAccession wgEncodeEH000176
 dccRep 1
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16202,6 +16307,7 @@ dccAccession wgEncodeEH000176
 dccRep 1
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16229,6 +16335,7 @@ dccAccession wgEncodeEH000176
 dccRep 1
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaMinusRawSigRep1.bigWig
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16257,6 +16364,7 @@ dccAccession wgEncodeEH000176
 dccRep 1
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaPlusRawSigRep1.bigWig
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16284,6 +16392,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000176
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamContigs.bedRnaElements.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16312,6 +16421,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamExonsGencV7.gtf.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16338,6 +16448,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000176
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamGeneDeNovo.gtf.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16365,6 +16476,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamGeneGencV7.gtf.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16391,6 +16503,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000176
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamJunctions.bedRnaElements.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16418,6 +16531,7 @@ dccAccession wgEncodeEH000176
 dccRep 1
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamProtocolRep1.pdf.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labProtocolId 036WC-
@@ -16443,6 +16557,7 @@ dccAccession wgEncodeEH000176
 dccRep 1
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16470,6 +16585,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000176
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16497,6 +16613,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
 expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
@@ -16914,6 +17031,7 @@ dccAccession wgEncodeEH000177
 dccRep 1
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1.bam
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826
@@ -16942,6 +17060,7 @@ dccAccession wgEncodeEH000177
 dccRep 2
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep2.bam
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8827
@@ -16970,6 +17089,7 @@ dccAccession wgEncodeEH000177
 dccRep 1
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826
@@ -16997,6 +17117,7 @@ dccAccession wgEncodeEH000177
 dccRep 2
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8827
@@ -17024,6 +17145,7 @@ dccAccession wgEncodeEH000177
 dccRep 1
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826
@@ -17051,6 +17173,7 @@ dccAccession wgEncodeEH000177
 dccRep 2
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8827
@@ -17078,6 +17201,7 @@ dccAccession wgEncodeEH000177
 dccRep 1
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep1.bigWig
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826
@@ -17106,6 +17230,7 @@ dccAccession wgEncodeEH000177
 dccRep 2
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep2.bigWig
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8827
@@ -17134,6 +17259,7 @@ dccAccession wgEncodeEH000177
 dccRep 1
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep1.bigWig
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826
@@ -17162,6 +17288,7 @@ dccAccession wgEncodeEH000177
 dccRep 2
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep2.bigWig
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8827
@@ -17189,6 +17316,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000177
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamContigs.bedRnaElements.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826,LID8827
@@ -17214,6 +17342,7 @@ dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamExonsGencV7.gtf.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826,LID8827
@@ -17240,6 +17369,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000177
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamGeneDeNovo.gtf.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826,LID8827
@@ -17264,6 +17394,7 @@ dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamGeneGencV7.gtf.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826,LID8827
@@ -17290,6 +17421,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000177
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamJunctions.bedRnaElements.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826,LID8827
@@ -17314,6 +17446,7 @@ dccAccession wgEncodeEH000177
 dccRep 1
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep1.pdf.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labProtocolId 023WC-
@@ -17337,6 +17470,7 @@ dccAccession wgEncodeEH000177
 dccRep 2
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep2.pdf.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labProtocolId 024WC-
@@ -17362,6 +17496,7 @@ dccAccession wgEncodeEH000177
 dccRep 1
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826
@@ -17391,6 +17526,7 @@ dccAccession wgEncodeEH000177
 dccRep 2
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8827
@@ -17418,6 +17554,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000177
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826,LID8827
@@ -17442,6 +17579,7 @@ dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
 expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826,LID8827
@@ -21850,6 +21988,7 @@ dccAccession wgEncodeEH000163
 dccRep 1
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapAlnRep1.bam
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627
@@ -21878,6 +22017,7 @@ dccAccession wgEncodeEH000163
 dccRep 2
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapAlnRep2.bam
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16628
@@ -21905,6 +22045,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627,LID16628
@@ -21930,6 +22071,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627,LID16628
@@ -21957,6 +22099,7 @@ dccAccession wgEncodeEH000163
 dccRep 1
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627
@@ -21984,6 +22127,7 @@ dccAccession wgEncodeEH000163
 dccRep 2
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16628
@@ -22011,6 +22155,7 @@ dccAccession wgEncodeEH000163
 dccRep 1
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627
@@ -22038,6 +22183,7 @@ dccAccession wgEncodeEH000163
 dccRep 2
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16628
@@ -22064,6 +22210,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627,LID16628
@@ -22088,6 +22235,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627,LID16628
@@ -22114,6 +22262,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627,LID16628
@@ -22140,6 +22289,7 @@ dccAccession wgEncodeEH000163
 dccRep 1
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627
@@ -22168,6 +22318,7 @@ dccAccession wgEncodeEH000163
 dccRep 2
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16628
@@ -22196,6 +22347,7 @@ dccAccession wgEncodeEH000163
 dccRep 1
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627
@@ -22224,6 +22376,7 @@ dccAccession wgEncodeEH000163
 dccRep 2
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16628
@@ -22251,6 +22404,7 @@ dccAccession wgEncodeEH000163
 dccRep 1
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labProtocolId 001WC+
@@ -22274,6 +22428,7 @@ dccAccession wgEncodeEH000163
 dccRep 2
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labProtocolId 002WC+
@@ -22299,6 +22454,7 @@ dccAccession wgEncodeEH000163
 dccRep 1
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627
@@ -22328,6 +22484,7 @@ dccAccession wgEncodeEH000163
 dccRep 2
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16628
@@ -22355,6 +22512,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627,LID16628
@@ -22379,6 +22537,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
 expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627,LID16628
@@ -22619,6 +22778,7 @@ dccAccession wgEncodeEH000180
 dccRep 1
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3.bam
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185
@@ -22647,6 +22807,7 @@ dccAccession wgEncodeEH000180
 dccRep 2
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4.bam
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9186
@@ -22674,6 +22835,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalContigs.bedRnaElements.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185,LID9186
@@ -22699,6 +22861,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalExonsGencV7.gtf.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185,LID9186
@@ -22726,6 +22889,7 @@ dccAccession wgEncodeEH000180
 dccRep 1
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185
@@ -22753,6 +22917,7 @@ dccAccession wgEncodeEH000180
 dccRep 2
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9186
@@ -22780,6 +22945,7 @@ dccAccession wgEncodeEH000180
 dccRep 1
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185
@@ -22807,6 +22973,7 @@ dccAccession wgEncodeEH000180
 dccRep 2
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9186
@@ -22833,6 +23000,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalGeneDeNovo.gtf.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185,LID9186
@@ -22857,6 +23025,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalGeneGencV7.gtf.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185,LID9186
@@ -22883,6 +23052,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalJunctions.bedRnaElements.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185,LID9186
@@ -22908,6 +23078,7 @@ dccAccession wgEncodeEH000180
 dccRep 1
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3.bigWig
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185
@@ -22936,6 +23107,7 @@ dccAccession wgEncodeEH000180
 dccRep 2
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep4.bigWig
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9186
@@ -22964,6 +23136,7 @@ dccAccession wgEncodeEH000180
 dccRep 1
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3.bigWig
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185
@@ -22992,6 +23165,7 @@ dccAccession wgEncodeEH000180
 dccRep 2
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4.bigWig
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9186
@@ -23021,6 +23195,7 @@ dccAccession wgEncodeEH000180
 dccRep 1
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalSpikeinsRep3.spikeins.bam.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185
@@ -23050,6 +23225,7 @@ dccAccession wgEncodeEH000180
 dccRep 2
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalSpikeinsRep4.spikeins.bam.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9186
@@ -23077,6 +23253,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185,LID9186
@@ -23101,6 +23278,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185,LID9186
@@ -24242,6 +24420,7 @@ dccAccession wgEncodeEH000181
 dccRep 1
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3.bam
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187
@@ -24270,6 +24449,7 @@ dccAccession wgEncodeEH000181
 dccRep 2
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4.bam
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9188
@@ -24297,6 +24477,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalContigs.bedRnaElements.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187,LID9188
@@ -24322,6 +24503,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalExonsGencV7.gtf.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187,LID9188
@@ -24349,6 +24531,7 @@ dccAccession wgEncodeEH000181
 dccRep 1
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187
@@ -24376,6 +24559,7 @@ dccAccession wgEncodeEH000181
 dccRep 2
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9188
@@ -24403,6 +24587,7 @@ dccAccession wgEncodeEH000181
 dccRep 1
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187
@@ -24430,6 +24615,7 @@ dccAccession wgEncodeEH000181
 dccRep 2
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9188
@@ -24456,6 +24642,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalGeneDeNovo.gtf.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187,LID9188
@@ -24480,6 +24667,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalGeneGencV7.gtf.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187,LID9188
@@ -24506,6 +24694,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions.bedRnaElements.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187,LID9188
@@ -24531,6 +24720,7 @@ dccAccession wgEncodeEH000181
 dccRep 1
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3.bigWig
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187
@@ -24559,6 +24749,7 @@ dccAccession wgEncodeEH000181
 dccRep 2
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4.bigWig
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9188
@@ -24587,6 +24778,7 @@ dccAccession wgEncodeEH000181
 dccRep 1
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3.bigWig
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187
@@ -24615,6 +24807,7 @@ dccAccession wgEncodeEH000181
 dccRep 2
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4.bigWig
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9188
@@ -24644,6 +24837,7 @@ dccAccession wgEncodeEH000181
 dccRep 1
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalSpikeinsRep3.spikeins.bam.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187
@@ -24673,6 +24867,7 @@ dccAccession wgEncodeEH000181
 dccRep 2
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalSpikeinsRep4.spikeins.bam.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9188
@@ -24700,6 +24895,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187,LID9188
@@ -24724,6 +24920,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187,LID9188
@@ -24752,6 +24949,7 @@ dccAccession wgEncodeEH000182
 dccRep 1
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3.bam
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189
@@ -24780,6 +24978,7 @@ dccAccession wgEncodeEH000182
 dccRep 2
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4.bam
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9190
@@ -24807,6 +25006,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalContigs.bedRnaElements.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189,LID9190
@@ -24832,6 +25032,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalExonsGencV7.gtf.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189,LID9190
@@ -24859,6 +25060,7 @@ dccAccession wgEncodeEH000182
 dccRep 1
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189
@@ -24886,6 +25088,7 @@ dccAccession wgEncodeEH000182
 dccRep 2
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9190
@@ -24913,6 +25116,7 @@ dccAccession wgEncodeEH000182
 dccRep 1
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189
@@ -24940,6 +25144,7 @@ dccAccession wgEncodeEH000182
 dccRep 2
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9190
@@ -24966,6 +25171,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalGeneDeNovo.gtf.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189,LID9190
@@ -24990,6 +25196,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalGeneGencV7.gtf.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189,LID9190
@@ -25016,6 +25223,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalJunctions.bedRnaElements.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189,LID9190
@@ -25041,6 +25249,7 @@ dccAccession wgEncodeEH000182
 dccRep 1
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3.bigWig
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189
@@ -25069,6 +25278,7 @@ dccAccession wgEncodeEH000182
 dccRep 2
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep4.bigWig
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9190
@@ -25097,6 +25307,7 @@ dccAccession wgEncodeEH000182
 dccRep 1
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3.bigWig
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189
@@ -25125,6 +25336,7 @@ dccAccession wgEncodeEH000182
 dccRep 2
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4.bigWig
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9190
@@ -25154,6 +25366,7 @@ dccAccession wgEncodeEH000182
 dccRep 1
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalSpikeinsRep3.spikeins.bam.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189
@@ -25183,6 +25396,7 @@ dccAccession wgEncodeEH000182
 dccRep 2
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalSpikeinsRep4.spikeins.bam.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9190
@@ -25210,6 +25424,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189,LID9190
@@ -25234,6 +25449,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189,LID9190
@@ -25818,6 +26034,7 @@ dccAccession wgEncodeEH000174
 dccRep 1
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1.bam
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556
@@ -25846,6 +26063,7 @@ dccAccession wgEncodeEH000174
 dccRep 2
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep2.bam
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8557
@@ -25873,6 +26091,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000174
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556,LID8557
@@ -25898,6 +26117,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556,LID8557
@@ -25925,6 +26145,7 @@ dccAccession wgEncodeEH000174
 dccRep 1
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556
@@ -25952,6 +26173,7 @@ dccAccession wgEncodeEH000174
 dccRep 2
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8557
@@ -25979,6 +26201,7 @@ dccAccession wgEncodeEH000174
 dccRep 1
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556
@@ -26006,6 +26229,7 @@ dccAccession wgEncodeEH000174
 dccRep 2
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8557
@@ -26032,6 +26256,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000174
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556,LID8557
@@ -26056,6 +26281,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556,LID8557
@@ -26082,6 +26308,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000174
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556,LID8557
@@ -26107,6 +26334,7 @@ dccAccession wgEncodeEH000174
 dccRep 1
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556
@@ -26135,6 +26363,7 @@ dccAccession wgEncodeEH000174
 dccRep 2
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8557
@@ -26163,6 +26392,7 @@ dccAccession wgEncodeEH000174
 dccRep 1
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556
@@ -26191,6 +26421,7 @@ dccAccession wgEncodeEH000174
 dccRep 2
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8557
@@ -26218,6 +26449,7 @@ dccAccession wgEncodeEH000174
 dccRep 1
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labProtocolId 001N+
@@ -26241,6 +26473,7 @@ dccAccession wgEncodeEH000174
 dccRep 2
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labProtocolId 002N+
@@ -26266,6 +26499,7 @@ dccAccession wgEncodeEH000174
 dccRep 1
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556
@@ -26295,6 +26529,7 @@ dccAccession wgEncodeEH000174
 dccRep 2
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8557
@@ -26322,6 +26557,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000174
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556,LID8557
@@ -26346,6 +26582,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
 expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556,LID8557
@@ -26930,6 +27167,7 @@ dccAccession wgEncodeEH000175
 dccRep 1
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1.bam
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686
@@ -26958,6 +27196,7 @@ dccAccession wgEncodeEH000175
 dccRep 2
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep2.bam
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8687
@@ -26985,6 +27224,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000175
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686,LID8687
@@ -27010,6 +27250,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686,LID8687
@@ -27037,6 +27278,7 @@ dccAccession wgEncodeEH000175
 dccRep 1
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686
@@ -27064,6 +27306,7 @@ dccAccession wgEncodeEH000175
 dccRep 2
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8687
@@ -27091,6 +27334,7 @@ dccAccession wgEncodeEH000175
 dccRep 1
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686
@@ -27118,6 +27362,7 @@ dccAccession wgEncodeEH000175
 dccRep 2
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8687
@@ -27144,6 +27389,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000175
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686,LID8687
@@ -27168,6 +27414,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686,LID8687
@@ -27194,6 +27441,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000175
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686,LID8687
@@ -27219,6 +27467,7 @@ dccAccession wgEncodeEH000175
 dccRep 1
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686
@@ -27247,6 +27496,7 @@ dccAccession wgEncodeEH000175
 dccRep 2
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8687
@@ -27275,6 +27525,7 @@ dccAccession wgEncodeEH000175
 dccRep 1
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686
@@ -27303,6 +27554,7 @@ dccAccession wgEncodeEH000175
 dccRep 2
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8687
@@ -27330,6 +27582,7 @@ dccAccession wgEncodeEH000175
 dccRep 1
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labProtocolId 015WC+
@@ -27353,6 +27606,7 @@ dccAccession wgEncodeEH000175
 dccRep 2
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labProtocolId 016WC+
@@ -27378,6 +27632,7 @@ dccAccession wgEncodeEH000175
 dccRep 1
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686
@@ -27407,6 +27662,7 @@ dccAccession wgEncodeEH000175
 dccRep 2
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8687
@@ -27434,6 +27690,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000175
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686,LID8687
@@ -27458,6 +27715,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
 expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686,LID8687
@@ -27486,6 +27744,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1.bam
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665
@@ -27514,6 +27773,7 @@ dccAccession wgEncodeEH000164
 dccRep 2
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2.bam
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8666
@@ -27542,6 +27802,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5.bam
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -27570,6 +27831,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665
@@ -27597,6 +27859,7 @@ dccAccession wgEncodeEH000164
 dccRep 2
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8666
@@ -27624,6 +27887,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep5.fastq.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -27651,6 +27915,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665
@@ -27678,6 +27943,7 @@ dccAccession wgEncodeEH000164
 dccRep 2
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8666
@@ -27705,6 +27971,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep5.fastq.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -27732,6 +27999,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep1.bigWig
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665
@@ -27760,6 +28028,7 @@ dccAccession wgEncodeEH000164
 dccRep 2
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2.bigWig
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8666
@@ -27788,6 +28057,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5.bigWig
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -27816,6 +28086,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1.bigWig
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665
@@ -27844,6 +28115,7 @@ dccAccession wgEncodeEH000164
 dccRep 2
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2.bigWig
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8666
@@ -27872,6 +28144,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5.bigWig
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -27899,6 +28172,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamContigs.bedRnaElements.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -27927,6 +28201,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamExonsGencV7.gtf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665,LID8666
@@ -27953,6 +28228,7 @@ dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamExonsGencV7Rep5.gtf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -27980,6 +28256,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovo.gtf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -28007,6 +28284,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV7.gtf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665,LID8666
@@ -28033,6 +28311,7 @@ dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV7Rep5.gtf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -28060,6 +28339,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamJunctions.bedRnaElements.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -28087,6 +28367,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep1.pdf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labProtocolId 007WC-
@@ -28110,6 +28391,7 @@ dccAccession wgEncodeEH000164
 dccRep 2
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep2.pdf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labProtocolId 008WC-
@@ -28132,6 +28414,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep5.pdf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labProtocolId 035WC-
@@ -28157,6 +28440,7 @@ dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665
@@ -28186,6 +28470,7 @@ dccAccession wgEncodeEH000164
 dccRep 2
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8666
@@ -28214,6 +28499,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamSpikeinsRep5.spikeins.bam.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -28241,6 +28527,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -28268,6 +28555,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665,LID8666
@@ -28295,6 +28583,7 @@ dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5.gtf.gz
+geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
@@ -28324,6 +28613,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1.bam
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631
@@ -28352,6 +28642,7 @@ dccAccession wgEncodeEH000167
 dccRep 2
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2.bam
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16632
@@ -28380,6 +28671,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28409,6 +28701,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28437,6 +28730,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631,LID16632
@@ -28463,6 +28757,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapExonsGencV7Rep5.gtf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28491,6 +28786,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631
@@ -28518,6 +28814,7 @@ dccAccession wgEncodeEH000167
 dccRep 2
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16632
@@ -28545,6 +28842,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep5.fastq.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28572,6 +28870,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631
@@ -28599,6 +28898,7 @@ dccAccession wgEncodeEH000167
 dccRep 2
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16632
@@ -28626,6 +28926,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep5.fastq.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28652,6 +28953,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28679,6 +28981,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631,LID16632
@@ -28705,6 +29008,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV7Rep5.gtf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28732,6 +29036,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28760,6 +29065,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631
@@ -28788,6 +29094,7 @@ dccAccession wgEncodeEH000167
 dccRep 2
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16632
@@ -28816,6 +29123,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5.bigWig
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28844,6 +29152,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631
@@ -28872,6 +29181,7 @@ dccAccession wgEncodeEH000167
 dccRep 2
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16632
@@ -28900,6 +29210,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5.bigWig
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -28927,6 +29238,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labProtocolId 007WC+
@@ -28950,6 +29262,7 @@ dccAccession wgEncodeEH000167
 dccRep 2
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labProtocolId 008WC+
@@ -28972,6 +29285,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep5.pdf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labProtocolId 035WC+
@@ -28997,6 +29311,7 @@ dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631
@@ -29026,6 +29341,7 @@ dccAccession wgEncodeEH000167
 dccRep 2
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16632
@@ -29054,6 +29370,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapSpikeinsRep5.spikeins.bam.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -29081,6 +29398,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -29108,6 +29426,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631,LID16632
@@ -29135,6 +29454,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5.gtf.gz
+geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
@@ -29542,6 +29862,7 @@ dccAccession wgEncodeEH000166
 dccRep 1
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3.bam
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795
@@ -29570,6 +29891,7 @@ dccAccession wgEncodeEH000166
 dccRep 2
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep4.bam
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8796
@@ -29597,6 +29919,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000166
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795,LID8796
@@ -29622,6 +29945,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795,LID8796
@@ -29649,6 +29973,7 @@ dccAccession wgEncodeEH000166
 dccRep 1
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795
@@ -29676,6 +30001,7 @@ dccAccession wgEncodeEH000166
 dccRep 2
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8796
@@ -29703,6 +30029,7 @@ dccAccession wgEncodeEH000166
 dccRep 1
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795
@@ -29730,6 +30057,7 @@ dccAccession wgEncodeEH000166
 dccRep 2
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8796
@@ -29756,6 +30084,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000166
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795,LID8796
@@ -29780,6 +30109,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795,LID8796
@@ -29806,6 +30136,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000166
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795,LID8796
@@ -29831,6 +30162,7 @@ dccAccession wgEncodeEH000166
 dccRep 1
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep3.bigWig
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795
@@ -29859,6 +30191,7 @@ dccAccession wgEncodeEH000166
 dccRep 2
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep4.bigWig
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8796
@@ -29887,6 +30220,7 @@ dccAccession wgEncodeEH000166
 dccRep 1
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep3.bigWig
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795
@@ -29915,6 +30249,7 @@ dccAccession wgEncodeEH000166
 dccRep 2
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep4.bigWig
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8796
@@ -29942,6 +30277,7 @@ dccAccession wgEncodeEH000166
 dccRep 1
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep3.pdf.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labProtocolId 027C+
@@ -29965,6 +30301,7 @@ dccAccession wgEncodeEH000166
 dccRep 2
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep4.pdf.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labProtocolId 028C+
@@ -29990,6 +30327,7 @@ dccAccession wgEncodeEH000166
 dccRep 1
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapSpikeinsRep3.spikeins.bam.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795
@@ -30019,6 +30357,7 @@ dccAccession wgEncodeEH000166
 dccRep 2
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapSpikeinsRep4.spikeins.bam.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8796
@@ -30046,6 +30385,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000166
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795,LID8796
@@ -30070,6 +30410,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
 expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795,LID8796
@@ -30739,6 +31080,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797,LID8798
@@ -30902,6 +31244,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797,LID8798
@@ -31202,6 +31545,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
 expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797,LID8798
@@ -31230,6 +31574,7 @@ dccAccession wgEncodeEH000178
 dccRep 1
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1.bam
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828
@@ -31258,6 +31603,7 @@ dccAccession wgEncodeEH000178
 dccRep 2
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep2.bam
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8829
@@ -31286,6 +31632,7 @@ dccAccession wgEncodeEH000178
 dccRep 1
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828
@@ -31313,6 +31660,7 @@ dccAccession wgEncodeEH000178
 dccRep 2
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8829
@@ -31340,6 +31688,7 @@ dccAccession wgEncodeEH000178
 dccRep 1
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828
@@ -31367,6 +31716,7 @@ dccAccession wgEncodeEH000178
 dccRep 2
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8829
@@ -31394,6 +31744,7 @@ dccAccession wgEncodeEH000178
 dccRep 1
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep1.bigWig
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828
@@ -31422,6 +31773,7 @@ dccAccession wgEncodeEH000178
 dccRep 2
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep2.bigWig
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8829
@@ -31450,6 +31802,7 @@ dccAccession wgEncodeEH000178
 dccRep 1
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep1.bigWig
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828
@@ -31478,6 +31831,7 @@ dccAccession wgEncodeEH000178
 dccRep 2
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep2.bigWig
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8829
@@ -31505,6 +31859,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000178
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamContigs.bedRnaElements.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828,LID8829
@@ -31530,6 +31885,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamExonsGencV7.gtf.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828,LID8829
@@ -31556,6 +31912,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000178
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamGeneDeNovo.gtf.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828,LID8829
@@ -31580,6 +31937,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamGeneGencV7.gtf.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828,LID8829
@@ -31606,6 +31964,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000178
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamJunctions.bedRnaElements.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828,LID8829
@@ -31630,6 +31989,7 @@ dccAccession wgEncodeEH000178
 dccRep 1
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep1.pdf.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labProtocolId 033WC-
@@ -31653,6 +32013,7 @@ dccAccession wgEncodeEH000178
 dccRep 2
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep2.pdf.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labProtocolId 034WC-
@@ -31678,6 +32039,7 @@ dccAccession wgEncodeEH000178
 dccRep 1
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828
@@ -31707,6 +32069,7 @@ dccAccession wgEncodeEH000178
 dccRep 2
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8829
@@ -31734,6 +32097,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000178
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828,LID8829
@@ -31758,6 +32122,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
 expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828,LID8829
@@ -31786,6 +32151,7 @@ dccAccession wgEncodeEH000168
 dccRep 1
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692
@@ -31815,6 +32181,7 @@ dccAccession wgEncodeEH000168
 dccRep 2
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2.bam
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8701
@@ -31843,6 +32210,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000168
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692,LID8701
@@ -31868,6 +32236,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692,LID8701
@@ -31895,6 +32264,7 @@ dccAccession wgEncodeEH000168
 dccRep 1
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692
@@ -31922,6 +32292,7 @@ dccAccession wgEncodeEH000168
 dccRep 2
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8701
@@ -31949,6 +32320,7 @@ dccAccession wgEncodeEH000168
 dccRep 1
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692
@@ -31976,6 +32348,7 @@ dccAccession wgEncodeEH000168
 dccRep 2
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8701
@@ -32002,6 +32375,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000168
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692,LID8701
@@ -32026,6 +32400,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692,LID8701
@@ -32052,6 +32427,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000168
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692,LID8701
@@ -32077,6 +32453,7 @@ dccAccession wgEncodeEH000168
 dccRep 1
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692
@@ -32105,6 +32482,7 @@ dccAccession wgEncodeEH000168
 dccRep 2
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8701
@@ -32133,6 +32511,7 @@ dccAccession wgEncodeEH000168
 dccRep 1
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692
@@ -32161,6 +32540,7 @@ dccAccession wgEncodeEH000168
 dccRep 2
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8701
@@ -32188,6 +32568,7 @@ dccAccession wgEncodeEH000168
 dccRep 1
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labProtocolId 033WC+
@@ -32211,6 +32592,7 @@ dccAccession wgEncodeEH000168
 dccRep 2
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labProtocolId 034WC+
@@ -32236,6 +32618,7 @@ dccAccession wgEncodeEH000168
 dccRep 1
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692
@@ -32265,6 +32648,7 @@ dccAccession wgEncodeEH000168
 dccRep 2
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8701
@@ -32292,6 +32676,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000168
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692,LID8701
@@ -32316,6 +32701,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
 expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692,LID8701
@@ -32855,6 +33241,7 @@ dccAccession wgEncodeEH000169
 dccRep 1
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1.bam
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967
@@ -32883,6 +33270,7 @@ dccAccession wgEncodeEH000169
 dccRep 2
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep2.bam
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8968
@@ -32910,6 +33298,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000169
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapContigs.bedRnaElements.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967,LID8968
@@ -32935,6 +33324,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapExonsGencV7.gtf.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967,LID8968
@@ -32962,6 +33352,7 @@ dccAccession wgEncodeEH000169
 dccRep 1
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967
@@ -32989,6 +33380,7 @@ dccAccession wgEncodeEH000169
 dccRep 2
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8968
@@ -33016,6 +33408,7 @@ dccAccession wgEncodeEH000169
 dccRep 1
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967
@@ -33043,6 +33436,7 @@ dccAccession wgEncodeEH000169
 dccRep 2
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8968
@@ -33069,6 +33463,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000169
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapGeneDeNovo.gtf.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967,LID8968
@@ -33093,6 +33488,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapGeneGencV7.gtf.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967,LID8968
@@ -33119,6 +33515,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000169
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapJunctions.bedRnaElements.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967,LID8968
@@ -33144,6 +33541,7 @@ dccAccession wgEncodeEH000169
 dccRep 1
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep1.bigWig
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967
@@ -33172,6 +33570,7 @@ dccAccession wgEncodeEH000169
 dccRep 2
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2.bigWig
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8968
@@ -33200,6 +33599,7 @@ dccAccession wgEncodeEH000169
 dccRep 1
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1.bigWig
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967
@@ -33228,6 +33628,7 @@ dccAccession wgEncodeEH000169
 dccRep 2
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2.bigWig
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8968
@@ -33255,6 +33656,7 @@ dccAccession wgEncodeEH000169
 dccRep 1
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep1.pdf.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labProtocolId 019WC+
@@ -33278,6 +33680,7 @@ dccAccession wgEncodeEH000169
 dccRep 2
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep2.pdf.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labProtocolId 020WC+
@@ -33303,6 +33706,7 @@ dccAccession wgEncodeEH000169
 dccRep 1
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapSpikeinsRep1.spikeins.bam.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967
@@ -33332,6 +33736,7 @@ dccAccession wgEncodeEH000169
 dccRep 2
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapSpikeinsRep2.spikeins.bam.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8968
@@ -33359,6 +33764,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000169
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptDeNovo.gtf.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967,LID8968
@@ -33383,6 +33789,7 @@ dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7.gtf.gz
+geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967,LID8968
@@ -33398,4 +33805,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 616693028
+# MAGIC: 1021472218
