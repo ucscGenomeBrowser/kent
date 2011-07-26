@@ -9565,10 +9565,7 @@ printf("<HR>");
 printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
-// old name to be changed later
-#define omimPhenotypeClassColName "phenotypeClass"
-// new name to be used later
-//#define omimPhenotypeClassColName "omimPhenoMapKey"
+#include "omim.h"
 
 void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an omimGene2 entry. */
@@ -24263,6 +24260,7 @@ else if (sameWord(table, "RfamSeedFolds")
 	 || sameWord(table, "RfamFullFolds")
 	 || sameWord(table, "rfamTestFolds")
 	 || sameWord(table, "evofold")
+	 || sameWord(table, "evofoldV2")
 	 || sameWord(table, "evofoldRaw")
 	 || sameWord(table, "encode_tba23EvoFold")
 	 || sameWord(table, "encodeEvoFold")
