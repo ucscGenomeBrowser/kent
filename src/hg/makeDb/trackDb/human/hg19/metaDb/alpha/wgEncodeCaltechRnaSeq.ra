@@ -11,7 +11,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-04
-dateSubmitted1 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
@@ -39,7 +38,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
@@ -67,7 +65,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-02-10
 dateSubmitted 2010-01-04
-dateSubmitted1 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
@@ -92,7 +89,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-02-10
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
@@ -117,7 +113,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-04
-dateSubmitted1 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
@@ -145,7 +140,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
@@ -173,7 +167,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-04
-dateSubmitted1 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
@@ -201,7 +194,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
@@ -229,7 +221,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-04
-dateSubmitted1 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
@@ -257,7 +248,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
@@ -285,7 +275,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
@@ -314,7 +303,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
@@ -395,7 +383,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-07-14
-dateSubmitted1 2010-07-14
 dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000122
 expId 122
@@ -420,7 +407,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2010-07-14
-dateSubmitted1 2010-07-14
 dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000122
 expId 122
@@ -445,7 +431,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-07-14
-dateSubmitted1 2010-07-14
 dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000122
 expId 122
@@ -470,7 +455,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2010-07-14
-dateSubmitted1 2010-07-14
 dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000122
 expId 122
@@ -651,7 +635,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
@@ -680,7 +663,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
@@ -709,7 +691,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
@@ -738,7 +719,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
@@ -923,7 +903,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
@@ -978,7 +957,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
@@ -1003,7 +981,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
@@ -1106,7 +1083,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
@@ -1135,7 +1111,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
@@ -2787,7 +2762,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2815,7 +2789,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2843,7 +2816,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2868,7 +2840,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2893,7 +2864,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2921,7 +2891,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2949,7 +2918,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2977,7 +2945,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -3005,7 +2972,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -3033,7 +2999,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -3061,7 +3026,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3090,7 +3054,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3119,7 +3082,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3148,7 +3110,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
@@ -3281,7 +3242,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3306,7 +3266,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3331,7 +3290,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3356,7 +3314,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
@@ -3381,7 +3338,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3406,7 +3362,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3431,7 +3386,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3456,7 +3410,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
@@ -3793,7 +3746,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3822,7 +3774,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3851,7 +3802,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3880,7 +3830,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
@@ -3909,7 +3858,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3938,7 +3886,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3967,7 +3914,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3996,7 +3942,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
@@ -4337,7 +4282,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
@@ -4392,7 +4336,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
@@ -4417,7 +4360,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
@@ -4520,7 +4462,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
@@ -4549,7 +4490,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
-dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
@@ -5274,7 +5214,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5302,7 +5241,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5330,7 +5268,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5355,7 +5292,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5380,7 +5316,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5408,7 +5343,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5436,7 +5370,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5464,7 +5397,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5492,7 +5424,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5520,7 +5451,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5548,7 +5478,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5577,7 +5506,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5658,7 +5586,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5683,7 +5610,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5708,7 +5634,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5733,7 +5658,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5914,7 +5838,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5943,7 +5866,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5972,7 +5894,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -6001,7 +5922,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -6186,7 +6106,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6214,7 +6133,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6242,7 +6160,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6267,7 +6184,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6292,7 +6208,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6320,7 +6235,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6348,7 +6262,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6376,7 +6289,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6404,7 +6316,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6432,7 +6343,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -6460,7 +6370,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-12
-dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
@@ -6489,7 +6398,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-22
-dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
@@ -6570,7 +6478,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-12
 dateSubmitted 2010-01-12
-dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
@@ -6595,7 +6502,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-22
 dateSubmitted 2010-01-22
-dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
@@ -6620,7 +6526,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-12
 dateSubmitted 2010-01-12
-dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
@@ -6645,7 +6550,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-22
 dateSubmitted 2010-01-22
-dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
@@ -6826,7 +6730,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-12
-dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
@@ -6855,7 +6758,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-22
-dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
@@ -6884,7 +6786,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-12
-dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
@@ -6913,7 +6814,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-22
-dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
@@ -7696,7 +7596,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7724,7 +7623,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7752,7 +7650,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7777,7 +7674,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7802,7 +7698,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7830,7 +7725,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7858,7 +7752,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7886,7 +7779,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7914,7 +7806,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7942,7 +7833,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7970,7 +7860,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -7999,7 +7888,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8080,7 +7968,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8105,7 +7992,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8130,7 +8016,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8155,7 +8040,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8336,7 +8220,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8365,7 +8248,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8394,7 +8276,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8423,7 +8304,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -8608,7 +8488,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8636,7 +8515,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8664,7 +8542,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-02-10
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8689,7 +8566,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-02-10
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8714,7 +8590,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8742,7 +8617,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8770,7 +8644,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8798,7 +8671,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8826,7 +8698,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8854,7 +8725,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-06
-dateSubmitted1 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
@@ -8882,7 +8752,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
@@ -8911,7 +8780,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
@@ -8992,7 +8860,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-07-14
-dateSubmitted1 2010-07-14
 dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000124
 expId 124
@@ -9040,7 +8907,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-07-14
-dateSubmitted1 2010-07-14
 dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000124
 expId 124
@@ -9244,7 +9110,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
@@ -9273,7 +9138,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
@@ -9302,7 +9166,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
@@ -9331,7 +9194,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2009-03-06
-dateSubmitted1 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
@@ -11039,7 +10901,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
@@ -11067,7 +10928,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
@@ -11092,7 +10952,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-15
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
@@ -11120,7 +10979,6 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-15
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
@@ -11148,7 +11006,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-21
 dateSubmitted 2010-01-14
-dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
@@ -11176,7 +11033,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
@@ -11284,7 +11140,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
@@ -11332,7 +11187,6 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
@@ -11536,7 +11390,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
@@ -11592,7 +11445,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
-dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
@@ -12394,4 +12246,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: 1303404605
+# MAGIC: -542070446

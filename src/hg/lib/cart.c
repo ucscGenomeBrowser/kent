@@ -858,6 +858,32 @@ hashElFreeList(&elList);
 return cartVars;
 }
 
+struct slPair *cartVarsWithPrefixLm(struct cart *cart, char *prefix, struct lm *lm)
+/* Return list of cart vars that begin with prefix allocated in local memory.
+ * Quite a lot faster than cartVarsWithPrefix. */
+{
+struct slPair *cartVars = NULL;
+struct hash *hash = cart->hash;
+int hashSize = hash->size;
+struct hashEl *hel;
+int i;
+for (i=0; i<hashSize; ++i)
+    {
+    for (hel = hash->table[i]; hel != NULL; hel = hel->next)
+        {
+	if (startsWith(prefix, hel->name))
+	    {
+	    struct slPair *pair;
+	    lmAllocVar(lm, pair);
+	    pair->name = lmCloneString(lm, hel->name);
+	    pair->val = lmCloneString(lm, hel->val);
+	    slAddHead(&cartVars, pair);
+	    }
+	}
+    }
+return cartVars;
+}
+
 void cartRemoveLike(struct cart *cart, char *wildCard)
 /* Remove all variable from cart that match wildCard. */
 {
@@ -1953,7 +1979,7 @@ if (sameString(oldValue,CART_VAR_EMPTY))
 return (differentString(newValue,oldValue));
 }
 
-int cartNamesPruneChanged(struct cart *newCart,struct hash *oldVars,
+static int cartNamesPruneChanged(struct cart *newCart,struct hash *oldVars,
                           struct slPair **cartNames,boolean ignoreRemoved,boolean unChanged)
 /* Prunes a list of cartNames if the settings have changed between new and old cart.
    Returns pruned count */
@@ -1969,7 +1995,6 @@ while ((oneName = slPopHead(&oldList)) != NULL)
         slAddHead(&newList,oneName);
     else
         {
-        freeMem(oneName);
         pruned++;
         }
     }
@@ -2262,14 +2287,13 @@ else // If no views then composite is not set to fuul but to max of subtracks
 hashFree(&subVisHash);
 
 // If reshaped, be sure to set flag to stop composite cleanup
-#define RESHAPED_COMPOSITE "reshaped"
 if (count > 0)
-    tdbExtrasAddOrUpdate(tdbContainer,RESHAPED_COMPOSITE,(void *)(long)TRUE); // Exists for the life of the cgi only
+    tdbExtrasReshapedCompositeSet(tdbContainer);
 
 return TRUE;
 }
 
-boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars)
+boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars, struct lm *lm)
 /* When container or composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
 {
@@ -2278,7 +2302,7 @@ if (!tdbIsContainer(tdb))
     return anythingChanged;
 
 // If composite has been reshaped then don't clean it up
-if ((boolean)(long)tdbExtrasGetOrDefault(tdb,RESHAPED_COMPOSITE,(void *)(long)FALSE))
+if (tdbExtrasReshapedComposite(tdb))
     return anythingChanged;
 
 // vis is a special additive case! composite or view level changes then remove subtrack vis
@@ -2301,7 +2325,7 @@ char setting[512];
 safef(setting,sizeof(setting),"%s.",tdb->track);
 char * view = NULL;
 boolean hasViews = FALSE;
-struct slPair *changedSettings = cartVarsWithPrefix(newCart, setting);
+struct slPair *changedSettings = cartVarsWithPrefixLm(newCart, setting, lm);
 for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
     {
     if (!tdbIsView(tdbView,&view))
@@ -2309,7 +2333,7 @@ for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
     hasViews = TRUE;
     safef(setting,sizeof(setting),"%s.",tdbView->track);          // unfortunatly setting name could be viewTrackName.???
     //safef(setting,   sizeof(setting),"%s.%s.",tdb->track,view); // or containerName.Sig.???   HOWEVER: this are picked up by containerName prefix
-    struct slPair *changeViewSettings = cartVarsWithPrefix(newCart, setting);
+    struct slPair *changeViewSettings = cartVarsWithPrefixLm(newCart, setting, lm);
     changedSettings = slCat(changedSettings, changeViewSettings);
     }
 if (changedSettings == NULL && !containerVisChanged)
@@ -2356,7 +2380,6 @@ if (hasViews)
             else if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,suffix,oneName->val,TRUE) > 0)
                     clensed++;
 
-            freeMem(oneName);
             }
         if (viewVisChanged)
             {
@@ -2385,7 +2408,6 @@ while ((oneName = slPopHead(&changedSettings)) != NULL)
     suffix = oneName->name + strlen(tdb->track) + 1;
     if (cartRemoveOldFromTdbTree(newCart,oldVars,tdb,suffix,oneName->val,TRUE) > 0)
         clensed++;
-    freeMem(oneName);
     }
 if  (containerVisChanged && !hasViews)
     { // vis is a special additive case!
