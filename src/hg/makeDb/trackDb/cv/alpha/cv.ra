@@ -8526,6 +8526,13 @@ type view
 label Plus Raw Signal
 description Graphs the base-by-base density of tags on the plus strand
 
+#snippet for UW5c's primer view
+term Primer
+tag Primer
+type view
+label Primer
+description placeholder for Uw5c's primer file, so it can be in metaDb properly
+
 term Protocol
 tag PRTCL
 type view
