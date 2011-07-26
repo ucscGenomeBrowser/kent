@@ -1,17 +1,27 @@
 <H2>Description</H2>
 
-<P>This track is produced as part of the ENCODE Project.  K562, a non-adherent human erythromyeloblastoid leukemia cell line, was transduced with lentiviral vectors carrying an inducible short hairpin RNA (shRNA) that targets a specific transcription factor to reduced its expression.  Cells with stable integration of shRNA constructs were selected with puromycin for approximately three weeks.  Doxycycline was used to induce shRNA, which reduced the expression of the targeted gene.  A successful shRNA cell line showed at least a 70% reduction in expression of the targeted transcription factor as measured by qPCR and compared to the same cell line not treated with doxycycline.
+<P>This track is produced as part of the ENCODE Project.  
+Transcription factors (TF) are hypothesized to be knocked down through the interference of short hairpin RNA (shRNA).  The derivative sublines may show 
+differentially expressed genes where TF binding sites are proximal.  
+This increases evidence of potential genomic targets for a TF.
+</P>
 
-<P>For simplicity and ease of identification, we named these cell lines shX_K562, where X is the transcription factor targeted by shRNA and K562 denotes the parent cell line.  For example, shATF3_K562 cells are K562 derived cells selected for stable integration of shRNA targeting the transcription factor ATF3 gene and showed at least a 70% reduction in the expression of ATF3 gene when measured by qPCR. 
+<P>K562, a non-adherent human erythromyeloblastoid leukemia cell line, was transduced with lentiviral vectors carrying an inducible shRNA that targets a specific transcription factor to reduced its expression.  
+Cells with stable integration of shRNA constructs were selected with puromycin for approximately three weeks.  
+Doxycycline was used to induce shRNA, which reduced the expression of the targeted gene.  
+A successful shRNA cell line showed at least a 70% reduction in expression of the targeted transcription factor as measured by qPCR and compared to the same cell line not treated with doxycycline. </P>
+
+<P>The cell lines are named shX_K562, where X is the transcription factor targeted by shRNA and K562 denotes the parent cell line.  For example, shATF3_K562 cells are K562 derived cells selected for stable integration of shRNA targeting the transcription factor ATF3 gene and showed at least a 70% reduction in the expression of ATF3 gene when measured by qPCR.</P> 
 
 <P>RNA-seq (Mortazavi <EM>et al.</EM>, 2008) was used to quantify the transcriptome of these cell lines both for the doxycycline treatment with induced shRNA and for no doxycycline.  Biological replicates were performed for each experiment.  The cDNA was sequenced on an Illumina Genome Analyzer (GAI or GAIIx).</P>  
 
-</P>The DNA sequences were aligned to the NCBI Build37 (hg19) version of the human genome using the sequence alignment programs ELAND (Illumina) or Bowtie (Langmead <EM>et al.</EM>, 2009).  The first 10 residues of sequencing have a weak characteristic nucleotide bias of unknown origin. This RNA-seq protocol does not specify the coding strand.  As a result, there will be ambiguity at loci where both strands are transcribed.</P>
+<P>The DNA sequences were aligned to the NCBI Build37 (hg19) version of the human genome using the sequence alignment programs ELAND (Illumina) or Bowtie (Langmead <EM>et al.</EM>, 2009).  
+The first 10 residues of sequencing have a weak characteristic nucleotide bias of unknown origin. This RNA-seq protocol does not specify the coding strand.  As a result, there will be ambiguity at loci where both strands are transcribed.</P>
  
 
 <H2>Display Conventions and Configuration</H2>
 
-<P>This track is a multi-view composite track that contains multiple data types (<EM>views</EM>). For each view, there are multiple subtracks (cell lines, replicates and growth conditions) that display individually on the browser. Instructions for configuring multi-view tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.  The following views are in this track: </DL>
+<P>This is a composite track that contains multiple data types (<EM>views</EM>). For each view, there are multiple subtracks (cell lines, replicates and growth conditions) that display individually on the browser. Instructions for configuring multi-view tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.  The following views are in this track: </DL>
 
 <DT><I>FPKM</I>
 <DD>Gencode.v3c (Harrow <EM>et al.</EM>, 2006) gene models are shaded with a <A HREF="http://genome.ucsc.edu/FAQ/FAQformat.html#format1" TARGET=_BLANK>gray scale</A> according to a score calculated from the FPKM value (Fragments Per Kilobase of exon per Million reads, Cufflinks v0.9.3, Roberts <EM>et al.</EM>, 2011).  Score is equal to 100 x log<sub>2</sub>(FPKM +1) and is capped at 1000.  The gray scale becomes darker as score and FPKM increase, thereby assisting in visualizing the relative amount of a given transcript across multiple samples. 
@@ -47,7 +57,7 @@
 
 <H2>Credits</H2>
 
-<P>These data were produced by the <A TARGET=_BLANK HREF="http://hudsonalpha.org/myers-lab"> Dr. Richard Myers Lab</A>  at the <A TARGET=_BLANK HREF="http://hudsonalpha.org/"> HudsonAlpha Institute for Biotechnology</A>. 
+<P>These data were produced by the <A TARGET=_BLANK HREF="http://hudsonalpha.org/myers-lab"> Dr. Richard Myers Lab</A>  at the <A TARGET=_BLANK HREF="http://hudsonalpha.org/"> Hudson Alpha Institute for Biotechnology</A>. 
 
 <P>Contact: <A HREF="mailto:&#102;p&#97;&#117;&#108;&#105;&#64;&#104;&#117;&#100;&#115;&#111;&#110;&#97;&#108;&#112;&#104;a.
 &#111;r&#103;">Dr. Florencia Pauli</A>.
