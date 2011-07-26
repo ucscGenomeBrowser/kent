@@ -178,7 +178,7 @@ var ddcl = {
             $(multiSelect).dropdownchecklist("destroy");
             $(multiSelect).show(); // necessary to get dimensions
             if (newJQuery)
-                ddclSetup(multiSelect,'noneIsAll');
+                ddcl.setup(multiSelect,'noneIsAll');
             else
                 $(multiSelect).dropdownchecklist({ firstItemChecksAll: true,
                                                    noneIsAll: true,

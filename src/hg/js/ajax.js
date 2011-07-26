@@ -274,6 +274,7 @@ function lookupMetadata(trackName,showLonglabel,showShortLabel)
         thisData += "&showShortLabel=1";
     $.ajax({
         type: "GET",
+        dataType: "html",
         url: "../cgi-bin/hgApi",
         data: thisData,
         trueSuccess: loadMetadataTable,

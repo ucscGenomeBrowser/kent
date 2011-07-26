@@ -1043,6 +1043,7 @@ function showLoadingImage(id)
 // Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
 // This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
     var loadingId = id + "LoadingOverlay";
+    // make an opaque overlay to partially hide the image
     var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
     overlay.appendTo("body");
     overlay.css("top", $('#'+ id).position().top);
@@ -1054,7 +1055,9 @@ function showLoadingImage(id)
     overlay.height(height);
     overlay.css("background", "white");
     overlay.css("opacity", 0.75);
-    var imgLeft = (width / 2) - 110;
+    // now add the overlay image itself in the center of the overlay.
+    var imgWidth = 220;   // hardwired based on width of loading.gif
+    var imgLeft = (width / 2) - (imgWidth / 2);
     var imgTop = (height / 2 ) - 10;
     $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
     return loadingId;

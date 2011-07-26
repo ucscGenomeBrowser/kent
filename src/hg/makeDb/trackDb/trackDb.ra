@@ -2689,6 +2689,14 @@ xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSESTP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
+searchName ensGeneName
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+xrefTable ensemblToGeneName
+xrefQuery select name,value from %s where value like '%%%s%%'
+searchPriority 50
+
 searchTable knownGene
 searchType knownGene
 searchPriority 1
