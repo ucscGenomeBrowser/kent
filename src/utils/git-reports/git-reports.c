@@ -409,7 +409,7 @@ while (lineFileNext(lf, &line, &lineSize))
 		runShell(path);
 		*r = '/';
 		}
-	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff"
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s.%s.diff"
 		, outDir, outPrefix, "user", u, full ? "full" : "context", fpath, c->commitId);
 
 	    h = mustOpen(path, "w");
@@ -491,7 +491,7 @@ for(c = commits; c; c = c->next)
 	    char path[1024];
 
             // context unified
-	    safef(path, sizeof(path), "%s/%s%s", "context", f->path, c->commitId);
+	    safef(path, sizeof(path), "%s/%s.%s", "context", f->path, c->commitId);
 	    relativePath = cloneString(path);
 
 	    safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, relativePath);
@@ -520,7 +520,7 @@ for(c = commits; c; c = c->next)
 
             // full text (up to 10,000 lines)
 	    freeMem(relativePath);
-	    safef(path, sizeof(path), "%s/%s%s", "full", f->path, c->commitId);
+	    safef(path, sizeof(path), "%s/%s.%s", "full", f->path, c->commitId);
 	    relativePath = cloneString(path);
 
 	    safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, relativePath);
@@ -668,9 +668,9 @@ for(cf = comFiles; cf; cf = cf->next)
 
     // context unified
     if (u)
-	safef(path, sizeof(path), "%s/%s%s", "context", f->path, c->commitId);
+	safef(path, sizeof(path), "%s/%s.%s", "context", f->path, c->commitId);
     else
-	safef(path, sizeof(path), "../user/%s/%s/%s%s", c->author, "context", f->path, c->commitId);
+	safef(path, sizeof(path), "../user/%s/%s/%s.%s", c->author, "context", f->path, c->commitId);
     relativePath = cloneString(path);
     safef(path, sizeof(path), "%s.html", relativePath);
     cHtml = cloneString(path);
@@ -682,9 +682,9 @@ for(cf = comFiles; cf; cf = cf->next)
     // full text (up to 10,000 lines)
     freeMem(relativePath);
     if (u)
-	safef(path, sizeof(path), "%s/%s%s", "full", f->path, c->commitId);
+	safef(path, sizeof(path), "%s/%s.%s", "full", f->path, c->commitId);
     else
-	safef(path, sizeof(path), "../user/%s/%s/%s%s", c->author, "full", f->path, c->commitId);
+	safef(path, sizeof(path), "../user/%s/%s/%s.%s", c->author, "full", f->path, c->commitId);
     relativePath = cloneString(path);
     safef(path, sizeof(path), "%s.html", relativePath);
     fHtml = cloneString(path);
