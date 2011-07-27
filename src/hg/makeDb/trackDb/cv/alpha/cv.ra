@@ -8417,11 +8417,12 @@ type view
 label FastaRd2
 description FASTA Read 2
 
-term Fastq
-tag FASTQ
-type view
-label Fastq
-description Raw sequence with Phred33 quality scores
+#FastQ is now deprecated
+#term Fastq
+#tag FASTQ
+#type view
+#label Fastq
+#description Raw sequence with Phred33 quality scores
 
 term FastqRd1
 tag FASTQRD1
