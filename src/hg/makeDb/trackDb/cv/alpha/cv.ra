@@ -3772,6 +3772,7 @@ strain C3H
 description Myoblast cell line derived from thigh muscle of C3H mice after crush injury 
 vendorName Barbara Wold lab
 vendorId C2C12
+orderUrl http://woldlab.caltech.edu/
 termId 7125
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
 color 139,69,19
