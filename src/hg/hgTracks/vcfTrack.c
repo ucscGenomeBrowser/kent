@@ -397,14 +397,6 @@ if (gtOtherCount > 0)
 return dy->string;
 }
 
-static char *centerPosCartVarName(struct trackDb *tdb)
-// Return track.centerVariantPos setting (may be NULL)
-{
-static char cartVar[512];
-safef(cartVar, sizeof(cartVar), "%s.centerVariantPos", tdb->track);
-return cartVar;
-}
-
 static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, int gtHapEnd,
 		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width,
 		       boolean isCenter)
@@ -454,9 +446,10 @@ if (isCenter)
     if (dy == NULL)
 	dy = dyStringNew(0);
     dyStringPrintf(dy, "%s   Haplotypes sorted on ", mouseoverText);
-    char *cartVar = centerPosCartVarName(tg->tdb);
-    char *centerPos = cartOptionalString(cart, cartVar);
-    if (centerPos == NULL)
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "%s.centerVariantChrom", tg->tdb->track);
+    char *centerChrom = cartOptionalString(cart, cartVar);
+    if (centerChrom == NULL || !sameString(chromName, centerChrom))
 	dyStringAppend(dy, "middle variant by default. ");
     else
 	dyStringAppend(dy, "this variant. ");
@@ -474,28 +467,22 @@ static int getCenterVariantIx(struct track *tg, int seqStart, int seqEnd,
 // just use the median variant in window.
 {
 int defaultIx = (slCount(records)-1) / 2;
-char *cartVar = centerPosCartVarName(tg->tdb);
-char *centerPos = cartOptionalString(cart, cartVar);
-if (centerPos != NULL)
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s.centerVariantChrom", tg->tdb->track);
+char *centerChrom = cartOptionalString(cart, cartVar);
+if (centerChrom != NULL && sameString(chromName, centerChrom))
     {
-    char *words[3];
-    int wordCount = chopByChar(cloneString(centerPos), ':', words, sizeof(words));
-    if (wordCount != 2)
-	errAbort("Cart variable %s format error: expected 'chrom:pos', got %s",
-		 cartVar, centerPos);
-    if (sameString(chromName, words[0]))
+    safef(cartVar, sizeof(cartVar), "%s.centerVariantPos", tg->tdb->track);
+    int centerPos = cartInt(cart, cartVar);
+    int winSize = seqEnd - seqStart;
+    if (centerPos > (seqStart - winSize) && centerPos < (seqEnd + winSize))
 	{
-	int pos = sqlUnsigned(words[1]);
-	int winSize = seqEnd - seqStart;
-	if (pos > (seqStart - winSize) && pos < (seqEnd + winSize))
-	    {
-	    int i;
-	    struct vcfRecord *rec;
-	    for (rec = records, i = 0;  rec != NULL;  rec = rec->next, i++)
-		if (rec->chromStart >= pos)
-		    return i;
-	    return i-1;
-	    }
+	int i;
+	struct vcfRecord *rec;
+	for (rec = records, i = 0;  rec != NULL;  rec = rec->next, i++)
+	    if (rec->chromStart >= centerPos)
+		return i;
+	return i-1;
 	}
     }
 return defaultIx;
@@ -587,7 +574,7 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
     if (vcff != NULL)
 	{
-	if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 3000 &&
+	if (doHapClusterDisplay && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else
@@ -600,7 +587,7 @@ if (errCatchStart(errCatch))
 	}
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
+if (errCatch->gotError || vcff == NULL)
     {
     if (isNotEmpty(errCatch->message->string))
 	tg->networkErrMsg = cloneString(errCatch->message->string);

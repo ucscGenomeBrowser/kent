@@ -28,6 +28,7 @@
 #include "fileUi.h"
 #include "bigBed.h"
 #include "bigWig.h"
+#include "vcfUi.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -3730,6 +3731,8 @@ switch(cType)
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
 			break;
 #endif
+    case cfgVcf:	vcfCfgUi(cart, tdb, prefix, title, boxed);
+			break;
     case cfgPsl:	pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
@@ -4260,7 +4263,7 @@ safef(javascript, JBUFSIZE*sizeof(char),
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title)
+boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title)
 /* Handle start of box and title for individual track type settings */
 {
 if(!boxed)
@@ -4286,7 +4289,7 @@ else
 return boxed;
 }
 
-static void cfgEndBox(boolean boxed)
+void cfgEndBox(boolean boxed)
 /* Handle end of box and title for individual track type settings */
 {
 if (boxed)

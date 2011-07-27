@@ -38,6 +38,7 @@
 #include "pcrResult.h"
 #include "dgv.h"
 #include "transMapStuff.h"
+#include "vcfUi.h"
 #include "bbiFile.h"
 #include "ensFace.h"
 #include "microarray.h"
@@ -2609,8 +2610,10 @@ else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track
     dgvUi(tdb);
 #ifdef USE_BAM
 else if (sameString(tdb->type, "bam"))
-    bamCfgUi(cart, tdb, track, NULL, FALSE); // tim would like to see this boxed when at composite level: tdbIsComposite(tdb));
+    bamCfgUi(cart, tdb, track, NULL, FALSE);
 #endif
+else if (sameString(tdb->type, "vcfTabix"))
+    vcfCfgUi(cart, tdb, track, NULL, FALSE);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
