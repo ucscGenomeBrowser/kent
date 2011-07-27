@@ -391,6 +391,7 @@ typedef enum _eCfgType
     cfgBedFilt  =8,
     cfgBam      =9,
     cfgPsl      =10,
+    cfgVcf      =11,
 } eCfgType;
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);

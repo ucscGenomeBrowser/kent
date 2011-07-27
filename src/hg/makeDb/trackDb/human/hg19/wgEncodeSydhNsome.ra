@@ -8,7 +8,7 @@ shortLabel Stanf Nucleosome
 longLabel Nucleosome Position by MNase-seq from ENCODE/Stanford/BYU
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)
+subGroup2 cellType Cell_Line GM12878=GM12878<b>&nbsp;(Tier_1)</b> K562=K562<b>&nbsp;(Tier_1)</b>
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 fileSortOrder cell=Cell_Line replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
