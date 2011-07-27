@@ -4414,18 +4414,15 @@ for (track = trackList; track != NULL; track = track->next)
 	struct track *subtrack;
         for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
 	    {
-	    if (isTrackForParallelLoad(subtrack))
+	    if (isSubtrackVisible(subtrack))
 		{
-		if (!subtrack->tdb->parent || subtrack->tdb->parent->visibility != tvHide)
+		if (isTrackForParallelLoad(subtrack))
 		    {
-		    if (isSubtrackVisible(subtrack))
-			{
-			struct paraFetchData *pfd;
-			AllocVar(pfd);
-			pfd->track = subtrack;  // need pointer to be stable
-			slAddHead(ppfdList, pfd);
-			subtrack->parallelLoading = TRUE;
-			}
+		    struct paraFetchData *pfd;
+		    AllocVar(pfd);
+		    pfd->track = subtrack;  // need pointer to be stable
+		    slAddHead(ppfdList, pfd);
+		    subtrack->parallelLoading = TRUE;
 		    }
 		}
 	    }
