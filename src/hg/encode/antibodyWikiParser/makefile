@@ -11,7 +11,7 @@ install:
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
-            perl -c $$F && cp -upv $$F ${SCRIPTS}; \
+            cp -upv $$F ${SCRIPTS}; \
 	done
 
 clean::
