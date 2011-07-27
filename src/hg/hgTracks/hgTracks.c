@@ -4411,9 +4411,9 @@ for (track = trackList; track != NULL; track = track->next)
 	struct track *subtrack;
         for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
 	    {
-	    if (isSubtrackVisible(subtrack))
+	    if (isTrackForParallelLoad(subtrack))
 		{
-		if (isTrackForParallelLoad(subtrack))
+		if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
 		    {
 		    struct paraFetchData *pfd;
 		    AllocVar(pfd);
