@@ -14,7 +14,7 @@ import re
 import string
 import sys
 import urllib2
-from ucscgenomics.rafile.RaFile import *
+from rafile.RaFile import *
 
 
 
@@ -89,13 +89,14 @@ def processCellTypeEntry(row, species, downloadsDirectory,
         if len(cellData[7]) > 1:
             (stanza["termId"], 
              stanza["termUrl"]) = processTermId(cellData[7].contents[1])
+        stanza["lab"] = getContents(cellData[8])
 
         #
         # Assemble the target name of the cell protocol document.  The naming
         # convention is <term>_<lab>_protocol.pdf, with any special characters
         # stripped from the term.
         protocolDocument = "%s_%s_protocol.pdf" \
-            % re.sub("[-_\(\)]", "", term), stanza["lab"]) 
+            % (re.sub("[-_\(\)]", "", term), stanza["lab"]) 
         stanza["tag"] = stanza["tag"].upper()
         protocolDocument = re.sub("(\s)+", "", protocolDocument)
         stanza["protocol"] = "%s:%s" % (stanza["lab"], protocolDocument)
