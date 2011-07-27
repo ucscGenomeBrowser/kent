@@ -31628,29 +31628,21 @@ do
 done
 
     # compute male - female difference
-awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' male.bedGraph \
-    | sort > ordered.male.txt
-awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' female.bedGraph \
-    | sort > ordered.female.txt
-join ordered.male.txt ordered.female.txt > maleFemale.txt
+    awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' male.bedGraph \
+	| sort > ordered.male.txt
+    awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' female.bedGraph \
+	| sort > ordered.female.txt
+    join ordered.male.txt ordered.female.txt > maleFemale.txt
 
-awk '{printf "%s\t%.6f\n", $1, $2-$3}' maleFemale.txt \
-    | sed -e "s/_/\t/g" | sort -k1,1 -k2,2n > maleFemale.bedGraph
+    awk '{printf "%s\t%.6f\n", $1, $2-$3}' maleFemale.txt \
+	| sed -e "s/_/\t/g" | sort -k1,1 -k2,2n > maleFemale.bedGraph
 
-./hotSpots.sh | sort -k1,1 -k2,2n > hotSpots.bed
+    # and hot spots
+    awk '$4 > 9.99' female.bedGraph > hotSpotFemale.bed
+    awk '$4 > 9.99' male.bedGraph > hotSpotMale.bed
 
-    # where hotSpots.sh is:
-awk '$4 < -9.99' maleFemale.bedGraph | while read L
-do
-    echo "${L} 0 -" | tr '[ ]' '[\t]'
-done
-awk '$4 > 9.99' maleFemale.bedGraph | while read L
-do
-    echo "${L} 0 +" | tr '[ ]' '[\t]'
-done
-
-    hgLoadBed hg18 decodeHotSpots hotSpots.bed
-    #	Loaded 2745 elements of size 6
+    hgLoadBed hg18 decodeHotSpotFemale hotSpotFemale.bed
+    hgLoadBed hg18 decodeHotSpotMale hotSpotMale.bed
 
     bedGraphToBigWig maleFemale.bedGraph /hive/data/genomes/hg18/chrom.sizes \
         MaleFemaleDifference.bw
