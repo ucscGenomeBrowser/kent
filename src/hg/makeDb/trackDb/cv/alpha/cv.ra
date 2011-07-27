@@ -3772,6 +3772,7 @@ strain C3H
 description Myoblast cell line derived from thigh muscle of C3H mice after crush injury 
 vendorName Barbara Wold lab
 vendorId C2C12
+orderUrl http://woldlab.caltech.edu/
 termId 7125
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
 color 139,69,19
@@ -8417,11 +8418,12 @@ type view
 label FastaRd2
 description FASTA Read 2
 
-term Fastq
-tag FASTQ
-type view
-label Fastq
-description Raw sequence with Phred33 quality scores
+#FastQ is now deprecated
+#term Fastq
+#tag FASTQ
+#type view
+#label Fastq
+#description Raw sequence with Phred33 quality scores
 
 term FastqRd1
 tag FASTQRD1
@@ -8525,6 +8527,13 @@ tag PLUSRAWSIG
 type view
 label Plus Raw Signal
 description Graphs the base-by-base density of tags on the plus strand
+
+#snippet for UW5c's primer view
+term Primer
+tag Primer
+type view
+label Primer
+description placeholder for Uw5c's primer file, so it can be in metaDb properly
 
 term Protocol
 tag PRTCL
