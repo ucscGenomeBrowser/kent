@@ -63,7 +63,7 @@ def processTermId(termInfo):
 # (Cell Type, Description, Lineage, Karyotype, Sex, Tissue, Order URL, Term ID, 
 #  Submitting Lab)
 #   
-def processCellTypeEntry(row, species, downloadsDirectory, 
+def processCellTypeEntry(row, species, downloadsDirectory, noDownload,
                          username, password, wikiBaseUrl):
     cellData = row.findAll("td")
     term = getContents(cellData[0])
@@ -102,23 +102,25 @@ def processCellTypeEntry(row, species, downloadsDirectory,
         stanza["protocol"] = "%s:%s" % (stanza["lab"], protocolDocument)
         #
         # Indicate whether or not the document (if any) is approved by the NHGRI.
-        # If it's approved, then download it into the target filename.
+        # If it's approved, and if the noDownload flag is false,
+        # then download it into the target filename.  
         approved = False
         if re.search("^[Y|y]", getContents(cellData[10])):
             approved = True
-            documentContents = getContents(cellData[9])
-            if len(cellData[9].findAll("a")) != 0:
-                urlClauses = cellData[9].findAll("a")
-                if len(urlClauses) > 0:
-                    if urlClauses[0].has_key("href"):
-                        url = urlClauses[0]["href"]
-                        doc = accessWiki(wikiBaseUrl + url, username, password)
-                        if len(doc) > 0:
-                            outputFilename = "%s/%s" % (downloadsDirectory, 
-                                                        protocolDocument)
-                            newDocFile = open(outputFilename, "wb")
-                            newDocFile.write(doc)
-                            newDocFile.close()
+            if noDownload == False:
+                documentContents = getContents(cellData[9])
+                if len(cellData[9].findAll("a")) != 0:
+                    urlClauses = cellData[9].findAll("a")
+                    if len(urlClauses) > 0:
+                        if urlClauses[0].has_key("href"):
+                            url = urlClauses[0]["href"]
+                            doc = accessWiki(wikiBaseUrl + url, username, password)
+                            if len(doc) > 0:
+                                outputFilename = "%s/%s" % (downloadsDirectory, 
+                                                            protocolDocument)
+                                newDocFile = open(outputFilename, "wb")
+                                newDocFile.write(doc)
+                                newDocFile.close()
         return((stanza, approved))
                                
 
@@ -148,12 +150,14 @@ parser.add_option("-s", "--species", dest="species", default="human",
                   help="Species")
 parser.add_option("-d", "--downloadDir", dest="downloadDirectory", default=".",
                   help="Directory to download any validation documents into")
+parser.add_option("-f", "--force", dest="forcePrinting", default=False,
+                  help="Force printing of all stanzas, whether or not there's NHGRI approval")
+parser.add_option("-n", "--noDownload", dest="noDownload", default=False,
+                  help="Download no files")
 parser.add_option("-u", "--username", dest="username", default=defaultUsername,
                   help="Username to access the wiki page")
 parser.add_option("-p", "--password", dest="password", default=defaultPassword,
                   help="Password to access the wiki page")
-parser.add_option("-f", "--force", dest="forcePrinting", default=False,
-                  help="Force printing of all stanzas, whether or not there's NHGRI approval")
 (parameters, args) = parser.parse_args()
 
 #
@@ -189,6 +193,7 @@ for entry in cellTypeTable.findAll("tr"):
     else:
         (stanza, approved) = processCellTypeEntry(entry, parameters.species,
                                                   parameters.downloadDirectory,
+                                                  parameters.noDownload,
                                                   parameters.username,
                                                   parameters.password, 
                                                   wikiBaseUrl)
