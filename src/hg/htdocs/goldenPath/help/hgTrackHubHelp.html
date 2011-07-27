@@ -473,7 +473,7 @@ or underbar (&quot;_&quot;).  Each track must have a unique name. This tag pair 
 the first entry in the trackDb.txt file.  
 <P>
 <em>bigDataUrl</em> - the file name, path, or Web location of the 
-track's data file.The bigDataUrl can be a full URL. If it is not
+track's data file. The bigDataUrl can be a full URL. If it is not
 prefaced by a protocol, such as <em>http://</em>,  <em>https://</em> or
 <em>ftp://</em>, then it is considered to be a path
 relative to the trackDb.txt file. 
@@ -525,7 +525,7 @@ symbolic name for the track (defined by the <em>track</em> tag in the
 trackDb.txt file) with a suffix of <em>.html</em>.  For instance, a 
 description file associated with the track named &quot;dnaseSignal&quot; in 
 <em>Example 4</em> would be named &quot;dnaseSignal.html&quot;. The 
-description file must be reside in the same directory as the trackDb.txt file. 
+description file must reside in the same directory as the trackDb.txt file. 
 <P>
 Both parent and child tracks within a super-track can have their own
 description files.  If the description file is not present, the
@@ -566,7 +566,7 @@ hubCheck - Check a track hub for integrity.
 usage:
    hubCheck http://yourHost/yourDir/hub.txt
 options:
-   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs
+   -udcDir=/dir/to/cache - place to put cache for remote bigBeds and bigWigs
 </PRE></TT></BLOCKQUOTE>
 <P>
 Note that you will have to use the udcDir if /tmp/udcCache is not writable
