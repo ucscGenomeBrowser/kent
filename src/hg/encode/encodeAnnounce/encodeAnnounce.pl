@@ -27,7 +27,7 @@ our $afterwordFile = "announceBoilerplate.html";
 
 sub usage {
     print STDERR <<END;
-usage: encodeAnnounce.pl <assembly> <date> 
+usage: encodeAnnounce.pl <assembly> <YYYY-MM-DD> 
 END
 exit 1;
 }
