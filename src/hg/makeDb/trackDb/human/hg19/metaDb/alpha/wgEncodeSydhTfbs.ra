@@ -1077,7 +1077,6 @@ expId 1830
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Brca1cIggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1101,7 +1100,6 @@ expId 1830
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Brca1cIggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1149,7 +1147,6 @@ expId 1830
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Brca1cIggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1173,7 +1170,6 @@ expId 1830
 fileName wgEncodeSydhTfbsGm12878Brca1a300IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Brca1cIggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2089,130 +2085,6 @@ tableName wgEncodeSydhTfbsGm12878InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12878InputIggrabAlnRep1
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId wgEncodeEH000771
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputIggrabAlnRep1.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1366
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsGm12878InputIggrabAlnRep2
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId wgEncodeEH000771
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputIggrabAlnRep2.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1378
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsGm12878InputIggrabRawDataRep1
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId wgEncodeEH000771
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputIggrabRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1109
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878InputIggrabRawDataRep2
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId wgEncodeEH000771
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputIggrabRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1109
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878InputIggrabSig
-objType table
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId wgEncodeEH000771
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputIggrabSig.bigWig
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-setType input
-subId 3053
-tableName wgEncodeSydhTfbsGm12878InputIggrabSig
-treatment None
-view Signal
-
 metaObject wgEncodeSydhTfbsGm12878InputRawData
 objType file
 antibody Input
@@ -2286,6 +2158,130 @@ tableName wgEncodeSydhTfbsGm12878InputStdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1366
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1378
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1109
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep2
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1109
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
+objType table
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH000771
+expId 771
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabSig.bigWig
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+setType input
+subId 3053
+tableName wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep1
 objType file
 antibody IRF3
@@ -2302,7 +2298,6 @@ expId 1809
 fileName wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Irf3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2326,7 +2321,6 @@ expId 1809
 fileName wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Irf3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2374,7 +2368,6 @@ expId 1809
 fileName wgEncodeSydhTfbsGm12878Irf3IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Irf3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2398,7 +2391,6 @@ expId 1809
 fileName wgEncodeSydhTfbsGm12878Irf3IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Irf3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2888,7 +2880,6 @@ expId 1808
 fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2912,7 +2903,6 @@ expId 1808
 fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2961,7 +2951,6 @@ fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
-parentTable wgEncodeSydhTfbsGm12878Nfe2hStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2986,7 +2975,6 @@ fileName wgEncodeSydhTfbsGm12878Nfe2sc22827StdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
-parentTable wgEncodeSydhTfbsGm12878Nfe2hStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3676,7 +3664,6 @@ expId 1813
 fileName wgEncodeSydhTfbsGm12878P300sc584IggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878P300n15StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3700,7 +3687,6 @@ expId 1813
 fileName wgEncodeSydhTfbsGm12878P300sc584IggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878P300n15StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3748,7 +3734,6 @@ expId 1813
 fileName wgEncodeSydhTfbsGm12878P300sc584IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878P300n15StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3772,7 +3757,6 @@ expId 1813
 fileName wgEncodeSydhTfbsGm12878P300sc584IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878P300n15StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4811,7 +4795,6 @@ expId 1810
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Rfx5n494IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4835,7 +4818,6 @@ expId 1810
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Rfx5n494IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4883,7 +4865,6 @@ expId 1810
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Rfx5n494IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4907,7 +4888,6 @@ expId 1810
 fileName wgEncodeSydhTfbsGm12878Rfx5200401194IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Rfx5n494IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5375,7 +5355,6 @@ expId 1811
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5399,7 +5378,6 @@ expId 1811
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5447,7 +5425,6 @@ expId 1811
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Stat3IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5471,7 +5448,6 @@ expId 1811
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Stat3IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5809,7 +5785,6 @@ expId 1812
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5833,7 +5808,6 @@ expId 1812
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5881,7 +5855,6 @@ expId 1812
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Usf2IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5905,7 +5878,6 @@ expId 1812
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878Usf2IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12597,7 +12569,6 @@ expId 1767
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12621,7 +12592,6 @@ expId 1767
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12669,7 +12639,6 @@ expId 1767
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsH1hescCtbp2UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12693,7 +12662,6 @@ expId 1767
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsH1hescCtbp2UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15991,7 +15959,6 @@ expId 1814
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Brca1cIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -16015,7 +15982,6 @@ expId 1814
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Brca1cIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -16063,7 +16029,6 @@ expId 1814
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Brca1cIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -16087,7 +16052,6 @@ expId 1814
 fileName wgEncodeSydhTfbsHelas3Brca1a300IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Brca1cIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -16632,7 +16596,6 @@ expId 1815
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -16656,7 +16619,6 @@ expId 1815
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -16704,7 +16666,6 @@ expId 1815
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3CebpbIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -16728,7 +16689,6 @@ expId 1815
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3CebpbIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -18106,7 +18066,6 @@ expId 1816
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -18130,7 +18089,6 @@ expId 1816
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -18178,7 +18136,6 @@ expId 1816
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -18202,7 +18159,6 @@ expId 1816
 fileName wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -19757,7 +19713,6 @@ expId 1826
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -19781,7 +19736,6 @@ expId 1826
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -19829,7 +19783,6 @@ expId 1826
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -19853,7 +19806,6 @@ expId 1826
 fileName wgEncodeSydhTfbsHelas3Mxi1af4185IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -20123,7 +20075,6 @@ expId 1820
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3P300n15IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -20147,7 +20098,6 @@ expId 1820
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3P300n15IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -20195,7 +20145,6 @@ expId 1820
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3P300n15IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -20219,7 +20168,6 @@ expId 1820
 fileName wgEncodeSydhTfbsHelas3P300sc584sc584IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3P300n15IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -20608,7 +20556,6 @@ expId 1817
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -20632,7 +20579,6 @@ expId 1817
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -20680,7 +20626,6 @@ expId 1817
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Prdm1vIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -20704,7 +20649,6 @@ expId 1817
 fileName wgEncodeSydhTfbsHelas3Prdm19115IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Prdm1vIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -20917,7 +20861,6 @@ expId 1818
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Rfx5n494IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -20941,7 +20884,6 @@ expId 1818
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Rfx5n494IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -20989,7 +20931,6 @@ expId 1818
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Rfx5n494IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -21013,7 +20954,6 @@ expId 1818
 fileName wgEncodeSydhTfbsHelas3Rfx5200401194IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Rfx5n494IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -22169,7 +22109,6 @@ expId 1819
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -22193,7 +22132,6 @@ expId 1819
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -22241,7 +22179,6 @@ expId 1819
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Usf2IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -22265,7 +22202,6 @@ expId 1819
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Usf2IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -30686,7 +30622,6 @@ expId 1821
 fileName wgEncodeSydhTfbsK562CebpbIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562CebpbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -30710,7 +30645,6 @@ expId 1821
 fileName wgEncodeSydhTfbsK562CebpbIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562CebpbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -30758,7 +30692,6 @@ expId 1821
 fileName wgEncodeSydhTfbsK562CebpbIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562CebpbIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -30782,7 +30715,6 @@ expId 1821
 fileName wgEncodeSydhTfbsK562CebpbIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562CebpbIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -31028,7 +30960,6 @@ expId 1822
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Chd21250IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -31052,7 +30983,6 @@ expId 1822
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Chd21250IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -31100,7 +31030,6 @@ expId 1822
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Chd21250IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -31124,7 +31053,6 @@ expId 1822
 fileName wgEncodeSydhTfbsK562Chd2ab68301IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Chd21250IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -32967,7 +32895,6 @@ expId 1823
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Gtf2f1rapIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -32991,7 +32918,6 @@ expId 1823
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Gtf2f1rapIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -33039,7 +32965,6 @@ expId 1823
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Gtf2f1rapIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -33063,7 +32988,6 @@ expId 1823
 fileName wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Gtf2f1rapIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -35629,7 +35553,6 @@ expId 1827
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -35653,7 +35576,6 @@ expId 1827
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -35701,7 +35623,6 @@ expId 1827
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Mxi1bhlhIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -35725,7 +35646,6 @@ expId 1827
 fileName wgEncodeSydhTfbsK562Mxi1af4185IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Mxi1bhlhIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -36489,7 +36409,6 @@ expId 1828
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562P300f4IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -36513,7 +36432,6 @@ expId 1828
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562P300f4IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -36561,7 +36479,6 @@ expId 1828
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562P300f4IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -36585,7 +36502,6 @@ expId 1828
 fileName wgEncodeSydhTfbsK562P300sc584sc48343IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562P300f4IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -39368,7 +39284,6 @@ expId 1824
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -39392,7 +39307,6 @@ expId 1824
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -39440,7 +39354,6 @@ expId 1824
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Tal1sc12984IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -39464,7 +39377,6 @@ expId 1824
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Tal1sc12984IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -39512,7 +39424,6 @@ expId 1825
 fileName wgEncodeSydhTfbsK562TbpIggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562TbpIggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -39536,7 +39447,6 @@ expId 1825
 fileName wgEncodeSydhTfbsK562TbpIggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562TbpIggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -39584,7 +39494,6 @@ expId 1825
 fileName wgEncodeSydhTfbsK562TbpIggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562TbpIggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -39608,7 +39517,6 @@ expId 1825
 fileName wgEncodeSydhTfbsK562TbpIggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562TbpIggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -41105,7 +41013,6 @@ expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -41129,7 +41036,6 @@ expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -41177,7 +41083,6 @@ expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -41201,7 +41106,6 @@ expId 1771
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -41249,7 +41153,6 @@ expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -41273,7 +41176,6 @@ expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -41321,7 +41223,6 @@ expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -41345,7 +41246,6 @@ expId 1768
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -41393,7 +41293,6 @@ expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -41417,7 +41316,6 @@ expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -41465,7 +41363,6 @@ expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -41489,7 +41386,6 @@ expId 1772
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -41817,7 +41713,6 @@ expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -41841,7 +41736,6 @@ expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -41889,7 +41783,6 @@ expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -41913,7 +41806,6 @@ expId 1769
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -43313,7 +43205,6 @@ expId 1765
 fileName wgEncodeSydhTfbsPbdeGata1UcdAlnRep1.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsPbdeGata1UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -43337,7 +43228,6 @@ expId 1765
 fileName wgEncodeSydhTfbsPbdeGata1UcdAlnRep2.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsPbdeGata1UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -43386,7 +43276,6 @@ fileName wgEncodeSydhTfbsPbdeGata1UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-parentTable wgEncodeSydhTfbsPbdeGata1UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -43411,7 +43300,6 @@ fileName wgEncodeSydhTfbsPbdeGata1UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-parentTable wgEncodeSydhTfbsPbdeGata1UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -43527,7 +43415,6 @@ expId 1766
 fileName wgEncodeSydhTfbsPbdePol2UcdAlnRep1.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsPbdePol2UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -43551,7 +43438,6 @@ expId 1766
 fileName wgEncodeSydhTfbsPbdePol2UcdAlnRep2.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsPbdePol2UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -43600,7 +43486,6 @@ fileName wgEncodeSydhTfbsPbdePol2UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq
-parentTable wgEncodeSydhTfbsPbdePol2UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -43625,7 +43510,6 @@ fileName wgEncodeSydhTfbsPbdePol2UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq
-parentTable wgEncodeSydhTfbsPbdePol2UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -43881,7 +43765,6 @@ expId 1770
 fileName wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -43905,7 +43788,6 @@ expId 1770
 fileName wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -43954,7 +43836,6 @@ fileName wgEncodeSydhTfbsShsy5yGata2UcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
-parentTable wgEncodeSydhTfbsShsy5yGata2UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -43979,7 +43860,6 @@ fileName wgEncodeSydhTfbsShsy5yGata2UcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
-parentTable wgEncodeSydhTfbsShsy5yGata2UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -44779,4 +44659,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1852408075
+# MAGIC: -807373650
