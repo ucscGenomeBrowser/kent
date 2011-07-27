@@ -6,7 +6,7 @@ expVars lab,dataType,cell,treatment,antibody,control
 metaObject wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1
 objType file
 antibody H3K27me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -29,7 +29,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2
 objType file
 antibody H3K27me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -52,7 +52,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562H3k27me3bUcdPk
 objType table
 antibody H3K27me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -76,7 +76,7 @@ view Peaks
 metaObject wgEncodeSydhHistoneK562H3k27me3bUcdRawDataRep1
 objType file
 antibody H3K27me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -100,7 +100,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562H3k27me3bUcdRawDataRep2
 objType file
 antibody H3K27me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -124,7 +124,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562H3k27me3bUcdSig
 objType table
 antibody H3K27me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -148,7 +148,7 @@ view Signal
 metaObject wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1
 objType file
 antibody H3K4me1
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -171,7 +171,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2
 objType file
 antibody H3K4me1
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -194,7 +194,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562H3k4me1UcdPk
 objType table
 antibody H3K4me1
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -218,7 +218,7 @@ view Peaks
 metaObject wgEncodeSydhHistoneK562H3k4me1UcdRawDataRep1
 objType file
 antibody H3K4me1
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -241,7 +241,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562H3k4me1UcdRawDataRep2
 objType file
 antibody H3K4me1
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -264,7 +264,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562H3k4me1UcdSig
 objType table
 antibody H3K4me1
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -288,7 +288,7 @@ view Signal
 metaObject wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1
 objType file
 antibody H3K4me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -311,7 +311,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2
 objType file
 antibody H3K4me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -334,7 +334,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562H3k4me3bUcdPk
 objType table
 antibody H3K4me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -358,7 +358,7 @@ view Peaks
 metaObject wgEncodeSydhHistoneK562H3k4me3bUcdRawDataRep1
 objType file
 antibody H3K4me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -382,7 +382,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562H3k4me3bUcdRawDataRep2
 objType file
 antibody H3K4me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -406,7 +406,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562H3k4me3bUcdSig
 objType table
 antibody H3K4me3B
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -430,7 +430,7 @@ view Signal
 metaObject wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1
 objType file
 antibody H3K9acB
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -453,7 +453,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2
 objType file
 antibody H3K9acB
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -476,7 +476,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562H3k9acbUcdPk
 objType table
 antibody H3K9acB
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -500,7 +500,7 @@ view Peaks
 metaObject wgEncodeSydhHistoneK562H3k9acbUcdRawDataRep1
 objType file
 antibody H3K9acB
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -524,7 +524,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562H3k9acbUcdRawDataRep2
 objType file
 antibody H3K9acB
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -548,7 +548,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562H3k9acbUcdSig
 objType table
 antibody H3K9acB
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -572,7 +572,7 @@ view Signal
 metaObject wgEncodeSydhHistoneK562InputUcdAln
 objType file
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -597,7 +597,7 @@ view Alignments
 metaObject wgEncodeSydhHistoneK562InputUcdRawData
 objType file
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -622,7 +622,7 @@ view RawData
 metaObject wgEncodeSydhHistoneK562InputUcdSig
 objType table
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
@@ -2209,7 +2209,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
@@ -2233,7 +2233,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
@@ -2257,7 +2257,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
@@ -2281,7 +2281,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
@@ -2305,7 +2305,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
@@ -2329,7 +2329,7 @@ controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
-dateUnrestricted 2011-08-02
+dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
@@ -2557,4 +2557,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 1443942104
+# MAGIC: 1443455504

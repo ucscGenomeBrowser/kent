@@ -424,7 +424,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001490
 expId 1490
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -451,7 +450,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001490
 expId 1490
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -636,7 +634,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001491
 expId 1491
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -663,7 +660,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001491
 expId 1491
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -848,7 +844,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001492
 expId 1492
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -875,7 +870,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001492
 expId 1492
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1214,7 +1208,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001555
 expId 1555
-fileIndex wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1240,7 +1233,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001555
 expId 1555
-fileIndex wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1567,7 +1559,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001494
 expId 1494
-fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1594,7 +1585,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001494
 expId 1494
-fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -1776,7 +1766,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001493
 expId 1493
-fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -1803,7 +1792,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001493
 expId 1493
-fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -2057,7 +2045,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001644
 expId 1644
-fileIndex wgEncodeHaibTfbsA549RxlchPcr1xEtoh02AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549RxlchPcr1xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2661,7 +2648,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001509
 expId 1509
-fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2688,7 +2674,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001509
 expId 1509
-fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -2869,7 +2854,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001539
 expId 1539
-fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -2896,7 +2880,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001539
 expId 1539
-fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -3291,7 +3274,6 @@ dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 dccAccession wgEncodeEH001537
 expId 1537
-fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -3417,7 +3399,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001536
 expId 1536
-fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -3443,7 +3424,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001536
 expId 1536
-fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -4017,7 +3997,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001540
 expId 1540
-fileIndex wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -4043,7 +4022,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001540
 expId 1540
-fileIndex wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -4221,7 +4199,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001591
 expId 1591
-fileIndex wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -4247,7 +4224,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001591
 expId 1591
-fileIndex wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -4570,7 +4546,6 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001587
 expId 1587
-fileIndex wgEncodeHaibTfbsEcc1RxlchV0416102Dm002p1hAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsEcc1RxlchV0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -4844,7 +4819,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001479
 expId 1479
-fileIndex wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -4871,7 +4845,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001479
 expId 1479
-fileIndex wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -5056,7 +5029,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001486
 expId 1486
-fileIndex wgEncodeHaibTfbsGm12878Bcl11aPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Bcl11aPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -5083,7 +5055,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001486
 expId 1486
-fileIndex wgEncodeHaibTfbsGm12878Bcl11aPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Bcl11aPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -6464,7 +6435,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001462
 expId 1462
-fileIndex wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -6491,7 +6461,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001462
 expId 1462
-fileIndex wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -7079,7 +7048,6 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001648
 expId 1648
-fileIndex wgEncodeHaibTfbsGm12878Mef2csc13268V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Mef2csc13268V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -7305,7 +7273,6 @@ dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 dccAccession wgEncodeEH001465
 expId 1465
-fileIndex wgEncodeHaibTfbsGm12878NrsfPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878NrsfPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -7490,7 +7457,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001487
 expId 1487
-fileIndex wgEncodeHaibTfbsGm12878P300Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878P300Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -7517,7 +7483,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001487
 expId 1487
-fileIndex wgEncodeHaibTfbsGm12878P300Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878P300Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -7702,7 +7667,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001489
 expId 1489
-fileIndex wgEncodeHaibTfbsGm12878Pax5c20Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pax5c20Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -7729,7 +7693,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001489
 expId 1489
-fileIndex wgEncodeHaibTfbsGm12878Pax5c20Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pax5c20Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -7914,7 +7877,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001495
 expId 1495
-fileIndex wgEncodeHaibTfbsGm12878Pax5n19Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pax5n19Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -7941,7 +7903,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001495
 expId 1495
-fileIndex wgEncodeHaibTfbsGm12878Pax5n19Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pax5n19Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -8124,7 +8085,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001477
 expId 1477
-fileIndex wgEncodeHaibTfbsGm12878Pbx3Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pbx3Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -8151,7 +8111,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001477
 expId 1477
-fileIndex wgEncodeHaibTfbsGm12878Pbx3Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pbx3Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -8336,7 +8295,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001517
 expId 1517
-fileIndex wgEncodeHaibTfbsGm12878Pol24h8Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pol24h8Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -8363,7 +8321,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001517
 expId 1517
-fileIndex wgEncodeHaibTfbsGm12878Pol24h8Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pol24h8Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -8548,7 +8505,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001463
 expId 1463
-fileIndex wgEncodeHaibTfbsGm12878Pol2Pcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pol2Pcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -8575,7 +8531,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001463
 expId 1463
-fileIndex wgEncodeHaibTfbsGm12878Pol2Pcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pol2Pcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -8969,7 +8924,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001476
 expId 1476
-fileIndex wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -8996,7 +8950,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001476
 expId 1476
-fileIndex wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -9403,7 +9356,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001467
 expId 1467
-fileIndex wgEncodeHaibTfbsGm12878RxlchPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878RxlchPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -9748,7 +9700,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001469
 expId 1469
-fileIndex wgEncodeHaibTfbsGm12878RxlchPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878RxlchPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -9775,7 +9726,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001469
 expId 1469
-fileIndex wgEncodeHaibTfbsGm12878RxlchPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878RxlchPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -9901,7 +9851,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001634
 expId 1634
-fileIndex wgEncodeHaibTfbsGm12878RxlchV0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878RxlchV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -10048,7 +9997,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001541
 expId 1541
-fileIndex wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -10074,7 +10022,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001541
 expId 1541
-fileIndex wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -10251,7 +10198,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001542
 expId 1542
-fileIndex wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -10277,7 +10223,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001542
 expId 1542
-fileIndex wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -10455,7 +10400,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001496
 expId 1496
-fileIndex wgEncodeHaibTfbsGm12878Sp1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -10482,7 +10426,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001496
 expId 1496
-fileIndex wgEncodeHaibTfbsGm12878Sp1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -10668,7 +10611,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001464
 expId 1464
-fileIndex wgEncodeHaibTfbsGm12878SrfPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878SrfPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -10695,7 +10637,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001464
 expId 1464
-fileIndex wgEncodeHaibTfbsGm12878SrfPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878SrfPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -11282,7 +11223,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001485
 expId 1485
-fileIndex wgEncodeHaibTfbsGm12878Tcf12Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Tcf12Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -11309,7 +11249,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001485
 expId 1485
-fileIndex wgEncodeHaibTfbsGm12878Tcf12Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Tcf12Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -11493,7 +11432,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001468
 expId 1468
-fileIndex wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -11520,7 +11458,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001468
 expId 1468
-fileIndex wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -11902,7 +11839,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001488
 expId 1488
-fileIndex wgEncodeHaibTfbsGm12878Zbtb33Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878Zbtb33Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -11929,7 +11865,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001488
 expId 1488
-fileIndex wgEncodeHaibTfbsGm12878Zbtb33Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878Zbtb33Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -12311,7 +12246,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001545
 expId 1545
-fileIndex wgEncodeHaibTfbsGm12891Pax5c20V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12891Pax5c20V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -12337,7 +12271,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001545
 expId 1545
-fileIndex wgEncodeHaibTfbsGm12891Pax5c20V0416101AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12891Pax5c20V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -12516,7 +12449,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001523
 expId 1523
-fileIndex wgEncodeHaibTfbsGm12891Pol24h8Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12891Pol24h8Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -12543,7 +12475,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001523
 expId 1523
-fileIndex wgEncodeHaibTfbsGm12891Pol24h8Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12891Pol24h8Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -12728,7 +12659,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001522
 expId 1522
-fileIndex wgEncodeHaibTfbsGm12891Pol2Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12891Pol2Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -12755,7 +12685,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001522
 expId 1522
-fileIndex wgEncodeHaibTfbsGm12891Pol2Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12891Pol2Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -13148,7 +13077,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001521
 expId 1521
-fileIndex wgEncodeHaibTfbsGm12891Pu1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12891Pu1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -13175,7 +13103,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001521
 expId 1521
-fileIndex wgEncodeHaibTfbsGm12891Pu1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12891Pu1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -13360,7 +13287,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001519
 expId 1519
-fileIndex wgEncodeHaibTfbsGm12891RxlchPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12891RxlchPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -13439,7 +13365,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001592
 expId 1592
-fileIndex wgEncodeHaibTfbsGm12891RxlchV0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12891RxlchV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -13516,7 +13441,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001524
 expId 1524
-fileIndex wgEncodeHaibTfbsGm12891Taf1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12891Taf1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -13543,7 +13467,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001524
 expId 1524
-fileIndex wgEncodeHaibTfbsGm12891Taf1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12891Taf1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -13929,7 +13852,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001546
 expId 1546
-fileIndex wgEncodeHaibTfbsGm12892Pax5c20V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12892Pax5c20V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -13955,7 +13877,6 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001546
 expId 1546
-fileIndex wgEncodeHaibTfbsGm12892Pax5c20V0416101AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12892Pax5c20V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -14534,7 +14455,6 @@ dateSubmitted 2010-01-1
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEH001518
 expId 1518
-fileIndex wgEncodeHaibTfbsGm12892RxlchV0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12892RxlchV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -14611,7 +14531,6 @@ dateSubmitted 2010-05-31
 dateUnrestricted 2011-03-03
 dccAccession wgEncodeEH001510
 expId 1510
-fileIndex wgEncodeHaibTfbsGm12892RxlchV0416102AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12892RxlchV0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -15085,7 +15004,6 @@ dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 dccAccession wgEncodeEH001566
 expId 1566
-fileIndex wgEncodeHaibTfbsH1hescAtf3V0416102AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescAtf3V0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -15685,7 +15603,6 @@ dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 dccAccession wgEncodeEH001538
 expId 1538
-fileIndex wgEncodeHaibTfbsH1hescEgr1V0416102AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescEgr1V0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -15711,7 +15628,6 @@ dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 dccAccession wgEncodeEH001538
 expId 1538
-fileIndex wgEncodeHaibTfbsH1hescEgr1V0416102AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescEgr1V0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -16087,7 +16003,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001534
 expId 1534
-fileIndex wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -16113,7 +16028,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001534
 expId 1534
-fileIndex wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -16315,7 +16229,6 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccAccession wgEncodeEH001659
 expId 1659
-fileIndex wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -17112,7 +17025,6 @@ dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 dccAccession wgEncodeEH001574
 expId 1574
-fileIndex wgEncodeHaibTfbsH1hescP300V0416102AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescP300V0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -17488,7 +17400,6 @@ dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
 dccAccession wgEncodeEH001499
 expId 1499
-fileIndex wgEncodeHaibTfbsH1hescPol2V0416102AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescPol2V0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -17516,7 +17427,6 @@ dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
 dccAccession wgEncodeEH001499
 expId 1499
-fileIndex wgEncodeHaibTfbsH1hescPol2V0416102AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescPol2V0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -18439,7 +18349,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001530
 expId 1530
-fileIndex wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -18465,7 +18374,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001530
 expId 1530
-fileIndex wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -18643,7 +18551,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001528
 expId 1528
-fileIndex wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -18669,7 +18576,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001528
 expId 1528
-fileIndex wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -18847,7 +18753,6 @@ dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEH001529
 expId 1529
-fileIndex wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -18873,7 +18778,6 @@ dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEH001529
 expId 1529
-fileIndex wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -19051,7 +18955,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001533
 expId 1533
-fileIndex wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -19077,7 +18980,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001533
 expId 1533
-fileIndex wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -19653,7 +19555,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001531
 expId 1531
-fileIndex wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -19679,7 +19580,6 @@ dateSubmitted 2010-12-22
 dateUnrestricted 2011-09-22
 dccAccession wgEncodeEH001531
 expId 1531
-fileIndex wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -19857,7 +19757,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001532
 expId 1532
-fileIndex wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -19883,7 +19782,6 @@ dateSubmitted 2010-12-22
 dateUnrestricted 2011-09-22
 dccAccession wgEncodeEH001532
 expId 1532
-fileIndex wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -20061,7 +19959,6 @@ dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 dccAccession wgEncodeEH001567
 expId 1567
-fileIndex wgEncodeHaibTfbsH1hescYy1sc281V0416102AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsH1hescYy1sc281V0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -20934,7 +20831,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001504
 expId 1504
-fileIndex wgEncodeHaibTfbsHelas3GabpPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHelas3GabpPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -20961,7 +20857,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001504
 expId 1504
-fileIndex wgEncodeHaibTfbsHelas3GabpPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHelas3GabpPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -21347,7 +21242,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001474
 expId 1474
-fileIndex wgEncodeHaibTfbsHelas3Pol2Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHelas3Pol2Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -21374,7 +21268,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001474
 expId 1474
-fileIndex wgEncodeHaibTfbsHelas3Pol2Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHelas3Pol2Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -21557,7 +21450,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001628
 expId 1628
-fileIndex wgEncodeHaibTfbsHelas3RxlchPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHelas3RxlchPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -21634,7 +21526,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001505
 expId 1505
-fileIndex wgEncodeHaibTfbsHelas3Taf1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHelas3Taf1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -21661,7 +21552,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001505
 expId 1505
-fileIndex wgEncodeHaibTfbsHelas3Taf1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHelas3Taf1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -21869,7 +21759,6 @@ dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 dccAccession wgEncodeEH001568
 expId 1568
-fileIndex wgEncodeHaibTfbsHepg2Atf3V0416101AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Atf3V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -22045,7 +21934,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001515
 expId 1515
-fileIndex wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -22652,7 +22540,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001501
 expId 1501
-fileIndex wgEncodeHaibTfbsHepg2Fosl2V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Fosl2V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -22679,7 +22566,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001501
 expId 1501
-fileIndex wgEncodeHaibTfbsHepg2Fosl2V0416101AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Fosl2V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -22862,7 +22748,6 @@ dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEH001630
 expId 1630
-fileIndex wgEncodeHaibTfbsHepg2Foxa1sc101058V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Foxa1sc101058V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -23061,7 +22946,6 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001594
 expId 1594
-fileIndex wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -23458,7 +23342,6 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001548
 expId 1548
-fileIndex wgEncodeHaibTfbsHepg2GabpPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2GabpPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -23483,7 +23366,6 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001548
 expId 1548
-fileIndex wgEncodeHaibTfbsHepg2GabpPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2GabpPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -23860,7 +23742,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001502
 expId 1502
-fileIndex wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -23886,7 +23767,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001502
 expId 1502
-fileIndex wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -24065,7 +23945,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001595
 expId 1595
-fileIndex wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -24463,7 +24342,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001470
 expId 1470
-fileIndex wgEncodeHaibTfbsHepg2JundPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2JundPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -24490,7 +24368,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001470
 expId 1470
-fileIndex wgEncodeHaibTfbsHepg2JundPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2JundPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -24674,7 +24551,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001549
 expId 1549
-fileIndex wgEncodeHaibTfbsHepg2NrsfPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2NrsfPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -24699,7 +24575,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001549
 expId 1549
-fileIndex wgEncodeHaibTfbsHepg2NrsfPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2NrsfPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -25453,7 +25328,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001550
 expId 1550
-fileIndex wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -25478,7 +25352,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001550
 expId 1550
-fileIndex wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -25853,7 +25726,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001603
 expId 1603
-fileIndex wgEncodeHaibTfbsHepg2RxlchPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2RxlchPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -25880,7 +25752,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001603
 expId 1603
-fileIndex wgEncodeHaibTfbsHepg2RxlchPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2RxlchPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -26155,7 +26026,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001597
 expId 1597
-fileIndex wgEncodeHaibTfbsHepg2RxlchPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2RxlchPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -26181,7 +26051,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001597
 expId 1597
-fileIndex wgEncodeHaibTfbsHepg2RxlchPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2RxlchPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -26306,7 +26175,6 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH001596
 expId 1596
-fileIndex wgEncodeHaibTfbsHepg2RxlchV0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2RxlchV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -26455,7 +26323,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001506
 expId 1506
-fileIndex wgEncodeHaibTfbsHepg2RxraPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2RxraPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -26482,7 +26349,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001506
 expId 1506
-fileIndex wgEncodeHaibTfbsHepg2RxraPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2RxraPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -26667,7 +26533,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001471
 expId 1471
-fileIndex wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -26694,7 +26559,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001471
 expId 1471
-fileIndex wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -27460,7 +27324,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001551
 expId 1551
-fileIndex wgEncodeHaibTfbsHepg2Taf1Pcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Taf1Pcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -27485,7 +27348,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001551
 expId 1551
-fileIndex wgEncodeHaibTfbsHepg2Taf1Pcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Taf1Pcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -27660,7 +27522,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001544
 expId 1544
-fileIndex wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -27686,7 +27547,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001544
 expId 1544
-fileIndex wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -27864,7 +27724,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001472
 expId 1472
-fileIndex wgEncodeHaibTfbsHepg2Usf1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Usf1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -27891,7 +27750,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001472
 expId 1472
-fileIndex wgEncodeHaibTfbsHepg2Usf1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Usf1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -28274,7 +28132,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001503
 expId 1503
-fileIndex wgEncodeHaibTfbsHepg2Zbtb33Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsHepg2Zbtb33Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -28301,7 +28158,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001503
 expId 1503
-fileIndex wgEncodeHaibTfbsHepg2Zbtb33Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Zbtb33Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -31260,7 +31116,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001481
 expId 1481
-fileIndex wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -31287,7 +31142,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001481
 expId 1481
-fileIndex wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -32470,7 +32324,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001482
 expId 1482
-fileIndex wgEncodeHaibTfbsK562Pu1Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsK562Pu1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -32497,7 +32350,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001482
 expId 1482
-fileIndex wgEncodeHaibTfbsK562Pu1Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsK562Pu1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -32880,7 +32732,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001466
 expId 1466
-fileIndex wgEncodeHaibTfbsK562RxlchPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsK562RxlchPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -32907,7 +32758,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001466
 expId 1466
-fileIndex wgEncodeHaibTfbsK562RxlchPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsK562RxlchPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -33529,7 +33379,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001483
 expId 1483
-fileIndex wgEncodeHaibTfbsK562Six5Pcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsK562Six5Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -33556,7 +33405,6 @@ dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001483
 expId 1483
-fileIndex wgEncodeHaibTfbsK562Six5Pcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsK562Six5Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -36127,7 +35975,6 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001552
 expId 1552
-fileIndex wgEncodeHaibTfbsPanc1NrsfPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsPanc1NrsfPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -36708,7 +36555,6 @@ dateSubmitted 2011-02-07
 dateUnrestricted 2011-05-06
 dccAccession wgEncodeEH001525
 expId 1525
-fileIndex wgEncodeHaibTfbsPanc1RxlchPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsPanc1RxlchPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -37273,7 +37119,6 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001553
 expId 1553
-fileIndex wgEncodeHaibTfbsPfsk1NrsfPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsPfsk1NrsfPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -37852,7 +37697,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001558
 expId 1558
-fileIndex wgEncodeHaibTfbsPfsk1RxlchPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsPfsk1RxlchPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -38702,7 +38546,6 @@ dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEH001535
 expId 1535
-fileIndex wgEncodeHaibTfbsSknmcRxlchV0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsSknmcRxlchV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -38800,7 +38643,6 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001547
 expId 1547
-fileIndex wgEncodeHaibTfbsSknshNrsfPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsSknshNrsfPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -39193,7 +39035,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001473
 expId 1473
-fileIndex wgEncodeHaibTfbsSknshRxlchPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsSknshRxlchPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -40771,7 +40612,6 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 dccAccession wgEncodeEH001556
 expId 1556
-fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -40798,7 +40638,6 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 dccAccession wgEncodeEH001556
 expId 1556
-fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -40881,7 +40720,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001601
 expId 1601
-fileIndex wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -40907,7 +40745,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001601
 expId 1601
-fileIndex wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dm002p1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -42023,7 +41860,6 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001554
 expId 1554
-fileIndex wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -42421,7 +42257,6 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001559
 expId 1559
-fileIndex wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -42678,4 +42513,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -286431933
+# MAGIC: 456501747

@@ -53,7 +53,9 @@
 				<LI><A HREF="#format12">narrowPeak format</A>
 				<LI><A HREF="#format13">broadPeak format</A>
 				<LI><A HREF="#format14">gappedPeak format</A>
-                                </UL>
+                                <LI><A HREF="#format15">tagAlign format</A>
+				<LI><A HREF-"#format16">pairedTagAlign format</A>
+				</UL>
 				<P>
 				<A HREF="index.html">Return to FAQ Table of Contents</A>
 				<BR>
@@ -1436,14 +1438,15 @@ chr21	31812879	31812880	C	1	0	0
         <li><b>name</b> - Name given to a region (preferably unique). 
         Use '.' if no name is assigned.
         <li><b>score</b> - Indicates how dark the peak will be displayed in the 
-        browser (1-1000).  Ideally average signalvalue per base spread is 
-        between 100 and 1000.
+        browser (0-1000).  
+        <b><br>Note: there is an issue about handling 0's here as
+        well as with narrowPeaks, broadPeaks and gappedPeaks.</b>
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
-        <li><b>level</b> - Expression level such as rpkm or fpkm.
-        <li><b>signif</b> - Statistical significance such as idr.
-        <li><b>score2</b> - Additional measurement/ count e.g. number of reads.
-			    </td><td width=15></td></tr>
+        <li><b>level</b> - Expression level such as RPKM or FPKM.
+        <li><b>signif</b> - Statistical significance such as IDR.
+        <li><b>score2</b> - Additional measurement/count e.g. number of reads.
+</ol>			    </td><td width=15></td></tr>
 	    		</table><br>
 		     </td></tr>
 		</table>
@@ -1486,8 +1489,7 @@ chr21	31812879	31812880	C	1	0	0
         <li><b>name</b> - Name given to a region (preferably unique). 
         Use '.' if no name is assigned.
         <li><b>score</b> - Indicates how dark the peak will be displayed in the 
-        browser (1-1000).  Ideally average signalvalue per base spread is 
-        between 100 and 1000.
+        browser (0-1000). 
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
 	<li><b>signalValue</b> - Measurement of overall (usually, average) 
@@ -1498,12 +1500,14 @@ chr21	31812879	31812880	C	1	0	0
         false discovery rate. Use -1 if no qValue is assigned.
         <li><b>peak</b> - Point-source called for this peak; 0-based offset 
         from chromStart. Use -1 if no point-source called.
+</ol>
 <P>
-e.g.
-
+Here is an example of narrowPeak format
 chrX    9091548 9091648 .       0       .       182     5.0945  -1  50
+<PRE><TT>
 chrX    9358722 9358822 .       0       .       91      4.6052  -1  40
 chrX    9391082 9391182 .       0       .       182     9.2103  -1  75
+</TT></PRE>
 </P>
         		     </td><td width=15></td></tr>
 	    		</table><br>
@@ -1548,8 +1552,7 @@ This format is used to provide called regions of signal enrichment based on pool
         <li><b>name</b> - Name given to a region (preferably unique). 
         Use '.' if no name is assigned.
         <li><b>score</b> - Indicates how dark the peak will be displayed in the 
-        browser (1-1000).  Ideally average signalvalue per base spread is 
-        between 100 and 1000.
+        browser (0-1000).
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
 	<li><b>signalValue</b> - Measurement of overall (usually, average) 
@@ -1558,6 +1561,7 @@ This format is used to provide called regions of signal enrichment based on pool
         Use -1 if no pValue is assigned.
         <li><b>qValue</b> - Measurement of statistical significance using 
         false discovery rate. Use -1 if no qValue is assigned.
+</ol>
 <P>
         		     </td><td width=15></td></tr>
 	    		</table><br>
@@ -1604,8 +1608,7 @@ This format is used to provide called regions of signal enrichment based on pool
         <li><b>name</b> - Name given to a region (preferably unique). 
         Use '.' if no name is assigned.
         <li><b>score</b> - Indicates how dark the peak will be displayed in the 
-        browser (1-1000).  Ideally average signalvalue per base spread is 
-        between 100 and 1000.
+        browser (0-1000).  
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
 	<li><b>thickStart</b> - The starting position at which the feature is drawn thickly.
@@ -1620,7 +1623,54 @@ This format is used to provide called regions of signal enrichment based on pool
         Use -1 if no pValue is assigned.
         <li><b>qValue</b> - Measurement of statistical significance using 
         false discovery rate. Use -1 if no qValue is assigned.
+<ol>        		     </td><td width=15></td></tr>
+	    		</table><br>
+		     </td></tr>
+		</table>
+     	     </td></tr>
+    	</table>
+	<br>
+
+<!--content table-->
+<a name="format15"></a>
+    <!--outer table is for border purposes-->        
+    	<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
+             <tr><td>            
+        	<table bgcolor="fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
+	    	     <tr><td>                
+  	    		<table bgcolor="d9e4f8" background="../images/hr.gif" width="100%">
+	        	     <tr><td>                
+	   			<table cellpadding=0 cellspacing=0 margin=0 width="100%">
+		    		     <tr><td align="left"><font size="4"><b>&nbsp; tagAlign: BED3+3 format </b></font></td> 
+		    		     <td align="right"><a href="#top"><img src="/images/index.gif" alt="" align="right" border=0></a>
+	            		     </td></tr>
+  	        		</table>                
+	        	     </td></tr>
+  	    		</table>                
+   	    		<table bgcolor="fffee8" width="100%" cellpadding=0>
+	        	    <tr><th height=10></th></tr>
+                	    <tr><td width=10>&nbsp;</td>
+		    	    <td>
+	            	    <p>
+<P><b>tagAlign was used with hg18, but is no longer in use with hg19.</b>
+Tag Alignment provideid genomic mapping of short sequence tags. 
+It is a BED3+3 format.
+</P>
+<ol>
+	<li><b>chrom</b> - Name of the chromosome.
+        <li><b>chromStart</b> - The starting position of the feature in the chromosome. The first base in a chromosome is numbered 0.
+        <li><b>chromEnd</b> - The ending position of the feature in the chromosome or scaffold. The chromEnd base is not included in the display of the feature. For example, the first 100 bases of a chromosome are defined as chromStart=0, chromEnd=100, and span the bases numbered 0-99.
+        <li><b>sequence</b> - Sequence of this read.
+        <li><b>score</b> - Indicates uniqueness or quality (preferably 1000/alignmentCount).
+        <li><b>strand</b> - Orientation of this read (+ or -).
+</ol>
 <P>
+Here is an example of tagAlign format:
+</P>
+<PRE><TT>
+chrX 8823384 8823409 AGAAGGAAAATGATGTGAAGACATA 1000 +
+chrX 8823387 8823412 TCTTATGTCTTCACATCATTTTCCT 500  -
+</TT></PRE>
         		     </td><td width=15></td></tr>
 	    		</table><br>
 		     </td></tr>
@@ -1628,5 +1678,48 @@ This format is used to provide called regions of signal enrichment based on pool
      	     </td></tr>
     	</table>
 	<br>
+
+
+<!--content table-->
+<a name="format16"></a>
+    <!--outer table is for border purposes-->        
+    	<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
+             <tr><td>            
+        	<table bgcolor="fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
+	    	     <tr><td>                
+  	    		<table bgcolor="d9e4f8" background="../images/hr.gif" width="100%">
+	        	     <tr><td>                
+	   			<table cellpadding=0 cellspacing=0 margin=0 width="100%">
+		    		     <tr><td align="left"><font size="4"><b>&nbsp; pairedTagAlign: BED6+2 format</b></font></td> 
+		    		     <td align="right"><a href="#top"><img src="/images/index.gif" alt="" align="right" border=0></a>
+	            		     </td></tr>
+  	        		</table>                
+	        	     </td></tr>
+  	    		</table>                
+   	    		<table bgcolor="fffee8" width="100%" cellpadding=0>
+	        	    <tr><th height=10></th></tr>
+                	    <tr><td width=10>&nbsp;</td>
+		    	    <td>
+	            	    <p>
+<P><b>pairedTagAlign was used with hg18, but is no longer in use with hg19.</b>
+Tag Alignment Format for Paired Reads was used to provide genomic mapping of paired-read short sequence tags. It is a BED6+2 format.
+</P>
+<ol>
+        <li><b>chrom</b> - Name of the chromosome.
+        <li><b>chromStart</b> - The starting position of the feature in the chromosome. The first base in a chromosome is numbered 0.
+        <li><b>chromEnd</b> - The ending position of the feature in the chromosome or scaffold. The chromEnd base is not included in the display of the feature. For example, the first 100 bases of a chromosome are defined as chromStart=0, chromEnd=100, and span the bases numbered 0-99.
+        <li><b>name</b> - Identifier of paired-read.
+        <li><b>score</b> - Indicates uniqueness or quality (preferably 1000/alignment-count).
+        <li><b>strand</b> - Orientation of this read (+ or -).
+        <li><b>seq1</b> - Sequence of first read.
+        <li><b>seq2</b> - Sequence of second read.
+</ol>			    </td><td width=15></td></tr>
+	    		</table><br>
+		     </td></tr>
+		</table>
+     	     </td></tr>
+    	</table>
+	<br>
+
 
 </BODY></HTML>

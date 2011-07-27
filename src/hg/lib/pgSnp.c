@@ -463,7 +463,7 @@ for (el = th; el != NULL; el = el->next)
                 dnaseq = newDnaSeq(rep2, strlen(rep2), "rep2");
                 aaSeq *repAa = translateSeq(dnaseq, 0, FALSE);
                 //freeDnaSeq(&dnaseq);
-                if (!strstr(repAa->dna, "X"))
+                if (!strstr(repAa->dna, "X") && isNotEmpty(repAa->dna))
                     {
                     printf("&nbsp;&nbsp;&nbsp;&nbsp;%s &gt; %s<BR>\n",
                         origAa->dna, repAa->dna);

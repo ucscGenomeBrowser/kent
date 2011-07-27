@@ -25,6 +25,10 @@
 #include "htmlPage.h"
 #include "trackDb.h"
 #include "trackHub.h"
+#include "errCatch.h"
+#include "bamFile.h"
+#include "bigWig.h"
+#include "bigBed.h"
 
 static boolean hasProtocol(char *urlOrPath)
 /* Return TRUE if it looks like it has http://, ftp:// etc. */
@@ -103,7 +107,7 @@ char *trackHubRequiredSetting(struct trackHub *hub, char *name)
 {
 char *val = trackHubSetting(hub, name);
 if (val == NULL)
-    errAbort("Missing required setting %s from %s", name, hub->url);
+    errAbort("Missing required setting '%s' from %s", name, hub->url);
 return val;
 }
 
@@ -186,7 +190,7 @@ static char *requiredSetting(struct trackHub *hub, struct trackHubGenome *genome
 {
 char *val = trackDbSetting(tdb, setting);
 if (val == NULL)
-    errAbort("Missing required %s setting in hub %s genome %s track %s", setting,
+    errAbort("Missing required '%s' setting in hub %s genome %s track %s", setting,
     	hub->url, genome->name, tdb->track);
 return val;
 }
@@ -243,7 +247,7 @@ else
           startsWithWord("vcfTabix", type) ||
           startsWithWord("bam", type)))
 	{
-	errAbort("Unsupported type %s in hub %s genome %s track %s", type,
+	errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
 	    hub->url, genome->name, tdb->track);
 	}
 
@@ -390,4 +394,114 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     tdb->grp = cloneString(hubName);
     hashReplace(tdb->settingsHash, "group", tdb->grp);
     }
+}
+
+static int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, 
+    struct trackDb *tdb, struct dyString *errors)
+/* Make sure that track is ok. */
+{
+struct errCatch *errCatch = errCatchNew();
+char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
+int retVal = 0;
+
+if (relativeUrl != NULL)
+    {
+    if (errCatchStart(errCatch))
+	{
+	char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
+	char *type = trackDbRequiredSetting(tdb, "type");
+	verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
+
+	if (startsWithWord("bigWig", type))
+	    {
+	    /* Just open and close to verify file exists and is correct type. */
+	    struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
+	    bbiFileClose(&bbi);
+	    }
+	else if (startsWithWord("bigBed", type))
+	    {
+	    /* Just open and close to verify file exists and is correct type. */
+	    struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+	    bbiFileClose(&bbi);
+	    }
+	else if (startsWithWord("bam", type))
+	    {
+	    /* For bam files, the following call checks both main file and index. */
+	    bamFileExists(bigDataUrl);
+	    }
+	else
+	    errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
+	freez(&bigDataUrl);
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	retVal = 1;
+	dyStringPrintf(errors, "%s", errCatch->message->string);
+	}
+    errCatchFree(&errCatch);
+    }
+
+return retVal;
+}
+
+static int hubCheckGenome(struct trackHub *hub, struct trackHubGenome *genome,
+    struct dyString *errors)
+/* Check out genome within hub. */
+{
+struct errCatch *errCatch = errCatchNew();
+struct trackDb *tdbList = NULL;
+int retVal = 0;
+
+if (errCatchStart(errCatch))
+    tdbList = trackHubTracksForGenome(hub, genome);
+errCatchEnd(errCatch);
+
+if (errCatch->gotError)
+    {
+    retVal = 1;
+    dyStringPrintf(errors, "%s", errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    retVal |= hubCheckTrack(hub, genome, tdb, errors);
+verbose(2, "%d tracks in %s\n", slCount(tdbList), genome->name);
+
+return retVal;
+}
+
+int trackHubCheck(char *hubUrl, struct dyString *errors)
+/* hubCheck - Check a track data hub for integrity. Put errors in dyString.
+ *      return 0 if hub has no errors, 1 otherwise */
+{
+struct errCatch *errCatch = errCatchNew();
+struct trackHub *hub = NULL;
+int retVal = 0;
+
+if (errCatchStart(errCatch))
+    hub = trackHubOpen(hubUrl, "");
+errCatchEnd(errCatch);
+
+if (errCatch->gotError)
+    {
+    retVal = 1;
+    dyStringPrintf(errors, "%s", errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+
+if (hub == NULL)
+    return 1;
+
+verbose(2, "hub %s\nshortLabel %s\nlongLabel %s\n", hubUrl, hub->shortLabel, hub->longLabel);
+verbose(2, "%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
+struct trackHubGenome *genome;
+for (genome = hub->genomeList; genome != NULL; genome = genome->next)
+    {
+    retVal |= hubCheckGenome(hub, genome, errors);
+    }
+trackHubClose(&hub);
+
+return retVal;
 }

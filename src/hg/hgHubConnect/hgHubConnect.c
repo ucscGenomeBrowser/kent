@@ -25,6 +25,7 @@
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
 #define hgHubDoClear       hgHubDo "clear"
+#define hgHubDoDisconnect  hgHubDo "disconnect"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -70,7 +71,7 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
 
 // count up the number of unlisted hubs we currently have
 int count = 0;
-struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
+struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCartAll(cart);
 for(hub = hubList; hub; hub = hub->next)
     {
     if (isHubUnlisted(hub))
@@ -81,7 +82,7 @@ if (count == 0)
     {
     // nothing to see here
     printf(
-	"<tr><th>No Track Hubs for this genome assembly</th></tr>"
+	"<tr><td>No Track Hubs for this genome assembly</td></tr>"
 	"</td></table>");
     cgiMakeButton("Submit", "Return to Genome Browser");
     printf("</div>");
@@ -91,10 +92,11 @@ if (count == 0)
 // time to output the big table.  First the header
 printf(
     "<tr> "
-	"<th>Active?</th> "
+	"<th>Display</th> "
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
 	"<th>URL</th> "
+	"<th>Disconnect</th> "
     "</tr>\n");
 
 // start first row
@@ -129,6 +131,18 @@ for(hub = hubList; hub; hub = hub->next)
     else
 	ourPrintCell(hub->errorMessage);
     ourPrintCell(hub->hubUrl);
+
+    ourCellStart();
+    printf(
+    "<input name=\"hubDisconnectButton\""
+	"onClick=\"document.disconnectHubForm.elements['hubUrl'].value='%s';"
+	    "document.disconnectHubForm.submit();return true;\" "
+	    "class=\"hubField\" type=\"button\" value=\"X\">"
+	    , hub->hubUrl);
+    //cgiMakeButton("Submit", "X");
+    ourCellEnd();
+    //hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+
     }
 
 printf("</TR></tbody></TABLE>\n");
@@ -172,7 +186,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
 	    printf("<table id=\"publicHubsTable\"> "
 		"<thead><tr> "
-		    "<th>Active?</th> "
+		    "<th>Display</th> "
 		    "<th>Hub Name</th> "
 		    "<th>Description</th> "
 		    "<th>URL</th> "
@@ -227,7 +241,7 @@ else
     cgiMakeButton("Submit", "Return to Genome Browser");
     }
 
-printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\"> genome@soe.ucsc.edu </A>to add a public hub.</span>\n");
+printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</A> to add a public hub.</span>\n");
 printf("</div>");
 
 hDisconnectCentral(&conn);
@@ -245,6 +259,16 @@ else
 printf("<pre>Completed\n");
 }
 
+static void doDisconnectHub(struct cart *theCart)
+{
+char *url = cartOptionalString(cart, hgHubDataText);
+
+if (url != NULL)
+    hubDisconnect(theCart, url);
+
+cartRemove(theCart, hgHubDataText);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -256,6 +280,9 @@ if (cartVarExists(cart, hgHubDoClear))
     cartWebEnd();
     return;
     }
+
+if (cartVarExists(cart, hgHubDoDisconnect))
+    doDisconnectHub(cart);
 
 cartWebStart(cart, NULL, "%s", pageTitle);
 jsIncludeFile("jquery.js", NULL);
@@ -283,11 +310,18 @@ printf("</div>\n");
 makeGenomePrint();
 
 // check to see if we have any new hubs
-hubCheckForNew(database, cart);
+boolean gotNew = hubCheckForNew(database, cart);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
-cgiMakeHiddenVar("hubUrl", "foo");
+cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+puts("</FORM>");
+
+// this the form for the disconnect hub button
+printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubConnect");
+cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
@@ -300,10 +334,18 @@ printf("<div id=\"tabs\">"
        "<ul> <li><a href=\"#publicHubs\">Public Hubs</a></li>"
        "<li><a href=\"#unlistedHubs\">My Hubs</a></li> "
        "</ul> ");
-			     
+
 hgHubConnectPublic();
 hgHubConnectUnlisted();
 printf("</div>");
+
+if (gotNew) // make MyHubs the default tab
+    {
+    printf("<script type='text/javascript'>\n ");
+    printf("var $tabs = $('#tabs').tabs();\n");
+    printf(" $tabs.tabs('select',1);\n");
+    printf("</script>\n");
+    }
 
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 
@@ -312,7 +354,9 @@ puts("</FORM>");
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl,  hgHubDoClear, hgHubDataText, NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
+    hgHubConnectCgiDestUrl,  hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
+    hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

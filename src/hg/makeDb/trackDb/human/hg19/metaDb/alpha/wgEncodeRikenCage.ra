@@ -1046,7 +1046,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
@@ -1099,7 +1099,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
@@ -1127,7 +1127,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
@@ -1455,7 +1455,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
@@ -1507,7 +1507,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
@@ -1534,7 +1534,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
@@ -2011,7 +2011,7 @@ cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
@@ -2064,7 +2064,7 @@ cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
@@ -2092,7 +2092,7 @@ cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
@@ -3809,7 +3809,6 @@ dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
 dccRep 2
 expId 1149
-fileiIndex wgEncodeRikenCageHepg2CellPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHepg2CellPapAlnRep2.bam
 grant Gingeras
 lab RIKEN
@@ -4039,7 +4038,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
@@ -4092,7 +4091,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
@@ -4120,7 +4119,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
@@ -4456,7 +4455,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
@@ -4508,7 +4507,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
@@ -4535,7 +4534,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
@@ -4609,7 +4608,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
@@ -4662,7 +4661,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
@@ -4690,7 +4689,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
@@ -5287,7 +5286,7 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
@@ -5340,7 +5339,7 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
@@ -5368,7 +5367,7 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
@@ -6226,7 +6225,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
@@ -6279,7 +6278,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
@@ -6307,7 +6306,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
@@ -6382,7 +6381,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
@@ -6435,7 +6434,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
@@ -6463,7 +6462,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
@@ -6566,7 +6565,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
@@ -6698,7 +6697,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
@@ -6781,7 +6780,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
@@ -6863,7 +6862,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReubmitted 2010-09-23
+dateResubmitted 2010-09-23
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 dccAccession wgEncodeEH000332
@@ -7116,7 +7115,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
@@ -7169,7 +7168,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
@@ -7197,7 +7196,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
@@ -7272,7 +7271,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-26
+dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
@@ -7324,7 +7323,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-26
+dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
@@ -7351,7 +7350,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-26
+dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
@@ -7713,7 +7712,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
@@ -7766,7 +7765,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
@@ -7794,7 +7793,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
@@ -8386,7 +8385,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
@@ -8439,7 +8438,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
@@ -8467,7 +8466,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
@@ -8798,7 +8797,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
@@ -8851,7 +8850,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
@@ -8879,7 +8878,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
@@ -9108,7 +9107,7 @@ cell prostate
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
@@ -9161,7 +9160,7 @@ cell prostate
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
@@ -9189,7 +9188,7 @@ cell prostate
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
@@ -9521,4 +9520,4 @@ rnaExtract longPolyA
 subId 4524
 view TssGencV7
 
-# MAGIC: 470578237
+# MAGIC: 394027326
