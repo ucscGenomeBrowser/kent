@@ -14,8 +14,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CBjUw5cgeneMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -31,8 +31,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CBjUw5cgeneMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -48,8 +48,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CBjUw5cgeneRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -65,8 +65,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CBjUw5cgeneRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 2
 subId 3813
 view RawData
@@ -82,8 +82,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CCaco2Uw5cmycMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -99,8 +99,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CCaco2Uw5cmycMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -116,8 +116,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CCaco2Uw5cmycRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -133,8 +133,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CCaco2Uw5cmycRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view RawData
@@ -150,8 +150,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CGm06990Uw5cgeneMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -167,8 +167,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CGm06990Uw5cgeneMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -184,8 +184,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CGm06990Uw5cgeneRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -201,8 +201,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CGm06990Uw5cgeneRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 2
 subId 3813
 view RawData
@@ -218,8 +218,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CGm12878Uw5cmycMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -235,8 +235,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CGm12878Uw5cmycMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -252,8 +252,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CGm12878Uw5cmycRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -269,8 +269,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CGm12878Uw5cmycRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view RawData
@@ -286,8 +286,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CHepg2Uw5cgeneMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -303,8 +303,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CHepg2Uw5cgeneMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -320,8 +320,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CHepg2Uw5cgeneRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -337,8 +337,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CHepg2Uw5cgeneRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 2
 subId 3813
 view RawData
@@ -354,8 +354,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CK562Uw5cmycMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -371,8 +371,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CK562Uw5cmycMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -388,8 +388,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CK562Uw5cmycRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -405,8 +405,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CK562Uw5cmycRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view RawData
@@ -422,8 +422,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CLncapUw5cmycMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -439,8 +439,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CLncapUw5cmycMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -456,8 +456,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CLncapUw5cmycRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -473,8 +473,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CLncapUw5cmycRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view RawData
@@ -490,8 +490,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CMcf7Uw5cmycMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -507,8 +507,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CMcf7Uw5cmycMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -524,8 +524,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CMcf7Uw5cmycRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -541,8 +541,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CMcf7Uw5cmycRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Myc-Region
+project wgEncode
 replicate 2
 subId 3813
 view RawData
@@ -558,8 +558,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CSknshraUw5cgeneMatrixRep1.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 1
 subId 3813
 view Matrix
@@ -575,8 +575,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CSknshraUw5cgeneMatrixRep2.matrix.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 2
 subId 3813
 view Matrix
@@ -592,8 +592,8 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CSknshraUw5cgeneRawDataRep1.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 1
 subId 3813
 view RawData
@@ -609,10 +609,44 @@ dateUnrestricted 2011-12-08
 fileName wgEncodeUw5CSknshraUw5cgeneRawDataRep2.fastq.gz
 grant Stam
 lab UW
-project wgEncode
 labVersion UW-5C-Gene-Regions
+project wgEncode
 replicate 2
 subId 3813
 view RawData
 
-# MAGIC: 75019551
+metaObject wgEncodeUw5cGeneTargetedPrimers
+objType file
+cell None
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5cGeneTargetedPrimers.txt.tgz
+grant Stam
+lab UW
+labVersion UW-5C-Gene-Regions
+project wgEncode
+replicate 1
+subId 3813
+view Primer
+
+metaObject wgEncodeUw5cMycPrimers
+objType file
+cell None
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5cMycPrimers.txt.tgz
+grant Stam
+lab UW
+labVersion UW-5C-Myc-Regions
+project wgEncode
+replicate 1
+subId 3813
+view Primer
+
+# MAGIC: 432814163
