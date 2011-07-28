@@ -8294,6 +8294,37 @@ tag G1
 type phase
 description Flow sorted, G1 phase
 
+term G1b
+tag G1B
+type phase
+description Flow sorted, G1b phase (PROVISIONAL)
+
+term G2
+tag G2
+type phase
+description Flow sorted, G2 phase (PROVISIONAL)
+
+term S1
+tag S1
+type phase
+description Flow sorted, S1 phase (PROVISIONAL)
+
+term S2
+tag S2
+type phase
+description Flow sorted, S2 phase (PROVISIONAL)
+
+term S3
+tag S3
+type phase
+description Flow sorted, S3 phase (PROVISIONAL)
+
+term S4
+tag S4
+type phase
+description Flow sorted, S4 phase (PROVISIONAL)
+
+
 ### region
 # genomic regions used in experiments that are not whole-genome
 term chr21
@@ -8522,6 +8553,12 @@ type view
 label Peptide Mapping
 description PeptideMapping
 
+term PctSignal
+tag PCTSIG
+type view
+label Percentage-normalized Signal
+description Percentage-normalized Signal (PROVISIONAL)
+
 term PlusRawSignal
 tag PLUSRAWSIG
 type view
@@ -8643,6 +8680,12 @@ type view
 label SPP Optimal Peaks
 description Regions of conserved enriched signal in experiment performed by SPP (PROVISIONAL)
 
+term SumSignal
+tag SUMSIG
+type view
+label Summed Densities
+description Shows summed densities of all phases combined (PROVISIONAL)
+
 term TranscriptDeNovo
 tag TRANSDENOVO
 type view
@@ -8696,6 +8739,19 @@ tag VALIDATION
 type view
 label Validation
 description Documents used for the verification of experimental results
+
+term Valleys
+tag VALS
+type view
+label Valleys
+description Regions of enriched signal in experiment (PROVISIONAL)
+
+term WaveSignal
+tag WAVESIG
+type view
+label Wavelet Smoothed Signal
+description Shows smoothed wavelet over all phases (PROVISIONAL)
+
 
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type
@@ -8846,6 +8902,12 @@ tag PROTGENO
 type dataType
 label Proteogenomics
 description Mass Spec Proteogenomic Mapping
+
+term RepliSeq
+tag  REPLISEQ
+type dataType
+label Repli-Seq
+description Replication Timing (PROVISIONAL)
 
 # tag not standard to match hg18
 term RnaPet
