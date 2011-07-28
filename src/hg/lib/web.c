@@ -401,6 +401,8 @@ else if (dbIsFound)
         {
         if (endsWith(scriptName, "hgBlat"))
             printf("<TD><A HREF='../goldenPath/help/hgTracksHelp.html#BLATAlign'");
+        else if (endsWith(scriptName, "hgHubConnect"))
+            printf("<TD><A HREF='../goldenPath/help/hgTrackHubHelp.html'");
         else if (endsWith(scriptName, "hgText"))
             printf("<TD><A HREF='../goldenPath/help/hgTextHelp.html'");
         else if (endsWith(scriptName, "hgNear"))
