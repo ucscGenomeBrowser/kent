@@ -3820,7 +3820,20 @@ for(di=0;di<membersForAll->dimMax;di++) { if (membersForAll->members[di]) dimCou
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
-boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
+char buffer[SMALLBUF];
+char *displaySubs = NULL;
+int subCount = slCount(subtrackRefList);
+#define LARGE_COMPOSITE_CUTOFF 30
+if (subCount > LARGE_COMPOSITE_CUTOFF)
+    {
+    safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
+    displaySubs = cartUsualString(cart, buffer,"some");              // track specific defaults to only selected
+    }
+else
+    {
+    displaySubs = cartUsualString(cart, "displaySubtracks", "all");  // browser wide defaults to all
+    }
+boolean displayAll = sameString(displaySubs, "all");
 
 // Determine whether there is a restricted until date column
 boolean restrictions = FALSE;
@@ -3847,10 +3860,14 @@ if (sortOrder != NULL)
     printf("<B>List subtracks:&nbsp;");
     char javascript[JBUFSIZE];
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
-    cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
+    if (subCount > LARGE_COMPOSITE_CUTOFF)
+        safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
+    else
+        safecpy(buffer,SMALLBUF,"displaySubtracks");
+    cgiMakeOnClickRadioButton(buffer, "selected", !displayAll,javascript);
     puts("only selected/visible &nbsp;&nbsp;");
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(false);\"");
-    cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
+    cgiMakeOnClickRadioButton(buffer, "all", displayAll,javascript);
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
         printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
@@ -3900,10 +3917,14 @@ else
     printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
     char javascript[JBUFSIZE];
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
-    cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
+    if (subCount > LARGE_COMPOSITE_CUTOFF)
+        safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
+    else
+        safecpy(buffer,SMALLBUF,"displaySubtracks");
+    cgiMakeOnClickRadioButton(buffer, "selected", !displayAll,javascript);
     puts("only selected/visible &nbsp;&nbsp;");
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(false);\"");
-    cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
+    cgiMakeOnClickRadioButton(buffer, "all", displayAll,javascript);
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
         printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
@@ -3991,6 +4012,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     int fourState = subtrackFourStateChecked(subtrack,cart);
     boolean checkedCB = fourStateChecked(fourState);
     boolean enabledCB = fourStateEnabled(fourState);
+    boolean visibleCB = fourStateVisible(fourState);
     eCfgType cType = cfgTypeFromTdb(subtrack,FALSE);
     if (cType != cfgNone)
         {
@@ -4016,7 +4038,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     // Start the TR which must have an id that is directly related to the checkBox id
     char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,membership); // view is known tag
     printf("<TR valign='top' class='%s%s'",colors[colorIx],(useDragAndDrop?" trDraggable":""));
-    printf(" id=tr_%s p%s>\n",id,(!displayAll?" style='display:none'":""));
+    printf(" id=tr_%s p%s>\n",id,(!visibleCB && !displayAll?" style='display:none'":""));
 
     // Now the TD that holds the checkbox
     printf("<TD%s%s>",
@@ -4035,41 +4057,35 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         dyStringPrintf(dyHtml, " %s",membership->membership[ix]);  // Saved view for last
 
     // And finally the checkBox is made!
-    char htmlIdentifier[SMALLBUF];
-    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s_sel", subtrack->track);
-    cgiMakeCheckBoxFourWay(htmlIdentifier,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' style='cursor:pointer'");
+    safef(buffer, sizeof(buffer), "%s_sel", subtrack->track);
+    cgiMakeCheckBoxFourWay(buffer,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' style='cursor:pointer'");
     if (useDragAndDrop)
         printf("&nbsp;");
 
 #ifdef SUBTRACK_CFG
+#define SUBTRACK_CFG_VIS_SEEN
+#ifdef SUBTRACK_CFG_VIS_SEEN
+    enum trackVisibility vis = tdbVisLimitedByAncestry(cart, subtrack, TRUE);
+    //if (fourStateVisible(fourState))
+    //    {
+    //    safef(buffer, sizeof(buffer), " onclick='return scm.cfgToggle(\"%s\");'%s",subtrack->track,(fourStateVisible(fourState) ?"":" disabled"));
+    //    hTvDropDownClassVisOnlyAndExtra(subtrack->track,vis,TRUE,"normalText subVisDD", NULL,buffer);
+    //    }
+    //else
+    //    {
+        #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='clickable fauxInput%s subVisDD' style='width:65px;' onclick='return scm.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
+        printf(SUBTRACK_CFG_VIS,subtrack->track,(visibleCB ? "":" disabled"),subtrack->track,hStringFromTv(vis));
+    //    }
+#endif///def SUBTRACK_CFG_VIS_SEEN
     if (cType != cfgNone)  // make a wrench
         {
-        // TODO: make vis dd or vis text inp or vis img.  Alternatively, make '*' to denote there are subtrack level differences.
-    #define SUBTRACK_CFG_VIS_SEEN
-    #ifdef SUBTRACK_CFG_VIS_SEEN
-        enum trackVisibility vis = tdbVisLimitedByAncestry(cart, subtrack, TRUE);
-        if (fourStateVisible(fourState))
-            {
-            safef(htmlIdentifier, sizeof(htmlIdentifier), " onclick='return scm.cfgToggle(\"%s\");'%s",subtrack->track,(fourStateVisible(fourState) ?"":" disabled"));
-            hTvDropDownClassVisOnlyAndExtra(subtrack->track,vis,TRUE,"normalText subVisDD", NULL,htmlIdentifier);
-            }
-        else
-            {
-            #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='clickable fauxInput%s' style='width:65px;' onclick='return scm.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
-            printf(SUBTRACK_CFG_VIS,subtrack->track,(fourStateVisible(fourState) ?"":" disabled"),subtrack->track,hStringFromTv(vis));
-            }
-        #define SUBTRACK_CFG_WRENCH "<a href='#a_cfg' onclick='return scm.cfgToggle(\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></a>\n"
-        printf(SUBTRACK_CFG_WRENCH,subtrack->track);
-        // HAIB TFBS: wrench:7s  text:9s  dd:11s  none:7s
-        // TODO: all of this
-    #else///ifndef SUBTRACK_CFG_VIS_SEEN
-        #define SUBTRACK_CFG_STARRED
+        //#define SUBTRACK_CFG_STARRED
         #ifdef SUBTRACK_CFG_STARRED
             //lmCleanup(&lm);
             //struct lm *lm = lmInit(0); // FIXME: If used, move lmInit to outside of subtrack loop.
             //struct slPair *changeViewSettings = cartVarsWithPrefixLm(cart, subtrack->track, lm);
             struct slPair *subSpecificSettings = cartVarsWithPrefix(cart, subtrack->track);
-            htmlIdentifier[0] = '\0';
+            buffer[0] = '\0';
             if (subSpecificSettings)
                 {
                 // Not interested in some:
@@ -4087,10 +4103,10 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     }
                 subSpecificSettings = subSpecificFiltered;
                 if (subSpecificSettings)
-                    safef(htmlIdentifier, sizeof(htmlIdentifier), " (has differences)");
+                    safef(buffer, sizeof(buffer), " (has differences)");
                     // DEBUGGING are there other differences to be filtered
-                    //safef(htmlIdentifier, sizeof(htmlIdentifier), " (has %d differences", slCount(subSpecificSettings));
-                    //safef(htmlIdentifier, sizeof(htmlIdentifier), "<span class='diff' title='Subtrack specific differences %d'>&#42;</span>", slCount(subSpecificSettings));
+                    //safef(buffer, sizeof(buffer), " (has %d differences", slCount(subSpecificSettings));
+                    //safef(buffer, sizeof(buffer), "<span class='diff' title='Subtrack specific differences %d'>&#42;</span>", slCount(subSpecificSettings));
                     //printf("<span id-'%s_differs'>&#42;<sup>%d</sup></span>\n",subtrack->track,slCount(subSpecificSettings));
                     //{
                     //printf("<span id-'%s_differs'>&#42;<sup>%d",subtrack->track,slCount(subSpecificSettings));
@@ -4101,22 +4117,22 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     //}
                 }
             #define SUBTRACK_CFG_WRENCH "<span class='clickable' onclick='return scm.cfgToggle(\"%s\");' title='Configure this subtrack%s'><img src='../images/wrench.png'>%s</span>\n"
-            printf(SUBTRACK_CFG_WRENCH,subtrack->track,htmlIdentifier,(subSpecificSettings?"<span class='diff'>&#42;</span>":""));
+            printf(SUBTRACK_CFG_WRENCH,subtrack->track,buffer,(subSpecificSettings?"<span class='diff'>&#42;</span>":""));
             // TODO: js support for adding/removing star.  Problem: how many differences will there be?
         #else///ifndef SUBTRACK_CFG_STARRED
-            #define SUBTRACK_CFG_WRENCH "<a href='#a_cfg' onclick='return scm.cfgToggle(\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></a>\n"
-            printf(SUBTRACK_CFG_WRENCH,subtrack->track);
+            //#define SUBTRACK_CFG_WRENCH "<a href='#a_cfg' onclick='return scm.cfgToggle(\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></a>\n"
+            #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return scm.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
+            printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" halfVis"),subtrack->track);
         #endif///ndef SUBTRACK_CFG_STARRED
-    #endif///ndef SUBTRACK_CFG_VIS_SEEN
         }
 #endif///def SUBTRACK_CFG
 
     // A hidden field to keep track of subtrack order if it could change
     if (sortOrder != NULL || useDragAndDrop)
         {
-        safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", subtrack->track);
-        float priority = (float)cartUsualDouble(cart, htmlIdentifier, subtrack->priority);
-        printf("<INPUT TYPE=HIDDEN NAME='%s' class='trPos' VALUE=\"%.0f\">", htmlIdentifier, priority); // keeing track of priority
+        safef(buffer, sizeof(buffer), "%s.priority", subtrack->track);
+        float priority = (float)cartUsualDouble(cart, buffer, subtrack->priority);
+        printf("<INPUT TYPE=HIDDEN NAME='%s' class='trPos' VALUE=\"%.0f\">", buffer, priority); // keeing track of priority
         }
 
     // A color patch which helps distinguish subtracks in some types of composites
@@ -4191,11 +4207,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         dependentCfgsNeedBinding = TRUE; // configurable subtrack needs to be bound to composite settings
         #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
         #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
-        safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->track);
-        boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
-        MAKE_CFG_SUBTRACK_DIV(subtrack->track,htmlIdentifier,open);
-        safef(htmlIdentifier,sizeof(htmlIdentifier),"%s",subtrack->track);
-        cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
+        safef(buffer,sizeof(buffer),"%s.childShowCfg",subtrack->track);
+        boolean open = cartUsualBoolean(cart, buffer,FALSE);
+        MAKE_CFG_SUBTRACK_DIV(subtrack->track,buffer,open);
+        safef(buffer,sizeof(buffer),"%s",subtrack->track);
+        cfgByCfgType(cType,db,cart,subtrack,buffer,"Subtrack",TRUE);
         printf("</DIV>");
     #endif///ndef SUBTRACK_CFG
         }

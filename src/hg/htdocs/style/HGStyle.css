@@ -204,9 +204,8 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
 
 .hintCol { font-size: 70%; line-height: 80%; border-style: hidden; background-color: #FFF9D2; }
 .hintRow { font-size: 70%; line-height: 80%; border-style: hidden; background-color: #FFF9D2; }
-/*  not ready for prime time because ff and ie can't agree
-.halfVis { opacity: 0.5; filters.alpha.opacity=50; }
-*/
+/* halfVis may need to be removed again, but I am hoping it works in DTD 4.01 transitional */
+.halfVis { opacity: 0.5; filters.alpha.opacity:50; }
 
 /* waitMask allows waiting on long running javascript using utils.js::waitOnFunction */
 .waitMask { display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #fff; opacity: 0; }

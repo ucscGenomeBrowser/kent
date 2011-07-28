@@ -1152,6 +1152,9 @@ var scm = { // subtrack config module.
     // 6) SOLVED: subCfg not matching parent: solved.
     // 7) SOLVED: OpenChromSynth: subtrack filterby needs to be updated by composite filterBy.
     // 8) Remove debug code when ready
+    // - check subtrack to enable/disable fauxVis and wrench
+    // - matCB should effect subCb including enable/disable fauxVis and wrench
+    // - composite/view vis should effect subVis and enable/disable fauxVis and wrench
     // NOTE:
     // Current implementation relies upon '.' delimiter in name and no '_-' in name.  Nothing breaks rule yet...
 
@@ -1636,6 +1639,7 @@ var scm = { // subtrack config module.
     },
 
     currentCfg: null, // keep track of cfg while ajaxing, man
+    currentSub: null, // keep track of subtrack while ajaxing, dude
 
     cfgFill: function (content, status)
     { // Finishes the population of a subtrack cfg.  Called by ajax return.
@@ -1734,8 +1738,14 @@ var scm = { // subtrack config module.
         $(cfg).css({ position: 'absolute'});
         var myWidth = $(cfg).width();
         var shiftLeft = -1;
-        if (scm.visIndependent)
+        if (scm.visIndependent) {
             shiftLeft *= ($(cfg).position().left - 125);
+            var subVis = $('div#' + scm.currentSub+'_faux');
+            if (subVis != undefined && subVis.length == 1) {
+                // SHOULD NOT NEED $(subVis[0]).removeClass('disabled');
+                scm.replaceWithVis(subVis[0],scm.currentSub,false);
+            }
+        }
         else
             shiftLeft *= ($(cfg).position().left - 40);
         $(cfg).css({ width: myWidth+'px',position: 'relative', left: shiftLeft + 'px' });
@@ -1754,6 +1764,7 @@ var scm = { // subtrack config module.
     cfgPopulate: function (cfg,subtrack)
     { // Populates a subtrack cfg dialog via ajax and update from composite/view parents
         scm.currentCfg = cfg;
+        scm.currentSub = subtrack;
 
         $.ajax({
             type: "GET",
@@ -1770,6 +1781,8 @@ var scm = { // subtrack config module.
     replaceWithVis: function (obj,subtrack,open)
     { // Replaces the current fauxVis object with a true visibility selector
 
+        if ($(obj).hasClass('disabled'))
+            return;
         var selectHtml = "<SELECT id='"+subtrack+"' class='normalText subVisDD' style='width: 70px'>";
         var selected = $(obj).text();
         if (selected == 'hide')
@@ -1794,11 +1807,56 @@ var scm = { // subtrack config module.
             $(newObj).one('change',function (e) {
                 $(this).attr('size',1);
             });
+            // Doesn't work!
+            //$(newObj).parents('td').first().attr('valign','top');
             $(newObj).focus();
         }
     },
 
-    cfgToggle: function (subtrack)
+    enableCfg: function (cb,subtrack,setTo)
+    { // Enables or disables subVis and wrench
+        if (cb == null || cb == undefined) {
+            if (subtrack == null || subtrack.length == 0) {
+                warn("scm.enableCfg() called without CB or subtrack.");
+                return false;
+            }
+            cb = $("input[name='"++"'_sel]");
+            if (cb == undefined || cb.length == 0) {
+                warn("scm.enableCfg() could not find CB for subtrack: "+subtrack);
+                return false;
+            }
+        }
+        if (cb.length == 1)
+            cb = cb[0];
+
+        var td = $(cb).parent('td');
+        if (td == undefined || td.length == 0) {
+            warn("scm.enableCfg() could not TD for CB: "+cb.name);
+            return false;
+        }
+        if (td.length == 1)
+            td = td[0];
+        var subFaux = $(td).find('div.subVisDD');
+        if (subFaux != undefined && subFaux.length > 0) {
+            if (setTo == true)
+                $(subFaux).removeClass('disabled');
+            else
+                $(subFaux).addClass('disabled');
+        } else {
+            var subVis = $(td).find('select.subVisDD');
+            if (subVis != undefined && subVis.length > 0) {
+                $(subVis).attr('disable',!setTo);
+            }
+        }
+        var wrench = $(td).find('span.clickable'); // TODO tighten this
+        if (wrench != undefined && wrench.length > 0) {
+            if (setTo == true)
+                $(wrench).removeClass('halfVis');
+            else
+                $(wrench).addClass('halfVis');
+        }
+    },
+    cfgToggle: function (wrench,subtrack)
     { // Opens/closes subtrack cfg dialog, populating if empty
         var cfg = $("div#div_cfg_"+subtrack);
         if (cfg == undefined || cfg.length == 0) {
@@ -1809,6 +1867,8 @@ var scm = { // subtrack config module.
             cfg = cfg[0];
 
         if ($(cfg).css('display') == 'none') {
+            if ($(wrench).hasClass('halfVis'))
+                return;
             // Don't allow if this composite is not enabled!
             // find the cb
             var tr = $(cfg).parents('tr').first();
