@@ -8374,7 +8374,7 @@ term Contigs
 tag CONTIGS
 type view
 label Contigs
-description Contigs
+description PROVISIONAL Contigs represent continuous regions of the genome that are covered by several overlapping RNA-seq reads. The score represents the logarithm of the expression level (read coverage depth).
 
 term Excludable
 tag EXCLU
@@ -8446,8 +8446,8 @@ description Filtered transcript fragments
 term GeneDeNovo
 tag GENEDENO
 type view
-label Genes DeNovo
-description Expression estimates for genes defined by Cufflinks in de novo mode in gtf format
+label Genes De Novo
+description 'De novo' genes defined by Cufflinks with FPKM. PROVISIONAL 
 
 term GeneGencV7 
 tag GENEGENCV7 
@@ -8483,7 +8483,7 @@ term Junctions
 tag JUNCTIONS
 type view
 label Junctions
-description TopHat-defined splice junctions
+description TopHat-defined (Caltech) or STAR-defined (CSHL) splice junctions PROVISIONAL
 
 # Interactions may be a better view for this
 term Matrix
@@ -8647,7 +8647,7 @@ term TranscriptDeNovo
 tag TRANSDENOVO
 type view
 label TranscriptDeNovo
-description Transcript models and expression estimates in FPKM produced by Cufflinks in de novo mode
+description 'De novo' transcripts with FPKM produced by Cufflinks 
 
 term TranscriptGencV7 
 tag TRANSGENCV7 
