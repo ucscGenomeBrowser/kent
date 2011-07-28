@@ -2096,6 +2096,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-27
 dateUnrestricted 2012-04-27
+dccAccession wgEncodeEH000771
+expId 771
 fileName wgEncodeSydhTfbsGm12878InputIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
@@ -2117,6 +2119,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-27
 dateUnrestricted 2012-04-27
+dccAccession wgEncodeEH000771
+expId 771
 fileName wgEncodeSydhTfbsGm12878InputIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -2138,6 +2142,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-27
 dateUnrestricted 2012-04-27
+dccAccession wgEncodeEH000771
+expId 771
 fileName wgEncodeSydhTfbsGm12878InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -2234,7 +2240,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
+dccAccession wgEncodeEH002034
+expId 2034
 fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
@@ -2259,7 +2266,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
+dccAccession wgEncodeEH002034
+expId 2034
 fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
@@ -2283,7 +2291,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
+dccAccession wgEncodeEH002034
+expId 2034
 fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
@@ -2306,7 +2315,8 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
 dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
+dccAccession wgEncodeEH002034
+expId 2034
 fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
@@ -2329,7 +2339,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000771
+dccAccession wgEncodeEH002034
+expId 2034
 fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -44718,4 +44729,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 585025438
+# MAGIC: 24202563
