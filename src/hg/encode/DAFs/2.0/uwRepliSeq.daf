@@ -37,18 +37,25 @@ validationSettings validateFiles.bam:mismatches=2
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  UW DNaseI HS Peaks
+longLabelPrefix  UW Replication Timing Peaks
 type             bed9
 required         yes
 hasReplicates    yes
 
 view             Valley
-longLabelPrefix  UW DNaseI HS Peaks
+longLabelPrefix  UW Replication Timing Valleys
 type             bed9
 required         yes
 hasReplicates    yes
 
-view             
+view             WaveSignal
+longLabelPrefix  UW Replication Timing Wavelet Smoothed Signal
+type             bigWig
+required         yes
+hasReplicates    yes
+
+
+view             SumSignal
 longLabelPrefix  UW Replication Timing Summed Densities
 type             bigWig
 required         yes
