@@ -97,7 +97,7 @@ the ENCODE native data tracks are displayed in the browser.
 The track hub utility allows efficient access to data sets
 from around the world through the familiar Genome Browser interface. 
 Browser users can display tracks from any public track hub that has been
-registered with UCSC. Additionally, users can import data from private hubs
+registered with UCSC. Additionally, users can import data from unlisted hubs
 or can set up, display, and share their own track hubs.
 <P>
 The data underlying the tracks in a hub reside on the remote 
@@ -174,12 +174,12 @@ the Genome Browser, exercise caution when viewing a broad genomic region
 that requires the Genome Browser to display a large number of track
 features: the browser display may time out.
 <P>
-<B><I>Private hubs</I></B><BR>
+<B><I>Unlisted hubs (located in MyHubs tab)</I></B><BR>
 In addition to the publicly available hubs listed on the Public Hubs
-tab, it is possible to load your own private track hub or one created by a 
+tab, it is possible to load your own unlisted track hub or one created by a 
 colleague as long as you know its URL. To
-add a private hub, open the Track Hubs page and click the My Hubs
-tab. This tab lists the private track hubs that you have loaded into your
+add an unlisted hub, open the Track Hubs page and click the My Hubs
+tab. This tab lists the unlisted track hubs that you have loaded into your
 browser. To import a new hub, type its URL into the text box, then click
 the Add Hub button. If the track hub is imported successfully, it will
 be added to the list. If the browser is unable to load the track hub, it will
@@ -187,12 +187,14 @@ display an error message. Some common causes for an import to
 fail include typos in the URL, attempting to add a track hub from a different
 assembly, a hub server that is offline, or errors in the track hub files. 
 Once you have successfully loaded a hub, you can view it in the browser
-by clicking the &quot;Display Selected Hubs&quot; button.
+by clicking the &quot;Display Selected Hubs&quot; button. Please note that
+unlisted hubs are in no way secure. The URL helps to obfuscate the
+location of the data; it is a simple barrier to casual users.
 <P>
 To remove a track hub from your Genome Browser display, uncheck its 
 Display checkbox on the Track Hubs page. The hub will
 no longer be visible on the browser tracks page, but will still be available 
-from the Track Hubs page. To completely remove a private hub from your My 
+from the Track Hubs page. To completely remove an unlisted hub from your My 
 Hubs list, click the &quot;Disconnect&quot; button next to the track hub you wish to
 discard.
 <P>
@@ -381,13 +383,14 @@ with five fields that define properties of the track hub:
 files. Not displayed to hub users. This must be the first line in the hub.txt 
 file. 
 <P>
-<em>shortLabel</em> - the short name for the track hub. 
-<!--Question -- what is the char limit?-->
+<em>shortLabel</em> - the short name for the track hub.
+Suggested maximum length is 17 characters.
 Displayed as the hub name on the Track Hubs page and the track group
 name on the browser tracks page.
 <P>
 <em>longLabel</em> - a longer descriptive label for the track hub. 
-<!--Question -- char limit?--> Displayed in the description field on the Track
+Suggested maximum length is 80 characters.
+Displayed in the description field on the Track
 Hubs page.
 <P>
 <em>genomesFile</em> - the relative path of the genomes.txt file, which
