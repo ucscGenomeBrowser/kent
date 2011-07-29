@@ -578,7 +578,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
@@ -603,7 +603,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
@@ -628,7 +628,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
@@ -2494,7 +2494,7 @@ control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
@@ -2517,7 +2517,7 @@ control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
@@ -2540,7 +2540,7 @@ control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
@@ -2557,4 +2557,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 1443455504
+# MAGIC: 1456038608

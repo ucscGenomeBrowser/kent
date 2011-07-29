@@ -40,7 +40,7 @@ int i = 0;
 struct vcfRecord *rec = vcff->records;
 while (rec != NULL && i < 100)
     {
-    printf("%s\t%d\t%d\t%s:%s/%s\t%f\n",
+    printf("%s\t%d\t%d\t%s:%s/%s\t%s\n",
 	   rec->chrom, rec->chromStart, rec->chromEnd,
 	   rec->name, rec->ref, rec->alt, rec->qual);
     rec = rec->next;

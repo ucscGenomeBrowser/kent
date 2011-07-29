@@ -31582,6 +31582,72 @@ hgsql hg18 -e "delete from omimLocation where name='${1}'"
 
 ./doall
 
-##############################################################
+#############################################################################
+# adding new decode data (WORKING - 2011-07-26 - Hiram)
+    mkdir /hive/data/outside/decode
+    cd /hive/data/outside/decode
+    wget --timestamping "http://www.decode.com/addendum/Maps.zip
+    unzip Maps.zip
+    # produces a Maps directory
+    mkdir /hive/data/outside/decode/hg18
+    cd /hive/data/outside/decode/hg18
+    # extract the data from the 10Kb bin recombination maps,
+    #	constructing bedGraph files
+for F in female female_carrier female_noncarrier \
+        male male_carrier male_noncarrier \
+        sex-averaged sex-averaged_carrier sex-averaged_noncarrier
+do
+    ls -og ../Maps/${F}.rmap
+    grep -v stdrate ../Maps/${F}.rmap | awk '
+        { printf "%s\t%d\t%d\t%s\n", $1, $2-5000, $2+5000, $4 }' > ${F}.bedGraph
+    bedGraphToBigWig ${F}.bedGraph /hive/data/genomes/hg18/chrom.sizes \
+        ${F}.bw
+done
 
+    # load the bigWig files into SQL table name friendly tables:
+for C in female female_carrier female_noncarrier male male_carrier \
+        male_noncarrier sex-averaged sex-averaged_carrier sex-averaged_noncarrier
+do
+    N=${C}
+    case ${C} in
+        female) N="Female" ;;
+        female_carrier) N="FemaleCarrier" ;;
+        female_noncarrier) N="FemaleNonCarrier" ;;
+        male) N="Male" ;;
+        male_carrier) N="MaleCarrier" ;;
+        male_noncarrier) N="MaleNonCarrier" ;;
+        sex-averaged) N="SexAveraged" ;;
+        sex-averaged_carrier) N="SexAveragedCarrier" ;;
+        sex-averaged_noncarrier) N="SexAveragedNonCarrier" ;;
+    esac
+    echo $C $N
+    rm -f /gbdb/hg18/decode/${C}.bw /gbdb/hg18/decode/${N}.bw
+    ln -s `pwd`/${C}.bw /gbdb/hg18/decode/${N}.bw
+    hgsql -e "drop table decode${N};" hg18
+    hgBbiDbLink hg18 decode${N} /gbdb/hg18/decode/${N}.bw
+done
 
+    # compute male - female difference
+    awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' male.bedGraph \
+	| sort > ordered.male.txt
+    awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' female.bedGraph \
+	| sort > ordered.female.txt
+    join ordered.male.txt ordered.female.txt > maleFemale.txt
+
+    awk '{printf "%s\t%.6f\n", $1, $2-$3}' maleFemale.txt \
+	| sed -e "s/_/\t/g" | sort -k1,1 -k2,2n > maleFemale.bedGraph
+
+    # and hot spots
+    awk '$4 > 9.99' female.bedGraph > hotSpotFemale.bed
+    awk '$4 > 9.99' male.bedGraph > hotSpotMale.bed
+
+    hgLoadBed hg18 decodeHotSpotFemale hotSpotFemale.bed
+    hgLoadBed hg18 decodeHotSpotMale hotSpotMale.bed
+
+    bedGraphToBigWig maleFemale.bedGraph /hive/data/genomes/hg18/chrom.sizes \
+        MaleFemaleDifference.bw
+    ln -s `pwd`/MaleFemaleDifference.bw /gbdb/hg18/decode/
+    hgsql -e "drop table decodeMaleFemaleDifference;" hg18
+    hgBbiDbLink hg18 decodeMaleFemaleDifference /gbdb/hg18/decode/MaleFemaleDifference.bw
+
+#############################################################################

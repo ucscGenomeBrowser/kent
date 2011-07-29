@@ -17,7 +17,7 @@ include wgEncodeReg.ra
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
-include wgEncodeSydhNsome.ra alpha
+include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
 include wgEncodeGisRnaPet.ra alpha

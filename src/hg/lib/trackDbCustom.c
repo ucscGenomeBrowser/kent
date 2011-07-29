@@ -853,37 +853,6 @@ return tdb;
 }
 #endif///def OMIT
 
-void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value)
-/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
-{
-if(tdb->extras == NULL)
-    {
-    tdb->extras = hashNew(7);
-    hashAdd(tdb->extras, name, value);
-    }
-else
-    {
-    hashReplace(tdb->extras, name, value);
-    }
-}
-
-void tdbExtrasRemove(struct trackDb *tdb,char *name)
-/* Removes a value from the extras hash. */
-{
-if(tdb->extras != NULL)
-    hashMayRemove(tdb->extras, name);
-}
-
-void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal)
-/* Returns a value if it is found in the extras hash. */
-{
-if(tdb->extras == NULL)
-    return defaultVal;
-
-return hashOptionalVal(tdb->extras, name, defaultVal);
-
-}
-
 boolean tdbIsView(struct trackDb *tdb,char **viewName)
 // Is this tdb a view?  Will fill viewName if provided
 {
@@ -1195,5 +1164,24 @@ if (updated)
     *pVal = cloneString(val);
     }
 return updated;
+}
+
+struct tdbExtras *tdbExtrasNew()
+// Return a new empty tdbExtras
+{
+struct tdbExtras *extras;
+AllocVar(extras); // Note no need for extras = AllocVar(extras)
+// Initialize any values that need an "empty" state
+extras->fourState = TDB_EXTRAS_EMPTY_STATE; // I guess it is 5 state!
+// pointers are NULL and booleans are FALSE by default
+return extras;
+}
+
+void tdbExtrasFree(struct tdbExtras **pTdbExtras)
+// Frees the tdbExtras structure
+{
+// Developer, add intelligent routines to free structures
+// NOTE: For now just leak contents, because complex structs would also leak
+freez(pTdbExtras);
 }
 

@@ -52,7 +52,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-
+html wgEncodeUwTfbs.new
 	
     track wgEncodeUwTfbsViewHot
     shortLabel Hotspots
@@ -2589,5 +2589,14 @@ noInherit on
         type bigWig 1.000000 12152.000000
         origAssembly hg19
         # subId=4350 dateSubmitted=2011-06-29
+
+        track wgEncodeUwTfbsHacInputStdRawRep1
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel HAc Input Raw 1
+        longLabel HAc Input std ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        subGroups view=zRSig factor=zInput cellType=HAC rep=1
+        type bigWig 1.000000 18298.000000
+        origAssembly hg19
+        # subId=4635 dateSubmitted=2011-07-28
 
 

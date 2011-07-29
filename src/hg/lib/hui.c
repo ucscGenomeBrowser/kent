@@ -28,6 +28,7 @@
 #include "fileUi.h"
 #include "bigBed.h"
 #include "bigWig.h"
+#include "vcfUi.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -2165,8 +2166,7 @@ if(hierarchy && *hierarchy)
 
 // Four State checkboxes can be checked/unchecked by enable/disabled
 // NOTE: fourState is not a bitmap because it is manipulated in javascript and int seemed easier at the time
-#define FOUR_STATE_KEY               "fourState"
-#define FOUR_STATE_EMPTY             666
+#define FOUR_STATE_EMPTY             TDB_EXTRAS_EMPTY_STATE
 //#define FOUR_STATE_UNCHECKED         0
 //#define FOUR_STATE_CHECKED           1
 //#define FOUR_STATE_CHECKED_DISABLED  -1
@@ -2178,7 +2178,7 @@ int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart)
 {
 char * setting = NULL;
 char objName[SMALLBUF];
-int fourState = (int)(long)tdbExtrasGetOrDefault(subtrack,FOUR_STATE_KEY,(void *)FOUR_STATE_EMPTY);
+int fourState = (int)tdbExtrasFourState(subtrack);
 if(fourState != FOUR_STATE_EMPTY)
     return fourState;
 
@@ -2202,7 +2202,7 @@ if (vis == tvHide)
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 fourState = cartUsualInt(cart, objName, fourState);
-tdbExtrasAddOrUpdate(subtrack,FOUR_STATE_KEY,(void *)(long)fourState);
+tdbExtrasFourStateSet(subtrack,fourState);
 return fourState;
 }
 
@@ -2218,7 +2218,7 @@ char objVal[5];
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 safef(objVal, sizeof(objVal), "%d", fourState);
 cartSetString(cart, objName, objVal);
-tdbExtrasAddOrUpdate(subtrack,FOUR_STATE_KEY,(void *)(long)fourState);
+tdbExtrasFourStateSet(subtrack,fourState);
 }
 
 
@@ -2633,11 +2633,10 @@ membersForAll->abcCount = membersForAll->dimMax - dimA;
 return membersForAll;
 }
 
-#define MEMBERS_FOR_ALL_KEY "membersForAll"
 static membersForAll_t* membersForAllSubGroupsGet(struct trackDb *parentTdb, struct cart *cart)
 /* Returns all the parents subGroups and members */
 {
-membersForAll_t *membersForAll =tdbExtrasGetOrDefault(parentTdb,MEMBERS_FOR_ALL_KEY,NULL);
+membersForAll_t *membersForAll = tdbExtrasMembersForAll(parentTdb);
 if(membersForAll != NULL)
     return membersForAll;  // Already retrieved, so don't do it again
 
@@ -2715,7 +2714,7 @@ if(filtering && !sameWord(filtering,"off"))
     }
 
 if(cart != NULL) // Only save this if it is fully populated!
-    tdbExtrasAddOrUpdate(parentTdb,MEMBERS_FOR_ALL_KEY,membersForAll);
+    tdbExtrasMembersForAllSet(parentTdb,membersForAll);
 
 return membersForAll;
 }
@@ -2750,7 +2749,7 @@ if(membersForAllPtr && *membersForAllPtr)
     {
     if(parentTdb != NULL)
         {
-        if(*membersForAllPtr == tdbExtrasGetOrDefault(parentTdb,MEMBERS_FOR_ALL_KEY,NULL))
+        if(*membersForAllPtr == tdbExtrasMembersForAll(parentTdb))
             return;  // Don't free something saved to the tdbExtras!
         }
     membersForAll_t* membersForAll = *membersForAllPtr;
@@ -2793,11 +2792,10 @@ typedef struct _membership {
     char * setting;
 } membership_t;
 
-#define SUBTRACK_MEMBERSHIP_KEY "subgroupMembership"
 static membership_t *subgroupMembershipGet(struct trackDb *childTdb)
 /* gets all the subgroup membership for a child track */
 {
-membership_t *membership = tdbExtrasGetOrDefault(childTdb,SUBTRACK_MEMBERSHIP_KEY,NULL);
+membership_t *membership = tdbExtrasMembership(childTdb);
 if(membership != NULL)
     return membership;  // Already retrieved, so don't do it again
 
@@ -2841,7 +2839,7 @@ for (ix = 0,membership->count=0; ix < cnt; ix++)
         membership->count++;
         }
     }
-tdbExtrasAddOrUpdate(childTdb,SUBTRACK_MEMBERSHIP_KEY,membership);
+tdbExtrasMembershipSet(childTdb,membership);
 return membership;
 }
 
@@ -2876,23 +2874,6 @@ for (aIx = dimA; aIx < membersForAll->dimMax; aIx++)  // for each ABC subGroup
     }
 return TRUE; // passed all tests so must be on all
 }
-
-// No longer free this because it is saved in subtrack tdbExtras
-#define subgroupMembershipFree(membership)
-//static void subgroupMembershipFree(membership_t **membership)
-//// frees subgroupMembership memory
-//{
-//if(membership && *membership)
-//    {
-//    int ix;
-//    for(ix=0;ix<(*membership)->count;ix++) { freeMem((*membership)->titles[ix]); }
-//    freeMem((*membership)->titles);
-//    freeMem((*membership)->setting);
-//    freeMem((*membership)->subgroups);
-//    freeMem((*membership)->membership);
-//    freez(membership);
-//    }
-//}
 
 char *compositeGroupLabel(struct trackDb *tdb, char *group, char *id)
 /* Given ID from group, return corresponding label,  looking through parent's subGroupN's */
@@ -2933,7 +2914,6 @@ membership_t *membership = subgroupMembershipGet(childTdb);
 if(membership == NULL)
     return FALSE;
 boolean found = membershipInAllCurrentABCs(membership,membersForAll);
-subgroupMembershipFree(&membership);
 return found;
 }
 
@@ -3751,6 +3731,8 @@ switch(cType)
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
 			break;
 #endif
+    case cfgVcf:	vcfCfgUi(cart, tdb, prefix, title, boxed);
+			break;
     case cfgPsl:	pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
@@ -4177,7 +4159,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
     checkBoxIdFree(&id);
-    subgroupMembershipFree(&membership);
     }
 
 // End of the table
@@ -4282,7 +4263,7 @@ safef(javascript, JBUFSIZE*sizeof(char),
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title)
+boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title)
 /* Handle start of box and title for individual track type settings */
 {
 if(!boxed)
@@ -4308,7 +4289,7 @@ else
 return boxed;
 }
 
-static void cfgEndBox(boolean boxed)
+void cfgEndBox(boolean boxed)
 /* Handle end of box and title for individual track type settings */
 {
 if (boxed)
@@ -5254,9 +5235,9 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 boolean opened = FALSE;
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
 showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
 
 char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
 if(setting)

@@ -171,7 +171,7 @@ freeMem(el->grp);
 freeMem(el->settings);
 hashFree(&el->settingsHash);
 hashFree(&el->overrides);
-hashFree(&el->extras);
+tdbExtrasFree(&el->tdbExtras);
 freez(pEl);
 // #endif /* NOT */
 }

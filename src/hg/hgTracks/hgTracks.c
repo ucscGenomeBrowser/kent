@@ -4414,9 +4414,9 @@ for (track = trackList; track != NULL; track = track->next)
 	struct track *subtrack;
         for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
 	    {
-	    if (isSubtrackVisible(subtrack))
+	    if (isTrackForParallelLoad(subtrack))
 		{
-		if (isTrackForParallelLoad(subtrack))
+		if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
 		    {
 		    struct paraFetchData *pfd;
 		    AllocVar(pfd);
@@ -5023,7 +5023,7 @@ if (!hideControls)
         hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
 
     hPrintf(" ");
-    hPrintf("<INPUT TYPE='button' VALUE='import tracks' onClick='document.trackHubForm.submit();return false;' title='Import tracks from hubs'>");
+    hPrintf("<INPUT TYPE='button' VALUE='track hubs' onClick='document.trackHubForm.submit();return false;' title='Import tracks from hubs'>");
 
     hPrintf(" ");
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
