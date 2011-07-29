@@ -27,22 +27,33 @@ bits32 internetHostIp(char *hostName)
 /* Get IP v4 address (in host byte order) for hostName.
  * Warn and return 0 if there's a problem. */
 {
-struct hostent *hostent;
 bits32 ret;
 if (internetIsDottedQuad(hostName))
-   {
-   internetDottedQuadToIp(hostName, &ret);
-   }
+    {
+    internetDottedQuadToIp(hostName, &ret);
+    }
 else
     {
-    hostent = gethostbyname(hostName);
-    if (hostent == NULL)
+    /* getaddrinfo is thread-safe and widely supported */
+    struct addrinfo hints, *res;
+    struct in_addr addr;
+    int err;
+
+    zeroBytes(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+
+    if ((err = getaddrinfo(hostName, NULL, &hints, &res)) != 0) 
 	{
-	warn("Couldn't find host %s.", hostName);
+	warn("getaddrinfo() error on hostName=%s: %s\n", hostName, gai_strerror(err));
 	return 0;
 	}
-    memcpy(&ret, hostent->h_addr_list[0], sizeof(ret));
-    ret = ntohl(ret);
+
+    addr = ((struct sockaddr_in *)(res->ai_addr))->sin_addr;
+
+    ret = ntohl((uint32_t)addr.s_addr);
+
+    freeaddrinfo(res);
+
     }
 return ret;
 }
