@@ -124,6 +124,14 @@ function matSubCbClick(subCB)
     if(subCB.checked)
         exposeAll();  // Unhide composite vis?
 
+    var subtrackName = subCB.name;
+    if (subtrackName == undefined || subtrackName.length == 0)
+        subtrackName = subCB.id;
+    if (subtrackName != undefined && subtrackName.length > 0) {
+        subtrackName = subtrackName.substring(0,subtrackName.length - 4); // '_sel'.length
+        scm.enableCfg(subCB,subtrackName,subCB.checked);
+    }
+
     matSubCBsSelected();
 }
 
@@ -360,7 +368,7 @@ function matCbComplete(matCB,complete)
         $(matCB).css('opacity', '0.5');
         $(matCB).addClass('halfVis');
         $(matCB).attr("title","Not all associated subtracks have been selected");
-        $('.halfVis').css('opacity', '0.5');
+        //$('.halfVis').css('opacity', '0.5');
     }
 }
 
@@ -1820,7 +1828,7 @@ var scm = { // subtrack config module.
                 warn("scm.enableCfg() called without CB or subtrack.");
                 return false;
             }
-            cb = $("input[name='"++"'_sel]");
+            cb = $("input[name='"+subtrack+"'_sel]");
             if (cb == undefined || cb.length == 0) {
                 warn("scm.enableCfg() could not find CB for subtrack: "+subtrack);
                 return false;
@@ -2025,7 +2033,7 @@ $(document).ready(function()
         tableDragAndDropRegister(this);
     });
 
-    $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
+    //$('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
 
     $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
         if (newJQuery == false)
