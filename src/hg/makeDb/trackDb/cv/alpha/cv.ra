@@ -655,6 +655,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Lung_01-11002
+#same tag as BC_Lung_H12817N
 tag BCLUNG
 type Cell Line
 tier 3
@@ -2330,7 +2331,7 @@ term HMVEC-dNeo
 tag HMVECg
 type Cell Line
 organism human
-description Normal Neonatal Human Microvascular Endothelial Cells (single Donnor), Dermal-Derived
+description Normal Neonatal Human Microvascular Endothelial Cells (single Donor), Dermal-Derived
 tissue Blood
 lineage mesoderm
 vendorName Lonza
@@ -3424,7 +3425,7 @@ tag THEK293
 type Cell Line
 tier 3
 organism human
-description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, ATCC number CRL-1573
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line (PROVISIONAL)
 lineage mesoderm
 karyotype cancer, hypotriploid, XXX
 sex F
@@ -3771,6 +3772,7 @@ strain C3H
 description Myoblast cell line derived from thigh muscle of C3H mice after crush injury 
 vendorName Barbara Wold lab
 vendorId C2C12
+orderUrl http://woldlab.caltech.edu/
 termId 7125
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
 color 139,69,19
@@ -8416,11 +8418,12 @@ type view
 label FastaRd2
 description FASTA Read 2
 
-term Fastq
-tag FASTQ
-type view
-label Fastq
-description Raw sequence with Phred33 quality scores
+#FastQ is now deprecated
+#term Fastq
+#tag FASTQ
+#type view
+#label Fastq
+#description Raw sequence with Phred33 quality scores
 
 term FastqRd1
 tag FASTQRD1
@@ -8524,6 +8527,13 @@ tag PLUSRAWSIG
 type view
 label Plus Raw Signal
 description Graphs the base-by-base density of tags on the plus strand
+
+#snippet for UW5c's primer view
+term Primer
+tag Primer
+type view
+label Primer
+description placeholder for Uw5c's primer file, so it can be in metaDb properly
 
 term Protocol
 tag PRTCL
@@ -9417,6 +9427,7 @@ type lab
 label Wold - California Institute of Technology
 description Wold - California Institute of Technology
 #grantInst California Institute of Technology (Wold Lab)
+labInst California Institute of Technology
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
@@ -9510,6 +9521,7 @@ organism human
 term RIKEN
 tag  RIKEN
 type lab
+label Carninci - RIKEN Omics Science Center
 labInst Riken Omics Science Center
 description Carninci - RIKEN Omics Science Center
 #labName Riken

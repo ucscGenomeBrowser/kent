@@ -1168,3 +1168,22 @@ if (updated)
 return updated;
 }
 
+struct tdbExtras *tdbExtrasNew()
+// Return a new empty tdbExtras
+{
+struct tdbExtras *extras;
+AllocVar(extras); // Note no need for extras = AllocVar(extras)
+// Initialize any values that need an "empty" state
+extras->fourState = TDB_EXTRAS_EMPTY_STATE; // I guess it is 5 state!
+// pointers are NULL and booleans are FALSE by default
+return extras;
+}
+
+void tdbExtrasFree(struct tdbExtras **pTdbExtras)
+// Frees the tdbExtras structure
+{
+// Developer, add intelligent routines to free structures
+// NOTE: For now just leak contents, because complex structs would also leak
+freez(pTdbExtras);
+}
+

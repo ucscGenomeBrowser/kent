@@ -204,7 +204,7 @@ if (hubConnectTableExists())
     {
     puts("<TD VALIGN=\"TOP\">");
     printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
-        "../cgi-bin/hgHubConnect", "import tracks", "Import tracks");
+        "../cgi-bin/hgHubConnect", "track hubs", "Import tracks");
     puts("</TD>");
     }
 

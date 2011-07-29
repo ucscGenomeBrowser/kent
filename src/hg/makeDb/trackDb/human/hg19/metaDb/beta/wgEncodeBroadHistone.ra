@@ -171,7 +171,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878CtcfStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -258,7 +258,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneGm12878H2azStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep1.bam
 grant Bernstein
@@ -280,7 +280,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneGm12878H2azStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep2.bam
 grant Bernstein
@@ -302,7 +302,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H2azStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -324,7 +324,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H2azStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -346,7 +346,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H2azStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -368,7 +368,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H2azStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -438,7 +438,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k27acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -575,7 +575,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -712,7 +712,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k36me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -849,7 +849,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -986,7 +986,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k4me2StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1123,7 +1123,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1390,7 +1390,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k9acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1478,7 +1478,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep1.bam
 grant Bernstein
@@ -1500,7 +1500,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep2.bam
 grant Bernstein
@@ -1522,7 +1522,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep3.bam.bai
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep3.bam
 grant Bernstein
@@ -1544,7 +1544,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1566,7 +1566,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -1588,7 +1588,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -1610,7 +1610,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
@@ -1632,7 +1632,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdSig.bigWig
 grant Bernstein
 lab Broad
@@ -1702,7 +1702,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneGm12878H4k20me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -2090,7 +2090,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneH1hescH3k27acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -4915,7 +4915,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHepg2H2azStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -5189,7 +5189,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -5234,7 +5234,7 @@ controlId HepG2/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-12
-dateUnrestricted 2011-08-12
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -7694,7 +7694,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneHsmmH2azStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep1.bam
 grant Bernstein
@@ -7716,7 +7716,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneHsmmH2azStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep2.bam
 grant Bernstein
@@ -7738,7 +7738,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHsmmH2azStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -7760,7 +7760,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHsmmH2azStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -7782,7 +7782,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHsmmH2azStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -7804,7 +7804,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHsmmH2azStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -8970,7 +8970,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHsmmH3k9me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -10912,7 +10912,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecCtcfStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11095,7 +11095,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecH3k27acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11254,7 +11254,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecH3k27me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11414,7 +11414,7 @@ controlId HUVEC/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-12
-dateUnrestricted 2011-08-12
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11597,7 +11597,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11756,7 +11756,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecH3k4me2StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11917,7 +11917,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -12100,7 +12100,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecH3k9acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -12466,7 +12466,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -12649,7 +12649,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneHuvecPol2bStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -12876,7 +12876,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562CtcfStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -12963,7 +12963,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneK562H2azStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneK562H2azStdAlnRep1.bam
 grant Bernstein
@@ -12985,7 +12985,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneK562H2azStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneK562H2azStdAlnRep2.bam
 grant Bernstein
@@ -13007,7 +13007,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H2azStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -13029,7 +13029,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H2azStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -13051,7 +13051,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H2azStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -13073,7 +13073,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H2azStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -13143,7 +13143,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k27acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -13279,7 +13279,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k27me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -13416,7 +13416,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k36me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -13552,7 +13552,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k4me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -13688,7 +13688,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k4me2StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -13824,7 +13824,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k4me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -14092,7 +14092,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k9acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -14271,7 +14271,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneK562H3k9me3StdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep1.bam
 grant Bernstein
@@ -14293,7 +14293,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileIndex wgEncodeBroadHistoneK562H3k9me3StdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep2.bam
 grant Bernstein
@@ -14315,7 +14315,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k9me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -14337,7 +14337,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k9me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -14359,7 +14359,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k9me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -14381,7 +14381,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H3k9me3StdSig.bigWig
 grant Bernstein
 lab Broad
@@ -14451,7 +14451,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562H4k20me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -14587,7 +14587,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneK562Pol2bStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -16825,7 +16825,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekCtcfStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -17008,7 +17008,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekH3k27acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -17191,7 +17191,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekH3k27me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -17374,7 +17374,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekH3k36me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -17557,7 +17557,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekH3k4me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -17740,7 +17740,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekH3k4me2StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -17923,7 +17923,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekH3k4me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -18106,7 +18106,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekH3k9acStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -18472,7 +18472,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekH4k20me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -18631,7 +18631,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 fileName wgEncodeBroadHistoneNhekPol2bStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -21082,4 +21082,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: -1086729565
+# MAGIC: -1086744543

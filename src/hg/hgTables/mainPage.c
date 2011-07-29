@@ -644,7 +644,7 @@ hPrintf("<TABLE BORDER=0>\n");
         hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 
     hPrintf(" ");
-    hOnClickButton("document.trackHubForm.submit();return false;", "import tracks");
+    hOnClickButton("document.trackHubForm.submit();return false;", "track hubs");
 
     hPrintf("</TD></TR>\n");
     }

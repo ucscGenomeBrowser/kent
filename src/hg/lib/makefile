@@ -95,7 +95,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o txCluster.o txCommon.o txEdgeBed.o \
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \
-    validateGisaid.o vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
+    validateGisaid.o vcfUi.o vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o wikiTrack.o yaleGencodeAssoc.o \
     zdobnovSynt.o oreganno.o \

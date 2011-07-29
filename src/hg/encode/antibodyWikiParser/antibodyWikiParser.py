@@ -15,7 +15,7 @@ import string
 import subprocess
 import sys
 import urllib2 
-from ucscgenomics.rafile.RaFile import *
+from rafile.RaFile import *
 
 
 
@@ -90,7 +90,7 @@ def processFactorId(factorEntry):
 
 
 
-def processValidation(validationCell, species, antibody, lab, downloadsDir,
+def processValidation(validationCell, species, antibody, lab, downloadsDir, noDownload,
                       username, password, wikiBaseUrl):
     """
     (1) Given the contents of the 'Validation' cell, plus the species, antibody, and
@@ -98,7 +98,8 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir,
     (2) If there's any evidence of a filename, set the validation string to it.  
     Otherwise, set the validation string to "missing".
     (3) If there is a hyperlink to a validation file, download it into the 
-    filename assembled here, in the indicated download directory.
+    filename assembled here, in the indicated download directory, unless the noDownload
+    flag is set.
     Assumptions:
     - users are illogical
     - the number of ways users can do unexpected things cannot be counted
@@ -138,42 +139,43 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir,
         # from the antibody name.  Parentheses in filenames are just bad...
         documentName = species + "_" + re.sub("[\(\)]", "", antibody) \
                        + "_validation_" + lab + ".pdf"
-        targetDocumentName = downloadsDir + "/" + documentName
-        #
-        # If a single hyperlinked PDF exists, download the document to the 
-        # downloads directory.  If multiple hyperlinked PDFs exist, download the 
-        # documents separately and combine them into a single file.  If one or more
-        # hyperlinked document is not a PDF, give a warning but don't combine them.
-        #
-        urlClauses = validationCell.findAll("a")
-        downloadedFileList = ""
-        for ii in range(0,len(urlClauses)):
-            if urlClauses[ii].has_key("href"):
-                url = urlClauses[ii]["href"]
-                # 
-                # If this document is not in PDF format (e.g. if it's a word doc, 
-                # print out a warning message and don't try to download it, but return the
-                # target filename (generated above).  If the document is a PDF,
-                # download it and save it in the filename generated above.
-                if re.search(".pdf$", url):
-                    validationData = accessWiki(wikiBaseUrl + url, username, password)
-                    if len(validationData) > 0:
-                        downloadFilename = targetDocumentName + str(ii)
-                        newValidationFile = open(downloadFilename, "wb")
-                        newValidationFile.write(validationData)
-                        newValidationFile.close()
-                        downloadedFileList = downloadedFileList + " " + downloadFilename
-                    else:
-                        print "Warning: not downloading", url, ": not a PDF file";
-        if len(urlClauses) == 1:
-            renameCmd = "mv %s %s" % (downloadedFileList, targetDocumentName)
-            subprocess.Popen(renameCmd, shell=True)
-            #subprocess.Popen("rm %s" % (downloadedFileList), shell=True)
-        elif len(urlClauses) > 1:
-            combineCmd = "pdftk %s cat output %s" \
-                % (downloadedFileList, targetDocumentName)
-            subprocess.Popen(combineCmd, shell=True)
-            #subprocess.Popen("rm %s" % (downloadedFileList), shell=True)
+        if noDownload is False:
+            targetDocumentName = downloadsDir + "/" + documentName
+            #
+            # If a single hyperlinked PDF exists, download the document to the 
+            # downloads directory.  If multiple hyperlinked PDFs exist, download the 
+            # documents separately and combine them into a single file.  If one or more
+            # hyperlinked document is not a PDF, give a warning but don't combine them.
+            #
+            urlClauses = validationCell.findAll("a")
+            downloadedFileList = ""
+            for ii in range(0,len(urlClauses)):
+                if urlClauses[ii].has_key("href"):
+                    url = urlClauses[ii]["href"]
+                    # 
+                    # If this document is not in PDF format (e.g. if it's a word doc, 
+                    # print out a warning message and don't try to download it, but return the
+                    # target filename (generated above).  If the document is a PDF,
+                    # download it and save it in the filename generated above.
+                    if re.search(".pdf$", url):
+                        validationData = accessWiki(wikiBaseUrl + url, username, password)
+                        if len(validationData) > 0:
+                            downloadFilename = targetDocumentName + str(ii)
+                            newValidationFile = open(downloadFilename, "wb")
+                            newValidationFile.write(validationData)
+                            newValidationFile.close()
+                            downloadedFileList = downloadedFileList + " " + downloadFilename
+                        else:
+                            print "Warning: not downloading", url, ": not a PDF file";
+            if len(urlClauses) == 1:
+                renameCmd = "mv %s %s" % (downloadedFileList, targetDocumentName)
+                subprocess.Popen(renameCmd, shell=True)
+            elif len(urlClauses) > 1:
+                combineCmd = "pdftk %s cat output %s" \
+                             % (downloadedFileList, targetDocumentName)
+                process = subprocess.Popen(combineCmd, shell=True)
+                process.wait()
+                subprocess.Popen("rm %s" % (downloadedFileList), shell=True)
         validation =  validationLabel + ":" + documentName
         validation = re.sub("(\s)+", "", validation)
     return(validation)
@@ -185,7 +187,7 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir,
 # (Antibody, AntibodyDescription, TargetDescription, Source, Lab, Lot(s), 
 #  FactorId, ValidationDocument)
 #   
-def processAntibodyEntry(entry, species, downloadsDirectory, username, password,
+def processAntibodyEntry(entry, species, downloadsDirectory, noDownload, username, password,
                          wikiBaseUrl):
     """
     For a single wiki table entry, generate an appropriate RA file stanza and
@@ -206,8 +208,13 @@ def processAntibodyEntry(entry, species, downloadsDirectory, username, password,
         # The naming standard (as of May 3, 2011) is to name antibodies as 
         # <target>_(<vendorId>), such as TAF7_(SC-101167).  In the "term" cell,
         # the antibody might already have that name, or (more likely) it might be 
-        # named by just the target.  If the vendor ID isn't in the name yet, add it. 
+        # named by just the target.  If the vendor ID isn't in the name yet, add it.
+        # If the vendor ID is "missing" (the default value parsed if the field isn't
+        # filled in), then don't add it.
+        #
         if re.search(vendorId, term):
+            stanza["term"] = term
+        elif vendorId == "missing":
             stanza["term"] = term
         else:
             stanza["term"] = term + "_(" + vendorId + ")"
@@ -224,8 +231,8 @@ def processAntibodyEntry(entry, species, downloadsDirectory, username, password,
         (stanza["targetId"], 
          stanza["targetUrl"]) = processFactorId(cells[6])
         stanza["validation"] = processValidation(cells[7], species, stanza["term"], 
-                                                 stanza["lab"], downloadsDirectory, 
-                                                 username, password, wikiBaseUrl)
+                                                 stanza["lab"], downloadsDirectory,
+                                                 noDownload, username, password, wikiBaseUrl)
         #
         # Indicate whether or not the document (if any) is approved by the NHGRI
         if re.search("^[Y|y]", getContents(cells[8])):
@@ -262,12 +269,14 @@ parser.add_option("-s", "--species", dest="species", default="human",
                   help="Species")
 parser.add_option("-d", "--downloadDir", dest="downloadDirectory", default=".",
                   help="Directory to download any validation documents into")
+parser.add_option("-f", "--force", dest="forcePrinting", default=False,
+                  help="Force printing of all stanzas, whether or not there's NHGRI approval")
+parser.add_option("-n", "--noDownload", dest="noDownload", default=False,
+                  help="Don't download any documents")
 parser.add_option("-u", "--username", dest="username", default=defaultUsername,
                   help="Username to access the wiki page")
 parser.add_option("-p", "--password", dest="password", default=defaultPassword,
                   help="Password to access the wiki page")
-parser.add_option("-f", "--force", dest="forcePrinting", default=False,
-                  help="Force printing of all stanzas, whether or not there's NHGRI approval")
 (parameters, args) = parser.parse_args()
 
 #
@@ -288,8 +297,10 @@ if antibodiesPage != None:
         else:
             (newStanza, approvedByNhgri) = processAntibodyEntry(entry, parameters.species, 
                                                                 parameters.downloadDirectory,
+                                                                parameters.noDownload,
                                                                 parameters.username,
-                                                                parameters.password, wikiBaseUrl)
+                                                                parameters.password,
+                                                                wikiBaseUrl)
             if approvedByNhgri or parameters.forcePrinting:
                 if newStanza is not None:
                     print newStanza

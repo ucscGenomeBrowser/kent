@@ -15,7 +15,7 @@ sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Replicate replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labProtocolId=Protocol labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum attic=Attic
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-dimensionZchecked PAP,PAM,TOTAL
+dimensionZchecked PAP,TOTAL
 dimensionAchecked rep1,Pooled
 priority 0
 type bed 3

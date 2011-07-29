@@ -2091,49 +2091,20 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId wgEncodeEH000771
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-27
+dateUnrestricted 2012-04-27
 dccAccession wgEncodeEH000771
 expId 771
 fileName wgEncodeSydhTfbsGm12878InputIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
 project wgEncode
 replicate 1
 setType input
-subId 1366
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsGm12878InputIggrabAlnRep2
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId wgEncodeEH000771
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputIggrabAlnRep2.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1378
+subId 4618
 treatment None
 view Alignments
 
@@ -2143,45 +2114,20 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId wgEncodeEH000771
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-27
+dateUnrestricted 2012-04-27
 dccAccession wgEncodeEH000771
 expId 771
-fileName wgEncodeSydhTfbsGm12878InputIggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12878InputIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
-origAssembly hg18
 project wgEncode
 replicate 1
 setType input
-subId 1109
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878InputIggrabRawDataRep2
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId wgEncodeEH000771
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-03-05
-dateUnrestricted 2010-12-05
-dccAccession wgEncodeEH000771
-expId 771
-fileName wgEncodeSydhTfbsGm12878InputIggrabRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1109
+subId 4618
 treatment None
 view RawData
 
@@ -2191,20 +2137,20 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId wgEncodeEH000771
+controlId GM12878/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-27
+dateUnrestricted 2012-04-27
 dccAccession wgEncodeEH000771
 expId 771
 fileName wgEncodeSydhTfbsGm12878InputIggrabSig.bigWig
 grant Snyder
 lab Stanford
-origAssembly hg18
+labVersion PeakSeq1.0
 project wgEncode
 setType input
-subId 3053
+subId 4618
 tableName wgEncodeSydhTfbsGm12878InputIggrabSig
 treatment None
 view Signal
@@ -2280,6 +2226,130 @@ setType input
 subId 3053
 tableName wgEncodeSydhTfbsGm12878InputStdSig
 treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH002034
+expId 2034
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1366
+treatment TNFa
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH002034
+expId 2034
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1378
+treatment TNFa
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH002034
+expId 2034
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1109
+treatment TNFa
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep2
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-03-05
+dateUnrestricted 2010-12-05
+dccAccession wgEncodeEH002034
+expId 2034
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1109
+treatment TNFa
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
+objType table
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH000771
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH002034
+expId 2034
+fileName wgEncodeSydhTfbsGm12878InputTnfaIggrabSig.bigWig
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+setType input
+subId 3053
+tableName wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
+treatment TNFa
 view Signal
 
 metaObject wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep1
@@ -44659,4 +44729,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 123233227
+# MAGIC: 24202563

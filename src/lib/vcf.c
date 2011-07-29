@@ -426,6 +426,25 @@ return vcff;
 }
 
 
+static void parseFilterColumn(struct vcfFile *vcff, struct vcfRecord *record, char *filterStr)
+/* Transform ;-separated filter codes into count + string array. */
+{
+// We don't want to modify something allocated with vcfFilePooledStr because that uses
+// hash element names for storage!  So don't make a vcfFilePooledStr copy of filterStr and
+// chop that; instead, chop a temp string and pool the words separately.
+static struct dyString *tmp = NULL;
+if (tmp == NULL)
+    tmp = dyStringNew(0);
+dyStringClear(tmp);
+dyStringAppend(tmp, filterStr);
+record->filterCount = countChars(filterStr, ';') + 1;
+record->filters = vcfFileAlloc(vcff, record->filterCount * sizeof(char **));
+(void)chopByChar(tmp->string, ';', record->filters, record->filterCount);
+int i;
+for (i = 0;  i < record->filterCount;  i++)
+    record->filters[i] = vcfFilePooledStr(vcff, record->filters[i]);
+}
+
 struct vcfInfoDef *vcfInfoDefForKey(struct vcfFile *vcff, const char *key)
 /* Return infoDef for key, or NULL if it wasn't specified in the header or VCF spec. */
 {
@@ -563,8 +582,8 @@ while ((wordCount = lineFileChop(vcff->lf, words)) > 0)
     record->name = vcfFilePooledStr(vcff, words[2]);
     record->ref = vcfFilePooledStr(vcff, words[3]);
     record->alt = vcfFilePooledStr(vcff, words[4]);
-    record->qual = atof(words[5]); //#*** qual can be "." so we need to represent that
-    record->filter = vcfFilePooledStr(vcff, words[6]);
+    record->qual = vcfFilePooledStr(vcff, words[5]);
+    parseFilterColumn(vcff, record, words[6]);
     parseInfoColumn(vcff, record, words[7]);
     if (vcff->genotypeCount > 0)
 	{
