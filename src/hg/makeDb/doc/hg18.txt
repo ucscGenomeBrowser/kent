@@ -31579,6 +31579,7 @@ diff j.all j.1234 |grep "<" |sed -e 's/</do1/' >doall
 cat << '_EOF_' > do1
 hgsql hg18 -e "delete from omimLocation where name='${1}'"
 '_EOF_'
+# << emacs
 
 ./doall
 
@@ -31586,7 +31587,7 @@ hgsql hg18 -e "delete from omimLocation where name='${1}'"
 # adding new decode data (WORKING - 2011-07-26 - Hiram)
     mkdir /hive/data/outside/decode
     cd /hive/data/outside/decode
-    wget --timestamping "http://www.decode.com/addendum/Maps.zip
+    wget --timestamping "http://www.decode.com/addendum/Maps.zip"
     unzip Maps.zip
     # produces a Maps directory
     mkdir /hive/data/outside/decode/hg18
@@ -31649,5 +31650,77 @@ done
     ln -s `pwd`/MaleFemaleDifference.bw /gbdb/hg18/decode/
     hgsql -e "drop table decodeMaleFemaleDifference;" hg18
     hgBbiDbLink hg18 decodeMaleFemaleDifference /gbdb/hg18/decode/MaleFemaleDifference.bw
+
+#############################################################################
+# HI SEQ DEPTH (DONE 7/15/11 angie)
+    mkdir /hive/data/genomes/hg18/bed/hiSeqDepth
+    cd /hive/data/genomes/hg18/bed/hiSeqDepth
+    foreach cov (001 005 01 05 1)
+      wget --timestamp http://eqtl.uchicago.edu/Masking/seq.cov$cov.bed.gz
+      gunzip -N seq.cov$cov.bed.gz
+    end
+    wc -l seq.cov*
+#    553 seq.cov001.bed
+#   1301 seq.cov005.bed
+#   2187 seq.cov01.bed
+#  18369 seq.cov05.bed
+#  34359 seq.cov1.bed
+    foreach cov (001 005 01 05 1)
+      echo seq.cov$cov.bed
+      featureBits -countGaps hg18 seq.cov$cov.bed
+    end
+#seq.cov001.bed
+#57409 bases of 3107677273 (0.002%) in intersection
+#seq.cov005.bed
+#183848 bases of 3107677273 (0.006%) in intersection
+#seq.cov01.bed
+#362423 bases of 3107677273 (0.012%) in intersection
+#seq.cov05.bed
+#3462959 bases of 3107677273 (0.111%) in intersection
+#seq.cov1.bed
+#Coordinate out of allowed range [0,135374737) for chr10 near line 6826 of seq.cov1.bed
+    # I edited line 6826 of seq.cov1.bed to end with 135374737 not 135374744
+    featureBits -countGaps hg18 seq.cov$cov.bed
+#6466376 bases of 3107677273 (0.208%) in intersection
+
+    # Sanity check: verify that the smaller ones are strict subsets of larger:
+    featureBits hg18 -countGaps seq.cov001.bed \!seq.cov005.bed
+    featureBits hg18 -countGaps seq.cov005.bed \!seq.cov01.bed
+    featureBits hg18 -countGaps seq.cov01.bed \!seq.cov05.bed
+    featureBits hg18 -countGaps seq.cov05.bed \!seq.cov1.bed
+    # Yep, all got 0 bases:
+#0 bases of 3107677273 (0.000%) in intersection
+    # Hmm, some overlap w/gap track:
+    featureBits hg18 -countGaps seq.cov1.bed gap -bed=gapOverlaps.bed
+#477 bases of 3107677273 (0.000%) in intersection
+
+    # Load tables:
+    hgLoadBed hg18 hiSeqDepthTopPt1Pct seq.cov001.bed
+#Loaded 553 elements of size 3
+    hgLoadBed hg18 hiSeqDepthTopPt5Pct seq.cov005.bed
+#Loaded 1301 elements of size 3
+    hgLoadBed hg18 hiSeqDepthTop1Pct seq.cov01.bed
+#Loaded 2187 elements of size 3
+    hgLoadBed hg18 hiSeqDepthTop5Pct seq.cov05.bed
+#Loaded 18369 elements of size 3
+    hgLoadBed hg18 hiSeqDepthTop10Pct seq.cov1.bed
+#Loaded 34359 elements of size 3
+
+    # Compare with Terry Furey's blacklisted regions for ENCODE
+    # http://encodewiki.ucsc.edu/EncodeDCC/index.php/Blacklist_of_problematic_genomic_regions
+    # http://hgdownload-test.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeMapability/wgEncodeDukeRegionsExcluded.bed6.gz
+    featureBits -countGaps hg18 \
+      /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed
+#10366850 bases of 3107677273 (0.334%) in intersection
+    foreach cov (001 005 01 05 1)
+      featureBits -countGaps hg18 seq.cov$cov.bed -enrichment \
+        /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed
+    end
+    # Watch the coverage of seq*bed by Terry's regions drop as $cov increases:
+#seq.cov001.bed 0.002%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.002%, cover 94.75%, enrich 284.02x
+#seq.cov005.bed 0.006%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.006%, cover 93.43%, enrich 280.06x
+#seq.cov01.bed 0.012%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.010%, cover 87.56%, enrich 262.49x
+#seq.cov05.bed 0.111%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.038%, cover 34.48%, enrich 103.35x
+#seq.cov1.bed 0.208%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.050%, cover 24.02%, enrich 71.99x
 
 #############################################################################
