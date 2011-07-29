@@ -104,7 +104,7 @@ boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug
 int imagePixelHeight = 0;
 boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
-struct hash *jsVarsHash = NULL;
+struct jsonHashElement *jsonForClient = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
@@ -2468,16 +2468,16 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-jsAddBoolean(jsVarsHash, "dragSelection", dragZooming);
-jsAddBoolean(jsVarsHash, "inPlaceUpdate", IN_PLACE_UPDATE);
+jsonHashAddBoolean(jsonForClient, "dragSelection", dragZooming);
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
 
 if(rulerClickHeight)
     {
-    jsAddNumber(jsVarsHash, "rulerClickHeight", rulerClickHeight);
+    jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
     }
 if(newWinWidth)
     {
-    jsAddNumber(jsVarsHash, "newWinWidth", newWinWidth);
+    jsonHashAddNumber(jsonForClient, "newWinWidth", newWinWidth);
     }
 
 /* Save out picture and tell html file about it. */
@@ -4579,8 +4579,8 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsAddNumber(jsVarsHash, "insideX", insideX);
-jsAddBoolean(jsVarsHash, "revCmplDisp", revCmplDisp);
+jsonHashAddNumber(jsonForClient, "insideX", insideX);
+jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
 
 #ifdef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
@@ -4763,9 +4763,9 @@ if(theImgBox)
 hPrintf("<CENTER>\n");
 
 // info for drag selection javascript
-jsAddNumber(jsVarsHash, "winStart", winStart);
-jsAddNumber(jsVarsHash, "winEnd", winEnd);
-jsAddString(jsVarsHash, "chromName", chromName);
+jsonHashAddNumber(jsonForClient, "winStart", winStart);
+jsonHashAddNumber(jsonForClient, "winEnd", winEnd);
+jsonHashAddString(jsonForClient, "chromName", chromName);
 
 if(trackImgOnly && !ideogramToo)
     {
@@ -5875,7 +5875,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hgFindMatches = NULL;     // XXXX necessary ???
     }
 hWrites(commonCssStyles());
-jsVarsHash = newHash(8);
+jsonForClient = newJsonHash(newHash(8));
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("utils.js", NULL);
@@ -5994,10 +5994,16 @@ else
     {
     tracksDisplay();
     }
-if(hashNumEntries(jsVarsHash))
-    {
-    hPrintf("<script type='text/javascript'>\n");
-    jsPrintHash(jsVarsHash, "hgTracks", 0);
-    hPrintf("</script>\n");
-    }
+
+// XXXX debugging stuff
+struct slRef *list = NULL;
+jsonListAddNumber(&list, 666);
+jsonListAddString(&list, "1,2,3");
+jsonHashAdd(jsonForClient, "testing", (struct jsonElement *) newJsonList(list));
+jsonHashAddDouble(jsonForClient, "float", expf(1));
+
+hPrintf("<script type='text/javascript'>\n");
+jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
+hPrintf("</script>\n");
+
 }

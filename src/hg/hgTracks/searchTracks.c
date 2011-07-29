@@ -474,7 +474,7 @@ else
     hPrintf("</td></tr>\n");
 
     // Set up json for js functionality
-    struct dyString *jsonTdbVars = NULL;
+    struct jsonHashElement *jsonTdbVars = newJsonHash(newHash(8));
 
     int trackCount=0;
     boolean containerTrackCount = 0;
@@ -485,7 +485,7 @@ else
             break;
 
         struct track *track = (struct track *) ptr->val;
-        jsonTdbSettingsBuild(&jsonTdbVars, track, FALSE); // FALSE: No configuration from track search
+        jsonTdbSettingsBuild(jsonTdbVars, track, FALSE); // FALSE: No configuration from track search
 
         if (tdbIsFolder(track->tdb)) // supertrack
             hPrintf("<tr class='bgLevel4' valign='top' class='found'>\n");
@@ -571,7 +571,7 @@ else
     hPrintf("\n</form>\n");
 
     // be done with json
-    hWrites(jsonTdbSettingsUse(&jsonTdbVars));
+    jsonTdbSettingsUse(jsonTdbVars);
     }
 hPrintf("</div>"); // This div allows the clear button to empty it
 }
