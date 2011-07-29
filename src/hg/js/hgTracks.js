@@ -2504,7 +2504,7 @@ function afterImgTblReload()
         trackImgTbl.tableDnDUpdate();
     reloadFloatingItem();
     // Turn on drag scrolling.
-    if(hgTracks.imgBoxPortal) {
+    if(hgTracks.imgBoxPortal)
         $("div.scroller").panImages(hgTracks.imgBoxPortalOffsetX,hgTracks.imgBoxLeftLabel);
 }
 
