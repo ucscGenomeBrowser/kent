@@ -4645,4 +4645,22 @@ html wgEncodeUwHistone.new
         origAssembly hg19
         # subId=4349 dateSubmitted=2011-06-29
 
+        track wgEncodeUwHistoneWerirb1InputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel WERI-Rb-1 Input Raw 1
+        longLabel WERI-Rb-1 Input std ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        subGroups view=zRSig factor=zInput cellType=WERIRB1 rep=1
+        type bigWig 1.000000 9496.000000
+        origAssembly hg18
+        # subId=4633 dateSubmitted=2011-07-28
+
+        track wgEncodeUwHistoneHacInputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HAc Input Raw 1
+        longLabel HAc Input std ChIP-seq Raw Signal Rep 1 from ENCODE/UW
+        subGroups view=zRSig factor=zInput cellType=HAC rep=1
+        type bigWig 1.000000 18298.000000
+        origAssembly hg19
+        # subId=4634 dateSubmitted=2011-07-28
+
 

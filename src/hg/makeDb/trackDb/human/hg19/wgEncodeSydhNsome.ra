@@ -25,7 +25,7 @@ noInherit on
     	view Signal
     	visibility full
 	parent wgEncodeSydhNsome
-    	viewLimits 0:12
+    	viewLimits 0:8
     	autoScale off
     	maxHeightPixels 100:32:16
     	windowingFunction mean+whiskers
