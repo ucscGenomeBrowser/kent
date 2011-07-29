@@ -524,16 +524,16 @@ struct tdbExtras
     };
 
 #define TDB_EXTRAS_EMPTY_STATE 666
+struct tdbExtras *tdbExtrasNew(void);
+// Return a new empty tdbExtras
+
+void tdbExtrasFree(struct tdbExtras **pTdbExtras);
+// Frees the tdbExtras structure
+
 INLINE struct tdbExtras *tdbExtrasGet(struct trackDb *tdb)
 // Returns tdbExtras struct, initializing if needed.
 {
-if(tdb->tdbExtras == NULL)
-    {
-    tdb->tdbExtras = AllocVar(tdb->tdbExtras);
-    // Initialize any values that need an "empty" state
-    tdb->tdbExtras->fourState = TDB_EXTRAS_EMPTY_STATE; // I guess it is 5 state!
-    // pointers are NULL and booleans are FALSE by default
-    }
+assert(tdb->tdbExtras != NULL);
 return tdb->tdbExtras;
 }
 

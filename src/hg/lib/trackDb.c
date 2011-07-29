@@ -171,7 +171,7 @@ freeMem(el->grp);
 freeMem(el->settings);
 hashFree(&el->settingsHash);
 hashFree(&el->overrides);
-freeMem(&el->tdbExtras); // For now leak contents, because complex structs would also leak
+tdbExtrasFree(&el->tdbExtras);
 freez(pEl);
 // #endif /* NOT */
 }

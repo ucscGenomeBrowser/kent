@@ -1262,6 +1262,19 @@ void slPairIntSort(struct slPair **pList)
 slSort(pList, slPairIntCmp);
 }
 
+int slPairAtoiCmp(const void *va, const void *vb)
+// Compare two slPairs on their strings interpreted as integer values.
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return (atoi((char *)(a->val)) - atoi((char *)(b->val)));
+}
+
+void slPairValAtoiSort(struct slPair **pList)
+// Sort slPair list on string values interpreted as integers.
+{
+slSort(pList, slPairAtoiCmp);
+}
 
 void gentleFree(void *pt)
 {

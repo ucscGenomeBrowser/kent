@@ -404,7 +404,12 @@ if (sortOrder != NULL)
         // If there is more than one val for this var then create filterBy box for it
         if (slCount(tagLabelPairs) > 1)
             {
-            slPairValSortCase(&tagLabelPairs); // should have a list sorted on the label
+            // should have a list sorted on the label
+            enum cvDataType eCvDataType = cvDataType(var);
+            if (eCvDataType == cvInteger)
+                slPairValAtoiSort(&tagLabelPairs);
+            else
+                slPairValSortCase(&tagLabelPairs);
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
         #ifdef NEW_JQUERY
