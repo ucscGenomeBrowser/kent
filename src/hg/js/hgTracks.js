@@ -1712,7 +1712,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                             name = a[1];
                         }
                     }
-                    if(false && mapIsUpdateable) {
+                    if(inPlaceUpdate) {
                         // XXXX This attempt to "update whole track image in place" didn't work for a variety of reasons
                         // (e.g. safari doesn't parse map when we update on the client side), so this is currently dead code.
                         // However, this now works in all other browsers, so we may turn this on for non-safari browsers
@@ -2525,7 +2525,7 @@ function updateTrackImgForId(html, id)
 
 function handleUpdateTrackMap(response, status)
 {
-// Handle ajax response with an updated trackMap image (gif or png) and map.
+// Handle ajax response with an updated trackMap image, map and optional ideogram.
 //
 // this.cmd can be used to figure out which menu item triggered this.
 // this.id == appropriate track if we are retrieving just a single track.
@@ -2577,14 +2577,12 @@ function handleUpdateTrackMap(response, status)
                     //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                 }
             }
-            // update hgTracks as appropriate (XXXX should we just copy over the whole thing rather than just specific keys?)
-            hgTracks.chromName = json.chromName;
-            hgTracks.winStart = json.winStart;
-            hgTracks.winEnd = json.winEnd;
-            $("input[name='c']").val(json.chromName);
-            $("input[name='l']").val(json.winStart);
-            $("input[name='r']").val(json.winEnd);
-            hgTracks.newWinWidth = json.newWinWidth;
+            if(json != undefined) {
+                hgTracks = json;
+                $("input[name='c']").val(json.chromName);
+                $("input[name='l']").val(json.winStart);
+                $("input[name='r']").val(json.winEnd);
+            }
             setPositionByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd);
             originalPosition = undefined;
             initVars();
