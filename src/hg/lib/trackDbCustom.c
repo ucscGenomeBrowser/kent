@@ -167,6 +167,8 @@ if (trackDbSetting(bt, "private") != NULL)
 char *grp = trackDbSetting(bt, "group");
 if (grp != NULL)
      bt->grp = cloneString(grp);
+if (bt->tdbExtras == NULL)
+    bt->tdbExtras = tdbExtrasNew();
 }
 
 static void replaceStr(char **varPtr, char *val)
