@@ -5995,13 +5995,6 @@ else
     tracksDisplay();
     }
 
-// XXXX debugging stuff
-struct slRef *list = NULL;
-jsonListAddNumber(&list, 666);
-jsonListAddString(&list, "1,2,3");
-jsonHashAdd(jsonForClient, "testing", (struct jsonElement *) newJsonList(list));
-jsonHashAddDouble(jsonForClient, "float", expf(1));
-
 hPrintf("<script type='text/javascript'>\n");
 jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
 hPrintf("</script>\n");

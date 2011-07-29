@@ -16268,6 +16268,7 @@ diff j.all j.1234 |grep "<" |sed -e 's/</do1/' >doall
 cat << '_EOF_' > do1
 hgsql hg19 -e "delete from omimLocation where name='${1}'"
 '_EOF_'
+# << emacs
 
 ./doall
 
@@ -16353,5 +16354,70 @@ cosmic_mutation_id from cosmicRaw' \
 's/chr24/chrY/' >cosmic.bed
 
 hgLoadBed -allowStartEqualEnd  hg19 cosmic cosmic.bed
-############################################################################
 
+#############################################################################
+# HI SEQ DEPTH (DONE 7/15/11 angie)
+    mkdir /hive/data/genomes/hg19/bed/hiSeqDepth
+    cd /hive/data/genomes/hg19/bed/hiSeqDepth
+    foreach cov (001 005 01 05 1)
+      wget --timestamp http://eqtl.uchicago.edu/Masking/seq.cov$cov.ONHG19.bed.gz
+      gunzip -N seq.cov$cov.ONHG19.bed.gz
+    end
+    wc -l seq.cov*
+#    522 seq.cov001.ONHG19.bed
+#   1224 seq.cov005.ONHG19.bed
+#   2060 seq.cov01.ONHG19.bed
+#  16119 seq.cov05.ONHG19.bed
+#  30671 seq.cov1.ONHG19.bed
+    foreach cov (001 005 01 05 1)
+      echo seq.cov$cov.ONHG19.bed
+      featureBits -countGaps hg19 seq.cov$cov.ONHG19.bed
+    end
+#seq.cov001.ONHG19.bed
+#55092 bases of 3137161264 (0.002%) in intersection
+#seq.cov005.ONHG19.bed
+#175379 bases of 3137161264 (0.006%) in intersection
+#seq.cov01.ONHG19.bed
+#344425 bases of 3137161264 (0.011%) in intersection
+#seq.cov05.ONHG19.bed
+#3073270 bases of 3137161264 (0.098%) in intersection
+#seq.cov1.ONHG19.bed
+#5736695 bases of 3137161264 (0.183%) in intersection
+    # Compare hg19 coverage to hg18:
+    calc 55092 / 57409
+#55092 / 57409 = 0.959640
+    calc 175379 / 183848
+#175379 / 183848 = 0.953935
+    calc 344425 / 362423
+#344425 / 362423 = 0.950340
+    calc 3073270 / 3462959
+#3073270 / 3462959 = 0.887469
+    calc 5736695 / 6466376
+#5736695 / 6466376 = 0.887158
+
+    # Not all small ones are strict subsets of larger ones.
+    featureBits hg19 -countGaps seq.cov001.ONHG19.bed \!seq.cov005.ONHG19.bed
+#128 bases of 3137161264 (0.000%) in intersection
+    featureBits hg19 -countGaps seq.cov005.ONHG19.bed \!seq.cov01.ONHG19.bed
+#222 bases of 3137161264 (0.000%) in intersection
+    featureBits hg19 -countGaps seq.cov01.ONHG19.bed \!seq.cov05.ONHG19.bed
+#4185 bases of 3137161264 (0.000%) in intersection
+    featureBits hg19 -countGaps seq.cov05.ONHG19.bed \!seq.cov1.ONHG19.bed
+#41831 bases of 3137161264 (0.001%) in intersection
+    # No overlap w/gap track:
+    featureBits hg19 -countGaps seq.cov1.ONHG19.bed gap -bed=gapOverlaps.ONHG19.bed
+#0 bases of 3137161264 (0.000%) in intersection
+
+    # Load tables:
+    hgLoadBed hg19 hiSeqDepthTopPt1Pct seq.cov001.ONHG19.bed
+#Loaded 522 elements of size 3
+    hgLoadBed hg19 hiSeqDepthTopPt5Pct seq.cov005.ONHG19.bed
+#Loaded 1224 elements of size 3
+    hgLoadBed hg19 hiSeqDepthTop1Pct seq.cov01.ONHG19.bed
+#Loaded 2060 elements of size 3
+    hgLoadBed hg19 hiSeqDepthTop5Pct seq.cov05.ONHG19.bed
+#Loaded 16119 elements of size 3
+    hgLoadBed hg19 hiSeqDepthTop10Pct seq.cov1.ONHG19.bed
+#Loaded 30671 elements of size 3
+
+############################################################################
