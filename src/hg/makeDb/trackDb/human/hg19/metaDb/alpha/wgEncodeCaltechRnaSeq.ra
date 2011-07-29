@@ -1338,7 +1338,7 @@ rnaExtract longPolyA
 subId 3436
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2V2
 objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
@@ -1348,17 +1348,20 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 02971
+labVersion 02971
 localization cell
+md5sum 41c0d9d4424d12abc7afcd33f62fd623
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3437
+subId 4609
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep1
@@ -1384,7 +1387,7 @@ rnaExtract longPolyA
 subId 3436
 view FastqRd2
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2
 objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
@@ -1394,17 +1397,20 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 02971
+labVersion 02971
 localization cell
+md5sum a8376441f5942f8bf626ee107e0d1153
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3437
+subId 4609
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3
@@ -2009,7 +2015,7 @@ rnaExtract longPolyA
 subId 3441
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2V2
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
@@ -2019,20 +2025,23 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 02970
+labVersion 02970
 localization cell
+md5sum 16378d66248d2dc77390a6886be8504e
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3438
+subId 4607
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3V2
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
@@ -2042,17 +2051,20 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 02973
+labVersion 02973
 localization cell
+md5sum 66fc6a44a6c6f22f24aa57fdb5db64c8
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
-subId 3439
+subId 4608
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1
@@ -2078,7 +2090,7 @@ rnaExtract longPolyA
 subId 3441
 view FastqRd2
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2V2
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
@@ -2088,20 +2100,23 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 02970
+labVersion 02970
 localization cell
+md5sum 4f4cee3858dfd19c7a72f6563d65d4a4
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3438
+subId 4607
 view FastqRd2
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3V2
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
@@ -2111,17 +2126,20 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 02973
+labVersion 02973
 localization cell
+md5sum f43aedaa36bfcb4f20f69d05b42dbe52
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
-subId 3439
+subId 4608
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep1V3
@@ -12246,4 +12264,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -542070446
+# MAGIC: -799829860

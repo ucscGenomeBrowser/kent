@@ -11,7 +11,7 @@ subGroup1 view Views Signal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878<b>&nbsp;(Tier_1)</b> K562=K562<b>&nbsp;(Tier_1)</b>
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
-fileSortOrder cell=Cell_Line replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line replicate=Rep view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 visibilityViewDefaults  Signal=full 
@@ -25,7 +25,7 @@ noInherit on
     	view Signal
     	visibility full
 	parent wgEncodeSydhNsome
-    	viewLimits 0:12
+    	viewLimits 0:8
     	autoScale off
     	maxHeightPixels 100:32:16
     	windowingFunction mean+whiskers

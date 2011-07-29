@@ -3595,6 +3595,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                tdbMarkAsCompositeView(tdb);
             }
         }
+    if(tdb->tdbExtras == NULL) // probably assertable, but don't make a repeat call harmful
+        tdb->tdbExtras = tdbExtrasNew();
     trackDbContainerMarkup(tdb, tdb->subtracks);
     }
 }

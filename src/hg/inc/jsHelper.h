@@ -140,20 +140,74 @@ void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, ch
 void jsEndCollapsibleSection();
 /* End the collapsible <TR id=...>. */
 
-void jsAddString(struct hash *h, char *name, char *val);
+/* JSON Element code let's you build up a DOM like data structure in memory and then serialize it into
+   html for communication with client side code.
+ */
+
+// supported types
+
+typedef enum _jsonElementType
+{
+    jsonList     = 0,
+    jsonHash     = 1,
+    jsonNumber   = 2,
+    jsonDouble    = 3,
+    jsonBoolean  = 4,
+    jsonString   = 5
+} jsonElementType;
+
+struct jsonElement
+{
+    jsonElementType type;
+    // rest of data is here.
+};
+
+struct jsonListElement
+{
+    jsonElementType type;
+    struct slRef *list;
+};
+
+struct jsonHashElement
+{
+    jsonElementType type;
+    struct hash *hash;
+};
+
+struct jsonStringElement
+{
+    jsonElementType type;
+    char *str;
+};
+
+struct jsonStringElement *newJsonString(char *str);
+struct jsonHashElement *newJsonHash(struct hash *h);
+struct jsonListElement *newJsonList(struct slRef *list);
+
+void jsonHashAdd(struct jsonHashElement *h, char *name, struct jsonElement *ele);
+
+void jsonHashAddString(struct jsonHashElement *h, char *name, char *val);
 // Add a string to a hash which will be used to print a javascript object;
 // existing values are replaced.
 
-void jsAddNumber(struct hash *h, char *name, long val);
+void jsonHashAddNumber(struct jsonHashElement *h, char *name, long val);
 // Add a number to a hash which will be used to print a javascript object;
 // existing values are replaced.
 
-void jsAddBoolean(struct hash *h, char *name, boolean val);
+void jsonHashAddDouble(struct jsonHashElement *h, char *name, double val);
+
+void jsonHashAddBoolean(struct jsonHashElement *h, char *name, boolean val);
 // Add a boolean to a hash which will be used to print a javascript object;
 // existing values are replaced.
 
-void jsPrintHash(struct hash *hash, char *name, int indentLevel);
-// prints a hash as a javascript variable
+void jsonListAdd(struct slRef **list, struct jsonElement *ele);
+void jsonListAddString(struct slRef **list, char *val);
+void jsonListAddNumber(struct slRef **list, long val);
+void jsonListAddDouble(struct slRef **list, double val);
+void jsonListAddBoolean(struct slRef **list, boolean val);
+
+void jsonPrint(struct jsonElement *json, char *name, int indentLevel);
+// print out a jsonElement
 
 void jsonErrPrintf(struct dyString *ds, char *format, ...);
 //  Printf a json error to a dyString for communicating with ajax code; format is:
