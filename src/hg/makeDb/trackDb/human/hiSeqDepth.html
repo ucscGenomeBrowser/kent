@@ -1,0 +1,39 @@
+<H1>Description</H1>
+<P>
+This track displays regions of the reference genome that have exceptionally high
+sequence depth, inferred from alignments of short-read sequences from the 1000
+Genomes Project.  These regions may be caused by collapsed repetitive sequences
+in the reference genome assembly; they also have high read depth in assays such as
+ChIP-seq, and may trigger false positive calls from peak-calling algorithms.
+Excluding these regions from analysis of short-read alignments should reduce
+such false positive calls.
+</P>
+
+<H1>Methods</H1>
+<P>
+Pickrell <em>et al.</em> downloaded sequencing reads for 57 Yoruba individuals
+from the 1000 Genomes Project's low-coverage pilot data, mapped them to the
+Mar. 2006 human genome assembly (NCBI36/hg18), computed the read depth for
+every base in the genome, and compiled a distribution of read depths.
+They then identified contiguous regions where read depth exceeded thresholds
+corresponding to the top 0.001, 0.005, 0.01, 0.05 and 0.1 of the per-base 
+read depths, merging regions which fall within 50 bases of each other.
+The regions are available for download from
+<A HREF="http://eqtl.uchicago.edu/Masking/" TARGET=_BLANK>http://eqtl.uchicago.edu/Masking/</A>
+(see the
+<A HREF="http://eqtl.uchicago.edu/Masking/readme" TARGET=_BLANK>readme</A> file).
+</P>
+
+<H1>Credits</H1>
+<P>
+Thanks to Joseph Pickrell at the University of Chicago for these data.
+</P>
+
+<H1>References</H1>
+<P>
+Pickrell JK, Gaffney DJ, Gilad Y, Pritchard JK.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21690102"
+TARGET=_BLANK>False positive peaks in ChIP-seq and other sequencing-based
+functional assays caused by unannotated high copy number regions.</A>
+<em>Bioinformatics</em>. 2011 Aug 1;27(15):2144-6. Epub 2011 Jun 19.
+</P>
