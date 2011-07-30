@@ -581,7 +581,8 @@ char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_
 char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 bool baseQualMode = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
 		     sameString(grayMode, BAM_GRAY_MODE_BASE_QUAL));
-if (vis != tvDense)
+char *qSeq = lf->extra;
+if (vis != tvDense && isNotEmpty(qSeq) && !sameString(qSeq, "*"))
     {
     drawOpt = baseColorDrawSetup(hvg, tg, lf, &mrnaSeq, &psl);
     if (drawOpt > baseColorDrawOff)

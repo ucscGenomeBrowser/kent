@@ -17,13 +17,13 @@ cd ${BUILDHOME}/build-hgdownload/admin
 git pull origin master
 
 hgsqldump --all -d -c -h genome-centdb hgcentral \
-sessionDb userDb | sed -e "s/genome-centdb/localhost/" > \
+sessionDb userDb hubStatus | sed -e "s/genome-centdb/localhost/" > \
 /tmp/hgcentraltemp.sql
 
 # --skip-extended-insert 
 #   to make it dump rows as separate insert statements
 hgsqldump --all --skip-extended-insert -c -h genome-centdb hgcentral \
-defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targetDb | \
+defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targetDb hubPublic | \
 sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentraltemp.sql
 
 
