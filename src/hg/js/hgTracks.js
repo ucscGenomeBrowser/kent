@@ -22,7 +22,7 @@ var currentMapItem;
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;  // turn on experimental zoom-to-codon functionality (currently only on in larrym's tree).
-var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate
+var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate and mapIsUpdateable
 
 /* Data passed in from CGI via the hgTracks object:
  * 
@@ -2542,6 +2542,7 @@ function handleUpdateTrackMap(response, status)
                 if(json.trackDb[this.id].limitedVis)
                     limitedVis = visibilityStrsOrder[json.trackDb[this.id].limitedVis];
                 if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
+                    // see redmine 1333#note-9
                     alert("There are too many items to display the track in " + this.newVisibility + " mode.");
                 var rec = hgTracks.trackDb[this.id];
                 rec.limitedVis = json.trackDb[this.id].limitedVis;
