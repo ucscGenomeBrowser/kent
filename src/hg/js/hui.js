@@ -124,13 +124,7 @@ function matSubCbClick(subCB)
     if(subCB.checked)
         exposeAll();  // Unhide composite vis?
 
-    var subtrackName = subCB.name;
-    if (subtrackName == undefined || subtrackName.length == 0)
-        subtrackName = subCB.id;
-    if (subtrackName != undefined && subtrackName.length > 0) {
-        subtrackName = subtrackName.substring(0,subtrackName.length - 4); // '_sel'.length
-        scm.enableCfg(subCB,subtrackName,subCB.checked);
-    }
+    scm.enableCfg(subCB,null,subCB.checked);
 
     matSubCBsSelected();
 }
@@ -299,6 +293,7 @@ function matSubCBcheckOne(subCB,state)
 {
 // setting a single subCB may cause it to appear/disappear
     subCB.checked = state;
+    scm.enableCfg(subCB,null,state);
     matSubCBsetShadow(subCB);
     hideOrShowSubtrack(subCB);
 }
@@ -1443,7 +1438,7 @@ var scm = { // subtrack config module.
         var isComposite = false;
         var isVis = false;
         var suffix = scm.objSuffixGet(parentObj);
-        isVis = (suffix != undefined && suffix == 'vis');
+        isVis = (suffix != undefined && suffix == 'vis');  // vis inside of subCfg
 
         var viewId = undefined;
         if (isVis) { // This is a view control
@@ -1500,6 +1495,31 @@ var scm = { // subtrack config module.
         }
     },
 
+    visChildrenFind: function (parentObj)
+    { // returns array of all currently faux and populated vis child controls (which are not in subCfg div)
+      // parentObj could be composite level or view level
+
+        var isVis = false;
+        var suffix = scm.objSuffixGet(parentObj);
+        isVis = (suffix == undefined || suffix == 'vis');
+        var isComposite = (suffix == undefined);
+
+        var subVis = $('.subVisDD');  // select:vis or faux:div
+        if (isComposite) {
+
+            return subVis;
+
+        } else {
+            var classList = $( parentObj ).attr("class").split(" ");
+            classList = aryRemove(classList,"viewDD","normalText");
+            if (classList.length != 1) {
+                warn("Unexpected view vis class list:"+classList);
+                return [];
+            }
+            return $(subVis).filter('.' + classList[0]);
+        }
+    },
+
     propagateSetting: function (parentObj)
     { // propagate composite/view level setting to subtrack children
         var children = scm.childrenFind(parentObj);
@@ -1546,36 +1566,77 @@ var scm = { // subtrack config module.
 
     propagateViewVis: function (viewObj,compositeVis)
     { // propagate vis from a view limiting with compositeVis
-        var limitedVis = Math.min (compositeVis,viewObj.selectedIndex);
-        var children = scm.childrenFind(viewObj);
+        var limitedVis = Math.min(compositeVis,viewObj.selectedIndex);
+        var visText = 'hide';
+        if (limitedVis == 1)
+            visText = 'dense';
+        else if (limitedVis == 2)
+            visText = 'squish';
+        else if (limitedVis == 3)
+            visText = 'pack';
+        else if (limitedVis == 4)
+            visText = 'full';
+        // vis outside of subCfg
+        var children = scm.visChildrenFind(viewObj);
         $(children).each(function (i) {
-            // TODO: only set if selected?
-            $(this).attr('selectedIndex',limitedVis);
-            scm.clearChange(this);
+            if ($(this).hasClass('fauxInput')) {
+                $(this).text(visText);
+            } else {
+                $(this).attr('selectedIndex',limitedVis);
+                scm.clearChange(this);
+            }
         });
+        // vis inside of subCfg
+        //var children = scm.childrenFind(viewObj);
+        //$(children).each(function (i) {
+        //    // TODO: only set if selected?
+        //    $(this).attr('selectedIndex',limitedVis);
+        //    scm.clearChange(this);
+        //});
     },
+
     propagateVis: function (parentObj,viewId)
     { // propagate vis settings to subtrack children
         if (viewId == null) {
             // Walk through views and set with this
             var parentVis = parentObj.selectedIndex;
             if (scm.viewIds.length > 0) {
-                for (ix=0;ix<scm.viewIds;ix++) {
-                    var viewObj = scm.viewObjFind(viewIds[ix],undefined);
+                for (var ix=0;ix<scm.viewIds.length;ix++) {
+                    var viewObj = scm.viewObjFind(scm.viewIds[ix]);//,undefined);
                     if (viewObj != undefined)
                         scm.propagateViewVis(viewObj,parentVis);
                 }
             } else { // No view so, simple
-                var children = scm.childrenFind(parentObj);
+                // vis outside of subCfg
+                var visText = 'hide';
+                if (parentVis == 1)
+                    visText = 'dense';
+                else if (parentVis == 2)
+                    visText = 'squish';
+                else if (parentVis == 3)
+                    visText = 'pack';
+                else if (parentVis == 4)
+                    visText = 'full';
+                var children = scm.visChildrenFind(parentObj);
                 $(children).each(function (i) {
-                    var subCb = scm.subCbFind(this);
-                    if (subCb != undefined) {
-                        if (subCb.disabled != true && subCb.checked) {  // TODO: Integrate with things that enable/check!
-                            $(this).attr('selectedIndex',parentVis);
-                            scm.clearChange(this);
-                        }
+                    if ($(this).hasClass('fauxInput')) {
+                        $(this).text(visText);
+                    } else {
+                        $(this).attr('selectedIndex',parentVis);
+                        scm.clearChange(this);
                     }
                 });
+                // vis inside of subCfg
+                //var children = scm.childrenFind(parentObj);
+                //$(children).each(function (i) {
+                //    var subCb = scm.subCbFind(this);
+                //    if (subCb != undefined) {
+                //        if (subCb.disabled != true && subCb.checked) {  // TODO: Integrate with things that enable/check!
+                //            $(this).attr('selectedIndex',parentVis);
+                //            scm.clearChange(this);
+                //        }
+                //    }
+                //});
             }
         } else {
             // First get composite vis to limit with
@@ -1791,7 +1852,10 @@ var scm = { // subtrack config module.
 
         if ($(obj).hasClass('disabled'))
             return;
-        var selectHtml = "<SELECT id='"+subtrack+"' class='normalText subVisDD' style='width: 70px'>";
+        var classList = $( obj ).attr("class").split(" ");
+        var view = classList[classList.length - 1];
+        var classList = $(obj).attr('class').split(' '); // This relies on view being the last class!!!
+        var selectHtml = "<SELECT id='"+subtrack+"' class='normalText subVisDD "+view+"' style='width: 70px'>";
         var selected = $(obj).text();
         if (selected == 'hide')
             selectHtml += "<OPTION SELECTED>hide</OPTION><OPTION>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
@@ -1821,25 +1885,25 @@ var scm = { // subtrack config module.
         }
     },
 
-    enableCfg: function (cb,subtrack,setTo)
+    enableCfg: function (subCb,subtrack,setTo)
     { // Enables or disables subVis and wrench
-        if (cb == null || cb == undefined) {
+        if (subCb == null || subCb == undefined) {
             if (subtrack == null || subtrack.length == 0) {
                 warn("scm.enableCfg() called without CB or subtrack.");
                 return false;
             }
-            cb = $("input[name='"+subtrack+"'_sel]");
-            if (cb == undefined || cb.length == 0) {
+            subCb = $("input[name='"+subtrack+"'_sel]");
+            if (subCb == undefined || subCb.length == 0) {
                 warn("scm.enableCfg() could not find CB for subtrack: "+subtrack);
                 return false;
             }
         }
-        if (cb.length == 1)
-            cb = cb[0];
+        if (subCb.length == 1)
+            subCb = subCb[0];
 
-        var td = $(cb).parent('td');
+        var td = $(subCb).parent('td');
         if (td == undefined || td.length == 0) {
-            warn("scm.enableCfg() could not TD for CB: "+cb.name);
+            warn("scm.enableCfg() could not find TD for CB: "+subCb.name);
             return false;
         }
         if (td.length == 1)
@@ -1864,6 +1928,7 @@ var scm = { // subtrack config module.
                 $(wrench).addClass('halfVis');
         }
     },
+
     cfgToggle: function (wrench,subtrack)
     { // Opens/closes subtrack cfg dialog, populating if empty
         var cfg = $("div#div_cfg_"+subtrack);

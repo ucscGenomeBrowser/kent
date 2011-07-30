@@ -4068,16 +4068,30 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #ifdef SUBTRACK_CFG
 #define SUBTRACK_CFG_VIS_SEEN
 #ifdef SUBTRACK_CFG_VIS_SEEN
-    enum trackVisibility vis = tdbVisLimitedByAncestry(cart, subtrack, TRUE);
+    enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
+    char *view = NULL;
+    if (membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
+        view = membership->membership[ix];
+    //enum trackVisibility vis = tdbVisLimitedByAncestry(cart, subtrack, TRUE);
     //if (fourStateVisible(fourState))
     //    {
     //    safef(buffer, sizeof(buffer), " onclick='return scm.cfgToggle(\"%s\");'%s",subtrack->track,(fourStateVisible(fourState) ?"":" disabled"));
-    //    hTvDropDownClassVisOnlyAndExtra(subtrack->track,vis,TRUE,"normalText subVisDD", NULL,buffer);
+    //    char classList[256];
+    //    if (view != NULL)
+    //        safef(classList,sizeof(classList),"normalText subVisDD %s",view);
+    //    else
+    //        safecpy(classList,sizeof(classList),"normalText subVisDD");
+    //    hTvDropDownClassVisOnlyAndExtra(subtrack->track,vis,TRUE,classList, NULL,buffer);
     //    }
     //else
     //    {
-        #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='clickable fauxInput%s subVisDD' style='width:65px;' onclick='return scm.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
-        printf(SUBTRACK_CFG_VIS,subtrack->track,(visibleCB ? "":" disabled"),subtrack->track,hStringFromTv(vis));
+        char classList[256];
+        if (view != NULL)
+            safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD %s",(visibleCB ? "":" disabled"),view); // view should be last!
+        else
+            safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD",(visibleCB ? "":" disabled"));
+        #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='%s' style='width:65px;' onclick='return scm.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
+        printf(SUBTRACK_CFG_VIS,subtrack->track,classList,subtrack->track,hStringFromTv(vis));
     //    }
 #endif///def SUBTRACK_CFG_VIS_SEEN
     if (cType != cfgNone)  // make a wrench
@@ -7135,7 +7149,7 @@ if (subtrackOverride)
 // subtracks without explicit (cart) vis but are selected, should get inherited vis
 if (tdbIsContainerChild(tdb))
     {
-    if (checkBoxToo && fourStateVisible(subtrackFourStateChecked(tdb,cart)))
+    if (!checkBoxToo || fourStateVisible(subtrackFourStateChecked(tdb,cart)))
         vis = tvFull; // to be limited by ancestry
     }
 
