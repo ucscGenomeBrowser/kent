@@ -533,7 +533,9 @@ void tdbExtrasFree(struct tdbExtras **pTdbExtras);
 INLINE struct tdbExtras *tdbExtrasGet(struct trackDb *tdb)
 // Returns tdbExtras struct, initializing if needed.
 {
-assert(tdb->tdbExtras != NULL);
+//assert(tdb->tdbExtras != NULL);
+if (tdb->tdbExtras == NULL)   // Temprarily add this back in because Angie see asserts popping.
+    tdb->tdbExtras = tdbExtrasNew();
 return tdb->tdbExtras;
 }
 
