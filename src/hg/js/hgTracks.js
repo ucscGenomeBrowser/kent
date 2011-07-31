@@ -2573,24 +2573,28 @@ function handleUpdateTrackMap(response, status)
     } else {
         if(imageV2) {
             // Implement in-place updating of hgTracks image
-            //
-            // We update rows one at a time (updating the whole imgTable at one time doesn't work in IE).
-            for (id in hgTracks.trackDb) {
-                if(!updateTrackImgForId(response, id)) {
-                    showWarning("Couldn't parse out new image for id: " + id);
-                    //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
+            setPositionByCoordinates(json.chromName, json.winStart + 1, json.winEnd);
+            $("input[name='c']").val(json.chromName);
+            $("input[name='l']").val(json.winStart);
+            $("input[name='r']").val(json.winEnd);
+            if(json.cgiVersion != hgTracks.cgiVersion) {
+                // Must reload whole page because of a new version on the server; this should happen very rarely.
+                // Note that we have already updated position based on the user's action.
+                jQuery('body').css('cursor', 'wait');
+	        document.TrackHeaderForm.submit();
+            } else {
+                // We update rows one at a time (updating the whole imgTable at one time doesn't work in IE).
+                for (id in hgTracks.trackDb) {
+                    if(!updateTrackImgForId(response, id)) {
+                        showWarning("Couldn't parse out new image for id: " + id);
+                        //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
+                    }
                 }
-            }
-            if(json != undefined) {
                 hgTracks = json;
-                $("input[name='c']").val(json.chromName);
-                $("input[name='l']").val(json.winStart);
-                $("input[name='r']").val(json.winEnd);
-            }
-                setPositionByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd);
                 originalPosition = undefined;
                 initVars();
-            afterImgTblReload();
+                afterImgTblReload();
+            }
         } else {
             a= /<IMG([^>]+SRC[^>]+id='trackMap[^>]*)>/.exec(response);
             // Deal with a is null

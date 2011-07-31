@@ -5876,7 +5876,8 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     }
 
 jsonForClient = newJsonHash(newHash(8));
-boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0");
+jsonHashAddString(jsonForClient, "cgiVersion", CGI_VERSION);
+boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"), "0");
 
 if(!trackImgOnly)
     {
