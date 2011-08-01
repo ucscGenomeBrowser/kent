@@ -382,6 +382,7 @@ for (i=0;  i < vcff->genotypeCount;  i++)
     else
 	gtOtherCount++;
     }
+// These are pooled strings! Restore when done.
 if (revCmplDisp)
     {
     reverseComplement(rec->ref, strlen(rec->ref));
@@ -394,6 +395,13 @@ dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->ref, rec->ref, gtRefRefCou
 	       altAlleles[0], altAlleles[0], gtAltAltCount);
 if (gtOtherCount > 0)
     dyStringPrintf(dy, " other:%d", gtOtherCount);
+// Restore original values of pooled strings.
+if (revCmplDisp)
+    {
+    reverseComplement(rec->ref, strlen(rec->ref));
+    for (i=0;  i < altCount;  i++)
+	reverseComplement(altAlleles[i], strlen(altAlleles[i]));
+    }
 return dy->string;
 }
 
@@ -438,7 +446,7 @@ if (isCenter)
     // Thick black lines to distinguish this variant:
     int yBot = yOff + tg->height - 2;
     hvGfxBox(hvg, x1-3, yOff, 3, tg->height, MG_BLACK);
-    hvGfxBox(hvg, x2+1, yOff, 3, tg->height, MG_BLACK);
+    hvGfxBox(hvg, x2, yOff, 3, tg->height, MG_BLACK);
     hvGfxLine(hvg, x1-2, yOff, x2+2, yOff, MG_BLACK);
     hvGfxLine(hvg, x1-2, yBot, x2+2, yBot, MG_BLACK);
     // Special mouseover instructions:
