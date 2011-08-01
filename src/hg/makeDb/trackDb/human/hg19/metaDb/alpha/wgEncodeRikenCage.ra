@@ -3069,7 +3069,6 @@ labProtocolId gen0121C-cage
 localization cytosol
 md5sum d871d29397114870d82b1c19b0111519
 origAssembly hg18
-parentTable wgEncodeRikenCageHelas3CytosolLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2784
@@ -3481,7 +3480,6 @@ labProtocolId gen0123NLtcage
 localization nucleolus
 md5sum fb18f833db6f51bee64857dc15bd9ea9
 origAssembly hg18
-parentTable wgEncodeRikenCageHelas3NucleolusTotalRawSignal
 project wgEncode
 rnaExtract total
 subId 2783
@@ -9520,4 +9518,4 @@ rnaExtract longPolyA
 subId 4524
 view TssGencV7
 
-# MAGIC: 394027326
+# MAGIC: -1114613205
