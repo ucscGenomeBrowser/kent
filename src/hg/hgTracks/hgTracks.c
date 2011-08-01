@@ -104,7 +104,7 @@ boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug
 int imagePixelHeight = 0;
 boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
-struct hash *jsVarsHash = NULL;
+struct jsonHashElement *jsonForClient = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
@@ -2468,16 +2468,16 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-jsAddBoolean(jsVarsHash, "dragSelection", dragZooming);
-jsAddBoolean(jsVarsHash, "inPlaceUpdate", IN_PLACE_UPDATE);
+jsonHashAddBoolean(jsonForClient, "dragSelection", dragZooming);
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
 
 if(rulerClickHeight)
     {
-    jsAddNumber(jsVarsHash, "rulerClickHeight", rulerClickHeight);
+    jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
     }
 if(newWinWidth)
     {
-    jsAddNumber(jsVarsHash, "newWinWidth", newWinWidth);
+    jsonHashAddNumber(jsonForClient, "newWinWidth", newWinWidth);
     }
 
 /* Save out picture and tell html file about it. */
@@ -4579,8 +4579,8 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsAddNumber(jsVarsHash, "insideX", insideX);
-jsAddBoolean(jsVarsHash, "revCmplDisp", revCmplDisp);
+jsonHashAddNumber(jsonForClient, "insideX", insideX);
+jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
 
 #ifdef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
@@ -4763,9 +4763,9 @@ if(theImgBox)
 hPrintf("<CENTER>\n");
 
 // info for drag selection javascript
-jsAddNumber(jsVarsHash, "winStart", winStart);
-jsAddNumber(jsVarsHash, "winEnd", winEnd);
-jsAddString(jsVarsHash, "chromName", chromName);
+jsonHashAddNumber(jsonForClient, "winStart", winStart);
+jsonHashAddNumber(jsonForClient, "winEnd", winEnd);
+jsonHashAddString(jsonForClient, "chromName", chromName);
 
 if(trackImgOnly && !ideogramToo)
     {
@@ -5874,48 +5874,52 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
     }
-hWrites(commonCssStyles());
-jsVarsHash = newHash(8);
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("ajax.js", NULL);
-boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0");
-if(dragZooming && !searching)
+
+jsonForClient = newJsonHash(newHash(8));
+jsonHashAddString(jsonForClient, "cgiVersion", CGI_VERSION);
+boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"), "0");
+
+if(!trackImgOnly)
     {
-    jsIncludeFile("jquery.imgareaselect.js", NULL);
+    // Write out includes for css and js files
+    hWrites(commonCssStyles());
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("utils.js", NULL);
+    jsIncludeFile("ajax.js", NULL);
+    if(dragZooming && !searching)
+        {
+        jsIncludeFile("jquery.imgareaselect.js", NULL);
 #ifndef NEW_JQUERY
-    webIncludeResourceFile("autocomplete.css");
-    jsIncludeFile("jquery.autocomplete.js", NULL);
+        webIncludeResourceFile("autocomplete.css");
+        jsIncludeFile("jquery.autocomplete.js", NULL);
 #endif///ndef NEW_JQUERY
-    }
+        }
     jsIncludeFile("autocomplete.js", NULL);
-jsIncludeFile("hgTracks.js", NULL);
+    jsIncludeFile("hgTracks.js", NULL);
 
 #ifdef LOWELAB
-jsIncludeFile("lowetooltip.js", NULL);
+    jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
-if(advancedJavascriptFeaturesEnabled(cart))
-    {
-    webIncludeResourceFile("jquery-ui.css");
-    if (!searching) // NOT doing search
+    if(advancedJavascriptFeaturesEnabled(cart))
         {
-        webIncludeResourceFile("jquery.contextmenu.css");
-        jsIncludeFile("jquery.contextmenu.js", NULL);
-        webIncludeResourceFile("ui.dropdownchecklist.css");
-        jsIncludeFile("ui.dropdownchecklist.js", NULL);
+        webIncludeResourceFile("jquery-ui.css");
+        if (!searching) // NOT doing search
+            {
+            webIncludeResourceFile("jquery.contextmenu.css");
+            jsIncludeFile("jquery.contextmenu.js", NULL);
+            webIncludeResourceFile("ui.dropdownchecklist.css");
+            jsIncludeFile("ui.dropdownchecklist.js", NULL);
 #ifdef NEW_JQUERY
-        jsIncludeFile("ddcl.js", NULL);
+            jsIncludeFile("ddcl.js", NULL);
 #endif///def NEW_JQUERY
+            }
         }
-    }
 
-//if (!trackImgOnly)
-    {
-hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
-// XXXX stole this and '.hidden' from bioInt.css - needs work
-hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
+    hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
+    // XXXX stole this and '.hidden' from bioInt.css - needs work
+    hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
 
 /* check for new data hub */
@@ -5994,10 +5998,9 @@ else
     {
     tracksDisplay();
     }
-if(hashNumEntries(jsVarsHash))
-    {
-    hPrintf("<script type='text/javascript'>\n");
-    jsPrintHash(jsVarsHash, "hgTracks", 0);
-    hPrintf("</script>\n");
-    }
+
+hPrintf("<script type='text/javascript'>\n");
+jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
+hPrintf("</script>\n");
+
 }

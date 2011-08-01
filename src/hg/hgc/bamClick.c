@@ -38,7 +38,7 @@ int tStart = core->pos, tEnd = tStart+tLength;
 boolean isRc = useStrand && bamIsRc(bam);
 printPosOnChrom(seqName, tStart, tEnd, NULL, FALSE, itemName);
 if (!skipQualityScore)
-   printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
+    printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
 printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
 bamShowCigarEnglish(bam);
 printf(")<BR>\n");
@@ -55,13 +55,17 @@ puts("<BR>");
 char nibName[HDB_MAX_PATH_STRING];
 hNibForChrom(database, seqName, nibName);
 struct dnaSeq *genoSeq = hFetchSeq(nibName, seqName, tStart, tEnd);
-char *qSeq = NULL;
-struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart, useStrand, &qSeq);
-printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
-       seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
-ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
-		 FALSE);
-if (!skipQualityScore)
+char *qSeq = bamGetQuerySequence(bam, FALSE);
+if (isNotEmpty(qSeq) && !sameString(qSeq, "*"))
+    {
+    char *qSeq = NULL;
+    struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart, useStrand, &qSeq);
+    printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
+	   seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
+    ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
+		     FALSE);
+    }
+if (!skipQualityScore && core->l_qseq > 0)
     {
     printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
     UBYTE *quals = bamGetQueryQuals(bam, useStrand);

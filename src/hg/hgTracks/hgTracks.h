@@ -352,6 +352,7 @@ struct gsidSeq
     };
 
 extern struct trackLayout tl;
+extern struct jsonHashElement *jsonForClient;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern struct hash *oldVars;       /* List of vars from previous cart. */
