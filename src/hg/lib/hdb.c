@@ -3595,8 +3595,6 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                tdbMarkAsCompositeView(tdb);
             }
         }
-    if(tdb->tdbExtras == NULL) // probably assertable, but don't make a repeat call harmful
-        tdb->tdbExtras = tdbExtrasNew();
     trackDbContainerMarkup(tdb, tdb->subtracks);
     }
 }
@@ -3770,7 +3768,7 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 struct trackDb *theTdbs = NULL;
 if (tdbList == NULL || *tdbList == NULL)
     {
-//#define HGAPI_NEEDS_THIS
+#define HGAPI_NEEDS_THIS
 #ifdef HGAPI_NEEDS_THIS
     // This was removed becuase of missing cart. BUT CART ISN"T USED DOWN BLELOW
     // NOTE: Currently any call to this (hub or not), makes a tdbList and leaks it!
