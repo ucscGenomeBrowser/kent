@@ -3,6 +3,25 @@ objType composite
 composite wgEncodeOpenChromSynth
 expVars lab,dataType,cell,composite
 
+metaObject wgEncodeOpenChromSynthGlioblaPk
+objType table
+cell Gliobla
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthGlioblaPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGlioblaPk
+treatment None
+view Peaks
+
 metaObject wgEncodeOpenChromSynthGm12878Pk
 objType table
 cell GM12878
@@ -23,6 +42,82 @@ subId 3273
 tableName wgEncodeOpenChromSynthGm12878Pk
 view Peaks
 
+metaObject wgEncodeOpenChromSynthGm12891Pk
+objType table
+cell GM12891
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthGm12891Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGm12891Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthGm12892Pk
+objType table
+cell GM12892
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthGm12892Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGm12892Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthGm18507Pk
+objType table
+cell GM18507
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthGm18507Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGm18507Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthGm19239Pk
+objType table
+cell GM19239
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthGm19239Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGm19239Pk
+treatment None
+view Peaks
+
 metaObject wgEncodeOpenChromSynthH1hescPk
 objType table
 cell H1-hESC
@@ -41,6 +136,25 @@ origAssembly hg19
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthH1hescPk
+view Peaks
+
+metaObject wgEncodeOpenChromSynthHelas3Ifna4hPk
+objType table
+cell HeLa-S3
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthHelas3Ifna4hPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthHelas3Ifna4hPk
+treatment IFNa4h
 view Peaks
 
 metaObject wgEncodeOpenChromSynthHelas3Pk
@@ -83,6 +197,25 @@ subId 3273
 tableName wgEncodeOpenChromSynthHepg2Pk
 view Peaks
 
+metaObject wgEncodeOpenChromSynthHtr8Pk
+objType table
+cell HTR8svn
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthHtr8Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthHtr8Pk
+treatment None
+view Peaks
+
 metaObject wgEncodeOpenChromSynthHuvecPk
 objType table
 cell HUVEC
@@ -123,6 +256,25 @@ subId 3273
 tableName wgEncodeOpenChromSynthK562Pk
 view Peaks
 
+metaObject wgEncodeOpenChromSynthMedulloPk
+objType table
+cell Medullo
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthMedulloPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthMedulloPk
+treatment None
+view Peaks
+
 metaObject wgEncodeOpenChromSynthNhekPk
 objType table
 cell NHEK
@@ -143,4 +295,42 @@ subId 3273
 tableName wgEncodeOpenChromSynthNhekPk
 view Peaks
 
-# MAGIC: 1484753089
+metaObject wgEncodeOpenChromSynthPanisletsPk
+objType table
+cell PanIslets
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthPanisletsPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthPanisletsPk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthUrothelUt189Pk
+objType table
+cell Urothelia
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeOpenChromSynthUrothelUt189Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+origAssembly hg19
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthUrothelUt189Pk
+treatment UT189
+view Peaks
+
+# MAGIC: 2071389588
