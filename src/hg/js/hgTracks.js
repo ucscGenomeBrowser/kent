@@ -21,7 +21,7 @@ var currentMapItem;
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;  // turn on experimental zoom-to-codon functionality (currently only on in larrym's tree).
-var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate
+var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate and mapIsUpdateable
 
 /* Data passed in from CGI via the hgTracks object:
  *
@@ -2545,6 +2545,7 @@ function handleUpdateTrackMap(response, status)
                 if(json.trackDb[this.id].limitedVis)
                     limitedVis = visibilityStrsOrder[json.trackDb[this.id].limitedVis];
                 if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
+                    // see redmine 1333#note-9
                     alert("There are too many items to display the track in " + this.newVisibility + " mode.");
                 var rec = hgTracks.trackDb[this.id];
                 rec.limitedVis = json.trackDb[this.id].limitedVis;
@@ -2572,24 +2573,28 @@ function handleUpdateTrackMap(response, status)
     } else {
         if(imageV2) {
             // Implement in-place updating of hgTracks image
-            //
-            // We update rows one at a time (updating the whole imgTable at one time doesn't work in IE).
-            for (id in hgTracks.trackDb) {
-                if(!updateTrackImgForId(response, id)) {
-                    showWarning("Couldn't parse out new image for id: " + id);
-                    //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
+            setPositionByCoordinates(json.chromName, json.winStart + 1, json.winEnd);
+            $("input[name='c']").val(json.chromName);
+            $("input[name='l']").val(json.winStart);
+            $("input[name='r']").val(json.winEnd);
+            if(json.cgiVersion != hgTracks.cgiVersion) {
+                // Must reload whole page because of a new version on the server; this should happen very rarely.
+                // Note that we have already updated position based on the user's action.
+                jQuery('body').css('cursor', 'wait');
+	        document.TrackHeaderForm.submit();
+            } else {
+                // We update rows one at a time (updating the whole imgTable at one time doesn't work in IE).
+                for (id in hgTracks.trackDb) {
+                    if(!updateTrackImgForId(response, id)) {
+                        showWarning("Couldn't parse out new image for id: " + id);
+                        //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
+                    }
                 }
-            }
-            if(json != undefined) {
                 hgTracks = json;
-                $("input[name='c']").val(json.chromName);
-                $("input[name='l']").val(json.winStart);
-                $("input[name='r']").val(json.winEnd);
-            }
-                setPositionByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd);
                 originalPosition = undefined;
                 initVars();
-            afterImgTblReload();
+                afterImgTblReload();
+            }
         } else {
             a= /<IMG([^>]+SRC[^>]+id='trackMap[^>]*)>/.exec(response);
             // Deal with a is null

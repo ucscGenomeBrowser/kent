@@ -32743,7 +32743,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3149
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1
-treatment retinoic acid
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2
