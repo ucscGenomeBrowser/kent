@@ -9,6 +9,7 @@
 #include "hdb.h"
 #include "hgc.h"
 #include "htmshell.h"
+#include "jsHelper.h"
 #if (defined USE_TABIX && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
@@ -16,17 +17,16 @@
 #include "pgSnp.h"
 #include "trashDir.h"
 #include "vcf.h"
-
+#include "vcfUi.h"
 
 #define NA "<em>n/a</em>"
 
-static void printListWithDescriptions(struct vcfFile *vcff, char *str, char *sep, struct vcfInfoDef *infoDefs)
-/* Given a VCF field, its separator char and a list of vcfInfoDefs, print out a list
- * of values with descriptions if descriptions are available. */
+static void printKeysWithDescriptions(struct vcfFile *vcff, int wordCount, char **words,
+				      struct vcfInfoDef *infoDefs)
+/* Given an array of keys, print out a list of values with
+ * descriptions if descriptions are available. */
 {
-char *copy = cloneString(str);
-char *words[256];
-int i, wordCount = chopString(copy, sep, words, ArraySize(words));
+int i;
 for (i = 0;  i < wordCount; i++)
     {
     if (i > 0)
@@ -39,6 +39,16 @@ for (i = 0;  i < wordCount; i++)
 	printf("%s", htmlEncode(key));
     }
 printf("<BR>\n");
+}
+
+static void printListWithDescriptions(struct vcfFile *vcff, char *str, char *sep, struct vcfInfoDef *infoDefs)
+/* Given a VCF field, its separator char and a list of vcfInfoDefs, print out a list
+ * of values with descriptions if descriptions are available. */
+{
+char *copy = cloneString(str);
+char *words[256];
+int wordCount = chopString(copy, sep, words, ArraySize(words));
+printKeysWithDescriptions(vcff, wordCount, words, infoDefs);
 }
 
 static void vcfAltAlleleDetails(struct vcfRecord *rec)
@@ -54,18 +64,27 @@ struct vcfFile *vcff = rec->file;
 printListWithDescriptions(vcff, rec->alt, ",", vcff->altDefs);
 }
 
+static void vcfQualDetails(struct vcfRecord *rec)
+/* If VCF header specifies a quality/confidence score (not "."), print it out. */
+{
+printf("<B>Quality/confidence score:</B> %s<BR>\n", sameString(rec->qual, ".") ? NA : rec->qual);
+}
+
 static void vcfFilterDetails(struct vcfRecord *rec)
 /* If VCF header specifies any filters, pull in descriptions. */
 {
-if (sameString(rec->filter, "PASS"))
-    printf("<B>Filter:</B> ");
+if (rec->filterCount == 0 || sameString(rec->filters[0], "."))
+    printf("<B>Filter:</B> "NA"<BR>\n");
+else if (rec->filterCount == 1 && sameString(rec->filters[0], "PASS"))
+    printf("<B>Filter:</B> PASS<BR>\n");
 else
+    {
     printf("<B>Filter failures:</B> ");
-struct vcfFile *vcff = rec->file;
-if (sameString(rec->filter, "."))
-    printf(NA"<BR>\n");
-else
-    printListWithDescriptions(vcff, rec->filter, ",", vcff->filterDefs);
+    printf("<font style='font-weight: bold; color: #FF0000;'>\n");
+    struct vcfFile *vcff = rec->file;
+    printKeysWithDescriptions(vcff, rec->filterCount, rec->filters, vcff->filterDefs);
+    printf("</font>\n");
+    }
 }
 
 static void vcfInfoDetails(struct vcfRecord *rec)
@@ -116,7 +135,7 @@ else
 return NULL;
 }
 
-static void vcfGenotypesDetails(struct vcfRecord *rec)
+static void vcfGenotypesDetails(struct vcfRecord *rec, char *track)
 /* Print genotypes in some kind of table... */
 {
 struct vcfFile *vcff = rec->file;
@@ -128,14 +147,14 @@ if (tmp1 == NULL)
     tmp1 = dyStringNew(0);
     tmp2 = dyStringNew(0);
     }
-// TODO: make this a collapsible section
+jsBeginCollapsibleSection(cart, track, "genotypes", "Detailed genotypes", FALSE);
 vcfParseGenotypes(rec);
 dyStringClear(tmp1);
 dyStringAppend(tmp1, rec->format);
 enum vcfInfoType formatTypes[256];
 char *formatKeys[256];
 int formatCount = chopString(tmp1->string, ":", formatKeys, ArraySize(formatKeys));
-puts("<BR><B>Genotype info key:</B><BR>");
+puts("<B>Genotype info key:</B><BR>");
 int i;
 for (i = 0;  i < formatCount;  i++)
     {
@@ -187,6 +206,7 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
     puts("</TR>");
     }
 hTableEnd();
+jsEndCollapsibleSection();
 }
 
 static void pgSnpCodingDetail(struct vcfRecord *rec)
@@ -208,22 +228,22 @@ static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec)
  * (using seqName instead of rec->chrom because rec->chrom might lack "chr"). */
 {
 printf("<B>Name:</B> %s<BR>\n", rec->name);
-if (rec->file->genotypeCount > 0)
-    {
-    char cartVar[512];
-    safef(cartVar, sizeof(cartVar), "%s.centerVariantPos", tdb->track);
-    printf("<A HREF=\"%s&%s=%s:%d\">View haplotypes sorted by variants at this position</A><BR>\n",
-	   hgTracksPathAndSettings(), cartVar, seqName, rec->chromStart);
-    }
+printCustomUrl(tdb, rec->name, TRUE);
+static char *formName = "vcfCfgHapCenter";
+printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
+vcfCfgHaplotypeCenter(cart, tdb, rec->file, rec->name, seqName, rec->chromStart, formName);
+printf("</FORM>\n");
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);
 printf("<B>Reference allele:</B> %s<BR>\n", rec->ref);
 vcfAltAlleleDetails(rec);
-if (rec->qual != 0.0)
-    printf("<B>Call quality:</B> %.1f<BR>\n", rec->qual);
+vcfQualDetails(rec);
 vcfFilterDetails(rec);
 vcfInfoDetails(rec);
 pgSnpCodingDetail(rec);
-vcfGenotypesDetails(rec);
+// Wrapper table for collapsible section:
+puts("<TABLE>");
+vcfGenotypesDetails(rec, tdb->track);
+puts("</TABLE>");
 }
 
 void doVcfTabixDetails(struct trackDb *tdb, char *item)
@@ -262,6 +282,8 @@ if (vcff != NULL)
 	if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
 	    vcfRecordDetails(tdb, rec);
     }
+else
+    printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
 }
 
 

@@ -1218,6 +1218,12 @@ boolean printPennantIconNote(struct trackDb *tdb);
 void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed);
 // Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
 
+boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title);
+/* Handle start of box and title for individual track type settings */
+
+void cfgEndBox(boolean boxed);
+/* Handle end of box and title for individual track type settings */
+
 void printUpdateTime(char *database, struct trackDb *tdb,
     struct customTrack *ct);
 /* display table update time, or in case of bbi file, file stat time */

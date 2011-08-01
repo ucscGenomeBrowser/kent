@@ -1,0 +1,661 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>Using UCSC Genome Browser Track Hubs</TITLE>
+	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
+</HEAD>
+
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+
+<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/topbar.html"--></TD></TR>
+<!-----Content Tables------------------------------------>  
+<!--
+    <TD CELLPADDING=10 ROWSPAN=2 VALIGN="top">
+-->
+    <TR><TD CELLPADDING=10 ROWSPAN=2 VALIGN="top">	
+  	<!--outer table is for border purposes-->
+  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+	    <TR><TD>	
+    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+		    <TR><TD>	
+			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+			    <TR><TD>
+			    <FONT SIZE="4"><B>&nbsp;Using UCSC Genome
+Browser Track Hubs</B></FONT> 
+			    </TD></TR>
+			</TABLE>
+			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			    <TR><TH HEIGHT=10></TH></TR>
+			    <TR><TD WIDTH=10>&nbsp;</TD><TD> 
+				<B><FONT COLOR="#006666" SIZE=4> Table of Contents: </FONT></B>
+				<TABLE BORDER=0 NOWRAP CELLPADDING=0 CELLSPACING=0 MARGINS=0>
+			 	    <TR><TH HEIGHT=10></TH></TR>
+				    <TR><TD>
+				        <UL><B>
+				  	    <LI><A HREF="#Intro">What
+Are Track Hubs?</A>
+					    <LI><A HREF="#View">Viewing Track Hubs in the Browser</A>
+					    <LI><A HREF="#Setup">Setting
+Up Your Own Track Hub</A>
+					    <LI><A HREF="#Debug">Debugging and Updating Track Hubs</A>
+					    <LI><A HREF="#Register">Registering a Track Hub with UCSC</A>
+				  	</B></UL></TD>
+				    </TR>
+				</TABLE>
+				<P>
+		                <FORM name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">
+		                Search the Genome Browser help pages: &nbsp;
+                		<input type="hidden" name="q" value="">
+		                <input type="hidden" name="num" value="10">
+                		<input type="hidden" name="filter" value="0">
+		                <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+                		<input TYPE="submit" VALUE="Submit">
+		                </FORM>
+                		</p><p>
+		                <A HREF="../../contacts.html">Questions and feedback are welcome</A>.
+                		</p>
+				</TD>
+				<TD WIDTH=15></TD>
+			    </TR>
+			</TABLE>
+	 	    <BR></TD></TR>
+		</TABLE>
+	    </TD></TR>
+	</TABLE>
+
+<!-----------What Are Track Hubs?-------------------------------------------->
+<A NAME="Intro"></A><BR>
+
+	<!--outer table is for border purposes-->
+	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+	    <TR><TD>	
+    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+		    <TR><TD>	
+			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+			    <TR><TD><FONT SIZE="4"><A
+NAME="TOC"></A><B>&nbsp; What Are Track Hubs?</B></FONT>
+			    </TD></TR>
+			</TABLE>
+			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			    <TR><TH HEIGHT=10></TH></TR>
+			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
+				<P>
+Track hubs are web-accessible directories of genomic data that can
+be viewed on the UCSC Genome Browser alongside native annotation
+tracks. Hubs are a useful tool for visualizing a large number of genome-wide 
+data sets. For example, a project that has produced several wiggle plots of data
+can use the hub utility to organize the tracks into composite and
+super-tracks, making it possible to show the data for a large collection of 
+tissues and experimental conditions in a visually elegant way, similar to how 
+the ENCODE native data tracks are displayed in the browser.
+<P>
+The track hub utility allows efficient access to data sets
+from around the world through the familiar Genome Browser interface. 
+Browser users can display tracks from any public track hub that has been
+registered with UCSC. Additionally, users can import data from unlisted hubs
+or can set up, display, and share their own track hubs.
+<P>
+The data underlying the tracks in a hub reside on the remote 
+server of the data provider rather than at UCSC. 
+The data are stored in compressed binary indexed files in bigBed, bigWig or BAM 
+format that contain the data at several resolutions.
+When a hub track is displayed in the Genome Browser, only the
+relevant data needed to support the view of the current genomic region is 
+transmitted rather than the entire file. The transmitted data is cached
+on the UCSC server to expedite future access. This on-demand transfer mechanism 
+eliminates the need to transmit large data sets across the Internet,
+thereby minimizing upload time into the browser. 
+<P>
+The track hub utility offers a convenient way to view and share very large sets
+of data. Individuals wishing to display only a few small data sets may find it 
+easier to use the Genome Browser 
+<A HREF="hgTracksHelp.html#CustomTracks">custom track</A> utility. 
+As with hub tracks, custom tracks can be uploaded to the UCSC Genome 
+Browser and viewed alongside the native annotation tracks. Custom tracks can be
+constructed from a wide range of data types; hub tracks are limited
+to compressed binary indexed formats that can be remotely hosted. However, the 
+custom tracks utility does not offer the data persistence and track
+configurability provided by the track hub mechanism: hub tracks can be 
+grouped into composite or super-tracks and configured to display the data 
+using a wide variety of options. In general, for users who have large data 
+sets that would be prohibitive to upload, need to ensure the persistence of 
+their data, or would like to take full advantage of track functionality, track 
+hubs are a better solution. 
+Both mechanisms give data providers the flexibility to directly add, update, 
+and remove data from their display as needed.
+</P>
+			        </TD>
+			        <TD WIDTH=15></TD>
+			    </TR>
+			</TABLE>
+		    <BR></TD></TR>
+		</TABLE>
+	    </TD></TR>
+	</TABLE>
+
+<!-----------Viewing Hub Tracks in the Browser----------------------->
+<A NAME="View"></A><BR>
+
+	<!--outer table is for border purposes-->
+	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+	    <TR><TD>	
+    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+		    <TR><TD>	
+			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+			    <TR><TD><FONT SIZE="4"><A
+NAME="TOC"></A><B>&nbsp; Viewing Track Hubs in the Browser</B></FONT>
+			    </TD></TR>
+			</TABLE>
+			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			    <TR><TH HEIGHT=10></TH></TR>
+			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
+				<P>
+<B><I>Public hubs</I></B><BR>
+The Genome Browser provides links to a collection of public track hubs
+that have been registered with UCSC.
+To view a list of the public track hubs available for the currently
+selected assembly, click 
+the &quot;track hubs&quot; button on the Genome Browser gateway or
+annotation tracks page. 
+The Public Hubs tab on the Track Hubs page lists the hubs that are
+available for display in the browser. To add
+a hub to your display, check the Display checkbox in front of the hub's
+name, then click the &quot;Display Selected Hubs&quot; button. Tracks
+from the selected hub will be displayed in a separate track
+group below the browser image. The tracks can be 
+<A HREF="hgTracksHelp.html#FineTuning">configured and manipulated</A> in the 
+same fashion as native browser tracks. As with any very large track in
+the Genome Browser, exercise caution when viewing a broad genomic region
+that requires the Genome Browser to display a large number of track
+features: the browser display may time out.
+<P>
+<B><I>Unlisted hubs (located in the My Hubs tab)</I></B><BR>
+In addition to the publicly available hubs listed on the Public Hubs
+tab, it is possible to load your own unlisted track hub or one created by a 
+colleague as long as you know its URL. To
+add an unlisted hub, open the Track Hubs page and click the My Hubs
+tab. This tab lists the unlisted track hubs that you have loaded into your
+browser. To import a new hub, type its URL into the text box, then click
+the Add Hub button. If the track hub is imported successfully, it will
+be added to the list. If the browser is unable to load the track hub, it will
+display an error message. Some common causes for an import to
+fail include typos in the URL, attempting to add a track hub from a different
+assembly, a hub server that is offline, or errors in the track hub files. 
+Once you have successfully loaded a hub, you can view it in the browser
+by clicking the &quot;Display Selected Hubs&quot; button. Please note that
+unlisted hubs are in no way secure. The URL helps to obfuscate the
+location of the data; it is a simple barrier to casual users.
+<P>
+To remove a track hub from your Genome Browser display, uncheck its 
+Display checkbox on the Track Hubs page. The hub will
+no longer be visible on the browser tracks page, but will still be available 
+from the Track Hubs page. To completely remove an unlisted hub from your My 
+Hubs list, click the &quot;Disconnect&quot; button next to the track hub you wish to
+discard.
+<P>
+Occasionally, remote track hubs may be missing, off-line, or otherwise 
+unavailable. When a track hub is no longer accessible from the Genome
+Browser, it is automatically removed from the Track Hubs page. If a user
+is already browsing data from the remote hub when it disconnects, a yellow 
+error message will be displayed instead of the expected data.
+<P>
+The track sets in hubs are genome assembly specific. The Track Hubs page 
+lists only those hubs that contain tracks for the currently 
+selected genome assembly. To switch to a different assembly, click the
+Genomes link in the top menu bar, then select the new assembly from the
+Gateway page.
+<P>
+Tracks accessed through a hub can be used in Genome Browser 
+<A HREF="hgSessionHelp.html">sessions</A> and 
+<A HREF="hgTracksHelp.html#CustomTracks">custom tracks</A> in the same manner 
+as other tracks. The data underlying
+data hub tracks can be viewed, manipulated, and downloaded using the
+<A HREF="../../cgi-bin/hgTables">UCSC Table Browser</A>. 
+<!--Question: Are there any restrictions to these uses?-->
+			        </TD>
+			        <TD WIDTH=15></TD>
+			    </TR>
+			</TABLE>
+		    <BR></TD></TR>
+		</TABLE>
+	    </TD></TR>
+	</TABLE>
+
+<!-----------Setting Up Your Own Track Hub----------------------------------->
+<A NAME="Setup"></A><BR>
+
+	<!--outer table is for border purposes-->
+	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+	    <TR><TD>	
+    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+		    <TR><TD>	
+			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+			    <TR><TD><FONT SIZE="4"><A
+NAME="TOC"></A><B>&nbsp; Setting Up Your Own Track Hub</B></FONT>
+			    </TD></TR>
+			</TABLE>
+			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			    <TR><TH HEIGHT=10></TH></TR>
+			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
+				<P>
+This section provides a step-by-step description of the process used to
+set up a track hub on your own server.
+<P>
+To create your own hub you will need:
+<UL>
+<LI>
+one or more data sets formatted in one of the compressed binary index formats
+supported by the Genome Browser: bigBed, bigWig, or BAM
+<LI>
+a set of text files that specify properties for the track hub and for each of
+the data tracks within it
+<LI>
+an Internet-enabled web server or ftp server 
+<!--Question: do we have some general minimum requirements for this?-->
+</UL>
+<P> 
+The files are placed on the server in a file hierarchy like the one
+shown in <em>Example 1</em>. 
+Users experienced in setting up Genome Browser mirrors that
+contain their own data will find that setting up a track
+hub is similar, but is usually much easier.  Depending on the number
+and complexity of the data sets, a track hub can typically be set up in a day
+or two. 
+It is generally easiest to run the command-line data formatting programs in a 
+Linux programming environment, although it's possible to manipulate smaller 
+data sets using Mac OS-X as well.
+<P>
+<B><em>Example 1:</em></B> Directory hierarchy for a hub containing DNase and
+RNAseq data for the hg18 and hg19 human genome assemblies. The hg18/ and
+hg19/ subdirectories contain the assembly-specific data files. 
+<BLOCKQUOTE><TT>
+myHub/ - directory containing track hub files<BR>
+<BLOCKQUOTE>
+<DL>
+<DT>	hub.txt -  a short description of hub properties
+<DT>	genomes.txt - list of genome assemblies included in the hub data
+<DT>	hg19/ - directory of data for the hg19 (GRCh37) human assembly
+<DD>		trackDb.txt - display properties for tracks in this directory
+<DD>		dnase.html - description text for a DNase track 
+<DD>   		dnaseLiver.bigWig - wiggle plot of DNase in liver
+<DD>		dnaseLiver.bigBed - regions of active DNase
+<DD>		dnaseLung.bigWig - wiggle plot of DNase in lung
+<DD>		dnaseLung.bigWig - regions of active DNase
+<DD>			...
+<DD>		rnaSeq.html - description text for an RNAseq track
+<DD>		rnaSeqLiver.bigWig - wiggle plot of RNAseq data in liver
+<DD>		rnaSeqLiver.bigBed - intron/exon lists for liver
+<DD>		rnaSeqLung.bigWig - wiggle plot of RNAseq data in lung
+<DD>		rnaSeqLung.bigBed - intron/exon lists for lung
+<DT>	hg18/ - directory of data for the hg18 (Build 36) human assembly
+<DD>		trackDb.txt - display properties for tracks in this directory
+<DD>		dnase.html - description text for a DNase track 
+<DD> 		dnaseLiver.bigWig - wiggle plot of DNase data in liver
+<DD>		dnaseLiver.bigBed - regions of active DNase
+<DD>		dnaseLung.bigWig - wiggle plot of DNase data in lung
+<DD>		dnaseLung.bigWig - regions of active DNase
+<DD>			...
+<DD>		rnaSeq.html - description text for an RNAseq track
+<DD>		rnaSeqLiver.bigWig - wiggle plot of RNAseq data in liver
+<DD>		rnaSeqLiver.bigBed - intron/exon lists for liver
+<DD>		rnaSeqLung.bigWig - wiggle plot of RNAseq data in lung
+<DD>		rnaSeqLung.bigBed - intron/exon lists for lung
+</DL>
+</BLOCKQUOTE>
+</TT></BLOCKQUOTE>
+<P>
+<HR>
+<B>Step 1. Format the data</B><BR>
+The data tracks provided by a hub must be formatted in one of the 
+compressed binary index formats supported by the Genome Browser: 
+<A HREF="bigWig.html">bigWig</A>, 
+<A HREF="bigBed.html">bigBed</A>, or 
+<A HREF="bam.html">BAM</A>.
+<P>
+<em>bigWig</em> - 
+The bigWig format is best for displaying continuous value plot data,
+such as read depths from short read sequencing projects or levels of 
+conservation observed in a multiple-species alignment. A bigWig file contains a 
+list of chromosome segments, each of which is associated with a floating point 
+value. When graphed, the segments may appear as a big &quot;wiggle&quot;.  
+Although each bigWig file can contain only a single value for any given base, 
+bigWig tracks are often combined into &quot;container multiWig&quot; or
+&quot;composite on&quot; tagged tracks.
+For information on creating and configuring bigWig tracks, see the 
+<A HREF="bigWig.html">bigWig Track Format</A> help page. 
+<P>
+<em>bigBed</em> -
+BigBed files are binary indexed versions of Browser Extensible Data
+(<A HREF="../../FAQ/FAQformat#format1">BED</A>) files.  BED format is
+useful for associating a name and (optionally) a color and a score with one 
+or more related regions on the same chromosome, such as all the exons of a gene.
+See the <A HREF="bigBed.html">bigBed Track Format</A> help page for 
+information on creating and configuring bigBed tracks. 
+<P>
+<em>BAM</em> -
+BAM files contain alignments of (generally short) DNA reads to a
+reference sequence, usually a complete genome. BAM files are binary
+versions of Sequence Alignment/Map 
+(<A href="http://samtools.sourceforge.net/" TARGET=BLANK>SAM</A>) format files. 
+Unlike bigWig and bigBed formats, the
+index for a BAM file is in a separate file, which the track hub
+expects to be in the same directory with the same root name as the BAM file
+with the addition of a <em>.bai</em> suffix.  
+See the <A HREF="bam.html">BAM Track Format</A> help page for 
+more information. 
+<P>
+<HR>
+<B>Step 2. Create the track hub directory</B><BR>
+Create a track hub directory in an Internet-accessible location on your web or 
+ftp server. This directory will contain the hub.txt and genomes.txt
+files that define properties of the track hub and a subdirectory
+for each of the genome assemblies covered by the hub track data.
+<P>
+<HR>
+<B>Step 3. Place the track data files in an Internet-accessible location</B><BR>
+The data files underlying a track in a hub do not have to reside
+in the track hub directory or even on the same server, but they must be 
+accessible via the Internet.
+The track hub utility supports Internet protocols such as http://,
+https://, and ftp://, as well as file paths relative to the hub
+directory hierarchy. The location of a track file is defined by its 
+<em>bigDataUrl</em> tag in the associated trackDb.txt file (Step 7). 
+<P>
+<HR>
+<B>Step 4. Create the hub.txt file</B><BR>
+Within the hub directory, create a hub.txt file containing a single stanza 
+with five fields that define properties of the track hub: 
+<P>
+<BLOCKQUOTE><TT>
+<B>hub</B> <em>hub_name</em> <BR>
+<B>shortLabel</B> <em>hub_short_label</em><BR>
+<B>longLabel</B> <em>hub_long_label</em><BR>
+<B>genomesFile</B> <em>genomes_filelist</em><BR>
+<B>email</B> <em>email_address</em><BR>
+</TT></BLOCKQUOTE>
+<P>
+<em>hub</em> - a single-word name of the directory containing the track hub
+files. Not displayed to hub users. This must be the first line in the hub.txt 
+file. 
+<P>
+<em>shortLabel</em> - the short name for the track hub.
+Suggested maximum length is 17 characters.
+Displayed as the hub name on the Track Hubs page and the track group
+name on the browser tracks page.
+<P>
+<em>longLabel</em> - a longer descriptive label for the track hub. 
+Suggested maximum length is 80 characters.
+Displayed in the description field on the Track
+Hubs page.
+<P>
+<em>genomesFile</em> - the relative path of the genomes.txt file, which
+contains the list of genome assemblies covered by the track data and the names 
+of their associated configuration files. By convention the genomes.txt
+file is located in the same directory as the hub.txt file.
+<P>
+<em>email</em> - the contact to whom questions regarding the track hub
+should be directed.
+<P>
+<B><em>Example 2:</em></B> Sample hub.txt file defining attributes for the track
+hub shown in <em>Example 1</em>.
+<BLOCKQUOTE><TT>
+<B>hub</B> UCSCHub<BR>
+<B>shortLabel</B> UCSC Hub<BR>
+<B>longLabel</B> UCSC Genome Informatics Hub for human DNase and RNAseq data<BR>
+<B>genomesFile</B> genomes.txt<BR>
+<B>email</B> genome@soe.ucsc.edu<BR>
+</TT></BLOCKQUOTE>
+<P>
+<HR>
+<B>Step 5. Create the genomes.txt file</B><BR>
+Create a genomes.txt file within the track hub directory that contains a two-line 
+stanza for each genome assembly that is supported by the hub data. 
+Each stanza shows the location of the trackDb file that defines 
+display properties for each track in that assembly.  
+
+<BLOCKQUOTE><TT>
+<B>genome</B> <em>assembly_database_1</em><BR>
+<B>trackDb</B> <em>assembly_1_path/trackDb.txt</em><BR>
+<BR>
+<B>genome</B> <em>assembly_database_2</em><BR>
+<B>trackDb</B> <em>assembly_2_path/trackDb.txt</em><BR>
+</TT></BLOCKQUOTE>
+<P>
+<em>genome</em> - a valid UCSC database name. Each stanza must begin with
+this tag.
+<P>
+<em>trackDb</em> - the relative path of the trackDb file for the assembly
+designated by the <em>genome</em> tag. By convention, the trackDb file is 
+located in a subdirectory of the hub directory. However, the trackDb tag 
+may also specify a complete URL.
+<P>
+<B><em>Example 3:</em></B> Sample genomes.txt file defining attributes for the hub
+shown in <em>Example 1</em>.
+<BLOCKQUOTE><TT>
+<B>genome</B> hg18<BR>
+<B>trackDb</B> hg18/trackDb.txt<BR>
+<BR>
+<B>genome</B> hg19<BR>
+<B>trackDb</B> hg19/trackDb.txt<BR>
+</TT></BLOCKQUOTE>
+<P>
+<P>
+<HR>
+<B>Step 6. Create the genome assembly subdirectories</B><BR>
+Within the track hub directory, create a subdirectory for each of the genome
+assemblies that have track data in the hub. The subdirectory names must
+have a 1:1 correspondence with the database names defined by the 
+<em>genome</em> tags in the genomes.txt file.
+<HR>
+<B>Step 7. Create the trackDb.txt files</B><BR>
+The trackDb.txt file, which is based on the Genome Browser <em>.ra</em>
+format, is the most complicated of the text files in the
+hub directory. It contains a stanza for each of the data files for the
+given assembly that defines display and configuration properties for the
+track. If the tracks are grouped into larger entities, such as 
+composite or super-tracks, the larger entities will have a stanza in the
+file as well.
+<P>
+At a minimum, each trackDb.txt file must contain at least five tags: 
+<BLOCKQUOTE><TT>
+<B>track</B> <em>track_name</em><BR>
+<B>bigDataUrl</B> <em>track_data_URL</em><BR>
+<B>shortLabel</B> <em>short_label</em><BR>
+<B>longLabel</B> <em>long_label</em><BR>
+<B>type</B> <em>track_type</em><BR>
+</TT></BLOCKQUOTE>
+<P>
+<em>track</em> - the symbolic name of the track. The first character
+must be a letter, and the remaining characters must be letters, numbers,
+or underbar (&quot;_&quot;).  Each track must have a unique name. This tag pair must be
+the first entry in the trackDb.txt file.  
+<P>
+<em>bigDataUrl</em> - the file name, path, or Web location of the 
+track's data file. The bigDataUrl can be a full URL. If it is not
+prefaced by a protocol, such as <em>http://</em>,  <em>https://</em> or
+<em>ftp://</em>, then it is considered to be a path
+relative to the trackDb.txt file. 
+<P>
+<em>shortLabel</em> - the short name for the track displayed in the
+track list, in the configuration and track settings, and on the details
+pages. Suggested maximum length is 17 characters.
+ 
+<P>
+<em>longLabel</em> - the longer description label for the track that is
+displayed in the configuration and track settings, and on the
+details pages. Suggested maximum length is 80 characters. 
+<P>
+<em>type</em> - the format of the file specified by bigDataUrl. Must be either 
+<em>bigWig</em>, <em>bigBed</em>, or <em>bam</em>.
+<P>
+<B><em>Example 4:</em></B> Sample trackDb.txt file containing two simple tracks.
+<P>
+<BLOCKQUOTE><TT>
+<B>track</B> dnaseSignal<BR>
+<B>bigDataUrl</B> dnaseSignal.bigWig<BR>
+<B>shortLabel</B> DNAse Signal<BR>
+<B>longLabel</B> Depth of alignments of DNAse reads<BR>
+<B>type</B> bigWig<BR>
+<BR>
+<B>track</B> dnaseReads<BR>
+<B>bigDataUrl</B> dnaseReads.bam<BR>
+<B>shortLabel</B> DNAse Reads<BR>
+<B>longLabel</B> DNAse reads mapped with MAQ<BR>
+<B>type</B> bam<BR>
+</TT></BLOCKQUOTE>
+<!--Note/Question: This section could use some more work. Does anyone
+have detailed
+information about which trackDb settings are/aren't supported?-->
+<P>
+<HR>
+<B>Step 8. Create track description files</B><BR>
+Each track in the hub may have an associated description file 
+that describes the track to viewers. The file provides detailed information 
+about the data displayed in the track, including methods used to produce and 
+validate the data, background information, display conventions, 
+acknowledgments, and reference publications. The description file, which
+must be in HTML format, is inserted into the track configuration
+page that displays when the user clicks on the track's short label. It
+also displays on the track details page that is shown when the user
+clicks on a feature in the track image. 
+<P>
+The track description file must have the same name as the
+symbolic name for the track (defined by the <em>track</em> tag in the
+trackDb.txt file) with a suffix of <em>.html</em>.  For instance, a 
+description file associated with the track named &quot;dnaseSignal&quot; in 
+<em>Example 4</em> would be named &quot;dnaseSignal.html&quot;. The 
+description file must reside in the same directory as the trackDb.txt file. 
+<P>
+Both parent and child tracks within a super-track can have their own
+description files.  If the description file is not present, the
+corresponding sections of the track settings and details pages are left
+blank. Only one description page can be associated with composite and multiWig 
+tracks; the file name should correspond to the symbolic name of the top-level 
+track in the composite.
+				</TD>
+                                <TD WIDTH=15></TD>
+                            </TR>
+                        </TABLE>
+                    <BR></TD></TR>
+                </TABLE>        
+            </TD></TR>          
+        </TABLE>           
+
+<!-----------Debugging and Updating Track Hubs------------------------------>
+<A NAME="Debug"></A><BR>
+
+	<!--outer table is for border purposes-->
+	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+	    <TR><TD>	
+    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+		    <TR><TD>	
+			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+			    <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Debugging and Updating Track Hubs</B></FONT>
+			    </TD></TR>
+			</TABLE>
+			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			    <TR><TH HEIGHT=10></TH></TR>
+			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
+<P>
+It is a good practice to run the command-line utility <em>hubCheck</em> on
+your track hub when you first bring it online and whenever you make significant 
+changes. This utility checks that the files in the hub are correctly formatted. 
+<BLOCKQUOTE><TT><PRE>
+hubCheck - Check a track hub for integrity.
+usage:
+   hubCheck http://yourHost/yourDir/hub.txt
+options:
+   -udcDir=/dir/to/cache - place to put cache for remote bigBeds and bigWigs
+</PRE></TT></BLOCKQUOTE>
+<P>
+Note that you will have to use the udcDir if /tmp/udcCache is not writable
+on your machine.
+<P>
+The hubCheck program will soon be available from the UCSC downloads
+server at 
+<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">http://hgdownload.cse.ucsc.edu/admin/exe/</A>.
+Until the utility is available for download, you may need to build your
+own version from the Genome Browser
+<A HREF="http://hgdownload.cse.ucsc.edu/admin/jksrc.zip">source tree</A>.
+The hubCheck source is located in the directory
+kent/src/hg/utils/hubCheck within the source tree. Alternatively, send email to the Genome
+Browser technical support mailing list at 
+<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A> to request
+a copy of the binary. 
+<!--Question: is this on the todo list for this release? Would be nice
+to just have it on downloads.-->
+<P>
+As part of the track hub mechanism, UCSC caches data from the hub on the
+local server.  The hub utility periodically checks the time stamps
+on the hub files, and downloads them again only if they have a time
+stamp newer than the UCSC one. For performance reasons, UCSC checks the 
+time stamps every 300 seconds, which can result in a 5-minute delay 
+between the time a hub file is updated and the change appears on the Genome
+Browser. Hub providers can work around this delay by inserting the cgi variable 
+<em>udcTimeout=1</em> into the Genome Browser URL, which will reduce the delay 
+to one second. To add this variable, open the Genome Browser tracks page
+and zoom or scroll the image to display a full browser URL in which the cgi 
+variables visible. Insert the cgi variable just after the
+&quot;hgTracks&quot; portion of the URL so that it reads 
+<em>http://genome.ucsc.edu/cgi-bin/hgTracks?udcTimeout=1&</em> (with the
+remainder of the URL following the ampersand).  To restore the default
+timeout, repeat this process and set the udcTimeout variable to 300,
+i.e. <em>udcTimeout=300</em>. 
+<!--Question: does this actually work? Didn't check it. -->
+			        </TD>
+			        <TD WIDTH=15></TD>
+			    </TR>
+			</TABLE>
+		    <BR></TD></TR>
+		</TABLE>
+	    </TD></TR>
+	</TABLE>
+
+
+<!-----------Registering a Track Hub with UCSC------------------------->
+<A NAME="Register"></A><BR>
+
+	<!--outer table is for border purposes-->
+	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+	    <TR><TD>	
+    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+		    <TR><TD>	
+			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+			    <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Registering a Track Hub with UCSC</B></FONT>
+			    </TD></TR>
+			</TABLE>
+			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			    <TR><TH HEIGHT=10></TH></TR>
+			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
+<P>
+If you would like to share your track hub with other Genome Browser
+users, you can register your hub with UCSC by contacting the Genome
+Browser technical support mailing list at 
+<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A>. Please
+include the URL of your hub.txt file in the message. Once registered,
+your hub will appear as a link on the Public Hubs tab on the Track Hubs page. 
+<P>
+Alternatively, you can share your track hub with selected colleagues by
+providing them with the URL needed to load your hub via the My Hubs
+tab. 
+<!--Note: Probably should add a blurb about (lack of) security here.
+Maybe just expand this section to be about sharing hub data.-->
+			        </TD>
+			        <TD WIDTH=15></TD>
+			    </TR>
+			</TABLE>
+		    <BR></TD></TR>
+		</TABLE>
+	    </TD></TR>
+	</TABLE>
+
+
+    </TD></TR>
+</TABLE>
+
+</BODY></HTML>

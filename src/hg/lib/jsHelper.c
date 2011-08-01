@@ -487,56 +487,185 @@ void jsEndCollapsibleSection()
 puts("</TD></TR>");
 }
 
-void jsAddString(struct hash *h, char *name, char *val)
+struct jsonStringElement *newJsonString(char *str)
+{
+struct jsonStringElement *ele;
+AllocVar(ele);
+ele->str = cloneString(str);
+ele->type = jsonString;
+return ele;
+}
+
+struct jsonHashElement *newJsonHash(struct hash *h)
+{
+struct jsonHashElement *ele;
+AllocVar(ele);
+ele->type = jsonHash;
+ele->hash = h;
+return ele;
+}
+
+struct jsonListElement *newJsonList(struct slRef *list)
+{
+struct jsonListElement *ele;
+AllocVar(ele);
+ele->type = jsonList;
+ele->list = list;
+return ele;
+}
+
+void jsonHashAdd(struct jsonHashElement *h, char *name, struct jsonElement *ele)
+{
+hashReplace(h->hash, name, ele);
+}
+
+void jsonHashAddString(struct jsonHashElement *h, char *name, char *val)
 {
 // Add a string to a hash which will be used to print a javascript object;
 // existing values are replaced.
-char *str = needMem(strlen(val) + 3);
 val = javaScriptLiteralEncode(val);
+char *str = needMem(strlen(val) + 3);
 sprintf(str, "'%s'", val);
 freez(&val);
-hashReplace(h, name, str);
+jsonHashAdd(h, name, (struct jsonElement *) newJsonString(str));
 }
 
-void jsAddNumber(struct hash *h, char *name, long val)
+void jsonHashAddNumber(struct jsonHashElement *h, char *name, long val)
 {
 // Add a number to a hash which will be used to print a javascript object;
 // existing values are replaced.
 char buf[256];
 safef(buf, sizeof(buf), "%ld", val);
-hashReplace(h, name, cloneString(buf));
+jsonHashAdd(h, name, (struct jsonElement *) newJsonString(buf));
 }
 
-void jsAddBoolean(struct hash *h, char *name, boolean val)
+void jsonHashAddDouble(struct jsonHashElement *h, char *name, double val)
+{
+// Add a number to a hash which will be used to print a javascript object;
+// existing values are replaced.
+char buf[256];
+safef(buf, sizeof(buf), "%.10f", val);
+jsonHashAdd(h, name, (struct jsonElement *) newJsonString(buf));
+}
+
+void jsonHashAddBoolean(struct jsonHashElement *h, char *name, boolean val)
 {
 // Add a boolean to a hash which will be used to print a javascript object;
 // existing values are replaced.
-hashReplace(h, name, cloneString(val ? "true" : "false"));
+jsonHashAdd(h, name, (struct jsonElement *) newJsonString(val ? "true" : "false"));
 }
 
-void jsPrintHash(struct hash *hash, char *name, int indentLevel)
+void jsonListAdd(struct slRef **list, struct jsonElement *ele)
 {
-// prints a hash as a javascript variable
+struct slRef *e;
+AllocVar(e);
+e->val = ele;
+slAddHead(list, e);
+}
 
-int i;
+void jsonListAddString(struct slRef **list, char *val)
+{
+val = javaScriptLiteralEncode(val);
+char *str = needMem(strlen(val) + 3);
+sprintf(str, "'%s'", val);
+freez(&val);
+jsonListAdd(list, (struct jsonElement *) newJsonString(str));
+}
+
+void jsonListAddNumber(struct slRef **list, long val)
+{
+char buf[256];
+safef(buf, sizeof(buf), "%ld", val);
+jsonListAdd(list, (struct jsonElement *) newJsonString(buf));
+}
+
+void jsonListAddDouble(struct slRef **list, double val)
+{
+char buf[256];
+safef(buf, sizeof(buf), "%.10f", val);
+jsonListAdd(list, (struct jsonElement *) newJsonString(buf));
+}
+
+void jsonListAddBoolean(struct slRef **list, boolean val)
+{
+jsonListAdd(list, (struct jsonElement *) newJsonString(val ? "true" : "false"));
+}
+
+static char *makeIndentBuf(int indentLevel)
+{
 char *indentBuf;
 indentBuf = needMem(indentLevel + 1);
-for (i = 0; i < indentLevel; i++)
-    indentBuf[i] = '\t';
-indentBuf[i] = 0;
-if(hashNumEntries(hash))
+memset(indentBuf, '\t', indentLevel);
+indentBuf[indentLevel] = 0;
+return indentBuf;
+}
+
+static void jsonPrintRecurse(struct jsonElement *json, int indentLevel)
+{
+char *indentBuf = makeIndentBuf(indentLevel);
+switch (json->type)
     {
-    struct hashEl *el, *list = hashElListHash(hash);
-    slSort(&list, hashElCmp);
-    // We add START and END comments to facilitate scraping out this variable by javascript.
-    hPrintf("// START %s\n%svar %s = {\n", name, indentBuf, name);
-    for (el = list; el != NULL; el = el->next)
+    case jsonHash:
         {
-        hPrintf("%s\t\"%s\": %s%s\n", indentBuf, el->name, (char *) el->val, el->next == NULL ? "" : ",");
+        struct jsonHashElement *ele = (struct jsonHashElement *) json;
+        hPrintf("{\n");
+        if(hashNumEntries(ele->hash))
+            {
+            struct hashEl *el, *list = hashElListHash(ele->hash);
+            slSort(&list, hashElCmp);
+            for (el = list; el != NULL; el = el->next)
+                {
+                struct jsonElement *val = (struct jsonElement *) el->val;
+                hPrintf("%s\t\"%s\": ", indentBuf, el->name);
+                jsonPrintRecurse(val, indentLevel + 1);
+                hPrintf("%s\n", el->next == NULL ? "" : ",");
+                }
+            hashElFreeList(&list);
+            }
+        hPrintf("%s}", indentBuf);
+        break;
         }
-    hPrintf("%s};\n// END %s\n", indentBuf, name);
-    hashElFreeList(&list);
+    case jsonList:
+        {
+        struct jsonListElement *rec = (struct jsonListElement *) json;
+        struct slRef *el;
+        hPrintf("[\n");
+        if(rec->list)
+            {
+            for (el = rec->list; el != NULL; el = el->next)
+                {
+                struct jsonElement *val = (struct jsonElement *) el->val;
+                hPrintf("%s\t", indentBuf);
+                jsonPrintRecurse(val, indentLevel + 1);
+                hPrintf("%s\n", el->next == NULL ? "" : ",");
+                }
+            }
+        hPrintf("%s]", indentBuf);
+        break;
+        }
+    case jsonString:
+        {
+        hPrintf("%s", ((struct jsonStringElement *) json)->str);
+        break;
+        }
+    default:
+        {
+        errAbort("jsonPrintRecurse; invalid type: %d", json->type);
+        break;
+        }
     }
+freez(&indentBuf);
+}
+
+void jsonPrint(struct jsonElement *json, char *name, int indentLevel)
+{
+// print out a jsonElement
+
+char *indentBuf = makeIndentBuf(indentLevel);
+hPrintf("// START %s\n%svar %s = ", name, indentBuf, name);
+jsonPrintRecurse(json, indentLevel);
+hPrintf("%s;\n// END %s\n", indentBuf, name);
+freez(&indentBuf);
 }
 
 void jsonErrPrintf(struct dyString *ds, char *format, ...)

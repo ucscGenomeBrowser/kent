@@ -3023,7 +3023,7 @@ if (tdb->restrictList)
     }
 hashFree(&tdb->settingsHash);
 hashFree(&tdb->overrides);
-freeMem(&tdb->tdbExtras); // For now leak contents, because complex structs would also leak
+tdbExtrasFree(&tdb->tdbExtras);
 freeMem(tdb);
 freeMem(track->genomeDb);
 if (track->bedList)

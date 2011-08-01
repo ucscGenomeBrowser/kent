@@ -3768,15 +3768,19 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 struct trackDb *theTdbs = NULL;
 if (tdbList == NULL || *tdbList == NULL)
     {
-#ifdef NOTNOW   /* this is handled by the routines that call us, removed
-                 * from here because we don't have a cart down here */
+#define HGAPI_NEEDS_THIS
+#ifdef HGAPI_NEEDS_THIS
+    // This was removed becuase of missing cart. BUT CART ISN"T USED DOWN BLELOW
+    // NOTE: Currently any call to this (hub or not), makes a tdbList and leaks it!
     if (isHubTrack(track))
         {
 	struct hash *hash = hashNew(0);
-	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
+        // NOTE: cart is not even used!
+	theTdbs = hubConnectAddHubForTrackAndFindTdb((struct cart *)NULL,db, track, tdbList, hash);
+        return hashFindVal(hash, track); // leaks tdbList and hash
 	}
     else
-#endif
+#endif///def HGAPI_NEEDS_THIS
 	{
 	theTdbs = hTrackDb(db);
 	if (tdbList != NULL)
@@ -3794,6 +3798,11 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
 {
+#ifdef HGAPI_NEEDS_THIS
+if (isHubTrack(track))
+    return tdbForTrack(db, track,NULL);
+#endif///def HGAPI_NEEDS_THIS
+
 struct sqlConnection *conn = hAllocConn(db);
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);
 struct trackDb *ancestor = tdb;

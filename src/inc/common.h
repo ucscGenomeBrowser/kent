@@ -689,6 +689,12 @@ int slPairIntCmp(const void *va, const void *vb);
 void slPairIntSort(struct slPair **pList);
 // Sort slPair list on integer values.
 
+int slPairAtoiCmp(const void *va, const void *vb);
+// Compare two slPairs on their strings interpreted as integer values.
+
+void slPairValAtoiSort(struct slPair **pList);
+// Sort slPair list on string values interpreted as integers.
+
 void gentleFree(void *pt);
 /* check pointer for NULL before freeing.
  * (Actually plain old freeMem does that these days.) */
