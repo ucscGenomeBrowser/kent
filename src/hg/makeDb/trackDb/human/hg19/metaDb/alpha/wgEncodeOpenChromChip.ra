@@ -5036,7 +5036,6 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg19
-parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5061,7 +5060,6 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg19
-parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5134,7 +5132,6 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
 origAssembly hg19
-parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5158,7 +5155,6 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
 origAssembly hg19
-parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6656,4 +6652,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -1741280712
+# MAGIC: -249768854

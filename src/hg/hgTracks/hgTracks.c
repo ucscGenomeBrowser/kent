@@ -5874,48 +5874,52 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
     }
-hWrites(commonCssStyles());
+
 jsonForClient = newJsonHash(newHash(8));
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("ajax.js", NULL);
-boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0");
-if(dragZooming && !searching)
+jsonHashAddString(jsonForClient, "cgiVersion", CGI_VERSION);
+boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"), "0");
+
+if(!trackImgOnly)
     {
-    jsIncludeFile("jquery.imgareaselect.js", NULL);
+    // Write out includes for css and js files
+    hWrites(commonCssStyles());
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("utils.js", NULL);
+    jsIncludeFile("ajax.js", NULL);
+    if(dragZooming && !searching)
+        {
+        jsIncludeFile("jquery.imgareaselect.js", NULL);
 #ifndef NEW_JQUERY
-    webIncludeResourceFile("autocomplete.css");
-    jsIncludeFile("jquery.autocomplete.js", NULL);
+        webIncludeResourceFile("autocomplete.css");
+        jsIncludeFile("jquery.autocomplete.js", NULL);
 #endif///ndef NEW_JQUERY
-    }
+        }
     jsIncludeFile("autocomplete.js", NULL);
-jsIncludeFile("hgTracks.js", NULL);
+    jsIncludeFile("hgTracks.js", NULL);
 
 #ifdef LOWELAB
-jsIncludeFile("lowetooltip.js", NULL);
+    jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
-if(advancedJavascriptFeaturesEnabled(cart))
-    {
-    webIncludeResourceFile("jquery-ui.css");
-    if (!searching) // NOT doing search
+    if(advancedJavascriptFeaturesEnabled(cart))
         {
-        webIncludeResourceFile("jquery.contextmenu.css");
-        jsIncludeFile("jquery.contextmenu.js", NULL);
-        webIncludeResourceFile("ui.dropdownchecklist.css");
-        jsIncludeFile("ui.dropdownchecklist.js", NULL);
+        webIncludeResourceFile("jquery-ui.css");
+        if (!searching) // NOT doing search
+            {
+            webIncludeResourceFile("jquery.contextmenu.css");
+            jsIncludeFile("jquery.contextmenu.js", NULL);
+            webIncludeResourceFile("ui.dropdownchecklist.css");
+            jsIncludeFile("ui.dropdownchecklist.js", NULL);
 #ifdef NEW_JQUERY
-        jsIncludeFile("ddcl.js", NULL);
+            jsIncludeFile("ddcl.js", NULL);
 #endif///def NEW_JQUERY
+            }
         }
-    }
 
-//if (!trackImgOnly)
-    {
-hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
-// XXXX stole this and '.hidden' from bioInt.css - needs work
-hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
+    hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
+    // XXXX stole this and '.hidden' from bioInt.css - needs work
+    hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
 
 /* check for new data hub */
@@ -5994,13 +5998,6 @@ else
     {
     tracksDisplay();
     }
-
-// XXXX debugging stuff
-struct slRef *list = NULL;
-jsonListAddNumber(&list, 666);
-jsonListAddString(&list, "1,2,3");
-jsonHashAdd(jsonForClient, "testing", (struct jsonElement *) newJsonList(list));
-jsonHashAddDouble(jsonForClient, "float", expf(1));
 
 hPrintf("<script type='text/javascript'>\n");
 jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);

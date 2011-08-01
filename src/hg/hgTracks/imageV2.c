@@ -1679,7 +1679,7 @@ for(;item!=NULL;item=item->next)
             hPrintf(" HREF=%s",item->linkVar);
 	else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
                  hPrintf(" HREF='..%s'",item->linkVar);
-             else 
+             else
                  hPrintf(" HREF='%s'",item->linkVar);
         }
     else
@@ -1872,16 +1872,21 @@ if(imgBox->bgImg)
 #ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
     {
-    hPrintf("<script type='text/javascript'>var imgBoxPortal=true;");
-    hPrintf("var imgBoxChromStart=%d;var imgBoxChromEnd=%d;var imgBoxWidth=%d;",
-            imgBox->chromStart, imgBox->chromEnd,(imgBox->width - imgBox->sideLabelWidth));
-    hPrintf("var imgBoxPortalStart=%d;var imgBoxPortalEnd=%d;var imgBoxPortalWidth=%d;",
-            imgBox->portalStart, imgBox->portalEnd, imgBox->portalWidth);
-    hPrintf("var imgBoxLeftLabel=%d;var imgBoxPortalOffsetX=%d;var imgBoxBasesPerPixel=%lf;</script>\n",
-            (imgBox->plusStrand?imgBox->sideLabelWidth:0),
-            (int)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel),imgBox->basesPerPixel);
+    // Let js code know what's up
+    jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       TRUE);
+    jsonHashAddNumber( jsonForClient,"imgBoxChromStart",   imgBox->chromStart);
+    jsonHashAddNumber( jsonForClient,"imgBoxChromEnd",     imgBox->chromEnd);
+    jsonHashAddNumber( jsonForClient,"imgBoxWidth",        (imgBox->width - imgBox->sideLabelWidth));
+    jsonHashAddNumber( jsonForClient,"imgBoxPortalStart",  imgBox->portalStart);
+    jsonHashAddNumber( jsonForClient,"imgBoxPortalEnd",    imgBox->portalEnd);
+    jsonHashAddNumber( jsonForClient,"imgBoxPortalWidth",  imgBox->portalWidth);
+    jsonHashAddNumber( jsonForClient,"imgBoxLeftLabel",    (imgBox->plusStrand?imgBox->sideLabelWidth:0));
+    jsonHashAddNumber( jsonForClient,"imgBoxPortalOffsetX",(long)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel));
+    jsonHashAddDouble( jsonForClient,"imgBoxBasesPerPixel",imgBox->basesPerPixel);
     }
+else
 #endif//def IMAGEv2_DRAG_SCROLL
+    jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       FALSE);
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
