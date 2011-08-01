@@ -2611,7 +2611,6 @@ grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg19
-parentTable wgEncodeOpenChromFaireK562NabutAlnRep1
 project wgEncode
 replicate 1
 subId 2771
@@ -2634,7 +2633,6 @@ grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg19
-parentTable wgEncodeOpenChromFaireK562NabutAlnRep2
 project wgEncode
 replicate 2
 subId 2771
@@ -2700,7 +2698,6 @@ fileName wgEncodeOpenChromFaireK562NabutRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
 origAssembly hg19
-parentTable wgEncodeOpenChromFaireK562NabutRawSignalRep1
 project wgEncode
 replicate 1
 subId 2771
@@ -2722,7 +2719,6 @@ fileName wgEncodeOpenChromFaireK562NabutRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
 origAssembly hg19
-parentTable wgEncodeOpenChromFaireK562NabutRawSignalRep2
 project wgEncode
 replicate 2
 subId 2771
@@ -2767,7 +2763,6 @@ grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg19
-parentTable wgEncodeOpenChromFaireK562OhureaAlnRep1
 project wgEncode
 replicate 1
 subId 2772
@@ -2790,7 +2785,6 @@ grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg19
-parentTable wgEncodeOpenChromFaireK562OhureaAlnRep2
 project wgEncode
 replicate 2
 subId 2772
@@ -2856,7 +2850,6 @@ fileName wgEncodeOpenChromFaireK562OhureaRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
 origAssembly hg19
-parentTable wgEncodeOpenChromFaireK562OhureaRawSignalRep1
 project wgEncode
 replicate 1
 subId 2772
@@ -2878,7 +2871,6 @@ fileName wgEncodeOpenChromFaireK562OhureaRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
 origAssembly hg19
-parentTable wgEncodeOpenChromFaireK562OhureaRawSignalRep2
 project wgEncode
 replicate 2
 subId 2772

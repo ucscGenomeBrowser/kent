@@ -10716,7 +10716,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10864,7 +10863,6 @@ fileName wgEncodeUwHistoneHepg2H3k36me3StdRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2H3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
