@@ -1,121 +1,10 @@
 #!/hive/groups/encode/dcc/bin/python
-import sys, os, shutil, stat
-from rafile.RaFile import *
-from softfile.SoftFile import *
-from cvfile.CvFile import *
-
-class DataType(object):
-
-	def __init__(self, molecule, strategy, source, selection, soft):
-		self.molecule = molecule
-		self.strategy = strategy
-		self.source = source
-		self.selection = selection
-		self.soft = soft
-
-datatypes = {
-	'Cage': DataType('OVERRIDE RNA', 'OTHER', 'transcriptomic', 'CAGE', HighThroughputSoftFile),
-	'ChipSeq': DataType('genomic DNA', 'ChIP-Seq', 'genomic', 'ChIP', HighThroughputSoftFile),
-	'DnaPet': DataType('genomic DNA', 'OTHER', 'genomic', 'size fractionation', HighThroughputSoftFile),
-	'DnaseDgf': DataType('genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', HighThroughputSoftFile),
-	'DnaseSeq': DataType('genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', HighThroughputSoftFile),
-	'FaireSeq': DataType('genomic DNA', 'OTHER', 'genomic', 'other', HighThroughputSoftFile),
-	'MethylSeq': DataType('genomic DNA', 'MRE-Seq', 'genomic', 'Restriction Digest', HighThroughputSoftFile),
-	'MethylRrbs': DataType('genomic DNA', 'Bisulfite-Seq', 'genomic', 'Reduced Representation', HighThroughputSoftFile),
-	'Orchid': DataType('genomic DNA', 'OTHER', 'genomic', 'other', HighThroughputSoftFile),
-	'Proteogenomics': DataType('protein', 'mass spectrometry-based proteogenomic mapping', 'protein', 'chromatographically fractionated peptides', HighThroughputSoftFile),
-	'RnaPet': DataType('OVERRIDE RNA', 'OTHER', 'transcriptomic', 'other', HighThroughputSoftFile),
-	'RnaSeq': DataType('OVERRIDE RNA', 'RNA-Seq', 'transcriptomic', 'cDNA', HighThroughputSoftFile),
-	
-	#these need to be curated
-	'5C': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'AffyExonArray': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Bip': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Cluster': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Cnv': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Combined': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Genotype': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Gencode': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'ChiaPet': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Mapability': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'MethylArray': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'NRE': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Nucleosome': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'RnaChip': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'RipGeneSt': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'RipTiling': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'RipChip': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'RipSeq': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'Switchgear': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'TfbsValid': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None)
-}
-cvDetails = {
-	'cell':	[ 'organism', 'description', 'karyotype', 'lineage', 'sex' ],
-	'antibody': [ 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId' ]
-}
-
-#if the term appears in the mdb and must overriding the value in the cv
-cvOverride = [ 'sex' ]
-
-#talk to Venkat lol
-cvPretend = { 'antibody Input': 'control' }
-
-#if its not in cvDetails, which things should we check by default
-cvDefaults = [ 'description' ]
-
-mdbWhitelist = [
-	'age',
-	'bioRep',
-	'control',
-	'controlId',
-	'fragSize',
-	'labExpId',
-	'labVersion',
-	'mapAlgorithm',
-	'obtainedBy',
-	'phase',
-	'readType',
-	'region',
-	'replicate',
-	'restrictionEnzyme',
-	'run',
-	'softwareVersion',
-	'spikeInPool',
-	'strain'
-]
-
-# if the molecule is RNA, we need to map our data into !Sample_molecule, which only takes certain fields
-# first we check rnaExtractMapping. If its not there, we use the localization. This is because (at current)
-# polyA is the most important trait, otherwise its going to be nonPolyA which GEO doesn't accept that. 
-rnaExtractMapping = {
-	'shortPolyA': 'polyA RNA', 
-	'longPolyA': 'polyA RNA', 
-	'polyA': 'polyA RNA'
-}
-
-localizationMapping = {
-	'cytosol': 'cytoplasmic RNA', 
-	'polysome': 'cytoplasmic RNA',
-	'membraneFraction': 'cytoplasmic RNA',
-	'mitochondria': 'cytoplasmic RNA',
-	'nucleus': 'nuclear RNA', 
-	'nucleolus': 'nuclear RNA', 
-	'nucleoplasm': 'nuclear RNA', 
-	'nuclearMatrix': 'nuclear RNA', 
-	'chromatin': 'nuclear RNA',
-	'cell': 'total RNA'
-}
-
-# map our instrument names to GEO's names
-instrumentModels = {
-	'Illumina_GA2x': 'Illumina Genome Analyzer II'
-}
-
-organisms = {
-	'hg19': 'human',
-	'hg18': 'human',
-	'mm9': 'mouse'
-}
+import sys, os, shutil, argparse
+from ucscgenomics.rafile.RaFile import *
+from ucscgenomics.softfile.SoftFile import *
+from ucscgenomics.cvfile.CvFile import *
+from ucscgenomics.compositetrack.CompositeTrack import *
+from ucscgenomics.textstyle.TextStyle import TextStyle
 
 def filesize(val):
 	if val > 1099511627776:
@@ -129,8 +18,6 @@ def filesize(val):
 	else:
 		return str(val) + 'B'
 
-
-
 def getFileType(filename):
 	filename.replace('.gz', '')
 	return filename.rsplit('.')[1]
@@ -140,142 +27,140 @@ def isRawFile(filename):
 	
 def isSupplimentaryFile(filename):
 	return not isRawFile(filename)
-
 	
 def createMappings(mdb):
 	expIds = dict()
 	geoMapping = dict()
-	expVars = None
 	series = None
-	datatype = None
 	
 	for stanza in mdb.itervalues():
 		
 		if 'objType' in stanza and stanza['objType'] == 'composite':
 			series = stanza
-			expVars = stanza['expVars'].split(',')
 			continue
 
 		if 'expId' not in stanza:
-			#print stanza.name + ': no expId'
 			continue
 		
-			# if this hasn't been submitted to GEO yet, we'll add it to the submission list
-		if stanza['expId'] not in expIds:
-			expIds[stanza['expId']] = list()
+		expId = int(stanza['expId'])
+		
+		if expId not in expIds:
+			expIds[expId] = list()
 			
-		expIds[stanza['expId']].append(stanza)
+		expIds[expId].append(stanza)
 		
 		if 'geoSampleAccession' in stanza:
 			# otherwise we keep track of the geo number for partially submitted samples
-			if stanza['expId'] not in geoMapping:
-				geoMapping[stanza['expId']] = stanza['geoSampleAccession']
-			elif geoMapping[stanza['expId']] != 'Inconsistent' and geoMapping[stanza['expId']] != stanza['geoSampleAccession']:
-				geoMapping[stanza['expId']] = 'Inconsistent'
-				print stanza.name + ': inconsistent geo mapping'
-		
-		if datatype == None and 'dataType' in stanza:
-			datatype = stanza['dataType']
-		elif datatype != None and 'dataType' in stanza and datatype != stanza['dataType']:
-			raise KeyError(stanza.name + ': inconsistent data type') 
-
-		
+			if expId not in geoMapping:
+				geoMapping[expId] = stanza['geoSampleAccession']
+			elif geoMapping[expId] != 'Inconsistent' and geoMapping[expId] != stanza['geoSampleAccession']:
+				geoMapping[expId] = 'Inconsistent'
 	
-	datatype = datatypes[datatype]
-	
-	return expIds, expVars, geoMapping, series, datatype
+	return expIds, geoMapping, series
 
 		
 def main():
-	database = sys.argv[1]
-	composite = sys.argv[2]
-	organism = organisms[database]
+
+	parser = argparse.ArgumentParser(description = 'Provides information about a composite track.\nRed - Missing\nBlue - Already submitted\nYellow - Inconsistent GEO Accession per sample\nGreen - GEO Accession Number\nWhite - Unsubmitted file')
+	parser.add_argument('-u', '--unsubmitted', action='store_true', default=False, help='Do not list samples that have already been submitted')
+	parser.add_argument('-m', '--missing', action='store_true', default=False, help='List only missing files')
+	parser.add_argument('-s', '--size', action='store_true', default=False, help='Show file sizes')
+	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
+	parser.add_argument('database', help='The database, typically hg19 or mm9')
+	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
+	parser.add_argument('expIds', nargs='*', help='Any number of expIds separated by spaces, you can also specify a range by using a hyphen, "140 150 160-170" for instance, or leave blank to specify the entire file')
 	
-	#list everything
-	mode = 0
+	if len(sys.argv) == 1:
+		parser.print_usage()
+		return
 	
-	if len(sys.argv) > 3:
-		submitStart = sys.argv[3]
-		#list individual
-		mode = 1
+	args = parser.parse_args(sys.argv[1:])
 	
-	if len(sys.argv) > 4:
-		submitSize = int(sys.argv[4])
-		#list range
-		mode = 2
+	compositeTrack = CompositeTrack(args.database, args.composite, args.trackPath)
 	
+	ids = list()
 	
-	mdbPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/' + organism + '/' + database + '/metaDb/alpha/' + composite + '.ra' #CHANGE
-	trackPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/' + organism + '/' + database + '/' + composite + '.ra'
+	for id in args.expIds:
+		if '-' in id:
+			start, end = id.split('-', 1)
+			ids.extend(range(int(start), int(end) + 1))
+		else:
+			ids.append(int(id))
+
+	expIds, geoMapping, series = createMappings(compositeTrack.metaDb)
+
+	if len(ids) == 0:
+		ids = expIds.keys()
 	
-	downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/'
-	
-	
-	mdb = RaFile(mdbPath)
-	track = RaFile(trackPath)
-	expIds, expVars, geoMapping, series, datatype = createMappings(mdb)
-	
-	submission = dict()
-	sortedIds = expIds.keys()
-	sortedIds.sort()
-	
-	if mode == 1:
-		sortedIds = [submitStart]
-	elif mode == 2:
-		sortedIds = sortedIds[sortedIds.index(submitStart):sortedIds.index(submitStart) + submitSize]
-	
-	
-	minId = min(sortedIds)
-	maxId = max(sortedIds)
 	out = list()
 	totalsize = 0
 	filecount = 0
 	
-	# 'Generating soft using expIds ' + minId + ' to ' + maxId
-		
-	for idNum in sortedIds:
+	for idNum in ids:
 		
 		samplesize = 0
+		samplefiles = 0
 		expId = expIds[idNum]
 
 		for stanza in expId:
-		
-			if os.path.exists(downloadsDirectory + stanza['fileName']):
-				
-				st = os.stat(downloadsDirectory + stanza['fileName'])
-				samplesize = samplesize + st.st_size
-				totalsize = totalsize + st.st_size
+			
+			if 'geoSampleAccession' in stanza and args.unsubmitted:
+				continue
+			
+			if stanza['fileName'] in compositeTrack.files and not args.missing:
+				file = compositeTrack.files[stanza['fileName']]
+				samplesize = samplesize + file.size
+				samplefiles = samplefiles + 1
+				totalsize = totalsize + file.size
 				filecount = filecount + 1
 				
-		strsub = '[Unsubmitted]'
-		if idNum in geoMapping and geoMapping[idNum] == 'Inconsistent':
-			strsub = '[Inconsistent]'
-		if idNum in geoMapping and geoMapping[idNum] != 'Inconsistent':
-			strsub = '[' + geoMapping[idNum] + ']'		
+		size = ''
+		if args.size:
+			size = '[%s]' % filesize(samplesize)
 		
-		out.append('  + ' + expId[0]['metaObject'] + ' (' + str(idNum) + ')' + '[' + filesize(samplesize) + ']' + strsub + ' - ' + str(len(expId)) + ' files')
-		
+		if idNum in geoMapping:
+			if geoMapping[idNum] == 'Inconsistent':
+				out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'yellow'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
+			else:
+				out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'blue'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
+		else:
+			out.append('\t%s %s %s - %s files' % (str(idNum), expId[0]['metaObject'], size, str(samplefiles)))
+
 		for stanza in expId:
 			
-			if not os.path.exists(downloadsDirectory + stanza['fileName']):
-				out.append('  |     ' + stanza['fileName'] + ' MISSING FILE!')
-			else:
-			
-				st = os.stat(downloadsDirectory + stanza['fileName'])
-				#out.append('  |     ' + stanza['fileName'] + ' [' + filesize(st.st_size) + ']')
+			if 'geoSampleAccession' in stanza and args.unsubmitted:
+				continue
 
-	
-	strsub = '[Unsubmitted]'
+			if stanza['fileName'] in compositeTrack.files and not args.missing:
+			
+				file = compositeTrack.files[stanza['fileName']]
+				size = ''
+				if args.size:
+					size = '[%s]' % file.size
+					
+				if 'geoSampleAccession' not in stanza:
+					out.append('\t\t%s %s' % (file.name, size))
+				elif idNum in geoMapping and geoMapping[idNum] == 'Inconsistent':
+					out.append('\t\t%s %s%s' % (TextStyle.style(file.name, 'blue'), TextStyle.style('[%s]' % stanza['geoSampleAccession'], 'green'), size))
+				else:
+					out.append('\t\t%s %s' % (TextStyle.style(file.name, 'blue'), size))
+			else:
+				out.append('\t\t%s %s' % (TextStyle.style(file.name, 'red'), size))
+
+	strsub = TextStyle.style('[Unsubmitted]', 'blue')
 	if 'geoSeriesAccession' in series:
-		strsub = '[' + series['geoSeriesAccession'] + ']'
+		strsub = TextStyle.style('[%s]' % series['geoSeriesAccession'], 'green')
 	
-	modestr = ''
-	if mode == 1:
-		modestr = ' <' + minId + '>' 
-	elif mode == 2:
-		modestr = ' <' + minId + '-' + maxId + '>'
-		
-	out.insert(0, composite + ' [' + filesize(totalsize) + ']' + strsub + modestr + ' - ' + str(filecount) + ' files')
+	modestr = ' '
+	for id in args.expIds:
+		modestr = modestr + id + ',' 
+	modestr = modestr[:len(modestr) - 1]
+	
+	size = ''
+	if args.size:
+		size = '[%s]' % filesize(totalsize)
+	
+	out.insert(0, '%s %s%s%s - %s files' % (compositeTrack.name, size, strsub, modestr, str(filecount)))
 
 	for line in out:
 		print line

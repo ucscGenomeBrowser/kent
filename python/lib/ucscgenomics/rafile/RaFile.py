@@ -1,6 +1,6 @@
 import sys
 import re
-from ordereddict.OrderedDict import *
+from ucscgenomics.ordereddict.OrderedDict import *
 
 class RaFile(OrderedDict):
 	"""

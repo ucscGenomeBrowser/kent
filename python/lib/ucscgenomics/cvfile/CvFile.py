@@ -1,5 +1,5 @@
 import re
-from rafile.RaFile import *
+from ucscgenomics.rafile.RaFile import *
 
 class CvFile(RaFile):
 	"""cv.ra representation. Mainly adds CV-specific validation to the RaFile"""
