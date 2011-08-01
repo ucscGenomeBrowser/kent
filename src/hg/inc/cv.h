@@ -105,6 +105,25 @@ enum cvSearchable
 enum cvSearchable cvSearchMethod(const char *term);
 // returns whether the term is searchable
 
+const char *cvValidationRule(const char *term);
+// returns validation rule, trimmed of comment
+
+enum cvDataType
+// CV term may be recognizable as int or float
+    {
+    cvIndeterminant        =0,  // Indeterminant, likely string
+    cvString               =1,  // Just about all terms are strings
+    cvInteger              =2,  // Some are known integers
+    cvFloat                =3,  // Floats are possible
+    cvDate                 =4,  // Dates are expected as YYYY-MM-DD
+    };
+
+enum cvDataType cvDataType(const char *term);
+// returns the dataType if it can be determined
+
+boolean cvValidateTerm(const char *term,const char *val,char *reason,int len);
+// returns TRUE if term is valid.  Can pass in a reason buffer of len to get reason.
+
 const char *cvLabel(const char *term);
 // returns cv label if term found or else just term
 

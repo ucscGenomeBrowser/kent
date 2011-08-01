@@ -217,6 +217,8 @@ if (tabix == NULL)
 if ((tabix->idx = ti_index_load(tbiName)) == NULL)
     {
     warn("Unable to load tabix index from \"%s\"", tbiName);
+    ti_close(tabix);
+    tabix = NULL;
     freez(&tbiName);
     return NULL;
     }

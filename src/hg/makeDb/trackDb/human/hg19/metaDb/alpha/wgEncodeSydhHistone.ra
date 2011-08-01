@@ -578,7 +578,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
@@ -603,7 +603,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
@@ -628,7 +628,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
@@ -2215,7 +2215,6 @@ expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2239,7 +2238,6 @@ expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
 grant Snyder
 lab USC
-parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2287,7 +2285,6 @@ expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
-parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2311,7 +2308,6 @@ expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
-parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2494,7 +2490,7 @@ control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
@@ -2517,7 +2513,7 @@ control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
@@ -2540,7 +2536,7 @@ control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateReSubmitted 2011-03-22
+dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
@@ -2557,4 +2553,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 1443455504
+# MAGIC: -1343517150

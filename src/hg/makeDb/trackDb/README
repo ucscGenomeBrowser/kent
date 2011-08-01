@@ -868,7 +868,7 @@ subtracks.  Settings that are common to all tracks in a composite can be put at 
 composite level, settings that are common to all tracks in a view can be put in the view
 level, and individual track settings can be put at the lowest level.  In addition
 the composite parent track needs to have a specialized subGroup1 setting 'view' and
-view must be contained in the subGroup setting at the lowest level.   Example:
+view must be contained in the subGroups setting at the lowest level.   Example:
 
    track compositeParent
    shortLabel Composite Sample
@@ -882,12 +882,12 @@ view must be contained in the subGroup setting at the lowest level.   Example:
            track brainSignalTrack
 	   shortLabel Signals in Brain
 	   parent sigViewTrack
-	   subGroup view=Sig
+	   subGroups view=Sig
 
 	   track liverSignalTrack
 	   shortLabe Signals in Liver
 	   parent sigViewTrack
-	   subGroup view=Sig
+	   subGroups view=Sig
 
        track alnViewTrack
        view Aln
@@ -897,15 +897,15 @@ view must be contained in the subGroup setting at the lowest level.   Example:
            track brainAlignmentTrack
 	   shortLabel Signals in Brain
 	   parent alnViewTrack
-	   subGroup view=Aln
+	   subGroups view=Aln
 
 	   track liverAlignmentTrack
 	   shortLabe Signals in Liver
 	   parent alnViewTrack
-	   subGroup view=Aln
+	   subGroups view=Aln
 
 Note that the view level track needs to have a view tag.  There is some redundancy between
-information in the view track and the subGroup tag of the composite parent.  Apologies.  This
+information in the view track and the subGroups tag of the composite parent.  Apologies.  This
 is largely so that the same sorting machinery for non-view subGroups can be reused here.  In
 particular the value of the view tag needs to be the same as the right hand in the var=value pair
 of the subGroup, and the same as the left hand side of the var=val pair in the subGroup1.

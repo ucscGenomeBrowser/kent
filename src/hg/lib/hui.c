@@ -28,6 +28,7 @@
 #include "fileUi.h"
 #include "bigBed.h"
 #include "bigWig.h"
+#include "vcfUi.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -3730,6 +3731,8 @@ switch(cType)
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
 			break;
 #endif
+    case cfgVcf:	vcfCfgUi(cart, tdb, prefix, title, boxed);
+			break;
     case cfgPsl:	pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
@@ -4260,7 +4263,7 @@ safef(javascript, JBUFSIZE*sizeof(char),
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title)
+boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title)
 /* Handle start of box and title for individual track type settings */
 {
 if(!boxed)
@@ -4286,7 +4289,7 @@ else
 return boxed;
 }
 
-static void cfgEndBox(boolean boxed)
+void cfgEndBox(boolean boxed)
 /* Handle end of box and title for individual track type settings */
 {
 if (boxed)
@@ -5232,9 +5235,9 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 boolean opened = FALSE;
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
 showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
 
 char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
 if(setting)

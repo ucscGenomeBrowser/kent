@@ -246,7 +246,7 @@ function setVarAndPostForm(aName,aValue,formName)
 }
 
 // json help routines
-function tdbGetJsonRecord(trackName)  { return trackDbJson[trackName]; }
+function tdbGetJsonRecord(trackName)  { return hgTracks.trackDb[trackName]; }
 function tdbIsFolder(tdb)             { return (tdb.kindOfParent == 1); } // NOTE: These must jive with tdbKindOfParent() and tdbKindOfChild() in trackDb.h
 function tdbIsComposite(tdb)          { return (tdb.kindOfParent == 2); }
 function tdbIsMultiTrack(tdb)         { return (tdb.kindOfParent == 3); }

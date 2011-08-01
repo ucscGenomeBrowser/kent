@@ -53,7 +53,7 @@ shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2_C BJ=BJ CACO2=Caco-2 CD20+=CD20+ CD34+MOBILIZED=CD34+_Mobilized CMK=CMK GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7es=H7-hESC HAh=HA-h HA-sp=HA-sp HAc=HAc HAE=HAEpiC HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECDAD=HMVEC-dAd HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCE=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HRGEC=HRGEC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp;(G1_phase) LNCaP=LNCaP MCF7=MCF-7 MONOCD14=Monocytes-CD14+ NB4=NB4 NHA=NH-A NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2D1=NT2-D1 PANC1=PANC-1 PREC=PReC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2 WERIRb1=WERI-Rb-1 WI38=WI-38
+subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2_C BJ=BJ CACO2=Caco-2 CD20+=CD20+ CD34+MOBILIZED=CD34+_Mobilized CMK=CMK GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7es=H7-hESC HAh=HA-h HA-sp=HA-sp HAc=HAc HAE=HAEpiC HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECDAD=HMVEC-dAd HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCE=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HRGEC=HRGEC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp;(G1_phase) LNCaP=LNCaP MCF7=MCF-7 MONOCD14=Monocytes-CD14+ NB4=NB4 NHA=NH-A NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2D1=NT2-D1 PANC1=PANC-1 PREC=PReC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2 WERIRb1=WERI-Rb-1 WI38=WI-38 WI38O=WI-30_<i>hydroxytamoxifen<\i>
 subGroup3 rep Replicate 1=1 2=2
 subGroup4 treatment Treatment None=None OHTAM=4-OHTAM_20nM_72hr
 dimensions dimensionY=cellType dimensionX=rep
@@ -306,7 +306,7 @@ wgEncode 1
         # subId=1616 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2HotspotsRep1
-        parent wgEncodeUwDnaseViewHot
+        parent wgEncodeUwDnaseViewHot off
         shortLabel HepG2 Hspt 1
         longLabel HepG2 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=2HEPG2 rep=1 treatment=None
@@ -1437,7 +1437,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel WI-38 OHTM Hspt 1
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=WI38 treatment=OHTAM rep=1
+        subGroups view=Hot cellType=WI38O treatment=OHTAM rep=1
         type broadPeak
         origAssembly hg19
         # subId=3214 dateSubmitted=2011-01-11
@@ -1446,7 +1446,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel WI-38 OHTM Hspt 2
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=WI38 treatment=OHTAM rep=2
+        subGroups view=Hot cellType=WI38O treatment=OHTAM rep=2
         type broadPeak
         origAssembly hg19
         # subId=3215 dateSubmitted=2011-01-11
@@ -1772,7 +1772,7 @@ wgEncode 1
         # subId=1616 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2PkRep1
-        parent wgEncodeUwDnaseViewaPeaks
+        parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HepG2 Pk 1
         longLabel HepG2 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=2HEPG2 rep=1 treatment=None
@@ -2857,7 +2857,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI-38 OHTM Pk 1
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=WI38 treatment=OHTAM rep=1
+        subGroups view=Peaks cellType=WI38O treatment=OHTAM rep=1
         type narrowPeak
         origAssembly hg19
         # subId=3214 dateSubmitted=2011-01-11
@@ -2866,7 +2866,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI-38 OHTM Pk 2
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=WI38 treatment=OHTAM rep=2
+        subGroups view=Peaks cellType=WI38O treatment=OHTAM rep=2
         type narrowPeak
         origAssembly hg19
         # subId=3215 dateSubmitted=2011-01-11
@@ -3294,7 +3294,7 @@ wgEncode 1
         # subId=1616 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2RawRep1
-        parent wgEncodeUwDnaseViewzRaw
+        parent wgEncodeUwDnaseViewzRaw off
         shortLabel HepG2 Sig 1
         longLabel HepG2 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=2HEPG2 rep=1 treatment=None
@@ -4425,7 +4425,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel WI-38 OHTM Sig 1
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=WI38 treatment=OHTAM rep=1
+        subGroups view=zRSig cellType=WI38O treatment=OHTAM rep=1
         type bigWig 1.000000 21917.000000
         origAssembly hg19
         # subId=3214 dateSubmitted=2011-01-11
@@ -4434,7 +4434,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel WI-38 OHTM Sig 2
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=WI38 treatment=OHTAM rep=2
+        subGroups view=zRSig cellType=WI38O treatment=OHTAM rep=2
         type bigWig 1.000000 24297.000000
         origAssembly hg19
         # subId=3215 dateSubmitted=2011-01-11
