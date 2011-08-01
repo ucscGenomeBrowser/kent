@@ -522,6 +522,11 @@ return count;
 static void parseInfoColumn(struct vcfFile *vcff, struct vcfRecord *record, char *string)
 /* Translate string into array of vcfInfoElement. */
 {
+if (sameString(string, "."))
+    {
+    record->infoCount = 0;
+    return;
+    }
 char *elWords[VCF_MAX_INFO];
 record->infoCount = chopByChar(string, ';', elWords, ArraySize(elWords));
 if (record->infoCount >= VCF_MAX_INFO)
@@ -543,7 +548,10 @@ for (i = 0;  i < record->infoCount;  i++)
 	    vcfFileErr(vcff, "Missing = after key in INFO element: \"%s\" (type=%d)",
 		       elStr, type);
 	    if (type == vcfInfoString)
-		el->values[i].datString = vcfFilePooledStr(vcff, "");
+		{
+		el->values = vcfFileAlloc(vcff, sizeof(union vcfDatum));
+		el->values[0].datString = vcfFilePooledStr(vcff, "");
+		}
 	    }
 	continue;
 	}
