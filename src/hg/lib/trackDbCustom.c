@@ -167,8 +167,6 @@ if (trackDbSetting(bt, "private") != NULL)
 char *grp = trackDbSetting(bt, "group");
 if (grp != NULL)
      bt->grp = cloneString(grp);
-if (bt->tdbExtras == NULL)
-    bt->tdbExtras = tdbExtrasNew();
 }
 
 static void replaceStr(char **varPtr, char *val)
@@ -1168,7 +1166,7 @@ if (updated)
 return updated;
 }
 
-struct tdbExtras *tdbExtrasNew()
+static struct tdbExtras *tdbExtrasNew()
 // Return a new empty tdbExtras
 {
 struct tdbExtras *extras;
@@ -1185,5 +1183,88 @@ void tdbExtrasFree(struct tdbExtras **pTdbExtras)
 // Developer, add intelligent routines to free structures
 // NOTE: For now just leak contents, because complex structs would also leak
 freez(pTdbExtras);
+}
+
+static struct tdbExtras *tdbExtrasGet(struct trackDb *tdb)
+// Returns tdbExtras struct, initializing if needed.
+{
+if (tdb->tdbExtras == NULL)   // Temporarily add this back in because Angie see asserts popping.
+    tdb->tdbExtras = tdbExtrasNew();
+return tdb->tdbExtras;
+}
+
+int tdbExtrasFourState(struct trackDb *tdb)
+// Returns subtrack four state if known, else TDB_EXTRAS_EMPTY_STATE
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->fourState;
+return TDB_EXTRAS_EMPTY_STATE;
+}
+
+void tdbExtrasFourStateSet(struct trackDb *tdb,int fourState)
+// Sets subtrack four state
+{
+tdbExtrasGet(tdb)->fourState = fourState;
+}
+
+boolean tdbExtrasReshapedComposite(struct trackDb *tdb)
+// Returns TRUE if composite has been declared as reshaped, else FALSE.
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->reshapedComposite;
+return FALSE;
+}
+
+void tdbExtrasReshapedCompositeSet(struct trackDb *tdb)
+// Declares that the composite has been reshaped.
+{
+tdbExtrasGet(tdb)->reshapedComposite = TRUE;
+}
+
+struct mdbObj *tdbExtrasMdb(struct trackDb *tdb)
+// Returns mdb metadata if already known, else NULL
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->mdb;
+return NULL;
+}
+
+void tdbExtrasMdbSet(struct trackDb *tdb,struct mdbObj *mdb)
+// Sets the mdb metadata structure for later retrieval.
+{
+tdbExtrasGet(tdb)->mdb = mdb;
+}
+
+struct _membersForAll *tdbExtrasMembersForAll(struct trackDb *tdb)
+// Returns composite view/dimension members for all, else NULL.
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->membersForAll;
+return NULL;
+}
+
+void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membersForAll)
+// Sets the composite view/dimensions members for all for later retrieval.
+{
+tdbExtrasGet(tdb)->membersForAll = membersForAll;
+}
+
+struct _membership *tdbExtrasMembership(struct trackDb *tdb)
+// Returns subtrack membership if already known, else NULL
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->membership;
+return tdbExtrasGet(tdb)->membership;
+}
+
+void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership)
+// Sets the subtrack membership for later retrieval.
+{
+tdbExtrasGet(tdb)->membership = membership;
 }
 
