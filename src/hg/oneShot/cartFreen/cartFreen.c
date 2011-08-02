@@ -10,6 +10,7 @@
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 int userCount = 10;
+int randSeed = 0;
 
 struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
                                        char *database);
@@ -32,6 +33,7 @@ errAbort(
   "   iterations is the number of cart read/write accesses to do\n"
   "options:\n"
   "   -userCount=N number of users simulating.  Default %d\n"
+  "   -randSeed=N random number generator seed.  Defaults to pid\n"
   , userCount
   );
 }
@@ -79,8 +81,13 @@ int *sessionIds = getSomeInts(conn, "sessionDb", "id", sampleSize);
 /* Get userCount random indexes. */
 int *randomIxArray, ix;
 AllocArray(randomIxArray, userCount);
+verbose(2, "random user ix:\n");
 for (ix=0; ix<userCount; ++ix)
+    {
     randomIxArray[ix] = rand() % sampleSize;
+    verbose(2, "%d ", randomIxArray[ix]);
+    }
+verbose(2, "\n");
 
 sqlDisconnect(&conn);
 
@@ -141,6 +148,9 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 userCount = cgiOptionalInt("userCount", userCount);
+randSeed = cgiOptionalInt("randSeed", (int)getpid());
+verboseSetLevel(cgiOptionalInt("verbose", 1));
+srand(randSeed);
 if (argc != 7)
     usage();
 cartFreen(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
