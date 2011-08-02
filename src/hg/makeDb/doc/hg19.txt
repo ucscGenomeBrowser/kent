@@ -10786,19 +10786,18 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
 # 7207422 bases of 2897316137 (0.249%) in intersection
 
 #############################################################################
-# BUILD THE TRACK OF IKMC MAPPED TO HUMAN GENOME. (DONE, Fan, 7/8/10)
+# BUILD THE TRACK OF IKMC MAPPED TO HUMAN GENOME. (DONE, Fan, 8/2/11)
 
     ssh hgwdev
-    mkdir -p /hive/data/genomes/hg19/bed/ikmc/100708
-    cd /hive/data/genomes/hg19/bed/ikmc/100708
+    mkdir -p /hive/data/genomes/hg19/bed/ikmc/110801
+    cd /hive/data/genomes/hg19/bed/ikmc/110801
 
-# recieve  ucschuman.gff.gz from Carol Bult [Carol.Bult@jax.org] and place it under this subdirectory.
-    gzip -d ucschuman.gff.gz
+# recieve  20110801_human.gff.gz from Carol Bult [Carol.Bult@jax.org] and place it under this subdirectory.
 
 # build hgIkmc table from raw data file ucschuman.gff (substitue some
 # troublesome chroms in raw data file and remove some records mapped to 'chrUn')
 
-    cat ucschuman.gff |sort -u \
+    zcat 20110801_human.gff.gz |sort -u \
     |sed -e 's/chr9|NT_113911.1/chr9/' \
     |grep -v 'chrUn' \
     | perl -we \
@@ -10838,7 +10837,7 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
     
 # build hgIkmcExtra table
 
-    cat ucschuman.gff \
+    zcat 20110801_human.gff.gz \
     | grep -v 'chrUn' \
     | perl -wpe 's/\r?\n$//; @w = split("\t"); \
       if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
@@ -10851,10 +10850,9 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
 
 # load tables
     hgLoadBed hg19 hgIkmc hgIkmc.bed
-    checkTableCoords -verbose=2 hg19
+    checkTableCoords  -verbose=2  hg19 hgIkmc
 
     hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
-    checkTableCoords  -verbose=2  hg19 hgIkmc
 
 #############################################################################
 # adding patches to the sequence (DONE - 2010-07-23)
