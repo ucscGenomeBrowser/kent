@@ -23157,7 +23157,21 @@ if (gotExtra)
 	    ptr = strrchr(row[0], '_');
 	    if (ptr != NULL)
 		printf("<TD><B>Design ID: </B>%s</TD>\n", ptr+1);
-	    printf("<TD><B>Status: </B>%s</TD></TR>\n", status);
+	    printf("<TD><B>Status: </B>%s", status);
+	    if ((ptr != NULL) && (strstr(status, "vailable") != NULL))
+		{
+		char *productStr;
+		char *chp;
+		productStr = strdup(status);
+		chp = strstr(productStr, "vailable");
+		chp--;
+		chp--;
+		*chp = '\0';
+		printf(" (<A HREF=\"http://www.komp.org/geneinfo.php?project=%s\" target=_blank>",
+		       ++ptr);
+		printf("order %s)", productStr);fflush(stdout);
+		}
+	    printf("</TD></TR>\n");
 	    }
 	}
     puts("<TR><TD colspan=2>");
