@@ -1024,7 +1024,7 @@ termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
 sex M
 tier 3
-#protocol Stam:BJ-tert_Stam_protocol.pdf
+protocol Stam:BJ_fibroblasts_ATCC_SOP.V2.pdf
 # JEFF:  Please read and find which of these protocols is correct for BJ and label it appropriately
 
 #These terms seem to have a lot of confusion and no one is currently using these cell lines.  We are commenting out until resovled see Bug#4536
