@@ -113,23 +113,21 @@ function hideOrShowSubtrack(obj)
 // This can show/hide a tablerow that contains a specific object
 // Containing <tr>'s must be id'd with 'tr_' + obj.id
 // Also, this relies upon the "displaySubtracks" radio button control
-    var tblRow = document.getElementById("tr_"+obj.id);
+    var tr = $(obj).parents('tr#tr_'+obj.id);
+    if (tr != undefined && tr.length == 1) {
+        tr = tr[0];
 
-    if(!obj.checked || obj.disabled)
-    {
-        var list = document.getElementsByName("displaySubtracks");
-        for (var ix=0;ix<list.length;ix++) {
-            if(list[ix].value == "selected") {
-                if(list[ix].checked)
-                    tblRow.style.display = 'none';  // hides
-                else
-                    tblRow.style.display = ''; //'table-row' doesn't work in some browsers (ie: IE)
-                break;
+        if(!obj.checked || obj.disabled)  {
+            var radio = $('input.allOrOnly');
+            for (var ix=0;ix<radio.length;ix++) {
+                if(radio[ix].checked && radio[ix].value == "selected") {
+                    $(tr).hide();
+                    return;
+                }
             }
         }
+        $(tr).show();
     }
-    else
-        tblRow.style.display = '';
 }
 
 function waitCursor(obj)

@@ -2289,6 +2289,19 @@ if(dimensions && *dimensions)
     }
 }
 
+static char *firstCharNoDigit(char *name)
+// Turns out css classes cannot begin with a number.  So prepend 'A'
+// If this wee more widely used, could move to common.
+{
+if (!isdigit(*name))
+     return name;
+
+char *newName = needMem(strlen(name)+1);
+*newName = 'A';
+strcpy(newName+1,name);
+return newName;
+}
+
 #define SUBGROUP_MAX 9
 
 #define FILTER_COMPOSITE_ONLYONE
@@ -2397,7 +2410,7 @@ for (ix = 2,members->count=0; ix < count; ix++)
     char *name,*value;
     if (parseAssignment(words[ix], &name, &value))
         {
-        members->tags[members->count]  = name;
+        members->tags[members->count]  = firstCharNoDigit(name);
         members->titles[members->count] = strSwapChar(value,'_',' ');
         members->count++;
         }
@@ -2827,12 +2840,12 @@ for (ix = 0,membership->count=0; ix < cnt; ix++)
     if (parseAssignment(words[ix], &name, &value))
         {
         membership->subgroups[membership->count]  = name;
-        membership->membership[membership->count] = value;//strSwapChar(value,'_',' ');
+        membership->membership[membership->count] = firstCharNoDigit(value);//strSwapChar(value,'_',' ');
         members_t* members = subgroupMembersGet(childTdb->parent, name);
         membership->titles[membership->count] = NULL; // default
         if(members != NULL)
             {
-            int ix2 = stringArrayIx(value,members->tags,members->count);
+            int ix2 = stringArrayIx(membership->membership[membership->count],members->tags,members->count);
             if(ix2 != -1)
                 membership->titles[membership->count] = strSwapChar(cloneString(members->titles[ix2]),'_',' ');
             subgroupMembersFree(&members);
@@ -3568,6 +3581,12 @@ return;
 static char *checkBoxIdMakeForTrack(struct trackDb *tdb,members_t** dims,int dimMax,membership_t *membership)
 /* Creates an 'id' string for subtrack checkbox in style that matrix understand: "cb_dimX_dimY_view_cb" */
 {
+#ifdef SUBTRACK_CFG
+int len = strlen(tdb->track) + 10;
+char *id = needMem(len);
+safef(id,len,"%s_sel",tdb->track);
+return id;
+#else///#ifndef SUBTRACK_CFG
 int ix;
 #define CHECKBOX_ID_SZ 128
 // What is wanted: id="cb_ES_K4_SIG_cb"
@@ -3591,6 +3610,7 @@ if(dims[0] != NULL) // The view is saved for last
     }
 dyStringAppend(id,"cb");
 return dyStringCannibalize(&id);
+#endif///ndef SUBTRACK_CFG
 }
 
 static void checkBoxIdFree(char**id)
@@ -3862,14 +3882,14 @@ if (sortOrder != NULL)
     //       The reason is to ensure spacing of lines column headers when the only column header is "Restricted Until"
     printf("<B>List subtracks:&nbsp;");
     char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
+    safef(javascript, sizeof(javascript), "class='allOrOnly' onclick='showOrHideSelectedSubtracks(true);'");
     if (subCount > LARGE_COMPOSITE_CUTOFF)
         safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
     else
         safecpy(buffer,SMALLBUF,"displaySubtracks");
     cgiMakeOnClickRadioButton(buffer, "selected", !displayAll,javascript);
     puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(false);\"");
+    safef(javascript, sizeof(javascript), "class='allOrOnly' onclick='showOrHideSelectedSubtracks(false);'");
     cgiMakeOnClickRadioButton(buffer, "all", displayAll,javascript);
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
@@ -3919,14 +3939,14 @@ else
     //       The reason is to ensure spacing of lines column headers when the only column header is "Restricted Until"
     printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
     char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
+    safef(javascript, sizeof(javascript), "class='allOrOnly' onclick='showOrHideSelectedSubtracks(true);'");
     if (subCount > LARGE_COMPOSITE_CUTOFF)
         safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
     else
         safecpy(buffer,SMALLBUF,"displaySubtracks");
     cgiMakeOnClickRadioButton(buffer, "selected", !displayAll,javascript);
     puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(false);\"");
+    safef(javascript, sizeof(javascript), "class='allOrOnly' onclick='showOrHideSelectedSubtracks(false);'");
     cgiMakeOnClickRadioButton(buffer, "all", displayAll,javascript);
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
@@ -4040,6 +4060,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // Start the TR which must have an id that is directly related to the checkBox id
     char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,membership); // view is known tag
+
     printf("<TR valign='top' class='%s%s'",colors[colorIx],(useDragAndDrop?" trDraggable":""));
     printf(" id=tr_%s p%s>\n",id,(!visibleCB && !displayAll?" style='display:none'":""));
 

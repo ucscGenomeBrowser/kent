@@ -98,8 +98,13 @@ function exposeAll()
 {
     // Make main display dropdown show full if currently hide
     var visDD = $("select.visDD"); // limit to hidden
-    if ($(visDD).length == 1 && $(visDD).attr('selectedIndex') == 0)   // limit to hidden
-        $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
+    if ($(visDD).length == 1) {
+        visDD = visDD[0];              // limit to hidden
+        if ($(visDD).attr('selectedIndex') == 0) {
+            $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
+            scm.propagateVis(visDD);
+        }
+    }
 }
 
 function matSubCbClick(subCB)
@@ -107,8 +112,9 @@ function matSubCbClick(subCB)
 // subCB:onclick  When a subtrack checkbox is clicked, it may result in
 // Clicking/unclicking the corresponding matrix CB.  Also the
 // subtrack may be hidden as a result.
-    matSubCBsetShadow(subCB);
-    hideOrShowSubtrack(subCB);
+    scm.checkOneSubtrack(subCB,subCB.checked,!subCB.disabled);
+    //////////matSubCBsetShadow(subCB);
+    //////////hideOrShowSubtrack(subCB);
     // When subCBs are clicked, 3-state matCBs may need to be set
     var classes = matViewClasses('hidden');
     classes = classes.concat( matAbcCBclasses(false) );
@@ -124,7 +130,7 @@ function matSubCbClick(subCB)
     if(subCB.checked)
         exposeAll();  // Unhide composite vis?
 
-    scm.enableCfg(subCB,null,subCB.checked);
+    ///////////scm.enableCfg(subCB,null,subCB.checked);
 
     matSubCBsSelected();
 }
@@ -181,7 +187,7 @@ function _matSetMatrixCheckBoxes(state)
         this.checked = state;
         matCbComplete(this,true);
     });
-    subCbs = $("input.subCB");
+    var subCbs = $("input.subCB");
     for(var vIx=1;vIx<arguments.length;vIx++) {
         subCbs = $( subCbs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
@@ -190,12 +196,14 @@ function _matSetMatrixCheckBoxes(state)
         subCbs = objsFilterByClasses(subCbs,"not",classes);  // remove unchecked abcCB classes
     }
     $( subCbs ).each( function (i) {
-        this.checked = state;
-        matSubCBsetShadow(this);
+        scm.checkOneSubtrack(this,state,!(this.disabled));
+        /////////this.checked = state;
+        /////////matSubCBsetShadow(this);
+        /////////scm.enableCfg(this,null,this.checked);
     });
     if(state)
         exposeAll();  // Unhide composite vis?
-    showOrHideSelectedSubtracks();
+    ////////showOrHideSelectedSubtracks();
     matSubCBsSelected();
     //jQuery(this).css('cursor', '');
 
@@ -247,7 +255,8 @@ function matSubCBsCheck(state)
 
     if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
         var classes = matAbcCBclasses(false);
-        subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
+        if (classes.length > 0)
+            subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
         if(arguments.length == 1 || arguments.length == 3) { // Requested dimX&Y: check dim ABC state
             $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
         } else {//if(arguments.length == 2) { // Requested dim ABC (or only 1 dimension so this code is harmless)
@@ -583,79 +592,6 @@ function subtrackCfgHideAll(table)
     $("img[src$='../images/upBlue.png']").attr('src','../images/downBlue.png');
 }
 
-var popUpTrackName;
-var popUpTitle = "";
-var popSaveAllVars = null;
-function popUpCfgOk(popObj, trackName)
-{ // Kicks off a Modal Dialog for the provided content.
-    var allVars = getAllVars(popObj, trackName );   // always subtrack cfg
-    var changedVars = varHashChanges(allVars,popSaveAllVars);
-    //warn("cfgVars:"+varHashToQueryString(changedVars));
-    setVarsFromHash(changedVars);
-    var newVis = changedVars[trackName];
-    if(newVis != null) {
-        var sel = $('input[name="'+trackName+'_sel"]:checkbox');
-        var checked = (newVis != 'hide' && newVis != '[]');  // subtracks do not have "hide", thus '[]'
-        if( $(sel) != undefined ) {
-            $(sel).each( function (i) { matSubCBcheckOne(this,checked); });  // Though there is only one, the each works but the direct call does not!
-            matSubCBsSelected();
-        }
-    }
-}
-
-function popUpCfg(content, status)
-{ // Kicks off a Modal Dialog for the provided content.
-    // Set up the modal dialog
-    var popit = $('#popit');
-    $(popit).html("<div style='font-size:80%'>" + content + "</div>");
-    $(popit).dialog({
-        ajaxOptions: { cache: true }, // This doesn't work
-        resizable: false,
-        height: 'auto',
-        width: 'auto',
-        minHeight: 200,
-        minWidth: 700,
-        modal: true,
-        closeOnEscape: true,
-        autoOpen: false,
-        buttons: { "OK": function() {
-            popUpCfgOk(this,popUpTrackName);
-            $(this).dialog("close");
-        }},
-        open: function() { popSaveAllVars = getAllVars( this, popUpTrackName ); }, // always subtrack cfg
-        close: function() { $('#popit').empty(); }
-    });
-    // Apparently the options above to dialog take only once, so we set title explicitly.
-    if(popUpTitle != undefined && popUpTitle.length > 0)
-        $(popit).dialog('option' , 'title' , popUpTitle );
-    else
-        $(popit).dialog('option' , 'title' , "Please Respond");
-    $(popit).dialog('open');
-}
-
-function _popUpSubrackCfg(trackName,label)
-{ // popup cfg dialog
-    popUpTrackName = trackName;
-    popUpTitle = label;
-
-    $.ajax({
-        type: "GET",
-        url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
-        dataType: "html",
-        trueSuccess: popUpCfg,
-        success: catchErrorOrDispatch,
-        error: errorHandler,
-        cmd: "cfg",
-        cache: false
-    });
-}
-
-function popUpSubtrackCfg(trackName,label)
-{
-    waitOnFunction( _popUpSubrackCfg, trackName, label );  // Launches the popup but shields the ajax with a waitOnFunction
-    return false;
-}
-
 function subtrackCfgShow(tableName)
 {
 // Will show subtrack specific configuration controls
@@ -727,7 +663,7 @@ function showOrHideSelectedSubtracks(inp)
     if(arguments.length > 0)
         showHide=inp;
     else {
-        var onlySelected = $("input[name='displaySubtracks']");
+        var onlySelected = $("input.allOrOnly'");
         if(onlySelected.length > 0)
             showHide = onlySelected[0].checked;
         else
@@ -1520,6 +1456,15 @@ var scm = { // subtrack config module.
         }
     },
 
+    checkOneSubtrack: function (subCb,check,enable)
+    { // Handle a single check of a single subCb
+        subCb.checked = check;
+        subCb.dsabled = enable;
+        matSubCBsetShadow(subCb);
+        hideOrShowSubtrack(subCb);
+        scm.enableCfg(subCb,null,check);
+    },
+
     propagateSetting: function (parentObj)
     { // propagate composite/view level setting to subtrack children
         var children = scm.childrenFind(parentObj);
@@ -1855,7 +1800,10 @@ var scm = { // subtrack config module.
         var classList = $( obj ).attr("class").split(" ");
         var view = classList[classList.length - 1];
         var classList = $(obj).attr('class').split(' '); // This relies on view being the last class!!!
-        var selectHtml = "<SELECT id='"+subtrack+"' class='normalText subVisDD "+view+"' style='width: 70px'>";
+        var selectHtml = "<SELECT id='"+subtrack+"' class='normalText subVisDD "+view+"' style='width: 70px'";
+        if (open)
+            selectHtml += " size=5";
+        selectHtml += ">";
         var selected = $(obj).text();
         if (selected == 'hide')
             selectHtml += "<OPTION SELECTED>hide</OPTION><OPTION>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
@@ -1871,7 +1819,7 @@ var scm = { // subtrack config module.
         $(obj).replaceWith(selectHtml);
         if (open) {
             var newObj = $('select#'+subtrack);
-            $(newObj).attr('size',5)
+            //$(newObj).attr('size',5)
             $(newObj).one('blur',function (e) {
                 $(this).attr('size',1);
                 $(this).unbind()
@@ -1966,6 +1914,26 @@ var scm = { // subtrack config module.
         return false; // called by link!
     },
 
+    subCbInit: function (subCb)
+    { // unnames the subCb control and sets up on change envent
+        scm.unnameIt(subCb,true);
+        var boolshad = $('input#boolshad_-'+subCb.id);
+        if (boolshad != undefined && boolshad.length == 1) {
+            scm.unnameIt(boolshad[0],false);
+        }
+        $(subCb).bind('click',function (e) {
+            // deal with hidden boolshads!
+            var boolshad = $('input#boolshad_-'+subCb.id);
+            if (boolshad != undefined && boolshad.length == 1) {
+                if (subCb.checked == false)
+                    scm.markChange(boolshad[0]);
+                else
+                    scm.clearChange(boolshad[0]);
+            }
+            scm.markChange(subCb);
+        });
+    },
+
     viewInit: function (viewId)
     { // unnames all view controls
         // iterate through all matching controls and unname
@@ -2018,6 +1986,12 @@ var scm = { // subtrack config module.
         var matCbs = $('input.matCB');
         $(matCbs).each(function (i) {
             scm.unnameIt(this,false);
+        });
+
+        // SubCBs will get renamed and on change will name them back.
+        var subCbs = $('input.subCB');
+        $(subCbs).each(function (i) {
+            scm.subCbInit(this);
         });
 
         // Now vis control
