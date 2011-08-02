@@ -1075,6 +1075,8 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
         pan.css( 'cursor', 'w-resize');
 
         pan.mousedown(function(e){
+             if (e.which > 1 || e.button > 1)
+                 return true;
             if(mouseIsDown == false) {
                 mouseIsDown = true;
                 mouseDownX = e.clientX;
