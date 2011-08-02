@@ -178,7 +178,7 @@ include wgEncodeSunyAlbanyTiling.ra beta,public
 include wgEncodeSunyAlbanyTiling.new.ra alpha
 
 # SUNY SwitchGear (wrangler: cricket)
-include wgEncodeSunySwitchgear.ra alpha
+include wgEncodeSunySwitchgear.ra
 
 # SUNY Rip-seq (wrangler: cricket)
 include wgEncodeSunyRipSeq.ra alpha
