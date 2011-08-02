@@ -1,0 +1,9 @@
+files	view	cell	antibody	treatment	protocol	sex	control	replicate	controlId	labExpId	seqPlatform	softwareVersion	labVersion	md5sum
+data/CellControl*.fastq	RawData	Cell	Input	Myocyte_24h	PCR1x	M	Control_32bp	1	55555	55555	Illumina_GA		Control Fastq	49349DJF539
+data/CellControl*bam	Alignments	Cell	Input	Myocyte_24h	PCR1x	M	Control_32bp	1	55555	55555	Illumina_GA		Control bam	5908D245DKJH
+data/CellControl*bigWig	Signal	Cell	Input	Myocyte_24h	PCR1x	M	Control_32bp	1	55555	55555	Illumina_GA		Control bigwig	234DIj3429
+data/Cellp300rep1*fastq	RawData	Cell	p300	Myocyte_24h	PCR1x	M	Control_32bp	1	55555	12345	Illumina_GA		P300 Fastq	Dk32490DK
+data/Cellp300rep1*bam	Alignments	Cell	p300	Myocyte_24h	PCR1x	M	Control_32bp	1	55555	12345	Illumina_GA		P300 bam	DKfj34290
+data/Cellp300rep1*bigWig	Signal	Cell	p300	Myocyte_24h	PCR1x	M	Control_32bp	1	55555	12345	Illumina_GA		P300 bigwig	55390523jdkfljdlf
+data/Cellp300rep1*narrowPeak	Peaks	Cell	p300	Myocyte_24h	PCR1x	M	Control_32bp	1	55555	12345	Illumina_GA		P300 peak	KDLjf3294flksfj
+
