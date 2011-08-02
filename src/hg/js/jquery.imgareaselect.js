@@ -313,9 +313,19 @@ jQuery.imgAreaSelect.init = function (img, options) {
         selection.height = 0;
         selection.event = event;
         
-        if(options.clickClipHeight != null && selection.y1 > options.clickClipHeight) {
+        if(options.clickClipHeight != null) {
             // This is necessary on IE to support clicks in an image which has map items.
-            return false;
+            if(typeof(options.clickClipHeight) == 'number') {
+                if(selection.y1 > options.clickClipHeight) {
+                    return false;
+                }
+            } else {
+                for(var i = 0; i < options.clickClipHeight.length; i++) {
+                    if(selection.y1 > options.clickClipHeight[i].top && selection.y1 < options.clickClipHeight[i].bottom) {
+                        return false;
+                    }
+                }
+            }
         }
 
         resize = [ ];
