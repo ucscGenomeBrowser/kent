@@ -16,7 +16,6 @@ expId 1665
 fileName wgEncodeUmassDekker5CGm12878MatrixRep1.download.gz
 grant Dekker
 lab UMass-Dekker
-parentTable wgEncodeUmassDekker5CGm12878MatrixRep1
 project wgEncode
 replicate 1
 subId 3488
@@ -35,7 +34,6 @@ expId 1665
 fileName wgEncodeUmassDekker5CGm12878MatrixRep2.download.gz
 grant Dekker
 lab UMass-Dekker
-parentTable wgEncodeUmassDekker5CGm12878MatrixRep2
 project wgEncode
 replicate 2
 subId 3488
@@ -54,7 +52,6 @@ expId 1666
 fileName wgEncodeUmassDekker5CH1hescMatrixRep1.download.gz
 grant Dekker
 lab UMass-Dekker
-parentTable wgEncodeUmassDekker5CH1hescMatrixRep1
 project wgEncode
 replicate 1
 subId 3488
@@ -73,7 +70,6 @@ expId 1666
 fileName wgEncodeUmassDekker5CH1hescMatrixRep2.download.gz
 grant Dekker
 lab UMass-Dekker
-parentTable wgEncodeUmassDekker5CH1hescMatrixRep2
 project wgEncode
 replicate 2
 subId 3488
@@ -92,7 +88,6 @@ expId 1667
 fileName wgEncodeUmassDekker5CHelas3MatrixRep1.download.gz
 grant Dekker
 lab UMass-Dekker
-parentTable wgEncodeUmassDekker5CHelas3MatrixRep1
 project wgEncode
 replicate 1
 subId 3488
@@ -111,7 +106,6 @@ expId 1667
 fileName wgEncodeUmassDekker5CHelas3MatrixRep2.download.gz
 grant Dekker
 lab UMass-Dekker
-parentTable wgEncodeUmassDekker5CHelas3MatrixRep2
 project wgEncode
 replicate 2
 subId 3488
@@ -130,7 +124,6 @@ expId 1668
 fileName wgEncodeUmassDekker5CK562MatrixRep1.download.gz
 grant Dekker
 lab UMass-Dekker
-parentTable wgEncodeUmassDekker5CK562MatrixRep1
 project wgEncode
 replicate 1
 subId 3488
@@ -149,10 +142,9 @@ expId 1668
 fileName wgEncodeUmassDekker5CK562MatrixRep2.download.gz
 grant Dekker
 lab UMass-Dekker
-parentTable wgEncodeUmassDekker5CK562MatrixRep2
 project wgEncode
 replicate 2
 subId 3488
 view Matrix
 
-# MAGIC: 920336209
+# MAGIC: -390283835
