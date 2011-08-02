@@ -1,0 +1,105 @@
+track wgEncodeCaltechTfbs
+compositeTrack on
+shortLabel Caltech-m ChipSeq
+longLabel ENCODE Caltech-m Hardison ChipSeq
+group regulation
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line C2C12=C2C12
+subGroup3 factor Factor MYOGEN=myogenin USF1=USF-1 INPUT=Input
+subGroup4 sex Sex F=F
+subGroup5 control Control CONTROL32BP=Control_32bp CONTROL50BP=Control_50bp
+subGroup6 treatment Treatment MYOBLAST=Myoblast MYOCYTE24H=Myocyte_24h
+subGroup7 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x
+dimensions dimensionX=cellType dimensionY=factor dimensionA=control dimensionB=treatment dimensionC=protocol
+dimensionAchecked CONTROL32BP,CONTROL50BP
+dimensionBchecked MYOBLAST,MYOCYTE24H
+dimensionCchecked PCR1X,PCR2X
+filterComposite dimensionA=multi dimensionB=multi dimensionC=multi
+sortOrder cellType=+ factor=+ control=+ treatment=+ protocol=+ view=+
+controlledVocabulary encode/cv.ra cellType factor sex control treatment protocol
+dragAndDrop subTracks
+visibilityViewDefaults  Peaks=dense Signal=full
+priority 0
+type bed 3
+wgEncode 1
+
+	#####Peak Tracks###########
+	track wgEncodeCaltechTfbsViewPeaks
+	shortLabel Peaks
+	view Peaks
+	visibility dense
+	#viewUi on
+	subTrack wgEncodeCaltechTfbs
+	signalFilter 0
+	signalFilterLimits 0:82
+    scoreFilterLimits 1:1000
+    scoreFilter 0
+    scoreMin 0
+
+        track wgEncodeCaltechTfbsC2c12Usf1FControl50bpMyoblastPcr1xPk
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2C12 USF-1 Pk
+        longLabel ENCODE Caltech TFBS Peaks (USF-1 in C2C12 cells)
+        subGroups view=Peaks factor=USF1 cellType=C2C12 control=CONTROL50BP protocol=PCR1X sex=F treatment=MYOBLAST
+        type narrowPeak
+        color 139,69,19
+        # subId=4447 dateSubmitted=2011-07-08
+
+        track wgEncodeCaltechTfbsC2c12MyogenFControl32bpMyocyte24hPcr2xPk
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2C12 myogenin Pk
+        longLabel ENCODE Caltech TFBS Peaks (myogenin in C2C12 cells)
+        subGroups view=Peaks factor=MYOGEN cellType=C2C12 control=CONTROL32BP protocol=PCR2X sex=F treatment=MYOCYTE24H
+        type narrowPeak
+        color 139,69,19
+        # subId=4450 dateSubmitted=2011-07-08
+
+	#######	Signal Tracks###########
+	track wgEncodeCaltechTfbsViewSignal
+	shortLabel Signal
+	view Signal
+	visibility full
+	#viewUi on
+	subTrack wgEncodeCaltechTfbs
+	viewLimits 0.2:15
+	autoScale off
+	maxHeightPixels 100:32:0
+	configurable on
+	windowingFunction mean+whiskers
+
+        track wgEncodeCaltechTfbsC2c12InputFControl50bpMyoblastPcr1xSig
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2C12 Input Sig
+        longLabel ENCODE Caltech TFBS Signal (Input in C2C12 cells)
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CONTROL50BP protocol=PCR1X sex=F treatment=MYOBLAST
+        type bigWig 0.073500 10874.451172
+        color 139,69,19
+        # subId=4448 dateSubmitted=2011-07-08
+
+        track wgEncodeCaltechTfbsC2c12Usf1FControl50bpMyoblastPcr1xSig
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2C12 USF-1 Sig
+        longLabel ENCODE Caltech TFBS Signal (USF-1 in C2C12 cells)
+        subGroups view=Signal factor=USF1 cellType=C2C12 control=CONTROL50BP protocol=PCR1X sex=F treatment=MYOBLAST
+        type bigWig 0.049600 10984.794922
+        color 139,69,19
+        # subId=4447 dateSubmitted=2011-07-08
+
+        track wgEncodeCaltechTfbsC2c12InputFControl32bpMyocyte24hPcr2xSig
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2C12 Input Sig
+        longLabel ENCODE Caltech TFBS Signal (Input in C2C12 cells)
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CONTROL32BP protocol=PCR2X sex=F treatment=MYOCYTE24H
+        type bigWig 0.094200 1104.911621
+        color 139,69,19
+        # subId=4449 dateSubmitted=2011-07-08
+
+        track wgEncodeCaltechTfbsC2c12MyogenFControl32bpMyocyte24hPcr2xSig
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2C12 myogenin Sig
+        longLabel ENCODE Caltech TFBS Signal (myogenin in C2C12 cells)
+        subGroups view=Signal factor=MYOGEN cellType=C2C12 control=CONTROL32BP protocol=PCR2X sex=F treatment=MYOCYTE24H
+        type bigWig 0.087200 418.059204
+        color 139,69,19
+        # subId=4450 dateSubmitted=2011-07-08
+

@@ -22,6 +22,7 @@ var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;  // turn on experimental zoom-to-codon functionality (currently only on in larrym's tree).
 var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate and mapIsUpdateable
+var allowDragAndZoomEverywhere = false;     // true only in larrym's tree (see redmine 4667)
 
 /* Data passed in from CGI via the hgTracks object:
  *
@@ -283,8 +284,9 @@ $(window).load(function () {
             loadContextMenu(trackImgTbl);
             //$(".trDraggable,.nodrop").each( function(t) { loadContextMenu($(this)); });
             // FIXME: why isn't rightClick for sideLabel working??? Probably because there is no link!
-            if(inPlaceUpdate && !hgTracks.imgBoxPortal) {
-                // Larry's experimental version of 1x panning (aka cheap panning).
+            if(false && inPlaceUpdate && !hgTracks.imgBoxPortal) {
+                // Larry's experimental version of 1x panning (aka cheap panning). Currently turned off but being left
+                // here temporarily for illustrative purposes.
                 var originalLeft;
                 var originalClientX;
                 var withinTrackImgTbl;
@@ -380,12 +382,32 @@ function loadImgAreaSelect(firstTime)
             // XXXX Tim, I think we should get height from trackImgTbl, b/c it automatically adjusts as we add/delete items.
             imgHeight = trackImgTbl.height();
         }
-
+        var heights;
+        if(allowDragAndZoomEverywhere) {
+            heights = [];
+            var titleHeight;
+            $('div.cntrLab').each(function (i) {
+                                      titleHeight = $(this).css('height');
+                                      titleHeight = titleHeight.substring(0, titleHeight.length - 2) * 1;
+                                      return false;
+                                  });
+            $('img.sideLab').each(function (i) {
+                                      var top = $(this).css('top');
+                                      top = top.substring(0, top.length - 2);
+                                      top = top * -1;
+                                      heights.push({
+                                                       top: top,
+                                                       bottom: top + titleHeight
+                                                   });
+                                  });
+        } else {
+            heights = hgTracks.rulerClickHeight;
+        }
         imgAreaSelect = jQuery((trackImgTbl || trackImg).imgAreaSelect({ selectionColor: 'blue', outerColor: '',
             minHeight: imgHeight, maxHeight: imgHeight,
             onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
             autoHide: autoHideSetting, movable: false,
-            clickClipHeight: hgTracks.rulerClickHeight}));
+            clickClipHeight: heights}));
     }
 }
 
