@@ -92,6 +92,8 @@ verbose(2, "\n");
 sqlDisconnect(&conn);
 
 int iteration = 0;
+int querySize = 1024*1024*16;
+char *query = needLargeMem(querySize);
 for (;;)
     {
     for (ix = 0; ix < userCount; ++ix)
@@ -100,41 +102,41 @@ for (;;)
 	long startTime = clock1000();
 	struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 	long connectTime = clock1000();
-	char query[1024 * 512];
 
-	safef(query, sizeof(query), "select contents from userDb where id=%d", 
+	safef(query, querySize, "select contents from userDb where id=%d", 
 		userIds[randomIx]);
 	char *userContents = sqlQuickString(conn, query);
 	long userReadTime = clock1000();
 
-	safef(query, sizeof(query), "select contents from sessionDb where id=%d", 
+	safef(query, querySize, "select contents from sessionDb where id=%d", 
 		sessionIds[randomIx]);
 	char *sessionContents = sqlQuickString(conn, query);
 	long sessionReadTime = clock1000();
 
-	safef(query, sizeof(query), "update userDb set contents='%s' where id=%d",
+	safef(query, querySize, "update userDb set contents='%s' where id=%d",
 		userContents, userIds[randomIx]);
 	sqlUpdate(conn, query);
 	long userWriteTime = clock1000();
 
-	safef(query, sizeof(query), "update sessionDb set contents='%s' where id=%d",
+	safef(query, querySize, "update sessionDb set contents='%s' where id=%d",
 		sessionContents, sessionIds[randomIx]);
 	sqlUpdate(conn, query);
 	long sessionWriteTime = clock1000();
 
-	freez(&userContents);
-	freez(&sessionContents);
-
 	sqlDisconnect(&conn);
 	long disconnectTime = clock1000();
 
-	printf("%ld total, %ld connect, %ld userRead, %ld sessionRead, %ld userWrite, %ld userWrite\n",
+	printf("%ld total, %ld size, %ld connect, %ld userRead, %ld sessionRead, %ld userWrite, %ld userWrite\n",
 		disconnectTime - startTime,
+		(long) strlen(userContents) + strlen(sessionContents),
 		connectTime - startTime,
 		userReadTime - connectTime,
 		sessionReadTime - userReadTime,
 		userWriteTime - sessionReadTime,
 		sessionWriteTime - userReadTime);
+
+	freez(&userContents);
+	freez(&sessionContents);
 
 	sleep1000(milliDelay);
 	if (++iteration >= iterations)
