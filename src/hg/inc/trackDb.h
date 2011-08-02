@@ -510,6 +510,7 @@ struct _membersForAll;
 struct _membership;
 
 struct tdbExtras
+#define TDB_EXTRAS_EMPTY_STATE 666
 // Struct for misc. data collected/calculated during CGI track setup that are cached for later use.
 // These extras are primarily used in hgTracks & hgTrackUi but can be used and expanded as needed.
 // CGI developers are encouraged to add to this structure for their own needs.
@@ -523,81 +524,38 @@ struct tdbExtras
     // Developer: please add your useful data that is costly to calculate/retrieve more than once
     };
 
-#define TDB_EXTRAS_EMPTY_STATE 666
-struct tdbExtras *tdbExtrasNew(void);
-// Return a new empty tdbExtras
-
 void tdbExtrasFree(struct tdbExtras **pTdbExtras);
 // Frees the tdbExtras structure
 
-INLINE struct tdbExtras *tdbExtrasGet(struct trackDb *tdb)
-// Returns tdbExtras struct, initializing if needed.
-{
-//assert(tdb->tdbExtras != NULL);
-if (tdb->tdbExtras == NULL)   // Temprarily add this back in because Angie see asserts popping.
-    tdb->tdbExtras = tdbExtrasNew();
-return tdb->tdbExtras;
-}
-
-INLINE int tdbExtrasFourState(struct trackDb *tdb)
+int tdbExtrasFourState(struct trackDb *tdb);
 // Returns subtrack four state if known, else TDB_EXTRAS_EMPTY_STATE
-{
-return tdbExtrasGet(tdb)->fourState;
-}
 
-INLINE void tdbExtrasFourStateSet(struct trackDb *tdb,int fourState)
+void tdbExtrasFourStateSet(struct trackDb *tdb,int fourState);
 // Sets subtrack four state
-{
-tdbExtrasGet(tdb)->fourState = fourState;
-}
 
-INLINE boolean tdbExtrasReshapedComposite(struct trackDb *tdb)
+boolean tdbExtrasReshapedComposite(struct trackDb *tdb);
 // Returns TRUE if composite has been declared as reshaped, else FALSE.
-{
-return tdbExtrasGet(tdb)->reshapedComposite;
-}
 
-INLINE void tdbExtrasReshapedCompositeSet(struct trackDb *tdb)
+void tdbExtrasReshapedCompositeSet(struct trackDb *tdb);
 // Declares that the composite has been reshaped.
-{
-tdbExtrasGet(tdb)->reshapedComposite = TRUE;
-}
 
-INLINE struct mdbObj *tdbExtrasMdb(struct trackDb *tdb)
+struct mdbObj *tdbExtrasMdb(struct trackDb *tdb);
 // Returns mdb metadata if already known, else NULL
-{
-return tdbExtrasGet(tdb)->mdb;
-}
 
-INLINE void tdbExtrasMdbSet(struct trackDb *tdb,struct mdbObj *mdb)
+void tdbExtrasMdbSet(struct trackDb *tdb,struct mdbObj *mdb);
 // Sets the mdb metadata structure for later retrieval.
-{
-tdbExtrasGet(tdb)->mdb = mdb;
-}
 
-INLINE struct _membersForAll *tdbExtrasMembersForAll(struct trackDb *tdb)
+struct _membersForAll *tdbExtrasMembersForAll(struct trackDb *tdb);
 // Returns composite view/dimension members for all, else NULL.
-{
-return tdbExtrasGet(tdb)->membersForAll;
-}
 
-INLINE void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membersForAll)
+void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membersForAll);
 // Sets the composite view/dimensions members for all for later retrieval.
-{
-tdbExtrasGet(tdb)->membersForAll = membersForAll;
-}
 
-INLINE struct _membership *tdbExtrasMembership(struct trackDb *tdb)
+struct _membership *tdbExtrasMembership(struct trackDb *tdb);
 // Returns subtrack membership if already known, else NULL
-{
-return tdbExtrasGet(tdb)->membership;
-}
 
-INLINE void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership)
+void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership);
 // Sets the subtrack membership for later retrieval.
-{
-tdbExtrasGet(tdb)->membership = membership;
-}
 
 #endif /* TRACKDB_H */
 

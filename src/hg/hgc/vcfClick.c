@@ -228,6 +228,7 @@ static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec)
  * (using seqName instead of rec->chrom because rec->chrom might lack "chr"). */
 {
 printf("<B>Name:</B> %s<BR>\n", rec->name);
+printCustomUrl(tdb, rec->name, TRUE);
 static char *formName = "vcfCfgHapCenter";
 printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
 vcfCfgHaplotypeCenter(cart, tdb, rec->file, rec->name, seqName, rec->chromStart, formName);
@@ -281,6 +282,8 @@ if (vcff != NULL)
 	if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
 	    vcfRecordDetails(tdb, rec);
     }
+else
+    printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
 }
 
 

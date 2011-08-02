@@ -308,7 +308,9 @@ printf(
    "the box in the list below. "
    "After import the hub will show up as a group of tracks with its own blue "
    "bar and label underneath the main browser graphic, and in the "
-   "configure page. </P>\n"
+   "configure page. For more information, see the "
+   "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
+   "User's Guide</A>.</P>\n"
    );
 printf("</div>\n");
 
