@@ -315,16 +315,20 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
         if(options.clickClipHeight != null) {
             // This is necessary on IE to support clicks in an image which has map items.
+            var found = false;
             if(typeof(options.clickClipHeight) == 'number') {
-                if(selection.y1 > options.clickClipHeight) {
-                    return false;
+                if(selection.y1 < options.clickClipHeight) {
+                    found = true;
                 }
             } else {
-                for(var i = 0; i < options.clickClipHeight.length; i++) {
-                    if(selection.y1 > options.clickClipHeight[i].top && selection.y1 < options.clickClipHeight[i].bottom) {
-            return false;
-        }
+                for(var i = 0; !found && i < options.clickClipHeight.length; i++) {
+                    if(selection.y1 >= options.clickClipHeight[i].top && selection.y1 < options.clickClipHeight[i].bottom) {
+                        found = true;
+                    }
                 }
+            }
+            if(!found) {
+                return false;
             }
         }
 
