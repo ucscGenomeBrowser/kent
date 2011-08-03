@@ -1125,6 +1125,22 @@ sex M
 tier 3
 protocol Stam:CMK_Stam_protocol.pdf
 
+term Colo829
+tag COLO829
+type Cell Line
+tier 3
+organism human
+description Malignant Melanoma
+lineage missing
+karyotype missing
+sex M
+tissue Skin
+vendorName 
+vendorId [1]
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1974&Template=cellBiology
+lab Crawford
+protocol Crawford:Colo829_Crawford_protocol.pdf
+
 term Decidua
 tag DECIDUA
 type Cell Line
@@ -1324,6 +1340,114 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Stam:GM12865_Stam_protocol.pdf
+
+term GM12866
+tag GM12866
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed.
+lineage mesoderm
+karyotype missing
+sex M
+tissue Blood
+vendorName Coriell
+vendorId GM12866
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12866&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12866_Stam_protocol.pdf
+
+term GM12867
+tag GM12867
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed.
+lineage mesoderm
+karyotype missing
+sex F
+tissue Blood
+vendorName Coriell
+vendorId GM12867
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12867&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12867_Stam_protocol.pdf
+
+term GM12868
+tag GM12868
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed.
+lineage mesoderm
+karyotype missing
+sex F
+tissue Blood
+vendorName Coriell
+vendorId GM12868
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12868&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12868_Stam_protocol.pdf
+
+term GM12869
+tag GM12869
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed.
+lineage mesoderm
+karyotype missing
+sex F
+tissue Blood
+vendorName Coriell
+vendorId GM12869
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12869&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12869_Stam_protocol.pdf
+
+term GM12870
+tag GM12870
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed.
+lineage mesoderm
+karyotype missing
+sex M
+tissue Blood
+vendorName Coriell
+vendorId GM12870
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12870&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12870_Stam_protocol.pdf
+
+term GM12871
+tag GM12871
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed.
+lineage mesoderm
+karyotype missing
+sex M
+tissue Blood
+vendorName Coriell
+vendorId GM12871
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12871&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12871_Stam_protocol.pdf
 
 term GM12872
 tag GM12872
@@ -2635,6 +2759,22 @@ orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
 termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 protocol Crawford:iPS_Crawford_protocol.pdf
+
+term Ishikawa
+tag ISHIKAWA
+type Cell Line
+tier 3
+organism human
+description endometrial adenocarcinoma
+lineage missing
+karyotype missing
+sex F
+tissue Uterus
+vendorName 
+vendorId [3]
+orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?D7=0&N5=SEARCH_CONCAT_PNO%7CBRAND_KEY&N4=99040201%7CSIGMA&N25=0&QS=ON&F=SPEC
+lab Crawford
+protocol Crawford:Ishikawa_Crawford_protocol.pdf
 
 term Jurkat
 tag JURKAT
