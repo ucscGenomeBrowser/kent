@@ -6,9 +6,7 @@ SCRIPT_FILES = \
 	doEncodeValidate.pl
 CONFIG_FILES = \
 	fields.ra \
-	labs.ra \
-	hg18_chromInfo.txt \
-        expVars.ra
+	labs.ra
 
 CV = cv.ra
 CVDIR=../../makeDb/trackDb/cv/alpha
