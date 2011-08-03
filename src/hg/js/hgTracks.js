@@ -385,19 +385,12 @@ function loadImgAreaSelect(firstTime)
         var heights;
         if(allowDragAndZoomEverywhere) {
             heights = [];
-            var titleHeight;
+            var imgTop = trackImgTbl.offset().top;
             $('div.cntrLab').each(function (i) {
-                                      titleHeight = $(this).css('height');
-                                      titleHeight = titleHeight.substring(0, titleHeight.length - 2) * 1;
-                                      return false;
-                                  });
-            $('img.sideLab').each(function (i) {
-                                      var top = $(this).css('top');
-                                      top = top.substring(0, top.length - 2);
-                                      top = top * -1;
+                                      var top = $(this).offset().top - imgTop;
                                       heights.push({
                                                        top: top,
-                                                       bottom: top + titleHeight
+                                                       bottom: top + $(this).height()
                                                    });
                                   });
         } else {
