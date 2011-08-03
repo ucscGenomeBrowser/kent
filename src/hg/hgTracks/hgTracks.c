@@ -85,6 +85,7 @@ int guidelineSpacing = 12;  /* Pixels between guidelines. */
 boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
 
 int rulerMode = tvHide;         /* on, off, full */
+struct hvGfx *hvgSide = NULL;     // An extra pointer to a side label image that can be built if needed
 
 char *rulerMenu[] =
 /* dropdown for ruler visibility */
@@ -1898,7 +1899,6 @@ leftLabelWidth = insideX - gfxBorder*3;
 
 struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
 struct image *theSideImg = NULL; // Because dragScroll drags off end of image, the side label gets seen. Therefore we need 2 images!!
-struct hvGfx *hvgSide = NULL;    // Strategy an extra pointer to a side image that can be built if needed
 //struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
@@ -2076,7 +2076,6 @@ else
         }
     hvgSide = hvg; // Unlkess this is overwritten below, there is a single image
 
-#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     if (theImgBox && theImgBox->showPortal && withLeftLabels)
         {
         // TODO: It would be great to make the images smaller, but keeping both the same full size for now
@@ -2089,7 +2088,6 @@ else
         hvgSide->rc = revCmplDisp;
         initColors(hvgSide);
         }
-#endif/// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     }
 hvg->rc = revCmplDisp;
 initColors(hvg);
