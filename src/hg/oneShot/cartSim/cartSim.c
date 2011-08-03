@@ -43,6 +43,7 @@ static struct optionSpec options[] = {
    {"randSeed", OPTION_INT},
    {"cgiDelay", OPTION_INT},
    {"hitDelay", OPTION_INT},
+   {"iterations", OPTION_INT},
    {"create", OPTION_INT},
    {"clone", OPTION_STRING},
    {"newRatio", OPTION_DOUBLE},
@@ -225,7 +226,7 @@ dyStringFree(&contents);
 int randomFakeSize()
 /* Return a fake size of cart entry */
 {
-if (rand()%5 == 0)
+if (rand()%3 == 0)
     {
     double a = 0.0001 * (rand()%10000 + 1);
     return (int)(a*a*a*a*a*a*a*10000) + 10;
@@ -298,6 +299,54 @@ sqlFreeResult(&sr);
 return result;
 }
 
+void updateOne(struct sqlConnection *conn, char *table, char *contents, int id, int useCount)
+/* Update one of cart tables with new contents. */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringPrintf(dy, "UPDATE %s SET contents='", table);
+dyStringAppend(dy, contents);
+dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", useCount+1);
+dyStringPrintf(dy, " where id=%u", id);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+}
+
+int dummyQuery(struct sqlConnection *conn, char *table, int id, char **retContents)
+/* Ask database for useCount and contents. Just return useCount, fill in *retContents  */
+{
+char *contents = "";
+char query[256];
+safef(query, sizeof(query), "select useCount,contents from sessionDb where id=%d", id);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+int useCount = 0;
+if (row != NULL)
+    {
+    contents = row[1];
+    useCount = sqlUnsigned(row[0]);
+    }
+*retContents = cloneString(contents);
+sqlFreeResult(&sr);
+return useCount;
+}
+
+int dummyInsert(struct sqlConnection *conn, char *table)
+/* Insert new row into cart table and return ID */
+{
+char query[256];
+safef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
+      table);
+sqlUpdate(conn, query);
+return sqlLastAutoId(conn);
+}
+
+boolean randomBitFromProb(double prob)
+/* Where prob is between 0 and 1,  return TRUE with at given probability,
+ * FALSE otherwise. */
+{
+return (rand() % 1000000 <= prob*1000000);
+}
+
 void cartSimulate(char *host, char *user, char *password, char *database)
 /* Simulate action of various UCSC Genome Browser CGIs on cart. */
 {
@@ -312,10 +361,8 @@ verbose(2, "# userDb has %d rows,  sessionDb has %d rows, sampling %d\n"
 	, userDbSize, sessionDbSize, sampleSize);
 
 /* Get sample of user id's. */
-uglyTime(NULL);
 int *userIds = getSomeInts(conn, "userDb", "id", sampleSize);
 int *sessionIds = getSomeInts(conn, "sessionDb", "id", sampleSize);
-uglyTime("Got user and session IDs");
 
 /* Get userCount random indexes. */
 int *randomIxArray, ix;
@@ -331,46 +378,44 @@ verbose(2, "\n");
 sqlDisconnect(&conn);
 
 int iteration = 0;
-int querySize = 1024*1024*16;
-char *query = needLargeMem(querySize);
 for (;;)
     {
     for (ix = 0; ix < userCount; ++ix)
 	{
-	// int randomIx = randomIxArray[ix];
 	int randomIx = rand()%sampleSize;
+	boolean doNew = randomBitFromProb(newRatio);
 	long startTime = clock1000();
 	struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 	long connectTime = clock1000();
 	struct dyString *contents = fakeCart(randomFakeSize());
 
-
-	safef(query, querySize, "select contents from userDb where id=%d", 
-		userIds[randomIx]);
-	char *userContents = sqlQuickString(conn, query);
+	char *userContents = NULL;
+	int userId = userIds[randomIx];
+	if (doNew)
+	    userId = userIds[randomIx] = dummyInsert(conn, userTable);
+	int userUseCount = dummyQuery(conn, userTable, userId, &userContents);
 	long userReadTime = clock1000();
 
-	safef(query, querySize, "select contents from sessionDb where id=%d", 
-		sessionIds[randomIx]);
-	char *sessionContents = sqlQuickString(conn, query);
+	char *sessionContents = NULL;
+	int sessionId = sessionIds[randomIx];
+	if (doNew)
+	    sessionId = sessionIds[randomIx] = dummyInsert(conn, sessionTable);
+	int sessionUseCount = dummyQuery(conn, sessionTable, sessionId, &sessionContents);
 	long sessionReadTime = clock1000();
 
-	safef(query, querySize, "update userDb set contents='%s' where id=%d",
-		contents->string, userIds[randomIx]);
-	sqlUpdate(conn, query);
+	updateOne(conn, userTable, contents->string, userId, userUseCount);
 	long userWriteTime = clock1000();
 
-	safef(query, querySize, "update sessionDb set contents='%s' where id=%d",
-		contents->string, sessionIds[randomIx]);
-	sqlUpdate(conn, query);
+	updateOne(conn, sessionTable, contents->string, sessionId, sessionUseCount);
 	long sessionWriteTime = clock1000();
 
 	sqlDisconnect(&conn);
 	long disconnectTime = clock1000();
 
-	printf("%ld total, %ld size, %ld connect, %ld userRead, %ld sessionRead, %ld userWrite, %ld sessionWrite\n",
+	printf("%ld total, %ld oldSize, %ld newSize, %ld connect, %ld userRead, %ld sessionRead, %ld userWrite, %ld sessionWrite\n",
 		disconnectTime - startTime,
 		(long) strlen(userContents) + strlen(sessionContents),
+		(long)contents->stringSize,
 		connectTime - startTime,
 		userReadTime - connectTime,
 		sessionReadTime - userReadTime,
@@ -378,8 +423,8 @@ for (;;)
 		sessionWriteTime - userReadTime);
 
 	dyStringFree(&contents);
-	freez(&userContents);
 	freez(&sessionContents);
+	freez(&userContents);
 
 	sleep1000(hitDelay);
 	if (++iteration >= iterations)
