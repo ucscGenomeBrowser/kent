@@ -11,7 +11,7 @@ PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
 all:
 	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} scripts
 
-pipeline:
+development:
 	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_${USER}/bin/scripts scripts schemas
 
 beta:

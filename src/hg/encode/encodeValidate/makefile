@@ -20,7 +20,7 @@ ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 all:
 	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} 
 
-pipeline:
+development:
 	@${MAKE} --no-print-directory  SCRIPTS=${PIPELINE_PATH}/encpipeline_${USER}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config
 
 beta:
