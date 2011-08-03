@@ -1321,8 +1321,8 @@ include wgEncodeUwDGF.ra
 
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDnaseSeq.ra
-
+include wgEncodeUwDnaseSeq.ra beta,public
+include wgEncodeUwDnaseSeq.new.ra alpha
 
 # UW DNAase-seq southerns - has been made obsolete
 # The jpg images will instead be made available as experiment level "attic" data in UW Dnase.
