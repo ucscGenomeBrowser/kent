@@ -2076,6 +2076,7 @@ else
         }
     hvgSide = hvg; // Unlkess this is overwritten below, there is a single image
 
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     if (theImgBox && theImgBox->showPortal && withLeftLabels)
         {
         // TODO: It would be great to make the images smaller, but keeping both the same full size for now
@@ -2088,6 +2089,7 @@ else
         hvgSide->rc = revCmplDisp;
         initColors(hvgSide);
         }
+#endif/// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     }
 hvg->rc = revCmplDisp;
 initColors(hvg);
@@ -3834,7 +3836,7 @@ grpFreeList(&grps);
 	slSort(&hubList, hubCmpAlpha);	// alphabetize
 	minPriority -= 1.0;             // priority is 1-based
 	// the idea here is to get enough room between priority 1
-	// (which is custom tracks) and the group with the next 
+	// (which is custom tracks) and the group with the next
 	// priority number, so that the hub nestle inbetween the
 	// custom tracks and everything else at the top of the list
 	// of track groups
@@ -5113,7 +5115,7 @@ if (!hideControls)
 	    /* First track group that is not the custom track group (#1)
 	     * or a track hub, gets the Base Position track
 	     * unless it's collapsed. */
-	    if (!showedRuler && !isHubTrack(group->name) && 
+	    if (!showedRuler && !isHubTrack(group->name) &&
 		    differentString(group->name, "user") )
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
@@ -5829,7 +5831,7 @@ cart = theCart;
 
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount, 
+    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
