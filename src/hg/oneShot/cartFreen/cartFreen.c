@@ -126,7 +126,7 @@ for (;;)
 	sqlDisconnect(&conn);
 	long disconnectTime = clock1000();
 
-	printf("%ld total, %ld size, %ld connect, %ld userRead, %ld sessionRead, %ld userWrite, %ld userWrite\n",
+	printf("%ld total, %ld size, %ld connect, %ld userRead, %ld sessionRead, %ld userWrite, %ld sessionWrite\n",
 		disconnectTime - startTime,
 		(long) strlen(userContents) + strlen(sessionContents),
 		connectTime - startTime,
