@@ -1113,12 +1113,12 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
                 } else if(newX >= rightLimit && newX < leftLimit)
                     beyondImage = false; // could have scrolled back without mouse up
 
+                newX = panUpdatePosition(newX,true);
                 var nowPos = newX.toString() + "px";
                 $(".panImg").css( {'left': nowPos });
                 $('.tdData').css( {'backgroundPosition': nowPos } );
                 if (!only1xScrolling)
                     panAdjustHeight(newX);  // NOTE: This will dynamically resize image while scrolling.  Do we want to?
-                panUpdatePosition(newX,false);
             }
         }
     }
@@ -1155,14 +1155,18 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
         // Updates the 'position/search" display with change due to panning
         var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
         var portalScrolledX  = (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel) + newOffsetX;
+        var recalculate = false;
 
         var newPortalStart = hgTracks.imgBoxPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
-        if( newPortalStart < hgTracks.imgBoxChromStart && bounded)     // Stay within bounds
-            newPortalStart = hgTracks.imgBoxChromStart;
+        if( newPortalStart < hgTracks.chromStart && bounded) {     // Stay within bounds
+            newPortalStart = hgTracks.chromStart;
+            recalculate = true;
+        }
         var newPortalEnd = newPortalStart + portalWidthBases;
-        if( newPortalEnd > hgTracks.imgBoxChromEnd && bounded) {
-            newPortalEnd = hgTracks.imgBoxChromEnd;
+        if( newPortalEnd > hgTracks.chromEnd && bounded) {
+            newPortalEnd = hgTracks.chromEnd;
             newPortalStart = newPortalEnd - portalWidthBases;
+            recalculate = true;
         }
         if(newPortalStart > 0) {
             // XXXX ? hgTracks.imgBoxPortalStart = newPortalStart;
@@ -1170,7 +1174,11 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             var newPos = hgTracks.chromName + ":" + commify(newPortalStart) + "-" + commify(newPortalEnd);
             setPosition(newPos, (newPortalEnd - newPortalStart + 1));
         }
-        return true;
+        if (recalculate && hgTracks.imgBoxBasesPerPixel > 0) { // Need to recalculate X for bounding drag
+            portalScrolledX = (hgTracks.imgBoxPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
+            newOffsetX = portalScrolledX - (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel);
+        }
+        return newOffsetX;
     }
     function mapTopAndBottom(mapName,left,right)
     {
