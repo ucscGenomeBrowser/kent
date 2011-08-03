@@ -1024,58 +1024,7 @@ termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
 sex M
 tier 3
-protocol Stam:BJ_fibroblasts_ATCC_SOP.V2.pdf
-# JEFF:  Please read and find which of these protocols is correct for BJ and label it appropriately
-
-#These terms seem to have a lot of confusion and no one is currently using these cell lines.  We are commenting out until resovled see Bug#4536
-#term BJ-5ta
-#tag BJ5TA
-#type Cell Line
-#organism human
-#description BJ foreskin fibroblast transfected with the pGRN145 hTERT, expressing T antigens of SV40 virus.(PMID: 9916802)
-#tissue Skin
-#vendorName ATCC
-#vendorId CRL-4001
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
-#karyotype normal
-#termId BTO:0001255
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
-#sex M
-#tier 3
-#protocol Struhl:BJ_5ta_Struhl_protocol.pdf
-#
-#term BJ-HRas
-#tag BJHRAS
-#type Cell Line
-#organism human
-#description hTERT/BJ skin fibroblasts expressing T antigens of SV40 virus and H-RasV12
-#tissue Skin
-#vendorName Struhl laboratory
-#vendorId BJ-HRas
-#orderUrl https://struhl.med.harvard.edu/
-#karyotype normal
-#termId BTO:0001255
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
-#sex M
-#tier 3
-#protocol Struhl:BJ-tert-HRas_Struhl_protocol.pdf
-#
-#
-#term BJ-T
-#tag BJT
-#type Cell Line
-#organism human
-#description foreskin fibroblast
-#tissue Skin
-#vendorName Struhl laboratory
-#vendorId BJ-T
-#orderUrl https://struhl.med.harvard.edu/
-#karyotype normal
-#termId BTO:0001255
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
-#sex M
-#tier 3
-#protocol Struhl:BJ-5ta_Struhl_protocol.pdf
+protocol Stam:BJ_Stam_protocol.pdf
 
 term CD20+
 tag CD20+
