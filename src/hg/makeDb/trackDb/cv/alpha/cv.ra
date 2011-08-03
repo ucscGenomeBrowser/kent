@@ -9960,6 +9960,7 @@ label GEO accession number provided by lab
 description A generic GEO accession number provided by the producing lab.
 searchable no
 cvDefined no
+hidden yes
 validate regex: ^GS[M,E][0-9]*$
 priority 500
 # Superceded by geoSample? will be, but for now we can't sort the lab ones into geoSample or geoSeries easily
@@ -9981,7 +9982,7 @@ label GENCODE annotation.
 description GENCODE specifies if an annotation is done manually or automatically.
 searchable no
 cvDefined no
-priority 500
+priority 590
 validate list: manual,automatic
 
 term Antibody
@@ -10014,7 +10015,7 @@ description Cross Transcriptome sample ID number.
 searchable no
 cvDefined no
 validate none
-priority 500
+priority 415
 
 term category
 tag CATEGORY
@@ -10023,8 +10024,9 @@ label Cell type category
 description Cell type category, such as T for tissue, L for cell line, P for primary cells
 searchable no
 cvDefined yes
+hidden yes        
 validate cv
-priority 991
+priority 470
 
 term cellType
 tag CELLTYPE
@@ -10034,7 +10036,7 @@ description Cell line or tissue used as the source of experimental material.
 searchable multiSelect
 cvDefined yes
 validate cv or None
-priority 120
+priority 110
 ### Warning should be "term cell line", but the term here has to be a single
 ### word.  Or, "term cell line" in the cell type definitions should be
 ### "term cellType", but that requires changing a huge amount of existing code.
@@ -10122,7 +10124,7 @@ label Date restrictions end
 description ENCODE data is made publicly available but with restrictions on use for the first nine months since date submitted. After this date, the data is unrestricted.
 searchable date
 cvDefined no
-priority 235
+priority 325
 validate date # nine months more than dateSubmitted
 
 term dccAccession
@@ -10199,7 +10201,7 @@ description DNA libraries built for ChIP-seq and similar experiments often invol
 searchable no
 cvDefined no
 validate integer
-priority 500
+priority 590
 # Cricket's special story (11/19/10): in fields.ra we have fragLength
 # and medianFragLength.  fragLength and medianFragLength appear to be
 # redundant, and should be collapsed into fragLength
@@ -10213,7 +10215,7 @@ description length of GIS DNA PET fragments, which has different values than fra
 searchable no
 cvDefined yes
 validate regex: ^[0-9]*k$
-priority 500
+priority 590
 # With more investigation, this could be collapsed in with fragLength (11/19/10)
 
 term geoSampleAccession
@@ -10254,7 +10256,7 @@ description The length of the insertion for paired reads for RNA-seq experiments
 searchable no
 cvDefined yes
 validate cv
-priority 500
+priority 166
 # This is Caltech only and we are not supposed to take variation on this variable any more (11/2/2010)
 
 term lab
@@ -10305,7 +10307,7 @@ description GENCODE level of annotation.  Level 1: validated.  Level 2: manually
 searchable no
 cvDefined no
 validate list: 1,2,3,1-2
-priority 500
+priority 590
 
 term localization
 tag LOCALIZATION
@@ -10315,7 +10317,7 @@ description The cellular compartment from which RNA is extracted. Primarily used
 searchable multiSelect
 cvDefined yes
 validate cv
-priority 160
+priority 150
 
 term mapAlgorithm
 tag MAPALGORITHM
@@ -10325,7 +10327,7 @@ description Algorithm used in high-throughput sequencing experiments to map sequ
 searchable multiSelect
 cvDefined yes
 validate cv
-priority 500
+priority 430
 # This is Caltech only and possibly should be retired.  (11/3/10)
 
 term md5sum
@@ -10336,7 +10338,7 @@ description The md5sum for the file associated with the object.
 searchable no
 cvDefined no
 validate regex: ^[0-9a-f]*$
-priority 500
+priority 999
 
 term obtainedBy
 tag OBTAINEDBY
@@ -10411,7 +10413,7 @@ description Experiments with multiple replicates may declare a preferred replica
 searchable no
 cvDefined no
 validate list: 1st,2nd,3rd
-priority 460
+priority 242
 # Was retired.  UW used rank in hg18 only, only for 1 occurance (11/3/10)
 
 term readType
@@ -10422,7 +10424,7 @@ description Specific information about cDNA sequence reads including length, dir
 searchable multiSelect
 cvDefined yes
 validate cv
-priority 500
+priority 165
 #description Length of single or paired-end reads in a high-throughput sequencing experiment.
 
 term region
@@ -10463,7 +10465,7 @@ description Fraction of total cellular RNA selected for by an experiment. This i
 searchable multiSelect
 cvDefined yes
 validate cv
-priority 150
+priority 160
 
 term run
 tag RUN
@@ -10483,7 +10485,7 @@ description Sequencing platform used in high-throughput sequencing experiment.
 searchable multiSelect
 cvDefined yes
 validate cv
-priority 500
+priority 430
 
 term setType
 tag SETTYPE
@@ -10544,7 +10546,7 @@ description The spike-in pool that was used.
 searchable no
 cvDefined no
 validate none
-priority 921
+priority 430
 
 term strain
 tag STRAIN
@@ -10554,7 +10556,7 @@ description The strain of the doner organism used in an experiment.
 searchable multiSelect
 cvDefined yes
 validate cv
-priority 110
+priority 120
 
 term subId
 tag SUBID
@@ -10628,7 +10630,7 @@ description Degree of region uniqueness or mapability disctinctions
 searchable no
 cvDefined no
 validate none
-priority 500
+priority 590
 # Used in hg19 mapability only
 # It does not vary at all, it was on the possible retire list (11/3/10)
 
