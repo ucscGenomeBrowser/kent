@@ -29796,7 +29796,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 6/9/11)
+# NHGRI GWAS CATALOG (DONE 8/1/11 angie)
+# Updated 6/9/11
 # Updated 4/1/11
 # Updated 3/1/11
 # Updated 2/1/11
@@ -29894,7 +29895,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 5800 elements of size 22
+#Loaded 6156 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29908,7 +29909,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#315 ambigStrand.txt
+#342 ambigStrand.txt
 
 
 #############################################################################
@@ -31723,4 +31724,170 @@ done
 #seq.cov05.bed 0.111%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.038%, cover 34.48%, enrich 103.35x
 #seq.cov1.bed 0.208%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.050%, cover 24.02%, enrich 71.99x
 
+############################################################################################
+# CREATE TABLES AND .PNG PICTURE FILES OF evofoldV2 RNA STRUCTURES. (DONE, 7/26/2011, Fan)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/hg18/bed/evofoldV2/doEvoFoldV2
+cd /hive/data/genomes/hg18/bed/evofoldV2/doEvoFoldV2
+
+wget http://moma.ki.au.dk/~jsp/upload/evofoldV2.hg18.bed
+cat ~/kent/src/hg/lib/evofold.sql | \
+sed -e "s/evofold/evofoldV2/g" > tmp.sql 
+hgLoadBed –notItemRgb -sqlTable=tmp.sql hg18 evofoldV2 evofoldV2.hg18.bed
+
+# Creaet sub-directories to store .png files (total of about 47.5 K of them) sparated by chromosomes.
+
+mkdir -p evoFoldV2/chr1
+mkdir -p evoFoldV2/chr10
+mkdir -p evoFoldV2/chr11
+mkdir -p evoFoldV2/chr12
+mkdir -p evoFoldV2/chr13
+mkdir -p evoFoldV2/chr14
+mkdir -p evoFoldV2/chr15
+mkdir -p evoFoldV2/chr16
+mkdir -p evoFoldV2/chr17
+mkdir -p evoFoldV2/chr18
+mkdir -p evoFoldV2/chr19
+mkdir -p evoFoldV2/chr2
+mkdir -p evoFoldV2/chr20
+mkdir -p evoFoldV2/chr21
+mkdir -p evoFoldV2/chr22
+mkdir -p evoFoldV2/chr3
+mkdir -p evoFoldV2/chr4
+mkdir -p evoFoldV2/chr5
+mkdir -p evoFoldV2/chr6
+mkdir -p evoFoldV2/chr7
+mkdir -p evoFoldV2/chr8
+mkdir -p evoFoldV2/chr9
+mkdir -p evoFoldV2/chrM
+mkdir -p evoFoldV2/chrX
+mkdir -p evoFoldV2/chrY
+
+# get latest verion of the .jar file of VARNA
+
+wget --timestamping http://varna.lri.fr/bin/VARNAv3-7.jar
+
+# Create Java command line files
+
+echo 'doEvoFoldV2 hg18 do$1 $1' >do1Chrom
+chmod +x do1Chrom
+
+do1Chrom chr1
+do1Chrom chr10
+do1Chrom chr11
+do1Chrom chr12
+do1Chrom chr13
+do1Chrom chr14
+do1Chrom chr15
+do1Chrom chr16
+do1Chrom chr17
+do1Chrom chr18
+do1Chrom chr19
+do1Chrom chr2
+do1Chrom chr20
+do1Chrom chr21
+do1Chrom chr22
+do1Chrom chr3
+do1Chrom chr4
+do1Chrom chr5
+do1Chrom chr6
+do1Chrom chr7
+do1Chrom chr8
+do1Chrom chr9
+do1Chrom chrM
+do1Chrom chrX
+do1Chrom chrY
+
+chmod +x do*
+
+# run the dochrXX command files in small batches with '&' to exploit multiple CPU
+# wait an hour for each batch to finish so that we don't suck in too much computational resources.
+
+dochr1 &
+dochr2 &
+dochr3 &
+dochr4 &
+dochr5 &
+
+sleep 3600
+
+dochr6 &
+dochr7 &
+dochr8 &
+dochr9 &
+dochr10 &
+
+sleep 3600
+
+dochr11 &
+dochr12 &
+dochr13 &
+dochr14 &
+dochr15 &
+
+sleep 3600
+
+dochr16 &
+dochr17 &
+dochr18 &
+dochr19 &
+dochr20 &
+
+sleep 3600
+
+dochr21 &
+dochr22 &
+dochrX &
+dochrY &
+dochrM &
+
+# check the resulting .png files
+
+# create a simple script file, check1, with the following 3 lines:
+
+echo $1
+hgsql hg18 -N -e "select count(*) from evofoldV2 where chrom='${1}'"
+ls evoFoldV2/$1/*.png|wc
+
+chmod +x check1
+
+# create another script file, checkAll, with the following lines:
+
+check1 chr1
+check1 chr10
+check1 chr11
+check1 chr12
+check1 chr13
+check1 chr14
+check1 chr15
+check1 chr16
+check1 chr17
+check1 chr18
+check1 chr19
+check1 chr2
+check1 chr20
+check1 chr21
+check1 chr22
+check1 chr3
+check1 chr4
+check1 chr5
+check1 chr6
+check1 chr7
+check1 chr8
+check1 chr9
+check1 chrM
+check1 chrX
+check1 chrY
+
+chmod +x checkAll
+checkAll >j.check
+
+# examing the resuls in j.check to make sure things are OK.
+
+# create symbolic links
+mkdir -p /usr/local/apache/htdocs/evoFoldV2
+
+ln -s /hive/data/genomes/gs.19/build36/bed/evofoldV2/doEvoFoldV2/evoFoldV2  /gbdb/hg18/evoFoldV2 
+ln -s /gbdb/hg18/evoFoldV2 /usr/local/apache/htdocs/evoFoldV2/hg18
 #############################################################################

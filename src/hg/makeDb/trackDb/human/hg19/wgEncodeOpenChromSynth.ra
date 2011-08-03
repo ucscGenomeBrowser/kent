@@ -114,7 +114,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthMedulloPk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel Medullo Pk
-        longLabel Medullo Combined Peaks from ENCODE/Duke
+        longLabel Medullo DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=MEDULLO treatment=aNone
         type bed 9 +
         origAssembly hg19
@@ -123,7 +123,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthGm12891Pk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel GM12891 Pk
-        longLabel GM12891 Combined Peaks from ENCODE/Duke
+        longLabel GM12891 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=GM12891 treatment=aNone
         type bed 9 +
         origAssembly hg19
@@ -132,7 +132,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthGm12892Pk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel GM12892 Pk
-        longLabel GM12892 Combined Peaks from ENCODE/Duke
+        longLabel GM12892 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=GM12892 treatment=aNone
         type bed 9 +
         origAssembly hg19
@@ -141,7 +141,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthGm19239Pk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel GM19239 Pk
-        longLabel GM19239 Combined Peaks from ENCODE/Duke
+        longLabel GM19239 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=GM19239 treatment=aNone
         type bed 9 +
         origAssembly hg19
@@ -150,7 +150,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthGm18507Pk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel GM18507 Pk
-        longLabel GM18507 Combined Peaks from ENCODE/Duke
+        longLabel GM18507 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=GM18507 treatment=aNone
         type bed 9 +
         origAssembly hg19
@@ -159,7 +159,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthGlioblaPk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel Gliobla Pk
-        longLabel Gliobla Combined Peaks from ENCODE/Duke
+        longLabel Gliobla DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=GLIOBLA treatment=aNone
         type bed 9 +
         origAssembly hg19
@@ -168,7 +168,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthHelas3Ifna4hPk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel HeLa-S3 Pk
-        longLabel HeLa-S3 IFNa4h Combined Peaks from ENCODE/Duke
+        longLabel HeLa-S3 IFNa4h DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=2HELA treatment=IFNA4H
         type bed 9 +
         origAssembly hg19
@@ -178,7 +178,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthPanisletsPk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel PanIslets Pk
-        longLabel PanIslets Combined Peaks from ENCODE/Duke
+        longLabel PanIslets DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=PANISLETS treatment=aNone
         type bed 9 +
         origAssembly hg19
@@ -187,7 +187,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthHtr8Pk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel HTR8svn Pk
-        longLabel HTR8svn Combined Peaks from ENCODE/Duke
+        longLabel HTR8svn DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=HTR8 treatment=aNone
         type bed 9 +
         origAssembly hg19
@@ -196,7 +196,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromSynthUrothelUt189Pk
         parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel Urothelia Pk
-        longLabel Urothelia UT189 Combined Peaks from ENCODE/Duke
+        longLabel Urothelia UT189 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
         subGroups view=Peaks cellType=UROTHEL treatment=UT189
         type bed 9 +
         origAssembly hg19
