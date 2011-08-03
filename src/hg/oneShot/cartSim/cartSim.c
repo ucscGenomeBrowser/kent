@@ -40,7 +40,7 @@ static struct optionSpec options[] = {
    {"cgiDelay", OPTION_INT},
    {"hitDelay", OPTION_INT},
    {"create", OPTION_INT},
-   {"clone", OPTION_INT},
+   {"clone", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -239,8 +239,9 @@ for (i=0; i<count; ++i)
 sqlDisconnect(&conn);
 }
 
-void cloneOldTable(struct sqlConnection *oldConn, struct sqlConnection *newConn, char *table)
-/* Clone table in newConn from oldConn */
+void fakeCloneOldTable(struct sqlConnection *oldConn, struct sqlConnection *newConn, char *table)
+/* Clone sessionDb or userDb table in newConn from oldConn. Add fake prefix to
+ * contents field to help mark it as fake. */
 {
 char query[256];
 safef(query, sizeof(query), "select * from %s", table);
@@ -254,7 +255,9 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	if (i != 0)
 	    fprintf(f, "\t");
-	fprintf(f, "%s", row[0]);
+	if (i == 1)
+	    fprintf(f, "%s", fakePrefix);
+	fprintf(f, "%s", row[i]);
 	}
     fprintf(f, "\n");
     }
@@ -267,8 +270,8 @@ void cloneOldDatabase(char *host, char *user, char *password, char *newDatabase,
 {
 struct sqlConnection *oldConn = sqlConnectRemote(host, user, password, oldDatabase);
 struct sqlConnection *newConn = sqlConnectRemote(host, user, password, newDatabase);
-cloneOldTable(oldConn, newConn, userTable);
-cloneOldTable(oldConn, newConn, sessionTable);
+fakeCloneOldTable(oldConn, newConn, userTable);
+fakeCloneOldTable(oldConn, newConn, sessionTable);
 }
 
 void cartSimulate(char *host, char *user, char *password, char *database)
