@@ -33,3 +33,6 @@ include wgEncodeLicrRnaSeq.ra
 
 # Uw RNA-Seq (wrangler: Venkat)
 include wgEncodeUwRnaSeq.ra alpha
+
+# Caltech TFBS (wrangler: Venkat)
+include wgEncodeCaltechTfbs.ra alpha

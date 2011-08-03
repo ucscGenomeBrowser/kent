@@ -30,6 +30,7 @@ wgEncodeBroadHmm.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeSydhNsome.ra \
+wgEncodeSunySwitchgear.ra \
 wgEncodeHaibGenotype.ra \
 
 
