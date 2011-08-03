@@ -466,17 +466,17 @@ if (hIsBetaHost())
     subDir = "/beta";                        // it's downloads server is "hgdownload.cse.ucsc.edu"
     }
 
-printf("<BR><A HREF='http://%s/goldenPath/%s/%s/'><img src='../images/ab_up.gif'>Parent directory</A> for %s downloads.<BR>\n",
-                server,db,ENCODE_DCC_DOWNLOADS,db);
 cgiDown(0.9);
 puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
 puts("in publication  until the restriction date noted for the given data file.</B>");
 
 cgiDown(0.7);
 puts("Supporting documents:");
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> is a tab-separated file with the name and metadata for each download.\n",
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> file contains the name and metadata for each download.\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.\n",
+                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s'>raw files view</A></B> web server downloads directory (may include obsolete data).\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
