@@ -4,10 +4,10 @@ L += $(MYSQLLIBS) -lm -lz
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = cartFreen
-O = cartFreen.o
+A = cartSimNoInsert
+O = cartSimNoInsert.o
 
-cartFreen: ${O} ${MYLIBS}
+cartSimNoInsert: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 

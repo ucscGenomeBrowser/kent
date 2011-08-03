@@ -1,4 +1,5 @@
-/* cartFreen - Look around in cart and figure out what's taking so long. */
+/* cartSimNoInsert - simulates N users accessing cart at regular intervals
+ * where cart data is read and then written back unchanged */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -21,9 +22,10 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "cartFreen - Look around in cart and figure out what's taking so long\n"
+  "cartSimNoInsert - simulates N users accessing cart at regular intervals\n"
+  "   where cart data is read and then written back unchanged\n"
   "usage:\n"
-  "   cartFreen host user password database milliDelay iterations\n"
+  "   cartSimNoInsert host user password database milliDelay iterations\n"
   "where:\n"
   "   host is the MySQL host name - example mysqlbeta\n"
   "   user is the MySQL user name - example hgcentuser\n"
@@ -57,9 +59,10 @@ sqlFreeResult(&sr);
 return result;
 }
 
-void cartFreen(char *host, char *user, char *password, char *database, char *milliDelayString,
+void cartSimNoInsert(char *host, char *user, char *password, char *database, char *milliDelayString,
 	char *iterationString)
-/* cartFreen - Look around in cart and figure out what's taking so long. */
+/* cartSimNoInsert - simulates N users accessing cart at regular intervals
+ * where cart data is read and then written back unchanged */
 {
 int milliDelay = sqlUnsigned(milliDelayString);
 int iterations = sqlUnsigned(iterationString);
@@ -155,6 +158,6 @@ verboseSetLevel(cgiOptionalInt("verbose", 1));
 srand(randSeed);
 if (argc != 7)
     usage();
-cartFreen(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+cartSimNoInsert(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
