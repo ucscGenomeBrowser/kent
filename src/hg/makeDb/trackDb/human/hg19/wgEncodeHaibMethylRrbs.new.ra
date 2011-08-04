@@ -72,7 +72,6 @@ visibility dense
     subTrack wgEncodeHaibMethylRrbs
     scoreFilter 10
     scoreFilterLimits 0:1000
-    viewUi on
 
         track wgEncodeHaibMethylRrbsGm12878HaibSitesRep2
         parent wgEncodeHaibMethylRrbsViewSites off
