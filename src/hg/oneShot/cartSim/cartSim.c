@@ -16,6 +16,8 @@ int cgiDelay = 100;
 int hitDelay = 100;
 int iterations = 100;
 double newRatio = 0.1;
+boolean innodb = FALSE;
+char *engine = "MyISAM";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,10 +33,12 @@ errAbort(
   "   -hitDelay=N number of milliseconds to delay between hits. Default is %d\n"
   "   -iterations=N number of iterations to hit cart.  Default is %d\n"
   "   -newRatio=0.N proportion of hits that are from new users. Default is %g\n"
-  "   -verbose=N level of diagnostic output verbosity.  Default is 1.\n"
   "   -create=N create database if it doesn't exist with given number of dummy records\n"
   "   -clone=source clone existing database\n"
-  , userCount, cgiDelay, hitDelay, iterations, newRatio
+  "   -engine=MyISAM|InnoDB - default %s.\n"
+  "   -cleanup=N clean up database by getting rid of all but most recent N elements\n"
+  "   -verbose=N level of diagnostic output verbosity.  Default is 1.\n"
+  , userCount, cgiDelay, hitDelay, iterations, newRatio, engine
   );
 }
 
@@ -44,12 +48,15 @@ static struct optionSpec options[] = {
    {"cgiDelay", OPTION_INT},
    {"hitDelay", OPTION_INT},
    {"iterations", OPTION_INT},
+   {"newRatio", OPTION_DOUBLE},
    {"create", OPTION_INT},
    {"clone", OPTION_STRING},
-   {"newRatio", OPTION_DOUBLE},
+   {"engine", OPTION_STRING},
+   {"cleanup", OPTION_INT},
    {NULL, 0},
 };
 
+/* Some data to help make up fake cart contents.  You get prefixVar=val random combinations */
 char *prefixes[] = {"pre", "post", "ex", ""};
 char *vars[] = {"avocado", "bean", "almond", "peach", "pea", "oat", "artichoke", "lettuce",
    "apple", "beet", "pumpkin", "potato", "strawberry", "raspberry", "sage", "wheat"};
@@ -101,8 +108,7 @@ void checkFakeCartTable(struct sqlConnection *conn, char *database, char *table)
 /* Abort unless either table doesn't exist, or table exists and is in fake prefix format. */
 {
 if (!sqlTableExists(conn, table))
-    errAbort("no good test database %s: table %s doesn't exist", 
-       database, table);
+    return;
 int contentsFieldIx = sqlFieldIndex(conn, table, "contents");
 if (contentsFieldIx < 0)
     errAbort("%s.%s doesn't have a contents field", database, table);
@@ -158,27 +164,32 @@ sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 }
 
-void dropDatabase(char *host, char *user, char *password, char *database)
+void dropUserTable(char *host, char *user, char *password, char *database)
 /* Drop database if it exists. */
 {
 if (databaseExists(host, user, password, database))
     {
-    struct sqlConnection *conn = sqlConnectRemote(host, user, password, NULL);
-    char query[512];
-    safef(query, sizeof(query), "drop database %s", database);
-    sqlUpdate(conn, query);
+    struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
+    if (sqlTableExists(conn, userTable))
+	{
+	char query[512];
+	safef(query, sizeof(query), "drop table %s", userTable);
+	sqlUpdate(conn, query);
+	}
     sqlDisconnect(&conn);
     }
 }
 
 void createNewFakeDatabase(char *host, char *user, char *password, char *database)
-/* Create a fake database with two empty fake tables. */
+/* Create a fake database with empty fake useDb table. */
 {
-dropDatabase(host, user, password, database);
-createEmptyDatabase(host, user, password, database);
+dropUserTable(host, user, password, database);
+if (!databaseExists(host, user, password, database))
+    createEmptyDatabase(host, user, password, database);
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
-sqlUpdate(conn, 
-"CREATE TABLE userDb (\n"
+char query[1024];
+safef(query, sizeof(query), 
+"CREATE TABLE %s  (\n"
 "    id integer unsigned not null auto_increment,	# Cart ID\n"
 "    contents longblob not null,	# Contents - encoded variables\n"
 "    reserved tinyint not null,	# always 0\n"
@@ -187,7 +198,8 @@ sqlUpdate(conn,
 "    useCount int not null,	# Number of times used\n"
 "              #Indices\n"
 "    PRIMARY KEY(id)\n"
-")\n" );
+") ENGINE = %s\n", userTable, engine);
+sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 }
 
@@ -404,18 +416,64 @@ for (;;)
 errAbort("cartSimulate(%s %s %s %s) not implemented", host, user, password, database);
 }
 
+
+void cleanupTable(char *host, char *user, char *password, char *database, char *table, int target)
+/* Trim table to target most recent items.  */
+{
+uglyTime(NULL);
+struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
+struct dyString *query = dyStringNew(0);
+dyStringPrintf(query, "select count(*) from %s", table);
+int initialCount = sqlQuickNum(conn, query->string);
+uglyTime("%d initial vs %d target", initialCount, target);
+if (target < initialCount)
+    {
+    /* Query database for id's ordered by age */
+
+    dyStringClear(query);
+    dyStringPrintf(query, "select id,now()-lastUse age from %s order by age", table);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
+
+    /* Build up new query that'll delete old things. */
+    dyStringClear(query);
+    dyStringPrintf(query, "delete from %s where id in (", table);
+    int i=0;
+    boolean addComma = FALSE;
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (++i > target)
+	   {
+	   if (addComma)
+	       dyStringAppendC(query, ',');
+	   else
+	       addComma = TRUE;
+	   dyStringPrintf(query, "'%s'", row[0]);
+	   }
+	}
+    dyStringPrintf(query, ")");
+    sqlFreeResult(&sr);
+    uglyTime("made delete query %d chars", query->stringSize);
+
+    /* Excute deletion */
+    sqlUpdate(conn, query->string);
+    uglyTime("deleted");
+    }
+sqlDisconnect(&conn);
+}
+
 void cartSim(char *host, char *user, char *password, char *database)
 /* cartSim - Simulate cart usage by genome browser users. */
 {
 char *create = optionVal("create", NULL);
 char *clone = optionVal("clone", NULL);
+char *cleanup = optionVal("cleanup", NULL);
 if (create != NULL)
     {
-    int createSize = sqlUnsigned(create);
     checkNotRealDatabase(host, user, password, database);
     checkEmptyOrFakeDatabase(host, user, password, database);
     createNewFakeDatabase(host, user, password, database);
-    createFakeEntries(host, user, password, database, createSize);
+    createFakeEntries(host, user, password, database, sqlUnsigned(create));
     }
 else if (clone != NULL)
     {
@@ -423,6 +481,10 @@ else if (clone != NULL)
     checkEmptyOrFakeDatabase(host, user, password, database);
     createNewFakeDatabase(host, user, password, database);
     cloneOldDatabase(host, user, password, database, clone);
+    }
+else if (cleanup != NULL)
+    {
+    cleanupTable(host, user, password, database, userTable, sqlUnsigned(cleanup));
     }
 else
     {
@@ -443,6 +505,7 @@ cgiDelay = optionInt("cgiDelay", cgiDelay);
 hitDelay = optionInt("hitDelay", hitDelay);
 iterations = optionInt("iterations", iterations);
 newRatio = optionDouble("newRatio", newRatio);
+engine = optionVal("engine", engine);
 cartSim(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
