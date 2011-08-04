@@ -104,6 +104,7 @@ priority 12
 visibility hide
 color 160,0,50
 type bed 4
+chromosomes chrX,chrY
 
 track partMrnas
 shortLabel Partially Found mRNAs

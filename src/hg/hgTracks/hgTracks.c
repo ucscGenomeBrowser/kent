@@ -85,6 +85,7 @@ int guidelineSpacing = 12;  /* Pixels between guidelines. */
 boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
 
 int rulerMode = tvHide;         /* on, off, full */
+struct hvGfx *hvgSide = NULL;     // An extra pointer to a side label image that can be built if needed
 
 char *rulerMenu[] =
 /* dropdown for ruler visibility */
@@ -1898,7 +1899,6 @@ leftLabelWidth = insideX - gfxBorder*3;
 
 struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
 struct image *theSideImg = NULL; // Because dragScroll drags off end of image, the side label gets seen. Therefore we need 2 images!!
-struct hvGfx *hvgSide = NULL;    // Strategy an extra pointer to a side image that can be built if needed
 //struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
@@ -3834,7 +3834,7 @@ grpFreeList(&grps);
 	slSort(&hubList, hubCmpAlpha);	// alphabetize
 	minPriority -= 1.0;             // priority is 1-based
 	// the idea here is to get enough room between priority 1
-	// (which is custom tracks) and the group with the next 
+	// (which is custom tracks) and the group with the next
 	// priority number, so that the hub nestle inbetween the
 	// custom tracks and everything else at the top of the list
 	// of track groups
@@ -5113,7 +5113,7 @@ if (!hideControls)
 	    /* First track group that is not the custom track group (#1)
 	     * or a track hub, gets the Base Position track
 	     * unless it's collapsed. */
-	    if (!showedRuler && !isHubTrack(group->name) && 
+	    if (!showedRuler && !isHubTrack(group->name) &&
 		    differentString(group->name, "user") )
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
@@ -5829,7 +5829,7 @@ cart = theCart;
 
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount, 
+    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
