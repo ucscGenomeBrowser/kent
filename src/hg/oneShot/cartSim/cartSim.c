@@ -80,7 +80,6 @@ return dy;
 }
 
 #define userTable "userDb"
-#define sessionTable "sessionDb"
 
 void checkNotRealCartTable(struct sqlConnection *conn, char *database, char *table)
 /* Abort unless either table doesn't exist, or table exists and is in fake prefix format. */
@@ -110,23 +109,19 @@ if (contentsFieldIx < 0)
 char query[256];
 safef(query, sizeof(query), "select contents from %s limit 1", table);
 char *firstContents = sqlQuickString(conn, query);
-if (firstContents == NULL)
-    errAbort("no good test database %s: table %s is empty", 
-       database, table);
-if (!startsWith(fakePrefix, firstContents))
+if (firstContents != NULL && !startsWith(fakePrefix, firstContents))
     errAbort("no goot test database %s: %s.contents doesn't start with '%s'", 
     	database, table, firstContents);
 freez(&firstContents);
 }
 
 void checkNotRealDatabase(char *host, char *user, char *password, char *database)
-/* Make sure that database does not contain real looking user and session tables. */
+/* Make sure that database does not contain real looking user table. */
 {
 struct sqlConnection *conn = sqlMayConnectRemote(host, user, password, database);
 if (conn != NULL)
     {
     checkNotRealCartTable(conn, database, userTable);
-    checkNotRealCartTable(conn, database, sessionTable);
     sqlDisconnect(&conn);
     }
 }
@@ -139,7 +134,6 @@ struct sqlConnection *conn = sqlMayConnectRemote(host, user, password, database)
 if (conn != NULL)
     {
     checkFakeCartTable(conn, database, userTable);
-    checkFakeCartTable(conn, database, sessionTable);
     sqlDisconnect(&conn);
     }
 }
@@ -187,24 +181,13 @@ sqlUpdate(conn,
 "CREATE TABLE userDb (\n"
 "    id integer unsigned not null auto_increment,	# Cart ID\n"
 "    contents longblob not null,	# Contents - encoded variables\n"
-"    reserved tinyint not null,	# True if a user (rather than session) cart\n"
+"    reserved tinyint not null,	# always 0\n"
 "    firstUse DATETIME not null,	# First time this was used\n"
 "    lastUse DATETIME not null,	# Last time this was used\n"
 "    useCount int not null,	# Number of times used\n"
 "              #Indices\n"
 "    PRIMARY KEY(id)\n"
 ")\n" );
-sqlUpdate(conn, 
-"CREATE TABLE sessionDb (\n"
-"    id integer unsigned not null auto_increment,	# Cart ID\n"
-"    contents longblob not null,	# Contents - encoded variables\n"
-"    reserved tinyint not null,	# True if a user (rather than session) cart\n"
-"    firstUse DATETIME not null,	# First time this was used\n"
-"    lastUse DATETIME not null,	# Last time this was used\n"
-"    useCount int not null,	# Number of times used\n"
-"              #Indices\n"
-"    PRIMARY KEY(id)\n"
-")\n");
 sqlDisconnect(&conn);
 }
 
@@ -217,9 +200,6 @@ struct dyString *query = dyStringNew(0);
 dyStringPrintf(query, "INSERT %s VALUES(0,'%s',0,now(),now(),0)", userTable, contents->string);
 sqlUpdate(conn, query->string);
 dyStringClear(query);
-dyStringPrintf(query, "INSERT %s VALUES(0,'%s',0,now(),now(),0)", sessionTable, contents->string);
-sqlUpdate(conn, query->string);
-dyStringFree(&query);
 dyStringFree(&contents);
 }
 
@@ -246,7 +226,7 @@ sqlDisconnect(&conn);
 }
 
 void fakeCloneOldTable(struct sqlConnection *oldConn, struct sqlConnection *newConn, char *table)
-/* Clone sessionDb or userDb table in newConn from oldConn. Add fake prefix to
+/* Clone cart table in newConn from oldConn. Add fake prefix to
  * contents field to help mark it as fake. */
 {
 char query[256];
@@ -277,7 +257,6 @@ void cloneOldDatabase(char *host, char *user, char *password, char *newDatabase,
 struct sqlConnection *oldConn = sqlConnectRemote(host, user, password, oldDatabase);
 struct sqlConnection *newConn = sqlConnectRemote(host, user, password, newDatabase);
 fakeCloneOldTable(oldConn, newConn, userTable);
-fakeCloneOldTable(oldConn, newConn, sessionTable);
 }
 
 int *getSomeInts(struct sqlConnection *conn, char *table, char *field, int limit)
@@ -316,7 +295,7 @@ int dummyQuery(struct sqlConnection *conn, char *table, int id, char **retConten
 {
 char *contents = "";
 char query[256];
-safef(query, sizeof(query), "select useCount,contents from sessionDb where id=%d", id);
+safef(query, sizeof(query), "select useCount,contents from %s where id=%d", table, id);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 int useCount = 0;
@@ -353,16 +332,15 @@ void cartSimulate(char *host, char *user, char *password, char *database)
 /* Figure out size of tables. */
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 int userDbSize = sqlQuickNum(conn, "select count(*) from userDb");
-int sessionDbSize = sqlQuickNum(conn, "select count(*) from sessionDb");
-int sampleSize = min(userDbSize, sessionDbSize);
+if (userDbSize == 0)
+    errAbort("%s.%s table is empty", database, userTable);
 int maxSampleSize = 1024*1024;
-sampleSize = min(sampleSize, maxSampleSize);
-verbose(2, "# userDb has %d rows,  sessionDb has %d rows, sampling %d\n"
-	, userDbSize, sessionDbSize, sampleSize);
+int sampleSize = min(userDbSize, maxSampleSize);
+verbose(2, "# userDb has %d rows, sampling %d\n"
+	, userDbSize, sampleSize);
 
 /* Get sample of user id's. */
 int *userIds = getSomeInts(conn, "userDb", "id", sampleSize);
-int *sessionIds = getSomeInts(conn, "sessionDb", "id", sampleSize);
 
 /* Get userCount random indexes. */
 int *randomIxArray, ix;
@@ -396,34 +374,25 @@ for (;;)
 	int userUseCount = dummyQuery(conn, userTable, userId, &userContents);
 	long userReadTime = clock1000();
 
-	char *sessionContents = NULL;
-	int sessionId = sessionIds[randomIx];
-	if (doNew)
-	    sessionId = sessionIds[randomIx] = dummyInsert(conn, sessionTable);
-	int sessionUseCount = dummyQuery(conn, sessionTable, sessionId, &sessionContents);
-	long sessionReadTime = clock1000();
+	sleep1000(cgiDelay);
+	long cgiSleepTime = clock1000();
 
 	updateOne(conn, userTable, contents->string, userId, userUseCount);
 	long userWriteTime = clock1000();
 
-	updateOne(conn, sessionTable, contents->string, sessionId, sessionUseCount);
-	long sessionWriteTime = clock1000();
-
 	sqlDisconnect(&conn);
 	long disconnectTime = clock1000();
 
-	printf("%ld total, %ld oldSize, %ld newSize, %ld connect, %ld userRead, %ld sessionRead, %ld userWrite, %ld sessionWrite\n",
-		disconnectTime - startTime,
-		(long) strlen(userContents) + strlen(sessionContents),
+	printf("%ld total, %ld oldSize, %ld newSize, %ld connect, %ld userRead, %ld userWrite, %ld disconnect\n",
+		disconnectTime - startTime - (cgiSleepTime - userReadTime),
+		(long) strlen(userContents),
 		(long)contents->stringSize,
 		connectTime - startTime,
 		userReadTime - connectTime,
-		sessionReadTime - userReadTime,
-		userWriteTime - sessionReadTime,
-		sessionWriteTime - userReadTime);
+		userWriteTime - cgiSleepTime,
+		disconnectTime - userWriteTime );
 
 	dyStringFree(&contents);
-	freez(&sessionContents);
 	freez(&userContents);
 
 	sleep1000(hitDelay);
