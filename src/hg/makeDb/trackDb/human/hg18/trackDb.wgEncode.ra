@@ -69,7 +69,7 @@ include wgEncodeUwDGF.ra
 include wgEncodeUwDnaseSeq.ra
 
 # Yale RNA-seq (wrangler: tdreszer)
-include trackDb.wgEncodeYaleRnaSeq.ra
+# include wgEncodeYaleRnaSeq.ra
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
 include wgEncodeYaleChIPseq.ra
