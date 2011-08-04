@@ -8,7 +8,8 @@ DIRS = \
 	hgEncodeVocab \
 	validateFiles \
     encodeMkChangeNotes \
-    paraMd5sum
+    paraMd5sum \
+	encodeStatus
 
 # broken
 	#ldGencodeIntron \
