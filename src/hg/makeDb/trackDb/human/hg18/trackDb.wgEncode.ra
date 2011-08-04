@@ -66,7 +66,8 @@ include wgEncodeUwChIPSeq.ra
 include wgEncodeUwDGF.ra
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDnaseSeq.ra
+include wgEncodeUwDnaseSeq.ra beta,public
+include wgEncodeUwDnaseSeq.new.ra alpha
 
 # Yale RNA-seq (wrangler: tdreszer)
 # include wgEncodeYaleRnaSeq.ra
@@ -1368,18 +1369,6 @@ canPack On
     useScore 1
     priority 1.7
 
-
-# UW Histone (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwChIPSeq.ra
-
-
-# UW DGF (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDGF.ra
-
-
-# UW DNase-seq (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDnaseSeq.ra beta,public
-include wgEncodeUwDnaseSeq.new.ra alpha
 
 # UW DNAase-seq southerns - has been made obsolete
 # The jpg images will instead be made available as experiment level "attic" data in UW Dnase.
