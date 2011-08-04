@@ -1,0 +1,1666 @@
+metaObject wgEncodeLicrRnaSeq
+objType composite
+composite wgEncodeLicrRnaSeq
+expVars lab,dataType,cell
+
+metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell BoneMarrow
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
+fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 09/08/10 Lane 4G
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4094
+tableName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell BoneMarrow
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
+fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 09/08/10 Lane 4H
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4094
+tableName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell BoneMarrow
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
+fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 09/08/10 Lane 4G
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4094
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell BoneMarrow
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
+fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 09/08/10 Lane 4H
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4094
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell BoneMarrow
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
+fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 09/08/10 Lane 4G
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4094
+tableName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell BoneMarrow
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001706
+expId 1706
+fileName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 09/08/10 Lane 4H
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4094
+tableName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell Cerebellum
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
+fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 03/16/10 Lane 2
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4095
+tableName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell Cerebellum
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
+fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 03/16/10 Lane 3
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4095
+tableName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell Cerebellum
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
+fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/16/10 Lane 2
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4095
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell Cerebellum
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
+fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/16/10 Lane 3
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4095
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell Cerebellum
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
+fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/16/10 Lane 2
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4095
+tableName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell Cerebellum
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001710
+expId 1710
+fileName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/16/10 Lane 3
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4095
+tableName wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell Cortex
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
+fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 1
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4096
+tableName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell Cortex
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
+fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 2
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4096
+tableName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell Cortex
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
+fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 1
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4096
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell Cortex
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
+fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 2
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4096
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell Cortex
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
+fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 1
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4096
+tableName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell Cortex
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001711
+expId 1711
+fileName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 2
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4096
+tableName wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1
+objType table
+age E0
+cell ES-Bruce4
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
+fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 10/13/10 Lane 4A
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4102
+tableName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2
+objType table
+age E0
+cell ES-Bruce4
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
+fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 10/13/10 Lane 4B
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4102
+tableName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6RawDataRep1
+objType file
+age E0
+cell ES-Bruce4
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
+fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 10/13/10 Lane 4A
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4102
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6RawDataRep2
+objType file
+age E0
+cell ES-Bruce4
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
+fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 10/13/10 Lane 4B
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4102
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1
+objType table
+age E0
+cell ES-Bruce4
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
+fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 10/13/10 Lane 4A
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4102
+tableName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2
+objType table
+age E0
+cell ES-Bruce4
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001707
+expId 1707
+fileName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 10/13/10 Lane 4B
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4102
+tableName wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
+fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 1
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4097
+tableName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
+fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 2
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4097
+tableName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
+fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 1
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4097
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
+fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 2
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4097
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
+fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 1
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4097
+tableName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001712
+expId 1712
+fileName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 2
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4097
+tableName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell Kidney
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
+fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4098
+tableName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell Kidney
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
+fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4098
+tableName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell Kidney
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
+fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4098
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell Kidney
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
+fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4098
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell Kidney
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
+fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4098
+tableName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell Kidney
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001713
+expId 1713
+fileName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4098
+tableName wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
+fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 03/02/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4099
+tableName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
+fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 03/02/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4099
+tableName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
+fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/02/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4099
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
+fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/02/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4099
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
+fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/02/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4099
+tableName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001714
+expId 1714
+fileName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/02/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4099
+tableName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell Lung
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
+fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 5
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4100
+tableName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell Lung
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
+fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 6
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4100
+tableName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell Lung
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
+fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 5
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4100
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell Lung
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
+fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 6
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4100
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell Lung
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
+fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 5
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4100
+tableName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell Lung
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001715
+expId 1715
+fileName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 6
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4100
+tableName wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell MEF
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
+fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 5
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4101
+tableName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell MEF
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
+fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 6
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4101
+tableName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell MEF
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
+fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 5
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4101
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell MEF
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
+fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 6
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4101
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell MEF
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
+fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 5
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4101
+tableName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell MEF
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001708
+expId 1708
+fileName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/15/10 Lane 6
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4101
+tableName wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell Spleen
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
+fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4103
+tableName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell Spleen
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
+fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4103
+tableName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell Spleen
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
+fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4103
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell Spleen
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
+fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4103
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell Spleen
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
+fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 3
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4103
+tableName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell Spleen
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEM001709
+expId 1709
+fileName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 03/10/10 Lane 4
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 4103
+tableName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+# MAGIC: 446219745

@@ -2987,15 +2987,16 @@ if (withLeftLabels && firstOverflow)
     for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
 	if (sn->row >= overflowRow)
 	    overflowCount++;
-    hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+    assert(hvgSide != NULL);
+    hvGfxUnclip(hvgSide);
+    hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
     char nameBuff[SMALLBUF];
     safef(nameBuff, sizeof(nameBuff), "Last Row: %d", overflowCount);
     mgFontStringWidth(font, nameBuff);
-    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->lineHeight,
+    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->lineHeight,
                    color, font, nameBuff);
-    hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+    hvGfxUnclip(hvgSide);
+    hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
     }
 /* restore state */
 tg->limitedVis = origVis;
@@ -3045,20 +3046,21 @@ if (withLabels)
     if (snapLeft)        /* Snap label to the left. */
         {
         textX = leftLabelX;
-        hvGfxUnclip(hvg);
-        hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+        assert(hvgSide != NULL);
+        hvGfxUnclip(hvgSide);
+        hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
         if(drawNameInverted)
             {
             int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-            hvGfxBox(hvg, boxStart, y, nameWidth+1, tg->heightPer - 1, color);
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+            hvGfxBox(hvgSide, boxStart, y, nameWidth+1, tg->heightPer - 1, color);
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
                         MG_WHITE, font, name);
             }
         else
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
                         labelColor, font, name);
-        hvGfxUnclip(hvg);
-        hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+        hvGfxUnclip(hvgSide);
+        hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
         }
     else
         {
@@ -9438,11 +9440,14 @@ void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, 
 int textX = x1 - width - 2;
 boolean snapLeft = (textX < insideX);
 int clipYBak = 0, clipHeightBak = 0;
+struct hvGfx *hvgWhich = hvg;    // There may be a separate image for sideLabel!
 if (snapLeft)        /* Snap label to the left. */
     {
-    hvGfxGetClip(hvg, NULL, &clipYBak, NULL, &clipHeightBak);
-    hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, leftLabelX, itemY, insideWidth, lineHeight);
+    if (hvgSide != NULL)
+        hvgWhich = hvgSide;
+    hvGfxGetClip(hvgWhich, NULL, &clipYBak, NULL, &clipHeightBak);
+    hvGfxUnclip(hvgWhich);
+    hvGfxSetClip(hvgWhich, leftLabelX, itemY, insideWidth, lineHeight);
     textX = leftLabelX;
     width = leftLabelWidth-1;
     }
@@ -9458,16 +9463,16 @@ if (sameString(display, "freq"))
        allC = darkGreenColor;
     else if (startsWith("T", allele))
        allC = MG_MAGENTA;
-    hvGfxTextRight(hvg, textX, y, width, height, allC, font, allele);
+    hvGfxTextRight(hvgWhich, textX, y, width, height, allC, font, allele);
     }
 else
     {
-    hvGfxTextRight(hvg, textX, y, width, height, color, font, allele);
+    hvGfxTextRight(hvgWhich, textX, y, width, height, color, font, allele);
     }
 if (snapLeft)
     {
-    hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, insideX, clipYBak, insideWidth, clipHeightBak);
+    hvGfxUnclip(hvgWhich);
+    hvGfxSetClip(hvgWhich, insideX, clipYBak, insideWidth, clipHeightBak);
     }
 }
 
