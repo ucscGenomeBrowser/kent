@@ -390,6 +390,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/
 
-index.html
+README.txt
 files.txt
 md5sum.txt
