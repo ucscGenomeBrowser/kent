@@ -22,7 +22,6 @@ var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;  // turn on experimental zoom-to-codon functionality (currently only on in larrym's tree).
 var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate and mapIsUpdateable
-var allowDragAndZoomEverywhere = false;     // true only in larrym's tree (see redmine 4667)
 
 /* Data passed in from CGI via the hgTracks object:
  *
@@ -249,9 +248,22 @@ $(window).load(function () {
         }
         });
     // jQuery load function with stuff to support drag selection in track img
-    if(browser == "safari" && navigator.userAgent.indexOf("Chrome") != -1) {
-        // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
-        browser = "chrome";
+    if(browser == "safari") {
+        if(navigator.userAgent.indexOf("Chrome") != -1) {
+            // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
+            browser = "chrome";
+        } else {
+            // Turn off mapIsUpdateable for safari < version 5.1 because it has a bug which causes updates of map to be ignored.
+            mapIsUpdateable = false;
+            var reg = new RegExp("Version\/(\[0-9]+\.\[0-9]+) Safari");
+            var a = reg.exec(navigator.userAgent);
+            if(a && a[1]) {
+                var version = a[1] * 1;
+                if(version >= 5.1) {
+                    mapIsUpdateable = true;
+                }
+            }
+        }
     }
 
     // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
@@ -263,7 +275,6 @@ $(window).load(function () {
     //
     // Chrome used to have this problem too, but this  problem seems to have gone away as of
     // Chrome 5.0.335.1 (or possibly earlier).
-    mapIsUpdateable = browser != "safari";
     inPlaceUpdate = hgTracks.inPlaceUpdate && mapIsUpdateable;
     loadImgAreaSelect(true);
     if($('#hgTrackUiDialog'))
