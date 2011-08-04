@@ -1,61 +1,79 @@
 <h2>Description and display conventions</h2>
-<p>
-<b>NumtS</b> (Nuclear mitochondrial sequences) are mitochondrial fragments inserted in nuclear genomic sequences.The most credited hypothesis concerning their generation suggests that in presence of mutagenic agents or under stress conditions fragments of mtDNA escape from mitochondria, reach the nucleus and insert into chromosomes during break repair, although NumtS can derive from duplication of genomic fragments. NumtS may be cause of contamination during human mtDNA sequencing and hence frequent false low heteroplasmic evidences have been reported. The Bioinformatics group chaired by M.Attimonelli (University Bari, Italy) has produced the RMmsNumtS (Reference Mus musculus NumtS) compilation annotating 148 Mouse assembled NumtS. To allow the scientific community to access to the compilation and to perform genomics comparative analyses inclusive of the NumtS data, the group has designed the Mouse NumtS tracks below described.
-</p>
 
-<p> 
-The NumtS tracks show nuclear and mitochondrial regions, based on the High Score Pairs (HSPs) obtained by aligning the mitochondrial reference genome (NC_005089) with the mm9 assembly of the mouse genome.
-</p>
-<ol>
-<li><b>"NumtS (Nuclear mitochondrial Sequences)" Track</b>
-<p>
-The "NumtS mitochondrial sequences" track shows the mapping of the HSPs returned by BlastN on the nuclear genome. The shading of the items reflects the similarity returned by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every item, a link pointing to the mitochondrial mapping is provided, thus allowing a fast cross among the NumtS genomic contexts.
-</p>
-</li>
+<p> <b>NumtS</b> (Nuclear mitochondrial sequences) are mitochondrial fragments inserted in nuclear
+genomic sequences. The most credited hypothesis concerning their generation suggests that in presence
+of mutagenic agents, or under stress conditions, fragments of mtDNA escape from mitochondria, reach
+the nucleus and insert into chromosomes during break repair; although NumtS can also derive from
+duplication of genomic fragments. NumtS may be a cause of contamination during human mtDNA sequencing
+and hence frequent false low heteroplasmic evidences have been reported. The Bioinformatics group
+chaired by M. Attimonelli (University of Bari, Italy) has produced the RMmsNumtS (Reference Mus musculus
+NumtS) compilation annotating 148 Mouse assembled NumtS. To allow the scientific community to access 
+the compilation and to perform genomics comparative analyses inclusive of the NumtS data, the
+group has designed the Mouse NumtS tracks described below. </p>
 
-<li><b>"NumtS assembled" Track</b>
-<p>
-The "NumtS assembled" track shows items obtained by assembling HSPs annotated in the "NumtS" track fulfilling the following conditions:
-<ul type="disc">
-<li>the orientation of their alignments must be concordant.</li>
-<li>the distance between them must be less than 2 kb, on the mitochondrial genome as well as on the nuclear genome.</li>
-</ul></p>
-<p>
-Exceptions for the second condition arise when a long repetitive element is present between two HSPs.
-</p>
-</li>
+<p>The NumtS tracks show nuclear and mitochondrial regions, based on the High Score Pairs (HSPs)
+obtained by aligning the mitochondrial reference genome (NC_005089) with the mm9 assembly of the
+mouse genome.</p> 
 
-<li><b>"NumtS on mitochondrion" Track</b>
-<p>
-The "NumtS on mitochondrion" track shows the mapping of the HSPs on the mitochondrial genome. The shading of the items reflects the similarity returned by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every item, a link pointing to the nuclear mapping is provided.
-</p>
+<ol> 
+	<li><b>"NumtS (Nuclear mitochondrial Sequences)" Track</b> 
+	<p> The "NumtS
+mitochondrial sequences" track shows the mapping of the HSPs returned by BlastN on the nuclear
+genome. The shading of the items reflect the similarity returned by BlastN, and the direction of
+the arrows is concordant with the strand of the alignment. For every item, a link pointing to the
+mitochondrial mapping is provided, thus allowing a fast cross among the NumtS genomic contexts. </p>
+	</li>
 
-<li><b>"Mouse NumtS on mitochondrion SNP" Track</b>
-<p>
-The "Mouse NumtS SNP" shows the mapping of the HSPs on the mitochondrial genome, with the SNPs which fall within, derived from the comparison with the mm9 assembly. No shading is here provided. For every item, a link pointing to the nuclear mapping is provided.
-</p>
+	<li><b>"NumtS assembled" Track</b> 
+	<p> The "NumtS assembled" track shows items obtained by
+assembling HSPs annotated in the "NumtS" track fulfilling the following conditions:</p>
+
+		<ul>
+			<li>The orientation of their alignments must be concordant.</li> 
+			<li>The distance between them must be less than 2 kb, on the mitochondrial genome as 
+			well as on the nuclear genome.</li> 
+		</ul> 
+		
+	<p>Exceptions for the second condition arise when a long repetitive element is present between
+	 two HSPs.</p></li>
+
+	<li><b>"NumtS on mitochondrion" Track</b>
+	<p>The "NumtS on mitochondrion" track shows the mapping
+of the HSPs on the mitochondrial genome. The shading of the items reflects the similarity returned
+by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every
+item, a link pointing to the nuclear mapping is provided.</p></li>
+
+	<li><b>"Mouse NumtS on mitochondrion SNP" Track</b> 
+	<p>The "Mouse NumtS SNP" shows the mapping of
+the HSPs on the mitochondrial genome, with the SNPs which fall within, derived from comparison
+with the mm9 assembly. No shading is here provided. For every item, a link pointing to the nuclear
+mapping is provided.</p></li>
 </ol>
 
-<h2>Methods</h2>
-<p>
-NumtS mappings were obtained by running Blast2seq (program: BlastN) between each chromosome of the Mouse Genome mm9 assembly and the mouse mitochondrial reference sequence (AC: NC_005089), fixing the e-value threshold to 1e-03. The assembling of the HSPs was performed with spreadsheet interpolation and manual inspection. BED format is used for the first three annotation tracks, while for the last one the SAM/BAM format is preferred.
-</p>
+<h2>Methods</h2> 
+
+<p>NumtS mappings were obtained by running Blast2seq (program: BlastN) between
+each chromosome of the Mouse Genome (mm9 assembly) and the mouse mitochondrial reference sequence (AC:
+NC_005089), fixing the e-value threshold to 1e-03. The assembling of the HSPs was performed with
+spreadsheet interpolation and manual inspection. BED format is used for the first three annotation
+tracks, while for the last one the SAM/BAM format is preferred.</p>
 
 <h2>Credits</h2>
-<p>
-These data were provided by, Francesco Maria Calabrese, Domenico Simone and Marcella Attimonelli at Department of Biochemistry and Molecular Biology "Ernesto Quagliariello" (University of Bari, Italy). Manual inspection and format details are carried out by Francesco Maria Calabrese, Domenico Simone and Luana Raddi.
-</p>
+
+<p>These data were provided by Francesco Maria Calabrese, Domenico Simone and
+Marcella Attimonelli from the Department of Biochemistry and Molecular Biology "Ernesto 
+Quagliariello" (University of Bari, Italy). Manual inspection and format details are carried out 
+by Francesco Maria Calabrese, Domenico Simone and Luana Raddi.</p>
 
 <h2>References</h2>
-<p>
-Simone D, Calabrese FM, Lang M, Gasparre G, Attimonelli M: Validation and UCSC tracks of the extended RHNumtS compilation (submitted). 
-</p>
 
-<p>
-Lascaro D, Castellana S, Gasparre G, Romeo G, Saccone S, Attimonelli M. <a
-href="http://www.biomedcentral.com/1471-2164/9/267/abstract/" target="_blank">The RHNumtS compilation: features and bioinformatics approaches to locate and quantify Human NumtS</a>. <i>BMC
-Genomics</i>. 2008 June 3;9:267.
-</p>
+<p>Simone D, Calabrese FM, Lang M, Gasparre G, Attimonelli M: Validation and
+UCSC tracks of the extended RHNumtS compilation (submitted).</p>
+
+<p>Lascaro D, Castellana S, Gasparre G, Romeo G, Saccone S, Attimonelli M. <a
+href="http://www.biomedcentral.com/1471-2164/9/267/abstract/" target="_blank">The RHNumtS
+compilation: features and bioinformatics approaches to locate and quantify Human NumtS</a>. <i>BMC
+Genomics</i>. 2008 June 3;9:267.</p>
 
 
 

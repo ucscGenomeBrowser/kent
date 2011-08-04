@@ -6,7 +6,7 @@ Consortium</A>.  They contain information about human RNAs &gt; 200
 nucleotides in length obtained as short reads off the Illumina GAIIx
 platform.  Data is available from biological replicates of several
 cell lines.  In addition to profiling Poly-A+ and Poly-A- RNA from
-whole cells, we have also gather data from various subcellular
+whole cells, there is also data from various subcellular
 compartments.  In many cases, there are Cap Analysis of Gene
 Expression (CAGE, 
 <A TARGET=_BLANK HREF="http://www.riken.go.jp/engn/">RIKEN Institute</A>) and
@@ -17,12 +17,45 @@ di-TAG-RNA (PET-RNA,
 HREF="http://www.gis.a-star.edu.sg/internet/site/">Genome Institute of
 Singapore</A>) datasets available from the same biological replicates.   
 
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>To show only selected subtracks, uncheck the boxes next to the tracks that
+you wish to hide.</p>
+
+<p>Color differences among the views are arbitrary. They provide a
+visual cue for
+distinguishing between the different cell types and compartments.</p>
+
+<dl>
+<dt><i>Contigs</i>
+</dt><dd>The Contigs represent blocks of overlapping mapped reads from the pooled biological replicates.
+</dd><dt><i>Raw Signals</i>
+</dt><dd>The Raw Signal view shows the density of mapped reads on the plus and minus strands (wiggle format).
+</dd>
+<dt><i>Alignments</i>
+</dt><dd>The Alignments view shows individual reads mapped from pooled biological replicates to the genome and indicates where
+bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The track may be set so that the color of each alignment denotes the mapping frequency of the corresponding read:</br>
+<font color="#FF00FF">pink</font> for reads mapping to a single genomic location, </br>
+<font color="#CC00FF"> pinkish-purple</font> for reads mapping to exactly two genomic locations and </br>
+<font color="#800080">purple</font> for reads mapping to more than two possible locations.</br>
+  The alignment file follows the standard SAM format of Bowtie output. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. 
+</dd>
+<dt><i>Splice Junctions</i>
+</dt><dd>Subset of aligned reads that cross splice junctions.
+</dd>
+
+<P>
+<!--echo var="BROWSER_HOST" -->
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?tag=EXONGENCV7,FASTQRD1,FASTQRD2,GENEDENO,GENEGENCV7,JUNCTIONS,PRTCL,RAW,SPKNS,TRANSDENOVO,TRANSGENCV7">Additional views and files</A> are available on the Downloads page. 
+</P>
+
 <H2>Methods</H2>
 
 <H3>Cell Culture</H3>
 <P>Cells were grown according to the approved 
 <A TARGET=_BLANK
-HREF="http://genome-test.cse.ucsc.edu/ENCODE/protocols/cell/"> ENCODE
+HREF="http://genome.cse.ucsc.edu/ENCODE/protocols/cell/"> ENCODE
 cell culture protocols</A>.  
 </P>
 
@@ -34,16 +67,13 @@ and reports the transcripts strand of origin.  Exogenous RNA spike-ins
 (Round 5, pool 14), in development at National Institutes Standards
 Technology were added to each endogenous RNA isolate and carried
 through library construction and sequencing.  The Illumina PhiX
-control library was also spiked-in at 1% to each completed human
-library just prior to cluster formation. Libraries from biological
-replicates are always constructed in parallel to minimize technical
-variation.  The libraries were sequenced in pair-end fashion yielding
-76 bases of sequence for each end. Library insert sizes are centered
-on average at 200 bases.  Accompanying each RNA-Seq dataset is a
+control library was also spiked-in at 1&#37; to each completed human
+library just prior to cluster formation.
+ Accompanying each RNA-Seq dataset on the Downloads page is a
 &ldquo;Production Document&rdquo;.  This document contains details
 about the RNA isolations and treatments, library construction,
 spike-ins as well as quality control figures for individual libraries.   
-The spike-in sequence and the concentrations can are available for download
+The spike-in sequence and the concentrations are available for download
 in the <A TARGET=_BLANK HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/supplemental/">supplemental directory</A>.
 </P>
 
@@ -58,62 +88,28 @@ can be found at:
 HREF="http://gingeraslab.cshl.edu/STAR/">http://gingeraslab.cshl.edu/STAR/</A>. 
 </P>
 
+<P>
+Additionally, we provide the following processed  &ldquo;elements&rdquo; data files:
+ de novo splice junctions, de novo transcripts, and contigs.  
+These elements are assessed for reproducibility using a nonparametric 
+irreproducible detection (IDR) rate script.  The IDR values for each element
+ are included in the files for end-users to threshold on. An IDR value of 0.1 means
+ that the probability of detecting that element in a third experiment equivalent 
+in depth to the the sum of the bioreplicates is 90&#37;.  In addition, we also compute
+ expression values for annotated genes, transcripts and exons. Further explaination of these 
+files is available for download in the
+ <A TARGET=_BLANK HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/supplemental/">supplemental directory</A>.
+</P>
+
+
 <H2>Verification</H2>
-<P>We take several steps to ensure the primary data is high quality,
-reproducible and technical variation kept to a minimum.   Further
-Explanation Needed (qualitative and quantitative metrics)&hellip; 
-</P>
-
-<H3>RNA Element Files</H3>
-<P>The mapped data are further mined to generate secondary files
-representing transcribed &ldquo;Elements&rdquo;.  These include;
-expressed contigs, splice junctions, de novo genes and transcripts,
-and expression values for annotated Gencode genes, transcript and
-exons.   
-</P>
-
-<H3>Experimental Validation</H3>
-<P>The goals of the experimental validation are to gather Roche 454 FLX
-data for transcribed elements mapping to regions lacking gene
-annotations in order to:  
-<OL>
-  <LI>provide independent biochemical validation for the candidate
-  loci identified in the primary RNA-Seq data, and
-  <LI>gather longer sequence information to aid downstream annotation
-  and curation.
-</OL>
-We selected loci that encode canonical &ldquo;GU-AG&rdquo; introns and
-which appear as spliced products in the primary RNA-Seq data.  PCR
-primers are designed spanning these junctions and used to amplify
-oligo-dT primed cDNA.  The PCR products are pooled and sequenced on
-Roche 454 FLX to check the products identity.  The sequence data is
-mapped against hg19 using BLAT.   
-</P>
-
-<H3>Raw Data Files Available for Download</H3>
-<P>FASTQ&#146;s and the Production Document (.pdf) explaining the
-protocol used to gather the sequence data. 
-</P>
-
-<H3>Mapped Data Files Available for Download</H3>
-<P>.BAM, .Wig
-</P>
-
-<H3>Element Files Available for Download</H3>
-<P>Further Explanation Needed&hellip;
-</P>
-
-<UL>
-  <LI>Splice Junctions
-  <LI>Contigs
-  <LI>De novo Genes and Transcripts
-  <LI>Gencode annotation-based expression values
-</UL>
-
-<H3>Validation Files Available for Download</H3>
-<P>Further Explanation Needed&hellip; (you do not have these yet
-Cricket.  This will be 454 data (FASTQ and .psl files mapped with
-BLAT). 
+<P>
+FPKM (fragments per kilobase of exon per million fragments mapped) values are calculated 
+for annotated Gencode exons and Spearman values are compared.  
+In general, we find Rho values &#62; .90 between biological replicates.   
+Additional quality control metrics for the samples can be found 
+<A TARGET=_BLANK
+HREF="http://sites.google.com/site/rnajunkies/">Transcriptome Data Portal</A>.
 </P>
 
 <H2>Release Notes</H2>
@@ -124,7 +120,8 @@ cell and K562 PolyA+ RNA cytosol) as well as novel data from 13 additional cell
 lines and 4 additional cell localizations, as well as some PolyA- samples.  The
 singnals are now in bigWig format.  The alignments are in BAM format.  The newer
 data all have Bio Replicate numbers and Protocol ID numbers that can be used to
-link the samples with other experiments.
+link the samples with other experiments. Every experiment has extensive analysis 
+and production data availabel for downloads only.
 </P>
 
 <H2>Credits</H2>
@@ -146,9 +143,6 @@ Schlesinger</A> (computational)
 <!--above address is schlesin at cshl.edu -->
 <A HREF="mailto:&#103;&#105;&#110;&#103;e&#114;a&#115;&#64;&#99;&#115;&#104;&#108;.&#101;d&#117;">Tom Gingeras</A> (primary investigator)
 <!--above address is gingeras at cshl.edu -->
-</P>
-
-<P>
 <A HREF="mailto:&#114;&#103;&#117;i&#103;o&#64;&#105;&#109;&#105;m.e&#115;">Roderic Guigo</A>&#146;s group at the
 <A TARGET=_BLANK
 HREF="http://pasteur.crg.es/portal/page/portal/Internet/">CRG</A>.
@@ -156,5 +150,13 @@ HREF="http://pasteur.crg.es/portal/page/portal/Internet/">CRG</A>.
 
 </P>
 
-<!--<H3>References</H3>
--->
+<H2>References</H2>
+
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column, above.  The full data release policy
+for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
