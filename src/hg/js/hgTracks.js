@@ -219,7 +219,8 @@ function selectEnd(img, selection)
     }
     if(doIt) {
         // startDragZoom is null if mouse has never been moved
-        newPosition = updatePosition(img, selection, (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100);
+        var singleClick = (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100;
+        newPosition = updatePosition(img, selection, singleClick);
 	if(newPosition != undefined) {
             if(inPlaceUpdate) {
                 navigateInPlace("position=" + newPosition);
@@ -382,20 +383,7 @@ function loadImgAreaSelect(firstTime)
             // XXXX Tim, I think we should get height from trackImgTbl, b/c it automatically adjusts as we add/delete items.
             imgHeight = trackImgTbl.height();
         }
-        var heights;
-        if(allowDragAndZoomEverywhere) {
-            heights = [];
-            var imgTop = trackImgTbl.offset().top;
-            $('div.cntrLab').each(function (i) {
-                                      var top = $(this).offset().top - imgTop;
-                                      heights.push({
-                                                       top: top,
-                                                       bottom: top + $(this).height()
-                                                   });
-                                  });
-        } else {
-            heights = hgTracks.rulerClickHeight;
-        }
+        var heights = hgTracks.rulerClickHeight;
         imgAreaSelect = jQuery((trackImgTbl || trackImg).imgAreaSelect({ selectionColor: 'blue', outerColor: '',
             minHeight: imgHeight, maxHeight: imgHeight,
             onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
@@ -1068,7 +1056,7 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
         pan.css( 'cursor', 'w-resize');
 
         pan.mousedown(function(e){
-             if (e.which > 1 || e.button > 1)
+             if (e.which > 1 || e.button > 1 || e.shiftKey || e.ctrlKey)
                  return true;
             if(mouseIsDown == false) {
                 mouseIsDown = true;
