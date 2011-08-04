@@ -1369,6 +1369,18 @@ canPack On
     priority 1.7
 
 
+# UW Histone (wrangler: Venkat, assisted by Tim)
+include wgEncodeUwChIPSeq.ra
+
+
+# UW DGF (wrangler: Venkat, assisted by Tim)
+include wgEncodeUwDGF.ra
+
+
+# UW DNase-seq (wrangler: Venkat, assisted by Tim)
+include wgEncodeUwDnaseSeq.ra beta,public
+include wgEncodeUwDnaseSeq.new.ra alpha
+
 # UW DNAase-seq southerns - has been made obsolete
 # The jpg images will instead be made available as experiment level "attic" data in UW Dnase.
 # rename table wgEncodeUwSoutherns to wgEncodeUwSoutherns_obsoloete
