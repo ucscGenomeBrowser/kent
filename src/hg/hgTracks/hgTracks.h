@@ -158,7 +158,7 @@ struct track
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
     struct preDrawContainer *preDrawContainer;  /* Numbers to graph in wig, one per pixel */
-    struct preDrawContainer *(*loadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);  
+    struct preDrawContainer *(*loadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);
     /* Do bits that load the predraw buffer.  Called to set preDrawContainer */
 
     struct bbiFile *bbiFile;	/* Associated bbiFile for bigWig or bigBed. */
@@ -379,6 +379,7 @@ extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
 extern boolean withGuidelines;		/* Display guidelines? */
 extern boolean withNextExonArrows;	/* Display next exon navigation buttons near center labels? */
+extern struct hvGfx *hvgSide;    // An extra pointer to a side label image that can be built if needed
 
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */

@@ -14,9 +14,7 @@ http://genome.ucsc.edu/cgi-bin/hgFileUi?db=++db++&g=++composite++
 
 In addition to data files, this directory may also contain some or all of the following:
 
-    * files.txt - a tab-separated file listing each data file and its metadata.
-
-    * md5sum.txt - a list of the md5sum output for each data file.
+    * files.txt - a file listing each data file and its metadata.
 
     * supplemental - a directory containing any additional files provided by the
     submitting laboratory.
