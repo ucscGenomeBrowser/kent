@@ -144,7 +144,7 @@ def main(argv=None):
     prev_release_dir = args[2]
 
     # list of addition files
-    possible_addition_files = ["index.html", "files.txt", "md5sum.txt"]
+    possible_addition_files = ["README.txt", "files.txt", "md5sum.txt"]
     addition_files = []
 
     # some re we will be using
