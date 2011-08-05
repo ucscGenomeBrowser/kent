@@ -998,8 +998,8 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
 
     function initialize(){
 
-        pan.css('cursor',"url(../images/grabbing.cur)"); // Trick to preload
-        pan.css('cursor',"url(../images/grabber.cur),w-resize");
+        if ( !($.browser.msie) ) // IE will override map items cursors as well!
+            $(pan).parents('td.tdData').css('cursor',"url(../images/grabber.cur),w-resize");
 
         pan.mousedown(function(e){
              if (e.which > 1 || e.button > 1 || e.shiftKey || e.ctrlKey)
@@ -1222,16 +1222,14 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
         // Find or create the waitMask (which masks the whole page)
         var  dragMask = $('div#dragMask');
         if( dragMask == undefined || dragMask.length == 0) {
-            $(imgTbl).prepend("<div id='dragMask' class='waitMask'></div>");
+            $("body").prepend("<div id='dragMask' class='waitMask'></div>");
             dragMask = $('div#dragMask');
         }
 
-        $('body').css('cursor','not-allowed')
+        $('body').css('cursor','not-allowed');
         $(dragMask).css('cursor',"url(../images/grabbing.cur),w-resize");
-        //$(dragMask).css({opacity:0.4,backgroundColor:'gray'}); // temporarily so I can see it
-        $(dragMask).css({display:'block',zIndex:5,top: $(imgTbl).position().top, height: $(imgTbl).height() + 'px' });
-
-        return dragMask;  // The caller could add css if they wanted.
+        $(dragMask).css({opacity:0.0,display:'block',top: $(imgTbl).position().top.toString() + 'px', height: $(imgTbl).height().toString() + 'px' });
+        //$(dragMask).css({opacity:0.4,backgroundColor:'gray',zIndex:999}); // temporarily so I can see it
     }
 
     function dragMaskClear() {        // Clears the waitMask
