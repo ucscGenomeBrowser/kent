@@ -27,7 +27,6 @@ errAbort(
   "usage:\n"
   "   cartSim host user password database\n"
   "options:\n"
-  "   -userCount=N number of users simulating.  Default %d\n"
   "   -randSeed=N random number generator seed.  Defaults to pid\n"
   "   -cgiDelay=N number of milliseconds to pretend cgi is crunching. Default is %d\n"
   "   -hitDelay=N number of milliseconds to delay between hits. Default is %d\n"
@@ -38,7 +37,7 @@ errAbort(
   "   -engine=MyISAM|InnoDB - default %s.\n"
   "   -cleanup=N clean up database by getting rid of all but most recent N elements\n"
   "   -verbose=N level of diagnostic output verbosity.  Default is 1.\n"
-  , userCount, cgiDelay, hitDelay, iterations, newRatio, engine
+  , cgiDelay, hitDelay, iterations, newRatio, engine
   );
 }
 
