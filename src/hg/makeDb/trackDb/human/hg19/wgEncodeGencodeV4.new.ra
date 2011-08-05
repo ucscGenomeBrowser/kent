@@ -1,8 +1,7 @@
-
 track wgEncodeGencodeV4
 compositeTrack on
-shortLabel Gencode Genes V4
-longLabel ENCODE Gencode Gene Annotations
+shortLabel GENCODE Genes V4
+longLabel ENCODE GENCODE Gene Annotations
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks
@@ -14,10 +13,11 @@ yalePseudoAssoc wgEncodeGencodeYalePseudoV4
 yaleUrl http://tables.pseudogene.org/
 ensemblIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
 #ensemblIdUrl http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
+fileSortOrder tableName=Contents dccAccession=UCSC_Accession
 type genePred
 hgGene on
 hgsid on
-html wgEncodeGencode
+html wgEncodeGencodeV4
 baseColorUseCds given
 baseColorDefault genomicCodons
 wgEncode 1
