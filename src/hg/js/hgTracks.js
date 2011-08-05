@@ -253,7 +253,14 @@ $(window).load(function () {
         // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
         browser = "chrome";
         } else {
-            // Turn off mapIsUpdateable for safari < version 5.1 because it has a bug which causes updates of map to be ignored.
+            // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
+            // though if you look in the DOM the changes are there). So we have to do a full form submission when the
+            // user changes visibility settings or track configuration.
+            // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
+            // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately, logs for 7/2011 show vast majority of safari users
+            // are pre-5.1 (5.0.5 is by far the most common).
+            //
+            // Early versions of Chrome had this problem too, but this problem went away as of Chrome 5.0.335.1 (or possibly earlier).
             mapIsUpdateable = false;
             var reg = new RegExp("Version\/(\[0-9]+\.\[0-9]+) Safari");
             var a = reg.exec(navigator.userAgent);
@@ -266,15 +273,6 @@ $(window).load(function () {
         }
     }
 
-    // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
-    // though if you look in the DOM the changes are there); so we have to do a full form submission when the
-    // user changes visibility settings or track configuration.
-    // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
-    // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately, logs for 7/2011 show vast majority of safari users
-    // are pre-5.1 (5.0.5 is by far the most common).
-    //
-    // Chrome used to have this problem too, but this  problem seems to have gone away as of
-    // Chrome 5.0.335.1 (or possibly earlier).
     inPlaceUpdate = hgTracks.inPlaceUpdate && mapIsUpdateable;
     loadImgAreaSelect(true);
     if($('#hgTrackUiDialog'))
@@ -966,6 +964,7 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
     var only1xScrolling = (hgTracks.imgBoxPortalOffsetX == 0);
     var prevX       = (imgOffset + imgBoxLeftOffset)*-1;
     var portalWidth = 0;
+    var savedPosition;
     panAdjustHeight(prevX);
 
     this.each(function(){
@@ -1024,6 +1023,7 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             if(relativeX != 0) {
                 if (blockUseMap == false) {
                     // need to throw up a z-index div.  Wait mask?
+                    savedPosition = getPosition();
                     dragMaskShow();
                     blockUseMap = true;
                 }
@@ -1078,8 +1078,8 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             if (curY < imgTop || curY > imgTop + $(imgTbl).height()) {
                 atEdge = false;
                 beyondImage = false;
-                //warn ('curY:'+curY+ ' top:'+imgTop+' bottom:'+imgTop + $(imgTbl).innerHeight());
-                panUpdatePosition(prevX,false);   // FIXME: This should revert to a saved position!!
+                if (savedPosition != undefined)
+                    setPosition(savedPosition,null);
                 var oldPos = prevX.toString() + "px";
                 $(".panImg").css( {'left': oldPos });
                 $('.tdData').css( {'backgroundPosition': oldPos } );
