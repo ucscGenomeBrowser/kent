@@ -966,6 +966,7 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
     var only1xScrolling = (hgTracks.imgBoxPortalOffsetX == 0);
     var prevX       = (imgOffset + imgBoxLeftOffset)*-1;
     var portalWidth = 0;
+    var savedPosition;
     panAdjustHeight(prevX);
 
     this.each(function(){
@@ -1024,6 +1025,7 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             if(relativeX != 0) {
                 if (blockUseMap == false) {
                     // need to throw up a z-index div.  Wait mask?
+                    savedPosition = getPosition();
                     dragMaskShow();
                     blockUseMap = true;
                 }
@@ -1078,8 +1080,8 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             if (curY < imgTop || curY > imgTop + $(imgTbl).height()) {
                 atEdge = false;
                 beyondImage = false;
-                //warn ('curY:'+curY+ ' top:'+imgTop+' bottom:'+imgTop + $(imgTbl).innerHeight());
-                panUpdatePosition(prevX,false);   // FIXME: This should revert to a saved position!!
+                if (savedPosition != undefined)
+                    setPosition(savedPosition,null);
                 var oldPos = prevX.toString() + "px";
                 $(".panImg").css( {'left': oldPos });
                 $('.tdData').css( {'backgroundPosition': oldPos } );
