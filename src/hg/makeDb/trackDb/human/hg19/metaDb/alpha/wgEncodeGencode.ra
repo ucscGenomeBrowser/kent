@@ -3,7 +3,7 @@ objType composite
 annotation Automatic
 composite wgEncodeGencode
 dataType Gencode
-dataVersion "ENCODE September 2009 Freeze"
+dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
 expVars lab,dataType,labExpId
 fileName wgEncodeGencodePolyaV3.gtf.gz
@@ -37,7 +37,7 @@ metaObject wgEncodeGencodeAutoV3
 annotation Automatic
 composite wgEncodeGencode
 dataType Gencode
-dataVersion "ENCODE September 2009 Freeze"
+dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
 fileName wgEncodeGencodeAutoV3.gtf.gz
 grant Hubbard
@@ -87,7 +87,7 @@ objType table
 annotation Manual
 composite wgEncodeGencode
 dataType Gencode
-dataVersion "ENCODE September 2009 Freeze"
+dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
 fileName wgEncodeGencodeManualV3.gtf.gz
 grant Hubbard
@@ -150,4 +150,4 @@ project wgEncode
 subId 2094
 tableName wgEncodeGencodeYalePseudoV4
 
-# MAGIC: 1360594221
+# MAGIC: 1307031862
