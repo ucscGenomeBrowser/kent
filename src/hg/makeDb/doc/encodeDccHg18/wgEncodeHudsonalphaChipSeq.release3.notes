@@ -632,7 +632,7 @@ wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
 
 
 
-B') Deprecated files (117 downloadables, 0 gbdbs):
+B') Deprecated files (118 downloadables, 0 gbdbs):
     NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
     This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
     current location on alpha:
@@ -757,6 +757,7 @@ B') Deprecated files (117 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release2/wgEncodeHudsonalphaChipSeqRawDataRep2K562SrfPcr2x.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release2/wgEncodeHudsonalphaChipSeqRawDataRep2K562Taf1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release2/wgEncodeHudsonalphaChipSeqRawDataRep2K562Usf1Pcr2x.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release2/index.html
 
 C) New tables (2):
 wgEncodeHudsonalphaChipSeqPeaksRep1SknshNrsf
@@ -807,6 +808,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release3/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release3/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release3/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/release3/md5sum.txt
