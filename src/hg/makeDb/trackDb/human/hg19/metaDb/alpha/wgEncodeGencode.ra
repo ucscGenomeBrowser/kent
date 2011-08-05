@@ -1,25 +1,3 @@
-metaObject wgEncodeGencodeV3
-objType composite
-composite wgEncodeGencodeV3
-expVars lab,dataType,labExpId
-
-metaObject wgEncodeGencodePolyaV3
-objType table
-annotation Automatic
-composite wgEncodeGencodeV3
-dataType Gencode
-dataVersion ENCODE September 2009 Freeze
-dateSubmitted 2009-10-27
-expVars lab,dataType,labExpId
-fileName wgEncodeGencodePolyaV3.gtf.gz
-grant Hubbard
-lab Sanger
-labExpId V3c
-level 3
-project wgEncode
-subId 453
-tableName wgEncodeGencodePolyaV3
-
 metaObject wgEncodeGencodeAutoV3
 objType table
 annotation Automatic
@@ -52,3 +30,26 @@ project wgEncode
 subId 453
 tableName wgEncodeGencodeManualV3
 
+metaObject wgEncodeGencodePolyaV3
+objType table
+annotation Automatic
+composite wgEncodeGencodeV3
+dataType Gencode
+dataVersion ENCODE September 2009 Freeze
+dateSubmitted 2009-10-27
+expVars lab,dataType,labExpId
+fileName wgEncodeGencodePolyaV3.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V3c
+level 3
+project wgEncode
+subId 453
+tableName wgEncodeGencodePolyaV3
+
+metaObject wgEncodeGencodeV3
+objType composite
+composite wgEncodeGencodeV3
+expVars lab,dataType,labExpId
+
+# MAGIC: 1819172962
