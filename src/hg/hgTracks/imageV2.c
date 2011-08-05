@@ -1710,14 +1710,14 @@ if(slice->parentImg && slice->parentImg->file != NULL)
         hPrintf(" usemap='#map_%s'",name);
     hPrintf(" class='sliceImg %s",sliceTypeToClass(slice->type));
     if(slice->type==stData && imgBox->showPortal)
-        hPrintf(" panImg' ondrag='{return false;}'");
+        hPrintf(" panImg'");
     else
         hPrintf("'");
     if(slice->title != NULL)
         hPrintf(" title='%s'", htmlEncode(slice->title) );           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
         hPrintf("' title='%s'", htmlEncode(slice->parentImg->title) );// Adds image wide title
-    hPrintf(">");
+    hPrintf(" ondrag='{return false;}'>");
     }
 else
     {
