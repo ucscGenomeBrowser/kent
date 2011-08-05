@@ -471,18 +471,18 @@ puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED F
 puts("in publication  until the restriction date noted for the given data file.</B>");
 
 cgiDown(0.7);
-puts("Supporting documents:");
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> file contains the name and metadata for each download.\n",
+puts("Additional resources:");
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> - lists the name and metadata for each download.\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.\n",
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> - lists the md5sum output for each download.\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s'>raw files view</A></B> web server downloads directory (may include obsolete data).\n",
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s'>downloads server</A></B> - alternative access to downloadable files (may include obsolete data).\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>Supplemental materials</A></B> contains additional files provided by the laboratory related to these downloads.\n",
+    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>supplemental materials</A></B> - any related files provided by the laboratory.\n",
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
 }

@@ -12,9 +12,10 @@ subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1H1=H1-hESC_<i>Tier1<
 subGroup3 rank Rank 1st=1st 2nd=2nd
 dimensions dimensionY=cellType dimensionX=rank
 sortOrder cellType=+ rank=+ view=+
+fileSortOrder cell=Cell_Line rank=Rank replicate=Rep view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 noInherit on
-controlledVocabulary encode/cv.ra cellType=cell
+controlledVocabulary encode/cv.ra cellType=cell 
 priority 0
 type bed 3 +
 dataVersion through the ENCODE Jan 2010 Freeze

@@ -250,8 +250,8 @@ $(window).load(function () {
     // jQuery load function with stuff to support drag selection in track img
     if(browser == "safari") {
         if(navigator.userAgent.indexOf("Chrome") != -1) {
-            // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
-            browser = "chrome";
+        // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
+        browser = "chrome";
         } else {
             // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
             // though if you look in the DOM the changes are there). So we have to do a full form submission when the
@@ -964,6 +964,7 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
     var only1xScrolling = (hgTracks.imgBoxPortalOffsetX == 0);
     var prevX       = (imgOffset + imgBoxLeftOffset)*-1;
     var portalWidth = 0;
+    var savedPosition;
     panAdjustHeight(prevX);
 
     this.each(function(){
@@ -997,7 +998,8 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
 
     function initialize(){
 
-        pan.css( 'cursor', 'w-resize');
+        pan.css('cursor',"url(../images/grabbing.cur)"); // Trick to preload
+        pan.css('cursor',"url(../images/grabber.cur),w-resize");
 
         pan.mousedown(function(e){
              if (e.which > 1 || e.button > 1 || e.shiftKey || e.ctrlKey)
@@ -1019,7 +1021,12 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             var relativeX = (e.clientX - mouseDownX);
 
             if(relativeX != 0) {
-                blockUseMap = true;
+                if (blockUseMap == false) {
+                    // need to throw up a z-index div.  Wait mask?
+                    savedPosition = getPosition();
+                    dragMaskShow();
+                    blockUseMap = true;
+                }
                 var decelerator = 1;
                 var wingSize    = 1000; // 0 stops the scroll at the edges.
                 // Remeber that offsetX (prevX) is negative
@@ -1058,11 +1065,28 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
         //if(!e) e = window.event;
         if(mouseIsDown) {
 
+            dragMaskClear();
             $(document).unbind('mousemove',panner);
             $(document).unbind('mouseup',panMouseUp);
             mouseIsDown = false;
+            setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
 
-            // Talk to tim about this.
+            // Outside image?  Then abandon.
+            var curY = e.clientY;
+            var imgTbl = $('#imgTbl');
+            var imgTop = $(imgTbl).position().top;
+            if (curY < imgTop || curY > imgTop + $(imgTbl).height()) {
+                atEdge = false;
+                beyondImage = false;
+                if (savedPosition != undefined)
+                    setPosition(savedPosition,null);
+                var oldPos = prevX.toString() + "px";
+                $(".panImg").css( {'left': oldPos });
+                $('.tdData').css( {'backgroundPosition': oldPos } );
+                return true;
+            }
+
+            // Do we need to fetch anything?
             if(beyondImage) {
                 if(inPlaceUpdate) {
                     var pos = parsePosition(getPosition());
@@ -1072,12 +1096,13 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
                 }
                 return true; // Make sure the setTimeout below is not called.
             }
+
+            // Just a normal scroll within a >1X image
             if(prevX != newX) {
                 //if (!only1xScrolling)
                 //    panAdjustHeight(newX); // NOTE: This will resize image after scrolling.  Do we want to while scrolling?
                 prevX = newX;
             }
-            setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
         }
     }
     });  // end of this.each(function(){
@@ -1190,6 +1215,33 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             }
         });
     }
+
+    function dragMaskShow() {   // Sets up the waitMask to block page manipulation until cleared
+
+        var imgTbl = $('#imgTbl');
+        // Find or create the waitMask (which masks the whole page)
+        var  dragMask = $('div#dragMask');
+        if( dragMask == undefined || dragMask.length == 0) {
+            $(imgTbl).prepend("<div id='dragMask' class='waitMask'></div>");
+            dragMask = $('div#dragMask');
+        }
+
+        $('body').css('cursor','not-allowed')
+        $(dragMask).css('cursor',"url(../images/grabbing.cur),w-resize");
+        //$(dragMask).css({opacity:0.4,backgroundColor:'gray'}); // temporarily so I can see it
+        $(dragMask).css({display:'block',zIndex:5,top: $(imgTbl).position().top, height: $(imgTbl).height() + 'px' });
+
+        return dragMask;  // The caller could add css if they wanted.
+    }
+
+    function dragMaskClear() {        // Clears the waitMask
+        $('body').css('cursor','auto')
+        var  dragMask = $('#dragMask');
+        if( dragMask != undefined )
+            $(dragMask).hide();
+    }
+
+
 
 };
 

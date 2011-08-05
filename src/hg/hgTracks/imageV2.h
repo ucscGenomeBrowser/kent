@@ -12,9 +12,9 @@
 //#define IMAGEv2_DRAG_SCROLL
 //#define IMAGEv2_DRAG_SCROLL_SZ 1
 
-#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#ifdef IMAGEv2_DRAG_SCROLL
     #define IMAGEv2_SHORT_MAPITEMS
-#endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#endif//def IMAGEv2_DRAG_SCROLL
 
 // CURRENT PROBLEMS with dragScroll > 1X:
 // o Dynamic height for data/label based on image map currently works EXCEPT, occasionally does not resize.  Consider resize while dragging!

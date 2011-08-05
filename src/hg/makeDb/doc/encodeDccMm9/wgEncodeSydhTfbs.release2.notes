@@ -568,6 +568,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/mm9/encodeDCC/wgEncodeSydhTfbs/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhTfbs/release2/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhTfbs/release2/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhTfbs/release2/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhTfbs/release2/md5sum.txt
