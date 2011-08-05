@@ -4,8 +4,6 @@
 # The validator will use this template and our script to do mass update
 # of the README will use this template.
 # Items requiring relational replacement are marked with ++
-
-
 This directory contains the downloadable files associated with this ENCODE
 composite track. Data files are RESTRICTED FROM USE in publication until the
 restriction date noted in files.txt and in the recommended 'Downloadable Files' 
