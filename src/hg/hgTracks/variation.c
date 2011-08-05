@@ -566,7 +566,7 @@ return MG_BLACK;
 }
 
 Color snp125Color(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color of snp track item -- stashed in the weight column for set/enum 
+/* Return color of snp track item -- stashed in the weight column for set/enum
  * attributes that were used for sorting at draw time.  Allele frequency shading
  * must be done at draw time because it uses hvg.  Aside from allele frequencies
  * and overloaded weight, only the bed4 fields of snp are used at draw time). */
@@ -1201,12 +1201,13 @@ if (vis == tvPack || vis == tvSquish)
             if (textX < insideX)        /* Snap label to the left. */
 		{
 		textX = leftLabelX;
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
-		hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
+                assert(hvgSide != NULL);
+		hvGfxUnclip(hvgSide);
+		hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+		hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+		hvGfxUnclip(hvgSide);
+		hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
 		}
             else
 		hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
@@ -1276,20 +1277,21 @@ if (vis == tvPack || vis == tvSquish)
             if (snapLeft)        /* Snap label to the left. */
 		{
 		textX = leftLabelX;
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+                assert(hvgSide != NULL);
+		hvGfxUnclip(hvgSide);
+		hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
 		if (drawNameInverted)
 		    {
 		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-		    hvGfxBox(hvg, boxStart, y, nameWidth+1, heightPer - 1, color);
-		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		    hvGfxBox(hvgSide, boxStart, y, nameWidth+1, heightPer - 1, color);
+		    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 		                MG_WHITE, font, name);
 		    }
 		else
-		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+		hvGfxUnclip(hvgSide);
+		hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
 		}
             else
 	        {

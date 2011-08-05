@@ -864,16 +864,13 @@ hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.pro
 # Load up kgProtMap2 table that says where exons are in terms of CDS
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 cd $dir
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
 hgsql --skip-column-names \
   -e "select kgID, refseq from kgXref where length(refseq) > 0" $tempDb \
   > kgToRefseq.txt
-hgMapToGene $db -tempDb=$tempDb -lookup=kgToRefseq.txt refGene knownGene knownToRefSeq
+hgMapToGene $db -tempDb=$tempDb -override=kgToRefseq.txt refGene knownGene knownToRefSeq
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
@@ -889,22 +886,20 @@ hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 
 cd $dir
 hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 ~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
+
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
+
      
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
     hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
-    hgMapToGene $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
+    hgMapToGene $db -tempDb=$tempDb affyU133 knownGene knownToU133
     hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
     hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds -ignoreStrand
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
-
-compareModifiedFileSizes.csh $oldGeneDir .
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
@@ -912,20 +907,6 @@ if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
 	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
-    # All exon array.
-    mkdir affyAllExon
-    cd affyAllExon
-    hgsql $db -N -e "select * from affyExonTissues" | cut -f2-6 > probes.bed
-    overlapSelect -inFmt=genePred -selectFmt=bed -idOutput probes.bed ../ucscGenes.gp ids.txt
-    hgsql $db -N -e "select name,expCount,expScores from affyExonTissues" > expData.txt
-    affyAllExonGSColumn expData.txt ids.txt column.txt
-    hgLoadSqlTab $tempDb affyExonTissuesGs ~/kent/src/hg/lib/expData.sql column.txt
-    ln -s ~/kent/src/hg/makeDb/hgRatioMicroarray/affyHumanExon.ra .
-    echo "create table affyExonTissuesGsExps select * from $db.affyExonTissuesGsExps" | hgsql $tempDb
-    hgMedianMicroarray $tempDb affyExonTissuesGs $db.affyExonTissuesGsExps \
-       affyHumanExon.ra affyExonTissuesGsMedian affyExonTissuesGsMedianExps
-    hgExpDistance $tempDb affyExonTissuesGsMedian \
-       affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
 endif
 
 if ($db =~ mm*) then
@@ -941,8 +922,6 @@ if ($db =~ mm*) then
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
 
-#breakpoint
-
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
@@ -950,18 +929,19 @@ cd /usr/local/apache/cgi-bin/visiGeneData
 ixIxx visiGene.text visiGene.ix visiGene.ixx
 cd $dir
 
-
+# TODO: find path length data, and build these
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
-hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
-    -sqlRemap="select distinct value, name from knownToHprd"
-hgLoadNetDist $genomes/$db/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P \
-    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
-hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P \
-    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
+#hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
+#    -sqlRemap="select distinct value, name from knownToHprd"
+#hgLoadNetDist $genomes/$db/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P \
+#    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
+#hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P \
+#    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-#breakpoint
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
@@ -996,8 +976,6 @@ doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -wo
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
 loadPairwise.csh
 
-#breakpoint
-
 # Load human and rat
 cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
@@ -1015,8 +993,6 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
 synBlastp.csh $tempDb $ratDb
-
-#breakpoint
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -1061,7 +1037,9 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 
-#breakpoint
+compareModifiedFileSizes.csh $oldGeneDir .
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 # Clean up
 cd $dir/hgNearBlastp

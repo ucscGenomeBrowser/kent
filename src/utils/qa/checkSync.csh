@@ -81,7 +81,7 @@ echo gbLoaded >> genbank.local$$
 
 # 
 set active=`hgsql -h $sqlbeta -Ne "SELECT name FROM dbDb where active = 1" hgcentralbeta \
-  | grep $db`
+  | grep -w $db`
 foreach machine ( $mach1 $mach2 )
   # check if db is for active assembly on beta
   # (if not, can't do real-time check)

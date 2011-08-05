@@ -85,6 +85,7 @@ int guidelineSpacing = 12;  /* Pixels between guidelines. */
 boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
 
 int rulerMode = tvHide;         /* on, off, full */
+struct hvGfx *hvgSide = NULL;     // An extra pointer to a side label image that can be built if needed
 
 char *rulerMenu[] =
 /* dropdown for ruler visibility */
@@ -104,7 +105,7 @@ boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug
 int imagePixelHeight = 0;
 boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
-struct hash *jsVarsHash = NULL;
+struct jsonHashElement *jsonForClient = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
@@ -1337,12 +1338,26 @@ labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
 hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
-mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
+mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
+#ifdef IMAGEv2_SHORT_MAPITEMS
+char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
+int width = portWidth - (2 * arrowButtonWidth);
+int x = portX + arrowButtonWidth;
+// make toggle cover only actual label
+int size = mgFontStringWidth(font,label) + 12;  // get close enough to the label
+if (width > size)
+    {
+    x += width/2 - size/2;
+    width = size;
+    }
+mapBoxToggleVis(hvg, x, y + 1, width, insideHeight, (theImgBox ? track : parentTrack));
+#else///ifndef IMAGEv2_SHORT_MAPITEMS
 mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
+#endif///ndef IMAGEv2_SHORT_MAPITEMS
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
-mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
+mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
@@ -1376,8 +1391,19 @@ if (track->limitedVis != tvHide)
                 }
             }
         if (!toggleDone)
+            {
+        #ifdef IMAGEv2_SHORT_MAPITEMS
+            // make toggle cover only actual label
+            int size = mgFontStringWidth(font,label) + 12;  // get close enough to the label
+            if (trackPastTabWidth > size)
+                {
+                trackPastTabX = insideX + insideWidth/2 - size/2;
+                trackPastTabWidth = size;
+                }
+        #endif///def IMAGEv2_SHORT_MAPITEMS
             mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight,
                             (theImgBox ? track : parentTrack));
+            }
         y += fontHeight;
         }
     y += track->totalHeight(track, track->limitedVis);
@@ -1534,8 +1560,10 @@ switch (track->limitedVis)
                             {
                             if (isCenterLabelIncluded(subtrack))
                                 y += fontHeight;
+                        #ifndef IMAGEv2_DRAG_SCROLL
                             if(theImgBox && subtrack->limitedVis == tvDense)
                                 mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, track->lineHeight, subtrack);
+                        #endif///ndef IMAGEv2_DRAG_SCROLL
                             y += subtrack->totalHeight(subtrack, subtrack->limitedVis);
                             }
                         }
@@ -1554,9 +1582,11 @@ switch (track->limitedVis)
             mapHeight = track->height;
         else
             mapHeight = track->lineHeight;
+    #ifndef IMAGEv2_DRAG_SCROLL
         int maxWinToDraw = getMaxWindowToDraw(track->tdb);
         if (maxWinToDraw <= 1 || (winEnd - winStart) <= maxWinToDraw)
             mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
+    #endif///ndef IMAGEv2_DRAG_SCROLL
         y += mapHeight;
         break;
     case tvHide:
@@ -1898,7 +1928,6 @@ leftLabelWidth = insideX - gfxBorder*3;
 
 struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
 struct image *theSideImg = NULL; // Because dragScroll drags off end of image, the side label gets seen. Therefore we need 2 images!!
-struct hvGfx *hvgSide = NULL;    // Strategy an extra pointer to a side image that can be built if needed
 //struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
@@ -2408,8 +2437,10 @@ if (withCenterLabels)
         else
             y = doDrawItems(track, hvg, font, y, &lastTime);
 
+        #ifndef IMAGEv2_DRAG_SCROLL
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track); // Strange mabBoxToggleLogic handles reverse complement itself so x=0, width=tl.picWidth
+        #endif///ndef IMAGEv2_DRAG_SCROLL
 
         if(yEnd!=y)
             warn("Slice height does not add up.  Expecting %d != %d actual",yEnd - yStart - 1,y-yStart);
@@ -2468,16 +2499,16 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-jsAddBoolean(jsVarsHash, "dragSelection", dragZooming);
-jsAddBoolean(jsVarsHash, "inPlaceUpdate", IN_PLACE_UPDATE);
+jsonHashAddBoolean(jsonForClient, "dragSelection", dragZooming);
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
 
 if(rulerClickHeight)
     {
-    jsAddNumber(jsVarsHash, "rulerClickHeight", rulerClickHeight);
+    jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
     }
 if(newWinWidth)
     {
-    jsAddNumber(jsVarsHash, "newWinWidth", newWinWidth);
+    jsonHashAddNumber(jsonForClient, "newWinWidth", newWinWidth);
     }
 
 /* Save out picture and tell html file about it. */
@@ -3834,7 +3865,7 @@ grpFreeList(&grps);
 	slSort(&hubList, hubCmpAlpha);	// alphabetize
 	minPriority -= 1.0;             // priority is 1-based
 	// the idea here is to get enough room between priority 1
-	// (which is custom tracks) and the group with the next 
+	// (which is custom tracks) and the group with the next
 	// priority number, so that the hub nestle inbetween the
 	// custom tracks and everything else at the top of the list
 	// of track groups
@@ -4414,9 +4445,9 @@ for (track = trackList; track != NULL; track = track->next)
 	struct track *subtrack;
         for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
 	    {
-	    if (isSubtrackVisible(subtrack))
+	    if (isTrackForParallelLoad(subtrack))
 		{
-		if (isTrackForParallelLoad(subtrack))
+		if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
 		    {
 		    struct paraFetchData *pfd;
 		    AllocVar(pfd);
@@ -4579,8 +4610,8 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsAddNumber(jsVarsHash, "insideX", insideX);
-jsAddBoolean(jsVarsHash, "revCmplDisp", revCmplDisp);
+jsonHashAddNumber(jsonForClient, "insideX", insideX);
+jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
 
 #ifdef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
@@ -4763,9 +4794,9 @@ if(theImgBox)
 hPrintf("<CENTER>\n");
 
 // info for drag selection javascript
-jsAddNumber(jsVarsHash, "winStart", winStart);
-jsAddNumber(jsVarsHash, "winEnd", winEnd);
-jsAddString(jsVarsHash, "chromName", chromName);
+jsonHashAddNumber(jsonForClient, "winStart", winStart);
+jsonHashAddNumber(jsonForClient, "winEnd", winEnd);
+jsonHashAddString(jsonForClient, "chromName", chromName);
 
 if(trackImgOnly && !ideogramToo)
     {
@@ -5113,7 +5144,7 @@ if (!hideControls)
 	    /* First track group that is not the custom track group (#1)
 	     * or a track hub, gets the Base Position track
 	     * unless it's collapsed. */
-	    if (!showedRuler && !isHubTrack(group->name) && 
+	    if (!showedRuler && !isHubTrack(group->name) &&
 		    differentString(group->name, "user") )
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
@@ -5829,7 +5860,7 @@ cart = theCart;
 
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount, 
+    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
@@ -5874,48 +5905,52 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
     }
-hWrites(commonCssStyles());
-jsVarsHash = newHash(8);
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("ajax.js", NULL);
-boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0");
-if(dragZooming && !searching)
+
+jsonForClient = newJsonHash(newHash(8));
+jsonHashAddString(jsonForClient, "cgiVersion", CGI_VERSION);
+boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"), "0");
+
+if(!trackImgOnly)
     {
-    jsIncludeFile("jquery.imgareaselect.js", NULL);
+    // Write out includes for css and js files
+    hWrites(commonCssStyles());
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("utils.js", NULL);
+    jsIncludeFile("ajax.js", NULL);
+    if(dragZooming && !searching)
+        {
+        jsIncludeFile("jquery.imgareaselect.js", NULL);
 #ifndef NEW_JQUERY
-    webIncludeResourceFile("autocomplete.css");
-    jsIncludeFile("jquery.autocomplete.js", NULL);
+        webIncludeResourceFile("autocomplete.css");
+        jsIncludeFile("jquery.autocomplete.js", NULL);
 #endif///ndef NEW_JQUERY
-    }
+        }
     jsIncludeFile("autocomplete.js", NULL);
-jsIncludeFile("hgTracks.js", NULL);
+    jsIncludeFile("hgTracks.js", NULL);
 
 #ifdef LOWELAB
-jsIncludeFile("lowetooltip.js", NULL);
+    jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
-if(advancedJavascriptFeaturesEnabled(cart))
-    {
-    webIncludeResourceFile("jquery-ui.css");
-    if (!searching) // NOT doing search
+    if(advancedJavascriptFeaturesEnabled(cart))
         {
-        webIncludeResourceFile("jquery.contextmenu.css");
-        jsIncludeFile("jquery.contextmenu.js", NULL);
-        webIncludeResourceFile("ui.dropdownchecklist.css");
-        jsIncludeFile("ui.dropdownchecklist.js", NULL);
+        webIncludeResourceFile("jquery-ui.css");
+        if (!searching) // NOT doing search
+            {
+            webIncludeResourceFile("jquery.contextmenu.css");
+            jsIncludeFile("jquery.contextmenu.js", NULL);
+            webIncludeResourceFile("ui.dropdownchecklist.css");
+            jsIncludeFile("ui.dropdownchecklist.js", NULL);
 #ifdef NEW_JQUERY
-        jsIncludeFile("ddcl.js", NULL);
+            jsIncludeFile("ddcl.js", NULL);
 #endif///def NEW_JQUERY
+            }
         }
-    }
 
-//if (!trackImgOnly)
-    {
-hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
-// XXXX stole this and '.hidden' from bioInt.css - needs work
-hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
+    hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
+    // XXXX stole this and '.hidden' from bioInt.css - needs work
+    hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
 
 /* check for new data hub */
@@ -5994,10 +6029,9 @@ else
     {
     tracksDisplay();
     }
-if(hashNumEntries(jsVarsHash))
-    {
-    hPrintf("<script type='text/javascript'>\n");
-    jsPrintHash(jsVarsHash, "hgTracks", 0);
-    hPrintf("</script>\n");
-    }
+
+hPrintf("<script type='text/javascript'>\n");
+jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
+hPrintf("</script>\n");
+
 }

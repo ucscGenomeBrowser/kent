@@ -246,71 +246,77 @@ return kindOfChild;
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
 
 
-static void jsonTdbSettingsInit(struct dyString **jsonTdbSettingsString)
+static void jsonTdbSettingsInit(struct jsonHashElement *settings)
 // Inititializes trackDbJson
 {
-*jsonTdbSettingsString = newDyString(1024);
-dyStringPrintf(*jsonTdbSettingsString, "<script type='text/javascript'>\n// START trackDbJson\nvar trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d, \"configureBy\": \"popup\", \"kindOfParent\": 0}", rulerMode);
+struct jsonHashElement *ele = newJsonHash(newHash(8));
+jsonHashAddString(ele, "shortLabel", "ruler");
+jsonHashAddString(ele, "longLabel", "Base Position Controls");
+jsonHashAddNumber(ele, "canPack", 0);
+jsonHashAddNumber(ele, "visibility", rulerMode);
+jsonHashAddString(ele, "configureBy", "popup");
+jsonHashAddNumber(ele, "kindOfParent", 0);
+jsonHashAdd(settings, "ruler", (struct jsonElement *) ele);
 }
 
-void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable)
-// Creates then successively adds trackDb settings to the jsonTdbSettingsString
-// Initially pass in NULL pointer to a dyString to properly begin building
+void jsonTdbSettingsBuild(struct jsonHashElement *settings, struct track *track, boolean configurable)
+// Adds trackDb settings to the jsonTdbSettings
 {
-if(*jsonTdbSettingsString == NULL)
-    jsonTdbSettingsInit(jsonTdbSettingsString);
-dyStringAppend(*jsonTdbSettingsString, ", \n");
-
+struct jsonHashElement *ele = newJsonHash(newHash(8));
+jsonHashAdd(settings, track->track, (struct jsonElement *) ele);
 // track name and type
-dyStringPrintf(*jsonTdbSettingsString, "\t\"%s\": {", track->track);
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"type\": \"%s\",", track->tdb->type);
+jsonHashAddString(ele, "type", track->tdb->type);
 
 // Tell which kind of parent and which kind of child
 enum kindOfParent kindOfParent = tdbKindOfParent(track->tdb);
 enum kindOfChild  kindOfChild  = tdbKindOfChild(track->tdb);
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"kindOfParent\": %d,\n\t\t\"kindOfChild\": %d,",kindOfParent,kindOfChild);
+jsonHashAddNumber(ele, "kindOfParent", kindOfParent);
+jsonHashAddNumber(ele, "kindOfChild", kindOfChild);
 
 // Tell something about the parent and/or children
 if (kindOfChild != kocOrphan)
     {
     struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
 
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"parentTrack\": \"%s\",\n\t\t\"parentLabel\": \"%s\",",
-                    parentTdb->track, javaScriptLiteralEncode(parentTdb->shortLabel));
+    jsonHashAddString(ele, "parentTrack", parentTdb->track);
+    jsonHashAddString(ele, "parentLabel", parentTdb->shortLabel);
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
-        dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shouldPack\": 0,"); // default vis is full, but pack is an option
+        jsonHashAddNumber(ele, "shouldPack", 0); // default vis is full, but pack is an option
         track->canPack = parentTdb->canPack;
         }
     }
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"hasChildren\": %d,", slCount(track->tdb->subtracks));
+
+// XXXX really s/d be numChildren
+jsonHashAddNumber(ele, "hasChildren", slCount(track->tdb->subtracks));
 
 // Configuring?
 if (!configurable || track->hasUi == FALSE)
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"none\",");
+    jsonHashAddString(ele, "configureBy", "none");
 else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
     regexMatch(track->track, "^snp[0-9]+") || regexMatch(track->track, "^cons[0-9]+way") || regexMatch(track->track, "^multiz") ? "off" : "on"), "off"))
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"clickThrough\",");
+    jsonHashAddString(ele, "configureBy", "clickThrough");
 else
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"popup\",");
+    jsonHashAddString(ele, "configureBy", "popup");
 
 // Remote access by URL?
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"url\": \"%s\",", trackDbSetting(track->tdb, "url"));
+    jsonHashAddString(ele, "url", trackDbSetting(track->tdb, "url"));
 
 // Close with some standard vars
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"longLabel\": \"%s\",\n\t\t\"canPack\": %d,",
-    javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack);
+jsonHashAddString(ele, "shortLabel", track->shortLabel);
+jsonHashAddString(ele, "longLabel", track->longLabel);
+jsonHashAddNumber(ele, "canPack", track->canPack);
+
 if(track->limitedVis != track->visibility)
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"limitedVis\": %d,", track->limitedVis);
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"visibility\": %d\n\t}", track->visibility);
+    jsonHashAddNumber(ele, "limitedVis", track->limitedVis);
+jsonHashAddNumber(ele, "visibility", track->visibility);
 }
 
-char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
-// Closes and returns the contents of the jsonTdbSettingsString
+void jsonTdbSettingsUse(struct jsonHashElement *settings)
 {
-dyStringAppend(*jsonTdbSettingsString, "};\n// END trackDbJson\n</script>\n");
-return dyStringCannibalize(jsonTdbSettingsString);
+// add the settings to the hgTracks output object
+jsonHashAdd(jsonForClient, "trackDb", (struct jsonElement *) settings);
 }
 
 /////////////////////////
@@ -1657,7 +1663,7 @@ hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' onmouseover='mapItemMouseOver(this)' onmouseout='mapItemMouseOut(this)' onclick='return mapClk(this);'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' class='area'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)
@@ -1673,7 +1679,7 @@ for(;item!=NULL;item=item->next)
             hPrintf(" HREF=%s",item->linkVar);
 	else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
                  hPrintf(" HREF='..%s'",item->linkVar);
-             else 
+             else
                  hPrintf(" HREF='%s'",item->linkVar);
         }
     else
@@ -1704,14 +1710,14 @@ if(slice->parentImg && slice->parentImg->file != NULL)
         hPrintf(" usemap='#map_%s'",name);
     hPrintf(" class='sliceImg %s",sliceTypeToClass(slice->type));
     if(slice->type==stData && imgBox->showPortal)
-        hPrintf(" panImg' ondrag='{return false;}'");
+        hPrintf(" panImg'");
     else
         hPrintf("'");
     if(slice->title != NULL)
         hPrintf(" title='%s'", htmlEncode(slice->title) );           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
         hPrintf("' title='%s'", htmlEncode(slice->parentImg->title) );// Adds image wide title
-    hPrintf(">");
+    hPrintf(" ondrag='{return false;}'>");
     }
 else
     {
@@ -1788,7 +1794,7 @@ if(slice->parentImg)
         hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
 
     #ifdef IMAGEv2_DRAG_SCROLL
-    if(imgBox->showPortal && sliceType==stData)
+    if(imgBox->showPortal && (sliceType==stData || sliceType==stCenter))
         hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
     #endif //def IMAGEv2_DRAG_SCROLL
     hPrintf("'>\n");
@@ -1866,24 +1872,30 @@ if(imgBox->bgImg)
 #ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
     {
-    hPrintf("<script type='text/javascript'>var imgBoxPortal=true;");
-    hPrintf("var imgBoxChromStart=%d;var imgBoxChromEnd=%d;var imgBoxWidth=%d;",
-            imgBox->chromStart, imgBox->chromEnd,(imgBox->width - imgBox->sideLabelWidth));
-    hPrintf("var imgBoxPortalStart=%d;var imgBoxPortalEnd=%d;var imgBoxPortalWidth=%d;",
-            imgBox->portalStart, imgBox->portalEnd, imgBox->portalWidth);
-    hPrintf("var imgBoxLeftLabel=%d;var imgBoxPortalOffsetX=%d;var imgBoxBasesPerPixel=%lf;</script>\n",
-            (imgBox->plusStrand?imgBox->sideLabelWidth:0),
-            (int)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel),imgBox->basesPerPixel);
+    // Let js code know what's up
+    int chromSize = hChromSize(database, chromName);
+    jsonHashAddNumber( jsonForClient,"chromStart",   1);
+    jsonHashAddNumber( jsonForClient,"chromEnd",     chromSize);
+    jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       TRUE);
+    jsonHashAddNumber( jsonForClient,"imgBoxWidth",        (imgBox->width - imgBox->sideLabelWidth));
+    jsonHashAddNumber( jsonForClient,"imgBoxPortalStart",  imgBox->portalStart);
+    jsonHashAddNumber( jsonForClient,"imgBoxPortalEnd",    imgBox->portalEnd);
+    jsonHashAddNumber( jsonForClient,"imgBoxPortalWidth",  imgBox->portalWidth);
+    jsonHashAddNumber( jsonForClient,"imgBoxLeftLabel",    (imgBox->plusStrand?imgBox->sideLabelWidth:0));
+    jsonHashAddNumber( jsonForClient,"imgBoxPortalOffsetX",(long)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel));
+    jsonHashAddDouble( jsonForClient,"imgBoxBasesPerPixel",imgBox->basesPerPixel);
     }
+else
 #endif//def IMAGEv2_DRAG_SCROLL
+    jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       FALSE);
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
 hPrintf(" class='tableWithDragAndDrop'");
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
-struct dyString *jsonTdbVars = NULL;
-jsonTdbSettingsInit(&jsonTdbVars);
+struct jsonHashElement *jsonTdbVars = newJsonHash(newHash(8));
+jsonTdbSettingsInit(jsonTdbVars);
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;
@@ -1892,7 +1904,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
     struct track *track = hashFindVal(trackHash, trackName);
     if(track)
-        jsonTdbSettingsBuild(&jsonTdbVars, track, TRUE);
+        jsonTdbSettingsBuild(jsonTdbVars, track, TRUE);
     hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s%s'>\n",trackName,imgTrack->order,
         (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
         (imgTrack->centerLabelSeen != clAlways?" clOpt":""),
@@ -1916,12 +1928,16 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
 
     // Main/Data image region
+#ifdef IMAGEv2_DRAG_SCROLL
+    hPrintf(" <TD id='td_data_%s' title='click & drag to scroll; shift+click & drag to zoom' width=%d class='tdData'>\n", trackName, imgBox->width);
+#else///ifndef IMAGEv2_DRAG_SCROLL
     hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
+#endif//ndef IMAGEv2_DRAG_SCROLL
     // centerLabel
     if(imgTrack->hasCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
-        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,TRUE);
         hPrintf("\n");
         }
     // data image
@@ -1949,7 +1965,5 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     }
 hPrintf("</TABLE>\n");
 hPrintf("<!-- - - - - - - - ^^^ IMAGEv2 ^^^ - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
-
-if (jsonTdbVars != NULL)
-    hWrites(jsonTdbSettingsUse(&jsonTdbVars));
+jsonTdbSettingsUse(jsonTdbVars);
 }

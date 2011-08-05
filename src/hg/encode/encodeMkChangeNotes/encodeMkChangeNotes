@@ -144,13 +144,13 @@ def main(argv=None):
     prev_release_dir = args[2]
 
     # list of addition files
-    possible_addition_files = ["index.html", "files.txt", "md5sum.txt"]
+    possible_addition_files = ["README.txt", "files.txt", "md5sum.txt"]
     addition_files = []
 
     # some re we will be using
     table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedRnaElements|bedRrbs|bedGraph\d+|bed\d*|bedLogR|pairedTagAlign|shortFrags|peptideMapping)$")
     gbdb = re.compile("^(wig|tagAlign|bigWig|bam)$")
-    file_only = re.compile("^(pdf|fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|junction|fpkm|fpkm1|fpkm2|insDistrib|insDist|junction|txt)$")
+    file_only = re.compile("^(matrix|pdf|fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|junction|fpkm|fpkm1|fpkm2|insDistrib|insDist|junction|txt|tar)$")
 
     # if new relase, add the full path to all files
     path_prefix = ""

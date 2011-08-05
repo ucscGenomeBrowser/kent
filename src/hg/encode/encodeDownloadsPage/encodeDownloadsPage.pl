@@ -154,12 +154,12 @@ sub htmlRedirectPage {
                 print OUT_FILE "<META http-equiv='Content-Script-Type' content='text/javascript'>\n";
                 print OUT_FILE "<META HTTP-EQUIV='Pragma' CONTENT='no-cache'>\n";
                 print OUT_FILE "<META HTTP-EQUIV='Expires' CONTENT='-1'>\n";
-                print OUT_FILE "<META http-equiv='refresh' content='0; URL=http:///<!--#echo var=\"BROWSER_HOST\" -->//cgi-bin/hgFileUi?db=$database&g=$composite'>\n";
+                print OUT_FILE "<META http-equiv='refresh' content='0; URL=http://<!--#echo var=\"BROWSER_HOST\" -->/cgi-bin/hgFileUi?db=$database&g=$composite'>\n";
                 print OUT_FILE "<TITLE>Redirecting...</TITLE>\n";
                 print OUT_FILE "<LINK rel='STYLESHEET' href='../style/HGStyle-1304985632.css' TYPE='text/css' />\n";
                 print OUT_FILE "</HEAD>\n\n";
-                print OUT_FILE "<body onload=\"window.location.href='http:///<!--#echo var=\"BROWSER_HOST\" -->//cgi-bin/hgFileUi?db=$database&g=$composite';\" BGCOLOR='#FFF9D2' LINK='#0000CC' VLINK='#330066' ALINK='#6600FF' text='#000000'>\n";
-                print OUT_FILE "<p>Loading <a href='http:///<!--#echo var=\"BROWSER_HOST\" -->//cgi-bin/hgFileUi?db=$database&g=$composite'>redirection target</a></p>\n";
+                print OUT_FILE "<body onload=\"window.location.href='http://<!--#echo var=\"BROWSER_HOST\" -->/cgi-bin/hgFileUi?db=$database&g=$composite';\" BGCOLOR='#FFF9D2' LINK='#0000CC' VLINK='#330066' ALINK='#6600FF' text='#000000'>\n";
+                print OUT_FILE "<p>Loading <a href='http://<!--#echo var=\"BROWSER_HOST\" -->/cgi-bin/hgFileUi?db=$database&g=$composite'>redirection target</a></p>\n";
                 print OUT_FILE "<p>In approx. 1 second the redirection target page should load.<br>\n";
                 print OUT_FILE "If it doesn't please select the link above.</p>\n";
                 print OUT_FILE "</BODY>\n";

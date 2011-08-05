@@ -1416,6 +1416,108 @@ subId 737
 submittedDataVersion V2 - Improved DNA library
 view Alignments
 
+metaObject wgEncodeUwDnaseSeqBjValidation
+objType file
+attic auxSup
+cell BJ
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 487
+fileName wgEncodeUwDnaseSeqBjValidation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqCaco2Validation
+objType file
+attic auxSup
+cell Caco-2
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 486
+fileName wgEncodeUwDnaseSeqCaco2Validation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqGm12878Validation
+objType file
+attic auxSup
+cell GM12878
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 492
+fileName wgEncodeUwDnaseSeqGm12878Validation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqHelas3Validation
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 495
+fileName wgEncodeUwDnaseSeqHelas3Validation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqHepg2Validation
+objType file
+attic auxSup
+cell HepG2
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 482
+fileName wgEncodeUwDnaseSeqHepg2Validation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqHl60Validation
+objType file
+attic auxSup
+cell HL-60
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 489
+fileName wgEncodeUwDnaseSeqHl60Validation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
 metaObject wgEncodeUwDnaseSeqHotspotsRep1Ag04449
 objType table
 cell AG04449
@@ -2905,6 +3007,91 @@ subId 737
 submittedDataVersion V2 - Improved DNA Library
 tableName wgEncodeUwDnaseSeqHotspotsRep2SknshraV2
 view Hotspots
+
+metaObject wgEncodeUwDnaseSeqHuvecValidation
+objType file
+attic auxSup
+cell HUVEC
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 488
+fileName wgEncodeUwDnaseSeqHuvecValidation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqJurkatValidation
+objType file
+attic auxSup
+cell Jurkat
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 497
+fileName wgEncodeUwDnaseSeqJurkatValidation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqK562Validation
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 484
+fileName wgEncodeUwDnaseSeqK562Validation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqMcf7Validation
+objType file
+attic auxSup
+cell MCF-7
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 502
+fileName wgEncodeUwDnaseSeqMcf7Validation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+metaObject wgEncodeUwDnaseSeqNhekValidation
+objType file
+attic auxSup
+cell NHEK
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 499
+fileName wgEncodeUwDnaseSeqNhekValidation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
 
 metaObject wgEncodeUwDnaseSeqPeaksRep1Ag04449
 objType table
@@ -7225,4 +7412,21 @@ submittedDataVersion V2 - Improved DNA Library
 tableName wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 view RawSignal
 
-# MAGIC: -1951665318
+metaObject wgEncodeUwDnaseSeqSknshraValidation
+objType file
+attic auxSup
+cell SK-N-SH_RA
+composite wgEncodeUwDnaseSeq
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+expId 485
+fileName wgEncodeUwDnaseSeqSknshraValidation.tar.gz
+grant Stam
+lab UW
+project wgEncode
+subId 1012
+view Validation
+
+# MAGIC: 714880458

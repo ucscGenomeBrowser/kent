@@ -3,36 +3,26 @@
 #ifndef IMAGEV2_H
 #define IMAGEV2_H
 
-// UNCOMMENT
-//   CONTEXT_MENU to allow right-click funtionality
-//   IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
-//   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
-
-// UNCOMMENT CONTEXT_MENU to allow right-click funtionality
-#define CONTEXT_MENU
+// set IN_PLACE_UPDATE 1 to update the hgTracks image in-place in the client.
+#define IN_PLACE_UPDATE  0
 
 //  UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
-//  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
-//        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
+//  NOTE: 1x should work fine. Set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to see hidden image while dragging.
+//        Problems with >1x: nextExon and nextItem arrows not addressed.  Dynamic resize occasionally fails.
 //#define IMAGEv2_DRAG_SCROLL
-//#define IMAGEv2_DRAG_SCROLL_SZ 3
+//#define IMAGEv2_DRAG_SCROLL_SZ 1
 
-#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#ifdef IMAGEv2_DRAG_SCROLL
     #define IMAGEv2_SHORT_MAPITEMS
-#endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#endif//def IMAGEv2_DRAG_SCROLL
+
+// CURRENT PROBLEMS with dragScroll > 1X:
+// o Dynamic height for data/label based on image map currently works EXCEPT, occasionally does not resize.  Consider resize while dragging!
+// o next item feature '>>' arrows should check if items are in the wings
+// o next exon feature '>>' arrows are only seen in the wings and only look belond the wings
 
 // UNCOMMENT  USE_NAVIGATION_LINKS for so far experimental UI changes to replace buttons at top with more streamlined links
 //#define USE_NAVIGATION_LINKS
-
-#define IN_PLACE_UPDATE  0 // update the hgTracks image in-place in the client (currently turned off everywhere except for larrym's tree).
-
-// CURRENT PROBLEMS:
-// o FIXED: some map items span both sideLabel and data!!
-// o subrtacks should be dragReorderable!!!  Make them individual imgTracks
-// o centerlabel next feature '>>' arrows are scrolled off screen: fix when centerlabels are small and don't scroll
-// o subtrack center labels currently scroll with portal: fixed with subtracks being individual imgTracks
-// o image should be clear and background image should contain stripes
-// o Dynamic height for data/label based on image map currently in portal: DONE for packed, but full map items span all of data slice!
 
 extern struct imgBox   *theImgBox;   // Make this global for now to avoid huge rewrite
 //extern struct image    *theOneImg;   // Make this global for now to avoid huge rewrite
@@ -68,11 +58,12 @@ void flatTracksFree(struct flatTracks **flatTracks);
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
-void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable);
+void jsonTdbSettingsBuild(struct jsonHashElement *settings, struct track *track, boolean configurable);
+
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 
-char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString);
+void jsonTdbSettingsUse(struct jsonHashElement *settings);
 // Closes and returns the contents of the jsonTdbSettingsString
 
 /////////////////////////
