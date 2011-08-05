@@ -2,7 +2,7 @@
 LIST=\
 wgEncodeAffyRnaChip.ra \
 wgEncodeMapability.ra \
-wgEncodeGencode.ra \
+wgEncodeGencodeV4.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
