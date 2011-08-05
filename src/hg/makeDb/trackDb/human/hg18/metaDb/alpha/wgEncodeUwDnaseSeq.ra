@@ -1425,6 +1425,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 487
 fileName wgEncodeUwDnaseSeqBjValidation.tar.gz
 grant Stam
 lab UW
@@ -1441,6 +1442,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 486
 fileName wgEncodeUwDnaseSeqCaco2Validation.tar.gz
 grant Stam
 lab UW
@@ -1457,6 +1459,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 492
 fileName wgEncodeUwDnaseSeqGm12878Validation.tar.gz
 grant Stam
 lab UW
@@ -1473,6 +1476,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 495
 fileName wgEncodeUwDnaseSeqHelas3Validation.tar.gz
 grant Stam
 lab UW
@@ -1489,6 +1493,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 482
 fileName wgEncodeUwDnaseSeqHepg2Validation.tar.gz
 grant Stam
 lab UW
@@ -1505,6 +1510,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 489
 fileName wgEncodeUwDnaseSeqHl60Validation.tar.gz
 grant Stam
 lab UW
@@ -3011,6 +3017,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 488
 fileName wgEncodeUwDnaseSeqHuvecValidation.tar.gz
 grant Stam
 lab UW
@@ -3027,6 +3034,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 497
 fileName wgEncodeUwDnaseSeqJurkatValidation.tar.gz
 grant Stam
 lab UW
@@ -3043,6 +3051,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 484
 fileName wgEncodeUwDnaseSeqK562Validation.tar.gz
 grant Stam
 lab UW
@@ -3059,6 +3068,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 502
 fileName wgEncodeUwDnaseSeqMcf7Validation.tar.gz
 grant Stam
 lab UW
@@ -3075,6 +3085,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 499
 fileName wgEncodeUwDnaseSeqNhekValidation.tar.gz
 grant Stam
 lab UW
@@ -7410,6 +7421,7 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
+expId 485
 fileName wgEncodeUwDnaseSeqSknshraValidation.tar.gz
 grant Stam
 lab UW
@@ -7417,4 +7429,4 @@ project wgEncode
 subId 1012
 view Validation
 
-# MAGIC: 714430497
+# MAGIC: 714880458

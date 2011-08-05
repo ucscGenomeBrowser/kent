@@ -3391,6 +3391,7 @@ tablesIgnored hg19
     altSeqLiftOverPsl
     altSeqPatches
     bacEndPairsBad
+    bamAllNumtSSorted
     multizMHCSummary
     netSyn_mann_hap4
     net_dbb_hap3
@@ -3442,6 +3443,7 @@ tablesIgnored hg19
 
 tablesIgnored mm9
 	allMm9RS_BW
+	bamMmsNumtSSorted
     crgMapability%
     rest
 
