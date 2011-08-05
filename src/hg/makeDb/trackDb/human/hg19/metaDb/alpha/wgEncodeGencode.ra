@@ -1,7 +1,12 @@
-metaObject wgEncodeGencode
+metaObject wgEncodeGencodeV3
 objType composite
+composite wgEncodeGencodeV3
+expVars lab,dataType,labExpId
+
+metaObject wgEncodeGencodePolyaV3
+objType table
 annotation Automatic
-composite wgEncodeGencode
+composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
@@ -15,27 +20,10 @@ project wgEncode
 subId 453
 tableName wgEncodeGencodePolyaV3
 
-metaObject wgEncodeGencode2wayConsPseudoV4
+metaObject wgEncodeGencodeAutoV3
 objType table
 annotation Automatic
-composite wgEncodeGencode
-dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-dccAccession wgEncodeEH001879
-expId 1879
-fileName wgEncodeGencode2wayConsPseudoV4.gtf.gz
-grant Hubbard
-lab Sanger
-labExpId V4
-level 3
-project wgEncode
-subId 2094
-tableName wgEncodeGencode2wayConsPseudoV4
-
-metaObject wgEncodeGencodeAutoV3
-annotation Automatic
-composite wgEncodeGencode
+composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
@@ -48,44 +36,10 @@ project wgEncode
 subId 453
 tableName wgEncodeGencodeAutoV3
 
-metaObject wgEncodeGencodeAutoV4
-objType table
-annotation Automatic
-composite wgEncodeGencode
-dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-dccAccession wgEncodeEH001879
-expId 1879
-fileName wgEncodeGencodeAutoV4.gtf.gz
-grant Hubbard
-lab Sanger
-labExpId V4
-level 3
-project wgEncode
-subId 2094
-tableName wgEncodeGencodeAutoV4
-
-metaObject wgEncodeGencodeClassesV4
-objType table
-composite wgEncodeGencode
-dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-dccAccession wgEncodeEH001879
-expId 1879
-fileName wgEncodeGencodeClassesV4.tab.gz
-grant Hubbard
-lab Sanger
-labExpId V4
-project wgEncode
-subId 2094
-tableName wgEncodeGencodeClassesV4
-
 metaObject wgEncodeGencodeManualV3
 objType table
 annotation Manual
-composite wgEncodeGencode
+composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
@@ -98,56 +52,3 @@ project wgEncode
 subId 453
 tableName wgEncodeGencodeManualV3
 
-metaObject wgEncodeGencodeManualV4
-objType table
-annotation Manual
-composite wgEncodeGencode
-dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-dccAccession wgEncodeEH001879
-expId 1879
-fileName wgEncodeGencodeManualV4.gtf.gz
-grant Hubbard
-lab Sanger
-labExpId V4
-level 1-2
-project wgEncode
-subId 2094
-tableName wgEncodeGencodeManualV4
-
-metaObject wgEncodeGencodePolyAV4
-objType table
-annotation Manual
-composite wgEncodeGencode
-dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-dccAccession wgEncodeEH001879
-expId 1879
-fileName wgEncodeGencodePolyAV4.gtf.gz
-grant Hubbard
-lab Sanger
-labExpId V4
-level 2
-project wgEncode
-subId 2094
-tableName wgEncodeGencodePolyAV4
-
-metaObject wgEncodeGencodeYalePseudoV4
-objType table
-composite wgEncodeGencode
-dataType Gencode
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-01
-dccAccession wgEncodeEH001879
-expId 1879
-fileName wgEncodeGencodeYalePseudoV4.gtf.gz
-grant Hubbard
-lab Sanger
-labExpId V4
-project wgEncode
-subId 2094
-tableName wgEncodeGencodeYalePseudoV4
-
-# MAGIC: 1307031862
