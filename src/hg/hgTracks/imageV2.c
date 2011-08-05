@@ -1794,7 +1794,7 @@ if(slice->parentImg)
         hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
 
     #ifdef IMAGEv2_DRAG_SCROLL
-    if(imgBox->showPortal && sliceType==stData)
+    if(imgBox->showPortal && (sliceType==stData || sliceType==stCenter))
         hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
     #endif //def IMAGEv2_DRAG_SCROLL
     hPrintf("'>\n");
@@ -1928,12 +1928,16 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
 
     // Main/Data image region
+#ifdef IMAGEv2_DRAG_SCROLL
+    hPrintf(" <TD id='td_data_%s' title='click & drag to scroll; shift+click & drag to zoom' width=%d class='tdData'>\n", trackName, imgBox->width);
+#else///ifndef IMAGEv2_DRAG_SCROLL
     hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
+#endif//ndef IMAGEv2_DRAG_SCROLL
     // centerLabel
     if(imgTrack->hasCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
-        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,TRUE);
         hPrintf("\n");
         }
     // data image
