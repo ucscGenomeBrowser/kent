@@ -1717,7 +1717,9 @@ if(slice->parentImg && slice->parentImg->file != NULL)
         hPrintf(" title='%s'", htmlEncode(slice->title) );           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
         hPrintf("' title='%s'", htmlEncode(slice->parentImg->title) );// Adds image wide title
-    hPrintf(" ondrag='{return false;}'>");
+    if(slice->type==stData || slice->type==stCenter)
+        hPrintf(" ondrag='{return false;}'");
+    hPrintf(">");
     }
 else
     {
