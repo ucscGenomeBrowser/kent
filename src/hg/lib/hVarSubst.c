@@ -111,7 +111,7 @@ if (errno)
              words[0]);
 dyStringAppend(dest, "The following matrix was used:<P>\n");
 k = 1;
-dyStringAppend(dest, "<BLOCKQUOTE><TABLE CELLPADDING=4 BORDER=1 style='border:1px solid #aaaaaa;'>\n");
+dyStringAppend(dest, "<BLOCKQUOTE><TABLE class='chainTbl'>\n");
 if (matrixHeader)
     {
     dyStringAppend(dest, "<TR ALIGN=right><TD>&nbsp;</TD>");
