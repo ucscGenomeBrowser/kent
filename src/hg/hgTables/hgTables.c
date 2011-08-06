@@ -895,10 +895,24 @@ for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll)
         grpFree(&group);
     }
 
+/* if we have custom tracks, we want to add the track hubs
+ * after that group */
+struct grp *addAfter = NULL;
+if (sameString(groupList->name, "user"))
+    addAfter = groupList;
+
 /* Add in groups from hubs. */
 for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpList))
     {
-    slAddTail(&groupList, group);
+    /* check to see if we're inserting hubs rather than
+     * adding them to the front of the list */
+    if (addAfter != NULL)
+	{
+	group->next = addAfter->next;
+	addAfter->next = group;
+	}
+    else
+	slAddHead(&groupList, group);
     hashAdd(groupsInDatabase, group->name, group);
     }
 

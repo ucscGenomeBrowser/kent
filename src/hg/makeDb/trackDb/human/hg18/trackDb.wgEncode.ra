@@ -1,5 +1,84 @@
 # $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.1011 2010/06/11 21:13:51 katrina Exp $
 
+
+# Affymetrix RNA-chip (wrangler: braney)
+include wgEncodeAffyRnaChip.ra
+
+# BU ORChID (wrangler: Brian)
+include wgEncodeBuOrchid.ra
+
+# BROAD Histone (wrangler: Vankat, assisted by Tim)
+include wgEncodeBroadChipSeq.new.ra alpha
+include wgEncodeBroadChipSeq.ra beta,public
+
+# BROAD Chromatin modelling by HMM HMM (wrangler: Tim)
+include wgEncodeBroadHmm.ra
+
+# Caltech RNA-seq (wrangler: braney)
+include wgEncodeCaltechRnaSeq.ra
+
+# CSHL short rna-seq (wrangler: braney)
+include wgEncodeCshlShortRnaSeq.ra
+
+# CSHL long rna-seq (wrangler: braney)
+include wgEncodeCshlLongRnaSeq.ra
+
+# Duke Affy Exon (wrangler: braney, Cricket, Jeff)
+include wgEncodeDukeAffyExon.ra
+
+# Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
+include wgEncodeChromatinMap.new.ra alpha
+include wgEncodeChromatinMap.ra beta,public
+
+# GIS RNA-seq (wrangler: braney)
+include wgEncodeGisRnaSeq.ra
+
+# GIS DNA Pet (wrangler: braney)
+include wgEncodeGisDnaPet.ra
+
+
+# Helicos RNA-seq (wrangler: braney)
+include wgEncodeHelicosRnaSeq.ra
+
+# HudsonAlpha Rna Seq (wrangler: braney)
+include wgEncodeHudsonalphaRnaSeq.ra
+
+# HudsonAlpha CNV (wrangler: braney)
+include wgEncodeHudsonalphaCnv.ra
+
+# HudsonAlpha Methyl-seq (wrangler: braney)
+include wgEncodeHudsonalphaMethylSeq.ra
+
+# HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
+include wgEncodeHudsonalphaChipSeq.ra beta,public
+include wgEncodeHudsonalphaChipSeq.new.ra alpha
+
+# Riken CAGE (wrangler: braney)
+include wgEncodeRikenCage.ra
+
+# Mapability - Cross lab special track (wrangler: tdreszer)
+include wgEncodeMapability.ra
+
+# UW Histone (wrangler: Venkat, assisted by Tim)
+include wgEncodeUwChIPSeq.ra
+
+# UW DGF (wrangler: Venkat, assisted by Tim)
+include wgEncodeUwDGF.ra
+
+# UW DNase-seq (wrangler: Venkat, assisted by Tim)
+include wgEncodeUwDnaseSeq.ra beta,public
+include wgEncodeUwDnaseSeq.new.ra alpha
+
+# Yale RNA-seq (wrangler: tdreszer)
+# include wgEncodeYaleRnaSeq.ra
+
+# Yale TFBS (wrangler: Venkat, assisted by Tim)
+include wgEncodeYaleChIPseq.ra
+
+
+# GIS RNA Pet (wrangler: braney)
+include wgEncodeGisPet.ra
+
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
 
@@ -206,21 +285,6 @@ priority 300
     priority 4
     color 58,119,40
 
-# BROAD Histone (wrangler: Vankat, assisted by Tim)
-include wgEncodeBroadChipSeq.new.ra alpha
-include wgEncodeBroadChipSeq.ra beta,public
-
-# BROAD Chromatin modelling by HMM HMM (wrangler: Tim)
-include wgEncodeBroadHmm.ra
-
-# Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
-include wgEncodeChromatinMap.new.ra alpha
-include wgEncodeChromatinMap.ra beta,public
-
-
-# Mapability - Cross lab special track (wrangler: tdreszer)
-include wgEncodeMapability.ra
-
         
 # NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 
@@ -302,12 +366,6 @@ wgEncode 1
         subGroups view=EB cellType=K562 promoter=SV40
         type bed 6
         color 46,0,184
-
-# Riken CAGE (wrangler: braney)
-include wgEncodeRikenCage.ra
-
-# Duke Affy Exon (wrangler: braney, Cricket, Jeff)
-include wgEncodeDukeAffyExon.ra
 
 # U. Washington Affy Exon (wrangler: Andy, Brian)
 
@@ -1312,18 +1370,6 @@ canPack On
     priority 1.7
 
 
-# UW Histone (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwChIPSeq.ra
-
-
-# UW DGF (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDGF.ra
-
-
-# UW DNase-seq (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDnaseSeq.ra
-
-
 # UW DNAase-seq southerns - has been made obsolete
 # The jpg images will instead be made available as experiment level "attic" data in UW Dnase.
 # rename table wgEncodeUwSoutherns to wgEncodeUwSoutherns_obsoloete
@@ -1454,8 +1500,6 @@ type encodeFiveC
     interTableKind DHS
     priority 2
 
-# Affymetrix RNA-chip (wrangler: braney)
-include wgEncodeAffyRnaChip.ra
 
 # SUNY Albany genechp (wrangler: braney)
 
@@ -1545,19 +1589,6 @@ wgEncode 1
         type broadPeak
         color 133,0,33
 
-
-
-# Yale RNA-seq (wrangler: tdreszer)
-include trackDb.wgEncodeYaleRnaSeq.ra
-
-
-
-# Yale TFBS (wrangler: Venkat, assisted by Tim)
-include wgEncodeYaleChIPseq.ra
-
-# HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
-include wgEncodeHudsonalphaChipSeq.ra beta,public
-include wgEncodeHudsonalphaChipSeq.new.ra alpha
 
 #  GENCODE genes (wrangler: braney )
 
@@ -1787,30 +1818,6 @@ wgEncode 1
     cell K562
 #    color 46,0,184
 
-# HudsonAlpha CNV (wrangler: braney)
-include wgEncodeHudsonalphaCnv.ra
-
-# HudsonAlpha Methyl-seq (wrangler: braney)
-include wgEncodeHudsonalphaMethylSeq.ra
-
-# Wold Lab (Caltech) RNA-seq (wrangler: braney)
-include wgEncodeCaltechRnaSeq.ra
-
-# GIS RNA-seq (wrangler: braney)
-include wgEncodeGisRnaSeq.ra
-
-# GIS DNA Pet (wrangler: braney)
-include wgEncodeGisDnaPet.ra
-
-# Helicos RNA-seq (wrangler: braney)
-include wgEncodeHelicosRnaSeq.ra
-
-# CSHL short rna-seq (wrangler: braney)
-include wgEncodeCshlShortRnaSeq.ra
-
-# CSHL long rna-seq (wrangler: braney)
-include wgEncodeCshlLongRnaSeq.ra
-
 # UMass Weng Lab TFBS Validation (wrangler: kate)
 
 track wgEncodeUmasshaTfbsValid
@@ -1845,9 +1852,3 @@ wgEncode 1
         type bed 6 +
         color 46,0,184
 
-include wgEncodeGisPet.ra
-
-include wgEncodeHudsonalphaRnaSeq.ra
-
-# BU ORChID (wrangler: Brian)
-include wgEncodeBuOrchid.ra

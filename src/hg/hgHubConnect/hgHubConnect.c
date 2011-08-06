@@ -84,7 +84,6 @@ if (count == 0)
     printf(
 	"<tr><td>No Track Hubs for this genome assembly</td></tr>"
 	"</td></table>");
-    cgiMakeButton("Submit", "Return to Genome Browser");
     printf("</thead></div>");
     return;
     }
@@ -143,7 +142,6 @@ for(hub = hubList; hub; hub = hub->next)
     }
 
 printf("</TR></tbody></TABLE>\n");
-cgiMakeButton("Submit", "Display Selected Hubs");
 printf("</div>");
 }
 
@@ -229,16 +227,13 @@ sqlFreeResult(&sr);
 if (gotAnyRows)
     {
     printf("</TR></tbody></TABLE>\n");
-    cgiMakeButton("Submit", "Display Selected Hubs");
     }
 else
     {
     printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
     printf("No Public Track Hubs for this genome assembly<BR>");
-    cgiMakeButton("Submit", "Return to Genome Browser");
     }
 
-printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</A> to add a public hub.</span>\n");
 printf("</div>");
 
 hDisconnectCentral(&conn);
@@ -334,6 +329,8 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
 // ... and now the main form
+if (cartVarExists(cart, hgHubConnectCgiDestUrl))
+    destUrl = cartOptionalString(cart, hgHubConnectCgiDestUrl);
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
 cartSaveSession(cart);
 
@@ -345,6 +342,11 @@ printf("<div id=\"tabs\">"
 
 hgHubConnectPublic();
 hgHubConnectUnlisted();
+printf("</div>");
+
+printf("<div class=\"tabFooter\">");
+cgiMakeButton("Submit", "Load Selected Hubs");
+printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</A> to add a public hub.</span>\n");
 printf("</div>");
 
 if (gotNew || gotDisconnect) // make MyHubs the default tab
@@ -363,7 +365,7 @@ cartWebEnd();
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
-    hgHubConnectCgiDestUrl,  hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
+    hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])

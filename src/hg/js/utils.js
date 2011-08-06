@@ -947,10 +947,13 @@ function waitMaskSetup(timeOutInMs)
     $(waitMask).css('display','block');
 
     // Things could fail, so always have a timeout.
-    if(timeOutInMs == undefined || timeOutInMs <=0)
+    if(timeOutInMs == undefined || timeOutInMs ==0)
         timeOutInMs = 30000; // IE can take forever!
 
-    setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+    if (timeOutInMs > 0)
+        setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+
+    return waitMask;  // The caller could add css if they wanted.
 }
 
 function _launchWaitOnFunction()
