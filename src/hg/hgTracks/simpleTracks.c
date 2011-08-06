@@ -2926,8 +2926,15 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
+#ifdef IMAGEv2_SHORT_MAPITEMS
+    char *name = tg->itemName(tg, item);
+    if (*name != '\0')
+        tg->mapItem(tg, hvg, item, name, tg->mapItemName(tg, item),
+            s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+#else///ndef IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
         s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+#endif///ndef IMAGEv2_SHORT_MAPITEMS
     /* Make the button mapboxes. */
     if (lButton)
         tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
