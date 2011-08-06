@@ -1449,6 +1449,26 @@ bits64 udcTell(struct udcFile *file)
 return file->offset;
 }
 
+static long bitRealDataSize(char *fileName)
+/* Return number of real bytes indicated by bitmaps */
+{
+struct udcBitmap *bits = udcBitmapOpen(fileName);
+int blockSize = bits->blockSize;
+long byteSize = 0;
+int blockCount = (bits->fileSize + blockSize - 1)/blockSize;
+if (blockCount > 0)
+    {
+    int bitmapSize = bitToByteSize(blockCount);
+    Bits *b = needLargeMem(bitmapSize);
+    mustReadFd(bits->fd, b, bitmapSize);
+    int bitsSet = bitCountRange(b, 0, blockCount);
+    byteSize = (long)bitsSet*blockSize;
+    freez(&b);
+    }
+udcBitmapClose(&bits);
+return byteSize;
+}
+
 static bits64 rCleanup(time_t deleteTime, boolean testOnly)
 /* Delete any bitmap or sparseData files last accessed before deleteTime */
 {
@@ -1471,6 +1491,7 @@ for (file = fileList; file != NULL; file = file->next)
 	}
     else if (sameString(file->name, bitmapName))
         {
+	verbose(2, "%ld (%ld) %s/%s\n", bitRealDataSize(file->name), (long)file->size, getCurrentDir(), file->name);
 	if (file->lastAccess < deleteTime)
 	    {
 	    /* Remove all files when get bitmap, so that can ensure they are deleted in 

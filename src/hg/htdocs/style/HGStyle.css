@@ -78,7 +78,7 @@ LI {		line-height: 1.5;
 
 
 /*** used by CCDS details page in hgc *** */
-    
+
 /* give the tables some breathing room and a consistent width */
 TABLE.hgcCcds {
     margin-bottom: 30px;
@@ -168,6 +168,9 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+table.chainTbl {border-collapse: collapse;}
+table.chainTbl td {border: 1px solid black; padding: 5px;}
 
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }

@@ -1,0 +1,82 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release1 of the "ENCODE wgEncodeUw5C"
+The composite track is wgEncodeUw5C
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release1 (new+untouched):
+    Tables: 0
+    Files: 41
+    Gbdbs: 0
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+
+C) New tables (0):
+
+C') New files (38 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUw5C/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CBjUw5cgeneMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CBjUw5cgeneMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CBjUw5cgeneRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CBjUw5cgeneRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CCaco2Uw5cmycMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CCaco2Uw5cmycMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CCaco2Uw5cmycRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CCaco2Uw5cmycRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CGm06990Uw5cgeneMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CGm06990Uw5cgeneMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CGm06990Uw5cgeneRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CGm06990Uw5cgeneRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CGm12878Uw5cmycMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CGm12878Uw5cmycMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CGm12878Uw5cmycRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CGm12878Uw5cmycRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CHepg2Uw5cgeneMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CHepg2Uw5cgeneMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CHepg2Uw5cgeneRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CHepg2Uw5cgeneRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CK562Uw5cmycMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CK562Uw5cmycMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CK562Uw5cmycRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CK562Uw5cmycRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CLncapUw5cmycMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CLncapUw5cmycMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CLncapUw5cmycRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CLncapUw5cmycRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CMcf7Uw5cmycMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CMcf7Uw5cmycMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CMcf7Uw5cmycRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CMcf7Uw5cmycRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CSknshraUw5cgeneMatrixRep1.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CSknshraUw5cgeneMatrixRep2.matrix.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CSknshraUw5cgeneRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5CSknshraUw5cgeneRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5cGeneTargetedPrimers.txt.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/wgEncodeUw5cMycPrimers.txt.tgz
+
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUw5C/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUw5C/release1/md5sum.txt

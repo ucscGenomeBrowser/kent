@@ -32,8 +32,8 @@ This track is initially released with a single view:
 <DT><i>Peaks</i>
 <DD>The Peaks view shows the genomic extent of the sequencing read peaks.
 <P>
-<DT><I>Raw Signal</I>
-<DD>Density graph of signal enrichment based on a normalized aligned read density (Read Per Million, RPM).  RPM is reported in the score field and is equal to the number of reads at that position divided by the total number of reads divided by one million.  The Raw Signal view displays dense, continuous data as a graph and the RPM measure assists in visualizing the relative amount of a given transcript across multiple samples.</DD>
+<DT><I>Signal</I>
+<DD>Density graph of signal enrichment based on a normalized aligned read density (Read Per Million, RPM).  RPM is reported in the score field and is equal to the number of reads at that position divided by the total number of reads divided by one million.  The Signal view is unflitered and displays dense, continuous data as a graph and the RPM measure assists in visualizing the relative amount of a given transcript across multiple samples.</DD>
 <P>
 <DT><I>Alignments</I>
 <DD>The Alignments view shows reads mapped to the genome.
@@ -53,9 +53,8 @@ Approximately 30 million single end sequencing reads reads were obtained for eac
 RIP samples were analyzed for signal that was at or above the 60th percentile and statistically enriched compared to the negative control.
 Sequences were analyzed using <A HREF="http://tophat.cbcb.umd.edu/">TopHat</A> (Trapnell <EM>et al.</EM>, 2009) with 
 <A HREF="http://bowtie-bio.sourceforge.net/index.shtml">Bowtie</A> (Langmead <EM>et al.</EM>, 2009).
-<br>
-Peaks:
-<br>
+</P>
+<P>
 Peaks were called from the top 40 &#37; of TopHat normalized reads,
 with a max gap,  min run of (24:48).
 Unions of overlapping peak regions from total RNA replicates are presented with p-value from a one tailed t-test for average signal from replicates versus 0 
@@ -67,7 +66,7 @@ For both totals and RIPs, the peak scores are scaled relative p-values between t
 
 <H2>Credits</H2>
 <P>These data were produced and analyzed by a collaboration between the
-<A HREF="http://cnse.albany.edu/StaffDirectory/index.cfm?InstanceID=576&step=staffdetail&StaffDirectoryID=129"
+<A HREF="http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml"
 TARGET=_BLANK>
 Tenenbaum lab</A>
 at the University at Albany-SUNY, College of Nanoscale
@@ -95,40 +94,43 @@ Contact:
 <P>Baroni TE, Chittur SV, George AD, Tenenbaum SA.
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/18369977">
 Advances in RIP-chip analysis : RNA-binding protein
-immunoprecipitation-microarray profiling.
-</A>
+immunoprecipitation-microarray profiling
+</A>. 
 <EM>Methods Mol Biol</EM>. 2008;419:93-108.
 </P>
 
 <P>George AD, Tenenbaum SA.
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/17114943">
-MicroRNA modulation of RNA-binding protein regulatory elements.
-</A>
+MicroRNA modulation of RNA-binding protein regulatory elements
+</A>. 
 <EM>RNA Biol</EM>. 2006;3(2):57-9. Epub 2006 Apr 1.
 </P>
 
 <P>Keene JD, Tenenbaum SA.
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/12086614">
-Eukaryotic mRNPs may represent posttranscriptional operons.
-</A>
+Eukaryotic mRNPs may represent posttranscriptional operons
+</A>. 
 <EM>Mol Cell</EM>. 2002;9(6):1161-7.
 </P>
 
 <P>Langmead B, Trapnell C, Pop M, Salzberg SL.
-<A TARGET=_BLANK HREF="http://genomebiology.com/2009/10/3/R25"><U>Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</U></A><EM>Genome Biology</EM>. 2009 Mar; 10:R25.</P>
+<A TARGET=_BLANK HREF="http://genomebiology.com/2009/10/3/R25">
+<U>Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</U>
+</A>. 
+<EM>Genome Biology</EM>. 2009 Mar; 10:R25.</P>
 
 <P>Penalva LO, Tenenbaum SA, Keene JD.
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/14770002">
-Gene expression analysis of messenger RNP complexes.
-</A>
+Gene expression analysis of messenger RNP complexes
+</A>. 
 <EM>Methods Mol Biol</EM>. 2004;257:125-34.
 </P>
 
 <P>Tenenbaum SA, Lager PJ, Carson CC, Keene JD.
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/12054896">
 Ribonomics: identifying mRNA subsets in mRNP complexes using
-antibodies to RNA-binding proteins and genomic arrays.
-</A>
+antibodies to RNA-binding proteins and genomic arrays
+</A>. 
 <EM>Methods</EM>. 2002 Feb;26(2):191-8.
 </P>
 
