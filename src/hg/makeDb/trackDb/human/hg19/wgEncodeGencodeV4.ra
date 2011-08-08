@@ -1,7 +1,7 @@
 track wgEncodeGencodeV4
 compositeTrack on
 shortLabel GENCODE Genes V4
-longLabel ENCODE GENCODE Gene Annotations
+longLabel ENCODE GENCODE V4 Gene Annotations
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks
@@ -17,7 +17,7 @@ fileSortOrder tableName=Contents dccAccession=UCSC_Accession
 type genePred
 hgGene on
 hgsid on
-html wgEncodeGencodeV4
+html wgEncodeGencode
 baseColorUseCds given
 baseColorDefault genomicCodons
 wgEncode 1
@@ -49,7 +49,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     track wgEncodeGencodeManualV4
     subTrack wgEncodeGencodeV4
     shortLabel Gencode Manual
-    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (May 2010)
+    longLabel ENCODE GENCODE V4 Manual Gene Annotations (level 1+2) (May 2010)
     type genePred
     priority 1
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
@@ -59,7 +59,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     track wgEncodeGencodeAutoV4
     subTrack wgEncodeGencodeV4
     shortLabel Gencode Auto
-    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (May 2010)
+    longLabel ENCODE GENCODE V4 Automated Gene Annotations (level 3) (May 2010)
     type genePred
     priority 2
     #url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
@@ -69,14 +69,14 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     track wgEncodeGencodePolyaV4
     subTrack wgEncodeGencodeV4 off
     shortLabel Gencode PolyA
-    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (May 2010)
+    longLabel ENCODE GENCODE V4 PolyA Transcript Annotations (level 2) (May 2010)
     type genePred
     priority 4
 
     track wgEncodeGencode2wayConsPseudoV4
     subTrack wgEncodeGencodeV4 off
     shortLabel Gencode Pseudo
-    longLabel ENCODE Gencode 2way Pseudogenes (level 3) (May 2010)
+    longLabel ENCODE GENCODE V4 2way Pseudogenes (level 3) (May 2010)
     type genePred
     priority 5
 
