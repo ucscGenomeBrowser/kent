@@ -233,6 +233,10 @@ div.sliceDiv { overflow:hidden; }
 .trDrag { background-color: #CCFFCC; }
 .dragHandle { cursor: n-resize; }
 
+/* in hgTracks imageV2, left label (and reverse rightLabel) now uses css for red line */
+.tdLeft { border-right:1px solid #FFB4B4; }
+.tdRight { border-left:1px solid #FFB4B4; }
+
 /* These are duplicates of btnBlue and trDrag but allow useful highlighting to persist after hover */
 .blueButtons { background-color:#91B3E6; }
 .greenRows { background-color: #CCFFCC; }
