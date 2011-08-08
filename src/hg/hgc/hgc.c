@@ -23761,6 +23761,62 @@ if (sameString("hg18", database))
  hFreeConn(&conn);
 }
 
+void doGeneReviews(struct trackDb *tdb, char *itemName)
+/* generate the detail page for geneReviews */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+//char *table = tdb->table;
+char query[512];
+int start = cartInt(cart, "o");
+int num = 4;
+int i;
+char *clickMsg = "Click 'Short name' link below to search GeneReviews";
+boolean firstTime = TRUE;
+
+genericHeader(tdb, itemName);
+genericBedClick(conn, tdb, itemName, start, num);
+
+printf("<BR><B> GeneReview available for %s:</B><BR>",itemName);
+printf("%s<BR>",clickMsg);
+safef(query, sizeof(query), "select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+        char *grShort = *row++;
+        char *diseaseID = *row++;
+        char *diseaseName = *row++;
+
+
+        printf("<PRE>");
+        if (firstTime)
+        {
+        firstTime = FALSE;
+        
+            // #1234567890123456789012345678901234567890
+        printf("Short name               Disease ID       GeneTests disease name<BR>");
+        printf("-----------------------------------------------------------");
+        printf("-----------------------------------------------------------");  
+        printf("----------------------------------<BR>");
+        }      
+        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+        if (strlen(grShort) <= 20) {
+          for (i = 0; i <  28-strlen(grShort); i ++ )
+             { 
+                printf("%s", " " );
+             }
+           }
+         printf("%-10s    %s<BR>", diseaseID, diseaseName);
+        printf("</PRE>");
+    }  /* end while */
+
+ printf("<BR>");
+ printTrackHtml(tdb);
+ hFreeConn(&conn);
+
+
+} /* end of doGeneReviews */
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -24974,6 +25030,10 @@ else if (startsWith("numtS", table))
 else if (startsWith("cosmic", table))
     {
     doCosmic(tdb, item);
+    }
+else if (startsWith("geneReviews", table))
+    {
+    doGeneReviews(tdb, item);
     }
 else if (tdb != NULL)
     {

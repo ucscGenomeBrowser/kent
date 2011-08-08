@@ -4069,3 +4069,12 @@ searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
 termiRegex HSA_NumtS_*
 
+track geneReviews
+shortLabel Gene Reviews
+longLabel Gene Reviews
+group x
+priority 500.3
+visibility hide
+type bed 4
+itemRgb on
+html geneReviews
