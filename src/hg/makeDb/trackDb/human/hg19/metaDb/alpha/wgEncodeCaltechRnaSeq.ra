@@ -79,7 +79,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1874
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2
 objType file
@@ -103,7 +103,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1874
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3
 objType table
@@ -2848,7 +2848,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1633
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2
 objType file
@@ -2872,7 +2872,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1874
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3
 objType table
@@ -5300,7 +5300,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1634
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2
 objType file
@@ -5324,7 +5324,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1635
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3
 objType table
@@ -6192,7 +6192,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1636
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2
 objType file
@@ -6216,7 +6216,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1638
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
 objType table
@@ -7682,7 +7682,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1639
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2
 objType file
@@ -7706,7 +7706,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1645
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3
 objType table
@@ -8574,7 +8574,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1874
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dFastqRep2
 objType file
@@ -8598,7 +8598,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1646
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
 objType table
@@ -10960,7 +10960,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1483
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3
 objType table
@@ -12264,4 +12264,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -799829860
+# MAGIC: -794035123
