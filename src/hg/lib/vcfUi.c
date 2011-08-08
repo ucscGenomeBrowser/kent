@@ -159,13 +159,38 @@ errCatchFree(&errCatch);
 return vcff;
 }
 
+void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
+			    char *name)
+/* Let the user specify a height for the track. */
+{
+if (vcff != NULL && vcff->genotypeCount > 1)
+    {
+    printf("<B>Haplotype sorting display height:</B> \n");
+    boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
+    int cartHeight = cartUsualIntClosestToHome(cart, tdb, compositeLevel,
+					       VCF_HAP_HEIGHT_VAR, VCF_DEFAULT_HAP_HEIGHT);
+    char varName[1024];
+    safef(varName, sizeof(varName), "%s." VCF_HAP_HEIGHT_VAR, name);
+    cgiMakeIntVarInRange(varName, cartHeight, "Height (in pixels) of track", 5, "10", "2500");
+    }
+}
+
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* VCF: Variant Call Format.  redmine #3710 */
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 printf("<TABLE%s><TR><TD>", boxed ? " width='100%'" : "");
 struct vcfFile *vcff = vcfHopefullyOpenHeader(cart, tdb);
-vcfCfgHaplotypeCenter(cart, tdb, vcff, NULL, NULL, 0, "mainForm");
+if (vcff != NULL)
+    {
+    vcfCfgHaplotypeCenter(cart, tdb, vcff, NULL, NULL, 0, "mainForm");
+    vcfCfgHapClusterHeight(cart, tdb, vcff, name);
+    }
+else
+    {
+    printf("Sorry, couldn't access VCF file.<BR>\n");
+    }
+
 // filter:
 //   by qual column
 //   by filter column
