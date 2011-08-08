@@ -14,6 +14,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 #include "search.h"
+#include "hubConnect.h"
 
 #define DOWNLOADS_ONLY_TRACKS_INCLUDED
 #ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
@@ -89,7 +90,6 @@ if (changeVis != -2)
 
 jsInit();
 cgiMakeHiddenVar(configGroupTarget, "none");
-boolean isFirstNotCtGroup = TRUE;
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
@@ -162,8 +162,8 @@ for (group = groupList; group != NULL; group = group->next)
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
     hPrintf("</TR>\n");
 
-    /* First non-CT group gets ruler. */
-    if (!showedRuler && isFirstNotCtGroup &&
+    /* First non-CT, non-hub group gets ruler. */
+    if (!showedRuler && !isHubTrack(group->name) &&
                 differentString(group->name, "user"))
 	{
         showedRuler = TRUE;
@@ -191,8 +191,6 @@ for (group = groupList; group != NULL; group = group->next)
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 	hPrintf("</TR>\n");
 	}
-    if (differentString(group->name, "user"))
-        isFirstNotCtGroup = FALSE;
     /* Scan track list to determine which supertracks have visible member
      * tracks, and to insert a track in the list for the supertrack.
      * Sort tracks and supertracks together by priority */

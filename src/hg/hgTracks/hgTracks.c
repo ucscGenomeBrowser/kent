@@ -5285,6 +5285,7 @@ hPrintf("</FORM>\n");
 
 /* hidden form for track hub CGI */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
+cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTracks");
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
