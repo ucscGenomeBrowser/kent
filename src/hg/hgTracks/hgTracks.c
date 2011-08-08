@@ -1320,7 +1320,7 @@ int portX = insideX;
 // If a portal was established, then set the portal dimensions
 int portalStart,chromStart;
 double basesPerPixel;
-if (imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
+if (theImgBox && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
     {
     portX = (int)((portalStart - chromStart) / basesPerPixel);
     portX += gfxBorder;
@@ -1961,7 +1961,7 @@ if(theImgBox)
     if (withLeftLabels)
         {
         sliceWidth[stButton]   = trackTabWidth + 1;
-        sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 2;
+        sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 1;
         sliceOffsetX[stSide]   = (revCmplDisp? (tl.picWidth - sliceWidth[stSide] - sliceWidth[stButton]) : sliceWidth[stButton]);
         sliceOffsetX[stButton] = (revCmplDisp? (tl.picWidth - sliceWidth[stButton]) : 0);
         }
@@ -2228,10 +2228,13 @@ if (withLeftLabels && psOutput == NULL)
 
 if (withLeftLabels)
     {
-    Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
+    if (theImgBox == NULL)
+        {
+        Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
 
-    hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
-        gfxBorder, pixHeight, lightRed);
+        hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
+            gfxBorder, pixHeight, lightRed);
+        }
     y = gfxBorder;
     if (rulerMode != tvHide)
         {
