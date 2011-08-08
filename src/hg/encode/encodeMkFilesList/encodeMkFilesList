@@ -254,7 +254,7 @@ if ($opt{'md5'}){
 			unless (-e $file){next}
 			#store md5sums and modification dates in their respective hashes;
 			$md5sums{$file} = $md5;
-			unless ($lastmod){$lastmod{$file} = $lastmod}
+			if ($lastmod){$lastmod{$file} = $lastmod}
 			else {$lastmod{$file} = 0}
 		}
 		close MDH;
