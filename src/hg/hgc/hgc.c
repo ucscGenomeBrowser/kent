@@ -10728,6 +10728,8 @@ if (startsWith("hg", database))
     printf("%s</A><BR>\n", rl->name);
     }
 printStanSource(rl->mrnaAcc, "mrna");
+printGeneReviews(rl->name);
+
 }
 
 void prKnownGeneInfo(struct sqlConnection *conn, char *rnaName,
@@ -23765,21 +23767,31 @@ void doGeneReviews(struct trackDb *tdb, char *itemName)
 /* generate the detail page for geneReviews */
 {
 struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr;
-char **row;
 //char *table = tdb->table;
-char query[512];
 int start = cartInt(cart, "o");
 int num = 4;
+
+ genericHeader(tdb, itemName);
+ genericBedClick(conn, tdb, itemName, start, num);
+ printGeneReviews(itemName);
+ printf("<BR>");
+ printTrackHtml(tdb);
+ hFreeConn(&conn);
+}
+
+void printGeneReviews(char *itemName)
+/* print GeneReviews associated to this item */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[512];
+
+
 int i;
 char *clickMsg = "Click 'Short name' link below to search GeneReviews";
 boolean firstTime = TRUE;
 
-genericHeader(tdb, itemName);
-genericBedClick(conn, tdb, itemName, start, num);
-
-printf("<BR><B> GeneReview available for %s:</B><BR>",itemName);
-printf("%s<BR>",clickMsg);
 safef(query, sizeof(query), "select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -23789,16 +23801,18 @@ while ((row = sqlNextRow(sr)) != NULL)
         char *diseaseName = *row++;
 
 
-        printf("<PRE>");
         if (firstTime)
         {
-        firstTime = FALSE;
-        
-            // #1234567890123456789012345678901234567890
-        printf("Short name               Disease ID       GeneTests disease name<BR>");
-        printf("-----------------------------------------------------------");
-        printf("-----------------------------------------------------------");  
-        printf("----------------------------------<BR>");
+          printf("<BR><B> GeneReview available for %s:</B><BR>",itemName);
+          printf("%s<BR>",clickMsg);
+
+          firstTime = FALSE;
+          printf("<PRE>");
+              // #1234567890123456789012345678901234567890
+          printf("Short name               Disease ID       GeneTests disease name<BR>");
+          printf("-----------------------------------------------------------");
+          printf("-----------------------------------------------------------");  
+          printf("----------------------------------<BR>");
         }      
         printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
         if (strlen(grShort) <= 20) {
@@ -23808,15 +23822,11 @@ while ((row = sqlNextRow(sr)) != NULL)
              }
            }
          printf("%-10s    %s<BR>", diseaseID, diseaseName);
-        printf("</PRE>");
     }  /* end while */
-
+ printf("</PRE>");
  printf("<BR>");
- printTrackHtml(tdb);
  hFreeConn(&conn);
-
-
-} /* end of doGeneReviews */
+} /* end of iprintGeneReviews */
 
 void doMiddle()
 /* Generate body of HTML. */

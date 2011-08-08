@@ -428,6 +428,9 @@ void doGvf(struct trackDb *tdb, char *item);
 void doGeneReviews(struct trackDb *tdb, char *itemName);
 /* generate the detail page for geneReviews */
 
+void printGeneReviews(char *itemName);
+/* print GeneReviews associated to this item */
+
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 #endif
