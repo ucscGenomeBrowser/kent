@@ -1790,10 +1790,10 @@ if(slice->parentImg)
         offsetX += (imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel;
         width=imgBox->portalWidth;
         }
-        hPrintf("  <div style='width:%dpx; height:%dpx;",width,height);
-        if (sliceType == stCenter && imgTrack->centerLabelSeen == clNotSeen)
-            hPrintf(" display:none;");
-        hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
+    hPrintf("  <div style='width:%dpx; height:%dpx;",width,height);
+    if (sliceType == stCenter && imgTrack->centerLabelSeen == clNotSeen)
+        hPrintf(" display:none;");
+    hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
 
     #ifdef IMAGEv2_DRAG_SCROLL
     if(imgBox->showPortal && (sliceType==stData || sliceType==stCenter))
@@ -1922,9 +1922,9 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
-            hPrintf(" <TD id='td_%s' class='dragHandle' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
+            hPrintf(" <TD id='td_%s' class='dragHandle tdLeft' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
         else
-            hPrintf(" <TD id='td_%s'>\n",name);
+            hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
         hPrintf("</TD>\n");
         }
@@ -1952,9 +1952,9 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // rightLabel
         safef(name, sizeof(name), "side_%s", trackName);
         if (imgTrack->reorderable)
-            hPrintf(" <TD id='td_%s' class='dragHandle' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
+            hPrintf(" <TD id='td_%s' class='dragHandle tdRight' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
         else
-            hPrintf(" <TD id='td_%s'>\n",name);
+            hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
         hPrintf("</TD>\n");
         // button
