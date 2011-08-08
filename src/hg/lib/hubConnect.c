@@ -496,6 +496,27 @@ if (url != NULL)
 return FALSE;
 }
 
+unsigned hubResetError(char *url)
+/* clear the error for this url in the hubStatus table,return the id */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+
+safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+unsigned id = sqlQuickNum(conn, query);
+
+if (id == 0)
+    errAbort("could not find url %s in status table (%s)\n", 
+	url, hubStatusTableName);
+
+safef(query, sizeof(query), "update %s set errorMessage=\"\" where hubUrl = \"%s\"", hubStatusTableName, url);
+
+sqlUpdate(conn, query);
+hDisconnectCentral(&conn);
+
+return id;
+}
+
 unsigned hubClearStatus(char *url)
 /* drop the information about this url from the hubStatus table */
 {

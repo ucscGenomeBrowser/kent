@@ -101,6 +101,9 @@ unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
     char *url, char **errorMessage);
 /* find or add a URL to the status table */
 
+unsigned hubResetError(char *url);
+/* clear the error for this url in the hubStatus table,return the id */
+
 unsigned hubClearStatus(char *url);
 /* drop the information about this url from the hubStatus table,return the id */
 

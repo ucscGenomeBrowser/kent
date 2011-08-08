@@ -11,7 +11,7 @@ dragAndDrop subTracks
 priority 0
 type bed 3
 wgEncode 1
-#fileSortOrder replicate=Version view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+fileSortOrder replicate=Version view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 maxWindowToQuery 10000000
 noInherit on
 

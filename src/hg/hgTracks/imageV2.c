@@ -1663,7 +1663,7 @@ hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' onmouseover='mapItemMouseOver(this)' onmouseout='mapItemMouseOut(this)' onclick='return mapClk(this);'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' class='area'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)
@@ -1710,13 +1710,15 @@ if(slice->parentImg && slice->parentImg->file != NULL)
         hPrintf(" usemap='#map_%s'",name);
     hPrintf(" class='sliceImg %s",sliceTypeToClass(slice->type));
     if(slice->type==stData && imgBox->showPortal)
-        hPrintf(" panImg' ondrag='{return false;}'");
+        hPrintf(" panImg'");
     else
         hPrintf("'");
     if(slice->title != NULL)
         hPrintf(" title='%s'", htmlEncode(slice->title) );           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
         hPrintf("' title='%s'", htmlEncode(slice->parentImg->title) );// Adds image wide title
+    if(slice->type==stData || slice->type==stCenter)
+        hPrintf(" ondrag='{return false;}'");
     hPrintf(">");
     }
 else
@@ -1794,7 +1796,7 @@ if(slice->parentImg)
         hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
 
     #ifdef IMAGEv2_DRAG_SCROLL
-    if(imgBox->showPortal && sliceType==stData)
+    if(imgBox->showPortal && (sliceType==stData || sliceType==stCenter))
         hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
     #endif //def IMAGEv2_DRAG_SCROLL
     hPrintf("'>\n");
@@ -1873,9 +1875,10 @@ if(imgBox->bgImg)
 if(imgBox->showPortal)
     {
     // Let js code know what's up
+    int chromSize = hChromSize(database, chromName);
+    jsonHashAddNumber( jsonForClient,"chromStart",   1);
+    jsonHashAddNumber( jsonForClient,"chromEnd",     chromSize);
     jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       TRUE);
-    jsonHashAddNumber( jsonForClient,"imgBoxChromStart",   imgBox->chromStart);
-    jsonHashAddNumber( jsonForClient,"imgBoxChromEnd",     imgBox->chromEnd);
     jsonHashAddNumber( jsonForClient,"imgBoxWidth",        (imgBox->width - imgBox->sideLabelWidth));
     jsonHashAddNumber( jsonForClient,"imgBoxPortalStart",  imgBox->portalStart);
     jsonHashAddNumber( jsonForClient,"imgBoxPortalEnd",    imgBox->portalEnd);
@@ -1927,12 +1930,16 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
 
     // Main/Data image region
+#ifdef IMAGEv2_DRAG_SCROLL
+    hPrintf(" <TD id='td_data_%s' title='click & drag to scroll; shift+click & drag to zoom' width=%d class='tdData'>\n", trackName, imgBox->width);
+#else///ifndef IMAGEv2_DRAG_SCROLL
     hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
+#endif//ndef IMAGEv2_DRAG_SCROLL
     // centerLabel
     if(imgTrack->hasCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
-        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,TRUE);
         hPrintf("\n");
         }
     // data image

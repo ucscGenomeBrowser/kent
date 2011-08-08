@@ -1,0 +1,517 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+use Cwd;
+use Getopt::Long;
+use Digest::MD5;
+use threads;
+use threads::shared;
+BEGIN{unshift @INC, "/cluster/home/wong/bin/scripts"}
+use Time::HiRes qw(usleep nanosleep);
+
+use lib "/cluster/bin/scripts";
+use Encode;
+use HgAutomate;
+use HgDb;
+
+############
+### INIT ###
+############
+
+#grab environment variable for user
+my $user = "$ENV{'USER'}\n";
+
+#options array
+my %opt;
+
+#options handling
+my $goodopts = GetOptions(\%opt,
+					"md5",
+                    "filemask=s",
+                    "table=s",
+                    "verbose=i",
+                    "cv=s",
+                    "directory=s"
+                    );
+
+#make sure that GetOptions returns 1 and every option is good
+unless ($goodopts){
+	usage();
+}
+
+#defaults on the lines the "my", options loading in the if statements after
+my $configdir = "/data/apache/cgi-bin/encode";
+if ($opt{'cv'}){
+	$configdir = $opt{'cv'};
+}
+
+#make sure DB is present
+if (scalar(@ARGV) < 1){
+	print STDERR "db is required\n";
+	usage();
+}
+
+#metaDb
+my $mdb = "metaDb_$user";
+my $writedb = 1;
+if ($opt{'table'}){
+	$mdb = $opt{'table'};
+	if ($mdb eq "metaDb"){
+		$writedb = 0;
+	}
+}
+
+#working directory
+my $workdir = getcwd();
+if ($opt{'directory'}){
+	$workdir = "$opt{'directory'}";
+	$workdir =~ s/^\/\//\//;
+	$workdir =~ s/\/$//;
+}
+unless ($opt{'verbose'}){$opt{'verbose'} = 0}
+if ($opt{'verbose'} >= 1){
+	print STDERR "using dir: $workdir\n";
+}
+#this restricts the program to wonly work if the working directory matches wgEncode*
+unless ($workdir =~ m/wgEncode/){
+	print STDERR "Directory is not an encode directory: $workdir. Must match wgEncode*\n"; 
+	usage()
+}
+my $err = chdir($workdir);
+#print STDERR "err = $err\n";
+unless ($err) {die "can't change to directory $workdir\n"}
+
+#default, if updated, please update usage statement below ( search for "sub usage" )
+my %filemask;
+my $filemask = "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb";
+if ($opt{'filemask'}){
+	$filemask = $opt{'filemask'};
+}
+my @filemask = split /\s+/, $filemask;
+
+if ($opt{'verbose'} >= 1){print STDERR "filemasks (regex's):"}
+foreach my $mask (@filemask){
+	#convert $mask to regex if user used * as wildcard so that it can be inserted into 
+	#regex properly
+	$mask =~ s/^\*//;
+	$mask =~ s/\*$//;
+	$mask =~ s/[^\\][^\.|\]]\*/\.\*/;
+	$filemask{$mask} = 1;
+	if ($opt{'verbose'} >= 1){print STDERR " $mask"}
+}
+if ($opt{'verbose'} >= 1){print STDERR "\n"}
+@filemask = ();
+
+# I can't figure out a way to have hg19 be default and options at the same time
+# because if you run it blank in a directory with all options, and hg19 is default,
+# it will run, but it collides with how you would run it empty to get the usage statement
+
+
+############
+### MAIN ###
+############
+
+#the only required argument (database name)
+my $assm = $ARGV[0];
+
+#database connect
+my $db = HgDb->new(DB => $assm) or die "Can't connect to DB: $assm\n";
+
+#thread status, shared between threads
+my %thrdstat : shared;
+	
+#thread container
+my %thrdcont;
+	
+#md5sums container
+my %md5sums;
+
+#file information hash container
+#structure {fileinfo}->{filename}->{key}
+my %fileinfo;
+
+#%cv's structure returned from Encode.pm is {cv}->{type}->{term}->{key}
+my %cv = Encode::getControlledVocab($configdir);
+
+#grab filenames and human readable sizes
+#and processing
+my %sizes;
+my @files;
+my %files;
+my $ls = `ls -lh *.* 2>/dev/null`;
+my @list = split "\n", $ls;
+#parse through list to get the sizes and filenames
+foreach my $row (@list){
+	my @row = split /\s+/, $row;
+	push @files, $row[8];
+	#only put files that pass filemask in @filemask to be processed
+	foreach my $mask (keys %filemask){
+		if ($row[8] =~ m/$mask/){
+			push @filemask, $row[8];
+		}
+	}
+	
+	$files{$row[8]} = 1;
+	$sizes{$row[8]} = $row[4];
+}
+
+
+
+
+
+
+#set the sleep time based on largest file size found
+my $largest;
+my $sleep = "1";
+foreach my $size (keys %sizes){
+
+	#it's human readable, so just need to set for kilobyte and megabyte size range
+	if ($sizes{$size} =~ m/K/ && $sleep eq "1"){$sleep = "U"}
+	if ($sizes{$size} =~ m/M/ && ($sleep eq "1" || $sleep eq "U")){$sleep = "U2"}
+	if ($sizes{$size} =~ m/G/) {$sleep = 1}
+}
+
+###this grabs the sort order of the terms form the cv, based on priority, then alphaneumeric
+
+
+#grab only types that match typeOfTerm
+my %typeofterms = %{$cv{'typeOfTerm'}};
+
+my @sort;
+foreach my $key (sort keys %typeofterms){
+	#remove hidden ones
+	if (exists ${$typeofterms{$key}}{'hidden'}){
+		unless (${$typeofterms{$key}}{'hidden'} eq 'no'){
+			#print STDERR "$key = ${$typeofterms{$key}}{'hidden'} skipped\n";
+			next
+		}
+		#print STDERR "$key = ${$typeofterms{$key}}{'hidden'}\n";
+	}
+	else {
+		#print STDERR "$key had no value\n";
+	}
+	#make sure priority is there
+	unless (exists ${$typeofterms{$key}}{'priority'}){next}
+	#multidimensional array sort, @sort is the multidimentional one
+	#@array is a secondary array pushed onto the first one (@sort)
+	my @array;
+	push @array, $key;
+	push @array, ${$typeofterms{$key}}{'priority'};
+	push @sort, \@array;
+	
+}
+
+#actual sort function, first on the second value per row, then the first
+#translates to priority, the name
+@sort = sort {$a->[1] cmp $b->[1] || $a->[0] cmp $b->[0]} @sort;
+if ($opt{'verbose'} >=3 ){
+	print STDERR "\npriority list\n";
+	foreach my $sortval (@sort){
+		print STDERR "$$sortval[0] = $$sortval[1]\n";
+	}
+}
+
+#create one dimensional array for easy iteration
+my @sortorder;
+foreach my $element (@sort){
+	push @sortorder, $$element[0];
+}
+
+#ignore this, it's for debugging the stat function
+my @statlist = qw(dev inode file linknum uid grpid devid file lastaccess lastmodify inochng blksize blkamt);
+
+#md5 is threaded, files done in parallel
+if ($opt{'md5'}){
+	
+	##write in last file modification check here
+	my $md5hist = "md5sum.history";
+	my %lastmod;
+	my %tempmd5;
+	#copy over the filenames to tempmd5 hash
+	foreach my $file (@files) {
+		$tempmd5{$file} = 1;
+		$lastmod{$file} = 0;	
+	}
+	
+	#container for files to be md5'd
+	my @md5files;
+	my $foo = (-e $md5hist);
+	#check if md5sum.history exists
+	if (-e $md5hist){
+		open MDH, "$md5hist" or die "can't open history file\n";
+		while (<MDH>){
+			my $line = $_;
+			chomp $line;
+			my @line = split " ", $line;
+
+			#file is structures [filename] [md5sum] [last modified]
+			my $file = $line[0];
+			my $md5 = $line[1];
+			my $lastmod = $line[2];
+
+			#make sure files exists, hasn't been deleted etc.
+			unless (-e $file){next}
+			#store md5sums and modification dates in their respective hashes;
+			$md5sums{$file} = $md5;
+			unless ($lastmod){$lastmod{$file} = $lastmod}
+			else {$lastmod{$file} = 0}
+		}
+		close MDH;
+		
+		#can't remember how to easily to an array slice :-/
+		#hash for removing existing md5summed files from @md5files
+		#copies over data from @files, then removes files that have md5sums 
+		#and match last date modified
+		foreach my $file (keys %tempmd5){
+			
+			my @stat = stat("$file");
+			if ($opt{'verbose'} >= 3){
+				my $count = 0;
+				print STDERR "\n";
+				print STDERR "$file statistics:\n";
+				foreach my $stat (@stat){
+					print STDERR "$statlist[$count] = $stat\n";
+					$count++
+				}
+			}
+			my $filelastmod = $stat[9];
+			if ($lastmod{$file} == $filelastmod){
+				delete $tempmd5{$file};
+			}
+		}
+		@md5files = keys %tempmd5;
+		
+	}
+	else {
+		#if md5sum.history doesn't exist, copy over @files to @md5sum
+		@md5files = @files;
+	}
+	
+	if (@md5files){	
+		#only 2 threads allowed, filesystem limitation, ~ 125 MB/s from disk only
+		my $threads = 2;
+		#in case there is only 1 file to md5sum
+		if (scalar @md5files < 2){
+			$threads = scalar @md5files;
+		}
+		
+		#initializes the threads
+		for (my $i = 0; $i < $threads; $i++){
+			my $file = shift @md5files;
+			
+			#create the thread (reference to subroutine, file, threadnumber
+			$thrdcont{$i} = threads->create(\&md5sum, $file, $i);
+			
+			#unique thread id
+			my $tid = $thrdcont{$i}->tid();
+			if ($opt{'verbose'} >= 2){
+				print STDERR "Thread $tid started on $file\n";
+			}
+			$thrdstat{$i} = "0";
+		}
+		
+		#the loop to check if the threads are done and to spawn another one
+		while (@md5files){
+			foreach my $thrid (keys %thrdcont){
+				
+				#if done
+				if ($thrdstat{$thrid}){
+					
+					#join result back to main
+					my $sum = $thrdcont{$thrid}->join();
+			
+					#in threadstat, I return the value of the file, thus saving on one thread shared variable
+					$md5sums{$thrdstat{$thrid}} = $sum;
+	
+					#delete the finished thread
+					delete $thrdcont{$thrid};
+					
+					#if file list is still populated
+					if (@md5files){
+					
+						#start another thread
+						my $file = shift @md5files;
+						$thrdcont{$thrid} = threads->create(\&md5sum, $file, $thrid);
+						my $tid = $thrdcont{$thrid}->tid();
+						if ($opt{'verbose'} >=2 ){
+							print STDERR "Thread $tid started on $file\n";
+						}
+					}
+				}
+			}
+			
+			#wait 2 seconds before cehcking if a thread has finished
+			#this will slow the program down if hashing checking a lot of small files
+			#considering putting in a switch to override
+			if ($sleep eq "U"){usleep(10000)}
+			elsif ($sleep eq "U2"){usleep(400000)}
+			else{sleep 2}
+		}
+		
+		#clean up the remaining threads
+		foreach my $thrid (keys %thrdcont){
+			$md5sums{$thrdstat{$thrid}} = $thrdcont{$thrid}->join();
+		}
+	}
+
+	#print md5sum files (md5sum.txt and md5sum.history
+	open MDF, ">md5sum.txt" or die "can't open md5sum.txt file to write\n";
+	if ($opt{'verbose'} >= 2){
+		print STDERR "\n";
+		print STDERR "writing md5sum.tx\n";
+	}
+	foreach my $file (sort { $a cmp $b } @filemask){
+		print MDF "$file $md5sums{$file}\n";
+	}
+	close MDF;
+	open MDF, ">md5sum.history" or die "can't open md5sum.history to write\n";
+	if ($opt{'verbose'} >= 2){
+		print STDERR "\n";
+		print STDERR "writing md5sum.history\n";
+	}
+	foreach my $file (sort { $a cmp $b } keys %md5sums){
+		my @stat = stat("$file");
+		#stat[9] is last modify time from perl's file stat
+		print MDF "$file $md5sums{$file} $stat[9]\n";
+	}
+	close MDF;
+}
+
+if ($opt{'verbose'} >= 2){
+	print STDERR "\n";
+	print STDERR "files to be processed:\n";
+	foreach my $name (@filemask){
+		print STDERR "file = $name\n";
+	}
+}
+
+
+#go through each file and grab metadata, and dump to array convert to hash
+foreach my $file (@filemask){
+
+	my @fileparts = split '\.', $file;
+	my $tablename = $fileparts[0];
+	my $test = $fileparts[$#fileparts];
+	my $type;
+	
+	#decision tree
+	#look at last value after last dot
+	#if matches gz or tgz, filetype = second to last value
+	#else if last one = bai, type = bai
+	#else if only 2 elements after splitting at dots, type = last value
+	#else you've encountered a weird situation;
+	if ($test =~ m/gz/){
+		$type = $fileparts[($#fileparts - 1)];
+	}
+	elsif ($test eq 'bai'){
+		$type = "bai";
+	}
+	elsif (scalar (@fileparts) == 2) {
+		$type = $test;
+	}
+	else {
+		if ($opt{'verbose'} == 1){
+			print STDERR "something weird parsing name:\n";
+			print STDERR "file = $file\n";
+		}
+		$type = "unknown";
+	}
+	my %filehash;
+	if ($tablename =~ m/^wgEncode/){
+		#hash to store info about file MDB + extraneous, except size;
+		
+	
+		#perl DBI command to grab metadata, places functionality into the $query object
+		#which belings to DBI
+		my $query = $db->execute("select var,val from $mdb where obj = '$tablename'");
+	
+		#iterate thourgh all rows that match obj = $tablename
+		while(my $ref = $query->fetchrow_arrayref){
+			my @temp = @{$ref};
+			$filehash{$temp[0]} = $temp[1]; 
+		}
+	}
+	
+	$filehash{'type'} = $type;
+	if (exists $md5sums{$file}){
+		$filehash{'md5sum'} = $md5sums{$file};
+	}
+
+	#put hash into fileinfo container
+	$fileinfo{$file} = \%filehash;
+}
+
+open FILE, ">files.txt" or die "can't open files.txt to write\n";
+if ($opt{'verbose'} >= 2){
+	print "\n";
+	print STDERR "writing files.txt\n";
+}
+foreach my $file (sort { $a cmp $b } keys %fileinfo){
+	print FILE "$file\t";
+	print FILE "size=$sizes{$file}; ";
+	
+	#print each element according to sort order
+	foreach my $key (@sortorder){
+		#don't repeat fileName in metadata strings
+		if ($key eq "fileName"){next}
+		if (exists ${$fileinfo{$file}}{$key}){
+			print FILE "$key=${$fileinfo{$file}}{$key}; ";
+		}
+	}
+	print FILE "\n";
+}
+close FILE;
+
+
+# just in case someone searched with quotes
+# "sub usage"
+sub usage {
+	print STDERR <<END;
+usage: encodeFilesList <db> [options]
+
+Creates files.txt and optionally md5sum.txt
+
+options:
+
+	-md5			md5 sums the files in the directory
+	-table			selects which metadata table to use
+	-verbose		verbose output (levels 1 - 3)
+	-cv			custom cv directory (default is /data/apache/cgi-bin/encode)
+	-directory		custom download directory (default is working directory)
+	-filemask		only allows selected pattern matches (must be in quotes)
+				E.g. -filemask "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb" (default)
+				Regex Example:  -filemask "wgEncode\\S+Huvec.* wgEncode\\S+GM\\d+Input"
+				Normal example: -filemask "*.gz *GM12878* *GM12*Tnfa
+				
+END
+exit 1;
+}
+
+sub md5sum {
+	
+	my $file = $_[0];
+	my $id = $_[1];
+	open (FILE, $file) or die "Can't open '$file': $!\n";
+	binmode(FILE);
+		
+	my $sum = Digest::MD5->new->addfile(*FILE)->hexdigest;
+	
+	$thrdstat{$id} = $file;
+	return ($sum);
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

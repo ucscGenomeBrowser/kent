@@ -347,6 +347,7 @@ else if (dbIsFound)
         if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
             endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
             endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
+	    endsWith(scriptName, "hgHubConnect") ||
             endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
             printf("<TD><A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>Genome Browser</A></TD>\n",uiState,TRACK_SEARCH);
 
@@ -459,6 +460,7 @@ else
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
+	endsWith(scriptName, "hgHubConnect") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
         printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",

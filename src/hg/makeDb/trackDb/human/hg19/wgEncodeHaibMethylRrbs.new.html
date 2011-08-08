@@ -14,9 +14,17 @@ Methylation status is represented with an 11-color gradient using the following 
 <p>
 The score in this track reports the number of sequencing reads obtained for each CpG, which is often called 'coverage'.  Score is capped at 1000, so any CpGs that were covered by more than 1000 sequencing reads will have a score of 1000.  The bed files available for download contain two extra columns, one with the uncapped coverage (number of reads at that site), and one with the percentage of those reads that show methylation.  We obtain high reproducibility, with correlation coefficients greater than 0.9 between biological replicates, when we only consider CpGs represented by at least 10 sequencing reads (10x coverage, score=10).  Therefore, the default view for this track is set to 10X coverage, or a score of 10.
 </p>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>). For each view, there are multiple subtracks that display
+individually on the browser. Instructions for configuring multi-view tracks
+are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+<P>
+
+
 
 <a name="Methods"></a><h2>Methods</h2>
-DNA methylation at CpG sites was assayed with a modified version of Reduced Representation Bisulfite Sequencing (RRBS; Meissner <span style="font-style: italic">et al</span>., 2008).  RRBS was performed on cell lines grown by many ENCODE production groups.  The production group that grew the cells and isolated genomic DNA is indicated in the "obtainedBy" field of the metadata.  When a cell type was provided by more than one lab, the data for the cells from only one lab are displayed in the table above.  However, the data for every cell type from every lab is available from the <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/" TARGET=_BLANK>Downloads</A> page.  RRBS was carried out by the Myers production group at the HudsonAlpha Institute for Biotechnology.
+DNA methylation at CpG sites was assayed with a modified version of Reduced Representation Bisulfite Sequencing (RRBS; Meissner <span style="font-style: italic">et al</span>., 2008).  RRBS was performed on cell lines grown by many ENCODE production groups.  The production group that grew the cells and isolated genomic DNA is indicated in the "obtainedBy" field of the metadata.  When a cell type was provided by more than one lab, the data for the cells from only one lab are displayed in the table above.  However, the data for every cell type from every lab is available from the <A HREF="/cgi-bin/hgFileUi?db=hg19&g=wgEncodeHaibMethylRrbs" TARGET=_BLANK>Downloads</A> page.  RRBS was carried out by the Myers production group at the HudsonAlpha Institute for Biotechnology.
 
 
 <h3>Isolation of genomic DNA</h3>

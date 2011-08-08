@@ -886,21 +886,22 @@ hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 
 cd $dir
 hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 ~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
+
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
-     
+
+#
+# TODO: determine WHY knownToHprd is so much smaller than previously
+# (knownToHprd old: 1,642,416 new: 1,214,016)     
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
     hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
-    hgMapToGene $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
+    hgMapToGene $db -tempDb=$tempDb affyU133 knownGene knownToU133
     hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
     hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds -ignoreStrand
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
-
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
@@ -908,20 +909,6 @@ if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
 	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
-    # All exon array.
-    mkdir affyAllExon
-    cd affyAllExon
-    hgsql $db -N -e "select * from affyExonTissues" | cut -f2-6 > probes.bed
-    overlapSelect -inFmt=genePred -selectFmt=bed -idOutput probes.bed ../ucscGenes.gp ids.txt
-    hgsql $db -N -e "select name,expCount,expScores from affyExonTissues" > expData.txt
-    affyAllExonGSColumn expData.txt ids.txt column.txt
-    hgLoadSqlTab $tempDb affyExonTissuesGs ~/kent/src/hg/lib/expData.sql column.txt
-    ln -s ~/kent/src/hg/makeDb/hgRatioMicroarray/affyHumanExon.ra .
-    echo "create table affyExonTissuesGsExps select * from $db.affyExonTissuesGsExps" | hgsql $tempDb
-    hgMedianMicroarray $tempDb affyExonTissuesGs $db.affyExonTissuesGsExps \
-       affyHumanExon.ra affyExonTissuesGsMedian affyExonTissuesGsMedianExps
-    hgExpDistance $tempDb affyExonTissuesGsMedian \
-       affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
 endif
 
 if ($db =~ mm*) then
@@ -937,13 +924,6 @@ if ($db =~ mm*) then
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
 
-compareModifiedFileSizes.csh $oldGeneDir .
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
-#breakpoint
-
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
@@ -951,7 +931,7 @@ cd /usr/local/apache/cgi-bin/visiGeneData
 ixIxx visiGene.text visiGene.ix visiGene.ixx
 cd $dir
 
-
+# TODO: rerun the hprd command after figuring out WHY knownToHprd seems so much smaller...
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
 hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
@@ -962,7 +942,6 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-#breakpoint
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
@@ -997,8 +976,6 @@ doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -wo
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
 loadPairwise.csh
 
-#breakpoint
-
 # Load human and rat
 cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
@@ -1016,8 +993,6 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
 synBlastp.csh $tempDb $ratDb
-
-#breakpoint
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -1062,7 +1037,6 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 
-#breakpoint
 
 # Clean up
 cd $dir/hgNearBlastp
@@ -1116,12 +1090,17 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     cd ../utr5
     rm -r split fold err batch.bak
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
 # Did this with
 #   wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam_fs.gz
-mkdir $dir/pfam
+set pfamScratch = $scratchDir/tmp/pfam
+mkdir -p $pfamScratch
+cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
+mkdir -p $dir/pfam
 cd $dir/pfam
 mkdir splitProt
 faSplit sequence $dir/ucscGenes.faa 10000 splitProt/
@@ -1129,7 +1108,7 @@ mkdir result
 ls -1 splitProt > prot.list
 cat << '_EOF_' > doPfam
 #!/bin/csh -ef
-/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/pfam/current/Pfam_fs \
+/hive/data/outside/pfam/hmmpfam -E 0.1 /scratch/tmp/Pfam_fs \
 	splitProt/$1 > /scratch/tmp/$2.pf
 mv /scratch/tmp/$2.pf $3
 '_EOF_'
@@ -1141,7 +1120,10 @@ doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 #ENDLOOP
 '_EOF_'
 gensub2 prot.list single template jobList
-ssh $cpuFarm "cd $dir/pfam; para make jobList"
+#
+# Reports are that Pfam has become more I/O intensive recently (8/6/11).  To avoid
+# swamping the filesystem, run on no more than 5 cpus in the cpu farm.
+ssh $cpuFarm "cd $dir/pfam; para create jobList; para push jobList -maxJob=5"
 
 # Completed: 9668 of 9668 jobs
 # CPU time in finished jobs:    5543931s   92398.85m  1539.98h   64.17d  0.176 y
@@ -1171,8 +1153,6 @@ cut -f 1,4 ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPf
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
-
-#breakpoint
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
@@ -1214,7 +1194,9 @@ hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSupe
 hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
-#breakpoint
+compareModifiedFileSizes.csh $oldGeneDir .
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 # Regenerate ccdsKgMap table
 ~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap

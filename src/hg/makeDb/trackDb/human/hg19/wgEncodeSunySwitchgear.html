@@ -1,15 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><META http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body><h2>Description</h2>
-<p>This track is produced as part of the ENCODE Project.
-This track displays 3&#39; UTR regions associated with RNA binding proteins in the HT-1080
-<a href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?type=cellType" target="_blank">cell line</a>,
-using <a href="http://switchgeargenomics.com" target="_blank"> reporters.</a>
-
-The <i>RBP Assoc RNA</i> view shows the genomic location of 3&#39;UTRs tested.
-Data for this track was produced as part of the
-<a href="http://encodeproject.org/ENCODE/" target="_blank">
-Encyclopedia of DNA Elements (ENCODE) Project</a>,
-
-</a></p>
+<p>This track is produced as part of the <a href="http://encodeproject.org/ENCODE/" target="_blank">
+Encyclopedia of DNA Elements (ENCODE) Project</a>
+and displays 3&#39; UTR regions associated with RNA binding proteins in the 
+<a href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?ra=encode%2Fcv.ra&term=%22HT%2D1080%22" target="_blank">HT-1080</a>
+cell line using <a href="http://switchgeargenomics.com" target="_blank"> reporters.</a>
+</p>
 
 
 <p>In eukaryotic organisms gene regulatory networks require an additional
@@ -20,26 +15,23 @@ it is now clear that RNA-binding proteins play a major role in
 regulating multiple mRNAs in order to facilitate gene expression patterns.
 These tracks show RNA binding protein associated (predicted via RIP-chip) mRNA 3&#39; UTRs
 whose attachment to a reporter gene led to a change of that reporter&#39;s
-expression when the associated RBP&#39;s level was altered.
+expression when the associated RBP&#39;s level was altered. This experiment was proposed as
+a validation for the data found in <a href="/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeSunyalbanyRnaGeneChip">SUNY RBP</a>
+which is the precursor to the hg19 track <a href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeSunyAlbanyGeneSt">SUNY GeneST</a>.
+It was done on a small set of targets chosen from the earliest RIP arrays. 
 </p>
 
 
 <h2>Display Conventions and Configuration</h2>
-<p>This track is a multi-view composite track. For each view there
-are multiple subtracks that display individually in the browser.
-The subtracks within this track correspond to different mRNA 3&#39; UTRs
-attached to a reporter and tested for a response to a change in a particular
+<p>This is a composite track containing multiple subtracks that display individually 
+in the browser. The subtracks within this track correspond to different
+ mRNA 3&#39; UTRs attached to a reporter and tested for a response to a change in a particular
 RNA binding protein&#39;s level.
-This track is initially released with a single view:
-</p>
-<dl>
-<dt><i>RBP Assoc RNA</i>
-<dd>The RBP Assoc RNA view shows the genomic extent of the 3&#39; UTR segments
-used in the SwitchGear reporter assay.
-</dd></dt></dl>
+To display only selected subtracks, uncheck the boxes next to the tracks you wish to hide.
+<!--</p>
 Instructions for configuring multi-view tracks are
-
 <a href="../../goldenPath/help/multiView.html" target="_blank">here</a>.
+-->
 
 <h2>Methods</h2>
 <p>

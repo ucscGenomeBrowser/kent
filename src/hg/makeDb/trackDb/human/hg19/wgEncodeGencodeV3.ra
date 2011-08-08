@@ -50,7 +50,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
     idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
+    #metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
 
     track wgEncodeGencodeAutoV3
     subTrack wgEncodeSangerGencode
@@ -61,7 +61,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     #url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     #urlLabel Vega Transcript:
     #idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"     ### there are not OTT ids for level 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
+    #metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
 
     track wgEncodeGencodePolyaV3
     subTrack wgEncodeSangerGencode off
@@ -69,7 +69,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Oct 2009)
     type genePred
     priority 4
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV3 fileName=wgEncodeGencodePolyaV3.gtf.gz
+    #metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV3 fileName=wgEncodeGencodePolyaV3.gtf.gz
 
 searchName wgEncodeGencodeManualV3
 searchTable wgEncodeGencodeManualV3

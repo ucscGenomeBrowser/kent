@@ -218,7 +218,8 @@ function selectEnd(img, selection)
     }
     if(doIt) {
         // startDragZoom is null if mouse has never been moved
-        newPosition = updatePosition(img, selection, (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100);
+        var singleClick = (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100;
+        newPosition = updatePosition(img, selection, singleClick);
 	if(newPosition != undefined) {
             if(inPlaceUpdate) {
                 navigateInPlace("position=" + newPosition);
@@ -247,21 +248,31 @@ $(window).load(function () {
         }
         });
     // jQuery load function with stuff to support drag selection in track img
-    if(browser == "safari" && navigator.userAgent.indexOf("Chrome") != -1) {
+    if(browser == "safari") {
+        if(navigator.userAgent.indexOf("Chrome") != -1) {
         // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
         browser = "chrome";
+        } else {
+            // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
+            // though if you look in the DOM the changes are there). So we have to do a full form submission when the
+            // user changes visibility settings or track configuration.
+            // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
+            // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately, logs for 7/2011 show vast majority of safari users
+            // are pre-5.1 (5.0.5 is by far the most common).
+            //
+            // Early versions of Chrome had this problem too, but this problem went away as of Chrome 5.0.335.1 (or possibly earlier).
+            mapIsUpdateable = false;
+            var reg = new RegExp("Version\/(\[0-9]+\.\[0-9]+) Safari");
+            var a = reg.exec(navigator.userAgent);
+            if(a && a[1]) {
+                var version = a[1] * 1;
+                if(version >= 5.1) {
+                    mapIsUpdateable = true;
+                }
+            }
+        }
     }
 
-    // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
-    // though if you look in the DOM the changes are there); so we have to do a full form submission when the
-    // user changes visibility settings or track configuration.
-    // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
-    // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately, logs for 7/2011 show vast majority of safari users
-    // are pre-5.1 (5.0.5 is by far the most common).
-    //
-    // Chrome used to have this problem too, but this  problem seems to have gone away as of
-    // Chrome 5.0.335.1 (or possibly earlier).
-    mapIsUpdateable = browser != "safari";
     inPlaceUpdate = hgTracks.inPlaceUpdate && mapIsUpdateable;
     loadImgAreaSelect(true);
     if($('#hgTrackUiDialog'))
@@ -283,70 +294,6 @@ $(window).load(function () {
             loadContextMenu(trackImgTbl);
             //$(".trDraggable,.nodrop").each( function(t) { loadContextMenu($(this)); });
             // FIXME: why isn't rightClick for sideLabel working??? Probably because there is no link!
-            if(inPlaceUpdate && !hgTracks.imgBoxPortal) {
-                // Larry's experimental version of 1x panning (aka cheap panning).
-                var originalLeft;
-                var originalClientX;
-                var withinTrackImgTbl;
-                var last;
-                trackImgTbl.mousedown(
-                    function (e) {
-                        originalClientX = e.clientX;
-                        withinTrackImgTbl = true;
-                        last = new Date();
-                        jQuery('body').css('cursor', 'w-resize');
-                        $("img.dataImg").each( function(index, ele) {
-                                                   var left = $(ele).css('left');
-                                                   originalLeft = left.substring(0, left.length - 2)
-                                                   // we only need to look at one element, so bail out now.
-                                                   return false;
-                                               });
-                        jQuery(document).one('mouseup', function (e) {
-                                                 trackImgTbl.css('cursor', '');
-                                                 if(originalLeft != undefined) {
-                                                     if(withinTrackImgTbl && Math.abs(originalClientX - e.clientX) > 20) {
-                                                         originalLeft = undefined;
-                                                         var imgWidth = trackImgTbl.width() - hgTracks.insideX;
-                                                         var mult = (originalClientX - e.clientX) / imgWidth;
-                                                         var width = hgTracks.winEnd - hgTracks.winStart;
-                                                         hgTracks.winStart = hgTracks.winStart + Math.floor(width * mult);
-                                                         hgTracks.winEnd = hgTracks.winEnd + Math.floor(width * mult);
-                                                         setPositionByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd)
-                                                         navigateInPlace("position=" + encodeURIComponent(hgTracks.chromName + ":" + (hgTracks.winStart + 1) + "-" + hgTracks.winEnd));
-                                                         // return true in case of ajax error.
-                                                         return true;
-                                                     } else {
-                                                         $("img.dataImg").each( function(index, ele) {
-                                                                                    $(ele).css( {'left': originalLeft + "px" });
-                                                                                });
-                                                         originalLeft = undefined;
-                                                         return true;
-                                                     }
-                                                 } else {
-                                                     return true;
-                                                 }
-                                             });
-                        return true;
-                    }
-                );
-                trackImgTbl.mouseenter(function(e) { withinTrackImgTbl = true; });
-                trackImgTbl.mouseleave(function(e) { withinTrackImgTbl = false; });
-                trackImgTbl.mousemove(
-                    function (e) {
-                        var now = new Date();
-                        // date logic is an attempt to fix IE related weirdness
-                        if(originalLeft != undefined && (now - last) > 100) {
-                            last = now;
-                            trackImgTbl.css('cursor', 'w-resize');
-                            $("img.dataImg").each( function(index, ele) {
-                                                       var newPos = originalLeft - (originalClientX - e.clientX) + "px";
-                                                       $(ele).css( {'left': newPos });
-                                                   });
-                        }
-                        return true;
-                    }
-                );
-            }
         } else {
             loadContextMenu(trackImg);
             trackImg.mousemove(
@@ -380,12 +327,12 @@ function loadImgAreaSelect(firstTime)
             // XXXX Tim, I think we should get height from trackImgTbl, b/c it automatically adjusts as we add/delete items.
             imgHeight = trackImgTbl.height();
         }
-
+        var heights = hgTracks.rulerClickHeight;
         imgAreaSelect = jQuery((trackImgTbl || trackImg).imgAreaSelect({ selectionColor: 'blue', outerColor: '',
             minHeight: imgHeight, maxHeight: imgHeight,
             onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
             autoHide: autoHideSetting, movable: false,
-            clickClipHeight: hgTracks.rulerClickHeight}));
+            clickClipHeight: heights}));
     }
 }
 
@@ -942,11 +889,18 @@ function initImgTblButtons()
         $(btns).mouseleave( imgTblButtonMouseOut  );
         $(btns).show();
     }
-var handle = $("td.dragHandle");
+    var handle = $("td.dragHandle");
     if(handle.length > 0) {
         $(handle).mouseenter( imgTblDragHandleMouseOver );
         $(handle).mouseleave( imgTblDragHandleMouseOut  );
     }
+
+    // setup mouse callbacks for the area tags
+    $(".area").each( function(t) {
+                         this.onmouseover = mapItemMouseOver;
+                         this.onmouseout = mapItemMouseOut;
+                         this.onclick = mapClk;
+                     });
 }
 
 function imgTblDragHandleMouseOver()
@@ -1010,6 +964,7 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
     var only1xScrolling = (hgTracks.imgBoxPortalOffsetX == 0);
     var prevX       = (imgOffset + imgBoxLeftOffset)*-1;
     var portalWidth = 0;
+    var savedPosition;
     panAdjustHeight(prevX);
 
     this.each(function(){
@@ -1043,9 +998,12 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
 
     function initialize(){
 
-        pan.css( 'cursor', 'w-resize');
+        if ( !($.browser.msie) ) // IE will override map items cursors as well!
+            $(pan).parents('td.tdData').css('cursor',"url(../images/grabber.cur),w-resize");
 
         pan.mousedown(function(e){
+             if (e.which > 1 || e.button > 1 || e.shiftKey || e.ctrlKey)
+                 return true;
             if(mouseIsDown == false) {
                 mouseIsDown = true;
                 mouseDownX = e.clientX;
@@ -1063,7 +1021,12 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             var relativeX = (e.clientX - mouseDownX);
 
             if(relativeX != 0) {
-                blockUseMap = true;
+                if (blockUseMap == false) {
+                    // need to throw up a z-index div.  Wait mask?
+                    savedPosition = getPosition();
+                    dragMaskShow();
+                    blockUseMap = true;
+                }
                 var decelerator = 1;
                 var wingSize    = 1000; // 0 stops the scroll at the edges.
                 // Remeber that offsetX (prevX) is negative
@@ -1089,12 +1052,12 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
                 } else if(newX >= rightLimit && newX < leftLimit)
                     beyondImage = false; // could have scrolled back without mouse up
 
+                newX = panUpdatePosition(newX,true);
                 var nowPos = newX.toString() + "px";
                 $(".panImg").css( {'left': nowPos });
                 $('.tdData').css( {'backgroundPosition': nowPos } );
                 if (!only1xScrolling)
                     panAdjustHeight(newX);  // NOTE: This will dynamically resize image while scrolling.  Do we want to?
-                panUpdatePosition(newX,false);
             }
         }
     }
@@ -1102,11 +1065,28 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
         //if(!e) e = window.event;
         if(mouseIsDown) {
 
+            dragMaskClear();
             $(document).unbind('mousemove',panner);
             $(document).unbind('mouseup',panMouseUp);
             mouseIsDown = false;
+            setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
 
-            // Talk to tim about this.
+            // Outside image?  Then abandon.
+            var curY = e.clientY;
+            var imgTbl = $('#imgTbl');
+            var imgTop = $(imgTbl).position().top;
+            if (curY < imgTop || curY > imgTop + $(imgTbl).height()) {
+                atEdge = false;
+                beyondImage = false;
+                if (savedPosition != undefined)
+                    setPosition(savedPosition,null);
+                var oldPos = prevX.toString() + "px";
+                $(".panImg").css( {'left': oldPos });
+                $('.tdData').css( {'backgroundPosition': oldPos } );
+                return true;
+            }
+
+            // Do we need to fetch anything?
             if(beyondImage) {
                 if(inPlaceUpdate) {
                     var pos = parsePosition(getPosition());
@@ -1116,12 +1096,13 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
                 }
                 return true; // Make sure the setTimeout below is not called.
             }
+
+            // Just a normal scroll within a >1X image
             if(prevX != newX) {
                 //if (!only1xScrolling)
                 //    panAdjustHeight(newX); // NOTE: This will resize image after scrolling.  Do we want to while scrolling?
                 prevX = newX;
             }
-            setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
         }
     }
     });  // end of this.each(function(){
@@ -1131,14 +1112,18 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
         // Updates the 'position/search" display with change due to panning
         var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
         var portalScrolledX  = (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel) + newOffsetX;
+        var recalculate = false;
 
         var newPortalStart = hgTracks.imgBoxPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
-        if( newPortalStart < hgTracks.imgBoxChromStart && bounded)     // Stay within bounds
-            newPortalStart = hgTracks.imgBoxChromStart;
+        if( newPortalStart < hgTracks.chromStart && bounded) {     // Stay within bounds
+            newPortalStart = hgTracks.chromStart;
+            recalculate = true;
+        }
         var newPortalEnd = newPortalStart + portalWidthBases;
-        if( newPortalEnd > hgTracks.imgBoxChromEnd && bounded) {
-            newPortalEnd = hgTracks.imgBoxChromEnd;
+        if( newPortalEnd > hgTracks.chromEnd && bounded) {
+            newPortalEnd = hgTracks.chromEnd;
             newPortalStart = newPortalEnd - portalWidthBases;
+            recalculate = true;
         }
         if(newPortalStart > 0) {
             // XXXX ? hgTracks.imgBoxPortalStart = newPortalStart;
@@ -1146,7 +1131,11 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
             var newPos = hgTracks.chromName + ":" + commify(newPortalStart) + "-" + commify(newPortalEnd);
             setPosition(newPos, (newPortalEnd - newPortalStart + 1));
         }
-        return true;
+        if (recalculate && hgTracks.imgBoxBasesPerPixel > 0) { // Need to recalculate X for bounding drag
+            portalScrolledX = (hgTracks.imgBoxPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
+            newOffsetX = portalScrolledX - (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel);
+        }
+        return newOffsetX;
     }
     function mapTopAndBottom(mapName,left,right)
     {
@@ -1227,6 +1216,31 @@ jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
         });
     }
 
+    function dragMaskShow() {   // Sets up the waitMask to block page manipulation until cleared
+
+        var imgTbl = $('#imgTbl');
+        // Find or create the waitMask (which masks the whole page)
+        var  dragMask = $('div#dragMask');
+        if( dragMask == undefined || dragMask.length == 0) {
+            $("body").prepend("<div id='dragMask' class='waitMask'></div>");
+            dragMask = $('div#dragMask');
+        }
+
+        $('body').css('cursor','not-allowed');
+        $(dragMask).css('cursor',"url(../images/grabbing.cur),w-resize");
+        $(dragMask).css({opacity:0.0,display:'block',top: $(imgTbl).position().top.toString() + 'px', height: $(imgTbl).height().toString() + 'px' });
+        //$(dragMask).css({opacity:0.4,backgroundColor:'gray',zIndex:999}); // temporarily so I can see it
+    }
+
+    function dragMaskClear() {        // Clears the waitMask
+        $('body').css('cursor','auto')
+        var  dragMask = $('#dragMask');
+        if( dragMask != undefined )
+            $(dragMask).hide();
+    }
+
+
+
 };
 
 /////////////////////////////////////////////////////
@@ -1287,9 +1301,9 @@ jQuery.jStore && jQuery.jStore.ready(function(engine) {
     });
 });
 
-function mapClk(obj)
+function mapClk()
 {
-    return postToSaveSettings(obj);
+    return postToSaveSettings(this);
 }
 
 function postToSaveSettings(obj)
@@ -1523,13 +1537,13 @@ function makeMapItem(id)
     }
 }
 
-function mapItemMouseOver(obj)
+function mapItemMouseOver()
 {
     // Record data for current map area item
-    currentMapItem = makeMapItem(obj.id);
+    currentMapItem = makeMapItem(this.id);
     if(currentMapItem != null) {
-        currentMapItem.href = obj.href;
-        currentMapItem.title = obj.title;
+        currentMapItem.href = this.href;
+        currentMapItem.title = this.title;
     }
 }
 
