@@ -1258,7 +1258,7 @@ while(TRUE)
 	    }
 	}
 
-    bits64 saveEnd = end;
+    int saveEnd = end;
     if (size < READAHEADBUFSIZE)
 	{
 	file->sparseReadAhead = needMem(READAHEADBUFSIZE);
