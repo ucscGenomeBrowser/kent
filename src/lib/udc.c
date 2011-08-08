@@ -85,6 +85,9 @@ struct udcFile
     char *bitmapFileName;	/* Name of bitmap file. */
     char *sparseFileName;	/* Name of sparse data file. */
     int fdSparse;		/* File descriptor for sparse data file. */
+    boolean sparseReadAhead;    /* Read-ahead has something in the buffer */
+    char *sparseReadAheadBuf;   /* Read-ahead buffer, if any */
+    bits64 sparseRAOffset;      /* Read-ahead buffer offset */
     struct udcBitmap *bits;     /* udcBitMap */
     bits64 startData;		/* Start of area in file we know to have data. */
     bits64 endData;		/* End of area in file we know to have data. */
@@ -922,6 +925,7 @@ if (file != NULL)
     freeMem(file->cacheDir);
     freeMem(file->bitmapFileName);
     freeMem(file->sparseFileName);
+    freeMem(file->sparseReadAheadBuf);
     mustCloseFd(&(file->fdSparse));
     udcBitmapClose(&file->bits);
     }
@@ -1209,9 +1213,11 @@ for (s = offset; s < endPos; s = e)
 return ok;
 }
 
+#define READAHEADBUFSIZE 4096
 int udcRead(struct udcFile *file, void *buf, int size)
 /* Read a block from file.  Return amount actually read. */
 {
+
 /* Figure out region of file we're going to read, and clip it against file size. */
 bits64 start = file->offset;
 if (start > file->size)
@@ -1220,29 +1226,89 @@ bits64 end = start + size;
 if (end > file->size)
     end = file->size;
 size = end - start;
+char *cbuf = buf;
 
+/* use read-ahead buffer if present */
+int bytesRead = 0;
 
-/* If we're outside of the window of file we already know is good, then have to
- * consult cache on disk, and maybe even fetch data remotely! */
-if (start < file->startData || end > file->endData)
+bits64 raStart;
+bits64 raEnd;
+while(TRUE)
     {
-
-    if (!udcCachePreload(file, start, size))
+    if (file->sparseReadAhead)
 	{
-	verbose(2, "udcCachePreload failed");
-	return 0;
+	raStart = file->sparseRAOffset;
+	raEnd = raStart+READAHEADBUFSIZE;
+	if (start >= raStart && start < raEnd)
+	    {
+	    // copy bytes out of rabuf
+	    int endInBuf = min(raEnd, end);
+	    int sizeInBuf = endInBuf - start;
+	    memcpy(cbuf, file->sparseReadAheadBuf + (start-raStart), sizeInBuf);
+	    cbuf += sizeInBuf;
+	    bytesRead += sizeInBuf;
+	    start = raEnd;
+	    size -= sizeInBuf;
+	    file->offset += sizeInBuf;
+	    if (size == 0)
+		break;
+	    }
+	file->sparseReadAhead = FALSE;
+	mustLseek(file->fdSparse, start, SEEK_SET);
 	}
 
-    /* Currently only need fseek here.  Would be safer, but possibly
-     * slower to move fseek so it is always executed in front of read, in
-     * case other code is moving around file pointer. */
+    bits64 saveEnd = end;
+    if (size < READAHEADBUFSIZE)
+	{
+	file->sparseReadAhead = TRUE;
+	if (!file->sparseReadAheadBuf)
+	    file->sparseReadAheadBuf = needMem(READAHEADBUFSIZE);
+	file->sparseRAOffset = start;
+	size = READAHEADBUFSIZE;
+	end = start + size;
+	if (end > file->size)
+	    {
+	    end = file->size;
+	    size = end - start;
+	    }
+	}
 
-    mustLseek(file->fdSparse, start, SEEK_SET);
+
+    /* If we're outside of the window of file we already know is good, then have to
+     * consult cache on disk, and maybe even fetch data remotely! */
+    if (start < file->startData || end > file->endData)
+	{
+
+	if (!udcCachePreload(file, start, size))
+	    {
+	    verbose(2, "udcCachePreload failed");
+	    bytesRead = 0;
+	    break;
+	    }
+
+	/* Currently only need fseek here.  Would be safer, but possibly
+	 * slower to move fseek so it is always executed in front of read, in
+	 * case other code is moving around file pointer. */
+
+	mustLseek(file->fdSparse, start, SEEK_SET);
+	}
+
+    if (file->sparseReadAhead)
+	{
+	mustReadFd(file->fdSparse, file->sparseReadAheadBuf, size);
+	end = saveEnd;
+	size = end - start;
+	}
+    else
+	{
+	mustReadFd(file->fdSparse, cbuf, size);
+	file->offset += size;
+	bytesRead += size;
+	break;
+	}
     }
 
-mustReadFd(file->fdSparse, buf, size);
-file->offset += size;
-return size;
+return bytesRead;
 }
 
 void udcMustRead(struct udcFile *file, void *buf, int size)
