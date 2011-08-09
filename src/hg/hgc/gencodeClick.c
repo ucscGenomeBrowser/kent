@@ -167,22 +167,26 @@ printf("<table class=\"hgcCcds\"><thead>\n");
 printf("<tr><th><th>Transcript<th>Gene</tr>\n");
 printf("</thead><tbody>\n");
 
-printf("<tr><th>Position");
-printf("<td>");
-writePosLink(transAnno->chrom, transAnno->txStart, transAnno->txEnd);
-printf("<td>");
-writePosLink(transAnno->chrom, geneChromStart, geneChromEnd);
+printf("<tr><th>Gencode id");
+prTdExtIdAnchor(tdb, transAttrs->transcriptId, "ensemblTranscriptIdUrl");
+prTdExtIdAnchor(tdb, transAttrs->geneId, "ensemblGeneIdUrl");
 printf("</tr>\n");
 
-printf("<tr><th>HAVANA manual");
+printf("<tr><th>HAVANA manual id");
 prTdExtIdAnchor(tdb, transAttrs->havanaTranscriptId, "vegaTranscriptIdUrl");
 prTdExtIdAnchor(tdb, transAttrs->havanaGeneId, "vegaGeneIdUrl");
 printf("</tr>\n");
 
-printf("<tr><th>Ensembl automatic");
-prTdExtIdAnchor(tdb, transAttrs->transcriptId, "ensemblTranscriptIdUrl");
-prTdExtIdAnchor(tdb, transAttrs->geneId, "ensemblGeneIdUrl");
+// FIXME: white-space style should be in CCS, but don't want to risk breaking
+// other things.
+printf("<tr><th>Position");
+printf("<td style=\"white-space: nowrap;\">");
+writePosLink(transAnno->chrom, transAnno->txStart, transAnno->txEnd);
+printf("<td style=\"white-space: nowrap;\">");
+writePosLink(transAnno->chrom, geneChromStart, geneChromEnd);
 printf("</tr>\n");
+
+printf("<tr><th>Strand<td>%s<td></tr>\n", transAnno->strand);
 
 printf("<tr><th><a href=\"http://www.gencodegenes.org/gencode_biotypes.html\">Biotype</a><td>%s<td>%s</tr>\n", transAttrs->transcriptType, transAttrs->geneType);
 /* FIXME: add href o */

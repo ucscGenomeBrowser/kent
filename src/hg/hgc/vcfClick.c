@@ -147,15 +147,50 @@ if (tmp1 == NULL)
     tmp1 = dyStringNew(0);
     tmp2 = dyStringNew(0);
     }
-jsBeginCollapsibleSection(cart, track, "genotypes", "Detailed genotypes", FALSE);
 vcfParseGenotypes(rec);
+// Tally genotypes and alleles for summary:
+// Note: this lumps all alternate alleles together.
+int refs = 0, alts = 0, refRefs = 0, refAlts = 0, altAlts = 0, phasedGts = 0;
+int i;
+for (i = 0;  i < vcff->genotypeCount;  i++)
+    {
+    struct vcfGenotype *gt = &(rec->genotypes[i]);
+    if (gt->isPhased)
+	phasedGts++;
+    if (gt->hapIxA == 0)
+	refs++;
+    else
+	alts++;
+    if (!gt->isHaploid)
+	{
+	if (gt->hapIxB == 0)
+	    refs++;
+	else
+	    alts++;
+	if (gt->hapIxA == 0 && gt->hapIxB == 0)
+	    refRefs++;
+	else if (gt->hapIxA != 0 && gt->hapIxB != 0)
+	    altAlts++;
+	else
+	    refAlts++;
+	}
+    }
+printf("<B>Genotype count:</B> %d (%d phased)<BR>\n", vcff->genotypeCount, phasedGts);
+printf("<B>Alleles:</B> %s: %d (%.2f); %s: %d (%.2f)<BR>\n",
+       rec->ref, refs, (double)refs/(2*vcff->genotypeCount),
+       rec->alt, alts, (double)alts/(2*vcff->genotypeCount));
+if (vcff->genotypeCount > 1)
+    printf("<B>Genotypes:</B> %s/%s: %d (%.2f); %s/%s: %d (%.2f); %s/%s: %d (%.2f)<BR>\n",
+	   rec->ref, rec->ref, refRefs, (double)refRefs/vcff->genotypeCount,
+	   rec->ref, rec->alt, refAlts, (double)refAlts/vcff->genotypeCount,
+	   rec->alt, rec->alt, altAlts, (double)altAlts/vcff->genotypeCount);
+jsBeginCollapsibleSection(cart, track, "genotypes", "Detailed genotypes", FALSE);
 dyStringClear(tmp1);
 dyStringAppend(tmp1, rec->format);
 enum vcfInfoType formatTypes[256];
 char *formatKeys[256];
 int formatCount = chopString(tmp1->string, ":", formatKeys, ArraySize(formatKeys));
 puts("<B>Genotype info key:</B><BR>");
-int i;
 for (i = 0;  i < formatCount;  i++)
     {
     if (sameString(formatKeys[i], vcfGtGenotype))
