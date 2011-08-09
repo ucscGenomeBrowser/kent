@@ -10728,7 +10728,7 @@ if (startsWith("hg", database))
     printf("%s</A><BR>\n", rl->name);
     }
 printStanSource(rl->mrnaAcc, "mrna");
-printGeneReviews(rl->name);
+prGRShortRefGene(conn,rl->name);
 
 }
 
@@ -23773,21 +23773,18 @@ int num = 4;
 
  genericHeader(tdb, itemName);
  genericBedClick(conn, tdb, itemName, start, num);
- printGeneReviews(itemName);
+ prGeneReviews(conn, itemName);
  printf("<BR>");
  printTrackHtml(tdb);
  hFreeConn(&conn);
 }
 
-void printGeneReviews(char *itemName)
+void prGeneReviews(struct sqlConnection *conn, char *itemName)
 /* print GeneReviews associated to this item */
 {
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[512];
-
-
 int i;
 char *clickMsg = "Click 'Short name' link below to search GeneReviews";
 boolean firstTime = TRUE;
@@ -23825,8 +23822,32 @@ while ((row = sqlNextRow(sr)) != NULL)
     }  /* end while */
  printf("</PRE>");
  printf("<BR>");
- hFreeConn(&conn);
-} /* end of iprintGeneReviews */
+} /* end of prGeneReviews */
+
+void prGRShortRefGene(struct sqlConnection *conn, char *itemName)
+/* print GeneReviews short label associated to this refGene item */
+{
+struct sqlResult *sr;
+char **row;
+char query[512];
+boolean firstTime = TRUE;
+
+safef(query, sizeof(query), "select  grShort from geneReviewsRefGene where geneSymbol='%s'", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+        char *grShort = *row++;
+        if (firstTime)
+        {
+          printf("<B> GeneReview: </B>");
+          firstTime = FALSE;
+          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank>%s</A>", grShort, grShort);
+        } else {
+          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank>, %s</A>", grShort, grShort);
+        }
+     }
+     printf("<BR>");
+} /* end of prGRShortRefGene */
 
 void doMiddle()
 /* Generate body of HTML. */
