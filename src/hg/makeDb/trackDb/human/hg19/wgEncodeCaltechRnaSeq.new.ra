@@ -1,5 +1,5 @@
 track wgEncodeCaltechRnaSeq
-superTrack wgEncodeRnaSeqSuper full
+superTrack wgEncodeRnaSeqSuper dense
 compositeTrack on
 shortLabel Caltech RNA-seq
 longLabel RNA-seq from ENCODE/Caltech

@@ -1147,7 +1147,7 @@ readType 1x75D
 replicate 1
 rnaExtract polyA
 subId 870
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep1H1hescCellPapNaR1x75d
 objType file
@@ -1171,7 +1171,7 @@ readType 1x75D
 replicate 1
 rnaExtract polyA
 subId 1034
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep1Helas3CellPapNaR1x75d
 objType file
@@ -1195,7 +1195,7 @@ readType 1x75D
 replicate 1
 rnaExtract polyA
 subId 1038
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x32
 objType file
@@ -1219,7 +1219,7 @@ readType 1x32
 replicate 1
 rnaExtract polyA
 subId 1091
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x75d
 objType file
@@ -1243,7 +1243,7 @@ readType 1x75D
 replicate 1
 rnaExtract polyA
 subId 1040
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep1HuvecCellPapNaR1x75d
 objType file
@@ -1267,7 +1267,7 @@ readType 1x75D
 replicate 1
 rnaExtract polyA
 subId 1036
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep1K562CellPapNaR1x75d
 objType file
@@ -1291,7 +1291,7 @@ readType 1x75D
 replicate 1
 rnaExtract polyA
 subId 903
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep1NhekCellPapNaR1x75d
 objType file
@@ -1315,7 +1315,7 @@ readType 1x75D
 replicate 1
 rnaExtract polyA
 subId 1042
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep2Gm12878CellPapNaR1x75d
 objType file
@@ -1339,7 +1339,7 @@ readType 1x75D
 replicate 2
 rnaExtract polyA
 subId 898
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep2H1hescCellPapNaR1x75d
 objType file
@@ -1363,7 +1363,7 @@ readType 1x75D
 replicate 2
 rnaExtract polyA
 subId 1055
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep2Helas3CellPapNaR1x75d
 objType file
@@ -1387,7 +1387,7 @@ readType 1x75D
 replicate 2
 rnaExtract polyA
 subId 1039
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x32
 objType file
@@ -1411,7 +1411,7 @@ readType 1x32
 replicate 2
 rnaExtract polyA
 subId 1092
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x75d
 objType file
@@ -1435,7 +1435,7 @@ readType 1x75D
 replicate 2
 rnaExtract polyA
 subId 1041
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep2HuvecCellPapNaR1x75d
 objType file
@@ -1459,7 +1459,7 @@ readType 1x75D
 replicate 2
 rnaExtract polyA
 subId 1037
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqFastqRep2K562CellPapNaR1x75d
 objType file
@@ -1483,7 +1483,7 @@ readType 1x75D
 replicate 2
 rnaExtract polyA
 subId 904
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1
 objType file

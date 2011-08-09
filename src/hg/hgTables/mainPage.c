@@ -17,6 +17,7 @@
 #include "grp.h"
 #include "hgTables.h"
 #include "joiner.h"
+#include "hubConnect.h"
 
 static char const rcsid[] = "$Id: mainPage.c,v 1.154 2010/06/03 18:53:59 kent Exp $";
 
@@ -998,6 +999,7 @@ hPrintf("</FORM>\n");
 
 /* Hidden form for jumping to track hub manager CGI. */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
+cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTables");
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 

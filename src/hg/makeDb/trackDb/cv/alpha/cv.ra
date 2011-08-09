@@ -9271,6 +9271,17 @@ type sex
 description Unknown
 
 
+## object Status
+term revoked
+tag REVOKED
+type objStatus
+description This file has been REVOKED by the submitting laboratory for some reason.  It should not be used for further research. PROVISIONAL
+
+term replaced
+tag REPLACED
+type objStatus
+description This file has been REPLACED by the submitting laboratory with an improved version. PROVISIONAL
+
 ## Organisms
 term human
 tag HUMAN
@@ -10479,6 +10490,16 @@ searchable no
 cvDefined no
 validate regex: ^[0-9a-f]*$
 priority 999
+
+term objStatus
+tag OBJSTAT   
+type typeOfTerm
+label Object Status
+description The status of the file or table object (revoked, replaced, etc)  PROVISIONAL
+searchable multiSelect
+cvDefined yes
+validate cv  
+priority 1   
 
 term obtainedBy
 tag OBTAINEDBY

@@ -551,6 +551,42 @@ for my $key (keys %ra) {
     }
 }
 
+#modification to put in README.txt if not already there in download directory.
+my $readme = "$downloadDir/README.txt";
+unless (-e $readme){
+	my @template;
+	#always put in new readme on loading of a object
+	open TEMPLATE, "$configPath/downloadsReadmeTemplate.txt";
+	while (<TEMPLATE>){
+	
+		my $line = $_;
+		chomp $line;
+		#skip commented lines
+		if ($line =~ m/^\s*#/){next}
+		push @template, $line;
+		
+	}
+	my $assm = $daf->{assembly};
+	open README, ">$readme.txt" or die "Can't open README file to write in directory $downloadDir\n";
+	
+	foreach my $line (@template){
+		#interpolate in the name of the DB and composite name
+		if ($line =~ m/\+\+/){
+			$line =~ s/\+\+db\+\+/$assm/;
+			$line =~ s/\+\+composite\+\+/$compositeTrack/;
+			print README "$line\n";
+		}
+		else {
+			print README "$line\n";
+		}
+	}
+	close README;
+}
+
+
+
+
+
 if(!$opt_skipDownload and !$opt_skipLoad) {
     # Send "data is ready" email to email contact assigned to $daf{lab}
     if($email) {

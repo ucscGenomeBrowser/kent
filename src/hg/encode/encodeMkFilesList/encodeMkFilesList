@@ -254,7 +254,7 @@ if ($opt{'md5'}){
 			unless (-e $file){next}
 			#store md5sums and modification dates in their respective hashes;
 			$md5sums{$file} = $md5;
-			unless ($lastmod){$lastmod{$file} = $lastmod}
+			if ($lastmod){$lastmod{$file} = $lastmod}
 			else {$lastmod{$file} = 0}
 		}
 		close MDH;
@@ -359,7 +359,7 @@ if ($opt{'md5'}){
 	open MDF, ">md5sum.txt" or die "can't open md5sum.txt file to write\n";
 	if ($opt{'verbose'} >= 2){
 		print STDERR "\n";
-		print STDERR "writing md5sum.tx\n";
+		print STDERR "writing md5sum.txt\n";
 	}
 	foreach my $file (sort { $a cmp $b } @filemask){
 		print MDF "$file $md5sums{$file}\n";
@@ -378,11 +378,11 @@ if ($opt{'md5'}){
 	close MDF;
 }
 
-if ($opt{'verbose'} >= 2){
+if ($opt{'verbose'} >= 3){
 	print STDERR "\n";
 	print STDERR "files to be processed:\n";
 	foreach my $name (@filemask){
-		print STDERR "file = $name\n";
+		print STDERR "\t$name\n";
 	}
 }
 
