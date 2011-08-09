@@ -8,8 +8,9 @@
 #include "vcf.h"
 
 #define VCF_HAP_HEIGHT_VAR "hapClusterHeight"
-
 #define VCF_DEFAULT_HAP_HEIGHT 128
+
+#define VCF_HAP_ENABLED_VAR "hapClusterEnabled"
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
 			   char *thisName, char *thisChrom, int thisPos, char *formName);

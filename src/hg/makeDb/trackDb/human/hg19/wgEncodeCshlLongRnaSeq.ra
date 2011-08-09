@@ -843,7 +843,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel SKRA cell pA- + 2
-		longLabel SK-N-SH_RA cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
+		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 6761712.000000
 		origAssembly hg19
@@ -852,7 +852,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel SKRA cell pA- + 1
-		longLabel SK-N-SH_RA cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
+		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 8791351.000000
 		origAssembly hg19
@@ -901,7 +901,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa cell pA- + 2
-		longLabel HeLa-S3 cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
+		longLabel HeLa-S3 whole cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2383328.000000
 		origAssembly hg19
@@ -942,7 +942,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE cell pA- + 2
-		longLabel HUVEC cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
+		longLabel HUVEC whole cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1783683.000000
 		origAssembly hg19
@@ -952,7 +952,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE cell pA- + 1
-		longLabel HUVEC cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
+		longLabel HUVEC whole cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 844212.000000
 		origAssembly hg19
@@ -962,7 +962,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel BJ cell pA- + 2
-		longLabel BJ cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
+		longLabel BJ whole cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=BJ localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1897313.000000
 		origAssembly hg19
@@ -971,7 +971,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel BJ cell pA- + 1
-		longLabel BJ cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
+		longLabel BJ whole cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=BJ localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 3598691.000000
 		origAssembly hg19
@@ -980,7 +980,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel AG50 cell pA- + 2
-		longLabel AG04450 cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
+		longLabel AG04450 whole cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 6246875.000000
 		origAssembly hg19
@@ -989,7 +989,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel A549 cell pA- + 2
-		longLabel A549 cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
+		longLabel A549 whole cell polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=A549 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 7604967.000000
 		origAssembly hg19
@@ -998,7 +998,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel A549 cell pA- + 1
-		longLabel A549 cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
+		longLabel A549 whole cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=A549 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 6539260.000000
 		origAssembly hg19
@@ -1157,7 +1157,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 cell pA- + 1
-		longLabel GM12878 cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
+		longLabel GM12878 whole cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1565992.000000
 		origAssembly hg19
@@ -2016,7 +2016,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel SKRA cell pA- - 2
-		longLabel SK-N-SH_RA cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
+		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1625856.000000
 		origAssembly hg19
@@ -2025,7 +2025,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel SKRA cell pA- - 1
-		longLabel SK-N-SH_RA cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
+		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1177854.000000
 		origAssembly hg19
@@ -2074,7 +2074,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa cell pA- - 2
-		longLabel HeLa-S3 cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
+		longLabel HeLa-S3 whole cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1171222.000000
 		origAssembly hg19
@@ -2115,7 +2115,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE cell pA- - 2
-		longLabel HUVEC cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
+		longLabel HUVEC whole cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1051466.000000
 		origAssembly hg19
@@ -2125,7 +2125,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE cell pA- - 1
-		longLabel HUVEC cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
+		longLabel HUVEC whole cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 736288.000000
 		origAssembly hg19
@@ -2135,7 +2135,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel BJ cell pA- - 2
-		longLabel BJ cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
+		longLabel BJ whole cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=BJ localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1471367.000000
 		origAssembly hg19
@@ -2144,7 +2144,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel BJ cell pA- - 1
-		longLabel BJ cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
+		longLabel BJ whole cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=BJ localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1310427.000000
 		origAssembly hg19
@@ -2153,7 +2153,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel AG50 cell pA- - 2
-		longLabel AG04450 cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
+		longLabel AG04450 whole cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1806068.000000
 		origAssembly hg19
@@ -2162,7 +2162,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel A549 cell pA- - 2
-		longLabel A549 cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
+		longLabel A549 whole cell polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=A549 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1209428.000000
 		origAssembly hg19
@@ -2171,7 +2171,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel A549 cell pA- - 1
-		longLabel A549 cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
+		longLabel A549 whole cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=A549 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1483709.000000
 		origAssembly hg19
@@ -2330,7 +2330,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep1
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 cell pA- - 1
-		longLabel GM12878 cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
+		longLabel GM12878 whole cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 993820.000000
 		origAssembly hg19
@@ -3186,7 +3186,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel SKRA cell pA- A 2
-		longLabel SK-N-SH_RA cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
 		subGroups view=Alignments cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep2
 		type bam
 		origAssembly hg19
@@ -3195,7 +3195,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel SKRA cell pA- A 1
-		longLabel SK-N-SH_RA cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep1
 		type bam
 		origAssembly hg19
@@ -3244,7 +3244,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel HeLa cell pA- A 2
-		longLabel HeLa-S3 cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+		longLabel HeLa-S3 whole cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep2
 		type bam
 		origAssembly hg19
@@ -3284,7 +3284,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel HUVE cell pA- A 2
-		longLabel HUVEC cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+		longLabel HUVEC whole cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep2
 		type bam
 		origAssembly hg19
@@ -3294,7 +3294,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel HUVE cell pA- A 1
-		longLabel HUVEC cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+		longLabel HUVEC whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep1
 		type bam
 		origAssembly hg19
@@ -3304,7 +3304,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel BJ cell pA- A 2
-		longLabel BJ cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+		longLabel BJ whole cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
 		subGroups view=Alignments cellType=BJ localization=CELL rnaExtract=PAM rep=rep2
 		type bam
 		origAssembly hg19
@@ -3313,7 +3313,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel BJ cell pA- A 1
-		longLabel BJ cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+		longLabel BJ whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=BJ localization=CELL rnaExtract=PAM rep=rep1
 		type bam
 		origAssembly hg19
@@ -3322,7 +3322,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel AG50 cell pA- A 2
-		longLabel AG04450 cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+		longLabel AG04450 whole cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
 		subGroups view=Alignments cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep2
 		type bam
 		origAssembly hg19
@@ -3331,7 +3331,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel A549 cell pA- A 2
-		longLabel A549 cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+		longLabel A549 whole cell polyA- Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
 		subGroups view=Alignments cellType=A549 localization=CELL rnaExtract=PAM rep=rep2
 		type bam
 		origAssembly hg19
@@ -3340,7 +3340,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel A549 cell pA- A 1
-		longLabel A549 cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+		longLabel A549 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=A549 localization=CELL rnaExtract=PAM rep=rep1
 		type bam
 		origAssembly hg19
@@ -3499,7 +3499,7 @@ noInherit on
 		track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel GM78 cell pA- A 1
-		longLabel GM12878 cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+		longLabel GM12878 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep1
 		type bam
 		origAssembly hg19
@@ -4610,534 +4610,3 @@ noInherit on
         subGroups view=Junctions rep=Pooled cellType=SKNSHRA localization=CELL rnaExtract=PAM
         type bed 6
         # subId=3662 dateSubmitted=2011-02-18
-
-#    track wgEncodeCshlLongRnaSeqViewTranscriptGencV7
-#    shortLabel TranscriptGencV7
-#    view TRANSGENCV7
-#    visibility full
-#    subTrack wgEncodeCshlLongRnaSeq
-#
-#        track wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HepG cyto pA+
-#        longLabel HepG2 cytosol longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 189,0,157
-#        # subId=4603 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HUVE nucl pA+
-#        longLabel HUVEC nucleus longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 224,75,0
-#        # subId=4602 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel GM12 nucl pA+
-#        longLabel GM12878 nucleus longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 153,38,0
-#        # subId=4601 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel MCF7 cell pA+
-#        longLabel MCF-7 cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=MCF7 localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        # subId=4600 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HeLa cell pA-
-#        longLabel HeLa-S3 cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 0,119,158
-#        # subId=4599 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel NHEK cyto pA-
-#        longLabel NHEK cytosol longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=NHEK localization=CYTOSOL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 179,0,134
-#        # subId=4598 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel NHEK cyto pA+
-#        longLabel NHEK cytosol longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 179,0,134
-#        # subId=4597 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HepG cell pA+
-#        longLabel HepG2 cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 189,0,157
-#        # subId=4596 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HUVE cyto pA+
-#        longLabel HUVEC cytosol longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 224,75,0
-#        # subId=4595 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel H1ES cell pA-
-#        longLabel H1-hESC cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1H1HESC localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 0,107,27
-#        # subId=4593 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel H1ES cell pA+
-#        longLabel H1-hESC cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1H1HESC localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 0,107,27
-#        # subId=4592 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel H1ES nucl pA-
-#        longLabel H1-hESC nucleus longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 0,107,27
-#        # subId=4590 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel A549 cell pA-
-#        longLabel A549 cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=A549 localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        # subId=4589 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 cell pA-
-#        longLabel K562 cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4588 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HSMM cell pA+
-#        longLabel HSMM cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=HSMM localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        # subId=4587 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel GM12 cell pA-
-#        longLabel GM12878 cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1GM12878 localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 153,38,0
-#        # subId=4586 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 cell pA+
-#        longLabel K562 cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4585 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HepG nucl pA+
-#        longLabel HepG2 nucleus longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 189,0,157
-#        # subId=4584 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HeLa cell pA+
-#        longLabel HeLa-S3 cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 0,119,158
-#        # subId=4583 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel H1ES cyto pA+
-#        longLabel H1-hESC cytosol longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 0,107,27
-#        # subId=4582 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel BJ cell pA-
-#        longLabel BJ cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=BJ localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        # subId=4581 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HepG cell pA-
-#        longLabel HepG2 cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 189,0,157
-#        # subId=4580 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 cyto pA-
-#        longLabel K562 cytosol longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4579 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel MCF7 cell pA-
-#        longLabel MCF-7 cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=MCF7 localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        # subId=4578 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HeLa cyto pA-
-#        longLabel HeLa-S3 cytosol longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 0,119,158
-#        # subId=4577 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel BJ cell pA+
-#        longLabel BJ cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=BJ localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        # subId=4576 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HepG cyto pA-
-#        longLabel HepG2 cytosol longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 189,0,157
-#        # subId=4575 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel NHEK cell pA+
-#        longLabel NHEK cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=NHEK localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 179,0,134
-#        # subId=4574 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel NHLF cell pA-
-#        longLabel NHLF cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=NHLF localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        # subId=4573 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 cyto pA+
-#        longLabel K562 cytosol longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4572 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel GM12 cell pA+
-#        longLabel GM12878 cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1GM12878 localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 153,38,0
-#        # subId=4571 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel H1ES nucl pA+
-#        longLabel H1-hESC nucleus longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 0,107,27
-#        # subId=4570 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel NHEK nucl pA+
-#        longLabel NHEK nucleus longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 179,0,134
-#        # subId=4569 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HeLa nucl pA-
-#        longLabel HeLa-S3 nucleus longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 0,119,158
-#        # subId=4568 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel NHEK cell pA-
-#        longLabel NHEK cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=NHEK localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 179,0,134
-#        # subId=4567 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel NHEK nucl pA-
-#        longLabel NHEK nucleus longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 179,0,134
-#        # subId=4566 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HUVE cell pA-
-#        longLabel HUVEC cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HUVEC localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 224,75,0
-#        # subId=4565 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HUVE cell pA+
-#        longLabel HUVEC cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HUVEC localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 224,75,0
-#        # subId=4564 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HUVE nucl pA-
-#        longLabel HUVEC nucleus longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 224,75,0
-#        # subId=4563 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HepG nucl pA-
-#        longLabel HepG2 nucleus longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 189,0,157
-#        # subId=4562 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel SKRA cell pA-
-#        longLabel SK-N-SH RA cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        # subId=4561 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel SKRA cell pA+
-#        longLabel SK-N-SH RA cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        # subId=4560 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel GM12 cyto pA-
-#        longLabel GM12878 cytosol longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 153,38,0
-#        # subId=4559 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel AG50 cell pA-
-#        longLabel AG04450 cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=AG04450 localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        # subId=4558 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HMEC cell pA+
-#        longLabel HMEC cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=HMEC localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        # subId=4556 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 nucl pA+
-#        longLabel K562 nucleus longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4555 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel AG50 cell pA+
-#        longLabel AG04450 cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=AG04450 localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        # subId=4554 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel GM12 cyto pA+
-#        longLabel GM12878 cytosol longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 153,38,0
-#        # subId=4553 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HUVE cyto pA-
-#        longLabel HUVEC cytosol longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 224,75,0
-#        # subId=4552 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 chrm tot
-#        longLabel K562 chromatin total RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4551 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HeLa nucl pA+
-#        longLabel HeLa-S3 nucleus longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 0,119,158
-#        # subId=4550 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqA549CellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel A549 cell pA+
-#        longLabel A549 cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=A549 localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        # subId=4549 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel GM12 nucl pA-
-#        longLabel GM12878 nucleus longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 153,38,0
-#        # subId=4548 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HMEC cell pA-
-#        longLabel HMEC cell longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=HMEC localization=CELL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        # subId=4547 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 nlos tot
-#        longLabel K562 nucleolus total RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4546 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 nplm tot
-#        longLabel K562 nucleoplasm total RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4545 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel HeLa cyto pA+
-#        longLabel HeLa-S3 cytosol longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        color 0,119,158
-#        # subId=4544 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel NHLF cell pA+
-#        longLabel NHLF cell longPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=NHLF localization=CELL rnaExtract=PAP rep=Pooled
-#        type genePred
-#        # subId=4543 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel H1ES cyto pA-
-#        longLabel H1-hESC cytosol longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 0,107,27
-#        # subId=4542 dateSubmitted=2011-07-13
-#
-#        track wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV7
-#        parent wgEncodeCshlLongRnaSeqViewTranscriptGencV7 off
-#        shortLabel K562 nucl pA-
-#        longLabel K562 nucleus longNonPolyA RNA-seq Transcript Gencode V7 from ENCODE/CSHL
-#        subGroups view=TRANSGENCV7 cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=Pooled
-#        type genePred
-#        color 46,0,184
-#        # subId=4541 dateSubmitted=2011-07-13

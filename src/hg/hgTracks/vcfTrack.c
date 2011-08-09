@@ -18,9 +18,6 @@
 
 #ifdef USE_TABIX
 
-//#*** TODO: use trackDb/cart setting or something
-static boolean doHapClusterDisplay = TRUE;
-
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
@@ -305,19 +302,13 @@ rSetGtHapOrder(ht, gtHapOrder, retGtHapEnd);
 return gtHapOrder;
 }
 
-INLINE char *hapIxToAllele(int hapIx, char *refAllele, char *altAlleles[])
-/* Look up allele by index into reference allele and alternate allele(s). */
-{
-return (hapIx == 0) ? refAllele : altAlleles[hapIx-1];
-}
-
 //#*** unused... add UI option...
-INLINE Color colorFromGt(struct vcfGenotype *gt, int ploidIx, char *refAllele,
-			 char *altAlleles[], int altCount, boolean grayUnphasedHet)
+INLINE Color colorFromGt(struct vcfGenotype *gt, int ploidIx, char **alleles,
+			 boolean grayUnphasedHet)
 /* Color allele by base. */
 {
 int hapIx = ploidIx ? gt->hapIxB : gt->hapIxA;
-char *allele = hapIxToAllele(hapIx, refAllele, altAlleles);
+char *allele = alleles[hapIx];
 if (gt->isHaploid && hapIx > 0)
     return shadesOfGray[5];
 if (grayUnphasedHet && !gt->isPhased && gt->hapIxA != gt->hapIxB)
@@ -336,15 +327,17 @@ else
     return shadesOfGray[5];
 }
 
-INLINE char *gtSummaryString(struct vcfRecord *rec, char **altAlleles, int altCount)
+INLINE char *gtSummaryString(struct vcfRecord *rec)
 // Make pgSnp-like mouseover text, but with genotype counts instead of allele counts.
-// NOTE 1: Returned string is statically allocated, don't free it!
-// NOTE 2: if revCmplDisp is set, this reverse-complements rec->ref and altAlleles!
+// NOTE: Returned string is statically allocated, don't free it!
 {
 static struct dyString *dy = NULL;
 if (dy == NULL)
     dy = dyStringNew(0);
-dyStringClear(dy);
+else
+    dyStringClear(dy);
+if (rec->alleleCount < 2)
+    return "";
 const struct vcfFile *vcff = rec->file;
 int gtRefRefCount = 0, gtRefAltCount = 0, gtAltAltCount = 0, gtOtherCount = 0;
 int i;
@@ -363,22 +356,19 @@ for (i=0;  i < vcff->genotypeCount;  i++)
 // These are pooled strings! Restore when done.
 if (revCmplDisp)
     {
-    reverseComplement(rec->ref, strlen(rec->ref));
-    for (i=0;  i < altCount;  i++)
-	reverseComplement(altAlleles[i], strlen(altAlleles[i]));
+    for (i=0;  i < rec->alleleCount;  i++)
+	reverseComplement(rec->alleles[i], strlen(rec->alleles[i]));
     }
-
-dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->ref, rec->ref, gtRefRefCount,
-	       rec->ref, altAlleles[0], gtRefAltCount,
-	       altAlleles[0], altAlleles[0], gtAltAltCount);
+dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->alleles[0], rec->alleles[0], gtRefRefCount,
+	       rec->alleles[0], rec->alleles[1], gtRefAltCount,
+	       rec->alleles[1], rec->alleles[1], gtAltAltCount);
 if (gtOtherCount > 0)
     dyStringPrintf(dy, " other:%d", gtOtherCount);
 // Restore original values of pooled strings.
 if (revCmplDisp)
     {
-    reverseComplement(rec->ref, strlen(rec->ref));
-    for (i=0;  i < altCount;  i++)
-	reverseComplement(altAlleles[i], strlen(altAlleles[i]));
+    for (i=0;  i < rec->alleleCount;  i++)
+	reverseComplement(rec->alleles[i], strlen(rec->alleles[i]));
     }
 return dy->string;
 }
@@ -391,11 +381,6 @@ static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, int gt
 		       boolean isCenter)
 /* Draw a stack of genotype bars for this record */
 {
-static struct dyString *tmp = NULL;
-if (tmp == NULL)
-    tmp = dyStringNew(0);
-char *altAlleles[256];
-int altCount;
 const double scale = scaleForPixels(width);
 int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
@@ -405,9 +390,6 @@ if (w <= 1)
     x1--;
     w = 3;
     }
-dyStringClear(tmp);
-dyStringAppend(tmp, rec->alt);
-altCount = chopCommas(tmp->string, altAlleles);
 double hapsPerPix = (2 * (double)rec->file->genotypeCount / tg->height);
 int pixIx;
 for (pixIx = 0;  pixIx < tg->height;  pixIx++)
@@ -448,7 +430,7 @@ for (pixIx = 0;  pixIx < tg->height;  pixIx++)
     int y = yOff + pixIx;
     hvGfxLine(hvg, x1, y, x2, y, col);
     }
-char *mouseoverText = gtSummaryString(rec, altAlleles, altCount);
+char *mouseoverText = gtSummaryString(rec);
 if (isCenter)
     {
     // Thick black lines to distinguish this variant:
@@ -470,7 +452,7 @@ if (isCenter)
     else
 	dyStringAppend(dy, "this variant. ");
     dyStringAppend(dy, "To anchor sorting to a different variant, click on that variant and "
-		   "then click on the link below the variant name.");
+		   "then click on the 'Use this variant' button below the variant name.");
     mouseoverText = dy->string;
     }
 mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
@@ -587,6 +569,9 @@ else
     }
 int vcfMaxErr = 100;
 struct vcfFile *vcff = NULL;
+boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
+boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, compositeLevel,
+							VCF_HAP_ENABLED_VAR, TRUE);
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
@@ -594,7 +579,7 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
     if (vcff != NULL)
 	{
-	if (doHapClusterDisplay && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
+	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else

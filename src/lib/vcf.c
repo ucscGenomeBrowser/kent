@@ -426,6 +426,22 @@ return vcff;
 }
 
 
+#define VCF_MAX_INFO 512
+
+static void parseRefAndAlt(struct vcfFile *vcff, struct vcfRecord *record, char *ref, char *alt)
+/* Make an array of alleles, ref first, from the REF and comma-sep'd ALT columns.
+ * Note: this trashes the alt argument, since this is expected to be its last use. */
+{
+char *altAlleles[VCF_MAX_INFO];
+int altCount = chopCommas(alt, altAlleles);
+record->alleleCount = 1 + altCount;
+record->alleles = vcfFileAlloc(vcff, record->alleleCount * sizeof(record->alleles[0]));
+record->alleles[0] = vcfFilePooledStr(vcff, ref);
+int i;
+for (i = 0;  i < altCount;  i++)
+    record->alleles[1+i] = vcfFilePooledStr(vcff, altAlleles[i]);
+}
+
 static void parseFilterColumn(struct vcfFile *vcff, struct vcfRecord *record, char *filterStr)
 /* Transform ;-separated filter codes into count + string array. */
 {
@@ -478,10 +494,8 @@ if (def == NULL)
 return def->type;
 }
 
-#define VCF_MAX_INFO 512
-
-int parseInfoValue(struct vcfRecord *record, char *infoKey, enum vcfInfoType type, char *valStr,
-		   union vcfDatum **pData)
+static int parseInfoValue(struct vcfRecord *record, char *infoKey, enum vcfInfoType type,
+			  char *valStr, union vcfDatum **pData)
 /* Parse a comma-separated list of values into array of union vcfInfoDatum and return count. */
 {
 char *valWords[VCF_MAX_INFO];
@@ -588,8 +602,7 @@ while ((wordCount = lineFileChop(vcff->lf, words)) > 0)
     // chromEnd may be modified by parseInfoColumn, if INFO column includes END.
     record->chromEnd = record->chromStart + 1;
     record->name = vcfFilePooledStr(vcff, words[2]);
-    record->ref = vcfFilePooledStr(vcff, words[3]);
-    record->alt = vcfFilePooledStr(vcff, words[4]);
+    parseRefAndAlt(vcff, record, words[3], words[4]);
     record->qual = vcfFilePooledStr(vcff, words[5]);
     parseFilterColumn(vcff, record, words[6]);
     parseInfoColumn(vcff, record, words[7]);

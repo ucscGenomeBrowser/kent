@@ -41,27 +41,17 @@ for (i = 0;  i < wordCount; i++)
 printf("<BR>\n");
 }
 
-static void printListWithDescriptions(struct vcfFile *vcff, char *str, char *sep, struct vcfInfoDef *infoDefs)
-/* Given a VCF field, its separator char and a list of vcfInfoDefs, print out a list
- * of values with descriptions if descriptions are available. */
-{
-char *copy = cloneString(str);
-char *words[256];
-int wordCount = chopString(copy, sep, words, ArraySize(words));
-printKeysWithDescriptions(vcff, wordCount, words, infoDefs);
-}
-
 static void vcfAltAlleleDetails(struct vcfRecord *rec)
 /* If VCF header specifies any symbolic alternate alleles, pull in descriptions. */
 {
 printf("<B>Alternate allele(s):</B> ");
-if (sameString(rec->alt, "."))
+if (rec->alleleCount < 2 || sameString(rec->alleles[1], "."))
     {
     printf(NA"<BR>\n");
     return;
     }
 struct vcfFile *vcff = rec->file;
-printListWithDescriptions(vcff, rec->alt, ",", vcff->altDefs);
+printKeysWithDescriptions(vcff, rec->alleleCount-1, &(rec->alleles[1]), vcff->altDefs);
 }
 
 static void vcfQualDetails(struct vcfRecord *rec)
@@ -123,34 +113,18 @@ for (i = 0;  i < rec->infoCount;  i++)
 puts("</TABLE>");
 }
 
-static char *hapFromIx(char *ref, char *altAlleles[], unsigned char altAlCount, unsigned char hapIx)
-/* Look up the allele specified by hapIx: 0 = ref, 1 & up = offset index into altAlleles */
-{
-if (hapIx == 0)
-    return ref;
-else if (hapIx-1 < altAlCount)
-    return altAlleles[hapIx-1];
-else
-    errAbort("hapFromIx: index %d is out of range (%d alleles specified)", hapIx, altAlCount+1);
-return NULL;
-}
-
 static void vcfGenotypesDetails(struct vcfRecord *rec, char *track)
 /* Print genotypes in some kind of table... */
 {
 struct vcfFile *vcff = rec->file;
 if (vcff->genotypeCount == 0)
     return;
-static struct dyString *tmp1 = NULL, *tmp2 = NULL;
+static struct dyString *tmp1 = NULL;
 if (tmp1 == NULL)
-    {
     tmp1 = dyStringNew(0);
-    tmp2 = dyStringNew(0);
-    }
 vcfParseGenotypes(rec);
 // Tally genotypes and alleles for summary:
-// Note: this lumps all alternate alleles together.
-int refs = 0, alts = 0, refRefs = 0, refAlts = 0, altAlts = 0, phasedGts = 0;
+int refs = 0, alts = 0, refRefs = 0, refAlts = 0, altAlts = 0, gtOther = 0, phasedGts = 0;
 int i;
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
@@ -169,21 +143,29 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	    alts++;
 	if (gt->hapIxA == 0 && gt->hapIxB == 0)
 	    refRefs++;
-	else if (gt->hapIxA != 0 && gt->hapIxB != 0)
+	else if (gt->hapIxA == 1 && gt->hapIxB == 1)
 	    altAlts++;
-	else
+	else if ((gt->hapIxA == 1 && gt->hapIxB == 0) ||
+		 (gt->hapIxA == 0 && gt->hapIxB == 1))
 	    refAlts++;
+	else
+	    gtOther++;
 	}
     }
 printf("<B>Genotype count:</B> %d (%d phased)<BR>\n", vcff->genotypeCount, phasedGts);
 printf("<B>Alleles:</B> %s: %d (%.2f); %s: %d (%.2f)<BR>\n",
-       rec->ref, refs, (double)refs/(2*vcff->genotypeCount),
-       rec->alt, alts, (double)alts/(2*vcff->genotypeCount));
+       rec->alleles[0], refs, (double)refs/(2*vcff->genotypeCount),
+       rec->alleles[1], alts, (double)alts/(2*vcff->genotypeCount));
 if (vcff->genotypeCount > 1)
-    printf("<B>Genotypes:</B> %s/%s: %d (%.2f); %s/%s: %d (%.2f); %s/%s: %d (%.2f)<BR>\n",
-	   rec->ref, rec->ref, refRefs, (double)refRefs/vcff->genotypeCount,
-	   rec->ref, rec->alt, refAlts, (double)refAlts/vcff->genotypeCount,
-	   rec->alt, rec->alt, altAlts, (double)altAlts/vcff->genotypeCount);
+    {
+    printf("<B>Genotypes:</B> %s/%s: %d (%.2f); %s/%s: %d (%.2f); %s/%s: %d (%.2f)",
+	   rec->alleles[0], rec->alleles[0], refRefs, (double)refRefs/vcff->genotypeCount,
+	   rec->alleles[0], rec->alleles[1], refAlts, (double)refAlts/vcff->genotypeCount,
+	   rec->alleles[1], rec->alleles[1], altAlts, (double)altAlts/vcff->genotypeCount);
+    if (gtOther > 0)
+	printf("; other: %d (%.2f)", gtOther, (double)gtOther/vcff->genotypeCount);
+    printf("<BR>\n");
+    }
 jsBeginCollapsibleSection(cart, track, "genotypes", "Detailed genotypes", FALSE);
 dyStringClear(tmp1);
 dyStringAppend(tmp1, rec->format);
@@ -209,15 +191,11 @@ for (i = 0;  i < formatCount;  i++)
     printf("<TH>%s</TH>", formatKeys[i]);
     }
 puts("</TR>\n");
-dyStringClear(tmp2);
-dyStringAppend(tmp2, rec->alt);
-char *altAlleles[256];
-unsigned char altCount = chopCommas(tmp2->string, altAlleles);
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
     struct vcfGenotype *gt = &(rec->genotypes[i]);
-    char *hapA = hapFromIx(rec->ref, altAlleles, altCount, gt->hapIxA);
-    char *hapB = gt->isHaploid ? NA : hapFromIx(rec->ref, altAlleles, altCount, gt->hapIxB);
+    char *hapA = rec->alleles[gt->hapIxA];
+    char *hapB = gt->isHaploid ? NA : rec->alleles[gt->hapIxB];
     char sep = gt->isPhased ? '|' : '/';
     char *phasing = gt->isHaploid ? NA : gt->isPhased ? "Y" : "n";
     printf("<TR><TD>%s</TD><TD>%s%c%s</TD><TD>%s</TD>", vcff->genotypeIds[i],
@@ -269,7 +247,7 @@ printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
 vcfCfgHaplotypeCenter(cart, tdb, rec->file, rec->name, seqName, rec->chromStart, formName);
 printf("</FORM>\n");
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);
-printf("<B>Reference allele:</B> %s<BR>\n", rec->ref);
+printf("<B>Reference allele:</B> %s<BR>\n", rec->alleles[0]);
 vcfAltAlleleDetails(rec);
 vcfQualDetails(rec);
 vcfFilterDetails(rec);
