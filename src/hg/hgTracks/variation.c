@@ -1170,6 +1170,10 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int w, y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+if (theImgBox != NULL)
+    withLabels = (withLeftLabels && (vis == tvPack || vis == tvFull) && !tg->drawName);
+#endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
@@ -1189,7 +1193,7 @@ if (vis == tvPack || vis == tvSquish)
         int textX = x1;
         char *name = tg->itemName(tg, item);
 	Color itemColor = tg->itemColor(tg, item, hvg);
-	Color itemNameColor = tg->itemNameColor(tg, item, hvg);
+        Color itemNameColor = tg->itemNameColor(tg, item, hvg);
 
         y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
@@ -1198,7 +1202,11 @@ if (vis == tvPack || vis == tvSquish)
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
             textX -= nameWidth + dotWidth;
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox == NULL && textX < insideX)
+        #else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
             if (textX < insideX)        /* Snap label to the left. */
+        #endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
 		{
 		textX = leftLabelX;
                 assert(hvgSide != NULL);
@@ -1227,7 +1235,23 @@ else
 	Color itemColor = tg->itemColor(tg, item, hvg);
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (vis == tvFull)
+            {
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox != NULL) // In dragScroll >1x item labels cannot be in leftLabel
+                {                  // So they appear here in the image, just like in pack
+                int s = tg->itemStart(tg, item);
+                int textX = round((s - winStart)*scale) + xOff;
+                if (textX >= insideX)
+                    {
+                    char *name = tg->itemName(tg, item);
+                    int nameWidth = mgFontStringWidth(font, name);
+                    Color itemNameColor = tg->itemNameColor(tg, item, hvg);
+                    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, itemNameColor, font, name);
+                    }
+                }
+        #endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 	    y += lineHeight;
+            }
         }
     }
 }
@@ -1242,6 +1266,10 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+if (theImgBox != NULL)
+    withLabels = (withLeftLabels && (vis == tvPack || tvFull) && !tg->drawName);
+#endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 snp125ColorSource = snp125ColorSourceFromCart(cart, tg->tdb);
 
 if (!tg->drawItemAt)
@@ -1261,8 +1289,8 @@ if (vis == tvPack || vis == tvSquish)
         int textX = x1;
         char *name = tg->itemName(tg, item);
 	Color itemColor = tg->itemColor(tg, item, hvg);
-	Color itemNameColor = tg->itemNameColor(tg, item, hvg);
-	boolean drawNameInverted = FALSE;
+        Color itemNameColor = tg->itemNameColor(tg, item, hvg);
+        boolean drawNameInverted = FALSE;
 
         y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
@@ -1274,7 +1302,11 @@ if (vis == tvPack || vis == tvSquish)
 	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
 	    snapLeft = (textX < insideX);
-            if (snapLeft)        /* Snap label to the left. */
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox == NULL && snapLeft)
+        #else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+            if (snapLeft)
+        #endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
 		{
 		textX = leftLabelX;
                 assert(hvgSide != NULL);

@@ -2317,7 +2317,14 @@ if (withLeftLabels)
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
         else
-            y = doLeftLabels(track, hvgSide, font, y);
+            {
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox && track->limitedVis != tvDense)
+                y += sliceHeight;
+            else
+        #endif ///defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+                y = doLeftLabels(track, hvgSide, font, y);
+            }
         }
     }
 else
@@ -2473,7 +2480,11 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
+    #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        else if (track->drawLeftLabels != NULL && (theImgBox == NULL || track->limitedVis == tvDense))
+    #else ///!defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
         else if (track->drawLeftLabels != NULL)
+    #endif ///!defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ <= 1)
             y = doOwnLeftLabels(track, hvgSide, font, y);
         else
             y += trackPlusLabelHeight(track, fontHeight);
