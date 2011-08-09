@@ -18,9 +18,6 @@
 
 #ifdef USE_TABIX
 
-//#*** TODO: use trackDb/cart setting or something
-static boolean doHapClusterDisplay = TRUE;
-
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
@@ -455,7 +452,7 @@ if (isCenter)
     else
 	dyStringAppend(dy, "this variant. ");
     dyStringAppend(dy, "To anchor sorting to a different variant, click on that variant and "
-		   "then click on the link below the variant name.");
+		   "then click on the 'Use this variant' button below the variant name.");
     mouseoverText = dy->string;
     }
 mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
@@ -572,6 +569,9 @@ else
     }
 int vcfMaxErr = 100;
 struct vcfFile *vcff = NULL;
+boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
+boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, compositeLevel,
+							VCF_HAP_ENABLED_VAR, TRUE);
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
@@ -579,7 +579,7 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
     if (vcff != NULL)
 	{
-	if (doHapClusterDisplay && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
+	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else
