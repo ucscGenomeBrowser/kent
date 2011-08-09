@@ -10496,7 +10496,8 @@ tag OBJSTAT
 type typeOfTerm
 label Object Status
 description The status of the file or table object (revoked, replaced, etc)  PROVISIONAL
-searchable multiSelect
+searchable no
+hidden no
 cvDefined yes
 validate cv  
 priority 1   
