@@ -34,5 +34,15 @@
 #hubURL {line-height: 0.9em; color: #1c1d22;}
 .hubList input {margin: 3px; font-size: 0.8em;}
 .submitHub {margin: 10px;}
-.hubList .small {margin: 2px 40px; font-size: 0.8em;}
+
+.tabFooter {
+    font-size: 100%;
+    font-family: Verdana,Arial,sans-serif;
+}
+
+.tabFooter input {
+    font-size: 0.8em;
+    margin: 7px 0 7px 3px;
+}
+.tabFooter .small {margin: 2px 40px; font-size: 0.8em;}
 

@@ -210,14 +210,14 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 # Create an evidence weight file
-cat > trim.weights <<end
+cat > trim.weights <<EOF
 refSeq  100
 ccds    50
 mrna    2
 txOrtho 1
 exoniphy 1
 est 1
-end
+EOF
 
 # Make evidence file for EST graph edges supported by at least 2 
 # ests.  Takes about 30 seconds.
@@ -1239,6 +1239,13 @@ ixIxx knownGene.text knownGene.ix knownGene.ixx
 rm -f /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
 ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
+
+# UPDATE 8/2/11 (angie): regenerating knownGene.ix* because kgXref was more recent:
+foreach f (knownGene.text knownGene.ix knownGene.ixx)
+    mv $f $f.initialRelease
+end
+hgKgGetText $db knownGene.text.update
+ixIxx knownGene.text.update knownGene.ix knownGene.ixx
 
 # Build known genes list for google
 # make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html

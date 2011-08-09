@@ -4,8 +4,7 @@ include wgEncodeSuper.ra
 
 # GENCODE genes (wrangler: braney )
 include wgEncodeGencodeV3.ra
-include wgEncodeGencodeV4.new.ra alpha
-include wgEncodeGencodeV4.ra beta,public
+include wgEncodeGencodeV4.ra
 #include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra
 
@@ -26,7 +25,7 @@ include wgEncodeGisRnaPet.ra alpha
 include wgEncodeGisDnaPet.ra
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
-include wgEncodeHaibGenotype.ra alpha
+include wgEncodeHaibGenotype.ra
 
 # BU Orchid (wrangler: cricket)
 include wgEncodeBuOrchid.ra
@@ -174,8 +173,8 @@ include wgEncodeUchicagoTfbs.ra
 include wgEncodeSunyAlbanyGeneSt.ra
 
 # SUNY Tiling Array (wrangler: cricket)
-include wgEncodeSunyAlbanyTiling.ra beta,public
-include wgEncodeSunyAlbanyTiling.new.ra alpha
+include wgEncodeSunyAlbanyTiling.ra
+#include wgEncodeSunyAlbanyTiling.new.ra alpha
 
 # SUNY SwitchGear (wrangler: cricket)
 include wgEncodeSunySwitchgear.ra
