@@ -4235,9 +4235,9 @@ if (sameString(choice, "manual"))
 else if (sameString(choice, "automatic"))
     dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\")");
 else if (sameString(choice, "manual_only"))
-    dyStringAppend(dyClause, "(transSrc.source not like \"%havana%\")");
+    dyStringAppend(dyClause, "(transSrc.source like \"%havana%\") and (transSrc.source not like \"%ensembl%\")");
 else if (sameString(choice, "automatic_only"))
-    dyStringAppend(dyClause, "(transSrc.source not like \"%ensembl%\")");
+    dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\") and (transSrc.source not like \"%havana%\")");
 else
     errAbort("BUG: filterByMethodChoice missing choice: \"%s\"", choice);
 }
