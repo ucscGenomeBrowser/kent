@@ -673,7 +673,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Lung_H12817N
-tag BCLUNG
+tag BCLUNGb
 type Cell Line
 tier 3
 organism human
@@ -8742,7 +8742,7 @@ description Element cluster by integrative analysis
 
 #tag not standard to match hg18
 term Cnv
-tag CNV
+tag CNVdt
 type dataType
 label CNV
 description Copy Number Variation
@@ -9338,7 +9338,7 @@ grantPi Ruan
 organism human
 
 term Sanger
-tag GENCODE
+tag SANGER
 type lab
 label Hubbard - GENCODE at Sanger Institute
 description Hubbard - GENCODE at Sanger Institute
@@ -9656,7 +9656,7 @@ organism human
 ###
 
 term LICR-m
-tag LICR
+tag LICRm
 type lab
 label Ren - Ludwig Institue for Cancer Research
 description Ren - Ludwig Institue for Cancer Research
@@ -9667,7 +9667,7 @@ grantPi Ren
 organism mouse
 
 term Caltech-m
-tag CALTECH
+tag CALTECHm
 type lab
 label Wold - Califonia Institute of Technology
 description Wold - Califonia Institute of Technology
@@ -9678,7 +9678,7 @@ grantPi Hardison
 organism mouse
 
 term UMass-m
-tag  UMASS
+tag  UMASSm
 type lab
 label Dekker - University of Massachusettes
 description Dekker - University of Massachusettes
@@ -9689,7 +9689,7 @@ grantPi Hardison
 organism mouse
 
 term Duke-m
-tag DUKE
+tag DUKEm
 type lab
 label Crawford - Duke University
 description Crawford - Duke University
@@ -9700,7 +9700,7 @@ grantPi Hardison
 organism mouse
 
 term PSU-m
-tag PSU
+tag PSUm
 type lab
 label Hardison - Penn State University
 description Hardison - Penn State University
@@ -9712,7 +9712,7 @@ organism mouse
 
 
 term UW-m
-tag UW
+tag UWm
 type lab
 label Stamatoyannopoulous - University of Washington
 description Stamatoyannopoulous - University of Washington
@@ -9723,7 +9723,7 @@ grantPi Stam
 organism mouse
 
 term Stanford-m
-tag  STANFORD
+tag  STANFORDm
 type lab
 label Snyder - Stanford University
 description Snyder - Stanford University
@@ -9734,7 +9734,7 @@ grantPi Snyder
 organism mouse
 
 term Yale-m
-tag  YALE
+tag  YALEm
 type lab
 label Weissman - Yale University
 description Weissman - Yale University
@@ -10067,7 +10067,7 @@ priority 025
 # Should be cvDefined
 
 term control
-tag CONTROL
+tag CONTROLi
 type typeOfTerm
 label Control or Input for ChIPseq
 description The type of control (or 'input') used in ChIP-seq experiments to remove background noise before peak calling.
