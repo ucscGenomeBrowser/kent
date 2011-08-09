@@ -4143,10 +4143,13 @@ if (wikiTrackEnabled(database, NULL))
     wikiDisconnect(&conn);
     }
 
-loadTrackHubs(&trackList, &hubList);
-slReverse(&hubList);
+if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
+    { // If a single track was asked for and it is from a hub, then it is already in trackList
+    loadTrackHubs(&trackList, &hubList);
+    slReverse(&hubList);
+    groupTracks(hubList, &trackList, pGroupList, vis);
+    }
 loadCustomTracks(&trackList);
-groupTracks(hubList, &trackList, pGroupList, vis);
 setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
