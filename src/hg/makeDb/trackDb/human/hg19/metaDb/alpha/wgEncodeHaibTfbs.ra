@@ -28739,6 +28739,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -28787,6 +28788,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -28839,6 +28841,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -28887,6 +28890,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -42497,4 +42501,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 234300027
+# MAGIC: 274497011

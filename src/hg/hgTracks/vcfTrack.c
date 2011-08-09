@@ -10,6 +10,7 @@
 #include "pgSnp.h"
 #include "trashDir.h"
 #include "vcf.h"
+#include "vcfUi.h"
 #if (defined USE_TABIX && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
@@ -19,7 +20,6 @@
 
 //#*** TODO: use trackDb/cart setting or something
 static boolean doHapClusterDisplay = TRUE;
-static boolean colorHapByRefAlt = TRUE;
 
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
@@ -311,6 +311,7 @@ INLINE char *hapIxToAllele(int hapIx, char *refAllele, char *altAlleles[])
 return (hapIx == 0) ? refAllele : altAlleles[hapIx-1];
 }
 
+//#*** unused... add UI option...
 INLINE Color colorFromGt(struct vcfGenotype *gt, int ploidIx, char *refAllele,
 			 char *altAlleles[], int altCount, boolean grayUnphasedHet)
 /* Color allele by base. */
@@ -333,29 +334,6 @@ else if (allele[0] == 'T')
     return MG_MAGENTA;
 else
     return shadesOfGray[5];
-}
-
-INLINE Color colorFromRefAlt(struct vcfGenotype *gt, int hapIx, boolean grayUnphasedHet)
-/* Color allele red for alternate allele, blue for reference allele -- 
- * except for special center variant, make it yellow/green for contrast. */
-{
-if (grayUnphasedHet && !gt->isPhased && gt->hapIxA != gt->hapIxB)
-    return shadesOfGray[5];
-int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
-return alIx ? MG_RED : MG_BLUE;
-}
-
-
-INLINE int drawOneHap(struct vcfGenotype *gt, int hapIx,
-		      char *ref, char *altAlleles[], int altCount,
-		      struct hvGfx *hvg, int x1, int y, int w, int itemHeight, int lineHeight)
-/* Draw a base-colored box for genotype[hapIx].  Return the new y offset. */
-{
-Color color = colorHapByRefAlt ? colorFromRefAlt(gt, hapIx, TRUE) :
-				 colorFromGt(gt, hapIx, ref, altAlleles, altCount, TRUE);
-hvGfxBox(hvg, x1, y, w, itemHeight+1, color);
-y += itemHeight+1;
-return y;
 }
 
 INLINE char *gtSummaryString(struct vcfRecord *rec, char **altAlleles, int altCount)
@@ -405,6 +383,9 @@ if (revCmplDisp)
 return dy->string;
 }
 
+// This is initialized when we start drawing:
+static Color purple = 0;
+
 static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, int gtHapEnd,
 		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width,
 		       boolean isCenter)
@@ -415,8 +396,6 @@ if (tmp == NULL)
     tmp = dyStringNew(0);
 char *altAlleles[256];
 int altCount;
-const int lineHeight = tg->lineHeight;
-const int itemHeight = tg->heightPer;
 const double scale = scaleForPixels(width);
 int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
@@ -426,19 +405,48 @@ if (w <= 1)
     x1--;
     w = 3;
     }
-int y = yOff;
 dyStringClear(tmp);
 dyStringAppend(tmp, rec->alt);
 altCount = chopCommas(tmp->string, altAlleles);
-int gtHapOrderIx;
-for (gtHapOrderIx = 0;  gtHapOrderIx < gtHapEnd;  gtHapOrderIx++)
+double hapsPerPix = (2 * (double)rec->file->genotypeCount / tg->height);
+int pixIx;
+for (pixIx = 0;  pixIx < tg->height;  pixIx++)
     {
-    int gtHapIx = gtHapOrder[gtHapOrderIx];
-    int hapIx = gtHapIx & 1;
-    int gtIx = gtHapIx >>1;
-    struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
-    y = drawOneHap(gt, hapIx, rec->ref, altAlleles, altCount,
-		   hvg, x1, y, w, itemHeight, lineHeight);
+    int gtHapOrderIxStart = round(hapsPerPix * pixIx);
+    int gtHapOrderIxEnd = round(hapsPerPix * (pixIx + 1));
+    if (gtHapOrderIxEnd == gtHapOrderIxStart)
+	gtHapOrderIxEnd++;
+    int unks = 0, refs = 0, alts = 0;
+    int gtHapOrderIx;
+    for (gtHapOrderIx = gtHapOrderIxStart;  gtHapOrderIx < gtHapOrderIxEnd;  gtHapOrderIx++)
+	{
+	int gtHapIx = gtHapOrder[gtHapOrderIx];
+	int hapIx = gtHapIx & 1;
+	int gtIx = gtHapIx >>1;
+	struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
+	if (!gt->isPhased && gt->hapIxA != gt->hapIxB)
+	    unks++;
+	else
+	    {
+	    int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
+	    if (alIx)
+		alts++;
+	    else
+		refs++;
+	    }
+	}
+    const int fudgeFactor = 4;
+    Color col = MG_BLACK;
+    if (unks > (refs + alts))
+	col = shadesOfGray[5];
+    else if (alts > fudgeFactor * refs)
+	col = MG_RED;
+    else if (refs > fudgeFactor * alts)
+	col = MG_BLUE;
+    else
+	col = purple;
+    int y = yOff + pixIx;
+    hvGfxLine(hvg, x1, y, x2, y, col);
     }
 char *mouseoverText = gtSummaryString(rec, altAlleles, altCount);
 if (isCenter)
@@ -505,6 +513,7 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
+purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
 unsigned short gtHapEnd = 0;
 int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 unsigned short *gtHapOrder = clusterChroms(vcff, centerIx, &gtHapEnd);
@@ -528,8 +537,11 @@ static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
 const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return 0;
-int ploidy = 2;
-tg->height = ploidy * vcff->genotypeCount * tg->lineHeight;
+int ploidy = sameString(chromName, "chrY") ? 1 : 2;
+int simpleHeight = ploidy * vcff->genotypeCount * tg->lineHeight;
+int defaultHeight = min(simpleHeight, VCF_DEFAULT_HAP_HEIGHT);
+int cartHeight = cartOrTdbInt(cart, tg->tdb, VCF_HAP_HEIGHT_VAR, defaultHeight);
+tg->height = min(cartHeight, maximumTrackHeight(tg));
 return tg->height;
 }
 
