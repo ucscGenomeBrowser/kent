@@ -8,8 +8,13 @@
 #include "vcf.h"
 
 #define VCF_HAP_HEIGHT_VAR "hapClusterHeight"
-
 #define VCF_DEFAULT_HAP_HEIGHT 128
+
+#define VCF_HAP_ENABLED_VAR "hapClusterEnabled"
+
+#define VCF_HAP_COLORBY_VAR "hapClusterColorBy"
+#define VCF_HAP_COLORBY_REFALT "refAlt"
+#define VCF_HAP_COLORBY_BASE "base"
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
 			   char *thisName, char *thisChrom, int thisPos, char *formName);
