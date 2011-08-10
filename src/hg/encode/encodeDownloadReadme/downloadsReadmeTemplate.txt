@@ -4,17 +4,15 @@
 # The validator will use this template and our script to do mass update
 # of the README will use this template.
 # Items requiring relational replacement are marked with ++
-
-
 This directory contains the downloadable files associated with this ENCODE
 composite track. Data files are RESTRICTED FROM USE in publication until the
 restriction date noted in files.txt and in the recommended 'Downloadable Files' 
 user interface listed below. The full data policy is available at
 http://genome.ucsc.edu/ENCODE/terms.html.
 
-For more information about this data (e.g. release status, restriction dates,
-track description, methods, etc.) along with a filterable file list with the
-associated metadata use the 'Downloadable Files' user interface at: 
+For a filterable list of these files along with additional information such as
+release status, restriction dates, track description, methods, and metadata,
+please use the 'Downloadable Files' user interface at: 
 
 
      http://genome.ucsc.edu/cgi-bin/hgFileUi?db=++db++&g=++composite++

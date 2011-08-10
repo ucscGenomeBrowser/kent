@@ -27,6 +27,14 @@ its ability to reveal the translation of small ORFs, antisense
 transcripts, or sites annotated as introns that encode proteins.
 </p>
 <h2>Display Conventions and Configuration</h2>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+ENCODE tracks typically contain one or more of the following views:
+<DL>
+
 <p>The display for this track shows peptide mappings as
 grayscale-colored items where higher scores correspond to
 darker-colored blocks.<br>
@@ -76,7 +84,7 @@ mapping, and can be used to track the origins of the mapping.<br>
 proteomic analysis. Cell lines were cultured according to standard
 ENCODE cell culture protocols
 and in-gel digestion was completed according to the standard
-protocol[3]. </p>
+protocol[2]. </p>
 The proteolytic enzyme trypsin was used to digest the proteins
 in order to produce short, MS/MS analyzable peptides. Trypsin is a
 common protease that typically cleaves proteins after R or K. The
@@ -89,7 +97,7 @@ missed cleavages allowed in the search is described by the metadata
 parameter <i>miscleavages</i>.
 <p>We performed proteogenomic mapping with two missed cleavages
 allowed and using the whole human genomic sequence (UCSC hg19) via the
-genome fingerprint scanning (GFS) program [2] and newly developed
+genome fingerprint scanning (GFS) program [3] and newly developed
 Peppy [to appear]. We used HMM_Score [4] to accurately match MS/MS
 spectra to their corresponding genome sequences.  E-values are
 calculated, which estimate the number of results at the given score
@@ -100,19 +108,19 @@ FDR rate (E-Value <0.01) are included in the track. The results with
 10% FDR (E-Value <0.05) are available under the Downloads page as Raw Signal.</a> </p>
 <h2>Credits</h2>
 <p>Proteogenomic mapping: Dr. Jainab Khatun, Brian Risk, Mustaque
-Ahamed, Christopher Maier, Dr. John Wrobel and Dennis Crenshaw (Giddings Lab). </p>
-<p>Proteomic analysis: Drs. Yanbao Yu and Ling Xie (Xian Lab).</p>
+Ahamed, Christopher Maier, Dr. John Wrobel and Dennis Crenshaw (<A HREF=http://http://giddingslab.org/>Giddings Lab</A>). </p>
+<p>Proteomic analysis: Drs. Yanbao Yu and Ling Xie (<A HREF=http://www.med.unc.edu/biochem/chenlab/chen-research-lab>Chen Lab</A>).</p>
 <h2>References</h2>
 <p>1. Proteogenomic mapping as a complementary method to perform genome
 annotation. Jaffe, J. D., Berg, H. C., &amp; Church, G. M. (2004).
 Proteomics 2004 4(1):59-77.</p>
-<p>2. Genome-based peptide fingerprint scanning. Giddings MC, Shah AA,
-Gesteland RF, Moore MB. Proceedings of the National Academy of Sciences
-of the United States of America 100(1):20-25. </p>
-<p>3. In-gel digestion for mass spectrometric characterization of
+<p>2. In-gel digestion for mass spectrometric characterization of
 proteins and proteomes. Andrej Shevchenko, Henrik Tomas, Jan Havli ,
 Jesper V Olsen &amp; Matthias Mann. Nature Protocols 1, 2856 - 2860
 (2007).</p>
+<p>3. Genome-based peptide fingerprint scanning. Giddings MC, Shah AA,
+Gesteland RF, Moore MB. Proceedings of the National Academy of Sciences
+of the United States of America 100(1):20-25. </p>
 <p>4. Incorporating Sequence Information into the Scoring Function: A
 Hidden Markov Model for Improved Peptide Identification . Khatun J,
 Hamlett ED and Giddings, MC. Bioinformatics 2008 24(5):674-681.</p>
