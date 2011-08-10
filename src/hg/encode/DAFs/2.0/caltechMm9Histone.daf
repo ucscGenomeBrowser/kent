@@ -1,12 +1,12 @@
 # Data Agreement File for Caltech ChIP-seq (Histone Modifications) experiments for mm9
 
-#$Revision: 1.2 $
+#$Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated DDF should look like this:
-#files   view    cell    antibody        sex     age     strain  control replicate      seqPlatform       softwareVersion labVersion
+#files   view    cell    antibody   treatment   protocol     sex  control readType replicate setType controlId   labExpId    seqPlatform       softwareVersion labVersion md5sum
 
 
 #Explanation of DDF terms
@@ -14,22 +14,27 @@
 #view: The type of view that these files are. The options are listed in this DAF
 #cell: The cell or tissue name. The cell registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_cell_types
 #antibody: The antibody used for a specific target.The antibody registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Antibodies
+#treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
+#protocol: The specific PCR protocol used. The protocol registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Protocols
 #sex: The sex of the individual the tissue originated or cell sex type. The sex registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sex
-#age: The age of the sample used. The age registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
-#strain: The strain that the sample originated from. the strain registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
 #control: The input used as control for ChIP-seq data. The control registerd vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
+#readType       the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
 #replicate: The Replicate number. The replication number of a given experiment.
+#setType: The identification if either the data refers to an experiment (exp) or is input (input) for another experiment.
+#controlId: The unique identification of experiments. The control ID gerneated from the lab.
+#labExpId; A unique lab identification number for an experiment.
 #seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
 #softwareVersion: Free text for the lab to keep track of software used in processed data
 #labVersion: Free text for the lab to keep track of any other data
+#md5sum: md5sum of file
 
 
 # Lab and general info
 grant             Hardison
 lab               Caltech-m
 dataType          ChipSeq 
-variables         cell, antibody,sex,age,strain,control
-compositeSuffix   CaltechHistone
+variables         cell,antibody,sex,control,treatment,protocol
+compositeSuffix   CaltechHist
 assembly          mm9
 dafVersion        2.0
 validationSettings validateFiles.bam:mismatches=2,bamPercent=99.9;validateFiles.fastq:quick=1000
