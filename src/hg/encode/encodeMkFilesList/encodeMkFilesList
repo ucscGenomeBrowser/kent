@@ -448,7 +448,6 @@ foreach my $file (@filemask){
                 	unless (exists $filehash{'md5sum'}){
                         	$filehash{'md5sum'} = $md5sums{$file};
 				my $baisum;
-				my $bamstr;
 				my @into = ('obj', 'var', 'val');
                                 my @values;
 				if ($type eq "bam"){
