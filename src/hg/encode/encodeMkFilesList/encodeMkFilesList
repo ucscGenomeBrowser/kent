@@ -437,17 +437,25 @@ foreach my $file (@filemask){
 			my @temp = @{$ref};
 			$filehash{$temp[0]} = $temp[1]; 
 		}
+
+
+		#this should be pulled out into 2 subroutines whenever we get comma delimited lists into fileName in metaDb
+		#currently it is a lot of special casing because bai's aren't included in the meta, we have to make the assumption that
+		#the bai is there, but that isn't always the case, so we have to case it back to normal if the expected bai file is missing
+		#otherwise the output is something like bam=(md5sum),bai=
+		#so in the future, split this out into 2 subroutines, one for single file in fileName field, one for multiple files that will go into a comma delimited list.
 		if (exists $md5sums{$file} && $type ne "bai" && $writedb == 1){
                 	unless (exists $filehash{'md5sum'}){
                         	$filehash{'md5sum'} = $md5sums{$file};
 				my $baisum;
+				my $bamstr;
+				my @into = ('obj', 'var', 'val');
+                                my @values;
 				if ($type eq "bam"){
 					$baisum = $md5sums{"$file.bai"};
 					unless ($baisum){print STDERR "can't find md5sum for bai for $file, does it exist?\n"}
 				}
-				my @into = ('obj', 'var', 'val');
-				my @values;
-				unless ($type eq "bam"){
+				unless ($type eq "bam" || $baisum){
 					@values = ($tablename, 'md5sum', $md5sums{$file});
                         	}
 				else {
@@ -463,7 +471,7 @@ foreach my $file (@filemask){
 					print STDERR "md5sum for file $file is same in metaDb and calculated md5sum\n";
 				}
 			}
-			elsif ($type ne "bam") {
+			elsif ($type ne "bam" || !($md5sums{"$file.bai"})) {
 				my @values = ($md5sums{$file}, $tablename, 'md5sum');
 				$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
 				if ($opt{'verbose'} >=2){
