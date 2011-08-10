@@ -302,27 +302,17 @@ rSetGtHapOrder(ht, gtHapOrder, retGtHapEnd);
 return gtHapOrder;
 }
 
-//#*** unused... add UI option...
-INLINE Color colorFromGt(struct vcfGenotype *gt, int ploidIx, char **alleles,
-			 boolean grayUnphasedHet)
-/* Color allele by base. */
+INLINE Color pgSnpColor(char *allele)
+/* Color allele by first base according to pgSnp palette. */
 {
-int hapIx = ploidIx ? gt->hapIxB : gt->hapIxA;
-char *allele = alleles[hapIx];
-if (gt->isHaploid && hapIx > 0)
-    return shadesOfGray[5];
-if (grayUnphasedHet && !gt->isPhased && gt->hapIxA != gt->hapIxB)
-    return shadesOfGray[5];
-// Copying pgSnp color scheme here, using first base of allele which is not ideal for multibase
-// but allows us to simplify it to 5 colors:
-else if (allele[0] == 'A')
-    return MG_RED;
+if (allele[0] == 'A')
+    return revCmplDisp ? MG_MAGENTA : MG_RED;
 else if (allele[0] == 'C')
-    return MG_BLUE;
+    return revCmplDisp ? darkGreenColor : MG_BLUE;
 else if (allele[0] == 'G')
-    return darkGreenColor;
+    return revCmplDisp ? MG_BLUE : darkGreenColor;
 else if (allele[0] == 'T')
-    return MG_MAGENTA;
+    return revCmplDisp ? MG_RED : MG_MAGENTA;
 else
     return shadesOfGray[5];
 }
@@ -378,7 +368,7 @@ static Color purple = 0;
 
 static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, int gtHapEnd,
 		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width,
-		       boolean isCenter)
+		       boolean isCenter, boolean colorByRefAlt)
 /* Draw a stack of genotype bars for this record */
 {
 const double scale = scaleForPixels(width);
@@ -422,11 +412,11 @@ for (pixIx = 0;  pixIx < tg->height;  pixIx++)
     if (unks > (refs + alts))
 	col = shadesOfGray[5];
     else if (alts > fudgeFactor * refs)
-	col = MG_RED;
+	col = colorByRefAlt ? MG_RED : pgSnpColor(rec->alleles[1]);
     else if (refs > fudgeFactor * alts)
-	col = MG_BLUE;
+	col = colorByRefAlt ? MG_BLUE : pgSnpColor(rec->alleles[0]);
     else
-	col = purple;
+	col = colorByRefAlt ? purple : shadesOfGray[5];
     int y = yOff + pixIx;
     hvGfxLine(hvg, x1, y, x2, y, col);
     }
@@ -496,6 +486,10 @@ const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
+boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
+char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, compositeLevel,
+					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
+boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
 unsigned short gtHapEnd = 0;
 int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 unsigned short *gtHapOrder = clusterChroms(vcff, centerIx, &gtHapEnd);
@@ -505,10 +499,10 @@ for (rec = vcff->records, ix=0;  rec != NULL;  rec = rec->next, ix++)
     if (ix == centerIx)
 	centerRec = rec;
     else
-	drawOneRec(rec, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width, FALSE);
+	drawOneRec(rec, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width, FALSE, colorByRefAlt);
     }
 // Draw the center rec on top, outlined with black lines, to make sure it is very visible:
-drawOneRec(centerRec, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width, TRUE);
+drawOneRec(centerRec, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width, TRUE, colorByRefAlt);
 }
 
 static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
