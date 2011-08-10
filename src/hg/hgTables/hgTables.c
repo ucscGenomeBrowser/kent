@@ -1926,8 +1926,6 @@ pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 cgiSpoof(&argc, argv);
 
-struct dyString *in = cgiUrlString();
-fprintf(stderr, "%s\n", in->string);
 hgTables();
 
 textOutClose(&compressPipeline);
