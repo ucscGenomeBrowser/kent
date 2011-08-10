@@ -42,7 +42,7 @@ while (rec != NULL && i < 100)
     {
     printf("%s\t%d\t%d\t%s:%s/%s\t%s\n",
 	   rec->chrom, rec->chromStart, rec->chromEnd,
-	   rec->name, rec->ref, rec->alt, rec->qual);
+	   rec->name, rec->alleles[0], rec->alleles[1], rec->qual);
     rec = rec->next;
     i++;
     }

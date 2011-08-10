@@ -1320,7 +1320,7 @@ int portX = insideX;
 // If a portal was established, then set the portal dimensions
 int portalStart,chromStart;
 double basesPerPixel;
-if (imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
+if (theImgBox && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
     {
     portX = (int)((portalStart - chromStart) / basesPerPixel);
     portX += gfxBorder;
@@ -1338,12 +1338,26 @@ labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
 hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
-mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
+mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
+#ifdef IMAGEv2_SHORT_MAPITEMS
+char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
+int width = portWidth - (2 * arrowButtonWidth);
+int x = portX + arrowButtonWidth;
+// make toggle cover only actual label
+int size = mgFontStringWidth(font,label) + 12;  // get close enough to the label
+if (width > size)
+    {
+    x += width/2 - size/2;
+    width = size;
+    }
+mapBoxToggleVis(hvg, x, y + 1, width, insideHeight, (theImgBox ? track : parentTrack));
+#else///ifndef IMAGEv2_SHORT_MAPITEMS
 mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
+#endif///ndef IMAGEv2_SHORT_MAPITEMS
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
-mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
+mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
@@ -1377,8 +1391,19 @@ if (track->limitedVis != tvHide)
                 }
             }
         if (!toggleDone)
+            {
+        #ifdef IMAGEv2_SHORT_MAPITEMS
+            // make toggle cover only actual label
+            int size = mgFontStringWidth(font,label) + 12;  // get close enough to the label
+            if (trackPastTabWidth > size)
+                {
+                trackPastTabX = insideX + insideWidth/2 - size/2;
+                trackPastTabWidth = size;
+                }
+        #endif///def IMAGEv2_SHORT_MAPITEMS
             mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight,
                             (theImgBox ? track : parentTrack));
+            }
         y += fontHeight;
         }
     y += track->totalHeight(track, track->limitedVis);
@@ -1535,8 +1560,10 @@ switch (track->limitedVis)
                             {
                             if (isCenterLabelIncluded(subtrack))
                                 y += fontHeight;
+                        #ifndef IMAGEv2_DRAG_SCROLL
                             if(theImgBox && subtrack->limitedVis == tvDense)
                                 mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, track->lineHeight, subtrack);
+                        #endif///ndef IMAGEv2_DRAG_SCROLL
                             y += subtrack->totalHeight(subtrack, subtrack->limitedVis);
                             }
                         }
@@ -1555,9 +1582,11 @@ switch (track->limitedVis)
             mapHeight = track->height;
         else
             mapHeight = track->lineHeight;
+    #ifndef IMAGEv2_DRAG_SCROLL
         int maxWinToDraw = getMaxWindowToDraw(track->tdb);
         if (maxWinToDraw <= 1 || (winEnd - winStart) <= maxWinToDraw)
             mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
+    #endif///ndef IMAGEv2_DRAG_SCROLL
         y += mapHeight;
         break;
     case tvHide:
@@ -1932,7 +1961,7 @@ if(theImgBox)
     if (withLeftLabels)
         {
         sliceWidth[stButton]   = trackTabWidth + 1;
-        sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 2;
+        sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 1;
         sliceOffsetX[stSide]   = (revCmplDisp? (tl.picWidth - sliceWidth[stSide] - sliceWidth[stButton]) : sliceWidth[stButton]);
         sliceOffsetX[stButton] = (revCmplDisp? (tl.picWidth - sliceWidth[stButton]) : 0);
         }
@@ -2199,10 +2228,13 @@ if (withLeftLabels && psOutput == NULL)
 
 if (withLeftLabels)
     {
-    Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
+    if (theImgBox == NULL)
+        {
+        Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
 
-    hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
-        gfxBorder, pixHeight, lightRed);
+        hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
+            gfxBorder, pixHeight, lightRed);
+        }
     y = gfxBorder;
     if (rulerMode != tvHide)
         {
@@ -2285,7 +2317,14 @@ if (withLeftLabels)
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
         else
-            y = doLeftLabels(track, hvgSide, font, y);
+            {
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox && track->limitedVis != tvDense)
+                y += sliceHeight;
+            else
+        #endif ///defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+                y = doLeftLabels(track, hvgSide, font, y);
+            }
         }
     }
 else
@@ -2408,8 +2447,10 @@ if (withCenterLabels)
         else
             y = doDrawItems(track, hvg, font, y, &lastTime);
 
+        #ifndef IMAGEv2_DRAG_SCROLL
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track); // Strange mabBoxToggleLogic handles reverse complement itself so x=0, width=tl.picWidth
+        #endif///ndef IMAGEv2_DRAG_SCROLL
 
         if(yEnd!=y)
             warn("Slice height does not add up.  Expecting %d != %d actual",yEnd - yStart - 1,y-yStart);
@@ -2439,7 +2480,11 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
+    #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        else if (track->drawLeftLabels != NULL && (theImgBox == NULL || track->limitedVis == tvDense))
+    #else ///!defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
         else if (track->drawLeftLabels != NULL)
+    #endif ///!defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ <= 1)
             y = doOwnLeftLabels(track, hvgSide, font, y);
         else
             y += trackPlusLabelHeight(track, fontHeight);
@@ -4112,10 +4157,13 @@ if (wikiTrackEnabled(database, NULL))
     wikiDisconnect(&conn);
     }
 
-loadTrackHubs(&trackList, &hubList);
-slReverse(&hubList);
+if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
+    { // If a single track was asked for and it is from a hub, then it is already in trackList
+    loadTrackHubs(&trackList, &hubList);
+    slReverse(&hubList);
+    groupTracks(hubList, &trackList, pGroupList, vis);
+    }
 loadCustomTracks(&trackList);
-groupTracks(hubList, &trackList, pGroupList, vis);
 setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
@@ -5254,6 +5302,7 @@ hPrintf("</FORM>\n");
 
 /* hidden form for track hub CGI */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
+cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTracks");
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 

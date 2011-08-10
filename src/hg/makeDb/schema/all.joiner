@@ -2076,6 +2076,44 @@ identifier rgdSslpId external=RGD
 identifier rgdGene2Id external=RGD
 "RGD Genes ID"
     $rn.rgdGene2.name
+    $rn.rgdGenePathway.geneId minCheck=0.80
+    $rn.rgdGene2BlastTab.query minCheck=0.80
+    $rn.rgdGene2BlastTab.target minCheck=0.80
+    $rn.scBlastTab.query minCheck=0.80
+    $rn.mmBlastTab.query minCheck=0.80
+    $rn.hgBlastTab.query minCheck=0.80
+    $rn.dmBlastTab.query minCheck=0.80
+    $rn.drBlastTab.query minCheck=0.80
+    $rn.ceBlastTab.query minCheck=0.80
+    $rn.rgdGene2ToDisplayId.name minCheck=0.80
+    $rn.rgdGene2ToUniProt.name minCheck=0.80
+    $rn.rgdGene2ToPDB.name minCheck=0.80
+    $rn.rgdGene2ToPfam.name minCheck=0.80
+    $rn.rgdGene2Xref.rgdGeneId minCheck=0.80
+    $rn.rgdGene2Pep.name minCheck=0.80
+    $rn.rgdGene2ToDescription.name minCheck=0.70
+    $rn.rgdGene2Pep.name minCheck=0.80
+    $rn.rgdGene2ToSymbol.rgdId
+    $rn.rgdGene2ToU34A.name
+    $rn.rgdGene2ToSuper.name
+    $rn.rgdGene2ToRAE230.name
+    $rn.rgdGene2ToRefSeq.name
+    $rn.rgdGene2ToLocusLink.name
+    $rn.rgdGene2ToGnfAtlas2.name
+    $rn.rgdGene2ToKeggEntrez.name
+    $rn.rgdGene2ToGenbankAll.name
+    $rn.rgdGene2ToGenbank.name
+    $rn.rgdGene2ToEnsembl.name
+    $rn.rgdGene2ToCdsSnp.name
+    $rn.affyExonTissuesGsMedianDistRgdGene2.query
+    $rn.affyExonTissuesGsMedianDistRgdGene2.target
+    $rn.affyExonTissuesGsMedianRgdGene2.name
+    $rn.affyExonTissuesGsRgdGene2.name
+    $rn.gnfAtlas2RgdGene2Distance.query
+    $rn.gnfAtlas2RgdGene2Distance.target
+    $rn.rgdGene2Canonical.transcript
+    $rn.rgdGene2Isoforms.transcript
+    $rn.rgdGene2KeggPathway.rgdId
 
 # The Ensembl Gmish
 
@@ -3391,6 +3429,7 @@ tablesIgnored hg19
     altSeqLiftOverPsl
     altSeqPatches
     bacEndPairsBad
+    bamAllNumtSSorted
     multizMHCSummary
     netSyn_mann_hap4
     net_dbb_hap3
@@ -3442,6 +3481,7 @@ tablesIgnored hg19
 
 tablesIgnored mm9
 	allMm9RS_BW
+	bamMmsNumtSSorted
     crgMapability%
     rest
 

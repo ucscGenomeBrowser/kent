@@ -690,6 +690,78 @@ return item;
 
 #define VCF_MAX_ALLELE_LEN 80
 
+static char *alleleCountsFromVcfRecord(struct vcfRecord *rec, int alDescCount)
+/* Build up comma-sep list of per-allele counts, if available, up to alDescCount
+ * which may be less than rec->alleleCount: */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    dy = dyStringNew(0);
+else
+    dyStringClear(dy);
+dyStringClear(dy);
+int alCounts[VCF_MAX_ALLELE_LEN];
+boolean gotTotalCount = FALSE, gotAltCounts = FALSE;
+int i;
+for (i = 0;  i < rec->infoCount;  i++)
+    if (sameString(rec->infoElements[i].key, "AN"))
+	{
+	gotTotalCount = TRUE;
+	// Set ref allele to total count, subtract alt counts below.
+	alCounts[0] = rec->infoElements[i].values[0].datInt;
+	break;
+	}
+for (i = 0;  i < rec->infoCount;  i++)
+    if (sameString(rec->infoElements[i].key, "AC"))
+	{
+	if (rec->infoElements[i].count > 0)
+	    {
+	    gotAltCounts = TRUE;
+	    int j;
+	    for (j = 0;  j < rec->infoElements[i].count && j < alDescCount-1;  j++)
+		{
+		int ac = rec->infoElements[i].values[j].datInt;
+		alCounts[1+j] = ac;
+		if (gotTotalCount)
+		    alCounts[0] -= ac;
+		}
+	    while (j++ < alDescCount-1)
+		alCounts[1+j] = -1;
+	    if (gotTotalCount)
+		dyStringPrintf(dy, "%d", alCounts[0]);
+	    else
+		dyStringAppend(dy, "-1");
+	    for (j = 1;  j < alDescCount;  j++)
+		if (alCounts[j] >= 0)
+		    dyStringPrintf(dy, ",%d", alCounts[j]);
+		else
+		    dyStringAppend(dy, ",-1");
+	    }
+	break;
+	}
+if (gotTotalCount && !gotAltCounts)
+    dyStringPrintf(dy, "%d", alCounts[0]);
+else if (!gotTotalCount && !gotAltCounts && rec->file->genotypeCount > 0)
+    {
+    vcfParseGenotypes(rec);
+    for (i = 0;  i < alDescCount;  i++)
+	alCounts[i] = 0;
+    for (i = 0;  i < rec->file->genotypeCount;  i++)
+	{
+	struct vcfGenotype *gt = &(rec->genotypes[i]);
+	if (gt == NULL)
+	    uglyf("i=%d gt=NULL wtf?\n", i);
+	alCounts[gt->hapIxA]++;
+	if (! gt->isHaploid)
+	    alCounts[gt->hapIxB]++;
+	}
+    dyStringPrintf(dy, "%d", alCounts[0]);
+    for (i = 1;  i < alDescCount;  i++)
+	dyStringPrintf(dy, ",%d", alCounts[i]);
+    }
+return cloneStringZ(dy->string, dy->stringSize+1);
+}
+
 struct pgSnp *pgSnpFromVcfRecord(struct vcfRecord *rec)
 /* Convert VCF rec to pgSnp; don't free rec->file (vcfFile) until
  * you're done with pgSnp because pgSnp points to rec->chrom. */
@@ -704,68 +776,27 @@ AllocVar(pgs);
 pgs->chrom = rec->chrom;
 pgs->chromStart = rec->chromStart;
 pgs->chromEnd = rec->chromEnd;
-// Build up slash-separated allele string from rec->ref + rec->alt:
-dyStringAppend(dy, rec->ref);
-int altCount, i;
-if (sameString(rec->alt, "."))
-    altCount = 0;
-else
+// Build up slash-separated allele string from rec->alleles, starting with ref allele:
+dyStringAppend(dy, rec->alleles[0]);
+int alCount = rec->alleleCount, i;
+if (rec->alleleCount == 2 && sameString(rec->alleles[1], "."))
+    // ignore N/A alternate allele
+    alCount = 1;
+else if (rec->alleleCount >= 2)
     {
-    char *words[VCF_MAX_ALLELE_LEN/2];
-    char copy[VCF_MAX_ALLELE_LEN+1];
-    strncpy(copy, rec->alt, VCF_MAX_ALLELE_LEN);
-    copy[VCF_MAX_ALLELE_LEN] = '\0';
-    altCount = chopCommas(copy, words);
-    for (i = 0;  i < altCount && dy->stringSize < VCF_MAX_ALLELE_LEN;  i++)
-	dyStringPrintf(dy, "/%s", words[i]);
-    if (i < altCount)
-	altCount = i;
+    // append /-sep'd alternate alleles, unless/until it gets too long:
+    for (i = 1;  i < rec->alleleCount;  i++)
+	{
+	if ((dy->stringSize + 1 + strlen(rec->alleles[i])) > VCF_MAX_ALLELE_LEN)
+	    break;
+	dyStringPrintf(dy, "/%s", rec->alleles[i]);
+	}
+    if (i < rec->alleleCount)
+	alCount = i;
     }
 pgs->name = cloneStringZ(dy->string, dy->stringSize+1);
-pgs->alleleCount = altCount + 1;
-// Build up comma-sep list of per-allele counts, if available:
-dyStringClear(dy);
-int refAlleleCount = 0;
-boolean gotAltCounts = FALSE;
-for (i = 0;  i < rec->infoCount;  i++)
-    if (sameString(rec->infoElements[i].key, "AN"))
-	{
-	refAlleleCount = rec->infoElements[i].values[0].datInt;
-	break;
-	}
-for (i = 0;  i < rec->infoCount;  i++)
-    if (sameString(rec->infoElements[i].key, "AC"))
-	{
-	int alCounts[64];
-	int j;
-	gotAltCounts = (rec->infoElements[i].count > 0);
-	for (j = 0;  j < rec->infoElements[i].count;  j++)
-	    {
-	    int ac = rec->infoElements[i].values[j].datInt;
-	    if (j < altCount)
-		alCounts[1+j] = ac;
-	    refAlleleCount -= ac;
-	    }
-	if (gotAltCounts)
-	    {
-	    while (j++ < altCount)
-		alCounts[1+j] = -1;
-	    alCounts[0] = refAlleleCount;
-	    if (refAlleleCount >= 0)
-		dyStringPrintf(dy, "%d", refAlleleCount);
-	    else
-		dyStringAppend(dy, "-1");
-	    for (j = 0;  j < altCount;  j++)
-		if (alCounts[1+j] >= 0)
-		    dyStringPrintf(dy, ",%d", alCounts[1+j]);
-		else
-		    dyStringAppend(dy, ",-1");
-	    }
-	break;
-	}
-if (refAlleleCount > 0 && !gotAltCounts)
-    dyStringPrintf(dy, "%d", refAlleleCount);
-pgs->alleleFreq = cloneStringZ(dy->string, dy->stringSize+1);
+pgs->alleleCount = alCount;
+pgs->alleleFreq = alleleCountsFromVcfRecord(rec, alCount);
 // Build up comma-sep list... supposed to be per-allele quality scores but I think
 // the VCF spec only gives us one BQ... for the reference position?  should ask.
 dyStringClear(dy);
@@ -775,7 +806,7 @@ for (i = 0;  i < rec->infoCount;  i++)
 	float qual = rec->infoElements[i].values[0].datFloat;
 	dyStringPrintf(dy, "%.1f", qual);
 	int j;
-	for (j = 0;  j < altCount;  j++)
+	for (j = 1;  j < rec->alleleCount;  j++)
 	    dyStringPrintf(dy, ",%.1f", qual);
 	break;
 	}

@@ -13,19 +13,40 @@ fi
 db="$1"
 ver="$2"
 
-# transcriptClass desc
-reportCounts() {
+# generate transcript counts for a given class
+reportTransCounts() {
     local transcriptClass="$1"
-    local baseSel="select count(attrs.transcriptId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeTranscriptSource${ver} src where attrs.transcriptClass = \"${transcriptClass}\" and src.transcriptId = attrs.transcriptId"
+    local baseSel="select count(distinct attrs.transcriptId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeTranscriptSource${ver} src where attrs.transcriptClass = \"${transcriptClass}\" and src.transcriptId = attrs.transcriptId"
     local cnt
     cnt=$(hgsql -Ne "${baseSel} and src.source like \"ensembl_havana%\"" ${db})
-    echo "${transcriptClass}	manual+automatic	$cnt"
+    echo "${transcriptClass}	both manual and automatic	$cnt"
     cnt=$(hgsql -Ne "${baseSel} and src.source like \"havana%\"" ${db})
-    echo "${transcriptClass}	manual-only	$cnt"
+    echo "${transcriptClass}	manual only	$cnt"
     cnt=$(hgsql -Ne "${baseSel} and src.source not like \"havana%\"" ${db})
-    echo "${transcriptClass}	automatic-only	$cnt"
+    echo "${transcriptClass}	automatic only	$cnt"
 }
+echo "Transcript report"
 echo "transcriptClass	source	count"
 for transcriptClass in $(hgsql -Ne "select distinct(transcriptClass) from wgEncodeGencodeAttrs${ver}" ${db}) ; do
-   reportCounts ${transcriptClass}
+   reportTransCounts ${transcriptClass}
 done
+cnt=$(hgsql -Ne "select count(distinct attrs.transcriptId) from wgEncodeGencodeAttrs${ver} attrs" ${db})
+echo "All	All	$cnt"
+
+# generate gene stats
+reportGeneCounts() {
+    local baseSel="select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeGeneSource${ver} src where src.geneId = attrs.geneId"
+    local cnt
+    cnt=$(hgsql -Ne "${baseSel} and src.source like \"ensembl_havana%\"" ${db})
+    echo "both manual and automatic	$cnt"
+    cnt=$(hgsql -Ne "${baseSel} and src.source like \"havana%\"" ${db})
+    echo "manual only	$cnt"
+    cnt=$(hgsql -Ne "${baseSel} and src.source not like \"havana%\"" ${db})
+    echo "automatic only	$cnt"
+}
+echo ""
+echo "Gene report"
+echo "source	count"
+reportGeneCounts
+cnt=$(hgsql -Ne "select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs" ${db})
+echo "All	$cnt"

@@ -67,6 +67,7 @@ my $workdir = getcwd();
 if ($opt{'directory'}){
 	$workdir = "$opt{'directory'}";
 	$workdir =~ s/^\/\//\//;
+	$workdir =~ s/\/$//;
 }
 unless ($opt{'verbose'}){$opt{'verbose'} = 0}
 if ($opt{'verbose'} >= 1){
@@ -226,13 +227,19 @@ if ($opt{'md5'}){
 	##write in last file modification check here
 	my $md5hist = "md5sum.history";
 	my %lastmod;
+	my %tempmd5;
+	#copy over the filenames to tempmd5 hash
+	foreach my $file (@files) {
+		$tempmd5{$file} = 1;
+		$lastmod{$file} = 0;	
+	}
 	
 	#container for files to be md5'd
 	my @md5files;
-	
+	my $foo = (-e $md5hist);
 	#check if md5sum.history exists
 	if (-e $md5hist){
-		open MDH, "$md5hist";
+		open MDH, "$md5hist" or die "can't open history file\n";
 		while (<MDH>){
 			my $line = $_;
 			chomp $line;
@@ -247,21 +254,18 @@ if ($opt{'md5'}){
 			unless (-e $file){next}
 			#store md5sums and modification dates in their respective hashes;
 			$md5sums{$file} = $md5;
-			$lastmod{$file} = $lastmod;
+			if ($lastmod){$lastmod{$file} = $lastmod}
+			else {$lastmod{$file} = 0}
 		}
 		close MDH;
+		
 		#can't remember how to easily to an array slice :-/
 		#hash for removing existing md5summed files from @md5files
 		#copies over data from @files, then removes files that have md5sums 
 		#and match last date modified
-		
-		my %tempmd5;
-		#copy over the filenames to tempmd5 hash
-		foreach my $file (@files) {$tempmd5{$file} = 1}
 		foreach my $file (keys %tempmd5){
-
-			unless (exists $lastmod{$file}){$lastmod{$file} = 0}
-			my @stat = stat("$workdir/$file");
+			
+			my @stat = stat("$file");
 			if ($opt{'verbose'} >= 3){
 				my $count = 0;
 				print STDERR "\n";
@@ -277,7 +281,7 @@ if ($opt{'md5'}){
 			}
 		}
 		@md5files = keys %tempmd5;
-	
+		
 	}
 	else {
 		#if md5sum.history doesn't exist, copy over @files to @md5sum
@@ -355,7 +359,7 @@ if ($opt{'md5'}){
 	open MDF, ">md5sum.txt" or die "can't open md5sum.txt file to write\n";
 	if ($opt{'verbose'} >= 2){
 		print STDERR "\n";
-		print STDERR "writing md5sum.tx\n";
+		print STDERR "writing md5sum.txt\n";
 	}
 	foreach my $file (sort { $a cmp $b } @filemask){
 		print MDF "$file $md5sums{$file}\n";
@@ -367,18 +371,18 @@ if ($opt{'md5'}){
 		print STDERR "writing md5sum.history\n";
 	}
 	foreach my $file (sort { $a cmp $b } keys %md5sums){
-		my @stat = stat("$workdir/$file");
+		my @stat = stat("$file");
 		#stat[9] is last modify time from perl's file stat
 		print MDF "$file $md5sums{$file} $stat[9]\n";
 	}
 	close MDF;
 }
 
-if ($opt{'verbose'} >= 2){
+if ($opt{'verbose'} >= 3){
 	print STDERR "\n";
 	print STDERR "files to be processed:\n";
 	foreach my $name (@filemask){
-		print STDERR "file = $name\n";
+		print STDERR "\t$name\n";
 	}
 }
 

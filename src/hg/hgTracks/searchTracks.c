@@ -33,6 +33,7 @@
 #define TRACK_SEARCH_SORT        "tsSort"
 
 #define SUPPORT_QUOTES_IN_NAME_SEARCH
+#define SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -296,15 +297,15 @@ for (; pair!= NULL;pair=pair->next)
                         {
                         struct track *track = tr->track;
                         char *trackType = cloneFirstWord(track->tdb->type); // will be spilled
+                        if ((matchingTracks == NULL || hashLookup(matchingTracks, track->track) != NULL)
                 #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-                        if((isEmpty(nameSearch) || searchNameMatches(track->tdb, nameList))
+                        && (isEmpty(nameSearch) || searchNameMatches(track->tdb, nameList))
                         && (isEmpty(descSearch) || searchDescriptionMatches(track->tdb, descList))
                 #else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
-                        if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains"))
+                        && (isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains"))
                         && (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount))
                 #endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
-                        && (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb)))
-                        && (matchingTracks == NULL || hashLookup(matchingTracks, track->track) != NULL))
+                        && (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb))))
                             {
                             if (track != NULL)
                                 {
@@ -320,15 +321,29 @@ for (; pair!= NULL;pair=pair->next)
                             for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
                                 {
                                 trackType = cloneFirstWord(subTrack->tdb->type); // will be spilled
+                                if ((matchingTracks == NULL || hashLookup(matchingTracks, subTrack->track) != NULL)
                         #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-                                if((isEmpty(nameSearch) || searchNameMatches(subTrack->tdb, nameList))
+                                && (isEmpty(nameSearch) || searchNameMatches(subTrack->tdb, nameList))
+                            #ifdef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
+                                && (isEmpty(descSearch)
+                                    || searchDescriptionMatches(subTrack->tdb, descList)
+                                    || (tdbIsCompositeChild(subTrack->tdb) && subTrack->parent
+                                        && searchDescriptionMatches(subTrack->parent->tdb, descList)))
+                            #else///ifndef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
                                 && (isEmpty(descSearch) || searchDescriptionMatches(subTrack->tdb, descList))
+                            #endif///ndef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
                         #else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
-                                if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains"))
+                                && (isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains"))
+                            #ifdef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
+                                && (isEmpty(descSearch)
+                                    || isDescriptionMatch(subTrack, descWords, descWordCount)
+                                    || (tdbIsCompositeChild(subTrack->tdb) && subTrack->parent
+                                        && isDescriptionMatch(subTrack->parent, descWords, descWordCount)))
+                            #else///ifndef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
                                 && (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount))
+                            #endif///ndef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
                         #endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
-                                && (isEmpty(typeSearch) || sameWord(typeSearch, trackType))
-                                && (matchingTracks == NULL || hashLookup(matchingTracks, subTrack->track) != NULL))
+                                && (isEmpty(typeSearch) || sameWord(typeSearch, trackType)))
                                     {
                                     if (track != NULL)
                                         {
