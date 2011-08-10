@@ -1,6 +1,6 @@
 # Data Agreement File for PSU ChIP-seq (Transcription Factor Binding Sites) experiments for mm9
 
-#$Revision: 1.8 $
+#$Revision: 1.9 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -63,10 +63,10 @@ view             Alignments
 longLabelPrefix  PSU TFBS Alignments
 type             bam
 hasReplicates    yes
-required         yes
+required         no
 
 view             RawData
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 
