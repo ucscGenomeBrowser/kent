@@ -17,6 +17,7 @@ fileName wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL84
+md5sum bam=70b0ba531bc57b7ee433700375b7465f,bai=25438d1ff0d3f1e66b70cb8b2528d0de
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58,6 +59,7 @@ expId 279
 fileName wgEncodeHaibMethylSeqBg02esRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 02bade1f70a521257fc357dcfade964f
 project wgEncode
 replicate 1
 subId 1875
@@ -78,6 +80,7 @@ fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL111
+md5sum bam=ca0ca1e08513f79505bfc2ca79acf400,bai=0220f4b6b0b8849472dd2b77128c6c16
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -99,6 +102,7 @@ fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL112
+md5sum bam=0b7efb14ffc2a6979dfd70b5a63fe720,bai=8652545c4a6d5e24a74d3ea5d010b5ee
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -161,6 +165,7 @@ expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 61eb1857315a91bca4a8870a9a3cd40a
 project wgEncode
 replicate 1
 subId 1875
@@ -180,6 +185,7 @@ expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdRegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a48f83cda47570c005bdbd69648fb171
 project wgEncode
 replicate 2
 subId 1875
@@ -200,6 +206,7 @@ fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL296
+md5sum bam=f5a41ba96ddd04d5171ca147abc42e3d,bai=143237512fb8394fc3faa190f7f39370
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -221,6 +228,7 @@ fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL297
+md5sum bam=41364122bce5a3c3423c4d46b89d96d7,bai=fc1b0c07bccc483aafb9d1f25f6f67fd
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -241,6 +249,7 @@ expId 294
 fileName wgEncodeHaibMethylSeqGm12878HpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 5b352fc47983875e7472722529f14706
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -261,6 +270,7 @@ expId 294
 fileName wgEncodeHaibMethylSeqGm12878HpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 938c9a5183f59fe030d827c5b53e5c29
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -282,6 +292,7 @@ fileName wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL298
+md5sum bam=621c8a58b71b238b96204ed27ac8bfa5,bai=1a5611b184efa735f4266e817af635b1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -303,6 +314,7 @@ fileName wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL299
+md5sum bam=d7be89639d3ee9d2963499006dd2557e,bai=bbdda187e130c2db5e321259d88016d6
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -323,6 +335,7 @@ expId 294
 fileName wgEncodeHaibMethylSeqGm12878MspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum d29cf1c385d10d577ebb3e68033c2113
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -343,6 +356,7 @@ expId 294
 fileName wgEncodeHaibMethylSeqGm12878MspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 0c622fb47f1179c962ef58b0fc8dfa8b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -363,6 +377,7 @@ expId 294
 fileName wgEncodeHaibMethylSeqGm12878RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 360700f024ef158cd4db35614f4397b1
 project wgEncode
 replicate 1
 subId 1247
@@ -382,6 +397,7 @@ expId 294
 fileName wgEncodeHaibMethylSeqGm12878RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 04f9729b1f49c3f6260e416bf53a651c
 project wgEncode
 replicate 2
 subId 1247
@@ -402,6 +418,7 @@ fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL832
+md5sum bam=1812f16bb616b74a6d6f6f547f8563c8,bai=deb39e777f197277fc0a09c9b4b3c7e6
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -423,6 +440,7 @@ fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL833
+md5sum bam=7af1318cfc6d0ed190700d8acd734436,bai=653a71163824604dbbe6f0c457afadb7
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -443,6 +461,7 @@ expId 300
 fileName wgEncodeHaibMethylSeqGm12891HpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum f72fa091724c8f41756762fa7f59072c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -463,6 +482,7 @@ expId 300
 fileName wgEncodeHaibMethylSeqGm12891HpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum b9c03f962bec9522cd57ad1e36a7e136
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -484,6 +504,7 @@ fileName wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL828
+md5sum bam=94dc1994b196b3fc37ae8a590249a4b1,bai=488dc5bbdc5e30b31c9db94a9680ed88
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -505,6 +526,7 @@ fileName wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL829
+md5sum bam=66bbcc11c739571ae3ebebe4b5f8ecb8,bai=19532a4518b341e6786d9c32d4715894
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -525,6 +547,7 @@ expId 300
 fileName wgEncodeHaibMethylSeqGm12891MspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 7e70259c65411a60b2a03f57d5131f72
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -545,6 +568,7 @@ expId 300
 fileName wgEncodeHaibMethylSeqGm12891MspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 351f63a5dbc9b852466c290e0d33f68c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -565,6 +589,7 @@ expId 300
 fileName wgEncodeHaibMethylSeqGm12891RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 084bc0f6a134769fcf8984454237cbcb
 project wgEncode
 replicate 1
 subId 1247
@@ -584,6 +609,7 @@ expId 300
 fileName wgEncodeHaibMethylSeqGm12891RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 25e6ea0d5c0b141a705d64004833a198
 project wgEncode
 replicate 2
 subId 1247
@@ -604,6 +630,7 @@ fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL834
+md5sum bam=2162fe318d4331761c045190b76309f4,bai=bdab423f1c487c76938bdf5fb217d64d
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -625,6 +652,7 @@ fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL835
+md5sum bam=fce7c5806f7dec34afba41d1869d6148,bai=a3b01bdad7ca5070cd5d324e49d03a33
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -645,6 +673,7 @@ expId 303
 fileName wgEncodeHaibMethylSeqGm12892HpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 975b4e2c6c39cf69f1d1ee513cce87cf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -665,6 +694,7 @@ expId 303
 fileName wgEncodeHaibMethylSeqGm12892HpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 365e3b9d23f0b4f2ae02d5e339813e6c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -686,6 +716,7 @@ fileName wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL830
+md5sum bam=4985c59f46d126f8cbf8af374e30c186,bai=64eea8d27175d93ee6704ab5e2450a77
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -707,6 +738,7 @@ fileName wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL831
+md5sum bam=5d9add819d89a7554720addcfd3415df,bai=4547f7bea865b81ebce337413f12fedc
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -727,6 +759,7 @@ expId 303
 fileName wgEncodeHaibMethylSeqGm12892MspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 6538cd8b3d98d97d2b2f415a554e106e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -747,6 +780,7 @@ expId 303
 fileName wgEncodeHaibMethylSeqGm12892MspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 7fd1f812cd72727576c2571baeedeecf
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -767,6 +801,7 @@ expId 303
 fileName wgEncodeHaibMethylSeqGm12892RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 14dbc4e0f7c59789f7bdcdf8240078f3
 project wgEncode
 replicate 1
 subId 1247
@@ -786,6 +821,7 @@ expId 303
 fileName wgEncodeHaibMethylSeqGm12892RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 78e40ed8b22f952725cd8534e4e6c565
 project wgEncode
 replicate 2
 subId 1247
@@ -806,6 +842,7 @@ fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL605
+md5sum bam=b106fd0ab037c2f24df3d2de49f55f3e,bai=0914bd8b7e6a460b3f65aa3a083b6264
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -827,6 +864,7 @@ fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL659
+md5sum bam=fdf088fcbab2b2b2db6ee2100f0a6d44,bai=c8ccca82cec01cd30b78b70c27ffaa76
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -848,6 +886,7 @@ fileName wgEncodeHaibMethylSeqH1hescHpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL605
+md5sum d507b558f178ebef1ecd8173a182708a
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -870,6 +909,7 @@ fileName wgEncodeHaibMethylSeqH1hescHpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL659
+md5sum 9bad9807fa27537daecd803918c6b8cc
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -892,6 +932,7 @@ fileName wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL604
+md5sum bam=de1a803381dc987f31eb4be4b0d0d855,bai=b0b448a251397f3bec8ada1ff3059365
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -913,6 +954,7 @@ fileName wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL658
+md5sum bam=25cc070d0bf3c443991f310a7407d3da,bai=58ceef812924459c1c7704120071674d
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -934,6 +976,7 @@ fileName wgEncodeHaibMethylSeqH1hescMspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL605
+md5sum 5b9b40d1211bfc23bd795ba4c5c7c049
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -956,6 +999,7 @@ fileName wgEncodeHaibMethylSeqH1hescMspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL659
+md5sum 1196d34e5d8a478fc5efec4beab28ec3
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -977,6 +1021,7 @@ expId 306
 fileName wgEncodeHaibMethylSeqH1hescRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 224d338c7eab9891defd97541659d1aa
 project wgEncode
 replicate 1
 subId 1247
@@ -996,6 +1041,7 @@ expId 306
 fileName wgEncodeHaibMethylSeqH1hescRegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 8471d201a96eda5215968815e0b33603
 project wgEncode
 replicate 2
 subId 1247
@@ -1016,6 +1062,7 @@ fileName wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL26
+md5sum bam=16c1a1d9515acc9eb05c71e7b5d22eea,bai=79dabcd993294b12af3678abc438ab6a
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1057,6 +1104,7 @@ expId 281
 fileName wgEncodeHaibMethylSeqH9esRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum ca9019e709d16b61beb69a8114f8970a
 project wgEncode
 replicate 1
 subId 1875
@@ -1077,6 +1125,7 @@ fileName wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL43
+md5sum bam=4799eb54b4b0d3dd3f1a8d286b3a6e95,bai=d350be83d0341a3afe4b637727c15482
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1097,6 +1146,7 @@ expId 283
 fileName wgEncodeHaibMethylSeqH9esafpminusRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 927e12bbd81c3bdb6f0010de7268e177
 project wgEncode
 replicate 1
 subId 1968
@@ -1117,6 +1167,7 @@ fileName wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL42
+md5sum bam=1cc9c8e586f3a888016306842861570d,bai=bfc702eadc8a6944c4648d53bc363868
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1158,6 +1209,7 @@ expId 282
 fileName wgEncodeHaibMethylSeqH9esafpplusRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a33ee91b405e9b478b0649ca9dadadd9
 project wgEncode
 replicate 1
 subId 1875
@@ -1178,6 +1230,7 @@ fileName wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL46
+md5sum bam=c6842cba7cde4983d8e6d5247cbd6c7d,bai=54ab8ea3f0234450732c05fd3bf270bd
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1219,6 +1272,7 @@ expId 284
 fileName wgEncodeHaibMethylSeqH9escmRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum e0d74d115c0d369b099787206ad2f65e
 project wgEncode
 replicate 1
 subId 1875
@@ -1239,6 +1293,7 @@ fileName wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL24
+md5sum bam=a21b3e949ab2f19461ca95b9d909e0ca,bai=9e1b9c97a538e36f110ca966b203c72b
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1280,6 +1335,7 @@ expId 285
 fileName wgEncodeHaibMethylSeqH9eseRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a237a8c6a02de1b6f7c9d4681a7e0939
 project wgEncode
 replicate 1
 subId 1875
@@ -1300,6 +1356,7 @@ fileName wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL44
+md5sum bam=770894e407c6d664de35109afc9ed472,bai=17d6b8089708ada8df930f07bcf731b8
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1320,6 +1377,7 @@ expId 286
 fileName wgEncodeHaibMethylSeqH9esebRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 9dabf4d69d6dd92b0c54a2a7fdb1f8b7
 project wgEncode
 replicate 1
 subId 1968
@@ -1340,6 +1398,7 @@ fileName wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL86
+md5sum bam=2f2466a9191f4f8d8a3cf9fac40d7f9b,bai=efc8f40beafca225a14096a7c385988c
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1381,6 +1440,7 @@ expId 287
 fileName wgEncodeHaibMethylSeqH9esebdRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 8df7a198c3af69512e5d2a1a56ee510a
 project wgEncode
 replicate 1
 subId 1968
@@ -1401,6 +1461,7 @@ fileName wgEncodeHaibMethylSeqHalHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL37
+md5sum bam=3d83e3747c061852a43ace9c42844e66,bai=ebdef2a8e136d1411911851e21c341e9
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1442,6 +1503,7 @@ expId 288
 fileName wgEncodeHaibMethylSeqHalRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 29905f1c68464955d134446d20d24854
 project wgEncode
 replicate 1
 subId 1875
@@ -1462,6 +1524,7 @@ fileName wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL8
+md5sum bam=01e0f16a3337cc43bfe1a26a8955803d,bai=b740e2deba8b8a7329ee2c075d67a6a0
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1483,6 +1546,7 @@ fileName wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL33
+md5sum bam=65aff12e477f05c6b1f75b808a6a161c,bai=91afb22f61d590d9abb687a0e0592996
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1545,6 +1609,7 @@ expId 289
 fileName wgEncodeHaibMethylSeqHct116RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 2138e29b9bedeab320f14e17f16f2e6b
 project wgEncode
 replicate 1
 subId 1875
@@ -1564,6 +1629,7 @@ expId 289
 fileName wgEncodeHaibMethylSeqHct116RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 8b945bc393953a887921ca675e6f2472
 project wgEncode
 replicate 2
 subId 1875
@@ -1584,6 +1650,7 @@ fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL577
+md5sum bam=d8e434707bac1edfc239f19799635d74,bai=e0d03464a8226ba9d4dc9c1a48ab619a
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1605,6 +1672,7 @@ fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL603
+md5sum bam=bbcceffe6ff0a4f191246133fec8ff5a,bai=bbefa6dfcdbdbae1214a3a61556e1b07
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1626,6 +1694,7 @@ fileName wgEncodeHaibMethylSeqHelas3HpaPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL577
+md5sum ca06a9c89c8e672707620f111241f616
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -1648,6 +1717,7 @@ fileName wgEncodeHaibMethylSeqHelas3HpaPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL603
+md5sum 3686057c3bb1c80576f3e079156049e4
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -1670,6 +1740,7 @@ fileName wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL574
+md5sum bam=5c426dafe1df38a53669a14ab1e755ec,bai=82e3d6e205e1365b5ccdb05c41053815
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1691,6 +1762,7 @@ fileName wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL602
+md5sum bam=b6e83a5d5309c6658c1a5aac10323b58,bai=f31e398be7fb441a49e230089f28739d
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1712,6 +1784,7 @@ fileName wgEncodeHaibMethylSeqHelas3MspPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL574
+md5sum 6794bdf2f6056756d36d498e49f01354
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -1734,6 +1807,7 @@ fileName wgEncodeHaibMethylSeqHelas3MspPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL602
+md5sum 0b12dc48b34f2ba9d5ee5ed34d27ead3
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -1755,6 +1829,7 @@ expId 309
 fileName wgEncodeHaibMethylSeqHelas3RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 1ddec122dee67d53df20795f049d3498
 project wgEncode
 replicate 1
 subId 1247
@@ -1774,6 +1849,7 @@ expId 309
 fileName wgEncodeHaibMethylSeqHelas3RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum efbb0fc5ab0aee951d783a10b8a107ae
 project wgEncode
 replicate 2
 subId 1247
@@ -1794,6 +1870,7 @@ fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL578
+md5sum bam=8bbec5fceae2165e6670f6030812d135,bai=d87b2fc225d1034f6525ccb0493bab57
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1815,6 +1892,7 @@ fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL579
+md5sum bam=c401fe1ce958193cd9780ada934153c8,bai=0e23fd071c4da9a1daf3036926ed7a39
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1836,6 +1914,7 @@ fileName wgEncodeHaibMethylSeqHepg2HpaPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL578
+md5sum e958cf26a3503ef3c378ced03864970b
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -1858,6 +1937,7 @@ fileName wgEncodeHaibMethylSeqHepg2HpaPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL579
+md5sum f9425e6a0994834736a7faa549913fdd
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -1880,6 +1960,7 @@ fileName wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL575
+md5sum bam=83183cc84abfbc857bb10e15d4823d4e,bai=2cdce47369a7ad0a962fe96502ab4885
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1901,6 +1982,7 @@ fileName wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL576
+md5sum bam=9656f12bef02bb51169b76379b2a0238,bai=abf8d600760eb8faef9ea63ddece3f28
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1922,6 +2004,7 @@ fileName wgEncodeHaibMethylSeqHepg2MspPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL575
+md5sum a5088b552b44ea4181d2645b7fedb00b
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -1944,6 +2027,7 @@ fileName wgEncodeHaibMethylSeqHepg2MspPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL576
+md5sum 642234ed0ffef2d13d5f8b9dcea79d51
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -1965,6 +2049,7 @@ expId 312
 fileName wgEncodeHaibMethylSeqHepg2RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 2828747f3b711e689063f862347d89a4
 project wgEncode
 replicate 1
 subId 1247
@@ -1984,6 +2069,7 @@ expId 312
 fileName wgEncodeHaibMethylSeqHepg2RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a7be699b22509a47d0f992407da9d57c
 project wgEncode
 replicate 2
 subId 1247
@@ -2004,6 +2090,7 @@ fileName wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL113
+md5sum bam=8a1e9525e392c388c639610df2a2b4c0,bai=94667f9f3baff56d86dfd9078f69166a
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2045,6 +2132,7 @@ expId 290
 fileName wgEncodeHaibMethylSeqHfl11wRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 5ac99e547d1df244b0880a20217e4ca1
 project wgEncode
 replicate 1
 subId 1875
@@ -2065,6 +2153,7 @@ fileName wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL114
+md5sum bam=dcb26423df80e31489b7bdead147260f,bai=114af08b2c4410c925c3de649ee220bf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2106,6 +2195,7 @@ expId 291
 fileName wgEncodeHaibMethylSeqHfl24wRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum d954f804540416c19c9f258afed5d994
 project wgEncode
 replicate 1
 subId 1875
@@ -2126,6 +2216,7 @@ fileName wgEncodeHaibMethylSeqK562HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL229
+md5sum bam=59311428467f6ce627eb110732aa0147,bai=a687ac6eb7723d495dcc05e56cbe9cfe
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2147,6 +2238,7 @@ fileName wgEncodeHaibMethylSeqK562HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL231
+md5sum bam=823792d2a82e6d42e0fb03a4d76f8463,bai=dc0cebc4efdbb0303a0f7e8fc612cd25
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2167,6 +2259,7 @@ expId 297
 fileName wgEncodeHaibMethylSeqK562HpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 50dd54b1ca88791bc5eb2539ab432151
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2187,6 +2280,7 @@ expId 297
 fileName wgEncodeHaibMethylSeqK562HpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum 28ce75f5100950993e884b41c326ebc8
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2208,6 +2302,7 @@ fileName wgEncodeHaibMethylSeqK562MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL230
+md5sum bam=5005d5f78c9da4fa4b09942e27dd59cd,bai=c05364a164811d77ef754881a0f35667
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2229,6 +2324,7 @@ fileName wgEncodeHaibMethylSeqK562MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL232
+md5sum bam=f99bc6c6a9cbeb09ee425ce0965a56c5,bai=c7cb349ab73fcb4c631e918312a19d54
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2249,6 +2345,7 @@ expId 297
 fileName wgEncodeHaibMethylSeqK562MspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum a2d9aae5b8299b70a54549f78141a66c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2269,6 +2366,7 @@ expId 297
 fileName wgEncodeHaibMethylSeqK562MspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+md5sum b12cf549402e74906f93613e98248855
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2289,6 +2387,7 @@ expId 297
 fileName wgEncodeHaibMethylSeqK562RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum b595712139352962660e43049fbc53c2
 project wgEncode
 replicate 1
 subId 1247
@@ -2308,10 +2407,11 @@ expId 297
 fileName wgEncodeHaibMethylSeqK562RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 9b45633c99f81d7a94de65962b16e654
 project wgEncode
 replicate 2
 subId 1247
 tableName wgEncodeHaibMethylSeqK562RegionsRep2
 view Regions
 
-# MAGIC: -2144032009
+# MAGIC: 1221016490

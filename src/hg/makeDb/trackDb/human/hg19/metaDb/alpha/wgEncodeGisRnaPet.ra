@@ -22,6 +22,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
+md5sum bam=02bef90485e98b5397a70af77f3fa245,bai=b1e134a1fb04a188782052ed4de80394
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -49,6 +50,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
+md5sum bam=4449565e58dcbce0ab7f04a61bf63f8e,bai=11c1a897f3c3215ac69ee77fdb030cac
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -76,6 +78,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
+md5sum d6aca3475c5cb1c7b4e8a9ac6d1026ed
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -103,6 +106,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
+md5sum 43d7ca9a887f31047a1baccb796d9c8b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -129,6 +133,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
+md5sum 71652744741071a5964d03e30149243b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -155,6 +160,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
+md5sum fc34aca1582ce3c791a4f5df7311ca96
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -180,6 +186,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
+md5sum 84d5e9d31ed8eed12a827c9cc3f6982c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -206,6 +213,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
+md5sum a124b93ec33b6930e9ba241a13c749a8
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -232,6 +240,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
+md5sum a87c37d5997250c04b4cabb3627f3ec5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -259,6 +268,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
+md5sum d11593267f573d8b2ef5879719005872
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -286,6 +296,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
+md5sum f36808d54051996ab1f3b71759662c48
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -313,6 +324,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
+md5sum 711a4823129f2b4fa3c470387dfc537d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -340,6 +352,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
+md5sum bam=f0d5c607ffef0469a68169066d68f69e,bai=b55a759b767b658186f75b0b51756f0e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -367,6 +380,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
+md5sum 011715b1976580d3837f46b6efdd6fb1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -393,6 +407,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
+md5sum eb7b79830c23d3d729bdc9c605f6368f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -418,6 +433,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
+md5sum 2894f464d1a7646ffc5a27eef1b1c3dc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -444,6 +460,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
+md5sum fb50bcc9b26b9ff2bfb3b67f06f0be51
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -471,6 +488,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
+md5sum 89e86a431bf98d5757b90fa07cfec440
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -497,6 +515,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
+md5sum bam=416a7d6780983f69856a001ca3136998,bai=3d348f18039f31cfb375b1f9b3722e95
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -523,6 +542,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
+md5sum 0a28028ba1f146b003881c674ed35d62
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -549,6 +569,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
+md5sum 8f8266709db516faed3d2127780096df
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -574,6 +595,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
+md5sum cd82d6011ecf2e188b8f2a774508a94d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -599,6 +621,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
+md5sum d91f35ed4314f2eeaae866531726c34f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -625,6 +648,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
+md5sum ca0c00c6c7ee77c2d4eb69dbb6ae58ae
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -649,6 +673,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
+md5sum bam=aa7805481ffe6c9b43d9652b05051ef9,bai=dced77dd7838d36fe7359f1309e35c9e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -673,6 +698,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
+md5sum bam=ae0a825480b3d4550a05a3ba2ce80d0a,bai=69bf52628a799552960639f49fe0f25c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -697,6 +723,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
+md5sum d8d7ccd1781bbf316a68e8ed88b8d9e6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -721,6 +748,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
+md5sum e847205019dba276b4450a05969dbba9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -745,6 +773,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
+md5sum bc3680fa8452e4880fb94bba4aa95f13
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -768,6 +797,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
+md5sum c78d3fa812d92c4e0c890a6a963e8b5e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -791,6 +821,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
+md5sum 5c64b47ef025e6e0ad672c3bf15c18cc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -814,6 +845,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
+md5sum 2e6413f1465078a23f376322c2ccd9b2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -837,6 +869,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
+md5sum 3e1e497e9edea480337743072e0b5a08
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -861,6 +894,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
+md5sum 8ab3d8fc65849e6be478ae818f4c5e68
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -885,6 +919,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
+md5sum 18c28a22ee4e2601ab28e8d69c46e4a8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -909,6 +944,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
+md5sum ac92109f47476f7cca2bbd65c185472b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -924,7 +960,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000268
@@ -936,12 +971,12 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
+md5sum bam=6a39b4266713df479d2636811c341943,bai=27d520753752d64d6cc45f2cdb3f9a72
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4617
+subId 4024
 tableName wgEncodeGisRnaPetHelas3CytosolPapAlnRep1
 view Alignments
 
@@ -952,7 +987,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000268
@@ -964,12 +998,12 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
+md5sum 4656002d3fe512e9e27e09042794d5ae
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4617
+subId 4024
 tableName wgEncodeGisRnaPetHelas3CytosolPapClustersRep1
 view Clusters
 
@@ -980,7 +1014,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000268
@@ -992,12 +1025,12 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
+md5sum bce8b4ba72d31a8d49e51dc1bf4a9ba3
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4617
+subId 4024
 view FastqRd1
 
 metaObject wgEncodeGisRnaPetHelas3CytosolPapFastqRd2Rep1
@@ -1007,7 +1040,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000268
@@ -1019,12 +1051,12 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
+md5sum 2ac73eb4931bf1d2de942c69d8f2b578
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4617
+subId 4024
 view FastqRd2
 
 metaObject wgEncodeGisRnaPetHelas3CytosolPapMinusRawRep1
@@ -1034,7 +1066,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000268
@@ -1046,12 +1077,12 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
+md5sum 03eeca2f8ae0966eafb5a875fae5e34d
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4617
+subId 4024
 tableName wgEncodeGisRnaPetHelas3CytosolPapMinusRawRep1
 view MinusRawSignal
 
@@ -1062,7 +1093,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000268
@@ -1074,12 +1104,12 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
+md5sum 594b2cc41bb985e13293e859f51a1312
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4617
+subId 4024
 tableName wgEncodeGisRnaPetHelas3CytosolPapPlusRawRep1
 view PlusRawSignal
 
@@ -1090,7 +1120,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000267
@@ -1098,15 +1127,14 @@ expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
-labExpId RHH004
+labExpId RHH003
 labProtocolId gen0124N+pet
 localization nucleus
-origAssembly hg18
+md5sum bam=81ffd7ebb7ce09c491abf9ce9f4a16b6,bai=6bdcaf7e9ba0ce4cb10fe4f472147e76
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4615
+subId 4027
 tableName wgEncodeGisRnaPetHelas3NucleusPapAlnRep1
 view Alignments
 
@@ -1117,7 +1145,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000267
@@ -1125,15 +1152,14 @@ expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
-labExpId RHH004
+labExpId RHH003
 labProtocolId gen0124N+pet
 localization nucleus
-origAssembly hg18
+md5sum de49cfc7cc6a4a4f84b4db0d4f1dea29
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4615
+subId 4027
 tableName wgEncodeGisRnaPetHelas3NucleusPapClustersRep1
 view Clusters
 
@@ -1144,7 +1170,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000267
@@ -1152,15 +1177,14 @@ expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
-labExpId RHH004
+labExpId RHH003
 labProtocolId gen0124N+pet
 localization nucleus
-origAssembly hg18
+md5sum 85c16b6826b41e4b702a1550edc37f54
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4615
+subId 4027
 view FastqRd1
 
 metaObject wgEncodeGisRnaPetHelas3NucleusPapFastqRd2Rep1
@@ -1170,7 +1194,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000267
@@ -1178,15 +1201,14 @@ expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
-labExpId RHH004
+labExpId RHH003
 labProtocolId gen0124N+pet
 localization nucleus
-origAssembly hg18
+md5sum bd9c8453f8cc1b462d327614321046da
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4615
+subId 4027
 view FastqRd2
 
 metaObject wgEncodeGisRnaPetHelas3NucleusPapMinusRawRep1
@@ -1196,7 +1218,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000267
@@ -1204,15 +1225,14 @@ expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
-labExpId RHH004
+labExpId RHH003
 labProtocolId gen0124N+pet
 localization nucleus
-origAssembly hg18
+md5sum 29cd38f2c8c6b5877fe7a3a2d945e419
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4615
+subId 4027
 tableName wgEncodeGisRnaPetHelas3NucleusPapMinusRawRep1
 view MinusRawSignal
 
@@ -1223,7 +1243,6 @@ cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000267
@@ -1231,15 +1250,14 @@ expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
-labExpId RHH004
+labExpId RHH003
 labProtocolId gen0124N+pet
 localization nucleus
-origAssembly hg18
+md5sum de808d79b709b721d0e457cd3c2cb386
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4615
+subId 4027
 tableName wgEncodeGisRnaPetHelas3NucleusPapPlusRawRep1
 view PlusRawSignal
 
@@ -1262,6 +1280,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
+md5sum bam=146dbcdbe6179d456f76221cd093d930,bai=0f16146aa141287a7386292944b2b90e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1289,6 +1308,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
+md5sum 9d66639de524ab6d159d9ceef85c7110
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1315,6 +1335,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
+md5sum 01ac2447678a0ab4b72678a3ec64b0e5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1340,6 +1361,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
+md5sum d800bc3b41a0f5b2430b2fee91c59021
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1366,6 +1388,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
+md5sum e9cd55e87fe16b7348624e9fb468ef1b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1393,6 +1416,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
+md5sum 261ba4fcad5e6f496f3652566b83d40a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1420,6 +1444,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
+md5sum bam=3bfb08e51cf80893eb71231fc43a2435,bai=c478c8f319931356dab50b728685c894
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1447,6 +1472,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
+md5sum 0792cee5750de10dbc1c82a0badf9e15
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1473,6 +1499,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
+md5sum 7fce1c15605e19bb2fc7019179026010
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1498,6 +1525,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
+md5sum bd73d6539f8d343dc89195842c92849e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1524,6 +1552,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
+md5sum 5283f7444669a0a5486d9b4ff8fa9cbe
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1551,6 +1580,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
+md5sum ba8cc989c9c1679802b403f62ed6da5b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1566,7 +1596,7 @@ cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
+dateResubmitted 2010-07-22
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000266
@@ -1574,15 +1604,15 @@ expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
-labExpId RHH003
+labExpId RHH004
 labProtocolId gen0117C+pet
 localization cytosol
+md5sum bam=43a459ee0884661058837d3eadb4efb9,bai=3d771c2879c06ff24477448f7f1c4f36
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4614
+subId 4030
 tableName wgEncodeGisRnaPetHuvecCytosolPapAlnRep1
 view Alignments
 
@@ -1593,7 +1623,7 @@ cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
+dateResubmitted 2010-07-22
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000266
@@ -1601,15 +1631,15 @@ expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
-labExpId RHH003
+labExpId RHH004
 labProtocolId gen0117C+pet
 localization cytosol
+md5sum 3b1164ace222f4650fa689ea9b14177c
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4614
+subId 4030
 tableName wgEncodeGisRnaPetHuvecCytosolPapClustersRep1
 view Clusters
 
@@ -1620,7 +1650,6 @@ cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000266
@@ -1628,15 +1657,15 @@ expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
-labExpId RHH003
+labExpId RHH004
 labProtocolId gen0117C+pet
 localization cytosol
+md5sum cce0e097972fbd372eacd426b1754e65
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4614
+subId 4030
 view FastqRd1
 
 metaObject wgEncodeGisRnaPetHuvecCytosolPapFastqRd2Rep1
@@ -1646,7 +1675,6 @@ cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000266
@@ -1654,15 +1682,15 @@ expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
-labExpId RHH003
+labExpId RHH004
 labProtocolId gen0117C+pet
 localization cytosol
+md5sum d5c2c815089dede8f9fcc1f408ef7bb2
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4614
+subId 4030
 view FastqRd2
 
 metaObject wgEncodeGisRnaPetHuvecCytosolPapMinusRawRep1
@@ -1672,7 +1700,6 @@ cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000266
@@ -1680,15 +1707,15 @@ expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
-labExpId RHH003
+labExpId RHH004
 labProtocolId gen0117C+pet
 localization cytosol
+md5sum 394da799afaa56b94aed2fd8f41b1c64
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4614
+subId 4030
 tableName wgEncodeGisRnaPetHuvecCytosolPapMinusRawRep1
 view MinusRawSignal
 
@@ -1699,7 +1726,6 @@ cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000266
@@ -1707,15 +1733,15 @@ expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
-labExpId RHH003
+labExpId RHH004
 labProtocolId gen0117C+pet
 localization cytosol
+md5sum ec49b19178a406d7ce4b6d207f46816b
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 4614
+subId 4030
 tableName wgEncodeGisRnaPetHuvecCytosolPapPlusRawRep1
 view PlusRawSignal
 
@@ -1738,6 +1764,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
+md5sum bam=db5c295500bdc9750e756850b05e7ec2,bai=84a851f8a35395c9891e7d7c096f951e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1765,6 +1792,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
+md5sum b0830a5c107425e6a16e0d2d45906614
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1791,6 +1819,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
+md5sum 0c6af2812bcc366d3f043aca8992807d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1816,6 +1845,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
+md5sum 2a61843bca0be12bccfca3f009297455
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1841,6 +1871,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
+md5sum 16bfd4fd3be0fa6e84b28c03f9e41513
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1867,6 +1898,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
+md5sum 7bf4b0198aa4b4b4a8f75bb4b4868f5e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1894,6 +1926,7 @@ labExpId PHK001
 labProtocolId gen0135CHtpet
 labVersion clone-based
 localization chromatin
+md5sum bam=013c2f36f196e1880e8312951a305dea,bai=80dc3b869d568a459e56ee03f795099d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1921,6 +1954,7 @@ labExpId PHK001
 labProtocolId gen0135CHtpet
 labVersion clone-based
 localization chromatin
+md5sum 3160d3f0ea455fdde6dcc71daef5f1d3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1947,6 +1981,7 @@ labExpId PHK001
 labProtocolId gen0135CHtpet
 labVersion clone-based
 localization chromatin
+md5sum 5bb5797e8b3652e1db48d4e40cc7b8f6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1973,6 +2008,7 @@ labExpId PHK001
 labProtocolId gen0135CHtpet
 labVersion clone-based
 localization chromatin
+md5sum 73c07e72819bac301b9c8005438323da
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2000,6 +2036,7 @@ labExpId PHK001
 labProtocolId gen0135CHtpet
 labVersion clone-based
 localization chromatin
+md5sum 0a7a3ba1eab8f0bd077aa68f1571b53a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2015,7 +2052,7 @@ cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
+dateResubmitted 2010-09-16
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000255
@@ -2023,16 +2060,16 @@ expId 255
 fileName wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
-labExpId IHK009010015
+labExpId crg-47
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
+md5sum bam=09b28fa2071192f62aac17db362ca53d,bai=b687ae1427e2c46926a46b6cdf208918
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
-subId 4616
+subId 4023
 tableName wgEncodeGisRnaPetK562CytosolPapAlnRep1
 view Alignments
 
@@ -2043,7 +2080,7 @@ cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
+dateResubmitted 2010-09-16
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000255
@@ -2051,16 +2088,16 @@ expId 255
 fileName wgEncodeGisRnaPetK562CytosolPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
-labExpId IHK009010015
+labExpId crg-47
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
+md5sum aedd74f804647493e9c955a70a500fee
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
-subId 4616
+subId 4023
 tableName wgEncodeGisRnaPetK562CytosolPapClustersRep1
 view Clusters
 
@@ -2071,7 +2108,6 @@ cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000255
@@ -2079,16 +2115,16 @@ expId 255
 fileName wgEncodeGisRnaPetK562CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
-labExpId IHK009010015
+labExpId crg-47
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
+md5sum b5c88c91eea636eaf4525fa99e0f61c0
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
-subId 4616
+subId 4023
 view FastqRd1
 
 metaObject wgEncodeGisRnaPetK562CytosolPapFastqRd2Rep1
@@ -2098,7 +2134,6 @@ cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000255
@@ -2106,16 +2141,16 @@ expId 255
 fileName wgEncodeGisRnaPetK562CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
-labExpId IHK009010015
+labExpId crg-47
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
+md5sum 970adbb8dfe23f802af69a7d4b166742
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
-subId 4616
+subId 4023
 view FastqRd2
 
 metaObject wgEncodeGisRnaPetK562CytosolPapMinusRawRep1
@@ -2125,7 +2160,6 @@ cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000255
@@ -2133,16 +2167,16 @@ expId 255
 fileName wgEncodeGisRnaPetK562CytosolPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
-labExpId IHK009010015
+labExpId crg-47
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
+md5sum c20ced2d1bf34f979f22c41f062d6c52
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
-subId 4616
+subId 4023
 tableName wgEncodeGisRnaPetK562CytosolPapMinusRawRep1
 view MinusRawSignal
 
@@ -2153,7 +2187,6 @@ cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000255
@@ -2161,16 +2194,16 @@ expId 255
 fileName wgEncodeGisRnaPetK562CytosolPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
-labExpId IHK009010015
+labExpId crg-47
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
+md5sum ee4bd8baaf3c4437e7472fdda293befc
 origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
-subId 4616
+subId 4023
 tableName wgEncodeGisRnaPetK562CytosolPapPlusRawRep1
 view PlusRawSignal
 
@@ -2193,6 +2226,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
+md5sum bam=53a48c58e9f6c70f02b0b79553b7ead1,bai=58cd68a61b8121f054a5d979c5eb8f88
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2220,6 +2254,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
+md5sum 6245e6e550bdd7b02943dbec4e98500d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2246,6 +2281,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
+md5sum 4ab47e7e40bca37fd0bcb366128747e3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2271,6 +2307,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
+md5sum eb0e49911e705623dee7f3e6e39badf6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2297,6 +2334,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
+md5sum 9188f2fc82976cecba4d98c7c99973ea
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2324,6 +2362,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
+md5sum a1587b6c346639e0f9aff9923e47b3e7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2351,6 +2390,7 @@ labExpId PHK002
 labProtocolId gen0148NPtpet
 labVersion clone-based
 localization nucleoplasm
+md5sum bam=c2b8e2fa042e8f0617b2fefc2cbff066,bai=e43dcab6755ebb781df4eb92f7f0d7fa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2378,6 +2418,7 @@ labExpId PHK002
 labProtocolId gen0148NPtpet
 labVersion clone-based
 localization nucleoplasm
+md5sum 60279d2d6461fa892258d58fb35bb211
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2404,6 +2445,7 @@ labExpId PHK002
 labProtocolId gen0148NPtpet
 labVersion clone-based
 localization nucleoplasm
+md5sum fbc0be62aee6010a9e633b141be8b951
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2430,6 +2472,7 @@ labExpId PHK002
 labProtocolId gen0148NPtpet
 labVersion clone-based
 localization nucleoplasm
+md5sum c98b98e09faa6d2ea62ba00f39b06047
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2457,6 +2500,7 @@ labExpId PHK002
 labProtocolId gen0148NPtpet
 labVersion clone-based
 localization nucleoplasm
+md5sum 43bc9d2619ca5a974c252c766107e40a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2484,6 +2528,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
+md5sum bam=ee0137cced04dc5b30a2f07c7b9c5fb5,bai=2a17aec7564927022171ad7ac1f06865
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2511,6 +2556,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
+md5sum c622f345e6ab92dee2ef9fb4d7b91c42
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2537,6 +2583,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
+md5sum 9777c2e01d3693705695a377d40dee98
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2562,6 +2609,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
+md5sum 5b6963834b726eb0379e97d9ee3a3e72
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2588,6 +2636,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
+md5sum 0eb3c08edbe2f45db1a6b0b8762ea3f0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2615,6 +2664,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
+md5sum c727a7b67c7b0b8f28d8f511ebb3b89e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2642,6 +2692,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
+md5sum bam=13f582655eea95d8f4ec5083fd181f99,bai=046390ffe04c64fffb7106e625f7725d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2669,6 +2720,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
+md5sum 1c669e9eb5dcc50d94576297ab48991b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2695,6 +2747,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
+md5sum 71187261d5a845d218f80ee0fa3d8306
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2720,6 +2773,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
+md5sum 34362616d7bd2cf7b940cea07c5d10ec
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2746,6 +2800,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
+md5sum 42bb878a4e876a65ec7b8a4b0e5f6265
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2773,6 +2828,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
+md5sum 676ed61bb1072774127e023944d63dbc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2800,6 +2856,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
+md5sum bam=dcc5d59fa996a2346312e017553b7189,bai=3f84d25224ec72111e41d73c9c2b8395
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2827,6 +2884,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
+md5sum 350035cc394b24a152381400b9d908bf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2853,6 +2911,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
+md5sum 3d66efa677d17add52deec772909e365
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2878,6 +2937,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
+md5sum c515db639fc264e726e0ecf9f60ff981
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2903,6 +2963,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
+md5sum b4550476a11e2b248a29f2c70e5a4317
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2929,6 +2990,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
+md5sum 0cef6eeda63434f2f8ab4df39319ad6c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2956,6 +3018,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
+md5sum bam=c75f3771c79a4573a13183f45b9a116f,bai=ac569a421e2f61ecf675364298b760bf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2983,6 +3046,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
+md5sum 80ae968e0ee60496f19a619eb58e6884
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3009,6 +3073,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
+md5sum 499f6f261dcfa2f451db94d0f5e587af
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3034,6 +3099,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
+md5sum 98008b9f33e355d609b99502a92ae134
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3059,6 +3125,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
+md5sum 5de798a6aac7da424adf49247abe7fc8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3085,6 +3152,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
+md5sum 9ddd1d0717f21d92942c843ed4530af1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3112,6 +3180,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
+md5sum bam=2b35614e74d2a5a1127d984740fc210e,bai=3c079c3be9664c75627f4b0e79c4ed80
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3139,6 +3208,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
+md5sum 75ca48713aa261be31525b68a33181be
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3165,6 +3235,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
+md5sum d3d270b6d0d0a6ef995eff021b192170
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3190,6 +3261,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
+md5sum 012910ec5fc11f4a25dd0c1cc10d8cb4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3216,6 +3288,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
+md5sum e9d6ba8c32c3d56ef6d23ffbf8143b8c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3243,6 +3316,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
+md5sum 5c16509331a37e16c739fcf86fbf7652
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3251,4 +3325,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: -180736415
+# MAGIC: 12920728
