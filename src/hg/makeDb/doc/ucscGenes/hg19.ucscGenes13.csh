@@ -1083,15 +1083,10 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
 # RNAfold, so not easy for us to fix. Consequence is not too bad, just a
 # few 3' UTRs will be missing annotation.
 
-#breakpoint
-
 # Clean up
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
-
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
@@ -1120,17 +1115,16 @@ doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 #ENDLOOP
 '_EOF_'
 gensub2 prot.list single template jobList
-#
-# Reports are that Pfam has become more I/O intensive recently (8/6/11).  To avoid
-# swamping the filesystem, run on no more than 5 cpus in the cpu farm.
-ssh $cpuFarm "cd $dir/pfam; para create jobList; para push jobList -maxJob=5"
 
+ssh $cpuFarm "cd $dir/pfam; para make jobList"
+#
 # Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    5543931s   92398.85m  1539.98h   64.17d  0.176 y
-# IO & Wait Time:              21389629s  356493.81m  5941.56h  247.57d  0.678 y
-# Average job time:                2786s      46.43m     0.77h    0.03d
-# Longest finished job:           14976s     249.60m     4.16h    0.17d
-# Submission to last job:         69651s    1160.85m    19.35h    0.81d
+# CPU time in finished jobs:    3665959s   61099.32m  1018.32h   42.43d  0.116 y
+# IO & Wait Time:               3731399s   62189.98m  1036.50h   43.19d  0.118 y
+# Average job time:                 765s      12.75m     0.21h    0.01d
+# Longest finished job:            4941s      82.35m     1.37h    0.06d
+# Submission to last job:         10041s     167.35m     2.79h    0.12d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
@@ -1145,11 +1139,12 @@ raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
 # Convert output to tab-separated file. 
 cd $dir/pfam
 catDir result | hmmPfamToTab -eValCol stdin ucscPfam.tab
+cd $dir
 
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
 	pfamDesc.tab > sub.tab
-cut -f 1,4 ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
+cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
@@ -1178,11 +1173,12 @@ gensub2 prot.list single template jobList
 
 ssh $cpuFarm "cd $dir/scop; para make jobList"
 # Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    3984764s   66412.73m  1106.88h   46.12d  0.126 y
-# IO & Wait Time:              18210135s  303502.25m  5058.37h  210.77d  0.577 y
-# Average job time:                2296s      38.26m     0.64h    0.03d
-# Longest finished job:           11765s     196.08m     3.27h    0.14d
-# Submission to last job:         33834s     563.90m     9.40h    0.39d
+# CPU time in finished jobs:    3953327s   65888.78m  1098.15h   45.76d  0.125 y
+# IO & Wait Time:               7723843s  128730.72m  2145.51h   89.40d  0.245 y
+# Average job time:                1208s      20.13m     0.34h    0.01d
+# Longest finished job:            4703s      78.38m     1.31h    0.05d
+# Submission to last job:         12535s     208.92m     3.48h    0.15d
+
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -1194,9 +1190,8 @@ hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSupe
 hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
-compareModifiedFileSizes.csh $oldGeneDir .
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
+# move this endif statement past business that has successfully been completed
+endif # BRACKET
 
 # Regenerate ccdsKgMap table
 ~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
@@ -1221,7 +1216,6 @@ rm kgSpAlias_0.tmp
 
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
-#breakpoint (proteome browser)
 
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 
@@ -1261,7 +1255,6 @@ hgLoadSqlTab $tempDb pepResDist ~/kent/src/hg/lib/pepResDist.sql ./pepResDist.ta
 hgLoadSqlTab $tempDb pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql ./pepIPCntDist.tab
 hgLoadSqlTab $tempDb pepPiDist ~/kent/src/hg/lib/pepPiDist.sql ./pepPiDist.tab
 
-#breakpoint
 
 # Calculate frequency distributions
 
@@ -1272,6 +1265,12 @@ pbCalResStd $spDb $taxon $tempDb
 hgLoadSqlTab $tempDb pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
 
 hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
+
+compareModifiedFileSizes.csh $oldGeneDir .
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
+
 
 # The old pbStamp table seems OK, so no adjustment needed.
 
