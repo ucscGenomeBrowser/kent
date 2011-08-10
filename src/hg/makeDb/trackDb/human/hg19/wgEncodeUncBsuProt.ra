@@ -10,7 +10,7 @@ subGroup2 localization Localization cytosol=cytosol membraneFraction=membrane mi
 subGroup3 view View Signal=Signal RawSignal=RawSignal
 dimensions dimensionX=cellType dimensionY=localization
 sortOrder cellType=+ localization=+ view=+
-fileSortOrder cell=Cell_Line localization=Localization replicate=Rep labExpId=Lab<BR>Exp_ID view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line localization=Localization view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType localization
 dragAndDrop subTracks
 visibilityViewDefaults  Signal=full

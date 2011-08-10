@@ -5353,6 +5353,123 @@ subId 4649
 tableName wgEncodeUwHistoneGm12865H3k04me3StdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell GM12866
+composite wgEncodeUwHistone
+control std
+controlId GM12866/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-29
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS18912
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4650
+view Alignments
+
+metaObject wgEncodeUwHistoneGm12866H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell GM12866
+composite wgEncodeUwHistone
+control std
+controlId GM12866/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-29
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneGm12866H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18912
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4650
+tableName wgEncodeUwHistoneGm12866H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneGm12866H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell GM12866
+composite wgEncodeUwHistone
+control std
+controlId GM12866/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-29
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneGm12866H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18912
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4650
+tableName wgEncodeUwHistoneGm12866H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneGm12866H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell GM12866
+composite wgEncodeUwHistone
+control std
+controlId GM12866/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-29
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneGm12866H3k04me3StdRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS18912
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4650
+view RawData
+
+metaObject wgEncodeUwHistoneGm12866H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell GM12866
+composite wgEncodeUwHistone
+control std
+controlId GM12866/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-29
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneGm12866H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18912
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4650
+tableName wgEncodeUwHistoneGm12866H3k04me3StdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -22692,6 +22809,250 @@ subId 4380
 tableName wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1
+objType file
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS18355
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4675
+treatment 4OHTAM_20nM_72hr
+view Alignments
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2
+objType file
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2.bam
+grant Stam
+lab UW
+labExpId DS18354
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4674
+treatment 4OHTAM_20nM_72hr
+view Alignments
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdHotspotsRep1
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18355
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4675
+tableName wgEncodeUwHistoneWi38H3k04me3OhtamStdHotspotsRep1
+treatment 4OHTAM_20nM_72hr
+view Hotspots
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdHotspotsRep2
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18354
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4674
+tableName wgEncodeUwHistoneWi38H3k04me3OhtamStdHotspotsRep2
+treatment 4OHTAM_20nM_72hr
+view Hotspots
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdPkRep1
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18355
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4675
+tableName wgEncodeUwHistoneWi38H3k04me3OhtamStdPkRep1
+treatment 4OHTAM_20nM_72hr
+view Peaks
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdPkRep2
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18354
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4674
+tableName wgEncodeUwHistoneWi38H3k04me3OhtamStdPkRep2
+treatment 4OHTAM_20nM_72hr
+view Peaks
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdRawDataRep1
+objType file
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18355
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4675
+treatment 4OHTAM_20nM_72hr
+view RawData
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdRawDataRep2
+objType file
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS18354
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4674
+treatment 4OHTAM_20nM_72hr
+view RawData
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdRawRep1
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18355
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4675
+tableName wgEncodeUwHistoneWi38H3k04me3OhtamStdRawRep1
+treatment 4OHTAM_20nM_72hr
+view RawSignal
+
+metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdRawRep2
+objType table
+antibody H3K4me3
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS18354
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4674
+tableName wgEncodeUwHistoneWi38H3k04me3OhtamStdRawRep2
+treatment 4OHTAM_20nM_72hr
+view RawSignal
+
 metaObject wgEncodeUwHistoneWi38H3k04me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -22936,6 +23297,78 @@ subId 4382
 tableName wgEncodeUwHistoneWi38H3k04me3StdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwHistoneWi38InputOhtamStdAlnRep1
+objType file
+antibody Input
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38InputOhtamStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS18351
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4673
+treatment 4OHTAM_20nM_72hr
+view Alignments
+
+metaObject wgEncodeUwHistoneWi38InputOhtamStdRawDataRep1
+objType file
+antibody Input
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38InputOhtamStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18351
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4673
+treatment 4OHTAM_20nM_72hr
+view RawData
+
+metaObject wgEncodeUwHistoneWi38InputOhtamStdRawRep1
+objType table
+antibody Input
+cell WI-38
+composite wgEncodeUwHistone
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwHistoneWi38InputOhtamStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18351
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4673
+tableName wgEncodeUwHistoneWi38InputOhtamStdRawRep1
+treatment 4OHTAM_20nM_72hr
+view RawSignal
+
 metaObject wgEncodeUwHistoneWi38InputStdAlnRep1
 objType file
 antibody Input
@@ -23008,4 +23441,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: -1320764906
+# MAGIC: 1427180574
