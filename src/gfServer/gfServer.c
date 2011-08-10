@@ -407,15 +407,22 @@ longjmp(gfRecover, -1);
 static void errorSafeSetup()
 /* Start up error safe stuff. */
 {
+pushAbortHandler(gfAbort); // must come before memTracker
 memTrackerStart();
-pushAbortHandler(gfAbort);
 ripCord = needMem(64*1024); /* Memory for error recovery. memTrackerEnd frees */
+}
+
+static void errorSafeCleanup()
+/* Clean up and report problem. */
+{
+memTrackerEnd();
+popAbortHandler();  // must come after memTracker
 }
 
 static void errorSafeCleanupMess(int connectionHandle, char *message)
 /* Clean up and report problem. */
 {
-popAbortHandler();
+errorSafeCleanup();
 logError("Recovering from error via longjmp");
 netSendString(connectionHandle, message);
 }
@@ -440,14 +447,13 @@ if (status == 0)    /* Always true except after long jump. */
        }
     else
 	dnaQuery(gf, seq, connectionHandle, buf);
-    popAbortHandler();
+    errorSafeCleanup();
     }
 else    /* They long jumped here because of an error. */
     {
     errorSafeCleanupMess(connectionHandle, 
     	"Error: gfServer out of memory. Try reducing size of query.");
     }
-memTrackerEnd();
 }
 
 static void errorSafePcr(struct genoFind *gf, char *fPrimer, char *rPrimer, 
@@ -460,14 +466,13 @@ status = setjmp(gfRecover);
 if (status == 0)    /* Always true except after long jump. */
     {
     pcrQuery(gf, fPrimer, rPrimer, maxDistance, connectionHandle);
-    popAbortHandler();
+    errorSafeCleanup();
     }
 else    /* They long jumped here because of an error. */
     {
     errorSafeCleanupMess(connectionHandle, 
     	"Error: gfServer out of memory."); 
     }
-memTrackerEnd();
 }
 
 boolean badPcrPrimerSeq(char *s)
