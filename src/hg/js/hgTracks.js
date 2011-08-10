@@ -265,7 +265,7 @@ $(window).load(function () {
             var reg = new RegExp("Version\/(\[0-9]+\.\[0-9]+) Safari");
             var a = reg.exec(navigator.userAgent);
             if(a && a[1]) {
-                var version = a[1] * 1;
+                var version = Number(a[1]);
                 if(version >= 5.1) {
                     mapIsUpdateable = true;
                 }
@@ -2540,6 +2540,27 @@ function updateTrackImgForId(html, id)
     }
 }
 
+function updateTiming(response)
+{
+// update measureTiming text on current page based on what's in the response
+    var reg = new RegExp("(<span class='timing'>.+?</span>)", "g");
+    var strs = [];
+    for(var a = reg.exec(response); a != null && a[1] != null; a = reg.exec(response)) {
+        strs.push(a[1]);
+    }
+    if(strs.length > 0) {
+        $('.timing').remove();
+        for(var i = strs.length; i > 0; i--) {
+            $('body').prepend(strs[i - 1]);
+        }
+    }
+    reg = new RegExp("(<span class='trackTiming'>[\\S\\s]+?</span>)");
+    a = reg.exec(response);
+    if(a != null && a[1] != null) {
+        $('.trackTiming').replaceWith(a[1]);
+    }
+}
+
 function handleUpdateTrackMap(response, status)
 {
 // Handle ajax response with an updated trackMap image, map and optional ideogram.
@@ -2603,6 +2624,9 @@ function handleUpdateTrackMap(response, status)
                         showWarning("Couldn't parse out new image for id: " + id);
                         //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                     }
+                }
+                if(hgTracks.measureTiming) {
+                    updateTiming(response);
                 }
                 hgTracks = json;
                 originalPosition = undefined;
