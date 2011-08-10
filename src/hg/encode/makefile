@@ -7,8 +7,9 @@ DIRS = \
 	mkEncodeFrameset \
 	hgEncodeVocab \
 	validateFiles \
-        encodeMkChangeNotes \
-        paraMd5sum
+    encodeMkChangeNotes \
+    paraMd5sum \
+	encodeStatus
 
 # broken
 	#ldGencodeIntron \
@@ -17,7 +18,6 @@ DIRS = \
 # List of pipeline dirs
 PIPELINE_DIRS = \
         encodeLoad \
-        encodeStatus \
         encodeValidate
 
 USE_DIRS = $(DIRS)
@@ -30,13 +30,20 @@ all:
 	    fi ;\
 	    done
 
-install: 
+development:
 	@for D in ${PIPELINE_DIRS}; do \
-		(cd $${D} && ${MAKE} install;) \
+		 (cd $${D} && ${MAKE} development;) \
 	done
 
-pipeline:
-	@${MAKE} --no-print-directory USE_DIRS="${PIPELINE_DIRS}" all
+beta:
+	@for D in ${PIPELINE_DIRS}; do \
+		(cd $${D} && ${MAKE} beta;) \
+	done
+
+prod: 
+	@for D in ${PIPELINE_DIRS}; do \
+		(cd $${D} && ${MAKE} prod;) \
+	done
 
 clean::
 	echo nothing to clean in hg/encode/
