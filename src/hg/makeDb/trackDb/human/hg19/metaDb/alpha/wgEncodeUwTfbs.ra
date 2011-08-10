@@ -18140,6 +18140,78 @@ subId 4395
 tableName wgEncodeUwTfbsWi38CtcfStdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwTfbsWi38InputOhtamStdAlnRep1
+objType file
+antibody Input
+cell WI-38
+composite wgEncodeUwTfbs
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwTfbsWi38InputOhtamStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS18351
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4696
+treatment 4OHTAM_20nM_72hr
+view Alignments
+
+metaObject wgEncodeUwTfbsWi38InputOhtamStdRawDataRep1
+objType file
+antibody Input
+cell WI-38
+composite wgEncodeUwTfbs
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwTfbsWi38InputOhtamStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18351
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4696
+treatment 4OHTAM_20nM_72hr
+view RawData
+
+metaObject wgEncodeUwTfbsWi38InputOhtamStdRawRep1
+objType table
+antibody Input
+cell WI-38
+composite wgEncodeUwTfbs
+control std
+controlId WI-38/4OHTAM_20nM_72hr/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeUwTfbsWi38InputOhtamStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18351
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4696
+tableName wgEncodeUwTfbsWi38InputOhtamStdRawRep1
+treatment 4OHTAM_20nM_72hr
+view RawSignal
+
 metaObject wgEncodeUwTfbsWi38InputStdAlnRep1
 objType file
 antibody Input
@@ -18212,4 +18284,4 @@ subId 4365
 tableName wgEncodeUwTfbsWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: 1190495587
+# MAGIC: 2145241663
