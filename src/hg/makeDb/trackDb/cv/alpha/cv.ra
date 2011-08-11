@@ -5233,7 +5233,7 @@ vendorId sc-13030
 lab Farnham
 targetId GeneCard:ELK4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4
-validation missing
+validation ELK4(missing):human_ELK4_validation_Farnham.pdf
 
 term ERalpha_a
 tag ERAA
@@ -5587,7 +5587,6 @@ targetId GeneCard:GTF2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2F1
 validation GTF2F1_(AB28179)(Western_blot,Immunoprecipitation):human_GTF2F1_AB28179_validation_Snyder.pdf
 
-
 ##This does not appear in metaDb
 term H2A.Z
 tag H2AZ
@@ -5602,6 +5601,23 @@ lab Bernstein
 lots DAM1540736
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
+validation missing
+
+term H3ac_(06-599)
+tag H3AC06599
+type Antibody
+antibodyDescription rabbit polyclonal antibody raised against a KLH-conjugated p
+eptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]
+STGG[K*]APRKQLC) where K* is acetylated
+target H3ac
+targetDescription missing
+vendorName Millipore
+vendorId 06-599
+orderUrl http://www.millipore.com/catalogue/item/06-599
+lab Wold
+lots missing
+targetId Genecard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K4me1
@@ -5866,6 +5882,37 @@ lots 177/0100800
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
+
+term H3K79me2_(ab3594)
+tag H3K79ME2AB3594
+type Antibody
+antibodyDescription Rabbit polyclonal
+target H3K79me2
+targetDescription H3K79me2 is a mark of the transcriptional transition region - the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3)
+vendorName Abcam
+vendorId ab3594
+orderUrl http://www.abcam.com/Histone-H3-di-methyl-K79-antibody-ChIP-Grade-ab3594.html
+lab Wold
+lots 836403
+targetId Genecard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation missing
+
+term H3K79me3_(ab2621)
+tag H3K79ME3AB2621
+type Antibody
+antibodyDescription Rabbit polyclonal
+target H3K79me3
+targetDescription Associated with the gene body of actively transcribed genes
+vendorName Abcam
+vendorId ab2621
+orderUrl http://www.abcam.com/Histone-H3-tri-methyl-K79-antibody-ChIP-Grade-ab26
+21.html
+lab Wold
+lots 805949
+targetId Genecard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation missing
 
 term H4K20me1
 tag H4K20ME1
@@ -6187,6 +6234,64 @@ lab Myers
 lots K2009
 targetId GeneCards:MEF2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
+validation missing
+
+term MyoD_(sc-32758)
+tag MYODSC32758
+type Antibody
+antibodyDescription mouse monoclonal antibody raised against recombinant MyoD of
+ mouse origin with an epitope mapping to amino acids 180-189
+target MyoD
+targetDescription This gene encodes a nuclear protein that belongs to the basic 
+helix-loop-helix family of transcription factors and the myogenic factors subfam
+ily. It regulates muscle cell differentiation by inducing cell cycle arrest, a p
+rerequisite for myogenic initiation. The protein is also involved in muscle rege
+neration. It activates its own transcription which may stabilize commitment to m
+yogenesis. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-32758
+orderUrl http://www.scbt.com/datasheet-32758-myod-5-8a-antibody.html
+lab Wold
+lots missing
+targetId Genecard:MyoD1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MyoD1
+validation missing
+
+term Myogenin_(sc-12732)
+tag MYOGENINSC12732
+type Antibody
+antibodyDescription mouse monoclonal antibody; epitope mapping within amino acid
+s 138-158 of myogenin of rat origin
+target Myogenin
+targetDescription Myogenin is a muscle-specific transcription factor that can in
+duce myogenesis in a variety of cell types in tissue culture. It is a member of 
+a large family of proteins related by sequence homology, the helix-loop-helix (H
+LH) proteins. It is essential for the development of functional skeletal muscle.
+ (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-12732
+orderUrl http://www.scbt.com/datasheet-12732-myogenin-f5d-antibody.html
+lab Wold
+lots missing
+targetId Genecard:Myog
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Myog
+validation missing
+
+term MEF2_(sc-17785)
+tag MEF2SC17785
+type Antibody
+antibodyDescription mouse monoclonal antibody raised against amino acids 1-300 m
+apping at the N-terminus of MEF-2A of human origin; recommended for detection of
+ a broad range of MEF-2 family members of mouse, rat and human origin
+target MEF2
+targetDescription The MADS box transcription enhancer factor 2 (MEF2) family of 
+proteins plays a role in myogenesis.
+vendorName Santa Cruz Biotech
+vendorId sc-17785
+orderUrl http://www.scbt.com/datasheet-17785-mef-2-b-4-antibody.htmllab Wold
+lots missing
+targetId Genecard:MEF2A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
 validation missing
 
 term NANOG_(SC-33759)
@@ -6660,7 +6765,7 @@ orderUrl http://www.ptglab.com/Products/SETDB1-Antibody-11231-1-AP.htm
 lab Farnham
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation missing
+validation SETDB1(missing):human_SETDB1_validation_Farnham.pdf
 
 term  SETDB1_(SC-66884)
 tag  SETDB1b
@@ -7311,6 +7416,18 @@ lots 060729QCS1
 targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
 validation ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
+
+term ZNF274_(M01)tag ZNF274M01
+type Antibody
+antibodyDescription Mouse monoclonal antibody raised against a partial recombinant ZNF274 (corresponding to amino acids 420-531 of the human ZNF274 protein).target ZNF274targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.vendorName Abnova ZNF74
+vendorId M01
+orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782
+-M01
+lab Farnham
+lots 08064-4C12
+targetId GeneCards:Genecard:ZNF274
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:ZNF274
+validation ZNF274_(M01)(missing):human_ZNF274_M01_validation_Farnham.pdf
 
 term ZZZ3
 tag ZZZ3
