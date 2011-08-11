@@ -19,6 +19,7 @@ grant Ren
 lab LICR-m
 labVersion 09/08/10 Lane 4G
 localization cell
+md5sum bam=14237a1ad3e88c4963346688087910d1,bai=6af4b8e00935a5c2146ae5b5a3a13f6f
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -47,6 +48,7 @@ grant Ren
 lab LICR-m
 labVersion 09/08/10 Lane 4H
 localization cell
+md5sum bam=7ed3746b848be72621e6a4ccf231575f,bai=d3a25f473d4d4668d9d440c6a65d831c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -75,6 +77,7 @@ grant Ren
 lab LICR-m
 labVersion 09/08/10 Lane 4G
 localization cell
+md5sum 7866dd70110904c4ee5ebdd4a49f8e27
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -102,6 +105,7 @@ grant Ren
 lab LICR-m
 labVersion 09/08/10 Lane 4H
 localization cell
+md5sum 513fc20f81393c3814640cb228d21f53
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -129,6 +133,7 @@ grant Ren
 lab LICR-m
 labVersion 09/08/10 Lane 4G
 localization cell
+md5sum ce64fe300a9acf3ee7c343262a727686
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -157,6 +162,7 @@ grant Ren
 lab LICR-m
 labVersion 09/08/10 Lane 4H
 localization cell
+md5sum e5c308efc878a50f5fcbc811c6acbe48
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -185,6 +191,7 @@ grant Ren
 lab LICR-m
 labVersion 03/16/10 Lane 2
 localization cell
+md5sum bam=8da723d235d2b5e19950f5d5ca45394e,bai=d5a85a2216c7939b90316f8667512907
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -213,6 +220,7 @@ grant Ren
 lab LICR-m
 labVersion 03/16/10 Lane 3
 localization cell
+md5sum bam=5027d18a5bf6319620e935863a178d0e,bai=d835d29b627a329e0baeec74bfcf7817
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -241,6 +249,7 @@ grant Ren
 lab LICR-m
 labVersion 03/16/10 Lane 2
 localization cell
+md5sum 5819b3b4814082f1782b45eab653ed87
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -268,6 +277,7 @@ grant Ren
 lab LICR-m
 labVersion 03/16/10 Lane 3
 localization cell
+md5sum b0df8596b406ec91b2e8ace2ede6d99a
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -295,6 +305,7 @@ grant Ren
 lab LICR-m
 labVersion 03/16/10 Lane 2
 localization cell
+md5sum 71ee574a9c5babdc89b6d31e3208ec1c
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -323,6 +334,7 @@ grant Ren
 lab LICR-m
 labVersion 03/16/10 Lane 3
 localization cell
+md5sum eb5d4ba1e556b406314a0440405afdd6
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -351,6 +363,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 1
 localization cell
+md5sum bam=6a770ca539e22727b255ab31d14d6630,bai=8f8ac55627b64f3cd532ed7d92a787f3
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -379,6 +392,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 2
 localization cell
+md5sum bam=ffb8bbd7bba53b1199d5357901e76086,bai=a07a095bdb9fb742063641bd5c78451f
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -407,6 +421,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 1
 localization cell
+md5sum 03eabbcac55b4d2bebbb96b441aed5e6
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -434,6 +449,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 2
 localization cell
+md5sum a8456a098bead4280fef3baf3ee993d3
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -461,6 +477,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 1
 localization cell
+md5sum 24d2d8bbf679ed06b104a35dd4468c8d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -489,6 +506,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 2
 localization cell
+md5sum df7047a4074e7c503f399bc8b3ee371d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -517,6 +535,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 4A
 localization cell
+md5sum bam=b3333bb37c9e71cc87bcdec4580c60d8,bai=7e3b532ecf75e4e6504f77a5eabccc7a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -545,6 +564,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 4B
 localization cell
+md5sum bam=f9ed43263e65d56caf9d9010f87a0ea8,bai=28bd15def9af947611341b37927357fe
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -573,6 +593,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 4A
 localization cell
+md5sum edb48bf4fb82087921900418443dd00a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -600,6 +621,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 4B
 localization cell
+md5sum 9d4bae7ff91cc0d361b1a1170ac7e5ab
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -627,6 +649,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 4A
 localization cell
+md5sum 00c7fa9738e57fb7991375b94c534c49
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -655,6 +678,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 4B
 localization cell
+md5sum bbc1c2c3d98cd45b98d77ab64a792be2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -683,6 +707,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 1
 localization cell
+md5sum bam=f1ed78a6f5a5ad6653978b552d8fce89,bai=f94072db798f77ab8bfbb31090c79939
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -711,6 +736,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 2
 localization cell
+md5sum bam=14b61a5ef161c7db658efabd7ef0da38,bai=815ae8f340492f2a06afcba5f3b41f2c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -739,6 +765,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 1
 localization cell
+md5sum 99cbc15c396e3600ac0b3cff719d3f93
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -766,6 +793,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 2
 localization cell
+md5sum 58fcad2ea46f062f2ee5abdf34c5a52d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -793,6 +821,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 1
 localization cell
+md5sum e33675e476efe6ea90f7dd8e65c9ba8e
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -821,6 +850,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 2
 localization cell
+md5sum b0ef01570f7f92ad10d44177c242189a
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -849,6 +879,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 3
 localization cell
+md5sum bam=22b8617e5391dcf7246784fe82c154bc,bai=c86f3a70d91e0a6d2ecf96afc70fbc37
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -877,6 +908,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 4
 localization cell
+md5sum bam=eb4c39ed1151d670ea90e922ebec56ff,bai=f394e17b499f259ae5fa6ab1cf7ee64d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -905,6 +937,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 3
 localization cell
+md5sum dfe9901f57b4c51be3dae81cdc9243f8
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -932,6 +965,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 4
 localization cell
+md5sum 4855a4ff6cb5841b3e6736decadff926
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -959,6 +993,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 3
 localization cell
+md5sum 711aa6d2a5d71b9ec4a839fdc2ff245a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -987,6 +1022,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 4
 localization cell
+md5sum 6e0b660e33f18946a22654d2eadbf127
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1015,6 +1051,7 @@ grant Ren
 lab LICR-m
 labVersion 03/02/10 Lane 3
 localization cell
+md5sum bam=8190233ef599431709351de3690fcffc,bai=ffe95756d895aeec9b6a3ec09307f16e
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1043,6 +1080,7 @@ grant Ren
 lab LICR-m
 labVersion 03/02/10 Lane 4
 localization cell
+md5sum bam=633a3b0d8ab37f7cac048fa31d8ca554,bai=2c606d5efeacecc64590c05aec3e0e0b
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1071,6 +1109,7 @@ grant Ren
 lab LICR-m
 labVersion 03/02/10 Lane 3
 localization cell
+md5sum 53cf8a074d19fe7e35a2452ca0279e46
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1098,6 +1137,7 @@ grant Ren
 lab LICR-m
 labVersion 03/02/10 Lane 4
 localization cell
+md5sum 8625db2109036d6a3479ef6e8fea4cc7
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1125,6 +1165,7 @@ grant Ren
 lab LICR-m
 labVersion 03/02/10 Lane 3
 localization cell
+md5sum 57f8d27282524c958afb7e74509f7680
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1153,6 +1194,7 @@ grant Ren
 lab LICR-m
 labVersion 03/02/10 Lane 4
 localization cell
+md5sum 78c781a976010183b614405f025fca3d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1181,6 +1223,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 5
 localization cell
+md5sum bam=49f7bf22c064adca9c1308b064367a85,bai=9ccca606351138abc58b68a01f11bf4a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1209,6 +1252,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 6
 localization cell
+md5sum bam=733c0c951014489448774e26775a6b7a,bai=7e58d4676d8c7cbe19d70102bd2d0386
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1237,6 +1281,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 5
 localization cell
+md5sum a4a528fd6649f810c1cc8ad7fc11fe34
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1264,6 +1309,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 6
 localization cell
+md5sum 6afa489abdb28029dd0f1b7ef60bae84
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1291,6 +1337,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 5
 localization cell
+md5sum abadb1a9be3b5d34a086a3ca0072674a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1319,6 +1366,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 6
 localization cell
+md5sum b69fa2d1e0b2ef18a9eea3839bbe921e
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1347,6 +1395,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 5
 localization cell
+md5sum bam=5a06b9f4580636592c7f92080da63f46,bai=59e5e3eb4f542b22b3b6745e403c7ebe
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1375,6 +1424,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 6
 localization cell
+md5sum bam=b479c86706e2f4c016c1872375b804db,bai=65e2ddec8d81b43c5fa2e2a249ade4fd
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1403,6 +1453,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 5
 localization cell
+md5sum 54eae0eef0e787b78de0d49872f981e6
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1430,6 +1481,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 6
 localization cell
+md5sum 413c9682de4515e33ccaa12bd7843616
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1457,6 +1509,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 5
 localization cell
+md5sum 5c997df676cb190a35778bbc26128632
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1485,6 +1538,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 6
 localization cell
+md5sum 0b209d23076f5b60b37f1595f20654eb
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1513,6 +1567,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 3
 localization cell
+md5sum bam=ff20f1d7352d444de01b67a93732eefe,bai=d30f2b5d68b88c4689814362290271f3
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1541,6 +1596,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 4
 localization cell
+md5sum bam=92dfac8fda769647565582c9f44d46bb,bai=13628f1af0f460d431621ac74d8a7841
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1569,6 +1625,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 3
 localization cell
+md5sum 9ce6c6db6166402c2e3f1e965b719c95
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1596,6 +1653,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 4
 localization cell
+md5sum 39c5c40d79fb0c23c851383347cbadb6
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1623,6 +1681,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 3
 localization cell
+md5sum b37dde6b4eb5262b7190fdd9e320a163
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1651,6 +1710,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 4
 localization cell
+md5sum 4d146616950d9ad69e93431a150f7bbd
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1663,4 +1723,4 @@ tableName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: 446219745
+# MAGIC: -822475310
