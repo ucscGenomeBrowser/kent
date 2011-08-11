@@ -1,0 +1,28 @@
+<H3>Description</H3>
+<P>
+Evolutionary analysis of CpG-rich regions reveals that several distinct processes generate and maintain CpG islands. One central evolutionary regime resulting in enriched CpG content is driven by low levels of DNA methylation and consequentially low rates of deamination (C &#8594; T). Another major force forming CpG islands is biased gene conversion, which stabilizes constitutively methylated CpG islands by balancing rapid deamination with G/C fixation, indirectly increasing the CpG frequency. This track classifies contiguous CpG rich regions according to their inferred evolutionary dynamics. Analysis of different epigenetic marks (DNA methylation and others) should usually be performed separately for the different evolutionary classes. 
+<H3>Display Conventions</H3>
+The track shows contiguous (100bp or more) genomic elements with CpG content greater than 3%, color-coded according to their classification of evolutionary dynamics. Green elements represent CpG islands that have low rates of C&#8594;T deamination and are typically unmethylated. Red elements represent CpG rich regions that gain G/C quickly and are in many cases constitutively methylated. Blue elements represent CpG rich loci that overlap exons (where stabilization of CpGs can be explained by indirect selective pressure on coding sequence). A probabilistic score for each CpG island indicates the specificity of the evolutionary behavior; positive values indicate hypo-deamination and negative values indicate high rates of G/C gain.The intensity of the CpG island classification score is also represented in the shade of the CpG island element (shades of green for hypodeaminated elements, and shades of red for constitutively methylated islands).
+<BR><BR>Note: CpG islands in chromosomes X and Y and islands that cannot be aligned to other primate genomes are currently ignored.
+<H3>Methods</H3>
+A parameter-rich evolutionary model  was used to infer substitution dynamics over genomic bins of 50bp and clustering analysis identified two major types of genomic behaviors (as described in Mendelson Cohen, Kenigsberg and Tanay, Cell 2011). The distributions of evolutionary parameters in each cluster (Figure 3 in the paper) were used to compute a log-odds score for each 50bp genomic bin. Bins with CpG content higher than 3% (smoothed over 500bp) were then assembled into contiguous segments as follows:
+<ol>
+<li>Adjacent bins from the same cluster were merged.
+<li>Ambiguously classified bins were merged with any adjacent non-ambiguous bins. 
+<li>Bins of the same class with gaps of up to 50bp were merged. Short intervals (<200bp) at a distance less than 100bp were also merged.
+<li>Intervals shorter than 100bp were discarded.
+<li>All merged intervals were reclassified according to the mean log-odds score spanning the entire interval.
+</ol>
+
+The Evo CpG data of hg18 was lifted to hg19 by Weizmann Institute of Science.
+<P>
+The raw inferred evolutionary statistics and cluster distributions are available upon request (amos.tanay@weizmann.ac.il)
+<H3>Credits</H3>
+Thanks to 
+<A HREF="http://compgenomics.weizmann.ac.il/tanay/" TARGET=_blank>
+Amos Tanay's lab</A>
+ at the Weizmann Institute of Science for the evolutionary model and classification scheme.
+<H3>References</H3>
+Cohen NM, Kenigsberg E, Tanay A. <A HREF="http://dx.doi.org/10.1016/j.cell.2011.04.024" TARGET=_blank>
+Primate CpG Islands Are Maintained by Heterogeneous Evolutionary Regimes Involving Minimal Selection</A>. <i>Cell</i>. 2011 May 11;145(5):773-786.
+

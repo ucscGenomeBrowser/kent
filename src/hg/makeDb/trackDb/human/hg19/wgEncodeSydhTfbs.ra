@@ -3231,16 +3231,17 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878InputIggrabSig
+        track wgEncodeSydhTfbsGm12878InputTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 Inpt IgGr
+        shortLabel GM78 In IgGr TNFa
         longLabel GM12878 Input IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputrab cellType=1GM12878 control=IGGRAB treatment=aNone
+        subGroups view=Signal factor=zInputrab cellType=1GM12878 control=IGGRAB treatment=TNFa
         type bigWig 0.000000 8421.900391
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm12878InputIggrabSig wong Mon Jul 18 14:43:21 2011
         # was wgEncodeSydhTfbsGm12878InputTnfaIggrabSig wong Mon Jul 18 15:19:22 2011
+        # was wgEncodeSydhTfbsGm12878InputIggrabSig wong Tue Jul 26 10:30:39 2011
 
         track wgEncodeSydhTfbsGm12878InputStdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -5212,4 +5213,13 @@ wgEncode 1
         subGroups view=Signal factor=GATA3 cellType=SHSY5Y control=UCD treatment=aNone
         type bigWig 1.000000 22110.000000
         # subId=4343 dateSubmitted=2011-06-29
+
+        track wgEncodeSydhTfbsGm12878InputIggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Inpt IgGr
+        longLabel GM12878 Input IgG-rab ChIP-seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=1GM12878 control=IGGRAB treatment=aNone
+        type bigWig 1.000000 5818.000000
+        color 153,38,0
+        # subId=4618 dateSubmitted=2011-07-27
 

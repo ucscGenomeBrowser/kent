@@ -246,7 +246,7 @@ function setVarAndPostForm(aName,aValue,formName)
 }
 
 // json help routines
-function tdbGetJsonRecord(trackName)  { return trackDbJson[trackName]; }
+function tdbGetJsonRecord(trackName)  { return hgTracks.trackDb[trackName]; }
 function tdbIsFolder(tdb)             { return (tdb.kindOfParent == 1); } // NOTE: These must jive with tdbKindOfParent() and tdbKindOfChild() in trackDb.h
 function tdbIsComposite(tdb)          { return (tdb.kindOfParent == 2); }
 function tdbIsMultiTrack(tdb)         { return (tdb.kindOfParent == 3); }
@@ -947,10 +947,13 @@ function waitMaskSetup(timeOutInMs)
     $(waitMask).css('display','block');
 
     // Things could fail, so always have a timeout.
-    if(timeOutInMs == undefined || timeOutInMs <=0)
+    if(timeOutInMs == undefined || timeOutInMs ==0)
         timeOutInMs = 30000; // IE can take forever!
 
-    setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+    if (timeOutInMs > 0)
+        setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+
+    return waitMask;  // The caller could add css if they wanted.
 }
 
 function _launchWaitOnFunction()
@@ -1055,6 +1058,7 @@ function showLoadingImage(id)
 // Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
 // This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
     var loadingId = id + "LoadingOverlay";
+    // make an opaque overlay to partially hide the image
     var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
     overlay.appendTo("body");
     overlay.css("top", $('#'+ id).position().top);
@@ -1066,7 +1070,9 @@ function showLoadingImage(id)
     overlay.height(height);
     overlay.css("background", "white");
     overlay.css("opacity", 0.75);
-    var imgLeft = (width / 2) - 110;
+    // now add the overlay image itself in the center of the overlay.
+    var imgWidth = 220;   // hardwired based on width of loading.gif
+    var imgLeft = (width / 2) - (imgWidth / 2);
     var imgTop = (height / 2 ) - 10;
     $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
     return loadingId;

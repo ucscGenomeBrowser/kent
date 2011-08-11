@@ -17,6 +17,9 @@
 
 #define TRACKDB_NUM_COLS 21
 
+// Forward definitions
+struct tdbExtras;
+
 struct trackDb
 /* This describes an annotation track. */
     {
@@ -60,7 +63,7 @@ struct trackDb
                                  * entry.  It contains the names, but not the
                                  * values of the fields and settings that were
                                  * specified in the entry. */
-    struct hash *extras;        /* This hash allows storing extra values which may be used multiple times within a single cgi
+    struct tdbExtras *tdbExtras;/* This struct allows storing extra values which may be used multiple times within a single cgi
                                    And example is the metadata looked looked up once in the metaTbl and used again and again. */
     };
 
@@ -388,6 +391,7 @@ typedef enum _eCfgType
     cfgBedFilt  =8,
     cfgBam      =9,
     cfgPsl      =10,
+    cfgVcf      =11,
 } eCfgType;
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
@@ -425,15 +429,6 @@ struct trackDb *subTdbFind(struct trackDb *parent,char *table);
 
 struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
 /* Find or creates the tdb for this table. May return NULL. */
-
-void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value);
-/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
-
-void tdbExtrasRemove(struct trackDb *tdb,char *name);
-/* Removes a value from the extras hash. */
-
-void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal);
-/* Returns a value if it is found in the extras hash. */
 
 boolean tdbIsView(struct trackDb *tdb,char **viewName);
 // Is this tdb a view?  Will fill viewName if provided
@@ -508,6 +503,59 @@ struct slName *trackDbLocalSettingsWildMatch(struct trackDb *tdb, char *expressi
 
 struct slName *trackDbSettingsWildMatch(struct trackDb *tdb, char *expression);
 // Return settings in tdb tree that match expression else NULL.  In alpha order, no duplicates.
+
+// Forward defs for tdbExtras
+struct mdbObj;
+struct _membersForAll;
+struct _membership;
+
+struct tdbExtras
+#define TDB_EXTRAS_EMPTY_STATE 666
+// Struct for misc. data collected/calculated during CGI track setup that are cached for later use.
+// These extras are primarily used in hgTracks & hgTrackUi but can be used and expanded as needed.
+// CGI developers are encouraged to add to this structure for their own needs.
+    {
+    int fourState; // hgTrackUi subtracks use 4 state checkboxes (checked/un by enabled/dis)
+    boolean reshapedComposite; // hgTracks should not "reshape" composites more than once.
+    struct mdbObj *mdb;        // several CGIs need repeated access to a tracks metadata
+    struct _membersForAll *membersForAll; // hgTrackUi composites collect all view/dimension info
+    struct _membership *membership;       // hgTrackUi subtracks have individual membership info
+
+    // Developer: please add your useful data that is costly to calculate/retrieve more than once
+    };
+
+void tdbExtrasFree(struct tdbExtras **pTdbExtras);
+// Frees the tdbExtras structure
+
+int tdbExtrasFourState(struct trackDb *tdb);
+// Returns subtrack four state if known, else TDB_EXTRAS_EMPTY_STATE
+
+void tdbExtrasFourStateSet(struct trackDb *tdb,int fourState);
+// Sets subtrack four state
+
+boolean tdbExtrasReshapedComposite(struct trackDb *tdb);
+// Returns TRUE if composite has been declared as reshaped, else FALSE.
+
+void tdbExtrasReshapedCompositeSet(struct trackDb *tdb);
+// Declares that the composite has been reshaped.
+
+struct mdbObj *tdbExtrasMdb(struct trackDb *tdb);
+// Returns mdb metadata if already known, else NULL
+
+void tdbExtrasMdbSet(struct trackDb *tdb,struct mdbObj *mdb);
+// Sets the mdb metadata structure for later retrieval.
+
+struct _membersForAll *tdbExtrasMembersForAll(struct trackDb *tdb);
+// Returns composite view/dimension members for all, else NULL.
+
+void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membersForAll);
+// Sets the composite view/dimensions members for all for later retrieval.
+
+struct _membership *tdbExtrasMembership(struct trackDb *tdb);
+// Returns subtrack membership if already known, else NULL
+
+void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership);
+// Sets the subtrack membership for later retrieval.
 
 #endif /* TRACKDB_H */
 

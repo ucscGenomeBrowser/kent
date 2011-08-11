@@ -140,9 +140,9 @@ if (w > 1)
 	struct dyString *bubble = newDyString(256);
 	char depth[8];
 	snprintf(depth, sizeof(depth), "%d", level);
-	dyStringPrintf(bubble, "%s %c %dk ", 
+	dyStringPrintf(bubble, "%s %c %dk ",
 	    fill->qName, fill->qStrand, fill->qStart/1000);
-	mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->track, 
+	mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->track,
 	    depth, bubble->string);
 	dyStringFree(&bubble);
 	}
@@ -177,10 +177,10 @@ if (w >= 1)
     if (rNextLine > 0)	 /* Put up click info in full mode. */
 	{
 	snprintf(depth, sizeof(depth), "%d", level);
-	dyStringPrintf(bubble, "size %d/%d Ns %d/%d newRep %d/%d", 
+	dyStringPrintf(bubble, "size %d/%d Ns %d/%d newRep %d/%d",
 	    gap->qSize, gap->tSize, gap->qN, gap->tN,
 	    gap->qNewR, gap->tNewR);
-        mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->track, 
+        mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->track,
 		depth, bubble->string);
 	dyStringFree(&bubble);
 	}
@@ -234,7 +234,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
 }
 
 static void netDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw routine for netAlign type tracks.  This will load
  * the items as well as drawing them. */
@@ -267,8 +267,10 @@ if (net != NULL)
     rNetDraw(tg, hvg, net->fillList, 1, yOff);
     chainNetFree(&net);
     }
+#ifndef IMAGEv2_DRAG_SCROLL
 if (vis == tvDense)
     mapBoxToggleVis(hvg, xOff, yOff, width, tg->heightPer, tg);
+#endif///ndef IMAGEv2_DRAG_SCROLL
 }
 
 static int netTotalHeight(struct track *tg, enum trackVisibility vis)

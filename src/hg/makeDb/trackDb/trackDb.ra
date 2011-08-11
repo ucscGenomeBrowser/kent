@@ -104,6 +104,7 @@ priority 12
 visibility hide
 color 160,0,50
 type bed 4
+chromosomes chrX,chrY
 
 track partMrnas
 shortLabel Partially Found mRNAs
@@ -2687,6 +2688,14 @@ shortCircuit 1
 xrefTable ensEstGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSESTP[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensGeneName
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+xrefTable ensemblToGeneName
+xrefQuery select name,value from %s where value like '%%%s%%'
 searchPriority 50
 
 searchTable knownGene

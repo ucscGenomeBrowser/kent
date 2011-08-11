@@ -10,7 +10,6 @@
 #include "cv.h"
 #include "mdb.h"
 #include "encode/encodeExp.h"
-#include <regex.h>
 
 static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
 
@@ -295,7 +294,7 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
         AllocVar(mdbObj);
         mdbObj->obj     = thisRow->obj;
         if ( buildHashes )
-            mdbObj->varHash = hashNew(0);
+            mdbObj->varHash = hashNew(8);
         slAddHead(&mdbObjs,mdbObj);
         }
     else
@@ -345,7 +344,7 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
         limbVal = NULL;  // Very important!
         rootVar->var     = thisRow->var;
         if ( buildHashes )
-            rootVar->valHash = hashNew(0);
+            rootVar->valHash = hashNew(8);
         slAddHead(&rootVars,rootVar);
         }
     else
@@ -365,7 +364,7 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
         if ( buildHashes )
             {
             hashAddUnique(rootVar->valHash, limbVal->val, limbVal); // Pointer to struct to get to objHash
-            limbVal->objHash = hashNew(0);
+            limbVal->objHash = hashNew(10);
             }
         slAddHead(&(rootVar->vals),limbVal);
         }
@@ -458,7 +457,7 @@ char *cloneVars = cloneString(varPairs);
     if(mdbObj == NULL)
         AllocVar(mdbObj);
     if(mdbObj->varHash == NULL)
-        mdbObj->varHash = hashNew(0);
+        mdbObj->varHash = hashNew(8);
 
     int ix;
     for(ix = 0;ix<count;ix++)
@@ -618,7 +617,6 @@ struct mdbByVar   *mdbByVars = NULL;
 struct mdbByVar   *rootVar = NULL;
 struct mdbLimbVal *limbVal = NULL;
 char *cloneLine = cloneString(line);
-struct hash* varHash;     // There must not be multiple occurrances of the same var
 
     // initial chop and determine if this looks like metadata
     int count = chopByWhiteRespectDoubleQuotes(cloneLine,NULL,0);
@@ -626,8 +624,6 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
     count = chopByWhiteRespectDoubleQuotes(cloneLine,words,count);
 
     verbose(3, "mdbByVarsLineParse() word count:%d\n\t%s\n",count,line);
-    // Get obj and figure out if this is a delete line
-    varHash = hashNew(0);
 
     // All words are expected to be var=val pairs!
     for (thisWord=0; thisWord<count; thisWord++)
@@ -636,12 +632,13 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
             errAbort("Expected '%s=%s' but found '%s'.  This is not properly formatted metadata:\n\t%s\n",MDB_VAR,MDB_VAL,words[thisWord],line);
 
         // Set up var struct from 1st half of pair
+        // NOTE: Do not try to combine repeated vars because "fob=a fob=b" is 'AND' while "fob=a,b" is 'OR'.
+        //       Does this make sense?  Yes: select * ... where fob like 'Fr%' and fob != 'Frunk'
         AllocVar(rootVar);
         rootVar->var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
         rootVar->notEqual = (rootVar->var[strlen(rootVar->var)-1] == '!'); // requested not equal
         if (rootVar->notEqual)
             rootVar->var[strlen(rootVar->var)-1] = 0;
-        // Do not try to combine repeated vars because "foo=a foo=b" is 'AND' while "foo=a,b" is 'OR'.
 
         // Fill in the val(s) from second half of pair
         char *val = NULL;
@@ -675,7 +672,6 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
                 rootVar->vals = limbVal;
                 }
             }
-        hashAdd(varHash, rootVar->var, rootVar);
         slAddHead(&mdbByVars,rootVar);
         }
     freeMem(words);
@@ -782,7 +778,7 @@ if (mdbVars == NULL)
 else
     {
     mdbObj = mdbObjCreate(obj,mdbVars->var,mdbVars->val);
-    mdbObj->varHash = hashNew(0);
+    mdbObj->varHash = hashNew(8);
     hashAddUnique(mdbObj->varHash, mdbVars->var, mdbObj->vars); // pointer to struct to resolve type
 
     struct mdbVar *var = mdbVars->next;
@@ -804,7 +800,7 @@ while((objEl = hashNext(&objCookie)) != NULL)
     struct mdbObj *mdbObj;
     AllocVar(mdbObj);
     mdbObj->obj     = cloneString(objEl->name);
-    mdbObj->varHash = hashNew(0);
+    mdbObj->varHash = hashNew(8);
     struct hash *hashedVars = objEl->val;
     struct hashCookie varCookie = hashFirst(hashedVars);
     struct hashEl* varEl = NULL;
@@ -2394,7 +2390,7 @@ newObj->deleteThis = mdbObj->deleteThis;
 if(mdbObj->vars != NULL)
     {
     if(mdbObj->varHash != NULL)
-        newObj->varHash = hashNew(0);
+        newObj->varHash = hashNew(8);
 
     struct mdbVar *mdbVar = NULL;
     for(mdbVar = mdbObj->vars; mdbVar != NULL; mdbVar = mdbVar->next )
@@ -2470,154 +2466,21 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                 || sameString(mdbVar->val,MDB_OBJ_TYPE_FILE)
                 || sameString(mdbVar->val,MDB_OBJ_TYPE_COMPOSITE)))
                 continue;
-            printf("INVALID '%s' not defined in %s: %s -> %s = %s\n",mdbVar->var,CV_FILE_NAME,mdbObj->obj,mdbVar->var,mdbVar->val);
+            printf("INVALID %s '%s' not defined in %s: %s = %s in %s: %s\n",CV_TERM,
+                   mdbVar->var,CV_FILE_NAME,mdbVar->var,mdbVar->val,MDB_OBJ,mdbObj->obj);
             invalids++;
             continue;
             }
-        char *validationRule = hashFindVal(termHash,CV_VALIDATE);
-        if (validationRule == NULL)
+        char reason[256];
+        boolean valid = cvValidateTerm(mdbVar->var,mdbVar->val,reason,sizeof(reason));
+        if (!valid)
             {
-            verbose(1,"ERROR in %s: Term '%s' in typeOfTerms but has no '%s' setting.\n",CV_FILE_NAME,mdbVar->var,CV_VALIDATE);
-            continue;  // Should we errAbort?
-            }
-
-        // NOTE: Working on memory in hash but we are throwing away a comment and removing trailing spaces so that is okay
-        strSwapChar(validationRule,'#','\0'); // Chop off any comment in the setting
-        validationRule = trimSpaces(validationRule);
-
-        // Validate should be or start with known word
-        if (startsWithWord(CV_VALIDATE_CV,validationRule))
-            {
-            if (SETTING_NOT_ON(hashFindVal(termHash,CV_TOT_CV_DEFINED))) // Known type of term but no validation to be done
-                {
-                verbose(1,"ERROR in %s: Term '%s' says validate in cv but is not '%s'.\n",CV_FILE_NAME,mdbVar->var,CV_TOT_CV_DEFINED);
-                continue;
-                }
-
-           // cvDefined so every val should be in cv
-           struct hash *cvHashForTerm = (struct hash *)cvTermHash(mdbVar->var);
-           if (cvHashForTerm == NULL)
-                {
-                verbose(1,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.\n",CV_FILE_NAME,mdbVar->var);
-                continue;
-                }
-            if (hashFindVal(cvHashForTerm,mdbVar->val) == NULL) // No cv definition for term so no validation can be done
-                {
-                if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE) && sameString(mdbVar->val,MDB_VAL_ENCODE_EDV_NONE))
-                    continue;
-                else if (sameString(validationRule,CV_VALIDATE_CV_OR_CONTROL))
-                    {
-                    cvHashForTerm = (struct hash *)cvTermHash(CV_TERM_CONTROL);
-                    if (cvHashForTerm == NULL)
-                        {
-                        verbose(1,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.\n",CV_FILE_NAME,CV_TERM_CONTROL);
-                        continue;
-                        }
-                    if (hashFindVal(cvHashForTerm,mdbVar->val) != NULL)
-                        continue;
-                    }
-                printf("INVALID cv lookup: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
-                invalids++;
-                }
-           }
-        else if (startsWithWord(CV_VALIDATE_DATE,validationRule))
-            {
-            if (dateToSeconds(mdbVar->val,"%F") == 0)
-                {
-                printf("INVALID date: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
-                invalids++;
-                }
-            }
-        else if (startsWithWord(CV_VALIDATE_EXISTS,validationRule))
-            continue;  // (e.g. fileName exists) Nothing to be done at this time.
-        else if (startsWithWord(CV_VALIDATE_FLOAT,validationRule))
-            {
-            char* end;
-            double notNeeded = strtod(mdbVar->val, &end); // Don't want float, just error (However, casting to void resulted in a comple error on Ubuntu Maveric and Lucid)
-
-            if ((end == mdbVar->val) || (*end != '\0'))
-                {
-                printf("INVALID float: %s -> %s = %s (resulting double: %g)\n",mdbObj->obj,mdbVar->var,mdbVar->val,notNeeded);
-                invalids++;
-                }
-            }
-        else if (startsWithWord(CV_VALIDATE_INT,validationRule))
-            {
-            char *p0 = mdbVar->val;
-            if (*p0 == '-')
-                p0++;
-            char *p = p0;
-            while ((*p >= '0') && (*p <= '9'))
-                p++;
-            if ((*p != '\0') || (p == p0))
-                {
-                printf("INVALID integer: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
-                invalids++;
-                }
-            }
-        else if (startsWithWord(CV_VALIDATE_LIST,validationRule))
-            {
-            validationRule = skipBeyondDelimit(validationRule,' ');
-            if (validationRule == NULL)
-                {
-                verbose(1,"ERROR in %s: Invalid '%s' for %s.\n",CV_FILE_NAME,CV_VALIDATE_LIST,mdbVar->var);
-                continue;
-                }
-            int count = chopByChar(validationRule, ',', NULL, 0);
-            if (count == 1)
-                {
-                if (differentString(mdbVar->val,validationRule))
-                    {
-                    printf("INVALID list '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
-                    invalids++;
-                    }
-                }
-            else if (count > 1)
-                {
-                char **array = needMem(count*sizeof(char*));
-                chopByChar(cloneString(validationRule), ',', array, count); // Want to also trimSpaces()? No
-
-                if (stringArrayIx(mdbVar->val, array, count) == -1)
-                    {
-                    printf("INVALID list '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
-                    invalids++;
-                    }
-                }
+            if (startsWith("ERROR in ",reason))
+                verbose(1,"%s\n",reason);
             else
-                verbose(1,"ERROR in %s: Invalid 'validate list: %s' for term %s,\n",CV_FILE_NAME,validationRule,mdbVar->var);
+                verbose(1,"%s in %s: %s\n",reason,MDB_OBJ,mdbObj->obj);
+            invalids++;
             }
-        else if (startsWithWord(CV_VALIDATE_NONE,validationRule))
-            continue;
-        else if (startsWithWord(CV_VALIDATE_REGEX,validationRule))
-            {
-            validationRule = skipBeyondDelimit(validationRule,' ');
-            if (validationRule == NULL)
-                {
-                verbose(1,"ERROR in %s: Invalid '%s' for %s.\n",CV_FILE_NAME,CV_VALIDATE_REGEX,mdbVar->var);
-                continue;
-                }
-            // Real work ahead interpreting regex
-            regex_t regEx;
-            int err = regcomp(&regEx, validationRule, REG_NOSUB);
-            if(err != 0)  // Compile the regular expression so that it can be used.  Use: REG_EXTENDED ?
-                {
-                char buffer[128];
-                regerror(err, &regEx, buffer, sizeof buffer);
-                verbose(1,"ERROR in %s: Invalid regular expression for %s - %s.  %s\n",CV_FILE_NAME,mdbVar->var,validationRule,buffer);
-                continue;
-                }
-            err = regexec(&regEx, mdbVar->val, 0, NULL, 0);
-            if (err != 0)
-                {
-                //char buffer[128];
-                //regerror(err, &regEx, buffer, sizeof buffer);
-                printf("INVALID regex '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
-                invalids++;
-                }
-            regfree(&regEx);
-            }
-        else
-            verbose(1,"ERROR in %s: Unknown validationRule rule '%s' for term %s.\n",CV_FILE_NAME,validationRule,mdbVar->var);
         }
     }
 return invalids;
@@ -3099,7 +2962,7 @@ if(mdbByVarsPtr != NULL && *mdbByVarsPtr != NULL)
 // ----------------- CGI specific routines for use with tdb -----------------
 #define MDB_NOT_FOUND ((struct mdbObj *)-666)
 #define METADATA_NOT_FOUND ((struct mdbObj *)-999)
-#define MDB_OBJ_KEY "mdbObj"
+
 static struct mdbObj *metadataForTableFromTdb(struct trackDb *tdb)
 // Returns the metadata for a table from a tdb setting.
 {
@@ -3112,7 +2975,7 @@ mdbObj->obj     = cloneString(tdb->table?tdb->table:tdb->track);
 AllocVar(mdbObj->vars);
 mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
 mdbObj->vars->val = cloneString(MDB_OBJ_TYPE_TABLE);
-mdbObj->varHash = hashNew(0);
+mdbObj->varHash = hashNew(8);
 hashAdd(mdbObj->varHash, mdbObj->vars->var, mdbObj->vars);
 mdbObj = mdbObjAddVarPairs(mdbObj,setting);
 mdbObjRemoveVars(mdbObj,MDB_VAR_TABLENAME); // NOTE: Special hint that the tdb metadata is used since no mdb metadata is found
@@ -3127,7 +2990,7 @@ struct mdbObj *mdbObj = NULL;
 // See of the mdbObj was already built
 if(tdb != NULL)
     {
-    mdbObj = tdbExtrasGetOrDefault(tdb, MDB_OBJ_KEY,NULL);
+    mdbObj = tdbExtrasMdb(tdb);
     if(mdbObj == METADATA_NOT_FOUND) // NOT in mtatbl, not in tdb metadata setting!
         return NULL;
     else if(mdbObj == MDB_NOT_FOUND) // looked mdb already and not found!
@@ -3150,10 +3013,10 @@ hFreeConn(&conn);
 if(tdb)
     {
     if(mdbObj != NULL)
-        tdbExtrasAddOrUpdate(tdb,MDB_OBJ_KEY,mdbObj);
+        tdbExtrasMdbSet(tdb,mdbObj);
     else
         {
-        tdbExtrasAddOrUpdate(tdb,MDB_OBJ_KEY,MDB_NOT_FOUND);
+        tdbExtrasMdbSet(tdb,MDB_NOT_FOUND);
         return metadataForTableFromTdb(tdb);  // FIXME: metadata setting in TDB is soon to be obsolete
         }
     }
@@ -3164,7 +3027,7 @@ return mdbObj;
 const char *metadataFindValue(struct trackDb *tdb, char *var)
 // Finds the val associated with the var or retruns NULL
 {
-struct mdbObj *mdbObj = tdbExtrasGetOrDefault(tdb, MDB_OBJ_KEY,NULL);
+struct mdbObj *mdbObj = tdbExtrasMdb(tdb);
 if(mdbObj == MDB_NOT_FOUND) // Note, only we if already looked for mdb (which requires db)
     mdbObj = metadataForTableFromTdb(tdb);
 if (mdbObj == NULL || mdbObj == METADATA_NOT_FOUND)
@@ -3382,7 +3245,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     slPairAdd(&pairs,val,label);
     }
 sqlFreeResult(&sr);
-slPairValSortCase(&pairs);
+if (slCount(pairs) > 0)
+    {
+    // should have a list sorted on the label
+    enum cvDataType eCvDataType = cvDataType(var);
+    if (eCvDataType == cvInteger)
+        slPairValAtoiSort(&pairs);
+    else
+        slPairValSortCase(&pairs);
+    }
 return pairs;
 }
 

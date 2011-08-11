@@ -853,37 +853,6 @@ return tdb;
 }
 #endif///def OMIT
 
-void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value)
-/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
-{
-if(tdb->extras == NULL)
-    {
-    tdb->extras = hashNew(0);
-    hashAdd(tdb->extras, name, value);
-    }
-else
-    {
-    hashReplace(tdb->extras, name, value);
-    }
-}
-
-void tdbExtrasRemove(struct trackDb *tdb,char *name)
-/* Removes a value from the extras hash. */
-{
-if(tdb->extras != NULL)
-    hashMayRemove(tdb->extras, name);
-}
-
-void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal)
-/* Returns a value if it is found in the extras hash. */
-{
-if(tdb->extras == NULL)
-    return defaultVal;
-
-return hashOptionalVal(tdb->extras, name, defaultVal);
-
-}
-
 boolean tdbIsView(struct trackDb *tdb,char **viewName)
 // Is this tdb a view?  Will fill viewName if provided
 {
@@ -1195,5 +1164,107 @@ if (updated)
     *pVal = cloneString(val);
     }
 return updated;
+}
+
+static struct tdbExtras *tdbExtrasNew()
+// Return a new empty tdbExtras
+{
+struct tdbExtras *extras;
+AllocVar(extras); // Note no need for extras = AllocVar(extras)
+// Initialize any values that need an "empty" state
+extras->fourState = TDB_EXTRAS_EMPTY_STATE; // I guess it is 5 state!
+// pointers are NULL and booleans are FALSE by default
+return extras;
+}
+
+void tdbExtrasFree(struct tdbExtras **pTdbExtras)
+// Frees the tdbExtras structure
+{
+// Developer, add intelligent routines to free structures
+// NOTE: For now just leak contents, because complex structs would also leak
+freez(pTdbExtras);
+}
+
+static struct tdbExtras *tdbExtrasGet(struct trackDb *tdb)
+// Returns tdbExtras struct, initializing if needed.
+{
+if (tdb->tdbExtras == NULL)   // Temporarily add this back in because Angie see asserts popping.
+    tdb->tdbExtras = tdbExtrasNew();
+return tdb->tdbExtras;
+}
+
+int tdbExtrasFourState(struct trackDb *tdb)
+// Returns subtrack four state if known, else TDB_EXTRAS_EMPTY_STATE
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->fourState;
+return TDB_EXTRAS_EMPTY_STATE;
+}
+
+void tdbExtrasFourStateSet(struct trackDb *tdb,int fourState)
+// Sets subtrack four state
+{
+tdbExtrasGet(tdb)->fourState = fourState;
+}
+
+boolean tdbExtrasReshapedComposite(struct trackDb *tdb)
+// Returns TRUE if composite has been declared as reshaped, else FALSE.
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->reshapedComposite;
+return FALSE;
+}
+
+void tdbExtrasReshapedCompositeSet(struct trackDb *tdb)
+// Declares that the composite has been reshaped.
+{
+tdbExtrasGet(tdb)->reshapedComposite = TRUE;
+}
+
+struct mdbObj *tdbExtrasMdb(struct trackDb *tdb)
+// Returns mdb metadata if already known, else NULL
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->mdb;
+return NULL;
+}
+
+void tdbExtrasMdbSet(struct trackDb *tdb,struct mdbObj *mdb)
+// Sets the mdb metadata structure for later retrieval.
+{
+tdbExtrasGet(tdb)->mdb = mdb;
+}
+
+struct _membersForAll *tdbExtrasMembersForAll(struct trackDb *tdb)
+// Returns composite view/dimension members for all, else NULL.
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->membersForAll;
+return NULL;
+}
+
+void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membersForAll)
+// Sets the composite view/dimensions members for all for later retrieval.
+{
+tdbExtrasGet(tdb)->membersForAll = membersForAll;
+}
+
+struct _membership *tdbExtrasMembership(struct trackDb *tdb)
+// Returns subtrack membership if already known, else NULL
+{
+struct tdbExtras *extras = tdb->tdbExtras;
+if (extras)
+    return extras->membership;
+return tdbExtrasGet(tdb)->membership;
+}
+
+void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership)
+// Sets the subtrack membership for later retrieval.
+{
+tdbExtrasGet(tdb)->membership = membership;
 }
 

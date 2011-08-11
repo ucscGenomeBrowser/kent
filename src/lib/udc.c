@@ -85,6 +85,10 @@ struct udcFile
     char *bitmapFileName;	/* Name of bitmap file. */
     char *sparseFileName;	/* Name of sparse data file. */
     int fdSparse;		/* File descriptor for sparse data file. */
+    boolean sparseReadAhead;    /* Read-ahead has something in the buffer */
+    char *sparseReadAheadBuf;   /* Read-ahead buffer, if any */
+    bits64 sparseRAOffset;      /* Read-ahead buffer offset */
+    struct udcBitmap *bits;     /* udcBitMap */
     bits64 startData;		/* Start of area in file we know to have data. */
     bits64 endData;		/* End of area in file we know to have data. */
     bits32 bitmapVersion;	/* Version of associated bitmap we were opened with. */
@@ -601,7 +605,7 @@ static void udcProtocolFree(struct udcProtocol **pProt)
 freez(pProt);
 }
 
-static void setInitialCachedDataBounds(struct udcFile *file)
+static void setInitialCachedDataBounds(struct udcFile *file, boolean useCacheInfo)
 /* Open up bitmap file and read a little bit of it to see if cache is stale,
  * and if not to see if the initial part is cached.  Sets the data members
  * startData, and endData.  If the case is stale it makes fresh empty
@@ -613,6 +617,11 @@ bits32 version = 0;
 struct udcBitmap *bits = udcBitmapOpen(file->bitmapFileName);
 if (bits != NULL)
     {
+    if (useCacheInfo)
+	{
+	file->size = bits->fileSize;
+	file->updateTime = bits->remoteUpdate;
+	}
     version = bits->version;
     if (bits->remoteUpdate != file->updateTime || bits->fileSize != file->size ||
 	!fileExists(file->sparseFileName))
@@ -645,15 +654,18 @@ file->bitmapVersion = bits->version;
 if (file->size > 0)
     {
     Bits b;
+    off_t wasAt = lseek(bits->fd, 0, SEEK_CUR);
     mustReadOneFd(bits->fd, b);
     int endBlock = (file->size + udcBlockSize - 1)/udcBlockSize;
     if (endBlock > 8)
         endBlock = 8;
     int initialCachedBlocks = bitFindClear(&b, 0, endBlock);
     file->endData = initialCachedBlocks * udcBlockSize;
-    }
+    mustLseek(bits->fd, wasAt, SEEK_SET);
+    } 
 
-udcBitmapClose(&bits);
+file->bits = bits;
+
 }
 
 static boolean qEscaped(char c)
@@ -839,11 +851,7 @@ if (isTransparent)
 else
     {
     udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
-    if (useCacheInfo)
-	{
-	file->size = udcSizeAndModTimeFromBitmap(file->bitmapFileName, &(file->updateTime));
-	}
-    else
+    if (!useCacheInfo)
 	{
 	file->updateTime = info.updateTime;
 	file->size = info.size;
@@ -857,9 +865,11 @@ else
     /* Make directory. */
     makeDirsOnPath(file->cacheDir);
 
-    /* Figure out a little bit about the extent of the good cached data if any. */
-    setInitialCachedDataBounds(file);
+    /* Figure out a little bit about the extent of the good cached data if any. Open bits bitmap. */
+    setInitialCachedDataBounds(file, useCacheInfo);
+
     file->fdSparse = mustOpenFd(file->sparseFileName, O_RDWR);
+
     }
 freeMem(afterProtocol);
 return file;
@@ -915,7 +925,9 @@ if (file != NULL)
     freeMem(file->cacheDir);
     freeMem(file->bitmapFileName);
     freeMem(file->sparseFileName);
+    freeMem(file->sparseReadAheadBuf);
     mustCloseFd(&(file->fdSparse));
+    udcBitmapClose(&file->bits);
     }
 freez(pFile);
 }
@@ -1027,20 +1039,13 @@ mustReadFd(fd, bits, byteSize);
 *retPartOffset = byteStart*8;
 }
 
-static boolean allBitsSetInFile(int fd, int headerSize, int bitStart, int bitEnd)
+static boolean allBitsSetInFile(int bitStart, int bitEnd, int partOffset, Bits *bits)
 /* Return TRUE if all bits in file between start and end are set. */
 {
-int partOffset;
-Bits *bits;
-
-readBitsIntoBuf(fd, headerSize, bitStart, bitEnd, &bits, &partOffset);
-
 int partBitStart = bitStart - partOffset;
 int partBitEnd = bitEnd - partOffset;
 int nextClearBit = bitFindClear(bits, partBitStart, partBitEnd);
 boolean allSet = (nextClearBit >= partBitEnd);
-
-freeMem(bits);
 return allSet;
 }
 
@@ -1082,6 +1087,7 @@ if (endPos > startPos)
     {
     bits64 readSize = endPos - startPos;
     void *buf = needLargeMem(readSize);
+    
     int actualSize = file->prot->fetchData(file->url, startPos, readSize, buf, &(file->connInfo));
     if (actualSize != readSize)
 	errAbort("unable to fetch %lld bytes from %s @%lld (got %d bytes)",
@@ -1092,7 +1098,7 @@ if (endPos > startPos)
     }
 }
 
-static void fetchMissingBits(struct udcFile *file, struct udcBitmap *bits,
+static boolean fetchMissingBits(struct udcFile *file, struct udcBitmap *bits,
 	bits64 start, bits64 end, bits64 *retFetchedStart, bits64 *retFetchedEnd)
 /* Scan through relevant parts of bitmap, fetching blocks we don't already have. */
 {
@@ -1102,6 +1108,11 @@ Bits *b;
 int startBlock = start / bits->blockSize;
 int endBlock = (end + bits->blockSize - 1) / bits->blockSize;
 readBitsIntoBuf(bits->fd, udcBitmapHeaderSize, startBlock, endBlock, &b, &partOffset);
+if (allBitsSetInFile(startBlock, endBlock, partOffset, b))
+    {  // it is already in the cache
+    freeMem(b);
+    return TRUE;
+    }
 
 /* Loop around first skipping set bits, then fetching clear bits. */
 boolean dirty = FALSE;
@@ -1137,15 +1148,15 @@ if (dirty)
 freeMem(b);
 *retFetchedStart = startBlock * bits->blockSize;
 *retFetchedEnd = endBlock * bits->blockSize;
+return FALSE;
 }
 
-static boolean udcCacheContains(struct udcBitmap *bits, bits64 offset, int size)
-/* Return TRUE if cache already contains region. */
-{
-bits64 endOffset = offset + size;
-int startBlock = offset / bits->blockSize;
-int endBlock = (endOffset + bits->blockSize - 1) / bits->blockSize;
-return allBitsSetInFile(bits->fd, udcBitmapHeaderSize, startBlock, endBlock);
+static boolean rangeIntersectOrTouch64(bits64 start1, bits64 end1, bits64 start2, bits64 end2)
+/* Return true if two 64-bit ranges intersect or touch. */
+{  // cannot use the version of this function that is in common.c since it only handles integers.
+bits64 s = max(start1,start2);
+bits64 e = min(end1,end2);
+return e >= s;
 }
 
 
@@ -1154,11 +1165,12 @@ static void udcFetchMissing(struct udcFile *file, struct udcBitmap *bits, bits64
 {
 /* Call lower level routine fetch remote data that is not already here. */
 bits64 fetchedStart, fetchedEnd;
-fetchMissingBits(file, bits, start, end, &fetchedStart, &fetchedEnd);
+if (fetchMissingBits(file, bits, start, end, &fetchedStart, &fetchedEnd))
+    return;
 
 /* Update file startData/endData members to include new data (and old as well if
  * the new data overlaps the old). */
-if (rangeIntersection(file->startData, file->endData, fetchedStart, fetchedEnd) >= 0)
+if (rangeIntersectOrTouch64(file->startData, file->endData, fetchedStart, fetchedEnd))
     {
     if (fetchedStart > file->startData)
         fetchedStart = file->startData;
@@ -1184,11 +1196,10 @@ for (s = offset; s < endPos; s = e)
     if (e > endPos)
 	e = endPos;
 
-    struct udcBitmap *bits = udcBitmapOpen(file->bitmapFileName);
+    struct udcBitmap *bits = file->bits;
     if (bits->version == file->bitmapVersion)
 	{
-	if (!udcCacheContains(bits, s, e-s))
-	    udcFetchMissing(file, bits, s, e);
+        udcFetchMissing(file, bits, s, e);
 	}
     else
 	{
@@ -1196,16 +1207,17 @@ for (s = offset; s < endPos; s = e)
 	verbose(2, "udcCachePreload version check failed %d vs %d", 
 		bits->version, file->bitmapVersion);
 	}
-    udcBitmapClose(&bits);
     if (!ok)
         break;
     }
 return ok;
 }
 
+#define READAHEADBUFSIZE 4096
 int udcRead(struct udcFile *file, void *buf, int size)
 /* Read a block from file.  Return amount actually read. */
 {
+
 /* Figure out region of file we're going to read, and clip it against file size. */
 bits64 start = file->offset;
 if (start > file->size)
@@ -1214,27 +1226,89 @@ bits64 end = start + size;
 if (end > file->size)
     end = file->size;
 size = end - start;
+char *cbuf = buf;
 
-/* If we're outside of the window of file we already know is good, then have to
- * consult cache on disk, and maybe even fetch data remotely! */
-if (start < file->startData || end > file->endData)
+/* use read-ahead buffer if present */
+int bytesRead = 0;
+
+bits64 raStart;
+bits64 raEnd;
+while(TRUE)
     {
-    if (!udcCachePreload(file, start, size))
+    if (file->sparseReadAhead)
 	{
-	verbose(2, "udcCachePreload failed");
-	return 0;
+	raStart = file->sparseRAOffset;
+	raEnd = raStart+READAHEADBUFSIZE;
+	if (start >= raStart && start < raEnd)
+	    {
+	    // copy bytes out of rabuf
+	    int endInBuf = min(raEnd, end);
+	    int sizeInBuf = endInBuf - start;
+	    memcpy(cbuf, file->sparseReadAheadBuf + (start-raStart), sizeInBuf);
+	    cbuf += sizeInBuf;
+	    bytesRead += sizeInBuf;
+	    start = raEnd;
+	    size -= sizeInBuf;
+	    file->offset += sizeInBuf;
+	    if (size == 0)
+		break;
+	    }
+	file->sparseReadAhead = FALSE;
+	mustLseek(file->fdSparse, start, SEEK_SET);
 	}
-    // Even with this, the changes we wrote to fdSparse may not be visible when we read!
-    mustCloseFd(&(file->fdSparse));
-    file->fdSparse = mustOpenFd(file->sparseFileName, O_RDWR);
-    /* Currently only need fseek here.  Would be safer, but possibly
-     * slower to move fseek so it is always executed in front of read, in
-     * case other code is moving around file pointer. */
-    mustLseek(file->fdSparse, start, SEEK_SET);
+
+    bits64 saveEnd = end;
+    if (size < READAHEADBUFSIZE)
+	{
+	file->sparseReadAhead = TRUE;
+	if (!file->sparseReadAheadBuf)
+	    file->sparseReadAheadBuf = needMem(READAHEADBUFSIZE);
+	file->sparseRAOffset = start;
+	size = READAHEADBUFSIZE;
+	end = start + size;
+	if (end > file->size)
+	    {
+	    end = file->size;
+	    size = end - start;
+	    }
+	}
+
+
+    /* If we're outside of the window of file we already know is good, then have to
+     * consult cache on disk, and maybe even fetch data remotely! */
+    if (start < file->startData || end > file->endData)
+	{
+
+	if (!udcCachePreload(file, start, size))
+	    {
+	    verbose(2, "udcCachePreload failed");
+	    bytesRead = 0;
+	    break;
+	    }
+
+	/* Currently only need fseek here.  Would be safer, but possibly
+	 * slower to move fseek so it is always executed in front of read, in
+	 * case other code is moving around file pointer. */
+
+	mustLseek(file->fdSparse, start, SEEK_SET);
+	}
+
+    if (file->sparseReadAhead)
+	{
+	mustReadFd(file->fdSparse, file->sparseReadAheadBuf, size);
+	end = saveEnd;
+	size = end - start;
+	}
+    else
+	{
+	mustReadFd(file->fdSparse, cbuf, size);
+	file->offset += size;
+	bytesRead += size;
+	break;
+	}
     }
-mustReadFd(file->fdSparse, buf, size);
-file->offset += size;
-return size;
+
+return bytesRead;
 }
 
 void udcMustRead(struct udcFile *file, void *buf, int size)
@@ -1376,6 +1450,26 @@ bits64 udcTell(struct udcFile *file)
 return file->offset;
 }
 
+static long bitRealDataSize(char *fileName)
+/* Return number of real bytes indicated by bitmaps */
+{
+struct udcBitmap *bits = udcBitmapOpen(fileName);
+int blockSize = bits->blockSize;
+long byteSize = 0;
+int blockCount = (bits->fileSize + blockSize - 1)/blockSize;
+if (blockCount > 0)
+    {
+    int bitmapSize = bitToByteSize(blockCount);
+    Bits *b = needLargeMem(bitmapSize);
+    mustReadFd(bits->fd, b, bitmapSize);
+    int bitsSet = bitCountRange(b, 0, blockCount);
+    byteSize = (long)bitsSet*blockSize;
+    freez(&b);
+    }
+udcBitmapClose(&bits);
+return byteSize;
+}
+
 static bits64 rCleanup(time_t deleteTime, boolean testOnly)
 /* Delete any bitmap or sparseData files last accessed before deleteTime */
 {
@@ -1398,6 +1492,7 @@ for (file = fileList; file != NULL; file = file->next)
 	}
     else if (sameString(file->name, bitmapName))
         {
+	verbose(2, "%ld (%ld) %s/%s\n", bitRealDataSize(file->name), (long)file->size, getCurrentDir(), file->name);
 	if (file->lastAccess < deleteTime)
 	    {
 	    /* Remove all files when get bitmap, so that can ensure they are deleted in 

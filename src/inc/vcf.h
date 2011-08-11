@@ -69,10 +69,11 @@ struct vcfRecord
     unsigned int chromStart;	// Start offset in chrom
     unsigned int chromEnd;	// End offset in chrom
     char *name;			// Variant name from ID column
-    char *ref;			// Allele found in reference assembly
-    char *alt;			// Alternate allele(s)
-    float qual;			// Phred-scaled score, i.e. -10log_10 P(call in ALT is wrong)
-    char *filter;		// Either PASS or code(s) described in header for failed filters
+    int alleleCount;		// Number of alleles (reference + alternates)
+    char **alleles;		// Alleles: reference first then alternate alleles
+    char *qual;			// . or Phred-scaled score, i.e. -10log_10 P(call in ALT is wrong)
+    int filterCount;		// Number of ;-separated filter codes in FILTER column
+    char **filters;		// Code(s) described in header for failed filters (or PASS or .)
     int infoCount;		// Number of components of INFO column
     struct vcfInfoElement *infoElements;	// Array of INFO column components
     char *format;		// Optional column containing ordered list of genotype components

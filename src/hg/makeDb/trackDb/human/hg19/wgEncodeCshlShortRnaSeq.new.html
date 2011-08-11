@@ -5,36 +5,30 @@
 RNA</a> between the sizes of 20-200 nt. 
 As part of the ENCODE Consortia, Cold Spring Harbor Laboratories isolated 
 <a target="_BLANK" href="http://hgwdev.cse.ucsc.edu/cgi-bin/hgEncodeVocab?type=localization">
-tissues or sub cellular compartments</a> 
-from
+tissues or sub cellular compartments</a> from
 <a target="_BLANK" href="http://hgwdev.cse.ucsc.edu/cgi-bin/hgEncodeVocab?type=cellType">
-ENCODE cell lines</a>
+ENCODE cell lines.</a>
 The overall goal of the ENCODE project is to identify and characterize all functional
 elements in the sequence of the human genome.
 </p>
 
-<p>This cloning protocol generates directional libraries that are read from the
-5&#8242; ends of the inserts, which should largely correspond to the 5&#8242;
-ends of the mature RNAs.  The libraries were sequenced on a Solexa platform for
-a total of 36, 50 or 76 cycles however the reads undergo post-processing
-resulting in trimming of their 3&#8242; ends.  Consequently, the mapped read
-lengths are variable.
+<p>This cloning protocol generates directional libraries that largely correspond to the
+5&#8242; ends of mature RNAs.  The libraries were sequenced on a Solexa platform for
+a total of 36, 50 or 76 cycles producing variable length reads.  Furthermore, the reads undergo post-processing
+resulting in trimming of their 3&#8242; ends (Mortazavi et al., 2008).  
 </p>
 
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>To show only selected subtracks, uncheck the boxes next to the tracks that
-you wish to hide.</p>
-
-<p>Color differences among the views are arbitrary. They provide a
-visual cue for
+you wish to hide.  Color differences among the views provide a visual cue for
 distinguishing between the different cell types and compartments.</p>
 
 <dl>
 <dt><i>Transfrags</i>
-</dt><dd>Small RNA reads were assembled into "Transfrags" by merging reads with one or more overlapping nucleotides. In order to minimize ambiguity from reads that have the potential to map to multiple genomic loci, only the uniquely mapping reads were used to generate Transfrags. The BED6+ format of the transfrag files are created from "intervals-to-contigs" Galaxy tool written by <A HREF="mailto:&#103;&#111;r&#100;&#111;n&#64;&#99;&#115;h&#108;.e&#100;&#117;">Assaf Gordon</a> in the Hannon lab at CSHL. A complete description of the columns in this format can be found <a HREF="../ENCODE/transfragBed6CshlDescription.html">here</a>.
-The Transfrags view includes all transfrags before filtering.
+</dt><dd>Small RNA reads were assembled into transcribed fragments, "Transfrags" by merging reads with one or more overlapping nucleotides.  Only uniquely mapping reads were used to generate Transfrags. The <a HREF="../ENCODE/transfragBed6CshlDescription.html">BED6+ format</a> of the transfrag files are created from "intervals-to-contigs" Galaxy tool written by <A HREF="mailto:&#103;&#111;r&#100;&#111;n&#64;&#99;&#115;h&#108;.e&#100;&#117;">Assaf Gordon</a> in the Hannon lab at CSHL.
+The transfrags view is not filtered.
 </dd><dt><i>Raw Signals</i>
 </dt><dd>The Raw Signal view shows the density of mapped reads on the plus and minus strands (wiggle format).
 </dd>
@@ -47,12 +41,15 @@ bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The track
   The alignment file follows the standard SAM format of Bowtie output with the following additions: the mapping frequency for each read is indicated in the BAM file using the tag 'YG' and the alignment color is specified in RGB space using the tag 'YC'.  The 'XA' tag is Bowtie tag that means the aligned read belongs to <A HREF=http://bowtie-bio.sourceforge.net/manual.shtml#strata>strata</A>. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. Mapping quality is not available for this track and so, in accordance with the SAM Format Specification, a score of 255 is used. Also, as described in the Methods section below, the sequence quality scores are not available and so are all displayed as 40.
 </dd>
 
-<!--Not releaseing in release 2
+<H2>Release Notes </H2>
+<P>
+This is release 2 (Summer 2011).
+Not releaseing in release 2
 <dt><i>Contigs</i>
 </dt><dd> The Contigs are in .BED format files representing blocks of overlapping mapped reads from pooled biological replicates.
 </dd>
 </dl>
--->
+
 
 <H2>Methods</H2>
 
@@ -85,7 +82,7 @@ sequencing adapter was removed from the reads using a custom clipper program (av
 Hannon lab members: Katalin Fejes-Toth, Vihra Sotirova, Gordon  Assaf, Jon Preall</P>
 <P>Gingeras and Guigo laboratories: Carrie A. Davis, Lei-Hoon See, Wei Lin. </P>
 
-Contacts: 
+<H2>Contacts:</H2> 
 <DL>
 <DD><A HREF="mailto:&#106;&#112;r&#101;&#97;&#108;&#108;&#64;&#99;&#115;&#104;l.
 &#101;&#100;&#117;">Jonathan Preall</A> (Generation 0 Data from Hannon Lab) 
@@ -110,6 +107,16 @@ Schlesinger</A> (computational)
 </P>
 </DD>
 </DL>
+
+<H2>References</H2>
+
+<P>Langmead B, Trapnell C, Pop M, Salzberg SL.
+<A target="_BLANK" href="http://genomebiology.com/2009/10/3/R25"><U>Ultrafast and memory-efficient alignment of short DNA sequences to the human genome.</U></A>
+<EM>Genome Biology</EM>. 2009 Mar; 10:R25.</P>
+
+<P>Mortazavi A, Williams BA, McCue K, Schaeffer L, and Wold BJ. 
+<A target="_BLANK" href="http://www.ncbi.nlm.nih.gov/pubmed/18516045">Mapping and quantifying mammalian transcriptomes by RNA-seq</A>.
+<EM>Nature Methods</EM>. 2008 Jul; 5(7):621-628.</P> 
 
 <H2> Data Release Policy </H2>
 

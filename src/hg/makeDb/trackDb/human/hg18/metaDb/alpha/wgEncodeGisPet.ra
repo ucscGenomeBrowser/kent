@@ -1456,7 +1456,7 @@ localization chromatin
 project wgEncode
 rnaExtract total
 subId 841
-view Fastq
+view RawData
 
 metaObject wgEncodeGisPetFastqRep1K562NucleoplasmTotal
 objType file
@@ -1474,7 +1474,7 @@ localization nucleoplasm
 project wgEncode
 rnaExtract total
 subId 841
-view Fastq
+view RawData
 
 metaObject wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
 objType table

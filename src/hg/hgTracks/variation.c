@@ -566,7 +566,7 @@ return MG_BLACK;
 }
 
 Color snp125Color(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color of snp track item -- stashed in the weight column for set/enum 
+/* Return color of snp track item -- stashed in the weight column for set/enum
  * attributes that were used for sorting at draw time.  Allele frequency shading
  * must be done at draw time because it uses hvg.  Aside from allele frequencies
  * and overloaded weight, only the bed4 fields of snp are used at draw time). */
@@ -1170,6 +1170,10 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int w, y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+if (theImgBox != NULL)
+    withLabels = (withLeftLabels && (vis == tvPack || vis == tvFull) && !tg->drawName);
+#endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
@@ -1189,7 +1193,7 @@ if (vis == tvPack || vis == tvSquish)
         int textX = x1;
         char *name = tg->itemName(tg, item);
 	Color itemColor = tg->itemColor(tg, item, hvg);
-	Color itemNameColor = tg->itemNameColor(tg, item, hvg);
+        Color itemNameColor = tg->itemNameColor(tg, item, hvg);
 
         y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
@@ -1198,15 +1202,20 @@ if (vis == tvPack || vis == tvSquish)
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
             textX -= nameWidth + dotWidth;
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox == NULL && textX < insideX)
+        #else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
             if (textX < insideX)        /* Snap label to the left. */
+        #endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
 		{
 		textX = leftLabelX;
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
-		hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
+                assert(hvgSide != NULL);
+		hvGfxUnclip(hvgSide);
+		hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+		hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+		hvGfxUnclip(hvgSide);
+		hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
 		}
             else
 		hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
@@ -1226,7 +1235,23 @@ else
 	Color itemColor = tg->itemColor(tg, item, hvg);
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (vis == tvFull)
+            {
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox != NULL) // In dragScroll >1x item labels cannot be in leftLabel
+                {                  // So they appear here in the image, just like in pack
+                int s = tg->itemStart(tg, item);
+                int textX = round((s - winStart)*scale) + xOff;
+                if (textX >= insideX)
+                    {
+                    char *name = tg->itemName(tg, item);
+                    int nameWidth = mgFontStringWidth(font, name);
+                    Color itemNameColor = tg->itemNameColor(tg, item, hvg);
+                    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, itemNameColor, font, name);
+                    }
+                }
+        #endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 	    y += lineHeight;
+            }
         }
     }
 }
@@ -1241,6 +1266,10 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+if (theImgBox != NULL)
+    withLabels = (withLeftLabels && (vis == tvPack || tvFull) && !tg->drawName);
+#endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 snp125ColorSource = snp125ColorSourceFromCart(cart, tg->tdb);
 
 if (!tg->drawItemAt)
@@ -1260,8 +1289,8 @@ if (vis == tvPack || vis == tvSquish)
         int textX = x1;
         char *name = tg->itemName(tg, item);
 	Color itemColor = tg->itemColor(tg, item, hvg);
-	Color itemNameColor = tg->itemNameColor(tg, item, hvg);
-	boolean drawNameInverted = FALSE;
+        Color itemNameColor = tg->itemNameColor(tg, item, hvg);
+        boolean drawNameInverted = FALSE;
 
         y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
@@ -1273,23 +1302,28 @@ if (vis == tvPack || vis == tvSquish)
 	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
 	    snapLeft = (textX < insideX);
-            if (snapLeft)        /* Snap label to the left. */
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox == NULL && snapLeft)
+        #else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+            if (snapLeft)
+        #endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
 		{
 		textX = leftLabelX;
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+                assert(hvgSide != NULL);
+		hvGfxUnclip(hvgSide);
+		hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
 		if (drawNameInverted)
 		    {
 		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-		    hvGfxBox(hvg, boxStart, y, nameWidth+1, heightPer - 1, color);
-		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		    hvGfxBox(hvgSide, boxStart, y, nameWidth+1, heightPer - 1, color);
+		    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 		                MG_WHITE, font, name);
 		    }
 		else
-		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+		hvGfxUnclip(hvgSide);
+		hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
 		}
             else
 	        {

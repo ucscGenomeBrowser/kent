@@ -85,6 +85,7 @@ puts(
 "<CENTER>"
 "<table style='background-color:#FFFEF3; border: 1px solid #CCCC99;'>\n"
 "<tr><td>\n");
+cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTracks");
 
 puts("<table><tr>");
 if (gotClade)
@@ -142,7 +143,10 @@ freez(&defaultPosition);
 position = NULL;
 
 puts("<td align=center>\n");
-cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
+if(cartVarExists(cart, "pix"))
+    cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
+else
+    printf("<INPUT TYPE='TEXT' NAME='pix' SIZE='4'>\n");
 puts("</td>\n");
 puts("<td align=center>");
 if(supportsSuggest)
@@ -201,7 +205,7 @@ if (hubConnectTableExists())
     {
     puts("<TD VALIGN=\"TOP\">");
     printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
-        "../cgi-bin/hgHubConnect", "import tracks", "Import tracks");
+        "../cgi-bin/hgHubConnect", "track hubs", "Import tracks");
     puts("</TD>");
     }
 

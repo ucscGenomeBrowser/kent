@@ -315,7 +315,7 @@ struct hash *raReadWithFilter(char *fileName, char *keyField,char *filterKey,cha
  * Example raReadWithFilter(file,"term","type","antibody"): returns hash of hashes of every term with type=antibody */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *bigHash = hashNew(0);
+struct hash *bigHash = hashNew(10);
 struct hash *hash;
 while ((hash = raNextRecord(lf)) != NULL)
     {

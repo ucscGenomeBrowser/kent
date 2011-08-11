@@ -4,8 +4,8 @@
 track wgEncodeUw5C
 type downloadsOnly
 #type bed
-shortLabel UW 5C Interactions
+shortLabel UW 5C Interaction
 longLabel Chromatin Interactions by 5C from ENCODE/Univ. Washington
 group regulation
-fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line view=View replicate=Replicate labVersion=Lab_Version fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 wgEncode 1

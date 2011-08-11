@@ -26,6 +26,7 @@ dimensionCchecked aNONE
 #dimensionBchecked CTCF,FOXP2
 #filterComposite dimD=one dimE=one
 sortOrder cellType=+ factor=+ treat=+ prot=+ rep=+ view=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target protocol=Protocol treatment=Treatment replicate=Rep  view=View labExpId=Lab_ID controlId=Control_ID setType=Type fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody prot=protocol treat=treatment
 noInherit on

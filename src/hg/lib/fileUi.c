@@ -404,7 +404,12 @@ if (sortOrder != NULL)
         // If there is more than one val for this var then create filterBy box for it
         if (slCount(tagLabelPairs) > 1)
             {
-            slPairValSortCase(&tagLabelPairs); // should have a list sorted on the label
+            // should have a list sorted on the label
+            enum cvDataType eCvDataType = cvDataType(var);
+            if (eCvDataType == cvInteger)
+                slPairValAtoiSort(&tagLabelPairs);
+            else
+                slPairValSortCase(&tagLabelPairs);
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
         #ifdef NEW_JQUERY
@@ -450,36 +455,42 @@ return count;
 }
 
 static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
+// Replacement for preamble.html which should expose parent dir, files.txt and supplemental, but
+// not have any specialized notes per composite.  Specialized notes belong in track description.
 {
-// Do not bother getting preamble.html
-// 1) It isn't on the RR (yet)
-// 2) It will likely refer back to the composite for Description info which is included in this page
-// 3) The rsync-to-tmp-file hurdle isn't worth the effort.
-cgiDown(0.7);
-puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
-puts("in publication  until the restriction date noted for the given data file.</B>");
-
 char *server = hDownloadsServer();
 char *subDir = "";
 if (hIsBetaHost())
     {
-    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-    subDir = "/beta";
+    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think
+    subDir = "/beta";                        // it's downloads server is "hgdownload.cse.ucsc.edu"
     }
 
+cgiDown(0.9);
+puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
+puts("in publication  until the restriction date noted for the given data file.</B>");
+
 cgiDown(0.7);
-puts("Supporting documents:");
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> is a tab-separated file with the name and metadata for each download.</LI>\n",
+puts("Additional resources:");
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> - lists the name and metadata for each download.\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.</LI>\n",
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> - lists the md5sum output for each download.\n",
+                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s'>downloads server</A></B> - alternative access to downloadable files (may include obsolete data).\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>Supplemental materials</A></B> contains additional files provided by the laboratory related to these downloads.</LI>\n",
+    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>supplemental materials</A></B> - any related files provided by the laboratory.\n",
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
+if (hIsPreviewHost())
+    printf("<BR><b>WARNING</b>: This data is provided for early access via the Preview Browser -- it is unreviewed and subject to change. For high quality reviewed annotations, see the <a target=_blank href='http://%s/cgi-bin/hgFileUi?db=%s&g=%s'>Genome Browser</a>.",
+        "genome.ucsc.edu", db, tdb->track);
+else
+    printf("<BR><b>NOTE</b>: Early access to additional track data may be available on the <a target=_blank href='http://%s/cgi-bin/hgFileUi?db=%s&g=%s'>Preview Browser</A>.",
+        "genome-preview.ucsc.edu", db, tdb->track);
 }
 
 static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,boolean filterable)

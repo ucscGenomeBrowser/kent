@@ -9170,7 +9170,10 @@ if (row != NULL)
     
     printf(" (click <A HREF=\"%s&id=%s\" TARGET=_BLANK>here</A> for more details at COSMIC site)\n", url, chp);
 
-    printf("<BR><B>Source:</B> %s\n", source);
+    // Embed URL to COSMIC site per COSMICT request.
+    printf("<BR><B>Source:</B> ");
+    printf("<A HREF=\"http://www.sanger.ac.uk/cosmic/\" TARGET=_BLANK>%s</A>\n", source);
+    
     printf("<BR><B>Gene Name:</B> %s\n", gene_name);
     printf("<BR><B>Accession Number:</B> %s\n", accession_number);
     printf("<BR><B>Genomic Position:</B> %s:%s-%s", chromosome, grch37_start, grch37_stop);
@@ -9221,6 +9224,55 @@ if (row != NULL)
     	row2 = sqlNextRow(sr2);
 	}
     sqlFreeResult(&sr2);
+    
+    safef(query2, sizeof(query2), 
+      "select sum(mutated_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      itemName);
+
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if (row2 != NULL)
+    	{
+    	printf("<BR><BR><B>Total Mutated Samples:</B> %s\n", row2[0]);
+	//printf("<br>%s ", row2[0]);
+	}
+    sqlFreeResult(&sr2);
+    
+    safef(query2, sizeof(query2), 
+      "select sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      itemName);
+//printf("<br>%s\n", query2);fflush(stdout);
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if (row2 != NULL)
+    	{
+    	printf("<BR><B>Total Examined Samples:</B> %s\n", row2[0]);
+	//printf("%s", row2[0]);
+	//fflush(stdout);
+	}
+    sqlFreeResult(&sr2);
+    safef(query2, sizeof(query2), 
+      "select sum(mutated_samples)*100/sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
+      itemName);
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if (row2 != NULL)
+    	{
+    	char *chp;
+	chp = strstr(row2[0], ".");
+	if ((chp != NULL) && (strlen(chp) > 3))
+	   {
+	   chp++;
+	   chp++;
+	   chp++;
+	   chp++;
+	   *chp = '\0';
+	   }
+	printf("<BR><B>Total Mutation Frequency:</B> %s%c\n", row2[0], '%');
+	//printf("<br>%s", row2[0]);
+	}
+    sqlFreeResult(&sr2);
+
     }
 
 sqlFreeResult(&sr);
@@ -9513,6 +9565,8 @@ printf("<HR>");
 printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
+#include "omim.h"
+
 void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an omimGene2 entry. */
 {
@@ -9579,9 +9633,9 @@ if (url != NULL && url[0] != 0)
 
 	/* display disorder(s) */
     	safef(query, sizeof(query),
-	      "select description, phenotypeClass, phenotypeId from omimPhenotype where omimId=%s order by description",
-	      itemName);
-    	sr = sqlMustGetResult(conn, query);
+	      "select description, %s, phenotypeId from omimPhenotype where omimId=%s order by description",
+	      omimPhenotypeClassColName, itemName);
+	sr = sqlMustGetResult(conn, query);
 	disorderShown = FALSE;
         while ((row = sqlNextRow(sr)) != NULL)
     	    {
@@ -9758,8 +9812,8 @@ if (url != NULL && url[0] != 0)
 
 	/* display disorder for genes in morbidmap */
     	safef(query, sizeof(query),
-	 "select description, phenotypeClass, phenotypeId from omimPhenotype where omimId=%s order by description",
-	 itemName);
+	      "select description, %s, phenotypeId from omimPhenotype where omimId=%s order by description",
+	      omimPhenotypeClassColName, itemName);
     	sr = sqlMustGetResult(conn, query);
  	printf("<B>Disorder(s):</B><UL>\n");
         while ((row = sqlNextRow(sr)) != NULL)
@@ -9909,6 +9963,10 @@ chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
 avId       = strdup(itemName);
+
+chp = strstr(avId, "-");
+if (chp != NULL) *chp = '\0';
+
 safef(avString, sizeof(avString), "%s", itemName);
 
 chp = strstr(itemName, ".");
@@ -22998,7 +23056,21 @@ if (gotExtra)
 	    ptr = strrchr(row[0], '_');
 	    if (ptr != NULL)
 		printf("<TD><B>Design ID: </B>%s</TD>\n", ptr+1);
-	    printf("<TD><B>Status: </B>%s</TD></TR>\n", status);
+	    printf("<TD><B>Status: </B>%s", status);
+	    if ((ptr != NULL) && (strstr(status, "vailable") != NULL))
+		{
+		char *productStr;
+		char *chp;
+		productStr = strdup(status);
+		chp = strstr(productStr, "vailable");
+		chp--;
+		chp--;
+		*chp = '\0';
+		printf(" (<A HREF=\"http://www.komp.org/geneinfo.php?project=%s\" target=_blank>",
+		       ++ptr);
+		printf("order %s)", productStr);fflush(stdout);
+		}
+	    printf("</TD></TR>\n");
 	    }
 	}
     puts("<TR><TD colspan=2>");
@@ -23085,7 +23157,21 @@ if (gotExtra)
 	    ptr = strrchr(row[0], '_');
 	    if (ptr != NULL)
 		printf("<TD><B>Design ID: </B>%s</TD>\n", ptr+1);
-	    printf("<TD><B>Status: </B>%s</TD></TR>\n", status);
+	    printf("<TD><B>Status: </B>%s", status);
+	    if ((ptr != NULL) && (strstr(status, "vailable") != NULL))
+		{
+		char *productStr;
+		char *chp;
+		productStr = strdup(status);
+		chp = strstr(productStr, "vailable");
+		chp--;
+		chp--;
+		*chp = '\0';
+		printf(" (<A HREF=\"http://www.komp.org/geneinfo.php?project=%s\" target=_blank>",
+		       ++ptr);
+		printf("order %s)", productStr);fflush(stdout);
+		}
+	    printf("</TD></TR>\n");
 	    }
 	}
     puts("<TR><TD colspan=2>");
@@ -24202,6 +24288,7 @@ else if (sameWord(table, "RfamSeedFolds")
 	 || sameWord(table, "RfamFullFolds")
 	 || sameWord(table, "rfamTestFolds")
 	 || sameWord(table, "evofold")
+	 || sameWord(table, "evofoldV2")
 	 || sameWord(table, "evofoldRaw")
 	 || sameWord(table, "encode_tba23EvoFold")
 	 || sameWord(table, "encodeEvoFold")
