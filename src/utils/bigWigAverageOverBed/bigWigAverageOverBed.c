@@ -12,6 +12,8 @@
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
+char *bedOut = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -26,10 +28,13 @@ errAbort(
   "   sum - sum of values over all bases covered\n"
   "   mean0 - average over bases with non-covered bases counting as zeroes\n"
   "   mean - average over just covered bases\n"
+  "Options:\n"
+  "   -bedOut=out.bed - Make output bed that is echo of input bed but with mean column appended\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"bedOut", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -78,7 +83,18 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 return blockCount;
 }
 
-void averageFetchingEachBlock(struct bbiFile *bbi, struct bed *bedList, int fieldCount, FILE *f)
+void optionallyPrintBedPlus(FILE *f, struct bed *bed, int fieldCount, double extra)
+/* Print BED to tab separated file plus an extra double-format column. */
+{
+if (f != NULL)
+    {
+    bedOutputN(bed, fieldCount, f, '\t', '\t');
+    fprintf(f, "%g\n", extra);
+    }
+}
+
+void averageFetchingEachBlock(struct bbiFile *bbi, struct bed *bedList, int fieldCount, 
+	FILE *f, FILE *bedF)
 /* Do the averaging fetching each block from bedList from bigWig.  Fastest for short bedList. */
 {
 struct lm *lm = lmInit(0);
@@ -108,6 +124,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     if (coverage > 0)
 	 mean = sum/coverage;
     fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g\n", bed->name, size, coverage, sum, sum/size, mean);
+    optionallyPrintBedPlus(bedF, bed, fieldCount, mean);
     }
 }
 
@@ -146,7 +163,8 @@ for (i=start; i<end; ++i)
 *pSumVal += sum1;
 }
 
-void averageFetchingEachChrom(struct bbiFile *bbi, struct bed **pBedList, int fieldCount, FILE *f)
+void averageFetchingEachChrom(struct bbiFile *bbi, struct bed **pBedList, int fieldCount, 
+	FILE *f, FILE *bedF)
 /* Do the averaging by sorting bedList by chromosome, and then processing each chromosome
  * at once. Faster for long bedLists. */
 {
@@ -195,6 +213,7 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
 	    if (coverage > 0)
 		 mean = sum/coverage;
 	    fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g\n", bed->name, size, coverage, sum, sum/size, mean);
+	    optionallyPrintBedPlus(bedF, bed, fieldCount, mean);
 	    }
 	verboseDot();
 	}
@@ -202,7 +221,10 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
         {
 	/* If no bigWig data on this chromosome, just output as if coverage is 0 */
 	for (bed = bedList; bed != nextChrom; bed = bed->next)
+	    {
 	    fprintf(f, "%s\t%d\t0\t0\t0\t0\n", bed->name, bedTotalBlockSize(bed));
+	    optionallyPrintBedPlus(bedF, bed, fieldCount, 0);
+	    }
 	}
     }
 verbose(1, "\n");
@@ -218,6 +240,9 @@ checkUniqueNames(bedList);
 
 struct bbiFile *bbi = bigWigFileOpen(inBw);
 FILE *f = mustOpen(outTab, "w");
+FILE *bedF = NULL;
+if (bedOut != NULL)
+    bedF = mustOpen(bedOut, "w");
 
 /* Count up number of blocks in file.  It takes about 1/100th of of second to
  * look up a single block in a bigWig.  On the other hand to stream through
@@ -233,10 +258,11 @@ int blockCount = countBlocks(bedList, fieldCount);
 verbose(2, "Got %d blocks, if >= 3000 will use chromosome-at-a-time method\n", blockCount);
 
 if (blockCount < 3000)
-    averageFetchingEachBlock(bbi, bedList, fieldCount, f);
+    averageFetchingEachBlock(bbi, bedList, fieldCount, f, bedF);
 else
-    averageFetchingEachChrom(bbi, &bedList, fieldCount, f);
+    averageFetchingEachChrom(bbi, &bedList, fieldCount, f, bedF);
 
+carefulClose(&bedF);
 carefulClose(&f);
 }
 
@@ -246,6 +272,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+bedOut = optionVal("bedOut", bedOut);
 bigWigAverageOverBed(argv[1], argv[2], argv[3]);
 return 0;
 }
