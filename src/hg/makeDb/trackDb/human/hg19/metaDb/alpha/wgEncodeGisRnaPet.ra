@@ -221,7 +221,7 @@ rnaExtract longPolyA
 subId 4022
 view FastqRd2
 
-metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawRep2
+metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2
 objType table
 bioRep gen0107C
 cell GM12878
@@ -233,7 +233,7 @@ dateSubmitted 10-08-13
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawRep2.bigWig
+fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
 labExpId IHG024
@@ -246,7 +246,7 @@ project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 4022
-tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawRep2
+tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2
 view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
@@ -277,7 +277,7 @@ subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
 view MinusRawSignal
 
-metaObject wgEncodeGisRnaPetGm12878CytosolPapPlusRawRep2
+metaObject wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2
 objType table
 bioRep gen0107C
 cell GM12878
@@ -289,7 +289,7 @@ dateSubmitted 10-08-13
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawRep2.bigWig
+fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
 labExpId IHG024
@@ -302,7 +302,7 @@ project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 4022
-tableName wgEncodeGisRnaPetGm12878CytosolPapPlusRawRep2
+tableName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2
 view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
