@@ -5322,7 +5322,20 @@ targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
 validation FOSL1_(SC-183)(Western_blot,IP-MassSpec):human_FOSL1-SC183_validation_Myers.pdf
 
-
+term FOSL1_(sc-605)
+tag FOSL1SC605
+type Antibody
+antibodyDescription Rabbit polyclonal antibody raised against the N-terminus of FOSL1 of rat origin.
+target FOSL1
+targetDescription The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2. These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1. As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-605
+orderUrl http://www.scbt.com/datasheet-605-fra-1-r-20-antibody.html
+lab Wold
+lots G0109
+targetId Genecard:FOSL1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
+validation missing
 
 term FOSL2
 tag FOSL2
@@ -5664,6 +5677,21 @@ lots 56293
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me2(Dot_blot):human_H3K4me2_validation_Bernstein.pdf
+
+term H3K4me2_(ab32356)
+tag H3K4ME2AB32356
+type Antibody
+antibodyDescription Rabbit polyclonal
+target H3K4me2
+targetDescription Histone H3 (di methyl K4). Marks promoters and enhancers.
+vendorName Abcam
+vendorId ab32356
+orderUrl http://www.abcam.com/Histone-H3-di-methyl-K4-antibody-Y47-ChIP-Grade-ab32356.html
+lab Wold
+lots 870402
+targetId Genecard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation missing
 
 term H3K4me3
 tag H3K04ME3
@@ -7417,9 +7445,11 @@ targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
 validation ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
 
-term ZNF274_(M01)tag ZNF274M01
+term ZNF274_(M01)
+tag ZNF274M01
 type Antibody
-antibodyDescription Mouse monoclonal antibody raised against a partial recombinant ZNF274 (corresponding to amino acids 420-531 of the human ZNF274 protein).target ZNF274targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.vendorName Abnova ZNF74
+antibodyDescription Mouse monoclonal antibody raised against a partial recombinant ZNF274 (corresponding to amino acids 420-531 of the human ZNF274 protein).target ZNF274targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.
+vendorName Abnova ZNF74
 vendorId M01
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782
 -M01
