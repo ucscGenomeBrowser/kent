@@ -12,8 +12,7 @@ static char const rcsid[] = "$Id: regClusterBedExpCfg.c,v 1.2 2010/05/05 00:50:3
 boolean encodeList = FALSE;
 boolean tabList = FALSE;
 char *cellLetter = NULL;
-
-#define SCORE_COL_IX 6
+int scoreCol = 7;
 
 struct hash *cellLetterHash;
 
@@ -35,6 +34,9 @@ errAbort(
   "        where the metadata component is in the format:\n"
   "              this=that; that=two words; that=whatever\n"
   "        and the antibody and cell tags in the metadata are used\n"
+  "   -scoreCol=N - The column (starting with 1) with score.  5 for bed, 7 for narrowPeak\n"
+  "        default %d\n"
+  , scoreCol
   );
 }
 
@@ -42,6 +44,7 @@ static struct optionSpec options[] = {
    {"encodeList", OPTION_BOOLEAN},
    {"tabList", OPTION_BOOLEAN},
    {"cellLetter", OPTION_STRING},
+   {"scoreCol", OPTION_INT},
    {NULL, 0},
 };
 
@@ -175,8 +178,8 @@ for (in = inList; in != NULL; in = in->next)
     camelParseTwo(midString, &cell, &factor);
     fprintf(f, "%s\t%s\t", factor, cell);
     fprintf(f, "%s\t", cellAbbreviation(cell));
-    fprintf(f, "file\t%d\t", SCORE_COL_IX);
-    fprintf(f, "%g\t", calcNormScoreFactor(in->name, SCORE_COL_IX));
+    fprintf(f, "file\t%d\t", scoreCol-1);
+    fprintf(f, "%g\t", calcNormScoreFactor(in->name, scoreCol-1));
     fprintf(f, "%s\n", in->name);
     }
 carefulClose(&f);
@@ -197,8 +200,8 @@ while (lineFileRow(lf, row))
     verbose(2, "%s\n", fileName);
     fprintf(f, "%s\t%s\t", factor, cell);
     fprintf(f, "%s\t", cellAbbreviation(cell));
-    fprintf(f, "file\t%d\t", SCORE_COL_IX);
-    fprintf(f, "%g\t", calcNormScoreFactor(fileName, SCORE_COL_IX));
+    fprintf(f, "file\t%d\t", scoreCol-1);
+    fprintf(f, "%g\t", calcNormScoreFactor(fileName, scoreCol-1));
     fprintf(f, "%s\n", fileName);
     }
 lineFileClose(&lf);
@@ -267,8 +270,8 @@ while (lineFileNextReal(lf, &line))
 
     fprintf(f, "%s\t%s\t", antibody, cell);
     fprintf(f, "%s\t", cellAbbreviation(cell));
-    fprintf(f, "file\t%d\t", SCORE_COL_IX);
-    fprintf(f, "%g\t", calcNormScoreFactor(fileName, SCORE_COL_IX));
+    fprintf(f, "file\t%d\t", scoreCol-1);
+    fprintf(f, "%g\t", calcNormScoreFactor(fileName, scoreCol-1));
     fprintf(f, "%s\n", fileName);
     }
 carefulClose(&f);
@@ -296,6 +299,7 @@ if (argc != 3)
 encodeList = optionExists("encodeList");
 tabList = optionExists("tabList");
 cellLetter = optionVal("cellLetter", cellLetter);
+scoreCol = optionInt("scoreCol", scoreCol);
 regClusterBedExpCfg(argv[1], argv[2]);
 return 0;
 }
