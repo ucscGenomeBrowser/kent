@@ -13,6 +13,7 @@
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 char *bedOut = NULL;
+int sampleAroundCenter = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -30,11 +31,14 @@ errAbort(
   "   mean - average over just covered bases\n"
   "Options:\n"
   "   -bedOut=out.bed - Make output bed that is echo of input bed but with mean column appended\n"
+  "   -sampleAroundCenter=N - Take sample at region N bases wide centered around bed item, rather\n"
+  "                     than the usual sample in the bed item.\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"bedOut", OPTION_STRING},
+   {"sampleAroundCenter", OPTION_INT},
    {NULL, 0},
 };
 
@@ -105,17 +109,27 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     double sum = 0.0;
     int size = 0;
 
-    if (fieldCount < 12)
-	addBigWigIntervalInfo(bbi, lm, bed->chrom, bed->chromStart, bed->chromEnd, 
+    if (sampleAroundCenter > 0)
+        {
+	int center = (bed->chromStart + bed->chromEnd)/2;
+	int left = center - (sampleAroundCenter/2);
+	addBigWigIntervalInfo(bbi, lm, bed->chrom, left, left+sampleAroundCenter, 
 		&size, &coverage, &sum);
+	}
     else
 	{
-	int i;
-	for (i=0; i<bed->blockCount; ++i)
+	if (fieldCount < 12)
+	    addBigWigIntervalInfo(bbi, lm, bed->chrom, bed->chromStart, bed->chromEnd, 
+		    &size, &coverage, &sum);
+	else
 	    {
-	    int start = bed->chromStart + bed->chromStarts[i];
-	    int end = start + bed->blockSizes[i];
-	    addBigWigIntervalInfo(bbi, lm, bed->chrom, start, end, &size, &coverage, &sum);
+	    int i;
+	    for (i=0; i<bed->blockCount; ++i)
+		{
+		int start = bed->chromStart + bed->chromStarts[i];
+		int end = start + bed->blockSizes[i];
+		addBigWigIntervalInfo(bbi, lm, bed->chrom, start, end, &size, &coverage, &sum);
+		}
 	    }
 	}
 
@@ -192,19 +206,29 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
 	    {
 	    int size = 0, coverage = 0;
 	    double sum = 0.0;
-	    if (fieldCount < 12)
+	    if (sampleAroundCenter > 0)
 		{
-		addBufIntervalInfo(valBuf, covBuf, bed->chromStart, bed->chromEnd,
+		int center = (bed->chromStart + bed->chromEnd)/2;
+		int left = center - (sampleAroundCenter/2);
+		addBufIntervalInfo(valBuf, covBuf, left, left+sampleAroundCenter,
 		    &size, &coverage, &sum);
 		}
 	    else
 		{
-		int i;
-		for (i=0; i<bed->blockCount; ++i)
+		if (fieldCount < 12)
 		    {
-		    int start = bed->chromStart + bed->chromStarts[i];
-		    int end = start + bed->blockSizes[i];
-		    addBufIntervalInfo(valBuf, covBuf, start, end, &size, &coverage, &sum);
+		    addBufIntervalInfo(valBuf, covBuf, bed->chromStart, bed->chromEnd,
+			&size, &coverage, &sum);
+		    }
+		else
+		    {
+		    int i;
+		    for (i=0; i<bed->blockCount; ++i)
+			{
+			int start = bed->chromStart + bed->chromStarts[i];
+			int end = start + bed->blockSizes[i];
+			addBufIntervalInfo(valBuf, covBuf, start, end, &size, &coverage, &sum);
+			}
 		    }
 		}
 
@@ -273,6 +297,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 bedOut = optionVal("bedOut", bedOut);
+sampleAroundCenter = optionInt("sampleAroundCenter", sampleAroundCenter);
 bigWigAverageOverBed(argv[1], argv[2], argv[3]);
 return 0;
 }
