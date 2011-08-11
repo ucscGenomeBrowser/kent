@@ -1,14 +1,18 @@
 include ../../../inc/common.mk
 
-L += -lm $(MYSQLLIBS)
-MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L += $(MYSQLLIBS) -lm
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
+A = doEvoFoldV2
 O = doEvoFoldV2.o
 
-doEvoFoldV2: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/doEvoFoldV2 $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/doEvoFoldV2${EXE}
+doEvoFoldV2: ${O} ${MYLIBS}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile:: ${O}
+	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
 
 clean::
-	rm -f ${O}
+	rm -f ${A}${EXE} ${O}
