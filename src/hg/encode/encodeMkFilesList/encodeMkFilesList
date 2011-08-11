@@ -20,7 +20,7 @@ use HgDb;
 ############
 
 #grab environment variable for user
-my $user = "$ENV{'USER'}\n";
+my $user = "$ENV{'USER'}";
 
 #options array
 my %opt;
@@ -53,11 +53,12 @@ if (scalar(@ARGV) < 1){
 }
 
 #metaDb
-my $mdb = "metaDb_$user";
+my $metadb = "metaDb_$user";
 my $writedb = 1;
 if ($opt{'table'}){
-	$mdb = $opt{'table'};
-	if ($mdb eq "metaDb"){
+	$metadb = $opt{'table'};
+	if ($metadb eq "metaDb"){
+		print STDERR "Direct modification of metaDb is not allowed, please use a sandbox table. Writing to Db has been disabled.\n";
 		$writedb = 0;
 	}
 }
@@ -117,6 +118,11 @@ my $assm = $ARGV[0];
 
 #database connect
 my $db = HgDb->new(DB => $assm) or die "Can't connect to DB: $assm\n";
+#check if metaDb table exists
+my $sth = $db->execute("show tables") or die "Can't check tables\n";
+my %tables; 
+while(my @table = $sth->fetchrow_array){$tables{$table[0]} = 1}
+unless (exists $tables{$metadb}){die "The metaDb table: $metadb does not exist.\n"}
 
 #thread status, shared between threads
 my %thrdstat : shared;
@@ -424,19 +430,101 @@ foreach my $file (@filemask){
 	
 		#perl DBI command to grab metadata, places functionality into the $query object
 		#which belings to DBI
-		my $query = $db->execute("select var,val from $mdb where obj = '$tablename'");
+		my $query = $db->execute("select var,val from $metadb where obj = '$tablename'");
 	
 		#iterate thourgh all rows that match obj = $tablename
 		while(my $ref = $query->fetchrow_arrayref){
 			my @temp = @{$ref};
 			$filehash{$temp[0]} = $temp[1]; 
 		}
+
+
+		#this should be pulled out into 2 subroutines whenever we get comma delimited lists into fileName in metaDb
+		#currently it is a lot of special casing because bai's aren't included in the meta, we have to make the assumption that
+		#the bai is there, but that isn't always the case, so we have to case it back to normal if the expected bai file is missing
+		#otherwise the output is something like bam=(md5sum),bai=
+		#so in the future, split this out into 2 subroutines, one for single file in fileName field, one for multiple files that will go into a comma delimited list.
+		if (exists $md5sums{$file} && $type ne "bai" && $writedb == 1){
+                	unless (exists $filehash{'md5sum'}){
+                        	$filehash{'md5sum'} = $md5sums{$file};
+				my $baisum;
+				my @into = ('obj', 'var', 'val');
+                                my @values;
+				if ($type eq "bam"){
+					$baisum = $md5sums{"$file.bai"};
+					unless ($baisum){print STDERR "can't find md5sum for bai for $file, does it exist?\n"}
+				}
+				unless ($type eq "bam" || $baisum){
+					@values = ($tablename, 'md5sum', $md5sums{$file});
+                        	}
+				else {
+					@values = ($tablename, 'md5sum', "bam=$md5sums{$file},bai=$baisum");
+				}
+				$db->insert($metadb, \@into, \@values);
+                		if ($opt{'verbose'} >= 2){
+					print STDERR "Inserted md5sum for $file into metaDb\n";
+				}
+			}
+			elsif ($filehash{'md5sum'} eq $md5sums{$file} && $type ne "bam"){
+				if ($opt{'verbose'} >= 3){
+					print STDERR "md5sum for file $file is same in metaDb and calculated md5sum\n";
+				}
+			}
+			elsif ($type ne "bam" || !($md5sums{"$file.bai"})) {
+				my @values = ($md5sums{$file}, $tablename, 'md5sum');
+				$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+				if ($opt{'verbose'} >=2){
+					print STDERR "Updated md5sum for $file into metaDb\n";
+				}
+				$filehash{'md5sum'} = $md5sums{$file};
+			}
+			else {
+				my $baisum = $md5sums{"$file.bai"};
+				unless ($baisum){print STDERR "can't find md5sum for bai for $file, does it exist?\n"}
+				my @sums = split (",", $filehash{'md5sum'});
+				unless ($sums[0] =~ m/bam\=/ && $sums[1] =~ m/bai\=/){
+					my @values = ("bam=$md5sums{$file},bai=$baisum", $tablename, 'md5sum');
+                                	$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+					if ($opt{'verbose'} >= 2){
+						print STDERR "Updated md5sum for $file and $file.bai\n";
+					}
+				
+				}
+				else {
+					$sums[0] =~ m/bam\=(\S+)/;
+					my $testbam = $1;
+					$sums[1] =~ m/bai\=(\S+)/;
+					my $testbai = $1;
+					my $changed = 0;
+					unless ($testbam eq $md5sums{$file}){
+						$changed = 1;
+						if ($opt{'verbose'} >= 2){
+							print STDERR "$file changed md5sums\n";
+						}
+					}
+					unless ($testbai eq $baisum){
+						$changed = 1;
+						if ($opt{'verbose'} >= 2){
+							print STDERR "$file.bai changed md5sums\n";
+						}
+					}
+					if ($changed){
+						my @values = ("bam=$md5sums{$file},bai=$baisum", $tablename, 'md5sum');
+                                        	$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+						if ($opt{'verbose'} >= 2){
+							print STDERR "Updated md5sum for $file and $file.bai\n";
+						}
+					}
+				}
+	
+			}
+        	}
+		elsif (exists $md5sums{$file}){
+			$filehash{'md5sum'} = $md5sums{$file};
+		}
 	}
 	
 	$filehash{'type'} = $type;
-	if (exists $md5sums{$file}){
-		$filehash{'md5sum'} = $md5sums{$file};
-	}
 
 	#put hash into fileinfo container
 	$fileinfo{$file} = \%filehash;

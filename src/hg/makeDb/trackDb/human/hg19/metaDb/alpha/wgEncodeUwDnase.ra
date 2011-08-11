@@ -19,6 +19,7 @@ geoSampleAccession GSM736580
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=dba2a014d79dd62fb110c2ec6c83d5c6,bai=cb285ce7dc90a7c45db3a6666dfdc5d6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -41,6 +42,7 @@ geoSampleAccession GSM736506
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=105daf39076d49640d566e75e0dee280,bai=500d192a40644e3c87966a49be880c9f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -63,6 +65,7 @@ geoSampleAccession GSM736580
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 082d2d74360188c4a766816e2858e015
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -86,6 +89,7 @@ geoSampleAccession GSM736506
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 85a890981ce7e1e732e36c89e2bf03a8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -109,6 +113,7 @@ geoSampleAccession GSM736580
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 59e34c789a002f723b547bcb97560804
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -132,6 +137,7 @@ geoSampleAccession GSM736506
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum f7fe3a8e0956ba5ccc3e64e9f201e5e8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -154,6 +160,7 @@ fileName wgEncodeUwDnaseA549RawDataRep1.fastq.gz
 geoSampleAccession GSM736580
 grant Stam
 lab UW
+md5sum f6457ab2cac705d54cb1191cfaca5fa4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -175,6 +182,7 @@ fileName wgEncodeUwDnaseA549RawDataRep2.fastq.gz
 geoSampleAccession GSM736506
 grant Stam
 lab UW
+md5sum 88cb4356b8038ce2592c6dbac576d480
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -197,6 +205,7 @@ geoSampleAccession GSM736580
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 524d647813a21c65e511c7b1faf1d520
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -220,6 +229,7 @@ geoSampleAccession GSM736506
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 0b32bc5518d9651db6d2a09bd139db5d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -244,6 +254,7 @@ geoSampleAccession GSM736562
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=e00a83fa7119854bc70b205f16b15342,bai=45948ab575b1e6e891db899c88347e53
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -267,6 +278,7 @@ geoSampleAccession GSM736590
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=0df9c26a799ed80e8890701a5f764e75,bai=9c0b4f978486ebec30b4d2cdb6ff1406
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -290,6 +302,7 @@ geoSampleAccession GSM736562
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 87e008d579732b45884d7113b7a17306
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -314,6 +327,7 @@ geoSampleAccession GSM736590
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum e4bb26f1fbe5f1c55ca43c2ec6a62d65
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -338,6 +352,7 @@ geoSampleAccession GSM736562
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 0af330f171c3cf476eaeb92d4a529d32
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -362,6 +377,7 @@ geoSampleAccession GSM736590
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum bdeeada72a713979e0d9a13419b1e169
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -384,6 +400,7 @@ fileName wgEncodeUwDnaseAg04449RawDataRep1.fastq.gz
 geoSampleAccession GSM736562
 grant Stam
 lab UW
+md5sum cdfdadaa6e643673e3fb5c88b0c33c17
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -405,6 +422,7 @@ fileName wgEncodeUwDnaseAg04449RawDataRep2.fastq.gz
 geoSampleAccession GSM736590
 grant Stam
 lab UW
+md5sum cad08c3fbb7c679efdf1fd9de4cbe020
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -428,6 +446,7 @@ geoSampleAccession GSM736562
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum b7f780478fd126e8ff9022b58936939f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -452,6 +471,7 @@ geoSampleAccession GSM736590
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum d2f3e308fa8d54763463902d46c307dc
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -476,6 +496,7 @@ geoSampleAccession GSM736514
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=16512ef6ffee06fcf2497344d9a59751,bai=e9eafea4318d5362274dc5521e9fcbcb
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -499,6 +520,7 @@ geoSampleAccession GSM736563
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=3f98c58f907d3fe7a532b64f4a5e9160,bai=e18122388614fcd1c3a2fc198b686f75
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -522,6 +544,7 @@ geoSampleAccession GSM736514
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ec0e31bbbe094f0bdcff8c6bf9dcc9f9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -546,6 +569,7 @@ geoSampleAccession GSM736563
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 229984a60a72b3ae796807e2f41fa864
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -570,6 +594,7 @@ geoSampleAccession GSM736514
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 8f7c4f145d130385f9b5e732961b3c42
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -594,6 +619,7 @@ geoSampleAccession GSM736563
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 1250e67a89764a7e877bca3bbee70f62
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -616,6 +642,7 @@ fileName wgEncodeUwDnaseAg04450RawDataRep1.fastq.gz
 geoSampleAccession GSM736514
 grant Stam
 lab UW
+md5sum 833a50e905d1fc292b819a131af7e9aa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -637,6 +664,7 @@ fileName wgEncodeUwDnaseAg04450RawDataRep2.fastq.gz
 geoSampleAccession GSM736563
 grant Stam
 lab UW
+md5sum e19e63a0b1727c2430a8a002abbe2426
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -660,6 +688,7 @@ geoSampleAccession GSM736514
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 7887e48e5eb969075be3acc22fe9b0ae
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -684,6 +713,7 @@ geoSampleAccession GSM736563
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 1e9552872f92a7f0d63825bacaeebf48
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -708,6 +738,7 @@ geoSampleAccession GSM736551
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=bf4923f0f78df827041058bbdce2a57b,bai=f1f319bc30370d3d6af1fef82ef0e2e3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -731,6 +762,7 @@ geoSampleAccession GSM736616
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=a01d1244c651ccc7b0cfdc1631d78a78,bai=5a02a6259e9a71665d585f46edddaaaa
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -754,6 +786,7 @@ geoSampleAccession GSM736551
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum bdc755bf31d528e0e0532983553f115b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -778,6 +811,7 @@ geoSampleAccession GSM736616
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 8b9d3a620b1d126107bc5864678f2e3e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -802,6 +836,7 @@ geoSampleAccession GSM736551
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a12753d0b8d546473c733ba9be045a5c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -826,6 +861,7 @@ geoSampleAccession GSM736616
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum ddac6a15acd64d7b83753f2b5234e44a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -848,6 +884,7 @@ fileName wgEncodeUwDnaseAg09309RawDataRep1.fastq.gz
 geoSampleAccession GSM736551
 grant Stam
 lab UW
+md5sum 7d82bb9056cd037a5b94f13358d43468
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -869,6 +906,7 @@ fileName wgEncodeUwDnaseAg09309RawDataRep2.fastq.gz
 geoSampleAccession GSM736616
 grant Stam
 lab UW
+md5sum 5b89fd9fe934813005b4b291b5f302c1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -892,6 +930,7 @@ geoSampleAccession GSM736551
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum d2b95de8d781192ba93a5ad026dae604
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -916,6 +955,7 @@ geoSampleAccession GSM736616
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum e263e7afa6404e1bc52b1c5dc2c68583
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -940,6 +980,7 @@ geoSampleAccession GSM736531
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=7cc8edbc9c44bc54302911b9b53d0ac0,bai=8ada7b7bdb9cb3e26c5d0cf6d0c5beac
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -963,6 +1004,7 @@ geoSampleAccession GSM736619
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=baa0a10982be71e466b4afa102c01605,bai=b24f92da906c501f9391e30ff58dc1ec
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -986,6 +1028,7 @@ geoSampleAccession GSM736531
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum de3fcb393a1c0032ca1195a6b83d4498
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1010,6 +1053,7 @@ geoSampleAccession GSM736619
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 8095a6d57438a4033d60e9dd6e072531
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1033,6 +1077,7 @@ geoSampleAccession GSM736531
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a362a1c62506b467fa04bbe2ba090e85
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1058,6 +1103,7 @@ geoSampleAccession GSM736619
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 6cace0cfd377b9013018cab8979e0511
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1080,6 +1126,7 @@ fileName wgEncodeUwDnaseAg09319RawDataRep1.fastq.gz
 geoSampleAccession GSM736531
 grant Stam
 lab UW
+md5sum 132f920590eeaee0dbce344c5f738ccd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1101,6 +1148,7 @@ fileName wgEncodeUwDnaseAg09319RawDataRep2.fastq.gz
 geoSampleAccession GSM736619
 grant Stam
 lab UW
+md5sum 9ee4a9d019ccb92b2e76f26f0d72a428
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1124,6 +1172,7 @@ geoSampleAccession GSM736531
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 36debd83ca48c2a071faa8659173cbf6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1148,6 +1197,7 @@ geoSampleAccession GSM736619
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 2a23ed031498f61737747efd7c06a588
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1172,6 +1222,7 @@ geoSampleAccession GSM736598
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=998bbbcba4efd68e92b0506608263a7a,bai=6e582d288c4759520a77afe186d62fe1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1195,6 +1246,7 @@ geoSampleAccession GSM736633
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=d9205c03f90fb7bc50291a5e22d6cc15,bai=b1b85691638baad2a22e9dc69d8a2fa7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1218,6 +1270,7 @@ geoSampleAccession GSM736598
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f02f1f05f3a96e78804df5fdef7e101f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1242,6 +1295,7 @@ geoSampleAccession GSM736633
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 443c4c7a73a8aaaacc4959be280e3f63
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1266,6 +1320,7 @@ geoSampleAccession GSM736598
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 15b70d6e624aefd2296fc2602868c34d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1290,6 +1345,7 @@ geoSampleAccession GSM736633
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 46d75cb0ea2890deface70341e84da7f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1312,6 +1368,7 @@ fileName wgEncodeUwDnaseAg10803RawDataRep1.fastq.gz
 geoSampleAccession GSM736598
 grant Stam
 lab UW
+md5sum 02708aaac49ae40cccfdef8cfa9aef89
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1333,6 +1390,7 @@ fileName wgEncodeUwDnaseAg10803RawDataRep2.fastq.gz
 geoSampleAccession GSM736633
 grant Stam
 lab UW
+md5sum 2447cf3cc99174d814e5b593aab1beb1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1356,6 +1414,7 @@ geoSampleAccession GSM736598
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum dd95fe36a80656cd1d6b2877adc1096c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1380,6 +1439,7 @@ geoSampleAccession GSM736633
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 53f69d0322976038879cc74a14cc5298
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1403,6 +1463,7 @@ geoSampleAccession GSM736583
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=2e26c65ac1d27e4758a7f223634bb42f,bai=2757f3bbe87538879946c6759089391f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1425,6 +1486,7 @@ geoSampleAccession GSM736505
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=01e4966bd52b6276abfe3e41aef3fc53,bai=cf4004272a6a017ccd684e585250fe9f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1447,6 +1509,7 @@ geoSampleAccession GSM736583
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 3a657491066d590994f70a305699f15d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1470,6 +1533,7 @@ geoSampleAccession GSM736505
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 749a975a924afa6fe761db50c7ae4855
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1493,6 +1557,7 @@ geoSampleAccession GSM736583
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a707cdfc42d50ec67fc1cb51895ae15e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1516,6 +1581,7 @@ geoSampleAccession GSM736505
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 510a4dd82cde4d8ed6f8a133dbc66cb4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1538,6 +1604,7 @@ fileName wgEncodeUwDnaseAoafRawDataRep1.fastq.gz
 geoSampleAccession GSM736583
 grant Stam
 lab UW
+md5sum 0362dad5ee5f272df57c775d6abf5490
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1559,6 +1626,7 @@ fileName wgEncodeUwDnaseAoafRawDataRep2.fastq.gz
 geoSampleAccession GSM736505
 grant Stam
 lab UW
+md5sum 1aaad20579d606d9cc819e2db611de96
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1581,6 +1649,7 @@ geoSampleAccession GSM736583
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 4d8bfa1a1e0c7a6e91447e6685c5d00d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1604,6 +1673,7 @@ geoSampleAccession GSM736505
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 18172a192ba85ccf041523c95246ff09
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1627,6 +1697,7 @@ geoSampleAccession GSM736508
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=14df55e5c31c7a9f4870aad825313d04,bai=f16fcb8c0467a353daff052adcda3e85
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1649,6 +1720,7 @@ geoSampleAccession GSM736622
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=0eb09e580529542e2f20dcd09d7cb341,bai=b9ca906d711c40c9859e6dde7c9cf592
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1671,6 +1743,7 @@ geoSampleAccession GSM736508
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f0cc67c5c794d71e6a816271dcc6016b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1694,6 +1767,7 @@ geoSampleAccession GSM736622
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 257438e96cd10b3955b5b772263171be
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1717,6 +1791,7 @@ geoSampleAccession GSM736508
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 50522fbb0c44fd9419e79599f309c583
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1740,6 +1815,7 @@ geoSampleAccession GSM736622
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 957c6b42033f77e18fb8b950039c3ed2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1762,6 +1838,7 @@ fileName wgEncodeUwDnaseBe2cRawDataRep1.fastq.gz
 geoSampleAccession GSM736508
 grant Stam
 lab UW
+md5sum 5071ebc4a27e668d8ae7a8361cc74040
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1783,6 +1860,7 @@ fileName wgEncodeUwDnaseBe2cRawDataRep2.fastq.gz
 geoSampleAccession GSM736622
 grant Stam
 lab UW
+md5sum a2365605069ff810efc2b160944dcd9e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1805,6 +1883,7 @@ geoSampleAccession GSM736508
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 939185594beb7e9806f21650f142f592
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1828,6 +1907,7 @@ geoSampleAccession GSM736622
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum e58a5d5ec43237279f2a2b524f94f037
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1852,6 +1932,7 @@ geoSampleAccession GSM736518
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=6d529d9c9fed2bc4bafb93b48ff83dbf,bai=b6f0bdf75ed7bc69e51a02d318826cfb
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1875,6 +1956,7 @@ geoSampleAccession GSM736596
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=c93a53911d1a3c7ab13062b694c7adf9,bai=6cfa11cd73c48793f8752137ce79a802
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1898,6 +1980,7 @@ geoSampleAccession GSM736518
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 7b4e7f198049e301f89d0a2fafbf74dd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1922,6 +2005,7 @@ geoSampleAccession GSM736596
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 24a93ffab8c673001beb432047b34eba
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1946,6 +2030,7 @@ geoSampleAccession GSM736518
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum b3c1a7c7320c0da1599dbe8fd14def84
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1970,6 +2055,7 @@ geoSampleAccession GSM736596
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum b34472c4ab0fd7ee7aea0a62305771ed
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1992,6 +2078,7 @@ fileName wgEncodeUwDnaseBjRawDataRep1.fastq.gz
 geoSampleAccession GSM736518
 grant Stam
 lab UW
+md5sum 22f768be15ae1f5081524053341cb370
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2014,6 +2101,7 @@ fileName wgEncodeUwDnaseBjRawDataRep2.fastq.gz
 geoSampleAccession GSM736596
 grant Stam
 lab UW
+md5sum 846cd8a3f7cda28a497793629112ab7f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2037,6 +2125,7 @@ geoSampleAccession GSM736518
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 0525fc04c65f0c06a0f4742d3ec040c2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2061,6 +2150,7 @@ geoSampleAccession GSM736596
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 0a33107f2d5782252dfb445b7a8b3f2d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2085,6 +2175,7 @@ geoSampleAccession GSM736500
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=557f3d9c7f6ae53f62bcb477697cb9e4,bai=b46fcfc5db54aef7273fe80084c4247c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2108,6 +2199,7 @@ geoSampleAccession GSM736587
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=c9391edc7c09692dcef89dd20a22de7b,bai=44d4b46eac8ffc397b838d65384d963a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2131,6 +2223,7 @@ geoSampleAccession GSM736500
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum add0293672c9e5c01809c2134d480b89
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2155,6 +2248,7 @@ geoSampleAccession GSM736587
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 480291c36653ebe1b0ff078248f0e542
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2179,6 +2273,7 @@ geoSampleAccession GSM736500
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 6a4ea3ed8851781a41a418a0f4bb37e2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2203,6 +2298,7 @@ geoSampleAccession GSM736587
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum eb4b356f98beb39fd900398edd005876
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2225,6 +2321,7 @@ fileName wgEncodeUwDnaseCaco2RawDataRep1.fastq.gz
 geoSampleAccession GSM736500
 grant Stam
 lab UW
+md5sum 261ee4bef8666b650fea2553eea61a9d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2246,6 +2343,7 @@ fileName wgEncodeUwDnaseCaco2RawDataRep2.fastq.gz
 geoSampleAccession GSM736587
 grant Stam
 lab UW
+md5sum 61aa41638a36610d8f473cd530374d99
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2269,6 +2367,7 @@ geoSampleAccession GSM736500
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 50244aec4017f3471f5c6e440e7e3622
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2293,6 +2392,7 @@ geoSampleAccession GSM736587
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum a11a6738ad0c3c935b0ff3969d86f5d4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2315,6 +2415,7 @@ fileName wgEncodeUwDnaseCd20PosAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=bbff0a42d9ed658f06e9b6954c738ed5,bai=272c783a499625d10224bd5746322ece
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2336,6 +2437,7 @@ fileName wgEncodeUwDnaseCd20PosHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum b6f8489816bb5b783f3564545dae4b5d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2358,6 +2460,7 @@ fileName wgEncodeUwDnaseCd20PosPkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 1ff5267c6273a690c86489ab8258c156
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2379,6 +2482,7 @@ expId 1884
 fileName wgEncodeUwDnaseCd20PosRawDataRep2.fastq.tgz
 grant Stam
 lab UW
+md5sum a1b640317b4f6ac1dcc29e3b4b7445fc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2400,6 +2504,7 @@ fileName wgEncodeUwDnaseCd20PosRawRep2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum d69e827d61608f936ace2ba64da171de
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2422,6 +2527,7 @@ fileName wgEncodeUwDnaseCd34mobilizedAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=c24a71971013388d5e8ee1c5f61094c3,bai=716b5e9db4a5f8f3ae14a60530c0b165
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2443,6 +2549,7 @@ fileName wgEncodeUwDnaseCd34mobilizedHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum e790e4001f3bf6c8e13b13e361a9a525
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2465,6 +2572,7 @@ fileName wgEncodeUwDnaseCd34mobilizedPkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum e8ebc26bf91ffe81e3203147476060df
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2486,6 +2594,7 @@ expId 1885
 fileName wgEncodeUwDnaseCd34mobilizedRawDataRep1.fastq.tgz
 grant Stam
 lab UW
+md5sum 792392d36849af14473f94ca642aa137
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2507,6 +2616,7 @@ fileName wgEncodeUwDnaseCd34mobilizedRawRep1.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum adcdf7198a562387e409ae706ee98d1a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2531,6 +2641,7 @@ geoSampleAccession GSM736607
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=f2802e19f4c82d12ef75534fa6519c11,bai=3c5e65345dbbb5ac810ae2080526ddda
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2554,6 +2665,7 @@ geoSampleAccession GSM736607
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 3c89fe8833bd150d2cfbe8dedccf06d2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2578,6 +2690,7 @@ geoSampleAccession GSM736607
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 3c1ea4f201cf470eab2296e14f884837
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2600,6 +2713,7 @@ fileName wgEncodeUwDnaseCmkRawDataRep1.fastq.gz
 geoSampleAccession GSM736607
 grant Stam
 lab UW
+md5sum 7402635cad2ae245d8ea35a052353a3a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2623,6 +2737,7 @@ geoSampleAccession GSM736607
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 3858e5c98bd60fcfb6fdb9035ef64199
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2647,6 +2762,7 @@ geoSampleAccession GSM736558
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=ba3bc13f4afaad921de17acee3b953f9,bai=4e10ba08a0ce2737f27f1c3366e2a948
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2670,6 +2786,7 @@ geoSampleAccession GSM736635
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=df19a2aed67f52ae9e68c7d4dc807bd4,bai=6058fe7e137d6b1780d22ea4f052ffeb
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2693,6 +2810,7 @@ geoSampleAccession GSM736558
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 834bdd4e5695cec286fdabe091a0dfa7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2717,6 +2835,7 @@ geoSampleAccession GSM736635
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 14e1e6ce0f05518950e40ace7b0bc05e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2741,6 +2860,7 @@ geoSampleAccession GSM736558
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 9bef39391812a40672b5eb529b7e2794
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2765,6 +2885,7 @@ geoSampleAccession GSM736635
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 10a88b078098b56c9aa8135ff5480c1d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2787,6 +2908,7 @@ fileName wgEncodeUwDnaseGm06990RawDataRep1.fastq.gz
 geoSampleAccession GSM736558
 grant Stam
 lab UW
+md5sum 35dc124798e4f2d0a0ac8f8e6d302df9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2808,6 +2930,7 @@ fileName wgEncodeUwDnaseGm06990RawDataRep2.fastq.gz
 geoSampleAccession GSM736635
 grant Stam
 lab UW
+md5sum 038390f94351b81a2b9885a81abca181
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2831,6 +2954,7 @@ geoSampleAccession GSM736558
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 451fbaef204c713cc8e13840c77be1ee
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2855,6 +2979,7 @@ geoSampleAccession GSM736635
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 1064dfb6c8ef25d3821a6e8d0717efef
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2878,6 +3003,7 @@ geoSampleAccession GSM736525
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=8f2fc1d34a017aeef7273fcd3614301b,bai=3e0eb6a1e7d0ab99335154bc64056301
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2900,6 +3026,7 @@ geoSampleAccession GSM736525
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum a2b464f06207a9876a939701bbbe2185
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2923,6 +3050,7 @@ geoSampleAccession GSM736525
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 59d57dac26bcf7d20cbe4b142bd65a25
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2945,6 +3073,7 @@ fileName wgEncodeUwDnaseGm12864RawDataRep1.fastq.gz
 geoSampleAccession GSM736525
 grant Stam
 lab UW
+md5sum 7dc74e44c5228b1bbde741f5687790c1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2967,6 +3096,7 @@ geoSampleAccession GSM736525
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum eba9e53394bb1fff167e7bbe6dad6061
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2991,6 +3121,7 @@ geoSampleAccession GSM736512
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=13e269fb633a103db3f2181f846f420e,bai=a03435d3bd0913f5bead2d45168bfda9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3014,6 +3145,7 @@ geoSampleAccession GSM736561
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=bfd2fafc068a57859179f766275acbe8,bai=99de57119b3fa69763f95e9ce35589c8
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3037,6 +3169,7 @@ geoSampleAccession GSM736512
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 4002851ad94a6dd5e9de12aa91d5ae60
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3061,6 +3194,7 @@ geoSampleAccession GSM736561
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 8facc375ceeef5f7dde47fb89bfba901
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3085,6 +3219,7 @@ geoSampleAccession GSM736512
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 64a2595ecf9b497a057ee5dc5c33516f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3109,6 +3244,7 @@ geoSampleAccession GSM736561
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 2716e0f196c37136d2f36af16dd8050f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3131,6 +3267,7 @@ fileName wgEncodeUwDnaseGm12865RawDataRep1.fastq.gz
 geoSampleAccession GSM736512
 grant Stam
 lab UW
+md5sum 140d961b21ed239069e6f6446d878ded
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3152,6 +3289,7 @@ fileName wgEncodeUwDnaseGm12865RawDataRep2.fastq.gz
 geoSampleAccession GSM736561
 grant Stam
 lab UW
+md5sum de15af980dc95d789d9a6905904a21c7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3175,6 +3313,7 @@ geoSampleAccession GSM736512
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum c23e2f0641cef1db0bce8b8d9978d125
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3199,6 +3338,7 @@ geoSampleAccession GSM736561
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum b2e5cb099c13c998388922fd37db772d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3223,6 +3363,7 @@ geoSampleAccession GSM736496
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=2229448ab04f30b778a2c4f07a8daf8f,bai=119b140a4bb2c7d7b6579b39ff482187
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3246,6 +3387,7 @@ geoSampleAccession GSM736620
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=439f8899dfa2d393038e4be80dd08405,bai=627ad2d0a0ea96f5a6f5f3016badd34b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3269,6 +3411,7 @@ geoSampleAccession GSM736496
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum e3881a82973797b24ccf6a650f9fcaab
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3293,6 +3436,7 @@ geoSampleAccession GSM736620
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 77e5ba4251405b97c54ba4a3a9e57b0c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3317,6 +3461,7 @@ geoSampleAccession GSM736496
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum c3cc66778b172bff8d991a77765f5698
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3341,6 +3486,7 @@ geoSampleAccession GSM736620
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum cbad587229a297f936ddc0c31aa3613c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3363,6 +3509,7 @@ fileName wgEncodeUwDnaseGm12878RawDataRep1.fastq.gz
 geoSampleAccession GSM736496
 grant Stam
 lab UW
+md5sum 9e0b4b92c693579dd9fb2cca39019857
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3384,6 +3531,7 @@ fileName wgEncodeUwDnaseGm12878RawDataRep2.fastq.gz
 geoSampleAccession GSM736620
 grant Stam
 lab UW
+md5sum a4ae719b9019f1f77572c9efb139bba7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3407,6 +3555,7 @@ geoSampleAccession GSM736496
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum d264b15739c1865a837002938f9a04b0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3431,6 +3580,7 @@ geoSampleAccession GSM736620
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 655f4c76a6f5456f7b6f4cd1396f849f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3455,6 +3605,7 @@ geoSampleAccession GSM736582
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=3dbb5d6e96e419dece2a8c041c05021d,bai=ce199c985814c16b200b7bdcd5689eaa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3478,6 +3629,7 @@ geoSampleAccession GSM736582
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum dc27e4efbcab4adb80fb6e52375bb35c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3502,6 +3654,7 @@ geoSampleAccession GSM736582
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 74622e7aa7c065712c3fad0bffe79460
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3524,6 +3677,7 @@ fileName wgEncodeUwDnaseH1hescRawDataRep1.fastq.gz
 geoSampleAccession GSM736582
 grant Stam
 lab UW
+md5sum 392bd5929b0eae463df1ad70f9edf3c8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3547,6 +3701,7 @@ geoSampleAccession GSM736582
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum ef6885215ebd8bacae9ec6ca30f3a97a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3571,6 +3726,7 @@ geoSampleAccession GSM736638
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=b6864c037c4606bfdeaa487530d17436,bai=ccefc7ac23c1ec49ea407b6a45c19dc5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3593,6 +3749,7 @@ geoSampleAccession GSM736610
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=dbcd1bdd7d898d51e9e30b017ba1b501,bai=20381cb10f7478cbc264874a12ecf94a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3616,6 +3773,7 @@ geoSampleAccession GSM736638
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ac5a6185ae0627152ad25c542b850a6b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3639,6 +3797,7 @@ geoSampleAccession GSM736610
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 401c7de8e1deab7ff6fb7f3f7278e94d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3662,6 +3821,7 @@ geoSampleAccession GSM736638
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 44bf9349ce34a8b382d1c9773eddef62
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3686,6 +3846,7 @@ geoSampleAccession GSM736610
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 19c9bcd5ea07863de7b21e802deeb964
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3708,6 +3869,7 @@ fileName wgEncodeUwDnaseH7esRawDataRep1.fastq.gz
 geoSampleAccession GSM736638
 grant Stam
 lab UW
+md5sum f4ccd2e49f4f6b4a06bdaedafed1d4e8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3729,6 +3891,7 @@ fileName wgEncodeUwDnaseH7esRawDataRep2.fastq.gz
 geoSampleAccession GSM736610
 grant Stam
 lab UW
+md5sum fea7eb9caad94998482d99189b1b3cf8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3752,6 +3915,7 @@ geoSampleAccession GSM736638
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 26a73b7e69a5f7f731402ede92585ba6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3775,6 +3939,7 @@ geoSampleAccession GSM736610
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 71c0fbaf522d7b0a0610063b2a80c041
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3798,6 +3963,7 @@ geoSampleAccession GSM736586
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=bc5673d88cfcb2864ed12c377ac0eb09,bai=28402e05e09b7457ff0efa435a78cd33
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3820,6 +3986,7 @@ geoSampleAccession GSM736538
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=1978b413bf665bfcde6787c91128b4ea,bai=a6b546957fdfd089379b32dd4116ff33
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3842,6 +4009,7 @@ geoSampleAccession GSM736586
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum bb3215ee77b7145bf05541ac8dc0e0c9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3865,6 +4033,7 @@ geoSampleAccession GSM736538
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 106ea146de1924f4259ffd21835b8254
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3888,6 +4057,7 @@ geoSampleAccession GSM736586
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 99130757ca2523c598bbc79a4c7066d9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3911,6 +4081,7 @@ geoSampleAccession GSM736538
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 7a25625efb4bf2f43d71aa7990f1547f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3933,6 +4104,7 @@ fileName wgEncodeUwDnaseHacRawDataRep1.fastq.gz
 geoSampleAccession GSM736586
 grant Stam
 lab UW
+md5sum 492413c0dda0e51fb94ead2b144d6aa6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3954,6 +4126,7 @@ fileName wgEncodeUwDnaseHacRawDataRep2.fastq.gz
 geoSampleAccession GSM736538
 grant Stam
 lab UW
+md5sum e3f53b0ced33124c8459da6952746283
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3976,6 +4149,7 @@ geoSampleAccession GSM736586
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum ab4fdf1695e1f60752c03b09f75c0ce2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3999,6 +4173,7 @@ geoSampleAccession GSM736538
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum d6e2e05936b2a36337227c39d7d1cece
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4023,6 +4198,7 @@ geoSampleAccession GSM736631
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=8db3cc5f3471898f42db5c758bbac58d,bai=9f7cd6819309c337339bb7650d37be42
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4046,6 +4222,7 @@ geoSampleAccession GSM736606
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=003566f424df45f5a9e34d2c2d8a2062,bai=2505965bc24b3e052cd8f3e70be07989
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4069,6 +4246,7 @@ geoSampleAccession GSM736631
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 962f356e04ff2df66d08154f60e9ccc9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4093,6 +4271,7 @@ geoSampleAccession GSM736606
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 0e4dedaa388fc8de0a57d158ffb9a65e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4117,6 +4296,7 @@ geoSampleAccession GSM736631
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 581ba5cd79d81eded87f441d5f4c3519
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4141,6 +4321,7 @@ geoSampleAccession GSM736606
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 9ebe7222106f7b586cb5390dfcf27f70
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4163,6 +4344,7 @@ fileName wgEncodeUwDnaseHaeRawDataRep1.fastq.gz
 geoSampleAccession GSM736631
 grant Stam
 lab UW
+md5sum 5f0d87d10a777c056d11752332e58d60
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4184,6 +4366,7 @@ fileName wgEncodeUwDnaseHaeRawDataRep2.fastq.gz
 geoSampleAccession GSM736606
 grant Stam
 lab UW
+md5sum 8dddfd00bb50a05930a55d2b4aaa981b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4207,6 +4390,7 @@ geoSampleAccession GSM736631
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum f57caec6585f53e68f31c3630e7d63dc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4231,6 +4415,7 @@ geoSampleAccession GSM736606
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 5800dd3f45acfd573dd5a4f22c680421
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4254,6 +4439,7 @@ geoSampleAccession GSM736594
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=66cc90a25706da8f7baffbb47b268424,bai=1849494fc1e8486599a94bbfdd4de6c2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4276,6 +4462,7 @@ geoSampleAccession GSM736535
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=d70f48093c43b5724896f8d73048152d,bai=2f8cb6a3598c85e4551177953cfc4b47
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4298,6 +4485,7 @@ geoSampleAccession GSM736594
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 3a6781ea55965f4e84a27050a0ef939f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4321,6 +4509,7 @@ geoSampleAccession GSM736535
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum d066f558b4aeaf97fa3d61fdfa282f4a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4344,6 +4533,7 @@ geoSampleAccession GSM736594
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum ad007286b015f86361113bf60899798e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4367,6 +4557,7 @@ geoSampleAccession GSM736535
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 9ace3f5ef843e5b0240ba7c50594cd71
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4389,6 +4580,7 @@ fileName wgEncodeUwDnaseHahRawDataRep1.fastq.gz
 geoSampleAccession GSM736594
 grant Stam
 lab UW
+md5sum 88b1aaf86a81c909bf4ddcda2db92f36
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4410,6 +4602,7 @@ fileName wgEncodeUwDnaseHahRawDataRep2.fastq.gz
 geoSampleAccession GSM736535
 grant Stam
 lab UW
+md5sum da07a2d07878cd1cb897451866188c9e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4432,6 +4625,7 @@ geoSampleAccession GSM736594
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum fb40828654e9a75920ea4e9127f6ed99
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4455,6 +4649,7 @@ geoSampleAccession GSM736535
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 40c626d83a32694f9cdb79f47d894992
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4478,6 +4673,7 @@ geoSampleAccession GSM736537
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=1affbcb8269fa27b577d2f8bf63f9bae,bai=0026ee37e2b69cfbf9d2620f3afdf55c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4500,6 +4696,7 @@ geoSampleAccession GSM736625
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=3366bacd48a61f1f8d8cae5964ea3262,bai=58e154405728afcb18cbc3f71ef558c8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4522,6 +4719,7 @@ geoSampleAccession GSM736537
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum c9d0c96769ef02cfcfe209a1e4ec95cc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4545,6 +4743,7 @@ geoSampleAccession GSM736625
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 67242395a889a64ebb11c1999005c957
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4568,6 +4767,7 @@ geoSampleAccession GSM736537
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 670c0c7f759428c1e97f7889dad45a51
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4591,6 +4791,7 @@ geoSampleAccession GSM736625
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum beea0161ed7861a1e1b6dc81466e2b78
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4613,6 +4814,7 @@ fileName wgEncodeUwDnaseHaspRawDataRep1.fastq.gz
 geoSampleAccession GSM736537
 grant Stam
 lab UW
+md5sum d484fba5c86f0dc339d0e870fff6ffa0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4634,6 +4836,7 @@ fileName wgEncodeUwDnaseHaspRawDataRep2.fastq.gz
 geoSampleAccession GSM736625
 grant Stam
 lab UW
+md5sum 0cd603d03db1b790eed39a26f9aa165b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4656,6 +4859,7 @@ geoSampleAccession GSM736537
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum e6ec2e799e4e55cb1f85c00c473fded9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4679,6 +4883,7 @@ geoSampleAccession GSM736625
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 3d0993b58b40971cb9c5da2d13e8a9b8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4702,6 +4907,7 @@ geoSampleAccession GSM736509
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=f86c1cc9ff5d4d2145eecef8643be9c2,bai=356c564f8307f92e8907590e8374a591
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4724,6 +4930,7 @@ geoSampleAccession GSM736554
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=fe7975fb826aca3f23a20b5221da3520,bai=57fb134668604ed3669a636cd999210e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4746,6 +4953,7 @@ geoSampleAccession GSM736509
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 457d5a9e35249cb6954c296a3eeffd73
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4769,6 +4977,7 @@ geoSampleAccession GSM736554
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum a567886ae284c2615a0ec15dcabcfbd9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4792,6 +5001,7 @@ geoSampleAccession GSM736509
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum db2412a903125e80bb32e69b71e11291
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4815,6 +5025,7 @@ geoSampleAccession GSM736554
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum fa2ab791ca4c7b184edb8b0dde81b5b0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4837,6 +5048,7 @@ fileName wgEncodeUwDnaseHbmecRawDataRep1.fastq.gz
 geoSampleAccession GSM736509
 grant Stam
 lab UW
+md5sum ef2b1d6bc4d3c968e7c0761a57f5c7a6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4858,6 +5070,7 @@ fileName wgEncodeUwDnaseHbmecRawDataRep2.fastq.gz
 geoSampleAccession GSM736554
 grant Stam
 lab UW
+md5sum 667a4418b9f97456927e44b7504d9d14
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4880,6 +5093,7 @@ geoSampleAccession GSM736509
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 97bd26ad96d265923ec92623285bfba7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4903,6 +5117,7 @@ geoSampleAccession GSM736554
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 0e485c999d6d55ea04c1ba05f0657d2c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4927,6 +5142,7 @@ geoSampleAccession GSM736568
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=cbf254e0443bc4f69fb6a1b3d86aa35d,bai=e12f0ed753b7a59e81eb996b6c57a5b9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4950,6 +5166,7 @@ geoSampleAccession GSM736540
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=317cdf9e9ab940f71389987d8e07c9a8,bai=6e4a2869a2b7b3df2f64ca1a86f3f0e6
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4973,6 +5190,7 @@ geoSampleAccession GSM736568
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f08bee972dd9376dfeabf82f57aff0e5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4997,6 +5215,7 @@ geoSampleAccession GSM736540
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum fc954eca7d16abf6ad6d6a9c3beeccf4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5021,6 +5240,7 @@ geoSampleAccession GSM736568
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 41ad94875a23a00cca68249b7b8fbf2c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5045,6 +5265,7 @@ geoSampleAccession GSM736540
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d1dbd2c6a45c885d8ef28afcf53ecf62
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5067,6 +5288,7 @@ fileName wgEncodeUwDnaseHcfRawDataRep1.fastq.gz
 geoSampleAccession GSM736568
 grant Stam
 lab UW
+md5sum a9f01f3d803946dd56dd9f0ade118166
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5088,6 +5310,7 @@ fileName wgEncodeUwDnaseHcfRawDataRep2.fastq.gz
 geoSampleAccession GSM736540
 grant Stam
 lab UW
+md5sum 8e53ae6c36e08585083c970c604b6d6b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5111,6 +5334,7 @@ geoSampleAccession GSM736568
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 518633176f29b814eb70cc161eb30947
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5135,6 +5359,7 @@ geoSampleAccession GSM736540
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum beef4f6ea892127db7240aac1946ba79
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5158,6 +5383,7 @@ geoSampleAccession GSM736494
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=3ff9780df6f8511cb4a14d5d1dc47eb3,bai=bf453e1b30298f1247c707c83ff651ab
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5180,6 +5406,7 @@ geoSampleAccession GSM736601
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=0f78c011d75c65a84d6db29f1972ca73,bai=bddbda431887c5063b5cee6942879cc8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5202,6 +5429,7 @@ geoSampleAccession GSM736494
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 669f7d9e6149adfdaba77ae9de7138f0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5225,6 +5453,7 @@ geoSampleAccession GSM736601
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum e728b22529c909ba8690c01ee873c99a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5248,6 +5477,7 @@ geoSampleAccession GSM736494
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 7eddeed3a73c27d652d1cec6f34556db
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5271,6 +5501,7 @@ geoSampleAccession GSM736601
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum c5b74e2350fd317b41e961ebef50d433
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5293,6 +5524,7 @@ fileName wgEncodeUwDnaseHcfaaRawDataRep1.fastq.gz
 geoSampleAccession GSM736494
 grant Stam
 lab UW
+md5sum 570ea674526cdcc0e3c8bdfed643d35a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5314,6 +5546,7 @@ fileName wgEncodeUwDnaseHcfaaRawDataRep2.fastq.gz
 geoSampleAccession GSM736601
 grant Stam
 lab UW
+md5sum 1e7c0b6f61c07ebcab75eb7c2a971332
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5336,6 +5569,7 @@ geoSampleAccession GSM736494
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum e9301edb0426891de0f7eee3fb23d9a1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5359,6 +5593,7 @@ geoSampleAccession GSM736601
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum eaae0b37827f979d62e71b89ee64b5b2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5383,6 +5618,7 @@ geoSampleAccession GSM736516
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=808423500fcdc9bbed7b85972871a773,bai=6957bd40715eb5631427c40f418c6870
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5406,6 +5642,7 @@ geoSampleAccession GSM736504
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=dd42460542a812969a082149f85b659f,bai=ac3680c9f885ca238e4a494258d3c031
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5429,6 +5666,7 @@ geoSampleAccession GSM736516
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 712046b89a43c25b2a98add9d9b74b10
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5453,6 +5691,7 @@ geoSampleAccession GSM736504
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 965d55f6cec08b18a966c3e487e89e54
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5477,6 +5716,7 @@ geoSampleAccession GSM736516
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 22a9b72b64c555a739924f8191e3a1e2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5501,6 +5741,7 @@ geoSampleAccession GSM736504
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum e7dee3b50978a3ac28096be0c4a98edb
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5523,6 +5764,7 @@ fileName wgEncodeUwDnaseHcmRawDataRep1.fastq.gz
 geoSampleAccession GSM736516
 grant Stam
 lab UW
+md5sum 48b1028e59b299b0a8ce8e028a756900
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5544,6 +5786,7 @@ fileName wgEncodeUwDnaseHcmRawDataRep2.fastq.gz
 geoSampleAccession GSM736504
 grant Stam
 lab UW
+md5sum 297c2c651b1b21fa96a97ed453977abd
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5567,6 +5810,7 @@ geoSampleAccession GSM736516
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum d380408f0d61eb50e6498a10eebf823f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5591,6 +5835,7 @@ geoSampleAccession GSM736504
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 467d7c098ecf0fbe2cb36109814527ef
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5614,6 +5859,7 @@ geoSampleAccession GSM736547
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=18d005996c062c9b7f2de682eefb5c3e,bai=c58881b996579c61b82a4431d4b157b6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5636,6 +5882,7 @@ geoSampleAccession GSM736515
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=3cafea4b00b77ad86a4d851b7f691c34,bai=89e74c1315b969730970a91aa25c6426
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5658,6 +5905,7 @@ geoSampleAccession GSM736547
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 2bb7d17edbee415d11b29218aabad4a2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5681,6 +5929,7 @@ geoSampleAccession GSM736515
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum e65d91927166bd438c1adc5305da975d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5704,6 +5953,7 @@ geoSampleAccession GSM736547
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum b8ea00b4b0b3ad4b0400c1d84043cf40
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5727,6 +5977,7 @@ geoSampleAccession GSM736515
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d344eb7d31d985bf81c4488daef6861f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5749,6 +6000,7 @@ fileName wgEncodeUwDnaseHconfRawDataRep1.fastq.gz
 geoSampleAccession GSM736547
 grant Stam
 lab UW
+md5sum efcd2f8e447a1ec87108438b409fa8ea
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5770,6 +6022,7 @@ fileName wgEncodeUwDnaseHconfRawDataRep2.fastq.gz
 geoSampleAccession GSM736515
 grant Stam
 lab UW
+md5sum c1ffe191e71f6d68970bd6ebf38ad6d7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5792,6 +6045,7 @@ geoSampleAccession GSM736547
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 812407a7558cd34b390c424150fd5ff0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5815,6 +6069,7 @@ geoSampleAccession GSM736515
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum e071dbd444ce3f198a04855ca39a22bb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5839,6 +6094,7 @@ geoSampleAccession GSM736569
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=ae87909a7ead08b8c9fde63412359301,bai=511838128346fafa2a7409b6d3300d8f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5862,6 +6118,7 @@ geoSampleAccession GSM736597
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=1da815eb109c5c25d917ed258c095d3a,bai=760e07eabbbf2a5d21b2829db63ccb00
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5885,6 +6142,7 @@ geoSampleAccession GSM736569
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 9fc5d51619a45926b931e5105bf3ff1e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5909,6 +6167,7 @@ geoSampleAccession GSM736597
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ca2d3f8fd502d5eb80a311018755fc0b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5933,6 +6192,7 @@ geoSampleAccession GSM736569
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 41b89e34c01c4a73e90b73634dfb8e02
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5957,6 +6217,7 @@ geoSampleAccession GSM736597
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 3d148cfadc452c9943f33ba4d637b3e8
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5979,6 +6240,7 @@ fileName wgEncodeUwDnaseHcpeRawDataRep1.fastq.gz
 geoSampleAccession GSM736569
 grant Stam
 lab UW
+md5sum 3e14e00026618dedb764b485a5473b51
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6000,6 +6262,7 @@ fileName wgEncodeUwDnaseHcpeRawDataRep2.fastq.gz
 geoSampleAccession GSM736597
 grant Stam
 lab UW
+md5sum 3812abafcb1aee5b6e3a3905af6ca85f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6023,6 +6286,7 @@ geoSampleAccession GSM736569
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 31cbef8efb9dd35fcac700b29cfa7cbb
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6047,6 +6311,7 @@ geoSampleAccession GSM736597
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 49987ee158c3312a26efe2ba184ddd00
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6070,6 +6335,7 @@ geoSampleAccession GSM736600
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=e08fa5a8325f5187a69a68ba0f9f15f3,bai=9b848cde04856d2b3cb15ed8fae95992
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6092,6 +6358,7 @@ geoSampleAccession GSM736493
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=e137aaf7e1a7b4f2a4a8d2097a13cf98,bai=1e6de8be2cf89bc341ae282e106ceb04
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6114,6 +6381,7 @@ geoSampleAccession GSM736600
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum a3df8906449790b0bda3f0986d21f684
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6137,6 +6405,7 @@ geoSampleAccession GSM736493
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ad47ae0888852b87d9e608ace313ce85
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6160,6 +6429,7 @@ geoSampleAccession GSM736600
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 23b1e3f60af4565778988ad3c2ca7a5a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6183,6 +6453,7 @@ geoSampleAccession GSM736493
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 548d6a7e74d472494fd435fb26622507
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6205,6 +6476,7 @@ fileName wgEncodeUwDnaseHct116RawDataRep1.fastq.gz
 geoSampleAccession GSM736600
 grant Stam
 lab UW
+md5sum 19b5640cbb3101bd46da5e61d4ddfa6d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6226,6 +6498,7 @@ fileName wgEncodeUwDnaseHct116RawDataRep2.fastq.gz
 geoSampleAccession GSM736493
 grant Stam
 lab UW
+md5sum 14c776d076a43617e48edc146626880c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6248,6 +6521,7 @@ geoSampleAccession GSM736600
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 2eb97aef2a5871ae31192188c27b4068
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6271,6 +6545,7 @@ geoSampleAccession GSM736493
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9d0241cfae8aa8b16742e3228db750ea
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6295,6 +6570,7 @@ geoSampleAccession GSM736585
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=e5eca5a1d0e1d805fd98c2a8f3f44538,bai=1138a4a94f7bfb7f0335eebdcd5338c4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6318,6 +6594,7 @@ geoSampleAccession GSM736532
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=2fc08bb78c1cf469707929ad8bad910b,bai=24350ad5eb22bae73271c9b355c2c5cf
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6341,6 +6618,7 @@ geoSampleAccession GSM736585
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ef13cb78621ef81b4f1d1d51adbe7211
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6365,6 +6643,7 @@ geoSampleAccession GSM736532
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 2b25669c97f79215335fc430b846d310
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6389,6 +6668,7 @@ geoSampleAccession GSM736585
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum c9917594551b41486f68be67ab9328b2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6413,6 +6693,7 @@ geoSampleAccession GSM736532
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a6092171a395e5ce0a641423be58d233
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6435,6 +6716,7 @@ fileName wgEncodeUwDnaseHeeRawDataRep1.fastq.gz
 geoSampleAccession GSM736585
 grant Stam
 lab UW
+md5sum 1a775ea330c1d5ba88ba91fc9f4c95d9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6456,6 +6738,7 @@ fileName wgEncodeUwDnaseHeeRawDataRep2.fastq.gz
 geoSampleAccession GSM736532
 grant Stam
 lab UW
+md5sum 7fe8c3d2f324df15e8b3cb6ae2dbe056
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6479,6 +6762,7 @@ geoSampleAccession GSM736585
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum aaa612513f189f3f5f6d9071cf8c8c5e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6503,6 +6787,7 @@ geoSampleAccession GSM736532
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum ae75c284187c90a239c2722eeec3999a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6527,6 +6812,7 @@ geoSampleAccession GSM736564
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=80f10b0977671b78bd81277bebf3f0de,bai=2924baed53e8050df48d6fc9f7cb8007
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6550,6 +6836,7 @@ geoSampleAccession GSM736510
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=b120322f30d0192e746c83382fbe6bd3,bai=ca1e3c2495834eed841cd120401c262d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6573,6 +6860,7 @@ geoSampleAccession GSM736564
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum c1754c920cd6ed70949ff16acee0902d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6597,6 +6885,7 @@ geoSampleAccession GSM736510
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum bdf6dbee807be4eb7ab54be467dce12a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6621,6 +6910,7 @@ geoSampleAccession GSM736564
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 9e09bbeb4509b60e98f19cf39b103811
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6645,6 +6935,7 @@ geoSampleAccession GSM736510
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum f28ca17c4476082e283be599ac1cc2c2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6667,6 +6958,7 @@ fileName wgEncodeUwDnaseHelas3RawDataRep1.fastq.gz
 geoSampleAccession GSM736564
 grant Stam
 lab UW
+md5sum 1c4ef04bf23b1410d97d57f57fe06a9b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6688,6 +6980,7 @@ fileName wgEncodeUwDnaseHelas3RawDataRep2.fastq.gz
 geoSampleAccession GSM736510
 grant Stam
 lab UW
+md5sum e5bdf5b5dce3390f12331abaaac1242f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6711,6 +7004,7 @@ geoSampleAccession GSM736564
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 76d6650aed1bb37043d83bbdc3385269
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6735,6 +7029,7 @@ geoSampleAccession GSM736510
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8a8db58d42c713635096c2271c661919
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6759,6 +7054,7 @@ geoSampleAccession GSM736637
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=faad797139d5384b11d789943f815721,bai=ab53cee1f920be504f28b0af8f5843f7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6782,6 +7078,7 @@ geoSampleAccession GSM736639
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=0c29724fb6a204168c4281e03f5e37a9,bai=5ed036576a01008112f4b1bee82d53e0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6805,6 +7102,7 @@ geoSampleAccession GSM736637
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum a614e190bb4d22090c8e6e280cbf6021
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6829,6 +7127,7 @@ geoSampleAccession GSM736639
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 9cf4042d90c3dc819f46545c70b4d846
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6853,6 +7152,7 @@ geoSampleAccession GSM736637
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 58e12f3f8c4163276ca60a10ff664f21
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6877,6 +7177,7 @@ geoSampleAccession GSM736639
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 9f78ea8f235d1d64cdc5cf58a73e957e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6899,6 +7200,7 @@ fileName wgEncodeUwDnaseHepg2RawDataRep1.fastq.gz
 geoSampleAccession GSM736637
 grant Stam
 lab UW
+md5sum a80db28a952fcfecabf20701add99a3d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6920,6 +7222,7 @@ fileName wgEncodeUwDnaseHepg2RawDataRep2.fastq.gz
 geoSampleAccession GSM736639
 grant Stam
 lab UW
+md5sum 2a57022d6f5b91cb60cb4219cd07f84b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6943,6 +7246,7 @@ geoSampleAccession GSM736637
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum fce86fcb98ae54cdb56631d1072b8cb5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6967,6 +7271,7 @@ geoSampleAccession GSM736639
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum e0af3f5cec17c4762051fa99d03b2289
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6990,6 +7295,7 @@ geoSampleAccession GSM736602
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=f8c2b67bb45ab3087c02f6aeef26bcab,bai=66e78ace0bec47a8890790e6d0f5dc76
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7012,6 +7318,7 @@ geoSampleAccession GSM736572
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=e89b7d86bbaed331515a2f785583ec1f,bai=1203139c43479149381574c8ebcd718a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7034,6 +7341,7 @@ geoSampleAccession GSM736602
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum deaca50a25e0919fe9592a19ae30d9cd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7057,6 +7365,7 @@ geoSampleAccession GSM736572
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum dd1b0bb5f77899e6c5073c2eb9541463
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7080,6 +7389,7 @@ geoSampleAccession GSM736602
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 0956c16f74b121766977eeff11cb9d0c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7103,6 +7413,7 @@ geoSampleAccession GSM736572
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d724fccef24cf006e161ae180fbd2391
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7125,6 +7436,7 @@ fileName wgEncodeUwDnaseHffRawDataRep1.fastq.gz
 geoSampleAccession GSM736602
 grant Stam
 lab UW
+md5sum ca6eb5acc9ade962d553e62b82b69edf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7146,6 +7458,7 @@ fileName wgEncodeUwDnaseHffRawDataRep2.fastq.gz
 geoSampleAccession GSM736572
 grant Stam
 lab UW
+md5sum 6f5c8757b36121c6890e976fd2e1d4a1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7168,6 +7481,7 @@ geoSampleAccession GSM736602
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum edc5f690b8c16987b1bd7ed9864cb51c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7191,6 +7505,7 @@ geoSampleAccession GSM736572
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 7922c83f10bcb295c7984e570f67de5f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7214,6 +7529,7 @@ geoSampleAccession GSM736524
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=f7db21bd3b396868f15563703c47a3ed,bai=6052cd1354368ac9a638ed1b90bcf22b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7236,6 +7552,7 @@ geoSampleAccession GSM736605
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=4006e0acd016506b2c1ea339fb68f64f,bai=65361584b81f7b72ec3f5613c7db1e6a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7258,6 +7575,7 @@ geoSampleAccession GSM736524
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 60650952f743d2dbbea8bf7da00f6099
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7281,6 +7599,7 @@ geoSampleAccession GSM736605
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f3362233440fd874f54253fab762f716
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7304,6 +7623,7 @@ geoSampleAccession GSM736524
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 4a329444d1a61fcd26ad0754b326be52
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7327,6 +7647,7 @@ geoSampleAccession GSM736605
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum e2a848c8062739e5c85e7bb6f35706e4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7349,6 +7670,7 @@ fileName wgEncodeUwDnaseHffmycRawDataRep1.fastq.gz
 geoSampleAccession GSM736524
 grant Stam
 lab UW
+md5sum 914464f5e7dfbccb9f96419d4fb6dcd7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7370,6 +7692,7 @@ fileName wgEncodeUwDnaseHffmycRawDataRep2.fastq.gz
 geoSampleAccession GSM736605
 grant Stam
 lab UW
+md5sum 3dd1bfd08953d0e4bca55b8158dfd0ba
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7392,6 +7715,7 @@ geoSampleAccession GSM736524
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 36793e283c0f81d5defcf311fad369ec
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7415,6 +7739,7 @@ geoSampleAccession GSM736605
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum a7326377b039a48dee9025cdbd14c559
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7439,6 +7764,7 @@ geoSampleAccession GSM736579
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=d29cf622b008259adaa0dd717f787895,bai=aca9c69df01b047681859db27d05b0da
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7462,6 +7788,7 @@ geoSampleAccession GSM736576
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=2b44d445d68d14a6510b8b603c098906,bai=ece9bd2980ce8162f10d6fbdcef782d1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7485,6 +7812,7 @@ geoSampleAccession GSM736579
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 08d7d9a7f7737a1e98646d8743e5ccee
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7509,6 +7837,7 @@ geoSampleAccession GSM736576
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum a05b72e3f9ab592e2714afe481db409e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7533,6 +7862,7 @@ geoSampleAccession GSM736579
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 3e649fda45eaeef20862f5180fbf8914
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7557,6 +7887,7 @@ geoSampleAccession GSM736576
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 0b8ad9c58bb27d9c770779ef4d435eb9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7579,6 +7910,7 @@ fileName wgEncodeUwDnaseHgfRawDataRep1.fastq.gz
 geoSampleAccession GSM736579
 grant Stam
 lab UW
+md5sum 8b07d86f1c5259b81ccb447802caf3ae
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7600,6 +7932,7 @@ fileName wgEncodeUwDnaseHgfRawDataRep2.fastq.gz
 geoSampleAccession GSM736576
 grant Stam
 lab UW
+md5sum 03e47b700724fef7b07af0135f9f5fbe
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7623,6 +7956,7 @@ geoSampleAccession GSM736579
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 4061c2e6a388153e37cdffd3d38a30f7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7647,6 +7981,7 @@ geoSampleAccession GSM736576
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum c8004426e9c38127ba22791f2ac53d14
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7670,6 +8005,7 @@ geoSampleAccession GSM736589
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=3465c09ce5d3a08062db3f4bd65cd057,bai=6c4f8da2e57d7eb8c605b1a4c82a4285
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7692,6 +8028,7 @@ geoSampleAccession GSM736615
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=e5f3e175dac9000283d4c3f974d7e428,bai=2533038b26c3778d64974b04be3cc1e1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7714,6 +8051,7 @@ geoSampleAccession GSM736589
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 8e7c45f298093035372677284f0bec92
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7737,6 +8075,7 @@ geoSampleAccession GSM736615
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 824a8d54139a0e55a4bfd5233672c2cc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7760,6 +8099,7 @@ geoSampleAccession GSM736589
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 8cbd1a89c887a2db023ea5d4d22c6c57
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7783,6 +8123,7 @@ geoSampleAccession GSM736615
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 44d8c9a20f65ffa5b6ba723e3dcdcd61
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7805,6 +8146,7 @@ fileName wgEncodeUwDnaseHipeRawDataRep1.fastq.gz
 geoSampleAccession GSM736589
 grant Stam
 lab UW
+md5sum 088fcbf7d664d116f39f154877655542
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7826,6 +8168,7 @@ fileName wgEncodeUwDnaseHipeRawDataRep2.fastq.gz
 geoSampleAccession GSM736615
 grant Stam
 lab UW
+md5sum a6d376a924f419996f2ae2c348ec2c21
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7848,6 +8191,7 @@ geoSampleAccession GSM736589
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 766e785a3385cc5246f94e5a817effda
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7871,6 +8215,7 @@ geoSampleAccession GSM736615
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum cb132d76370282a70d589a04e6739d04
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7895,6 +8240,7 @@ geoSampleAccession GSM736626
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=a1ed90c65aa9da63aa3466bb5461b9fe,bai=9a81b9dcf4215b0eb5ca54722e95ecf8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7918,6 +8264,7 @@ geoSampleAccession GSM736595
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=cb8a21506f8f3b604553fae854fb0bed,bai=61b1ccf8e6106485a8d5e56d5e3c25f6
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7941,6 +8288,7 @@ geoSampleAccession GSM736626
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 40f3463be482518e267a772b1b8106ca
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7965,6 +8313,7 @@ geoSampleAccession GSM736595
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 88692ca6706cda5ea2b3897bbc33d5f5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7989,6 +8338,7 @@ geoSampleAccession GSM736626
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum cf8fbb3188ac26bb146e2091e64a3661
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8013,6 +8363,7 @@ geoSampleAccession GSM736595
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d8cd2cf3de3f228d7bd6aed1a54b224d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8035,6 +8386,7 @@ fileName wgEncodeUwDnaseHl60RawDataRep1V2.fastq.gz
 geoSampleAccession GSM736626
 grant Stam
 lab UW
+md5sum 18e4434f46fac88ec7134bcb3953ff98
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8057,6 +8409,7 @@ fileName wgEncodeUwDnaseHl60RawDataRep2.fastq.gz
 geoSampleAccession GSM736595
 grant Stam
 lab UW
+md5sum 06795611a685c2f4aa58c5f6b247a5e5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8080,6 +8433,7 @@ geoSampleAccession GSM736626
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum d5237b3f906d564cd655fcf3ca364911
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8104,6 +8458,7 @@ geoSampleAccession GSM736595
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8b63bcaf7fdc38415d3f4d3954a1f256
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8128,6 +8483,7 @@ geoSampleAccession GSM736634
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=4b3b5600779d0a74bbfa48feca7a77f1,bai=026ef6ecf10fb8c3d27019e3a9398c6f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8150,6 +8506,7 @@ geoSampleAccession GSM736552
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=bdc43294779a087d4dc996153ad2ba78,bai=2b9a101bdc61a73c9ae6ec3982a84a59
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8173,6 +8530,7 @@ geoSampleAccession GSM736634
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 0795509949741ee0414bda2cbd273a17
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8196,6 +8554,7 @@ geoSampleAccession GSM736552
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 69136caee3f708614cd531da9fbd88f8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8220,6 +8579,7 @@ geoSampleAccession GSM736634
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 234971f2cc2b89d0c7c24f24d5484637
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8243,6 +8603,7 @@ geoSampleAccession GSM736552
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum ef7e11408e1371afc8f1db0d883ffb9e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8265,6 +8626,7 @@ fileName wgEncodeUwDnaseHmecRawDataRep1.fastq.gz
 geoSampleAccession GSM736634
 grant Stam
 lab UW
+md5sum f99bbf6845aaf8b5a19e43049b85f035
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8286,6 +8648,7 @@ fileName wgEncodeUwDnaseHmecRawDataRep2.fastq.gz
 geoSampleAccession GSM736552
 grant Stam
 lab UW
+md5sum 6a6f992c5c0b1c157d20fccd1947480d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8309,6 +8672,7 @@ geoSampleAccession GSM736634
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum a687ec7a3c073d2cd7961c14da67fb99
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8332,6 +8696,7 @@ geoSampleAccession GSM736552
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum fff3c8b63763811233b5b96eacf4d64a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8355,6 +8720,7 @@ geoSampleAccession GSM736628
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=feb4a323bbbbf8caa1504d13fcf8750d,bai=a80ad9e0dc2aa16113f7fc2324265632
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8377,6 +8743,7 @@ geoSampleAccession GSM736541
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=3d6143306eb4f63adce455c9fc635238,bai=e8c2ae711adb328720692cbe876460c0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8399,6 +8766,7 @@ geoSampleAccession GSM736628
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 434d697a629bd06b90e25aadb1fa0f7f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8422,6 +8790,7 @@ geoSampleAccession GSM736541
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 3d1383ecbe830fd906c1f641fee29d9f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8445,6 +8814,7 @@ geoSampleAccession GSM736628
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 69a93a97b60a1648276a8e1a0e02ec33
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8468,6 +8838,7 @@ geoSampleAccession GSM736541
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d0b4eff951f8d770ca5d4f5d53aab99c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8490,6 +8861,7 @@ fileName wgEncodeUwDnaseHmfRawDataRep1.fastq.gz
 geoSampleAccession GSM736628
 grant Stam
 lab UW
+md5sum 661869e07779aec4f4ede07884dd72c1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8511,6 +8883,7 @@ fileName wgEncodeUwDnaseHmfRawDataRep2.fastq.gz
 geoSampleAccession GSM736541
 grant Stam
 lab UW
+md5sum 67c355d5433c1f959f38d0e572b1c6f5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8533,6 +8906,7 @@ geoSampleAccession GSM736628
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 598e22cd6e6e25ba116222d8870b9736
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8556,6 +8930,7 @@ geoSampleAccession GSM736541
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 08b9f03ee7dbfa252cf3114a51fcf71a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8578,6 +8953,7 @@ fileName wgEncodeUwDnaseHmvecdadAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=133f8dbeb2e290db8821f4fe959fe904,bai=96fc952abef7b9bc3aec7829924cc54a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8599,6 +8975,7 @@ fileName wgEncodeUwDnaseHmvecdadAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=a32557953776ae8f5ec370b733f28578,bai=4df39a0bbed867cac8fb7959ab71d3a8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8620,6 +8997,7 @@ fileName wgEncodeUwDnaseHmvecdadHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum 02cf81d80646a8517d27eabe3685517d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8642,6 +9020,7 @@ fileName wgEncodeUwDnaseHmvecdadHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum 76386b0b6e17086963b7d7aca5c69cf7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8664,6 +9043,7 @@ fileName wgEncodeUwDnaseHmvecdadPkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 424de07ec42c5803aebff43ea57d560a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8686,6 +9066,7 @@ fileName wgEncodeUwDnaseHmvecdadPkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum f8e48344d500e2faff9a2da40c46c03e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8707,6 +9088,7 @@ expId 1889
 fileName wgEncodeUwDnaseHmvecdadRawDataRep1.fastq.tgz
 grant Stam
 lab UW
+md5sum 3f421c8115767ead88bef8dfe701960a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8727,6 +9109,7 @@ expId 1889
 fileName wgEncodeUwDnaseHmvecdadRawDataRep2.fastq.tgz
 grant Stam
 lab UW
+md5sum 57940224ee6ee81f728788865860ae91
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8748,6 +9131,7 @@ fileName wgEncodeUwDnaseHmvecdadRawRep1.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum bfb7df21ef93947fb559231ee787d413
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8770,6 +9154,7 @@ fileName wgEncodeUwDnaseHmvecdadRawRep2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 4c1f0773392e25c430e327e1ea578395
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8793,6 +9178,7 @@ geoSampleAccession GSM736609
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=9c498c5508387764a21b3f8807ddf810,bai=d4fad219258d10cd773256683e342b92
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8815,6 +9201,7 @@ geoSampleAccession GSM736523
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=e67f4977c9e32c822286126e0e478e82,bai=420d7fc44bf610a058eb19bd7f9c569a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8837,6 +9224,7 @@ geoSampleAccession GSM736609
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 18a81c4df1bc1383dd92e6be6e0feaf2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8860,6 +9248,7 @@ geoSampleAccession GSM736523
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 8048fcd734ddc016a3c436fbfc4c78b3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8883,6 +9272,7 @@ geoSampleAccession GSM736609
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 054ca41393fa8b4774eeeb7b386a5c78
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8906,6 +9296,7 @@ geoSampleAccession GSM736523
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum fd77ba77564094e6b4caaba24b849921
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8928,6 +9319,7 @@ fileName wgEncodeUwDnaseHmvecdbladRawDataRep1.fastq.gz
 geoSampleAccession GSM736609
 grant Stam
 lab UW
+md5sum 320868a06a6621833fa4d2c3a08be004
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8949,6 +9341,7 @@ fileName wgEncodeUwDnaseHmvecdbladRawDataRep2.fastq.gz
 geoSampleAccession GSM736523
 grant Stam
 lab UW
+md5sum 36c5398dba0ddc3f03d8dd6d46a3fa7a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8971,6 +9364,7 @@ geoSampleAccession GSM736609
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 29d9572c0d2310cbe5fa17a5094785fd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8994,6 +9388,7 @@ geoSampleAccession GSM736523
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 99fcb0ee70bdee6704ef3758de289cf9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9017,6 +9412,7 @@ geoSampleAccession GSM736571
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=021c8d90c226443afb098faa2706039a,bai=7a05f25bb3eef1ba3cc10f41b99a70a0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9039,6 +9435,7 @@ geoSampleAccession GSM736521
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=1663293ef39fd8f039f36bd33319224f,bai=06733b5b8b8ab4762813bc9d89f7e44a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9061,6 +9458,7 @@ geoSampleAccession GSM736571
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 9877c1c11ce5a9055322472a0d79071d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9084,6 +9482,7 @@ geoSampleAccession GSM736521
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 16452a06a37825ae1cdcb08a70eb20db
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9107,6 +9506,7 @@ geoSampleAccession GSM736571
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 1c31d2c22e3a19255fe764f9548ab018
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9130,6 +9530,7 @@ geoSampleAccession GSM736521
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum c2b7bde8c837d207a1ddaf288b4b52a0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9152,6 +9553,7 @@ fileName wgEncodeUwDnaseHmvecdblneoRawDataRep1.fastq.gz
 geoSampleAccession GSM736571
 grant Stam
 lab UW
+md5sum 06d19cddd1d2934410e8846f00745c59
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9173,6 +9575,7 @@ fileName wgEncodeUwDnaseHmvecdblneoRawDataRep2.fastq.gz
 geoSampleAccession GSM736521
 grant Stam
 lab UW
+md5sum 455a0c58b8df5ecfc5bd9b36751316ee
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9195,6 +9598,7 @@ geoSampleAccession GSM736571
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 56a96ea59289f1bfd6d686e3054a6cdd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9218,6 +9622,7 @@ geoSampleAccession GSM736521
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 72516c847fd666382364de508136a700
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9241,6 +9646,7 @@ geoSampleAccession GSM736599
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=50f800b3b6fbbfa68e08fa5c175d9d37,bai=2e013e654545a384c55d381c9fb21698
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9263,6 +9669,7 @@ geoSampleAccession GSM736591
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=b8010f45cfa017b55c11a742fcf76028,bai=1d8aa40286efbdb9ade8f8f6ce31c22e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9285,6 +9692,7 @@ geoSampleAccession GSM736599
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 373a1084b9f64a20bb1fa720aa44f647
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9308,6 +9716,7 @@ geoSampleAccession GSM736591
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 236886cc9d02ce6bf5e9cc98a3381ba7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9331,6 +9740,7 @@ geoSampleAccession GSM736599
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 62b36bb85a28e8f928d6af88bf9dff72
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9354,6 +9764,7 @@ geoSampleAccession GSM736591
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum fe4f7867772394a96cf158c51ac96e29
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9376,6 +9787,7 @@ fileName wgEncodeUwDnaseHmvecdlyadRawDataRep1.fastq.gz
 geoSampleAccession GSM736599
 grant Stam
 lab UW
+md5sum 97476b2adee3f0a23a9c5e85007041e7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9397,6 +9809,7 @@ fileName wgEncodeUwDnaseHmvecdlyadRawDataRep2.fastq.gz
 geoSampleAccession GSM736591
 grant Stam
 lab UW
+md5sum 82e664a5c4936fb8cd4008e1ef3c25f9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9419,6 +9832,7 @@ geoSampleAccession GSM736599
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 668c3979b8ed820c00bd402b939196c1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9442,6 +9856,7 @@ geoSampleAccession GSM736591
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9556540a752217190f17dc5ba41528bf
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9465,6 +9880,7 @@ geoSampleAccession GSM736577
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=b4b848d855ea314727c0c791a094120b,bai=f6ef015cbf2f0bf79255a4f89c769409
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9487,6 +9903,7 @@ geoSampleAccession GSM736573
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=5fa7f7a710b8513700e9ad5461dabb54,bai=2ac182517d3d5671aff293189f79412a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9509,6 +9926,7 @@ geoSampleAccession GSM736577
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 5b99dd6b4d410e000ca28d39ca228eb1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9532,6 +9950,7 @@ geoSampleAccession GSM736573
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 9bea9ebfd387b98bec1bf242d4c22c72
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9555,6 +9974,7 @@ geoSampleAccession GSM736577
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 0aa44edb6c636a566c7b0b95ea153586
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9578,6 +9998,7 @@ geoSampleAccession GSM736573
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a97634a78a918fff2986b937f5903b1a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9600,6 +10021,7 @@ fileName wgEncodeUwDnaseHmvecdlyneoRawDataRep1.fastq.gz
 geoSampleAccession GSM736577
 grant Stam
 lab UW
+md5sum 68cb72ccdd68b6d14b2adea2a76e1fc3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9621,6 +10043,7 @@ fileName wgEncodeUwDnaseHmvecdlyneoRawDataRep2.fastq.gz
 geoSampleAccession GSM736573
 grant Stam
 lab UW
+md5sum 9eef1751b3d5a2a950ad64d8e926a7cd
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9643,6 +10066,7 @@ geoSampleAccession GSM736577
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum f2f80b20cc3e53582b36b70e9818cbf0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9666,6 +10090,7 @@ geoSampleAccession GSM736573
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum ad903eb68b7f112bb2e4b02041e005cf
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9689,6 +10114,7 @@ geoSampleAccession GSM736611
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=3c859c23ba55ac9770dc59f285133961,bai=4a561e6bf8a5e6ac291201111a6ad32c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9711,6 +10137,7 @@ geoSampleAccession GSM736624
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=3468017bd712f013e3452410c8fea6e4,bai=9f0e486f64a19fc8cd96668b537caaae
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9733,6 +10160,7 @@ geoSampleAccession GSM736611
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum d1d85aa1fec65b10f2bcaaac3ac2c460
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9756,6 +10184,7 @@ geoSampleAccession GSM736624
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 4eefccd017f7d4503a0f12b0fcb46774
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9779,6 +10208,7 @@ geoSampleAccession GSM736611
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum f17a27400b8cd45e354c1a13943036ba
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9802,6 +10232,7 @@ geoSampleAccession GSM736624
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 4bad6e7e1d84872374e94a0fd5483df2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9824,6 +10255,7 @@ fileName wgEncodeUwDnaseHmvecdneoRawDataRep1.fastq.gz
 geoSampleAccession GSM736611
 grant Stam
 lab UW
+md5sum e36a441901f234e56f1709fe1b7590b5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9845,6 +10277,7 @@ fileName wgEncodeUwDnaseHmvecdneoRawDataRep2.fastq.gz
 geoSampleAccession GSM736624
 grant Stam
 lab UW
+md5sum de81b1f999205779a2ea95995aa2ac2f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9867,6 +10300,7 @@ geoSampleAccession GSM736611
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 89aa91575549881415788039a0c09464
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9890,6 +10324,7 @@ geoSampleAccession GSM736624
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 11617b442d77acd2ca2b9c9acd289d48
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9913,6 +10348,7 @@ geoSampleAccession GSM736542
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=7b251f2ba5c2114699220ee36b905c0c,bai=7ff0a9f5b17c3b261f2a8d6d4fb1821d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9935,6 +10371,7 @@ geoSampleAccession GSM736511
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=6e12456dfff069e538291d976403a4e6,bai=1f68ae33238e4189c7d96f6bedae3bfb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9957,6 +10394,7 @@ geoSampleAccession GSM736542
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 03eee13bafce8d2ce7e88d94ddd8fd70
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9980,6 +10418,7 @@ geoSampleAccession GSM736511
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum fdcddb15d5d9f5d4a1bf58238f59a193
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10003,6 +10442,7 @@ geoSampleAccession GSM736542
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 9c6fd39b7b2966abcd57a17e4cbb9120
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10026,6 +10466,7 @@ geoSampleAccession GSM736511
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 7fc86222378654dce56ecfe149447982
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10048,6 +10489,7 @@ fileName wgEncodeUwDnaseHmveclblRawDataRep1.fastq.gz
 geoSampleAccession GSM736542
 grant Stam
 lab UW
+md5sum 5cd68bb1ffc78a7545e57bdcc482b821
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10069,6 +10511,7 @@ fileName wgEncodeUwDnaseHmveclblRawDataRep2.fastq.gz
 geoSampleAccession GSM736511
 grant Stam
 lab UW
+md5sum 78d091c800f0608aaab2292d065af770
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10091,6 +10534,7 @@ geoSampleAccession GSM736542
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 46f3eb60f861222310bd5f9013fe4827
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10114,6 +10558,7 @@ geoSampleAccession GSM736511
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 3553cbfbef338750a7fb11b03d5c7824
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10137,6 +10582,7 @@ geoSampleAccession GSM736507
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=b4cb331bec300b4d9bb2684b9deb082d,bai=44b93cfa03143734c6b7ffb02c151c13
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10159,6 +10605,7 @@ geoSampleAccession GSM736627
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=5582eb4397a76f2bbedc21162974d27f,bai=1ba09619b1ac2b13bc6007ed8b391f1c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10181,6 +10628,7 @@ geoSampleAccession GSM736507
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f914b68606cf9ced93a17891070a2196
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10204,6 +10652,7 @@ geoSampleAccession GSM736627
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f0dda082a31c9db1e763122635b7e793
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10227,6 +10676,7 @@ geoSampleAccession GSM736507
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 5cf606a85a00ce7b0ff716b64204c569
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10250,6 +10700,7 @@ geoSampleAccession GSM736627
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 56c30832c955a5db200853678da21652
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10272,6 +10723,7 @@ fileName wgEncodeUwDnaseHmvecllyRawDataRep1.fastq.gz
 geoSampleAccession GSM736507
 grant Stam
 lab UW
+md5sum 4ceb7090e8e53928d1b7f7d2a0228972
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10293,6 +10745,7 @@ fileName wgEncodeUwDnaseHmvecllyRawDataRep2.fastq.gz
 geoSampleAccession GSM736627
 grant Stam
 lab UW
+md5sum 9f4ca95f6678ac0c54e03aa18d12010e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10315,6 +10768,7 @@ geoSampleAccession GSM736507
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 781e194cb03727724356b8a22571924b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10338,6 +10792,7 @@ geoSampleAccession GSM736627
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum fc4ae15648054db7a82e166653237453
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10362,6 +10817,7 @@ geoSampleAccession GSM736621
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=9bcc137e3965313afc757a61fab47cfe,bai=3ecba3cab2ba48c878d5586aceccfde7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10385,6 +10841,7 @@ geoSampleAccession GSM736550
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=83eba2ebd2f0cb5648a722c4bc13c187,bai=91cec8e3afcca097806936efc39a8ec4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10408,6 +10865,7 @@ geoSampleAccession GSM736621
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f7dd9dcf4b27d40a56c0d7eabf3774bf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10432,6 +10890,7 @@ geoSampleAccession GSM736550
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 950c399fbefc2d4462a9a09c164e2996
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10456,6 +10915,7 @@ geoSampleAccession GSM736621
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 4b64e2c97cd8561c2a716210089778fb
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10479,6 +10939,7 @@ geoSampleAccession GSM736550
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 4283bcbd3bee7284e0d128c37d5bf59e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10502,6 +10963,7 @@ fileName wgEncodeUwDnaseHnpceRawDataRep1.fastq.gz
 geoSampleAccession GSM736621
 grant Stam
 lab UW
+md5sum 929d640fa01b62bdf52c3ec3db556d5a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10523,6 +10985,7 @@ fileName wgEncodeUwDnaseHnpceRawDataRep2.fastq.gz
 geoSampleAccession GSM736550
 grant Stam
 lab UW
+md5sum 4be727601a38cdec1bd1906a4fc4ba21
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10546,6 +11009,7 @@ geoSampleAccession GSM736621
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 99b123debf3dde49d556fa069a92f6a0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10570,6 +11034,7 @@ geoSampleAccession GSM736550
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 1ef22f3a183f18f2697f77c8f1225f02
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10592,6 +11057,7 @@ fileName wgEncodeUwDnaseHpaecAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=4ac496f24e126d66d910a1ac736f7fb7,bai=668cc50835f3ec1605b8934e4432c103
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10613,6 +11079,7 @@ fileName wgEncodeUwDnaseHpaecHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum 6a2f133759ff834f56c2fea4058a20e9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10635,6 +11102,7 @@ fileName wgEncodeUwDnaseHpaecPkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum fe89c172608750a3ab84c9a34b0bb3be
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10656,6 +11124,7 @@ expId 1886
 fileName wgEncodeUwDnaseHpaecRawDataRep1.fastq.tgz
 grant Stam
 lab UW
+md5sum 76315f1d94a05e3f4cd5c40102489fdb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10677,6 +11146,7 @@ fileName wgEncodeUwDnaseHpaecRawRep1.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 598dbea4e72723d0de3519637e2024b0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10700,6 +11170,7 @@ geoSampleAccession GSM736555
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=f7a8c83baf6f353e6e0c82d2ff65470a,bai=a9adf06cb310a960e50380833dd306a0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10722,6 +11193,7 @@ geoSampleAccession GSM736614
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=5d55d522e5bb25088757d491223ea93a,bai=7cc1349471c810e7b42d573f1b3fe204
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10744,6 +11216,7 @@ geoSampleAccession GSM736555
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 4d3b8fcf0bf089e5f876c5b7f10c50c5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10767,6 +11240,7 @@ geoSampleAccession GSM736614
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 136bdfd9d0910e7f3bc128756e4be2bd
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10790,6 +11264,7 @@ geoSampleAccession GSM736555
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d453436f4dc6dba4880076e36b20d488
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10813,6 +11288,7 @@ geoSampleAccession GSM736614
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 1d39c51fbbf16903d8ec21651cae314b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10835,6 +11311,7 @@ fileName wgEncodeUwDnaseHpafRawDataRep1.fastq.gz
 geoSampleAccession GSM736555
 grant Stam
 lab UW
+md5sum 5eb95b35368a42369b2b7bc2c6e14947
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10856,6 +11333,7 @@ fileName wgEncodeUwDnaseHpafRawDataRep2.fastq.gz
 geoSampleAccession GSM736614
 grant Stam
 lab UW
+md5sum a6bd3bb065183347c95898ec27506140
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10878,6 +11356,7 @@ geoSampleAccession GSM736555
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 41c048e6e8fb1cdf43a79e18326e053c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10901,6 +11380,7 @@ geoSampleAccession GSM736614
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 87481086ca0e442cac8689dcfda06475
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10924,6 +11404,7 @@ geoSampleAccession GSM736632
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=4fe9f2eecd9057163465ce79e60bc35e,bai=e19f0a172d3bb4ee40afda3925103fce
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10946,6 +11427,7 @@ geoSampleAccession GSM736528
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=c23511d2af87505da8accd746bda62c1,bai=8f1e334d092bf56959309caab15a0fbc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10968,6 +11450,7 @@ geoSampleAccession GSM736632
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum dba088626919384a33a10851a5bad15f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10991,6 +11474,7 @@ geoSampleAccession GSM736528
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum b665c08b6f1f1dba547a2a53f8020c3a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11014,6 +11498,7 @@ geoSampleAccession GSM736632
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 5d9d007d0d4b8b36ea0006d12bf54edb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11037,6 +11522,7 @@ geoSampleAccession GSM736528
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 46ccddc367a7f58613b8e850b0d84d1e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11059,6 +11545,7 @@ fileName wgEncodeUwDnaseHpdlfRawDataRep1.fastq.gz
 geoSampleAccession GSM736632
 grant Stam
 lab UW
+md5sum 90e491e897f879d13dcfa347dcdc69fb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11080,6 +11567,7 @@ fileName wgEncodeUwDnaseHpdlfRawDataRep2.fastq.gz
 geoSampleAccession GSM736528
 grant Stam
 lab UW
+md5sum b992603c10cca21ed0e9d8c777def04a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11102,6 +11590,7 @@ geoSampleAccession GSM736632
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8687acc3be9b037235081b214f9d1a09
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11125,6 +11614,7 @@ geoSampleAccession GSM736528
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 06ad64af250daa09a74dd31577660b6e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11148,6 +11638,7 @@ geoSampleAccession GSM736574
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=a2d9987f904e1d63ddc5b7e9e2786f9e,bai=4a8f461398b34b9822954a28b19be2c5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11170,6 +11661,7 @@ geoSampleAccession GSM736503
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=6dad62595bf794ad0413d8cf47f89acb,bai=61d525b90c1198640bb113c5073c05ab
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11192,6 +11684,7 @@ geoSampleAccession GSM736574
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 5e668c2496dc46a43bc059c1bf0f8b61
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11215,6 +11708,7 @@ geoSampleAccession GSM736503
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 88757dfa21c9ecfc19341f10e7710981
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11238,6 +11732,7 @@ geoSampleAccession GSM736574
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 15642977dda42fef0b084a469f373c40
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11261,6 +11756,7 @@ geoSampleAccession GSM736503
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 921b53dc3d0810f58fd4d75f359bd5b6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11283,6 +11779,7 @@ fileName wgEncodeUwDnaseHpfRawDataRep1.fastq.gz
 geoSampleAccession GSM736574
 grant Stam
 lab UW
+md5sum 2f8ddd08663eb33ab603c9cc4d5d1e03
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11304,6 +11801,7 @@ fileName wgEncodeUwDnaseHpfRawDataRep2.fastq.gz
 geoSampleAccession GSM736503
 grant Stam
 lab UW
+md5sum 3f2f00a6eae49008370accde22967282
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11326,6 +11824,7 @@ geoSampleAccession GSM736574
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 46ac9978613b90b3b909bc888ee9188a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11349,6 +11848,7 @@ geoSampleAccession GSM736503
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 2bf81223c28baa3af00312c96cfc3fad
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11373,6 +11873,7 @@ geoSampleAccession GSM736549
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=54a885bd72bb4e21b3d5c6d4e53f53a7,bai=5ad75f2ce3af227be36fa0cfefc4b592
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11396,6 +11897,7 @@ geoSampleAccession GSM736557
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=e1c70873496c48cf5bc0f018c5424ca4,bai=9949cdb0c5518a571b4c6b286566da61
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11419,6 +11921,7 @@ geoSampleAccession GSM736549
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 608e52e3d359afea03ee37a206ebcf8c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11443,6 +11946,7 @@ geoSampleAccession GSM736557
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ea31b991ca91c7b0dacad89be98e4c05
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11467,6 +11971,7 @@ geoSampleAccession GSM736549
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 8798ab831b9be20561ad5d6c43937172
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11491,6 +11996,7 @@ geoSampleAccession GSM736557
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 9755508747655dcb8b07c6109c70c76e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11513,6 +12019,7 @@ fileName wgEncodeUwDnaseHrceRawDataRep1.fastq.gz
 geoSampleAccession GSM736549
 grant Stam
 lab UW
+md5sum 9ae522d88305669d3124b65d9114e7f8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11534,6 +12041,7 @@ fileName wgEncodeUwDnaseHrceRawDataRep2.fastq.gz
 geoSampleAccession GSM736557
 grant Stam
 lab UW
+md5sum 4803f128340f375504a72922f178cd8e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11557,6 +12065,7 @@ geoSampleAccession GSM736549
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 78b963359eaaf11457da9b69754e9fb7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11581,6 +12090,7 @@ geoSampleAccession GSM736557
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 5169b03d3ab0aaa85ae518df1fafda30
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11605,6 +12115,7 @@ geoSampleAccession GSM736527
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=fc3c2c4ec71c36201ecd78f9de5f9c69,bai=4233945b5d4692073a028b5ad8acb6da
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11628,6 +12139,7 @@ geoSampleAccession GSM736548
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=0fdad89eaa2bee7f4e1103b7ae8c8cb8,bai=92a1d5fea2a0661670ed5904c0214226
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11651,6 +12163,7 @@ geoSampleAccession GSM736527
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ffc0f0b421d34403ce148218ee265055
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11675,6 +12188,7 @@ geoSampleAccession GSM736548
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 02c4181e5aed7f1a5faa13b272f54484
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11698,6 +12212,7 @@ geoSampleAccession GSM736527
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 9a75a8ad6f6b8659ecb282d5a1e21d84
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11722,6 +12237,7 @@ geoSampleAccession GSM736548
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 45bbc0a3b58d5f0f7a9fcde1d5c3561d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11745,6 +12261,7 @@ fileName wgEncodeUwDnaseHreRawDataRep1.fastq.gz
 geoSampleAccession GSM736527
 grant Stam
 lab UW
+md5sum a891b966e4da85fd20e35ee535e37ae2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11766,6 +12283,7 @@ fileName wgEncodeUwDnaseHreRawDataRep2.fastq.gz
 geoSampleAccession GSM736548
 grant Stam
 lab UW
+md5sum 47ad742a2d5abe9e00d7f960115e4016
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11789,6 +12307,7 @@ geoSampleAccession GSM736527
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 0727f75fee1564d3ff0eaf7e22d3df01
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11813,6 +12332,7 @@ geoSampleAccession GSM736548
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 08332656a432753b1d6157909d37773b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11836,6 +12356,7 @@ geoSampleAccession GSM736499
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=9bc036a1e0148e632f6d89ce66b48f01,bai=f8390eb3af48294125ab8aca2a97b261
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11858,6 +12379,7 @@ geoSampleAccession GSM736618
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=db41102c3c5be0060137be665efbeb1a,bai=13090763d6f14afe287c538ff2026476
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11880,6 +12402,7 @@ geoSampleAccession GSM736499
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 8caed3412da8b5cb8698e5e87d733ae2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11903,6 +12426,7 @@ geoSampleAccession GSM736618
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ed2071c554ad6b1c8f8ca5a2ef929d3c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11926,6 +12450,7 @@ geoSampleAccession GSM736499
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 438191e86407d965b0020bc5558ca67d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11949,6 +12474,7 @@ geoSampleAccession GSM736618
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum e4d9de1900e5cd950196d4d46f321816
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11971,6 +12497,7 @@ fileName wgEncodeUwDnaseHrgecRawDataRep1.fastq.gz
 geoSampleAccession GSM736499
 grant Stam
 lab UW
+md5sum 64823f835681c4a8fe73d18ccc241c0f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11992,6 +12519,7 @@ fileName wgEncodeUwDnaseHrgecRawDataRep2.fastq.gz
 geoSampleAccession GSM736618
 grant Stam
 lab UW
+md5sum b98567a064a2f3dbb8e99ed4dd5e253e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12014,6 +12542,7 @@ geoSampleAccession GSM736499
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum bcdf1c80cecd6dac18fc98da3e713dd8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12037,6 +12566,7 @@ geoSampleAccession GSM736618
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 65b5305688aabd2986f175fee62b1c7c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12061,6 +12591,7 @@ geoSampleAccession GSM736630
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=0fc9da6600a4bda620d1fde389887f6c,bai=3a6a2323684f07c4dcc2702fb336e97e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12084,6 +12615,7 @@ geoSampleAccession GSM736623
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=3caa4f579e1d5fc1721d04dc6b43801b,bai=3e7d0001d14b6d5ea861457793f99230
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12107,6 +12639,7 @@ geoSampleAccession GSM736630
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 4f934d4de691aa9964886d43e6ce6ac1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12131,6 +12664,7 @@ geoSampleAccession GSM736623
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum e61e63c37cb9f9040395198a8366444a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12154,6 +12688,7 @@ geoSampleAccession GSM736630
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a4536f3b3bf108029534115e0f6e60ca
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12178,6 +12713,7 @@ geoSampleAccession GSM736623
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 039d58147544025107aa1ae4e73cc709
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12201,6 +12737,7 @@ fileName wgEncodeUwDnaseHrpeRawDataRep1.fastq.gz
 geoSampleAccession GSM736630
 grant Stam
 lab UW
+md5sum c5df3355c725e0696ba47e5492e890b1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12222,6 +12759,7 @@ fileName wgEncodeUwDnaseHrpeRawDataRep2.fastq.gz
 geoSampleAccession GSM736623
 grant Stam
 lab UW
+md5sum 563185bfe1b93128a272d09f44e9ab79
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12245,6 +12783,7 @@ geoSampleAccession GSM736630
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum e071980be5d0d029101b0ff663677b6c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12269,6 +12808,7 @@ geoSampleAccession GSM736623
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum b1844cd35c7354dab9aa59e7ede81a7c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12292,6 +12832,7 @@ geoSampleAccession GSM736560
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=e7dcd5d11efcb9bdcd35c3115ec5a0e3,bai=0b281c7190dbc4d069f529c4065d8246
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12314,6 +12855,7 @@ geoSampleAccession GSM736553
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=b58390a79d16e1b779eb35c73914c2da,bai=df27ec22ea62ed010854c4364ba4088a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12336,6 +12878,7 @@ geoSampleAccession GSM736560
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 3ac2ceb8c0ddbe21fdb69644ddab1b54
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12359,6 +12902,7 @@ geoSampleAccession GSM736553
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f37b1eee66c6c128ec5de7d8044cc8ec
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12382,6 +12926,7 @@ geoSampleAccession GSM736560
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 3561aee9bd52949dffc7e7f96c71af87
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12405,6 +12950,7 @@ geoSampleAccession GSM736553
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum db249a70538a9697d041fd594774c38b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12427,6 +12973,7 @@ fileName wgEncodeUwDnaseHsmmRawDataRep1.fastq.gz
 geoSampleAccession GSM736560
 grant Stam
 lab UW
+md5sum 59a2b23b073f6c5bdf834c81c2008062
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12448,6 +12995,7 @@ fileName wgEncodeUwDnaseHsmmRawDataRep2.fastq.gz
 geoSampleAccession GSM736553
 grant Stam
 lab UW
+md5sum c75e71f7c4f74cad1483639f9115e39f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12470,6 +13018,7 @@ geoSampleAccession GSM736560
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 080fa96dab90a55c36689b2cd25ce9bc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12493,6 +13042,7 @@ geoSampleAccession GSM736553
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9b1da2e26020c51751dd113e6142f28c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12516,6 +13066,7 @@ geoSampleAccession GSM736530
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=3227ab8f582414e2b76388306fbc0ed8,bai=991f313c114d732029260cb6c560a798
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12537,6 +13088,7 @@ fileName wgEncodeUwDnaseHsmmtAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=e63a02d50ee06870a51e1ef02da9ce69,bai=3f2de5ff26903edc97a84660c4606662
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12559,6 +13111,7 @@ geoSampleAccession GSM736530
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ecf429fcb151e1266006a25280d7b5f8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12581,6 +13134,7 @@ fileName wgEncodeUwDnaseHsmmtHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum b6127f275bd83cbe63b0e059082a6aca
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12604,6 +13158,7 @@ geoSampleAccession GSM736530
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum aae3a5d06d682a8393b9958e75d86e91
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12626,6 +13181,7 @@ fileName wgEncodeUwDnaseHsmmtPkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum c787a7bcd889667b18dee8a17021b439
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12648,6 +13204,7 @@ fileName wgEncodeUwDnaseHsmmtRawDataRep1.fastq.gz
 geoSampleAccession GSM736530
 grant Stam
 lab UW
+md5sum 39b01ac311f66cd8d9f7b71a1dd6bde5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12668,6 +13225,7 @@ expId 1186
 fileName wgEncodeUwDnaseHsmmtRawDataRep2.fastq.tgz
 grant Stam
 lab UW
+md5sum c48f45984c827de55b51754342950b18
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12690,6 +13248,7 @@ geoSampleAccession GSM736530
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 77aedf2d6148737a7ebb4d5f13e9b1f7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12712,6 +13271,7 @@ fileName wgEncodeUwDnaseHsmmtRawRep2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum ebffda9da7d2c9f806c0a66ecf6f9817
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12736,6 +13296,7 @@ geoSampleAccession GSM736575
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=33827b5e017737aa076eac289e7d0cfc,bai=a1f643b6082c4de7f7f7331a61143295
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12758,6 +13319,7 @@ geoSampleAccession GSM736533
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=8bd78f6b67c08dc889ba05b9434c2b1a,bai=a5082d825b888098291e56ac55d46c7c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12781,6 +13343,7 @@ geoSampleAccession GSM736575
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 8102f0e1d4880cec0daf287e5d6a1b4c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12804,6 +13367,7 @@ geoSampleAccession GSM736533
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum df4b9b3bce767707eef05922d1b70a3d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12827,6 +13391,7 @@ geoSampleAccession GSM736575
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum febb003e53c0d355023053e8b6a723d6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12851,6 +13416,7 @@ geoSampleAccession GSM736533
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 69e927c98297c97055be74fbac6fa45f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12873,6 +13439,7 @@ fileName wgEncodeUwDnaseHuvecRawDataRep1.fastq.gz
 geoSampleAccession GSM736575
 grant Stam
 lab UW
+md5sum 0b11d9e672ea89642ce4a83b510d2747
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12894,6 +13461,7 @@ fileName wgEncodeUwDnaseHuvecRawDataRep2.fastq.gz
 geoSampleAccession GSM736533
 grant Stam
 lab UW
+md5sum baa95853cf218aea269570814ff1eff8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12917,6 +13485,7 @@ geoSampleAccession GSM736575
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum d31ad898a86096a18ddf5c51bca9a3ab
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12940,6 +13509,7 @@ geoSampleAccession GSM736533
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 264344a14ec954b8dfedb8a089d97657
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12963,6 +13533,7 @@ geoSampleAccession GSM736534
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=09d1d6fab08f33695661ed4d93316ec7,bai=a769d51ad902bb5712d93cfc2c139f32
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12985,6 +13556,7 @@ geoSampleAccession GSM736491
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=f7a7868f846f045c423d15a113e824f3,bai=682725de6c1da42375bddcc00f198185
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13007,6 +13579,7 @@ geoSampleAccession GSM736534
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 4872a4b87435328fafa33d6b6e3cad39
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13030,6 +13603,7 @@ geoSampleAccession GSM736491
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 106dd31e66d2bc071d11c3aeb3735986
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13053,6 +13627,7 @@ geoSampleAccession GSM736534
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum b0cd5d30fe0293e886ccee9e7206cc0e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13076,6 +13651,7 @@ geoSampleAccession GSM736491
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum e5446ea094adccdf84474837b811ef4a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13098,6 +13674,7 @@ fileName wgEncodeUwDnaseHvmfRawDataRep1.fastq.gz
 geoSampleAccession GSM736534
 grant Stam
 lab UW
+md5sum 9a15c5356a518f39f55a4bcdb796051a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13119,6 +13696,7 @@ fileName wgEncodeUwDnaseHvmfRawDataRep2.fastq.gz
 geoSampleAccession GSM736491
 grant Stam
 lab UW
+md5sum 24766ff71e33872789edfc1c14049576
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13141,6 +13719,7 @@ geoSampleAccession GSM736534
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 1cc84999af77d1de2d9257878427d4fd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13164,6 +13743,7 @@ geoSampleAccession GSM736491
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 98cbba7c98cc53495e8aa239eb8f90ce
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13187,6 +13767,7 @@ geoSampleAccession GSM736501
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=507d40c38251b0df93bc1ffb716ad88a,bai=9a3325cb97db3264d651a312f888227a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13209,6 +13790,7 @@ geoSampleAccession GSM736492
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=d3c35945ca3d785a47be536731c345a5,bai=8055ff15bd62b215ee0022ab555e8ce7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13231,6 +13813,7 @@ geoSampleAccession GSM736501
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum d2a1db93f8e0a4340b5d8eca5cf1684c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13254,6 +13837,7 @@ geoSampleAccession GSM736492
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum efd04e60707e5bee88a364d6c171fdd8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13277,6 +13861,7 @@ geoSampleAccession GSM736501
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum ee142f9af4c4791bd4e836cdc94a4530
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13300,6 +13885,7 @@ geoSampleAccession GSM736492
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum af2be53c8ab8e951365ca8f7ea2c7ef6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13323,6 +13909,7 @@ fileName wgEncodeUwDnaseJurkatRawDataRep1.fastq.gz
 geoSampleAccession GSM736501
 grant Stam
 lab UW
+md5sum e026f2105135789d8f2262b68a533230
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13345,6 +13932,7 @@ fileName wgEncodeUwDnaseJurkatRawDataRep2.fastq.gz
 geoSampleAccession GSM736492
 grant Stam
 lab UW
+md5sum a3ccba847ee9b8e7467bf0a60151af38
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13367,6 +13955,7 @@ geoSampleAccession GSM736501
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 137b780f9a726333bfc7a806082e1c8c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13390,6 +13979,7 @@ geoSampleAccession GSM736492
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8475607b1d1d40a9b3c6ad59b953dfe1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13414,6 +14004,7 @@ geoSampleAccession GSM736629
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=f936b7cb3c2a029acb3918de88dcf466,bai=249ae506a3d143460749a1bcbbea99d2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13437,6 +14028,7 @@ geoSampleAccession GSM736566
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=2dc1b8b1539ceb7ac56a2d141a2d6f76,bai=17a4d74f79cb6e4ddb7c663697ecb5e4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13460,6 +14052,7 @@ geoSampleAccession GSM736629
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 718be2f8cdeac410cc6d28040152e4ea
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13484,6 +14077,7 @@ geoSampleAccession GSM736566
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 5adb9c13257e6505c22453565ef0fb47
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13508,6 +14102,7 @@ geoSampleAccession GSM736629
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum debf79adc0251e8b88b0d5604e79a9bf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13532,6 +14127,7 @@ geoSampleAccession GSM736566
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 4adce964573cc45ce1886b62df4b1c93
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13554,6 +14150,7 @@ fileName wgEncodeUwDnaseK562RawDataRep1.fastq.gz
 geoSampleAccession GSM736629
 grant Stam
 lab UW
+md5sum f9062b75aa38d71ccb1af221c8d95db3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13575,6 +14172,7 @@ fileName wgEncodeUwDnaseK562RawDataRep2.fastq.gz
 geoSampleAccession GSM736566
 grant Stam
 lab UW
+md5sum 16e334352d9e7b2f7cd7a780532cedcf
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13598,6 +14196,7 @@ geoSampleAccession GSM736629
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum c16b7eb755d6f4f255b4ba1169de0cb3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13622,6 +14221,7 @@ geoSampleAccession GSM736566
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 839d453069220267a298ddd576f920cd
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13645,6 +14245,7 @@ geoSampleAccession GSM736565
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=2d4d76ea8f7221bbc646e1fc388e22a1,bai=a17c66443de4627f800f0ee86e7343a8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13667,6 +14268,7 @@ geoSampleAccession GSM736603
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=9a82a132e47023ffe2ba0b46548503d0,bai=74892044bd1080efd695a03dfac674cd
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13689,6 +14291,7 @@ geoSampleAccession GSM736565
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 11c7e9596aa35b152df7aea661e204b1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13712,6 +14315,7 @@ geoSampleAccession GSM736603
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum d9908d82ca3097fa8302d323b06de515
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13735,6 +14339,7 @@ geoSampleAccession GSM736565
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 2bd10f8aa2bc1533c9cbaaf7f2a5c955
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13758,6 +14363,7 @@ geoSampleAccession GSM736603
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 79ec355637e3e50a816bd50865bd0ff9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13780,6 +14386,7 @@ fileName wgEncodeUwDnaseLncapRawDataRep1.fastq.gz
 geoSampleAccession GSM736565
 grant Stam
 lab UW
+md5sum 7ba16c0174cbfbf1f010b8dc2749cdc2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13801,6 +14408,7 @@ fileName wgEncodeUwDnaseLncapRawDataRep2.fastq.gz
 geoSampleAccession GSM736603
 grant Stam
 lab UW
+md5sum fb0876c740b4d7088fbc4010771293ea
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13823,6 +14431,7 @@ geoSampleAccession GSM736565
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 7f8764f5e86f15c3c7c3047c930dd3db
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13846,6 +14455,7 @@ geoSampleAccession GSM736603
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum cd13f87618ed6173c6b339a2692102e1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13870,6 +14480,7 @@ geoSampleAccession GSM736581
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=bf13af359221bac8d3aa30467b38913b,bai=1f53967aba54cb4965b898da93918034
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13893,6 +14504,7 @@ geoSampleAccession GSM736588
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=61da52cd67628448eeec6a6bec9aceb5,bai=18a117993f8f9df9c1306db9f87f08a2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13916,6 +14528,7 @@ geoSampleAccession GSM736581
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum a2159009e0c9bf2c621137fccee7aa2b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13940,6 +14553,7 @@ geoSampleAccession GSM736588
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 265b4b3dbbf24e5be628b11c67e1359f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13964,6 +14578,7 @@ geoSampleAccession GSM736581
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum bf19db698f0081c52147d61f67a2493b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13988,6 +14603,7 @@ geoSampleAccession GSM736588
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum fb83ee8ea2c00cd3429152b6ff18b11a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14010,6 +14626,7 @@ fileName wgEncodeUwDnaseMcf7RawDataRep1.fastq.gz
 geoSampleAccession GSM736581
 grant Stam
 lab UW
+md5sum fcf311442dab599a903573d9621e0b51
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14031,6 +14648,7 @@ fileName wgEncodeUwDnaseMcf7RawDataRep2.fastq.gz
 geoSampleAccession GSM736588
 grant Stam
 lab UW
+md5sum a1015c307773d31f22f14a5a05bb080f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14054,6 +14672,7 @@ geoSampleAccession GSM736581
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum a7559b65e2b14451db253f21be2589ef
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14078,6 +14697,7 @@ geoSampleAccession GSM736588
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 48cf70618548f1fed67b0a76bbddf03e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14101,6 +14721,7 @@ fileName wgEncodeUwDnaseMonocd14AlnRep1V2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=fe85986229b367ed81d310d678265cb3,bai=522d75f85e31cea62d6f41f8e2065056
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14123,6 +14744,7 @@ fileName wgEncodeUwDnaseMonocd14AlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=6449436bfc807ef710b214cf4ae5dccd,bai=e4308205f4a9473ddceaaa87168f418d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14145,6 +14767,7 @@ fileName wgEncodeUwDnaseMonocd14HotspotsRep1V2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum 36e2052f63c36e6a410da45f7da94700
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14168,6 +14791,7 @@ fileName wgEncodeUwDnaseMonocd14HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum bb1f7f4402ee775ce50473fe829ce8a7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14191,6 +14815,7 @@ fileName wgEncodeUwDnaseMonocd14PkRep1V2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum fa30e0c47cbc55598921bb1866728a4d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14214,6 +14839,7 @@ fileName wgEncodeUwDnaseMonocd14PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 2421bedab9e1c5ff75afaca3bfd03ba8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14236,6 +14862,7 @@ expId 1196
 fileName wgEncodeUwDnaseMonocd14RawDataRep1V2.fastq.tgz
 grant Stam
 lab UW
+md5sum aa36e2238abb647a8d84f76cd024568c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14257,6 +14884,7 @@ expId 1196
 fileName wgEncodeUwDnaseMonocd14RawDataRep2.fastq.tgz
 grant Stam
 lab UW
+md5sum 78d8e1ba6db9f928cae4befb49f4d56d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14279,6 +14907,7 @@ fileName wgEncodeUwDnaseMonocd14RawRep1V2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 01931d00fa1b170143cdcdf548906cd1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14302,6 +14931,7 @@ fileName wgEncodeUwDnaseMonocd14RawRep2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8ac992f34379775627130ea1239207b4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14326,6 +14956,7 @@ geoSampleAccession GSM736604
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=360a5972271df128324820a2fe0ca6b0,bai=5997e3f36932e1095bc0dbd7708855ee
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14349,6 +14980,7 @@ geoSampleAccession GSM736529
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=6d66c7427df11eb6977922b2140f7416,bai=05b13ce3996f518d704747e63a3e6f67
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14372,6 +15004,7 @@ geoSampleAccession GSM736604
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 07710ef305811f804b88318974ab0181
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14396,6 +15029,7 @@ geoSampleAccession GSM736529
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum e26a23a7f9734551e99920109bf70776
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14420,6 +15054,7 @@ geoSampleAccession GSM736604
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 4ca059737fb34dac440d8c3a777f3f0f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14444,6 +15079,7 @@ geoSampleAccession GSM736529
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 6b05c98d965496cbcc82317c5df0bfe5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14466,6 +15102,7 @@ fileName wgEncodeUwDnaseNb4RawDataRep1V2.fastq.gz
 geoSampleAccession GSM736604
 grant Stam
 lab UW
+md5sum fb6c46ea4cdb257d1fe9505374f3bff4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14488,6 +15125,7 @@ fileName wgEncodeUwDnaseNb4RawDataRep2.fastq.gz
 geoSampleAccession GSM736529
 grant Stam
 lab UW
+md5sum afe61e11ffc68a6c80fccc682837846c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14511,6 +15149,7 @@ geoSampleAccession GSM736604
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 0ea925ad1dd00d274343955f43637a1a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14535,6 +15174,7 @@ geoSampleAccession GSM736529
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 69031e4ee37e1e6dfa6cae0c33af2ed4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14558,6 +15198,7 @@ geoSampleAccession GSM736544
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=884c8e6233f5af61dbdd48a0343d5d32,bai=2fb23c9bcf30cdc8e6e91f583a0edf86
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14580,6 +15221,7 @@ geoSampleAccession GSM736584
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=ced8419e2c0dcb1fd324c8c71e51d370,bai=9fee05a048958c3b462a270d2c647eda
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14602,6 +15244,7 @@ geoSampleAccession GSM736544
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum e7afde17fb5d9a9e3bdb582e6e149c4f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14625,6 +15268,7 @@ geoSampleAccession GSM736584
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 62182403cb0b65fde1d2d63778f546ff
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14648,6 +15292,7 @@ geoSampleAccession GSM736544
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a859d215ef2f6a8fb8dd36bb497a09fc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14671,6 +15316,7 @@ geoSampleAccession GSM736584
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 5490c9a95705c93c976371426cabf0bf
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14693,6 +15339,7 @@ fileName wgEncodeUwDnaseNhaRawDataRep1.fastq.gz
 geoSampleAccession GSM736544
 grant Stam
 lab UW
+md5sum 647c4460624309243080300de5af82f0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14714,6 +15361,7 @@ fileName wgEncodeUwDnaseNhaRawDataRep2.fastq.gz
 geoSampleAccession GSM736584
 grant Stam
 lab UW
+md5sum f82bb9b4442b79505b1cb8e308c57785
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14736,6 +15384,7 @@ geoSampleAccession GSM736544
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 234e7b293890b45b6a588e2c72f2bbd6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14759,6 +15408,7 @@ geoSampleAccession GSM736584
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 4370767319abba2ed8c03533970148f5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14782,6 +15432,7 @@ geoSampleAccession GSM736567
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=8a6ee45eb59cf6dab6c364e33969b225,bai=76c13a46dd146e2bc70b1b574f3a5903
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14804,6 +15455,7 @@ geoSampleAccession GSM736520
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=9d9d45d1ffb1fecde37e6b1f0a63bf30,bai=f3619213d23adb164396c9b95fa8a50d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14826,6 +15478,7 @@ geoSampleAccession GSM736567
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 88398d9460a641fcb87a4262d56d92dd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14849,6 +15502,7 @@ geoSampleAccession GSM736520
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 555471625619cc0c15c8895ab45d02d2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14872,6 +15526,7 @@ geoSampleAccession GSM736567
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 07f16e0860e3a6da3c944d53cb676931
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14895,6 +15550,7 @@ geoSampleAccession GSM736520
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 02b283d02f45d914ab86fddeadc9da1b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14917,6 +15573,7 @@ fileName wgEncodeUwDnaseNhdfadRawDataRep1.fastq.gz
 geoSampleAccession GSM736567
 grant Stam
 lab UW
+md5sum 3e463dd2dc0b54ba34415691e0da6720
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14938,6 +15595,7 @@ fileName wgEncodeUwDnaseNhdfadRawDataRep2.fastq.gz
 geoSampleAccession GSM736520
 grant Stam
 lab UW
+md5sum fb67965d9c354c4ec95a4752f05e2cf5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14960,6 +15618,7 @@ geoSampleAccession GSM736567
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9d2b0cd1ab6c8686751ad8c8b0ca0e57
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14983,6 +15642,7 @@ geoSampleAccession GSM736520
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum f96a43bc7900c50cdfae71e84305f6d3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15007,6 +15667,7 @@ geoSampleAccession GSM736498
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=a23da423a98f6e86ec5da6e0dc4141e4,bai=634a729a361bfee69f699f03c0643e11
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15030,6 +15691,7 @@ geoSampleAccession GSM736546
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=0cb450919bdf03fcf5d354f185860fa5,bai=1031930742ce41a72faeda7b484ff638
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15053,6 +15715,7 @@ geoSampleAccession GSM736498
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum b2f7a181b0b8a0131578df87dc101ec6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15077,6 +15740,7 @@ geoSampleAccession GSM736546
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 716e387add93c7a3c5e1c9d3eff8fc73
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15101,6 +15765,7 @@ geoSampleAccession GSM736498
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 8f7865e21064405c678f5ab07d888ab6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15125,6 +15790,7 @@ geoSampleAccession GSM736546
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 12cccac21963f49f017ace1277c5f022
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15147,6 +15813,7 @@ fileName wgEncodeUwDnaseNhdfneoRawDataRep1.fastq.gz
 geoSampleAccession GSM736498
 grant Stam
 lab UW
+md5sum 6981038e6eb109e5d445f00d616d3036
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15168,6 +15835,7 @@ fileName wgEncodeUwDnaseNhdfneoRawDataRep2.fastq.gz
 geoSampleAccession GSM736546
 grant Stam
 lab UW
+md5sum 062031a0c7307a5c672a3cb676fb0599
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15191,6 +15859,7 @@ geoSampleAccession GSM736498
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum b79d3221901a6008be214defe1660d54
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15215,6 +15884,7 @@ geoSampleAccession GSM736546
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum cc74aae6ab2669ad11f3ec0fbb935641
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15239,6 +15909,7 @@ geoSampleAccession GSM736545
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=fc5eddfd3422834189d6197ad86edd21,bai=a3762a3fd5c360463dee1ba0f176e275
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15261,6 +15932,7 @@ geoSampleAccession GSM736556
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=631b8ba0b56f3d60b80df04b6ab7dddf,bai=320e9a85a33c2544958e8959b00f6170
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15284,6 +15956,7 @@ geoSampleAccession GSM736545
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 503553812262690671c12bd73afb6718
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15307,6 +15980,7 @@ geoSampleAccession GSM736556
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum a3954a3f2bb0e6e759eef31ed6c5a33c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15331,6 +16005,7 @@ geoSampleAccession GSM736545
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 540e20603c042ecc4d80fb9e7ca1df75
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15354,6 +16029,7 @@ geoSampleAccession GSM736556
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum fb5e0c28f9fedc3fe5f23a433e2e2e77
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15376,6 +16052,7 @@ fileName wgEncodeUwDnaseNhekRawDataRep1.fastq.gz
 geoSampleAccession GSM736545
 grant Stam
 lab UW
+md5sum 2c876e508d29ea1e9d7f044934eed6f4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15397,6 +16074,7 @@ fileName wgEncodeUwDnaseNhekRawDataRep2.fastq.gz
 geoSampleAccession GSM736556
 grant Stam
 lab UW
+md5sum afe4cdd1282330dfe8f3062da8d7089f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15420,6 +16098,7 @@ geoSampleAccession GSM736545
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum b8d350bbb46457974ad8489a376f43e0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15443,6 +16122,7 @@ geoSampleAccession GSM736556
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 6e6e74a68e134bc664e4b1d6d4eceb09
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15467,6 +16147,7 @@ geoSampleAccession GSM736612
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=89bda3fce7c5b7fdd553c219fec37f52,bai=8360bf5a50fd5a17992a536e0ef54a3a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15490,6 +16171,7 @@ geoSampleAccession GSM736536
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=631c9bd127582f5242358fb2f24a3ee7,bai=8fbc1273c36b59607b006cee509620c9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15513,6 +16195,7 @@ geoSampleAccession GSM736612
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 9598692553a25a76f0fcca942b5c1153
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15537,6 +16220,7 @@ geoSampleAccession GSM736536
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 2df8819ba7a5bc47687514c507dc6f4c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15561,6 +16245,7 @@ geoSampleAccession GSM736612
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 451d419f33ff5fc2d4830d712eb23128
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15585,6 +16270,7 @@ geoSampleAccession GSM736536
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 1388768d89e3b739c26de0d7a1e81940
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15607,6 +16293,7 @@ fileName wgEncodeUwDnaseNhlfRawDataRep1.fastq.gz
 geoSampleAccession GSM736612
 grant Stam
 lab UW
+md5sum 093b6053266f34d77b23e74afc39c0ff
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15628,6 +16315,7 @@ fileName wgEncodeUwDnaseNhlfRawDataRep2.fastq.gz
 geoSampleAccession GSM736536
 grant Stam
 lab UW
+md5sum 34638da20c50d7dae339d5a57dfc5a89
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15651,6 +16339,7 @@ geoSampleAccession GSM736612
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum fc3357bf3ba9e6a2bf8f3d5d58b67a76
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15675,6 +16364,7 @@ geoSampleAccession GSM736536
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8ecc8c67d4846641816909405cfabab9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15697,6 +16387,7 @@ fileName wgEncodeUwDnaseNt2d1AlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=9107c37f199f9951894d1e469c0f035a,bai=de7f2ac29ee0115cecc5cc4e2051d8e8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15718,6 +16409,7 @@ fileName wgEncodeUwDnaseNt2d1AlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=59c7169bd87bf7160c519796296567e4,bai=9e06a60d9e885b71007ea87dea46e2da
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15739,6 +16431,7 @@ fileName wgEncodeUwDnaseNt2d1HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum 4085269f9459e4a8d8f6ad3959177627
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15761,6 +16454,7 @@ fileName wgEncodeUwDnaseNt2d1HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum ad5d6c48a8981be96fa751c1ebd3e575
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15783,6 +16477,7 @@ fileName wgEncodeUwDnaseNt2d1PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 4d2270f7f151e7eaac4e1c9372816cd8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15805,6 +16500,7 @@ fileName wgEncodeUwDnaseNt2d1PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum f9e06072bc93e0900feb3452a6316824
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15826,6 +16522,7 @@ expId 1887
 fileName wgEncodeUwDnaseNt2d1RawDataRep1.fastq.tgz
 grant Stam
 lab UW
+md5sum 2fcd7c232c3a4c807239477dd25d4519
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15846,6 +16543,7 @@ expId 1887
 fileName wgEncodeUwDnaseNt2d1RawDataRep2.fastq.gz
 grant Stam
 lab UW
+md5sum 08217dbbbb8047bba51c5dfa3c3293c7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15867,6 +16565,7 @@ fileName wgEncodeUwDnaseNt2d1RawRep1.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 24a226de6b4f1a17d14af4016928aced
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15889,6 +16588,7 @@ fileName wgEncodeUwDnaseNt2d1RawRep2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 925d57f7d106d643ca3a0568325a9a86
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15913,6 +16613,7 @@ geoSampleAccession GSM736517
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=8673fd28031c2375afd694503730cc3f,bai=9a100a33cba9228a770e10c7618db5a5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15936,6 +16637,7 @@ geoSampleAccession GSM736519
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=29d69909ca057e4b8c2b40fafef8f5c5,bai=33d11285590505a39ae4c6ccf21333c2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15959,6 +16661,7 @@ geoSampleAccession GSM736517
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum d07d008196b940e6d5683bb9b91e90f1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15983,6 +16686,7 @@ geoSampleAccession GSM736519
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 8f15414a023a2b2cc2ee721e1b89b318
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16007,6 +16711,7 @@ geoSampleAccession GSM736517
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum be7970eeea8d511d6abc5484234657f1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16031,6 +16736,7 @@ geoSampleAccession GSM736519
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum b4dae684ed25d435051d8894bf7d190d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16053,6 +16759,7 @@ fileName wgEncodeUwDnasePanc1RawDataRep1.fastq.gz
 geoSampleAccession GSM736517
 grant Stam
 lab UW
+md5sum 0c4cf2f6f29f45648682ae6f95ef977a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16074,6 +16781,7 @@ fileName wgEncodeUwDnasePanc1RawDataRep2.fastq.gz
 geoSampleAccession GSM736519
 grant Stam
 lab UW
+md5sum 36951f285d5fa5f801af0178ddd1aaee
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16097,6 +16805,7 @@ geoSampleAccession GSM736517
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9ffe0629912048bca5dc11c255d5ac8c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16121,6 +16830,7 @@ geoSampleAccession GSM736519
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum f1aaa3481bee86dbe860cb8d7017820d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16143,6 +16853,7 @@ fileName wgEncodeUwDnasePrecAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=eea9c4b9694668662bd70f1f9eb54cb5,bai=43a226fdbc3aacbc55a0032d7767a0a7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16164,6 +16875,7 @@ fileName wgEncodeUwDnasePrecAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=febe0b12f34405ed765dd1670f08e411,bai=42aeab01a54cf7e48dfb8e8136b7e9b7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16185,6 +16897,7 @@ fileName wgEncodeUwDnasePrecHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum c084fe3ab85b134bd362c3fb78e432c6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16207,6 +16920,7 @@ fileName wgEncodeUwDnasePrecHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
+md5sum a0f35848325f7bc8bfcda03b697d496d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16229,6 +16943,7 @@ fileName wgEncodeUwDnasePrecPkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 5e70fc4b2ac0f5b6e1ee195d856e054e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16251,6 +16966,7 @@ fileName wgEncodeUwDnasePrecPkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 2a707ce48df3f49af8a0a93a41ff876b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16272,6 +16988,7 @@ expId 1888
 fileName wgEncodeUwDnasePrecRawDataRep1.fastq.tgz
 grant Stam
 lab UW
+md5sum 7dfd9e7b6a47f498dbfdedc48755c5af
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16292,6 +17009,7 @@ expId 1888
 fileName wgEncodeUwDnasePrecRawDataRep2.fastq.tgz
 grant Stam
 lab UW
+md5sum 9a1e63d5678c787f942c8a425054be9c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16313,6 +17031,7 @@ fileName wgEncodeUwDnasePrecRawRep1.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 69bf6e4a30fe8cada0e4f2b332cc7565
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16335,6 +17054,7 @@ fileName wgEncodeUwDnasePrecRawRep2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum c6f1337c3b0cd5b802408415456bb268
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16358,6 +17078,7 @@ geoSampleAccession GSM736543
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=23f2820db573e3396a6022060a28dad5,bai=2c5bcee9f545e1287aa1edbfdc88611f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16380,6 +17101,7 @@ geoSampleAccession GSM736539
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=7138183da0cee3d01207044643d6997e,bai=bc84f3dc478646c6575b8eaa03538113
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16402,6 +17124,7 @@ geoSampleAccession GSM736543
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum bc01160f7911f38e4f0df2f89848179f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16425,6 +17148,7 @@ geoSampleAccession GSM736539
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 3281cec030aa4b622df17ef53085b99f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16448,6 +17172,7 @@ geoSampleAccession GSM736543
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 6ae89fcdc18af8982e4b7a38dd41c5f9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16471,6 +17196,7 @@ geoSampleAccession GSM736539
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 238583061f4b75d245ecf69f2b85f3dd
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16493,6 +17219,7 @@ fileName wgEncodeUwDnaseRptecRawDataRep1.fastq.gz
 geoSampleAccession GSM736543
 grant Stam
 lab UW
+md5sum 1ea7acc01421bda5648f1446009df892
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16514,6 +17241,7 @@ fileName wgEncodeUwDnaseRptecRawDataRep2.fastq.gz
 geoSampleAccession GSM736539
 grant Stam
 lab UW
+md5sum 1e44b8c535658eb7dd63bae5aae73865
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16536,6 +17264,7 @@ geoSampleAccession GSM736543
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum f26c2595df8bc280ad7f140b039404c3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16559,6 +17288,7 @@ geoSampleAccession GSM736539
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 85f4acbac3dfbf680a5ab6506f4ca091
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16583,6 +17313,7 @@ geoSampleAccession GSM736608
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=809909a3a4af72bfb61b7e08e5054072,bai=3661e60f6de5e20588ca6e1a323095a5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16606,6 +17337,7 @@ geoSampleAccession GSM736617
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=79fdb08b3bdb2ce7672b907468c2068c,bai=a7b89d553e710a4ca4a27523183f1010
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16629,6 +17361,7 @@ geoSampleAccession GSM736608
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum a2b23f3c156a8214bb3e01f1385d4878
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16653,6 +17386,7 @@ geoSampleAccession GSM736617
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 9946fc516f28c3e36317a770b59ca54b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16677,6 +17411,7 @@ geoSampleAccession GSM736608
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum ca4ab707673db6b4af1c6967b99a572d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16701,6 +17436,7 @@ geoSampleAccession GSM736617
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d2dfbc46b4f5ff035a7363ce3b176fd4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16723,6 +17459,7 @@ fileName wgEncodeUwDnaseSaecRawDataRep1.fastq.gz
 geoSampleAccession GSM736608
 grant Stam
 lab UW
+md5sum cac5a7e0bb8251f45b50e62360037a19
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16744,6 +17481,7 @@ fileName wgEncodeUwDnaseSaecRawDataRep2.fastq.gz
 geoSampleAccession GSM736617
 grant Stam
 lab UW
+md5sum 24925e9215ccfd9fc718568960bb844d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16767,6 +17505,7 @@ geoSampleAccession GSM736608
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8ef4be42ea6af4350833f47615582eb6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16791,6 +17530,7 @@ geoSampleAccession GSM736617
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 945c1282a9b433d93863acc1b2b07c44
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16815,6 +17555,7 @@ geoSampleAccession GSM736593
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=c150280003efcaa70f5edd59b3a0b3c3,bai=0c6746136344794b8244dbe4a55430cd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16838,6 +17579,7 @@ geoSampleAccession GSM736497
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=ccd458ca8aa1638febf9d1b6af967fe6,bai=363790383ca34e073f83c90afe01e35f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16861,6 +17603,7 @@ geoSampleAccession GSM736593
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 90a4c768e7b6726293fa41bdfb0eacd9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16885,6 +17628,7 @@ geoSampleAccession GSM736497
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum d87c40d0f5ce450476907321eb702974
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16909,6 +17653,7 @@ geoSampleAccession GSM736593
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a9056c97cd4a4280fe495655d1f9b13f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16933,6 +17678,7 @@ geoSampleAccession GSM736497
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 50bf299f8d745962847ddef3f3916491
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16956,6 +17702,7 @@ fileName wgEncodeUwDnaseSkmcRawDataRep1V2.fastq.gz
 geoSampleAccession GSM736593
 grant Stam
 lab UW
+md5sum 01ab34a6f33f6cb56af1c9896c839b70
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16978,6 +17725,7 @@ fileName wgEncodeUwDnaseSkmcRawDataRep2.fastq.gz
 geoSampleAccession GSM736497
 grant Stam
 lab UW
+md5sum 5fb9e336a63e1d25f09ac62beda9992b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17001,6 +17749,7 @@ geoSampleAccession GSM736593
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 1bdfeeb542bdfe49e0bb8c54c741101d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17025,6 +17774,7 @@ geoSampleAccession GSM736497
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 1cf32b7e9c094bb7a21d6e58ac2c7bd6
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17048,6 +17798,7 @@ geoSampleAccession GSM736522
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=05df09b683584116838da0ee14ab496e,bai=27957c8754297141393df6ac543afc11
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17070,6 +17821,7 @@ geoSampleAccession GSM736570
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=79f65a374cf6318b248da2949b3277cd,bai=15944e10bd4b9f8969de4455c8dfb6be
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17092,6 +17844,7 @@ geoSampleAccession GSM736522
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 7b8e2a2d6d2d481de70ef9e913ce42cb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17115,6 +17868,7 @@ geoSampleAccession GSM736570
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 25c2c14385ed72edf9b2563f968d2397
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17138,6 +17892,7 @@ geoSampleAccession GSM736522
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 2ecc9191626c34e3e87b3337c580f87f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17161,6 +17916,7 @@ geoSampleAccession GSM736570
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 5ec0f63720666db2f6bba1c5c8b36fd6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17183,6 +17939,7 @@ fileName wgEncodeUwDnaseSknmcRawDataRep1.fastq.gz
 geoSampleAccession GSM736522
 grant Stam
 lab UW
+md5sum 30945b8dcce7d1e63da860401e325782
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17204,6 +17961,7 @@ fileName wgEncodeUwDnaseSknmcRawDataRep2.fastq.gz
 geoSampleAccession GSM736570
 grant Stam
 lab UW
+md5sum 555943f5a9b7e85756d99c6452ac42de
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17226,6 +17984,7 @@ geoSampleAccession GSM736522
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 0b27a153bdcb7f431b07ffb9e54dd7ae
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17249,6 +18008,7 @@ geoSampleAccession GSM736570
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 7b4b308041b473ea41396fb942a153c4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17273,6 +18033,7 @@ geoSampleAccession GSM736559
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=f213033a9c820f6efd6d29cde74f68e1,bai=a3e08e0d8a4b1b34d27c775d1a8b1df6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17296,6 +18057,7 @@ geoSampleAccession GSM736578
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=cb0d073523b0395a09e3f5eaa7613dd0,bai=76f853f5b75b1fd0001b9f3afed25595
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17319,6 +18081,7 @@ geoSampleAccession GSM736559
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 94d678905fd7696d8363eecc7fef1369
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17343,6 +18106,7 @@ geoSampleAccession GSM736578
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum b698cc00948c381fe71f79ab74608063
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17367,6 +18131,7 @@ geoSampleAccession GSM736559
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum f054e4b5428818b3e547560172f6c9f0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17391,6 +18156,7 @@ geoSampleAccession GSM736578
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 0a0b7cb84ee0b9d7ffb269e016746839
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17413,6 +18179,7 @@ fileName wgEncodeUwDnaseSknshraRawDataRep1.fastq.gz
 geoSampleAccession GSM736559
 grant Stam
 lab UW
+md5sum 53978f17f864521bb6ef12318ba7142d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17434,6 +18201,7 @@ fileName wgEncodeUwDnaseSknshraRawDataRep2V2.fastq.gz
 geoSampleAccession GSM736578
 grant Stam
 lab UW
+md5sum 8d2b2e0732dcae7877f47c42bc4392ef
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17458,6 +18226,7 @@ geoSampleAccession GSM736559
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum fd83e63c5c705d1231a38609e96dfe98
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17482,6 +18251,7 @@ geoSampleAccession GSM736578
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 64bcfbe42bab341bc0979518df00c910
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17506,6 +18276,7 @@ geoSampleAccession GSM736592
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=343535594a3ac1733125256ab1332998,bai=ce4e58e8d07f69c0240164c4497e692e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17529,6 +18300,7 @@ geoSampleAccession GSM736592
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 21e90a146701e094998ba01572f19047
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17553,6 +18325,7 @@ geoSampleAccession GSM736592
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 371a9c68c5c959988147ee31ccaa2c9f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17575,6 +18348,7 @@ fileName wgEncodeUwDnaseTh1RawDataRep1.fastq.gz
 geoSampleAccession GSM736592
 grant Stam
 lab UW
+md5sum 909d9b2631a755234e98953d3693e000
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17598,6 +18372,7 @@ geoSampleAccession GSM736592
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 0fa3946463f1c8c5c67b5b6f1e293c05
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17622,6 +18397,7 @@ geoSampleAccession GSM736502
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum bam=d9001d7d59640a934bb501a774692f65,bai=32af84f6fb77e090c7cbe63d12babbbc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17645,6 +18421,7 @@ geoSampleAccession GSM736502
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ed3f6ed3bd3b9ef5285065bd55164496
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17669,6 +18446,7 @@ geoSampleAccession GSM736502
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 25298084db618dd1fce97d1c540ac5c7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17691,6 +18469,7 @@ fileName wgEncodeUwDnaseTh2RawDataRep1.fastq.gz
 geoSampleAccession GSM736502
 grant Stam
 lab UW
+md5sum 2ec4ef1bb4de02fc80d9cee7e3b16dc1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17714,6 +18493,7 @@ geoSampleAccession GSM736502
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum b57d4dbe356e6db1ef049c232119a78e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17737,6 +18517,7 @@ geoSampleAccession GSM736495
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=ad388f3987f061caed48ad65bd593be7,bai=e91872ffaccb27831cad55ea65560366
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17759,6 +18540,7 @@ geoSampleAccession GSM736636
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=b6e6e8aa2cc220bf6bb331140a759e84,bai=9695a6874589cff9a5e9c70cedd6ae0b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17781,6 +18563,7 @@ geoSampleAccession GSM736495
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum 921f8611e61eb5ff15c3c60ff53a9999
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17804,6 +18587,7 @@ geoSampleAccession GSM736636
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum fa76a9b1736919da9b30c4ccce8d39b9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17827,6 +18611,7 @@ geoSampleAccession GSM736495
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d00240ca3cafa345c8e43d3b0de896cb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17850,6 +18635,7 @@ geoSampleAccession GSM736636
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 8ed6102be6dd5908bc46237b678f35d5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17872,6 +18658,7 @@ fileName wgEncodeUwDnaseWerirb1RawDataRep1.fastq.gz
 geoSampleAccession GSM736495
 grant Stam
 lab UW
+md5sum 62bdda85cdf6c593715e1838161b5008
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17893,6 +18680,7 @@ fileName wgEncodeUwDnaseWerirb1RawDataRep2.fastq.gz
 geoSampleAccession GSM736636
 grant Stam
 lab UW
+md5sum c16fe79bb4cf12dcdab88426d83c100d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17915,6 +18703,7 @@ geoSampleAccession GSM736495
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum dc3cc86c2b71b98126c387b065260cf2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17938,6 +18727,7 @@ geoSampleAccession GSM736636
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 584f808c59a0d64327df62313078f9ce
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17961,6 +18751,7 @@ geoSampleAccession GSM736613
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=f991c6bc25c27caffc20b8c6d50cf9d7,bai=e551927bf6930734e8daf041c1bcff17
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17983,6 +18774,7 @@ geoSampleAccession GSM736526
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=8cc2f508904c77f1dc18bd72ebc929e0,bai=c8f0ead55a2d1dcaa34cd1592d47b082
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18005,6 +18797,7 @@ geoSampleAccession GSM736613
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum ab69498fefc7e6f72c1da2fc6aab68fe
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18028,6 +18821,7 @@ geoSampleAccession GSM736526
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum c0f0c237bb43ea6c2b7e1cfd1e2a530a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18051,6 +18845,7 @@ geoSampleAccession GSM736613
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=7cfe912f89d95691e4949369a0939998,bai=40c1a99c3cb00c8601ed116c3a8f23cf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18073,6 +18868,7 @@ geoSampleAccession GSM736526
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
+md5sum bam=fdd64e3529f0bfd844605feeaf636393,bai=93b0d00394a02f849f7cb6eed6223569
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18095,6 +18891,7 @@ geoSampleAccession GSM736613
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum f630f8373774996747b55f05e13096a9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18118,6 +18915,7 @@ geoSampleAccession GSM736526
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
+md5sum c9c9fabf8e7103033f56a2005e00a139
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18141,6 +18939,7 @@ geoSampleAccession GSM736613
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum d9c1a6d1362c9ed1f08c4981b68948e7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18164,6 +18963,7 @@ geoSampleAccession GSM736526
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum a4fa507052d7dfc7e6aa8c8c9450ea90
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18186,6 +18986,7 @@ fileName wgEncodeUwDnaseWi38OhtamRawDataRep1.fastq.gz
 geoSampleAccession GSM736613
 grant Stam
 lab UW
+md5sum 0082f141b3607a24447758bef4c320e9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18207,6 +19008,7 @@ fileName wgEncodeUwDnaseWi38OhtamRawDataRep2.fastq.gz
 geoSampleAccession GSM736526
 grant Stam
 lab UW
+md5sum 7d508ad9c70d0c7101ea634d94d118b5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18229,6 +19031,7 @@ geoSampleAccession GSM736613
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 19002d5196572181b7f5169899213bf6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18252,6 +19055,7 @@ geoSampleAccession GSM736526
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum bfb0a6ebb69c604740013691bdf82583
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18275,6 +19079,7 @@ geoSampleAccession GSM736613
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum 7971c2617a17277438999d31fe4ab772
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18298,6 +19103,7 @@ geoSampleAccession GSM736526
 grant Stam
 lab UW
 labVersion lmax-v1.0
+md5sum feaa2f9c7924fa03d7d72dd4f48060ed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18320,6 +19126,7 @@ fileName wgEncodeUwDnaseWi38RawDataRep1.fastq.gz
 geoSampleAccession GSM736613
 grant Stam
 lab UW
+md5sum 3533bdfe894c32cd4ab6b86e5f522bfa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18341,6 +19148,7 @@ fileName wgEncodeUwDnaseWi38RawDataRep2.fastq.gz
 geoSampleAccession GSM736526
 grant Stam
 lab UW
+md5sum c3b5f2049fde4037b31347ae0b1a0bd3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18363,6 +19171,7 @@ geoSampleAccession GSM736613
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 57095cd767deeb9c0bcfc94850b4657f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18386,6 +19195,7 @@ geoSampleAccession GSM736526
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 28faa446760616a213258849c67f7b50
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18394,4 +19204,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 1305925875
+# MAGIC: -611356397

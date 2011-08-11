@@ -17,6 +17,7 @@ fileName wgEncodeHaibMethylArrayAg04449UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 8e2ae43e2771c52b5c1770af2e5be1d9
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -40,6 +41,7 @@ fileName wgEncodeHaibMethylArrayAg04450UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum d59b88b13de69a0f3a48e505f88ac296
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -63,6 +65,7 @@ fileName wgEncodeHaibMethylArrayAg09309UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 0933d53936a6558802677381ae44c7b4
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -86,6 +89,7 @@ fileName wgEncodeHaibMethylArrayAg09319UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 6150bbf41139faf8de028d098b32c774
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -109,6 +113,7 @@ fileName wgEncodeHaibMethylArrayAg10803UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 789086d4dce1938773c37ab10301dc56
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -132,6 +137,7 @@ fileName wgEncodeHaibMethylArrayBcadiposeuhn00001BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum b5c05406d040c190b10139002fc76f33
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -155,6 +161,7 @@ fileName wgEncodeHaibMethylArrayBcadrenalglandh12803nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 098196c9a1ba2383d54995d9b7dcb3d8
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -178,6 +185,7 @@ fileName wgEncodeHaibMethylArrayBcbladder0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 7f4a5354c7a15365688d7d4b4767122d
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -201,6 +209,7 @@ fileName wgEncodeHaibMethylArrayBcbrainh11058nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum da84ad1ba67d5361078387bc910485cf
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -224,6 +233,7 @@ fileName wgEncodeHaibMethylArrayBcbreast0203015BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum bceeee65649a1e91ce3bea6f97916242
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -247,6 +257,7 @@ fileName wgEncodeHaibMethylArrayBccolon0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 2f85632001930862c03702677bcb1ce1
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -270,6 +281,7 @@ fileName wgEncodeHaibMethylArrayBccolonh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum b59c56745d064a5eabc20040d3d6e662
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -293,6 +305,7 @@ fileName wgEncodeHaibMethylArrayBcesophagus0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum b6a64e863931d9721f006b5fcfaca177
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -316,6 +329,7 @@ fileName wgEncodeHaibMethylArrayBcesophagush12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum d236d474900eb8632ec205c6be128e59
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -339,6 +353,7 @@ fileName wgEncodeHaibMethylArrayBcjejunumh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 50ffe80f725061dcb92cbd213f5421ab
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -362,6 +377,7 @@ fileName wgEncodeHaibMethylArrayBckidney0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 12e7d0e0b9c0f4fe540f61ac2490a4ad
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -385,6 +401,7 @@ fileName wgEncodeHaibMethylArrayBckidneyh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum cf10a64a04b61d6a338856c015df4c86
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -408,6 +425,7 @@ fileName wgEncodeHaibMethylArrayBcleftventriclen41BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum ba50311408c0d0fe526c3f146aaed708
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -431,6 +449,7 @@ fileName wgEncodeHaibMethylArrayBcleukocyteuhn00204BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 7092d2568caea1ee64238ecfbf54ce74
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -454,6 +473,7 @@ fileName wgEncodeHaibMethylArrayBcliver0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 012f3a1b66b85db8d19abed135354a24
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -477,6 +497,7 @@ fileName wgEncodeHaibMethylArrayBclung0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 5dca4c67d1c1e6c398b9cc3a59a58704
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -500,6 +521,7 @@ fileName wgEncodeHaibMethylArrayBclungh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 3a85d248196e179ac33fcc25c69f3584
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -523,6 +545,7 @@ fileName wgEncodeHaibMethylArrayBcpancreash12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 814d5072a9f6f4f7d7d206d68c0a57bd
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -546,6 +569,7 @@ fileName wgEncodeHaibMethylArrayBcpenish12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum fb950b5b0ebd3b8081c86a6fbcb5a7cc
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -569,6 +593,7 @@ fileName wgEncodeHaibMethylArrayBcpericardiumh12529nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum dc9b528d1c91df2e903b594b5645f3f2
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -592,6 +617,7 @@ fileName wgEncodeHaibMethylArrayBcplacentauhn00189BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 5bdfe58516c91f61371ba52e84484ffb
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -615,6 +641,7 @@ fileName wgEncodeHaibMethylArrayBcprostateglandh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 0faba1d21ffad87a7e5ea464602a5b3e
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -638,6 +665,7 @@ fileName wgEncodeHaibMethylArrayBcrectumn29BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 807ecb000a8f0aded4902d9492db6475
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -661,6 +689,7 @@ fileName wgEncodeHaibMethylArrayBcskeletalmuscle0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum b09146ce4e4e764227be6d1e03a3af5e
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -684,6 +713,7 @@ fileName wgEncodeHaibMethylArrayBcskeletalmuscleh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 717c7ca16750d666fa2e054bc30847ff
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -707,6 +737,7 @@ fileName wgEncodeHaibMethylArrayBcskin0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 36d7b4d6b8994ad4df45aab150725ef8
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -730,6 +761,7 @@ fileName wgEncodeHaibMethylArrayBcsmallintestine0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 8f629983e08c560007b7b24749f06fdb
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -753,6 +785,7 @@ fileName wgEncodeHaibMethylArrayCmkUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum b62476da43fa8db81fd1d83d6cd326a4
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -776,6 +809,7 @@ fileName wgEncodeHaibMethylArrayGm12878SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 0b7c88d71259e72faa640dfab82f386e
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -799,6 +833,7 @@ fileName wgEncodeHaibMethylArrayGm12878SitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 4ffdc108a8d304344286138564fa873c
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -822,6 +857,7 @@ fileName wgEncodeHaibMethylArrayGm12891HaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 80cbb49e1b295ff503ceed37217c5c9e
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -845,6 +881,7 @@ fileName wgEncodeHaibMethylArrayGm12891HaibSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum a6b275d30592ee6b6b4ecbd22eb8107d
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -868,6 +905,7 @@ fileName wgEncodeHaibMethylArrayGm12892HaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 5d6c36257f1e3ab131e9ee284c44847b
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -891,6 +929,7 @@ fileName wgEncodeHaibMethylArrayGm12892HaibSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum e795547d60402f26ceae0cffdfef4a6c
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -914,6 +953,7 @@ fileName wgEncodeHaibMethylArrayH1hescHaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 05124ffafd740cd11ff99bb0ce545ab8
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -937,6 +977,7 @@ fileName wgEncodeHaibMethylArrayH1hescHaibSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum e4c410466ab7474ec179e81a74f6b613
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -960,6 +1001,7 @@ fileName wgEncodeHaibMethylArrayHaeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 2e9e7cd9ca9fa26b87a0dd75bd373532
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -983,6 +1025,7 @@ fileName wgEncodeHaibMethylArrayHcfUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 3e4d67e416c8aa5575a9741e254e08e9
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1006,6 +1049,7 @@ fileName wgEncodeHaibMethylArrayHcmUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 58132fceb751b39d48e35ea11c7e6d43
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1029,6 +1073,7 @@ fileName wgEncodeHaibMethylArrayHcpeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 047df84a00609a1916a2ace55b8f5c8e
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1052,6 +1097,7 @@ fileName wgEncodeHaibMethylArrayHeeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum b892cc3be1c1bacbab885246b104b904
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1075,6 +1121,7 @@ fileName wgEncodeHaibMethylArrayHek293YaleSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum f36aff711cd11a4c9ec0a36f8f369ca7
 obtainedBy Yale
 origAssembly hg19
 project wgEncode
@@ -1098,6 +1145,7 @@ fileName wgEncodeHaibMethylArrayHepg2HaibSitesRep3.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 5ebf422d46b731a19bc5a35af449349f
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1121,6 +1169,7 @@ fileName wgEncodeHaibMethylArrayHepg2HaibSitesRep4.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum b159e16b975b7347bbb0efb1a40f9bc4
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1144,6 +1193,7 @@ fileName wgEncodeHaibMethylArrayHepg2SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum a5fd8f73f6e4d5ecad1ef54fef6d617f
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -1167,6 +1217,7 @@ fileName wgEncodeHaibMethylArrayHepg2SitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum e38b872b6bbc687e00110e93ce190cff
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -1190,6 +1241,7 @@ fileName wgEncodeHaibMethylArrayHipeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum de414a8cf251858764df5038b659fe4b
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1213,6 +1265,7 @@ fileName wgEncodeHaibMethylArrayHmecUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 9de9c0e3aaecf072a51a4e2ea5e49453
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1236,6 +1289,7 @@ fileName wgEncodeHaibMethylArrayHnpceUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 39600bd0f1bd4e36ccddb3e785896e44
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1259,6 +1313,7 @@ fileName wgEncodeHaibMethylArrayHpaeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum c1228cd4d40ddf80fa6bc96b41074c6f
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1282,6 +1337,7 @@ fileName wgEncodeHaibMethylArrayHrceUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 24b1b96f06b5804dbf8d649fb2b56136
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1305,6 +1361,7 @@ fileName wgEncodeHaibMethylArrayHreUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum ae2a40fe3bce2a63c41f1dafa181734b
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1328,6 +1385,7 @@ fileName wgEncodeHaibMethylArrayHrpeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 9c57a206bfc88ba4b72d63b68a4e061b
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1351,6 +1409,7 @@ fileName wgEncodeHaibMethylArrayImr90UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum cf51bd7fb2622f9ea28b562baec14266
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1374,6 +1433,7 @@ fileName wgEncodeHaibMethylArrayJurkatUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum bd2899bb40e295a3f6e3742a50b69525
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1397,6 +1457,7 @@ fileName wgEncodeHaibMethylArrayK562HaibSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum fb6388a8537a9697da00bb0ec3f4d338
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1420,6 +1481,7 @@ fileName wgEncodeHaibMethylArrayK562HaibSitesRep4.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 91a4a5b18d62e630179a590d5f02db4f
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1443,6 +1505,7 @@ fileName wgEncodeHaibMethylArrayK562SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 1573f733b52ea99aeb68bc57ef4a30a2
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -1466,6 +1529,7 @@ fileName wgEncodeHaibMethylArrayK562SitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 651d2c4d840cbdf04f4b466e7c9aa56f
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -1489,6 +1553,7 @@ fileName wgEncodeHaibMethylArrayMcf7DukeSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 44e7c1b24c67ffad5cef63604d1e1e73
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -1512,6 +1577,7 @@ fileName wgEncodeHaibMethylArrayNb4UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 3b16ae794bbdebc5e1cf4b54c0d6d245
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1535,6 +1601,7 @@ fileName wgEncodeHaibMethylArrayNhaUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum bd7e2f5e48be9571abee12ee49ee554e
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1558,6 +1625,7 @@ fileName wgEncodeHaibMethylArrayNhbeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 25b200127ae37c67887ea46f8c6708ce
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1581,6 +1649,7 @@ fileName wgEncodeHaibMethylArrayNhdfneoUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 09b524ce23ec410120ab97abe11a95b5
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1604,6 +1673,7 @@ fileName wgEncodeHaibMethylArrayRptecUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum f1f3b12b6e65672aad44a62ab8072818
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1627,6 +1697,7 @@ fileName wgEncodeHaibMethylArraySaecUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 4f6104ca4ee49552e3f02d5c8e378857
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1650,6 +1721,7 @@ fileName wgEncodeHaibMethylArraySkmcUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum 2c6a2eca9d2b5ab85effb4b5e0d1b283
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1673,6 +1745,7 @@ fileName wgEncodeHaibMethylArraySknshraUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl27
+md5sum a63a02ae9c0525187dfb2b1519f1378f
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1682,4 +1755,4 @@ tableName wgEncodeHaibMethylArraySknshraUwSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -1767826664
+# MAGIC: -815946952
