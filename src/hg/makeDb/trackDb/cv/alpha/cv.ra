@@ -7417,9 +7417,11 @@ targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
 validation ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
 
-term ZNF274_(M01)tag ZNF274M01
+term ZNF274_(M01)
+tag ZNF274M01
 type Antibody
-antibodyDescription Mouse monoclonal antibody raised against a partial recombinant ZNF274 (corresponding to amino acids 420-531 of the human ZNF274 protein).target ZNF274targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.vendorName Abnova ZNF74
+antibodyDescription Mouse monoclonal antibody raised against a partial recombinant ZNF274 (corresponding to amino acids 420-531 of the human ZNF274 protein).target ZNF274targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.
+vendorName Abnova ZNF74
 vendorId M01
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782
 -M01
