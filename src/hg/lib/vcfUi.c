@@ -152,6 +152,35 @@ errCatchFree(&errCatch);
 return vcff;
 }
 
+static void vcfCfgHapClusterEnable(struct cart *cart, struct trackDb *tdb, char *name,
+				   boolean compositeLevel)
+/* Let the user enable/disable haplotype sorting display. */
+{
+printf("<B>Enable Haplotype sorting display: </B>");
+boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
+							VCF_HAP_ENABLED_VAR, TRUE);
+char varName[1024];
+safef(varName, sizeof(varName), "%s." VCF_HAP_ENABLED_VAR, name);
+cgiMakeCheckBox(varName, hapClustEnabled);
+printf("<BR>\n");
+}
+
+static void vcfCfgHapClusterColor(struct cart *cart, struct trackDb *tdb, char *name,
+				   boolean compositeLevel)
+/* Let the user choose how to color the sorted haplotypes. */
+{
+printf("<B>Color sorted haplotypes by:</B>\n");
+char *colorBy = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
+					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
+boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
+char varName[1024];
+safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, colorByRefAlt);
+printf("reference/alternate alleles (reference = blue, alternate = red)\n");
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, !colorByRefAlt);
+printf("first base of allele (A = red, C = blue, G = green, T = magenta)<BR>\n");
+}
+
 static void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
 				   char *name, boolean compositeLevel)
 /* Let the user specify a height for the track. */
@@ -173,14 +202,9 @@ static void vcfCfgHapCluster(struct cart *cart, struct trackDb *tdb, struct vcfF
  * the VCF file describes multiple genotypes. */
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
-printf("<B>Enable Haplotype sorting display: </B>");
-boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
-							VCF_HAP_ENABLED_VAR, TRUE);
-char varName[1024];
-safef(varName, sizeof(varName), "%s." VCF_HAP_ENABLED_VAR, name);
-cgiMakeCheckBox(varName, hapClustEnabled);
-printf("<BR>\n");
+vcfCfgHapClusterEnable(cart, tdb, name, compositeLevel);
 vcfCfgHaplotypeCenter(cart, tdb, vcff, NULL, NULL, 0, "mainForm");
+vcfCfgHapClusterColor(cart, tdb, name, compositeLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, compositeLevel);
 //      thicken lines?
 //      outline center variant?

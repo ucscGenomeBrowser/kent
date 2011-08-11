@@ -12,6 +12,10 @@
 
 #define VCF_HAP_ENABLED_VAR "hapClusterEnabled"
 
+#define VCF_HAP_COLORBY_VAR "hapClusterColorBy"
+#define VCF_HAP_COLORBY_REFALT "refAlt"
+#define VCF_HAP_COLORBY_BASE "base"
+
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
 			   char *thisName, char *thisChrom, int thisPos, char *formName);
 /* If vcff has genotype data, show status and controls for choosing the center variant

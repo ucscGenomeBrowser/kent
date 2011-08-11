@@ -8017,17 +8017,17 @@ type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
 
 term Control_32bp
-tag CONTROL32BP
+tag CNTRL32B
 type control
 description This data represents a control being compared to experiments using read length of 32 bp PROVISIONAL
 
 term Control_36bp
-tag CONTROL36BP
+tag CNTRL36B
 type control
 description This data represents a control being compared to experiments using read length of 36 bp PROVISIONAL
 
 term Control_50bp
-tag CONTROL50BP
+tag CNTRL50B
 type control
 description This data represents a control being compared to experiments using read length of 50 bp PROVISIONAL
 
@@ -8294,27 +8294,27 @@ type treatment
 label MNase
 
 term Myoblast
-tag MYOBLAST
+tag MYB
 description Grown differentiation medium undifferediated (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_24h
-tag MYOCYTE24H
+tag MYC24H
 description Grown for 24 hours in differentiation medium (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_60h
-tag MYOCYTE60H
+tag MYC60H
 description Grown for 60 hours in differentiation medium (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_5d
-tag MYOCYTE5D
+tag MYC5D
 description Grown for 5 days in differentiation medium (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_7d
-tag MYOCYTE7D
+tag MYC7D
 description Grown for 7 days in differentiation medium (Wold) PROVISIONAL
 type treatment
 
@@ -10496,7 +10496,8 @@ tag OBJSTAT
 type typeOfTerm
 label Object Status
 description The status of the file or table object (revoked, replaced, etc)  PROVISIONAL
-searchable multiSelect
+searchable no
+hidden no
 cvDefined yes
 validate cv  
 priority 1   

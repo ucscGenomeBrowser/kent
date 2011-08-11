@@ -16,6 +16,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum a54272add0e0e2eac8b0e065401be79c
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -38,6 +39,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum 71094e82c9f8fc578a146551d12992bd
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -60,6 +62,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum b196109676da1a9b9138cb3adb11cba9
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -82,6 +85,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum 1923410b7bab249f66540290f469a62e
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -104,6 +108,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum c9f2ee6fc5714ab52554ee34a0e6a636
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -126,6 +131,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum 8ba5f73844d33b37409232e36a27aad2
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -148,6 +154,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum ba49046c29fe9e8c07891562a856e10b
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -170,6 +177,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum b4a81e12b69bd92f7fc9ca186d3f4c26
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -192,6 +200,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum ba7bcf2fe207a26877c0c10e98f10131
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -214,6 +223,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum e55fa2e794b08752837610b44b5ee25c
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -236,6 +246,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum e8f7ab46cfc1387b5ebd052f73ebe653
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -245,4 +256,4 @@ tableName wgEncodeHaibMethyl450T47dDm002p24hSitesRep1
 treatment DMSO_0.02pct_24hr
 view Sites
 
-# MAGIC: 1982965270
+# MAGIC: -1178303633
