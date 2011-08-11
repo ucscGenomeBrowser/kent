@@ -2092,7 +2092,7 @@ labExpId crg-47
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
-md5sum aedd74f804647493e9c955a70a500fee
+md5sum 385505dab8c87f9f4836b9f295159343
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3325,4 +3325,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 12920728
+# MAGIC: -111961597
