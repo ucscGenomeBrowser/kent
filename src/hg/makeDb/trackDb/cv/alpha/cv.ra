@@ -4924,6 +4924,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 lab Snyder
 validation missing
 
+term CEBPD_(SC-636)_(sc-49548)
+tag CEBPDSC636SC49548
+type Antibody
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of CEBPD of human origin.
+target CEBPD
+targetDescription The protein encoded by this intronless gene is a bZIP transcription factor which can bind as a homodimer to certain DNA regulatory regions. It can also form heterodimers with the related protein CEBP-alpha. The encoded protein is important in the regulation of genes involved in immune and inflammatory responses, and may be involved in the regulation of genes associated with activation and/or differentiation of macrophages. The cytogenetic location of this locus has been reported as both 8p11 and 8q11 (provided by RefSeq).
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-49548
+orderUrl http://www.scbt.com/datasheet-636-c-ebp-delta-m-17-antibody.html
+lab Myers
+lots C1010
+targetId GeneCard:CEBPD
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
+validation CEBPD_(SC-636)_(sc-49548)(missing):human_CEBPD_SC-636_sc-49548_validation_Myers.pdf
+
+
 term CHD2_(AB68301)
 tag CHD2
 type Antibody
