@@ -98,7 +98,7 @@ end
 # add ann to list
 set contacts="$contacts ann "
 
-# cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  " $USER
-cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" $USER
+# cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  "
+cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" 
 rm Bfile
 
