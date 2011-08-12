@@ -20,6 +20,7 @@ visibility full
 extraFields logR=[f]LogR_Value
 #scoreFilter 0
 #scoreFilterLimits 0:1000
+noScoreFilter .
 
         track wgEncodeHaibGenotypeGm12878RegionsRep1
         parent wgEncodeHaibGenotype on

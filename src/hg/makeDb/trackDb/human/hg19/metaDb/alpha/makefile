@@ -4,7 +4,7 @@ wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBroadHmm.ra \
 wgEncodeBuOrchid.ra \
-wgEncodeGencode.ra \
+wgEncodeGencodeV3.ra \
 wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeGisChiaPet.ra \
