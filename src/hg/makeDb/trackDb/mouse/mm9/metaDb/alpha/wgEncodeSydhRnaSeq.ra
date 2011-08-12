@@ -15,6 +15,7 @@ dateUnrestricted 2012-01-20
 fileName wgEncodeSydhRnaSeqCh12PolyaAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=e7e8b39ae2df8294c7a93fd959f14fd3,bai=b1f8c35b9805c338f52195f68f27db72
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -39,6 +40,7 @@ dateUnrestricted 2012-01-20
 fileName wgEncodeSydhRnaSeqCh12PolyaRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford-m
+md5sum 300b9e2b96e1bc0da98a1228416f5789
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -62,6 +64,7 @@ dateUnrestricted 2012-01-20
 fileName wgEncodeSydhRnaSeqCh12PolyaSigRep1.bigWig
 grant Snyder
 lab Stanford-m
+md5sum 793dc5cdf6d38fb793b79612aaba3054
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -86,6 +89,7 @@ dateUnrestricted 2011-12-16
 fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=a2f5cdba175710f7df2c6ad6a32b919d,bai=0771733a73ee6bed5d4ea3c421dcb4a2
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -109,6 +113,7 @@ dateUnrestricted 2011-12-16
 fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum bcc9a45f9464ea1e732eb9dffaaa3d40
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -131,6 +136,7 @@ dateUnrestricted 2011-12-16
 fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaSigRep1.bigWig
 grant Snyder
 lab Stanford-m
+md5sum ba2f036db5aa7f4891bfb4f97e76056e
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -154,6 +160,7 @@ dateUnrestricted 2011-12-21
 fileName wgEncodeSydhRnaSeqMelPolyaAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=67c198244e058a49d4e4a1d48a2d98de,bai=3581098b13c4b583e3163ab25fc81e6e
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -177,6 +184,7 @@ dateUnrestricted 2011-12-21
 fileName wgEncodeSydhRnaSeqMelPolyaRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 7ad901342b7e9b0099b6b84db95e633c
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -199,6 +207,7 @@ dateUnrestricted 2011-12-21
 fileName wgEncodeSydhRnaSeqMelPolyaSigRep1.bigWig
 grant Snyder
 lab Stanford-m
+md5sum 76fe3435fdcff1c7c6e82019ee6f956d
 origAssembly mm9
 project wgEncode
 replicate 1
@@ -210,4 +219,4 @@ tableName wgEncodeSydhRnaSeqMelPolyaSigRep1
 treatment None
 view Signal
 
-# MAGIC: -1475813620
+# MAGIC: 2002142411

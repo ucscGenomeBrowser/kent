@@ -555,7 +555,6 @@ for my $key (keys %ra) {
 my $readme = "$downloadDir/README.txt";
 unless (-e $readme){
 	my @template;
-	#always put in new readme on loading of a object
 	open TEMPLATE, "$configPath/downloadsReadmeTemplate.txt";
 	while (<TEMPLATE>){
 	
