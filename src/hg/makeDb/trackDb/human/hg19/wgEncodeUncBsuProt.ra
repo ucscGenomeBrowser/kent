@@ -7,9 +7,9 @@ longLabel ENCODE UNC/BSU Proteogenomics
 group expression
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup2 localization Localization cytosol=cytosol membraneFraction=membrane mito=mitochondria nucleus=nucleus 
-subGroup3 view View Signal=Signal RawSignal=RawSignal
+#subGroup3 view View Signal=Signal RawSignal=RawSignal
 dimensions dimensionX=cellType dimensionY=localization
-sortOrder cellType=+ localization=+ view=+
+sortOrder cellType=+ localization=+ 
 fileSortOrder cell=Cell_Line localization=Localization view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType localization
 dragAndDrop subTracks
@@ -30,7 +30,7 @@ wgEncode 1
         	parent wgEncodeUncBsuProtSignal
         	shortLabel GM12878 nucleus
         	longLabel GM12878 nuclear Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        	subGroups view=Signal cellType=GM12878 localization=nucleus
+        	subGroups  cellType=GM12878 localization=nucleus
 		visibility full
         	type peptideMapping
         	origAssembly hg19
@@ -41,7 +41,7 @@ wgEncode 1
         	parent wgEncodeUncBsuProtSignal
         	shortLabel K562 cytosol
         	longLabel K562 cytosol Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        	subGroups view=Signal cellType=K562 localization=cytosol
+        	subGroups  cellType=K562 localization=cytosol
 		visibility full
         	type peptideMapping
         	origAssembly hg19
@@ -52,7 +52,7 @@ wgEncode 1
         	parent wgEncodeUncBsuProtSignal
         	shortLabel K562 membrane
         	longLabel K562 membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        	subGroups view=Signal cellType=K562 localization=membraneFraction
+        	subGroups  cellType=K562 localization=membraneFraction
 		visibility full
         	type peptideMapping
         	origAssembly hg19
@@ -63,7 +63,7 @@ wgEncode 1
 	        parent wgEncodeUncBsuProtSignal
 	        shortLabel K562 mitochondria
 	        longLabel K562 mitochondria Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-	        subGroups view=Signal cellType=K562 localization=mito
+	        subGroups  cellType=K562 localization=mito
 		visibility full
 	        type peptideMapping
 	        origAssembly hg19
@@ -74,7 +74,7 @@ wgEncode 1
 	        parent wgEncodeUncBsuProtSignal
 	        shortLabel K562 nucleus
 	        longLabel K562 nucleus Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-	        subGroups view=Signal cellType=K562 localization=nucleus
+	        subGroups  cellType=K562 localization=nucleus
 		visibility full
 	        type peptideMapping
 	        origAssembly hg19
