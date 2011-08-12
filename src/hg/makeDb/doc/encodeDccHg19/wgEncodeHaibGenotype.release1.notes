@@ -12,7 +12,7 @@ D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
     Tables: 88
-    Files: 93
+    Files: 91
     Gbdbs: 0
 
 A) Untouched Tables (0):
@@ -113,7 +113,7 @@ wgEncodeHaibGenotypeSknshraRegionsRep2
 wgEncodeHaibGenotypeT47dRegionsRep2
 wgEncodeHaibGenotypeU87RegionsRep1
 
-C') New files (90 downloadables, 0 gbdbs):
+C') New files (88 downloadables, 0 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/
     NOT on RR but must be placed in:
