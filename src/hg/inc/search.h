@@ -38,7 +38,7 @@ struct slPair *fileFormatSearchWhiteList(void);
 char *fileFormatSelectHtml(char *name, char *selected, char *extraHtml);
 // returns an allocated string of HTML for the fileType select drop down
 
-struct slPair *mdbSelectPairs(struct cart *cart,enum searchTab selectedTab, struct slPair *mdbVars);
+struct slPair *mdbSelectPairs(struct cart *cart, struct slPair *mdbVars);
 // Returns the current mdb  vars and vals in the table of drop down selects
 
 char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects, struct slPair *mdbVars,int cols,boolean fileSearch);

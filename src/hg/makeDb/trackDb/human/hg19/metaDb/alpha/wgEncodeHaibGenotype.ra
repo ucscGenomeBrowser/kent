@@ -386,7 +386,9 @@ dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
+dccAccession wgEncodeEH000273
 dccRep 1
+expId 273
 fileName wgEncodeHaibGenotypeGm12878RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -400,7 +402,7 @@ replicate 1
 subId 4057
 tableName wgEncodeHaibGenotypeGm12878RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeGm12878RegionsRep2
 objType table
@@ -2202,4 +2204,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -92988527
+# MAGIC: -279997394

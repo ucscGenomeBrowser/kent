@@ -3225,8 +3225,9 @@ va_list args;
 va_start(args, label);
 if (label != NULL)
     {
+    fprintf(stdout, "<span class='timing'>");
     vfprintf(stdout, label, args);
-    fprintf(stdout, ": %ld millis<BR>\n", time - lastTime);
+    fprintf(stdout, ": %ld millis<BR></span>\n", time - lastTime);
     }
 lastTime = time;
 va_end(args);
