@@ -1,7 +1,7 @@
 metaObject wgEncodeUwHistone
 objType composite
 composite wgEncodeUwHistone
-expVars lab,dataType,cell,antibody
+expVars lab,dataType,cell,antibody,treatment
 
 metaObject wgEncodeUwHistoneA549H3k04me3StdAlnRep1
 objType file
