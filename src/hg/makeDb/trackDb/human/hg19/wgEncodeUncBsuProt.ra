@@ -2,6 +2,7 @@
 
 track wgEncodeUncBsuProt
 compositeTrack on
+superTrack wgEncodeProtGenoSuper dense
 shortLabel UNC/BSU ProtGeno
 longLabel ENCODE UNC/BSU Proteogenomics
 group expression
