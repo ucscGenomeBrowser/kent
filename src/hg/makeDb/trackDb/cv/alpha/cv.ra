@@ -3511,8 +3511,8 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
-term T-REx-HEK293
-tag THEK293
+term HEK293-T-REx
+tag HEK293T
 type Cell Line
 tier 3
 organism human
