@@ -8566,6 +8566,11 @@ type treatment
 
 
 ### Protocols
+term FASP
+tag FASP
+description FASP (Filter-Assisted Sample Preparation) proteomics protocol (Giddings)
+type protocol
+
 term PCR1x
 tag PCR1X
 description 1-cycle of PCR (Myers)
@@ -8574,6 +8579,11 @@ type protocol
 term PCR2x
 tag PCR2X
 description 2-cycles of PCR (Myers)
+type protocol
+
+term SDS-Page
+tag SDSPAGE
+description SDS-Page proteomics sample preparation protocol (Giddings)
 type protocol
 
 term v041610.1
@@ -8595,7 +8605,6 @@ term v042211.2
 tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
-
 
 ### phase
 term G1
