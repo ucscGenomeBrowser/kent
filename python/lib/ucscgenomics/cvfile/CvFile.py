@@ -109,17 +109,72 @@ class CvFile(RaFile):
 		for stanza in self.itervalues():
 				stanza.validate(self)
 
+				
 class CvStanza(RaStanza):
 	"""base class for a single stanza in the cv, which adds validation"""
 	
 	def __init__(self):
 		RaStanza.__init__(self)
 
+	def readStanza(self, stanza):
+		"""
+		Populates this entry from a single stanza
+		"""
+		
+		for line in stanza:
+			self.readLine(line)
+
+		return self.readName(stanza[0])
+		
+	def readName(self, line):
+		"""
+		Extracts the Stanza's name from the value of the first line of the
+		stanza.
+		"""
+
+		if len(line.split(' ', 1)) != 2:
+			raise ValueError()
+
+		names = map(str.strip, line.split(' ', 1))
+		self._name = names[1]
+		return names
+		
+	def readLine(self, line):
+		"""
+		Reads a single line from the stanza, extracting the key-value pair
+		""" 
+
+		if line.startswith('#') or line == '':
+			OrderedDict.append(self, line)
+		else:
+			raKey = line.split(' ', 1)[0]
+			raVal = ''
+			if (len(line.split(' ', 1)) == 2):
+				raVal = line.split(' ', 1)[1]
+				
+			if raKey in self:
+				count = 0
+				while raKey + '__$$' + str(count) in self:
+					count = count + 1
+					
+				self[raKey + '__$$' + str(count)] = raVal
+				
+			else:
+				self[raKey] = raVal
+		
 	def validate(self, ra):
 		"""default validation for a generic cv stanza."""
 
 		necessary = {'term', 'tag', 'type', 'description'}
 		self.checkMandatory(ra, necessary)
+		self.checkDuplicates(ra)
+		
+	def checkDuplicates(self, ra):
+		"""ensure that all keys are present and not blank in the stanza"""
+		for key in self.iterkeys():
+			if '__$$' in key:
+				newkey = key.split('__$$', 1)[0]
+				ra.handler(DuplicateKeyError(self.name, newkey))
 		
 	def checkMandatory(self, ra, keys):
 		"""ensure that all keys are present and not blank in the stanza"""
@@ -138,7 +193,7 @@ class CvStanza(RaStanza):
 	def checkExtraneous(self, ra, keys):
 		"""check for keys that are not in the list of keys"""
 		for key in self.iterkeys():
-			if key not in keys:
+			if key not in keys and '__$$' not in key:
 				ra.handler(ExtraKeyError(self.name, key))
 	
 	def checkRelational(self, ra, key, other):
@@ -159,7 +214,6 @@ class CvStanza(RaStanza):
 			
 	def checkListRelational(self, ra, key, other):
 		"""check that the value at key matches the value at other"""
-		
 		
 		if key not in self:
 			return
@@ -191,6 +245,17 @@ class MissingKeyError(CvError):
 	
 	def __str__(self):
 		return repr(self.stanza + ': missing key (' + self.key + ')')
+	
+	
+class DuplicateKeyError(CvError):
+	"""raised if a key is duplicated"""
+	
+	def __init__(self, stanza, key):
+		self.stanza = stanza
+		self.key = key
+	
+	def __str__(self):
+		return repr(self.stanza + ': duplicate key (' + self.key + ')')
 	
 	
 class BlankKeyError(CvError):
@@ -321,6 +386,7 @@ class LabStanza(CvStanza):
 		self.checkOptional(ra, optional)
 		self.checkExtraneous(ra, necessary | optional)
 		self.checkRelational(ra, 'organism', 'term')
+		self.checkDuplicates(ra)
 
 
 class PhaseStanza(CvStanza):
@@ -342,6 +408,7 @@ class AgeStanza(CvStanza):
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary)
+		self.checkDuplicates(ra)
 
 
 class DataTypeStanza(CvStanza):
@@ -354,6 +421,7 @@ class DataTypeStanza(CvStanza):
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary)
+		self.checkDuplicates(ra)
 
 
 class RegionStanza(CvStanza):
@@ -381,6 +449,7 @@ class CellLineStanza(CvStanza):
 		self.checkRelational(ra, 'sex', 'term')
 		self.checkRelational(ra, 'category', 'term')
 		self.checkRelational(ra, 'tier', 'term')
+		self.checkDuplicates(ra)
 
 
 class ReadTypeStanza(CvStanza):
@@ -449,6 +518,7 @@ class SeqPlatformStanza(CvStanza):
 		self.checkMandatory(ra, necessary)
 		self.checkOptional(ra, optional)
 		self.checkExtraneous(ra, necessary | optional)
+		self.checkDuplicates(ra)
 
 
 class AntibodyStanza(CvStanza):
@@ -464,6 +534,7 @@ class AntibodyStanza(CvStanza):
 		self.checkOptional(ra, optional)
 		self.checkExtraneous(ra, necessary | optional)
 		self.checkListRelational(ra, 'lab', 'labPi')
+		self.checkDuplicates(ra)
 
 
 class ViewStanza(CvStanza):
@@ -476,6 +547,7 @@ class ViewStanza(CvStanza):
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary)
+		self.checkDuplicates(ra)
 
 
 class ControlStanza(CvStanza):
@@ -549,6 +621,7 @@ class MouseStanza(CvStanza):
 		self.checkRelational(ra, 'category', 'term')
 		self.checkRelational(ra, 'age', 'term')
 		self.checkRelational(ra, 'strain', 'term')
+		self.checkDuplicates(ra)
 
 
 class SpeciesStanza(CvStanza):

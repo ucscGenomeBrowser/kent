@@ -65,6 +65,7 @@ def main():
 	parser.add_argument('-u', '--unsubmitted', action='store_true', default=False, help='Do not list samples that have already been submitted')
 	parser.add_argument('-m', '--missing', action='store_true', default=False, help='List only missing files')
 	parser.add_argument('-s', '--size', action='store_true', default=False, help='Show file sizes')
+	parser.add_argument('-c', '--collapse', action='store_true', default=False, help='Collapses all sample files, showing just the sample list')
 	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
 	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
@@ -87,10 +88,11 @@ def main():
 		else:
 			ids.append(int(id))
 
-	expIds, geoMapping, series = createMappings(compositeTrack.metaDb)
+	expIds, geoMapping, series = createMappings(compositeTrack.alphaMetaDb)
 
 	if len(ids) == 0:
 		ids = expIds.keys()
+		ids.sort()
 	
 	out = list()
 	totalsize = 0
@@ -99,6 +101,7 @@ def main():
 	for idNum in ids:
 		
 		samplesize = 0
+		submittedfiles = 0
 		samplefiles = 0
 		expId = expIds[idNum]
 
@@ -114,29 +117,39 @@ def main():
 				totalsize = totalsize + file.size
 				filecount = filecount + 1
 				
+				if 'geoSampleAccession' in stanza:
+					submittedfiles = submittedfiles + 1
+				
 		size = ''
 		if args.size:
 			size = '[%s]' % filesize(samplesize)
 		
 		if idNum in geoMapping:
 			if geoMapping[idNum] == 'Inconsistent':
-				out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'yellow'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
+				if not args.unsubmitted:
+					out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'blue'), TextStyle.style('[%s]' % geoMapping[idNum], 'yellow'), size, str(samplefiles)))
+			elif samplefiles == submittedfiles:
+				if not args.unsubmitted:
+					out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'blue'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
 			else:
-				out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'blue'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
+				out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'cyan'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
 		else:
 			out.append('\t%s %s %s - %s files' % (str(idNum), expId[0]['metaObject'], size, str(samplefiles)))
 
 		for stanza in expId:
 			
-			if 'geoSampleAccession' in stanza and args.unsubmitted:
+			if 'geoSampleAccession' in stanza and args.unsubmitted or args.collapse:
 				continue
 
-			if stanza['fileName'] in compositeTrack.files and not args.missing:
+			if stanza['fileName'] in compositeTrack.files:
+			
+				if args.missing:
+					continue
 			
 				file = compositeTrack.files[stanza['fileName']]
 				size = ''
 				if args.size:
-					size = '[%s]' % file.size
+					size = '[%s]' % filesize(file.size)
 					
 				if 'geoSampleAccession' not in stanza:
 					out.append('\t\t%s %s' % (file.name, size))
@@ -145,9 +158,9 @@ def main():
 				else:
 					out.append('\t\t%s %s' % (TextStyle.style(file.name, 'blue'), size))
 			else:
-				out.append('\t\t%s %s' % (TextStyle.style(file.name, 'red'), size))
+				out.append('\t\t%s' % TextStyle.style(stanza['fileName'], 'red'))
 
-	strsub = TextStyle.style('[Unsubmitted]', 'blue')
+	strsub = ''
 	if 'geoSeriesAccession' in series:
 		strsub = TextStyle.style('[%s]' % series['geoSeriesAccession'], 'green')
 	
@@ -164,7 +177,7 @@ def main():
 
 	for line in out:
 		print line
-		
+			
 	
 if __name__ == '__main__':
 	main()

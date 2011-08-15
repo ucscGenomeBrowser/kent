@@ -95,7 +95,7 @@ class SoftFile(OrderedDict):
 class HighThroughputSoftFile(SoftFile):
 
 	def __init__(self, filePath=''):
-		SoftFile__init__(self, filePath)
+		SoftFile.__init__(self, filePath)
 
 	def readStanza(self, stanza):
 		if stanza[0].startswith('^SAMPLE'):
@@ -112,7 +112,7 @@ class HighThroughputSoftFile(SoftFile):
 class MicroArraySoftFile(SoftFile):
 
 	def __init__(self, filePath=''):
-		SoftFile__init__(self, filePath)
+		SoftFile.__init__(self, filePath)
 		
 	def readStanza(self, stanza):
 		if stanza[0].startswith('^SAMPLE'):

@@ -50,6 +50,14 @@ datatypes = {
 	'Switchgear': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
 	'TfbsValid': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None)
 }
+
+#compare this to the source in datatype, give GP ids depending on the type
+gpIds = {
+	'genomic': '63443',
+	'transcriptomic': '30709',
+	'protein': '63447'
+}
+
 cvDetails = {
 	'cell':	[ 'organism', 'description', 'karyotype', 'lineage', 'sex' ],
 	'antibody': [ 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId' ]
@@ -124,7 +132,10 @@ def isSupplimentaryFile(file):
 def sampleTitle(stanza, expVars):
 	concat = stanza[expVars[0]].replace('-m', '')
 	for expVar in expVars[1:len(expVars)]:
-		concat += '_' + stanza[expVar]
+		if expVar in stanza:
+			concat += '_' + stanza[expVar]
+		else:
+			print 'warning: %s not in %s' % (expVar, stanza.name)
 	return concat
 	
 def createMappings(mdb):
@@ -170,7 +181,7 @@ def createMappings(mdb):
 	return expIds, expVars, geoMapping, series, datatype
 	
 	
-def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series):
+def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series, datatype, replace):
 	
 	if 'geoSeriesAccession' in series:
 		print 'Existing series ' + series['composite'] + ' using geoSeriesAccession ' + series['geoSeriesAccession']
@@ -181,11 +192,27 @@ def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series):
 	seriesStanza = SeriesStanza()
 	seriesStanza['^SERIES'] = series['composite']
 	seriesStanza['!Series_title'] = compositeTrack.trackDb[compositeTrack.name]['longLabel'] #STILL INCORRECT
-	seriesStanza['!Series_summary'] = '[REPLACE]'
-	seriesStanza['!Series_overall_design'] = '[REPLACE]'
+	
+	if '!Series_summary' in replace:
+		seriesStanza['!Series_summary'] = replace['!Series_summary']
+	else:
+		raise Error('no series summary found. Please include in replace file.')
+		seriesStanza['!Series_summary'] = '[REPLACE]'
+		
+	if '!Series_overall_design' in replace:
+		seriesStanza['!Series_overall_design'] = replace['!Series_overall_design']
+	else:
+		raise Error('no series overall design found. Please include in replace file.')
+		seriesStanza['!Series_overall_design'] = '[REPLACE]'
+		
 	seriesStanza['!Series_web_link'] = [ compositeTrack.url, 'http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html' ]
-	seriesStanza['!Series_contributor'] = '[REPLACE]'
-	seriesStanza['!Series_gp_id'] = '[REPLACE]'
+	
+	if '!Series_contributor' in replace:
+		seriesStanza['!Series_contributor'] = replace['!Series_contributor']
+	else:
+		seriesStanza['!Series_contributor'] = '[REPLACE]'
+		
+	seriesStanza['!Series_gp_id'] = gpIds[datatype.source]
 	
 	# could use !Series_variable_* and !Series_repeats_*
 	
@@ -199,14 +226,14 @@ def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series):
 	
 	softfile[series['composite']] = seriesStanza
 	
-def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping, series, datatype):
+def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping, series, datatype, instrument, replace):
 	
 	print 'Creating HighThroughput soft file'
 
-	softfile = SoftFile()
+	softfile = HighThroughputSoftFile()
 	fileList = list()
 	
-	createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series)
+	createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series, datatype, replace)
 		
 	for idNum in expIds.iterkeys():
 		
@@ -304,12 +331,19 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
 		sample['!Sample_library_source'] = datatype.source
 		sample['!Sample_library_selection'] = datatype.selection
 		
-		# set to replace for if nothing has a seqPlatform
+		# set to replace for if nothing has a seqPlatform and no instrument model is specified.
 		sample['!Sample_instrument_model'] = '[REPLACE]'
 		for stanza in expId:	
 			if 'seqPlatform' in stanza:
 				sample['!Sample_instrument_model'] = instrumentModels[stanza['seqPlatform']]
-			
+				break
+			elif instrument != None:
+				sample['!Sample_instrument_model'] = instrumentModels[instrument]
+				break
+		if sample['!Sample_instrument_model'] == '[REPLACE]':
+			if '!Sample_instrument_model' in replace:
+				sample['!Sample_instrument_model'] = replace['!Sample_instrument_model']
+				
 		sample['!Sample_data_processing'] = compositeTrack.url
 
 		if idNum in geoMapping and geoMapping[idNum] != 'Inconsistent':
@@ -321,6 +355,8 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
 		
 		
 def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype):
+	
+	raise KeyError('microarray')
 	
 	print 'Creating MicroArray soft file'
 
@@ -360,8 +396,8 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 
 		# sample['!Sample_table'] = KeyOptional # CEL file
 		sample['!Sample_source_name_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
-		sample['!Sample_organism_ch'] = '[REPLACE]' #KeyOnePlusNumbered
-		sample['!Sample_characteristics_ch'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_organism_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_characteristics_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
 		# sample['!Sample_biomaterial_provider_ch'] = KeyZeroPlusNumbered
 		# sample['!Sample_treatment_protocol_ch'] = KeyZeroPlusNumbered
 		# sample['!Sample_growth_protocol_ch'] = KeyZeroPlusNumbered
@@ -441,6 +477,8 @@ def main():
 
 	parser = argparse.ArgumentParser(description = 'Prepares a submission to GEO. Creates a soft file and shell script with the correct call to aspera.')
 	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
+	parser.add_argument('-i', '--instrument', help='If specified, expIds without instruments listed will default to this value. Use the no-spacing name eg Illumina_GA2')
+	parser.add_argument('-r', '--replace', help='Give the name of a file that has contents to be used to replace unspecified tags in metadata (description, contributers, etc)')
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
 	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
 	parser.add_argument('expIds', nargs='*', help='Any number of expIds separated by spaces, you can also specify a range by using a hyphen, "140 150 160-170" for instance, or leave blank to specify the entire file')
@@ -451,10 +489,21 @@ def main():
 	
 	args = parser.parse_args(sys.argv[1:])
 		
-	compositeTrack = CompositeTrack(args.database, args.composite)
+	compositeTrack = CompositeTrack(args.database, args.composite, args.trackPath)
 
 	cvPath = compositeTrack.trackPath + 'cv/alpha/cv.ra'
 	cv = CvFile(cvPath)
+	
+	replace = dict()
+	if args.replace != None:
+		for line in open(args.replace):
+			if line == '':
+				continue
+			key, val = map(str.strip, line.split('=', 1))
+			if key not in replace:
+				replace[key] = list()
+			replace[key].append(val)
+		
 	
 	ids = list()
 	
@@ -465,7 +514,7 @@ def main():
 		else:
 			ids.append(int(id))
 	
-	expIds, expVars, geoMapping, series, datatype = createMappings(compositeTrack.metaDb)
+	expIds, expVars, geoMapping, series, datatype = createMappings(compositeTrack.alphaMetaDb)
 	
 	submission = dict()
 	if len(ids) == 0:
@@ -481,19 +530,29 @@ def main():
 	print 'Generating soft using expIds ' + expIdStr
 	
 	if datatype.soft == HighThroughputSoftFile:
-		softfile, fileList = createHighThroughputSoftFile(compositeTrack, cv, submission, expVars, geoMapping, series, datatype)
+		softfile, fileList = createHighThroughputSoftFile(compositeTrack, cv, submission, expVars, geoMapping, series, datatype, args.instrument, replace)
 	elif datatype.soft == MicroArraySoftFile:
 		softfile, fileList = createMicroArraySoftFile(compositeTrack, cv, submission, expVars, geoMapping, series, datatype)
 	else:
 		raise KeyError('unsupported type')
-		
-	print 'Writing soft file'
+	
+	print 'Creating directory'
+	
 	d = datetime.datetime.today()
-	datestring = '%4d%02d%02d' % (d.year, d.month, d.day)
-	outfileName = '%s%s.soft' % (compositeTrack.name, datestring)
+	datestring = '%4d-%02d-%02d' % (d.year, d.month, d.day)
+	
+	dirname = '%s_%s/' % (compositeTrack.name, datestring)
+	os.mkdir(dirname)
+	
+	print 'Writing file'
+	
+	outfileName = '%s%s.soft' % (dirname, compositeTrack.name)
 	outfile = open(outfileName, 'w')
 	outfile.write(str(softfile))
-	outscript = open(compositeTrack.name + datestring + '.sh', 'w')
+	fileslistname = '%sfiles.txt' % dirname
+	fileslist = open(fileslistname, 'w')
+	scriptname = '%supload.sh' % dirname
+	outscript = open(scriptname, 'w')
 	outscript.write('#!/bin/sh\n\n')
 	outscript.write('/opt/aspera/connect/bin/ascp -i ~/encode_geo_key/encode_geo_key.ppk -QTr -l300m \\\n')
 	
@@ -502,11 +561,13 @@ def main():
 			print IOError(file.path + ' does not exist')
 		else:
 			outscript.write(file.path + ' \\\n')
+			fileslist.write(file.name + '\n')
 	
 	outscript.write('asp-geo@upload.ncbi.nlm.nih.gov:ENCODE\n')
 	outscript.close()
+	fileslist.close()
 
-	os.system('chmod +x ' + compositeTrack.name + datestring + '.sh')
+	os.system('chmod +x ' + scriptname)
 		
 	print 'Finished!'
 	
