@@ -1,7 +1,7 @@
 metaObject wgEncodeUwTfbs
 objType composite
 composite wgEncodeUwTfbs
-expVars lab,dataType,cell,antibody
+expVars lab,dataType,cell,antibody,treatment
 geoSeriesAccession GSE30263
 
 metaObject wgEncodeUwTfbsA549CtcfStdAlnRep1
