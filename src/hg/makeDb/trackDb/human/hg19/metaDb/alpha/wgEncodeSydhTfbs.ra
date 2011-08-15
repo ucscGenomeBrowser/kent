@@ -3668,6 +3668,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeSydhTfbsGm12878P300bStdAlnRep1.bam
 grant Snyder
 lab Stanford
+md5sum bam=af55699051245edf18a0e061146dcd07,bai=77ecf46b430747b1570b62e1886f7bc7
 project wgEncode
 replicate 1
 setType exp
@@ -3689,6 +3690,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeSydhTfbsGm12878P300bStdAlnRep2.bam
 grant Snyder
 lab Stanford
+md5sum bam=5f42bbac44759c96755de774cc12af47,bai=d8547d55df12dd81f15cb18ac3248acd
 project wgEncode
 replicate 2
 setType exp
@@ -3711,6 +3713,7 @@ fileName wgEncodeSydhTfbsGm12878P300bStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum b47d8a6898a2ae6b6a627b61d201b056
 project wgEncode
 setType exp
 subId 4698
@@ -3732,6 +3735,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeSydhTfbsGm12878P300bStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum e8afa5616e2a3a597d995b21da4e56f6
 project wgEncode
 replicate 1
 setType exp
@@ -3753,6 +3757,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeSydhTfbsGm12878P300bStdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum c53a26c1e385e77e828512f2d1ca96b3
 project wgEncode
 replicate 2
 setType exp
@@ -3775,6 +3780,7 @@ fileName wgEncodeSydhTfbsGm12878P300bStdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 99d776eadfe37b45719d76a84c3b6c12
 project wgEncode
 setType exp
 subId 4698
@@ -43771,6 +43777,7 @@ dateUnrestricted 2012-05-03
 fileName wgEncodeSydhTfbsMcf7Gata3UcdAlnRep1.bam
 grant Snyder
 lab USC
+md5sum bam=02264c6d0a9868153af4cbfe191dfaaa,bai=63b7376b8a9d2a097567dfa40c1c3bb2
 project wgEncode
 replicate 1
 setType exp
@@ -43792,6 +43799,7 @@ dateUnrestricted 2012-05-03
 fileName wgEncodeSydhTfbsMcf7Gata3UcdAlnRep2.bam
 grant Snyder
 lab USC
+md5sum bam=b86317c688ae58bf962d3e0433fd971c,bai=6721bebd99c0ab10359225f1fe449eec
 project wgEncode
 replicate 2
 setType exp
@@ -43814,6 +43822,7 @@ fileName wgEncodeSydhTfbsMcf7Gata3UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum e61ff8573853711f7da720260fff5879
 project wgEncode
 setType exp
 subId 4699
@@ -43835,6 +43844,7 @@ dateUnrestricted 2012-05-03
 fileName wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
+md5sum 0c437c119365108b1aba0e70545f62ce
 project wgEncode
 replicate 1
 setType exp
@@ -43856,6 +43866,7 @@ dateUnrestricted 2012-05-03
 fileName wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
+md5sum 3c112cf76ff69b3c5ceb43fe22818a54
 project wgEncode
 replicate 2
 setType exp
@@ -43878,6 +43889,7 @@ fileName wgEncodeSydhTfbsMcf7Gata3UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum d42ad7e9974882e93ea2a67011a6ea3c
 project wgEncode
 setType exp
 subId 4699
@@ -44190,6 +44202,7 @@ dateUnrestricted 2012-05-03
 fileName wgEncodeSydhTfbsMcf7Znf217UcdAlnRep1.bam
 grant Snyder
 lab USC
+md5sum bam=6bc6bbc99050130601a2350d6bb4f6f9,bai=c812b637263979ae33c93dbce60dc63b
 project wgEncode
 replicate 1
 setType exp
@@ -44211,6 +44224,7 @@ dateUnrestricted 2012-05-03
 fileName wgEncodeSydhTfbsMcf7Znf217UcdAlnRep2.bam
 grant Snyder
 lab USC
+md5sum bam=cd7c956392c4629f46946f15ead95985,bai=50cb13a8070ed5850526febedbd1a4e7
 project wgEncode
 replicate 2
 setType exp
@@ -44233,6 +44247,7 @@ fileName wgEncodeSydhTfbsMcf7Znf217UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum 197c425bc94cf17dcc0a553b92572aa7
 project wgEncode
 setType exp
 subId 4700
@@ -44254,6 +44269,7 @@ dateUnrestricted 2012-05-03
 fileName wgEncodeSydhTfbsMcf7Znf217UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
+md5sum 1d08560ddfe32e16dcbc4520b87df78e
 project wgEncode
 replicate 1
 setType exp
@@ -44275,6 +44291,7 @@ dateUnrestricted 2012-05-03
 fileName wgEncodeSydhTfbsMcf7Znf217UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
+md5sum 4be2ff4ad189648610f480e5b2bafac5
 project wgEncode
 replicate 2
 setType exp
@@ -44297,6 +44314,7 @@ fileName wgEncodeSydhTfbsMcf7Znf217UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum 0b37a0dc9d9ab8f515a918c08c67498b
 project wgEncode
 setType exp
 subId 4700
@@ -46951,4 +46969,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -904457397
+# MAGIC: -707624183
