@@ -227,11 +227,13 @@ static unsigned short *clusterChroms(const struct vcfFile *vcff, int centerIx,
  * in the order determined by the hacTree, and set retGtHapEnd to its length/end. */
 {
 int len = slCount(vcff->records);
-// Should alpha depend on len?  Should the penalty drop off with distance?  Seems like
-// straight-up exponential will cause the signal to drop to nothing pretty quickly...
+// Limit the number of variants that we compare, to keep from timing out:
+const int maxVariantsPerSide = 50;
+int startIx = max(0, centerIx - maxVariantsPerSide);
+int endIx = min(len, centerIx+1 + maxVariantsPerSide);
 double alpha = 0.5;
 struct lm *lm = lmInit(0);
-struct cwaExtraData helper = { centerIx, len, alpha, lm };
+struct cwaExtraData helper = { centerIx-startIx, endIx-startIx, alpha, lm };
 int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
 int gtCount = vcff->genotypeCount;
 // Make an slList of hapClusters, but allocate in a big block so I can use
@@ -247,9 +249,11 @@ for (i=0;  i < ploidy * gtCount;  i++)
 boolean haveHaploid = FALSE;
 int varIx;
 struct vcfRecord *rec;
-for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
+for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, rec = rec->next)
     {
-    vcfParseGenotypes(rec);
+    if (varIx < startIx)
+	continue;
+    int countIx = varIx - startIx;
     int gtIx;
     for (gtIx=0;  gtIx < gtCount;  gtIx++)
 	{
@@ -262,7 +266,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
 	    c1->leafCount = 1;
 	    c1->gtHapIx = gtIx << 1;
 	    if (gt->hapIxA == 0)
-		c1->refCounts[varIx] = 1;
+		c1->refCounts[countIx] = 1;
 	    if (gt->isHaploid)
 		haveHaploid = TRUE;
 	    else
@@ -270,7 +274,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
 		c2->leafCount = 1;
 		c2->gtHapIx = (gtIx << 1) | 1;
 		if (gt->hapIxB == 0)
-		    c2->refCounts[varIx] = 1;
+		    c2->refCounts[countIx] = 1;
 		}
 	    }
 	else
@@ -279,7 +283,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
 	    c1->leafCount = c2->leafCount = 1;
 	    c1->gtHapIx = gtIx << 1;
 	    c2->gtHapIx = (gtIx << 1) | 1;
-	    c1->unkCounts[varIx] = c2->unkCounts[varIx] = 1;
+	    c1->unkCounts[countIx] = c2->unkCounts[countIx] = 1;
 	    }
 	}
     if (haveHaploid)
@@ -644,11 +648,14 @@ boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, compositeLevel,
 					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
 boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
+struct vcfRecord *rec;
+for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    vcfParseGenotypes(rec);
 unsigned short gtHapCount = 0;
 int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 struct hacTree *ht = NULL;
 unsigned short *gtHapOrder = clusterChroms(vcff, centerIx, &gtHapCount, &ht);
-struct vcfRecord *rec, *centerRec = NULL;
+struct vcfRecord *centerRec = NULL;
 for (rec = vcff->records, ix=0;  rec != NULL;  rec = rec->next, ix++)
     {
     if (ix == centerIx)

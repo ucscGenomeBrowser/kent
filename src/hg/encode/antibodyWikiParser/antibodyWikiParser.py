@@ -164,7 +164,8 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir, noDo
                             newValidationFile = open(downloadFilename, "wb")
                             newValidationFile.write(validationData)
                             newValidationFile.close()
-                            downloadedFileList = downloadedFileList + " " + downloadFilename
+                            downloadedFileList = "%s %s" % (downloadedFileList,
+                                                            downloadFilename)
                         else:
                             print "Warning: not downloading", url, ": not a PDF file";
             if len(urlClauses) == 1:

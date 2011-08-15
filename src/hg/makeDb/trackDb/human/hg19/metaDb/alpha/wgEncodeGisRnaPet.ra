@@ -268,7 +268,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum a87c37d5997250c04b4cabb3627f3ec5
+md5sum f89ce7a4a60a27d2b406f8ab40b6e798
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -324,7 +324,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum f36808d54051996ab1f3b71759662c48
+md5sum 8abeabbf4976dd5318d80d62f15b87ae
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3325,4 +3325,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 360194261
+# MAGIC: -1699877092

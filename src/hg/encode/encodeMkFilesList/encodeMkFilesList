@@ -327,6 +327,8 @@ foreach my $element (@sort){
 #ignore this, it's for debugging the stat function
 #incidentally, these are the fields of the array returned by stat($file)
 my @statlist = qw(dev inode file linknum uid grpid devid file lastaccess lastmodify inochng blksize blkamt);
+my %seenmd5s;
+
 
 #md5 is threaded, files done in parallel
 if ($opt{'md5'}){
@@ -548,6 +550,14 @@ if ($opt{'md5'}){
 		my @stat = stat("$file");
 		#print STDERR "file = $file\n";
 		#stat[9] is last modify time from perl's file stat
+		#this unless and else are to make sure that there are no 2 files sharing the same md5sum,
+		#if there is, it warns you, as there could be others
+		unless (exists $seenmd5s{$md5sums{$file}}){
+			$seenmd5s{$md5sums{$file}} = $file;
+		}
+		else {
+			print STDERR "$file and $seenmd5s{$md5sums{$file}} have the same md5sum: $md5sums{$file}\n";
+		}
 		print MDF "$file $md5sums{$file} $stat[9]\n";
 	}
 	close MDF;
@@ -621,8 +631,13 @@ foreach my $file (@filemask){
 			my @temp = @{$ref};
 			$filehash{$temp[0]} = $temp[1]; 
 		}
-
-
+		
+		if ($opt{'verbose'} >=4){
+			print STDERR "mdb infor for table $tablename:\n";
+			foreach my $mdbobj (keys %filehash){
+				print STDERR "$mdbobj = $filehash{$mdbobj}\n";
+			}
+		}
 		#this should be pulled out into 2 subroutines whenever we get comma delimited lists into fileName in metaDb
 		#currently it is a lot of special casing because bai's aren't included in the meta, we have to make the assumption that
 		#the bai is there, but that isn't always the case, so we have to case it back to normal if the expected bai file is missing
@@ -666,9 +681,16 @@ foreach my $file (@filemask){
 		#if either are off, $change the md5sum store in %filehash, and
 		#UPDATE the metaDB with a newly construted bam=,bai= line with data from %md5sums
 		#if both are the same, do nothing
-
 		
-		if (exists $md5sums{$file} && $type ne "bai" && $writedb == 1){
+		#this unless makes sure that you don't have a file with no associated metadata. It assumes that if you're a file 
+		#in the downloads directory, you will have a metadata stanza line fileName = wgEncodeWhatever.type.ext
+		#there is an extra exists in the if statement below so that you don't try to insert metadata into the metaDb as a orphaned stanza of just
+		#obj = filename, var = md5sum, val = [md5sum]
+		#I'm not sure that is required, as I couldn't find any orphaned metaDb entries before this modification, but better safe than sorry.
+		unless (exists $filehash{'fileName'}){
+			print STDERR "$file is an orphaned file, it has no metadata\n";
+		}
+		if (exists $md5sums{$file} && $type ne "bai" && $writedb == 1 && exists($filehash{'fileName'})){
                 	#there does not exist a metaDb md5sum value, do this
 			unless (exists $filehash{'md5sum'}){
                         	$filehash{'md5sum'} = $md5sums{$file};

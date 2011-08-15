@@ -4,13 +4,13 @@
 #define IMAGEV2_H
 
 // set IN_PLACE_UPDATE 1 to update the hgTracks image in-place in the client.
-#define IN_PLACE_UPDATE  0
+#define IN_PLACE_UPDATE  1
 
 //  UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
 //  NOTE: 1x should work fine. Set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to see hidden image while dragging.
 //        Problems with >1x: nextExon and nextItem arrows not addressed.  Dynamic resize occasionally fails.
-//#define IMAGEv2_DRAG_SCROLL
-//#define IMAGEv2_DRAG_SCROLL_SZ 1
+#define IMAGEv2_DRAG_SCROLL
+#define IMAGEv2_DRAG_SCROLL_SZ 1
 
 #ifdef IMAGEv2_DRAG_SCROLL
     #define IMAGEv2_SHORT_MAPITEMS
