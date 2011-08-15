@@ -8,6 +8,7 @@ expId 317
 fileName wgEncodeCrgMapabilityAlign100mer.bigWig
 grant Gingeras
 lab CRG-Guigo
+md5sum a1b1a8c99431fedf6a3b4baef028cca4
 project wgEncode
 size 100mer
 tableName wgEncodeCrgMapabilityAlign100mer
@@ -24,6 +25,7 @@ expId 608
 fileName wgEncodeCrgMapabilityAlign24mer.bigWig
 grant Gingeras
 lab CRG-Guigo
+md5sum ba1c4bb9fb079aa86094572d5a827bb7
 project wgEncode
 size 24mer
 tableName wgEncodeCrgMapabilityAlign24mer
@@ -40,6 +42,7 @@ expId 318
 fileName wgEncodeCrgMapabilityAlign36mer.bigWig
 grant Gingeras
 lab CRG-Guigo
+md5sum debdda148b79a5b5d22ebd13caaf069c
 project wgEncode
 size 36mer
 tableName wgEncodeCrgMapabilityAlign36mer
@@ -56,6 +59,7 @@ expId 319
 fileName wgEncodeCrgMapabilityAlign40mer.bigWig
 grant Gingeras
 lab CRG-Guigo
+md5sum 97d55005d426e4e4a7c304a7a0f3b2a8
 project wgEncode
 size 40mer
 tableName wgEncodeCrgMapabilityAlign40mer
@@ -72,6 +76,7 @@ expId 320
 fileName wgEncodeCrgMapabilityAlign50mer.bigWig
 grant Gingeras
 lab CRG-Guigo
+md5sum 2e73d575594ad4aa3b66e2b436930b8d
 project wgEncode
 size 50mer
 tableName wgEncodeCrgMapabilityAlign50mer
@@ -88,6 +93,7 @@ expId 321
 fileName wgEncodeCrgMapabilityAlign75mer.bigWig
 grant Gingeras
 lab CRG-Guigo
+md5sum 82bbdf76bf5f1df5e73dcbf4480e0f43
 project wgEncode
 size 75mer
 tableName wgEncodeCrgMapabilityAlign75mer
@@ -106,6 +112,7 @@ fileName wgEncodeDacMapabilityConsensusExcludable.bed.gz
 grant Birney
 lab DAC-Stanford
 labVersion consensus: Duke Excluded and DAC UltraHighSignal blacklist
+md5sum 895f1dd97b001a338eb25d665c23d571
 project wgEncode
 subId 4039
 tableName wgEncodeDacMapabilityConsensusExcludable
@@ -123,6 +130,7 @@ fileName wgEncodeDukeMapabilityRegionsExcludable.bed.gz
 grant Crawford
 lab Duke
 labVersion satellite_rna_chrM_500.bed.20080925
+md5sum 6a305b0e7c33700fd11fecbbaf62548a
 project wgEncode
 subId 3840
 tableName wgEncodeDukeMapabilityRegionsExcludable
@@ -140,6 +148,7 @@ fileName wgEncodeDukeMapabilityUniqueness20bp.bigWig
 grant Crawford
 lab Duke
 labVersion 1.0 - 4 or less
+md5sum 829c23fa7e5b351ffd85c03a904728ae
 project wgEncode
 size 20mer
 subId 3840
@@ -158,6 +167,7 @@ fileName wgEncodeDukeMapabilityUniqueness35bp.bigWig
 grant Crawford
 lab Duke
 labVersion 1.0 - 4 or less
+md5sum 1d15ddafe2c8df51cf08495db96679e7
 project wgEncode
 size 35mer
 subId 3840
@@ -169,4 +179,4 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
-# MAGIC: -556871331
+# MAGIC: -338169219

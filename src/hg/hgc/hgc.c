@@ -18426,7 +18426,7 @@ if (cgiVarExists("o"))
     while ((row = sqlNextRow(sr)))
 	{
 	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
-	bedPrintPos((struct bed *)(&dup), 6, tdb);
+	bedPrintPos((struct bed *)(&dup), 4, tdb);
 	printf("<B>Other Position:</B> "
 	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">"
 	       "%s:%d-%d</A> &nbsp;&nbsp;&nbsp;\n",

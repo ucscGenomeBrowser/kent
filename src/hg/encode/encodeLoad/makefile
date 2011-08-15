@@ -5,18 +5,25 @@ include ../../../inc/common.mk
 SCRIPT_FILES = \
 	doEncodeLoad.pl doEncodeUnload.pl
 
+PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
+
+
 all:
-	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
+	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} scripts
 
-alpha: scripts
+development:
+	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_${USER}/bin/scripts scripts schemas
 
-install: 
-	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} scripts schemas
+beta:
+	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_beta/bin/scripts scripts schemas
+
+prod:
+	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_prod/bin/scripts scripts schemas
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
-	    chmod +x $$F; \
-            perl -c $$F && cp $$F ${SCRIPTS}; \
+	  	chmod +x $$F; \
+		perl -c $$F && cp $$F ${SCRIPTS}; \
 	done
 
 schemas: 

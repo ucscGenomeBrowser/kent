@@ -1320,7 +1320,7 @@ int portX = insideX;
 // If a portal was established, then set the portal dimensions
 int portalStart,chromStart;
 double basesPerPixel;
-if (imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
+if (theImgBox && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
     {
     portX = (int)((portalStart - chromStart) / basesPerPixel);
     portX += gfxBorder;
@@ -1961,7 +1961,7 @@ if(theImgBox)
     if (withLeftLabels)
         {
         sliceWidth[stButton]   = trackTabWidth + 1;
-        sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 2;
+        sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 1;
         sliceOffsetX[stSide]   = (revCmplDisp? (tl.picWidth - sliceWidth[stSide] - sliceWidth[stButton]) : sliceWidth[stButton]);
         sliceOffsetX[stButton] = (revCmplDisp? (tl.picWidth - sliceWidth[stButton]) : 0);
         }
@@ -2228,10 +2228,13 @@ if (withLeftLabels && psOutput == NULL)
 
 if (withLeftLabels)
     {
-    Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
+    if (theImgBox == NULL)
+        {
+        Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
 
-    hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
-        gfxBorder, pixHeight, lightRed);
+        hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
+            gfxBorder, pixHeight, lightRed);
+        }
     y = gfxBorder;
     if (rulerMode != tvHide)
         {
@@ -2314,7 +2317,14 @@ if (withLeftLabels)
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
         else
-            y = doLeftLabels(track, hvgSide, font, y);
+            {
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox && track->limitedVis != tvDense)
+                y += sliceHeight;
+            else
+        #endif ///defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+                y = doLeftLabels(track, hvgSide, font, y);
+            }
         }
     }
 else
@@ -2470,7 +2480,11 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
+    #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        else if (track->drawLeftLabels != NULL && (theImgBox == NULL || track->limitedVis == tvDense))
+    #else ///!defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
         else if (track->drawLeftLabels != NULL)
+    #endif ///!defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ <= 1)
             y = doOwnLeftLabels(track, hvgSide, font, y);
         else
             y += trackPlusLabelHeight(track, fontHeight);
@@ -2515,6 +2529,30 @@ if(newWinWidth)
 if(hvgSide != hvg)
     hvGfxClose(&hvgSide);
 hvGfxClose(&hvg);
+
+#ifdef SUPPORT_CONTENT_TYPE
+// following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
+if(sameString(cartUsualString(cart, "hgt.contentType", "html"), "png"))
+    {
+    char buf[4096];
+    FILE *fd = fopen(gifTn.forCgi, "r");
+    if(fd == NULL)
+        // fail some other way (e.g. HTTP 500)?
+        errAbort("Couldn't open png for reading");
+    while(TRUE) 
+        {
+        size_t n = fread(buf, 1, sizeof(buf), fd);
+        if(n)
+            fwrite(buf, 1, n, stdout);
+        else
+            break;
+        }
+    fclose(fd);
+    unlink(gifTn.forCgi);
+    return;
+    }
+#endif
+
 if(theImgBox)
     {
     imageBoxDraw(theImgBox);
@@ -4143,8 +4181,11 @@ if (wikiTrackEnabled(database, NULL))
     wikiDisconnect(&conn);
     }
 
-loadTrackHubs(&trackList, &hubList);
-slReverse(&hubList);
+if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
+    { // If a single track was asked for and it is from a hub, then it is already in trackList
+    loadTrackHubs(&trackList, &hubList);
+    slReverse(&hubList);
+    }
 loadCustomTracks(&trackList);
 groupTracks(hubList, &trackList, pGroupList, vis);
 setSearchedTrackToPackOrFull(trackList);
@@ -4577,6 +4618,38 @@ pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
+static void printTrackTiming()
+{
+hPrintf("<span class='trackTiming'>track, load time, draw time, total<br />\n");
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (track->visibility == tvHide)
+        continue;
+    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
+        {
+        struct track *subtrack;
+        for (subtrack = track->subtracks; subtrack != NULL;
+             subtrack = subtrack->next)
+            if (isSubtrackVisible(subtrack))
+                hPrintf("%s, %d, %d, %d<br />\n", subtrack->shortLabel,
+                            subtrack->loadTime, subtrack->drawTime,
+                            subtrack->loadTime + subtrack->drawTime);
+        }
+    else
+        {
+        hPrintf("%s, %d, %d, %d<br />\n",
+		    track->shortLabel, track->loadTime, track->drawTime,
+		    track->loadTime + track->drawTime);
+        if (startsWith("wigMaf", track->tdb->type))
+            if (track->subtracks)
+                if (track->subtracks->loadTime)
+                    hPrintf("&nbsp; &nbsp; %s wiggle, load %d<br />\n",
+                                track->shortLabel, track->subtracks->loadTime);
+        }
+    }
+hPrintf("</span>\n");
+}
 
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4618,7 +4691,7 @@ hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 #else///ifndef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
 #endif///ndef NEW_JQUERY
-if (!psOutput) cartSaveSession(cart);
+if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
 /* See if want to include sequence search results. */
@@ -4979,8 +5052,14 @@ makeActiveImage(trackList, psOutput);
 fflush(stdout);
 
 if(trackImgOnly)
+    {
     // bail out b/c we are done
+    if (measureTiming)
+        {
+        printTrackTiming();
+        }
     return;
+    }
 
 if (!hideControls)
     {
@@ -5220,35 +5299,8 @@ if (!hideControls)
 	}
 
     if (measureTiming)
-	{
-	hPrintf("track, load time, draw time, total<BR>\n");
-	for (track = trackList; track != NULL; track = track->next)
-	    {
-	    if (track->visibility == tvHide)
-		    continue;
-	    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-		{
-		struct track *subtrack;
-		for (subtrack = track->subtracks; subtrack != NULL;
-						    subtrack = subtrack->next)
-		    if (isSubtrackVisible(subtrack))
-			hPrintf("%s, %d, %d, %d<BR>\n", subtrack->shortLabel,
-				subtrack->loadTime, subtrack->drawTime,
-		subtrack->loadTime + subtrack->drawTime);
-		}
-	    else
-		{
-		hPrintf("%s, %d, %d, %d<BR>\n",
-		    track->shortLabel, track->loadTime, track->drawTime,
-		    track->loadTime + track->drawTime);
-		if (startsWith("wigMaf", track->tdb->type))
-		  if (track->subtracks)
-		      if (track->subtracks->loadTime)
-			 hPrintf("&nbsp; &nbsp; %s wiggle, load %d<BR>\n",
-			    track->shortLabel, track->subtracks->loadTime);
-		}
-	    }
-	}
+        printTrackTiming();
+
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
@@ -6031,6 +6083,7 @@ else
     tracksDisplay();
     }
 
+jsonHashAddBoolean(jsonForClient, "measureTiming", measureTiming);
 hPrintf("<script type='text/javascript'>\n");
 jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
 hPrintf("</script>\n");

@@ -19,7 +19,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b7d7d916256f7fbed062d62f8e638b0c
+md5sum bam=b7d7d916256f7fbed062d62f8e638b0c,bai=35c6c98b4fba7c6866dd70db77845edd
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -46,7 +46,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum c25e4497f13790cfb1cb774af139f031
+md5sum bam=c25e4497f13790cfb1cb774af139f031,bai=e26326ddacc5ba5cdf9c8adc1966d727
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -79,7 +79,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1874
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2
 objType file
@@ -103,7 +103,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1874
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3
 objType table
@@ -229,7 +229,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 84e858ca0735e80e3f4d7849e9c090be
+md5sum bam=84e858ca0735e80e3f4d7849e9c090be,bai=7c42184af4a2fac5a468a0f9516b0d37
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -256,7 +256,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 26293fea65f5e28d1f460fca23661171
+md5sum bam=26293fea65f5e28d1f460fca23661171,bai=c1a97a0db2d230ca4fad14fcdba5bc64
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -284,7 +284,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 30b867ee186936262528423c7d8fecd2
+md5sum bam=30b867ee186936262528423c7d8fecd2,bai=a1b43071f778488fda7582e1616723b6
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -312,7 +312,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 4e211666eebc50fed6118e7bf373b0fe
+md5sum bam=4e211666eebc50fed6118e7bf373b0fe,bai=815b8a68fbea313bff7662bdd8fe1eab
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -391,6 +391,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 6bb7caefd719fcc0c04422ec2b3beab9
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -415,6 +416,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 5f1378912a890da956db7de0d6d4cc78
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -439,6 +441,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 51c4d1679b0ad29888bea2b40e26364a
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -463,6 +466,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 96d6aadb16da66a198aa50c5deca69a3
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -700,7 +704,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum bc50918b17b37c531facded3671a7c94
+md5sum bam=bc50918b17b37c531facded3671a7c94,bai=ab25fea607a09bfc0b0b3a9404176628
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -728,7 +732,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum a6f8f785dc00bc13c5a56fb8330dcd6e
+md5sum bam=a6f8f785dc00bc13c5a56fb8330dcd6e,bai=70a696691bf788f1aeb7e14aad3722a6
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -912,7 +916,7 @@ insertLength 400
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b795de6855f4a9a159fcd17ceb7d5901
+md5sum bam=b795de6855f4a9a159fcd17ceb7d5901,bai=b9d25e5856d5253f6d475b97cc89bb4e
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -965,6 +969,7 @@ grant Myers
 insertLength 400
 lab Caltech
 localization cell
+md5sum f58d510cac0f14b185e8cd860777e0de
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -989,6 +994,7 @@ grant Myers
 insertLength 400
 lab Caltech
 localization cell
+md5sum b1386c9919a18fe8738caa9facd7e342
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1120,7 +1126,7 @@ insertLength 400
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 5a1ed642ee3842aa3b4618d223fea4d2
+md5sum bam=5a1ed642ee3842aa3b4618d223fea4d2,bai=a35275ea9bd05227231c38d898ce995a
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1225,7 +1231,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 8601206e648441dea06b536b97381871
+md5sum bam=8601206e648441dea06b536b97381871,bai=dfd1c803afacdafd96d42e73ee0b0479
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1252,7 +1258,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b42c65ab6d04eb1000d2eb08987a9056
+md5sum bam=b42c65ab6d04eb1000d2eb08987a9056,bai=7393bcc9e383ce072fbce4576db02736
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1330,6 +1336,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 80c729c4dc51d999b29f160fc0c3c0ed
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1355,7 +1362,7 @@ lab Caltech
 labExpId 02971
 labVersion 02971
 localization cell
-md5sum 41c0d9d4424d12abc7afcd33f62fd623
+md5sum 4cb30a64d329b94572729973b2b6bf91
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1379,6 +1386,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum cb57a6acca676e312a685df149895bc5
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1404,7 +1412,7 @@ lab Caltech
 labExpId 02971
 labVersion 02971
 localization cell
-md5sum a8376441f5942f8bf626ee107e0d1153
+md5sum 7ba263090dc325d5422abd68fb363561
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1639,7 +1647,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 76bf6fcbc697c870e2871ea7724dfae7
+md5sum bam=76bf6fcbc697c870e2871ea7724dfae7,bai=4db2f15ef0a74ac054341164664e6d21
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1666,7 +1674,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum d38a684b10152d9bd28388232be48f44
+md5sum bam=d38a684b10152d9bd28388232be48f44,bai=b133850585aaa3435fd33ff0a8ed9e9c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1849,7 +1857,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b875bc2403e407855e14f8307b3689e6
+md5sum bam=b875bc2403e407855e14f8307b3689e6,bai=a07562587f280f070de050099db4197a
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1876,7 +1884,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum f462987ea29143a367c71750afe06bb1
+md5sum bam=f462987ea29143a367c71750afe06bb1,bai=79b7a9b00dc17c9dfd17fd6b7c2c3f9b
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1903,7 +1911,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum e95070c17ae3c7da4ebb738023edba25
+md5sum bam=e95070c17ae3c7da4ebb738023edba25,bai=316c25d160c62cd4eb714a2a96c37b0c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2007,6 +2015,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 6e8b6989524f88ed18e9211f15644ed4
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2032,7 +2041,7 @@ lab Caltech
 labExpId 02970
 labVersion 02970
 localization cell
-md5sum 16378d66248d2dc77390a6886be8504e
+md5sum 41879169ddaff59e75f6c8071709dd3a
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2058,7 +2067,7 @@ lab Caltech
 labExpId 02973
 labVersion 02973
 localization cell
-md5sum 66fc6a44a6c6f22f24aa57fdb5db64c8
+md5sum 4c8e09f2996b0aa75faacae617408447
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2082,6 +2091,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum d20a75deb7ac79d1436c6ef092af6c9f
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2107,7 +2117,7 @@ lab Caltech
 labExpId 02970
 labVersion 02970
 localization cell
-md5sum 4f4cee3858dfd19c7a72f6563d65d4a4
+md5sum 1ed64d59246ea4bd66c8cc1598744d93
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2133,7 +2143,7 @@ lab Caltech
 labExpId 02973
 labVersion 02973
 localization cell
-md5sum f43aedaa36bfcb4f20f69d05b42dbe52
+md5sum c94978a1b5d2846e38b4521b8a029602
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2473,7 +2483,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b8a1fdf2698376e417dc1a904188fc39
+md5sum bam=b8a1fdf2698376e417dc1a904188fc39,bai=b7bff76e55856b32e36eebf2fde4361c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2500,7 +2510,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 6f2488d7085d8c13573bce2014dd35ca
+md5sum bam=6f2488d7085d8c13573bce2014dd35ca,bai=5f8338829a1e4cf57c3bf1c05bc676a6
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2527,7 +2537,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 95b2c965412f7a1cd35f99e0bba4d3c2
+md5sum bam=95b2c965412f7a1cd35f99e0bba4d3c2,bai=41849a151ca64734fc52b0fdf769c3ac
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2788,7 +2798,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 3c6b6a7da491d4a6a9460bf78d20dc4e
+md5sum bam=3c6b6a7da491d4a6a9460bf78d20dc4e,bai=251d27bada4a0dd496cb95fe088398fa
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -2815,7 +2825,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 401e74ccbcd897e7d9dd702ef2e2a8ce
+md5sum bam=401e74ccbcd897e7d9dd702ef2e2a8ce,bai=90696c2bc33fe1f8cf3c8a23e9638e0c
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -2848,7 +2858,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1633
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2
 objType file
@@ -2872,7 +2882,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1874
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3
 objType table
@@ -2998,7 +3008,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 4cf4b19a3e4465dbea1f51a8216fbd95
+md5sum bam=4cf4b19a3e4465dbea1f51a8216fbd95,bai=287adc76cbc7aad9e9bb5c518718bcf9
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3025,7 +3035,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum aa23f6e532a6adbc9536a487066670ab
+md5sum bam=aa23f6e532a6adbc9536a487066670ab,bai=f76674c4442cd6e2257de211722328ea
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3053,7 +3063,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum c98813c9577fa37418f1ae5841964162
+md5sum bam=c98813c9577fa37418f1ae5841964162,bai=1f4f91ad9b262e5407c0e194296a6163
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3081,7 +3091,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum a410a257d7a6ebeb3673e2531934e375
+md5sum bam=a410a257d7a6ebeb3673e2531934e375,bai=6efe87b2c66bb0a28eb15266c7ea2139
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3109,7 +3119,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum e776b497549eb6c7757516fadc29c3b3
+md5sum bam=e776b497549eb6c7757516fadc29c3b3,bai=04b24bf40443c952e45bfb8bbaf86540
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3137,7 +3147,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 4e0a69e803e9a920c988f7bce1553a77
+md5sum bam=4e0a69e803e9a920c988f7bce1553a77,bai=ab082addc7ebb47572f6bc7cb538bbc7
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3268,6 +3278,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 618f5ee048b9f2abe7e2e8e0a96e7b61
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3292,6 +3303,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 486ac5301a47ab617ebaf0cf9fc841a5
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3316,6 +3328,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 895e5173c69c92db7c41d9d84858dc84
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3340,6 +3353,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 0e7cce805f1d78c50c4a7f1e1485decf
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3364,6 +3378,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum c51771a4f8db428f15c7a88c43efd254
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3388,6 +3403,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 0d28ecd7d3b692cee9b5143a44cfde30
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3412,6 +3428,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 1e57b7fa9dcdaf326ffa5af00eca65d5
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3436,6 +3453,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 255330a0214525aa1da4b656f25d7421
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3885,7 +3903,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 1d5de812ce6da76d0930148451c9df7c
+md5sum bam=1d5de812ce6da76d0930148451c9df7c,bai=034616f0c3d4dfbca402a366a023e643
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3913,7 +3931,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 9639b934c03483ed79225c0a922598f0
+md5sum bam=9639b934c03483ed79225c0a922598f0,bai=897b1463a269c34a7b7a7c877e4bd74c
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3941,7 +3959,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum f37195b52920dd494edb4a053f39db69
+md5sum bam=f37195b52920dd494edb4a053f39db69,bai=e491e48dfc95dc9a77cddb9e41e89018
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3969,7 +3987,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum bfede33e27558171bc6e11e116225bd8
+md5sum bam=bfede33e27558171bc6e11e116225bd8,bai=b188968da362e01582a3b653afc90197
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4309,7 +4327,7 @@ insertLength 400
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 66abda0e9463837f62084fb7db7f2039
+md5sum bam=66abda0e9463837f62084fb7db7f2039,bai=de83149535d75004e32a898fa1b18832
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4362,6 +4380,7 @@ grant Myers
 insertLength 400
 lab Caltech
 localization cell
+md5sum 22165a6c61f8cd4b5486da759e3ad9be
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4386,6 +4405,7 @@ grant Myers
 insertLength 400
 lab Caltech
 localization cell
+md5sum 2053e9573bbabb24de68da503dc41e72
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4517,7 +4537,7 @@ insertLength 400
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum bd17b339a2bee1732bc56cbeb38e3861
+md5sum bam=bd17b339a2bee1732bc56cbeb38e3861,bai=edd57aa8b3c501b6ac3a01f1da318e40
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4622,7 +4642,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 34a00a4967798a37486729b287154b38
+md5sum bam=34a00a4967798a37486729b287154b38,bai=0869164d5f267563bb44d5b27b65159f
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -4649,7 +4669,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 6ded65a8d81d53743b63158b70893549
+md5sum bam=6ded65a8d81d53743b63158b70893549,bai=c276d637fb757b93bdfd1ebf26e9192f
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -4727,6 +4747,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 7be9775795bc68cd82ef5f47a140e7f8
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -4750,6 +4771,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 4912e2df4569ae27537b53acb6a6aca7
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -4773,6 +4795,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 95ff2bef7738bbcdd506a1c19c0149c2
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -4796,6 +4819,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum d0722e6cfcffada8c04b4c93708249bb
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -5030,7 +5054,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b1c98e599d3267d3fc180d398e39b9b0
+md5sum bam=b1c98e599d3267d3fc180d398e39b9b0,bai=d679189fca4886cec38d21f75ee99baf
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -5057,7 +5081,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum d5c96023912ae5f31817fbfca973e9c0
+md5sum bam=d5c96023912ae5f31817fbfca973e9c0,bai=d67a8c0dab93beff7950d5c70edf704a
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -5240,7 +5264,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 6ad12d866a26c1b6a37b310ebd788ad1
+md5sum bam=6ad12d866a26c1b6a37b310ebd788ad1,bai=13a263412fb9c9bdc8f037df6bf6a274
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5267,7 +5291,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 857438513e376d2558253af8387b71be
+md5sum bam=857438513e376d2558253af8387b71be,bai=1f8e5f8eb8b3b9d2d5afbbb42fadf4ec
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5300,7 +5324,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1634
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2
 objType file
@@ -5324,7 +5348,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1635
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3
 objType table
@@ -5450,7 +5474,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 04eaef8ed2a4c788486752976bff1799
+md5sum bam=04eaef8ed2a4c788486752976bff1799,bai=929afdbc95ae5e50fcd9b218132551c9
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5477,7 +5501,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 54d6a2a677bf445d78ffbf9f57ded488
+md5sum bam=54d6a2a677bf445d78ffbf9f57ded488,bai=1d97b9d8786a66bb1d0371242af2dd6a
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5505,7 +5529,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 7aec375011d0161d6aa00cf6ef78168b
+md5sum bam=7aec375011d0161d6aa00cf6ef78168b,bai=a2b5be64d6e1167613d7a866db0130f0
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5533,7 +5557,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 355dbee232bc44418ac302bbb8a70dbf
+md5sum bam=355dbee232bc44418ac302bbb8a70dbf,bai=4aa2d30f0dc3c5972cbb61ddbccdce52
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5612,6 +5636,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum ac841c2bd1040b8d9c33b835ee73fd54
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5636,6 +5661,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 8b4e2325aaa0e93a56d512c48c030c26
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5660,6 +5686,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 6bba7f69bfe0cedcd7c1ff01a4b044bf
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5684,6 +5711,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum b0c95c0d38374fbc6dd9f60e30e7cca7
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5921,7 +5949,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum bb04716ad55e6bc1fc13908b572ecfdd
+md5sum bam=bb04716ad55e6bc1fc13908b572ecfdd,bai=4e54a9347c25e75fa454dd684141e9e2
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5949,7 +5977,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 2d1393f563e27fdef545e28f105b152c
+md5sum bam=2d1393f563e27fdef545e28f105b152c,bai=8fe19068876022dd2d78ee794cbd1c92
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6132,7 +6160,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b49542b9c2a6bce74fb049f8873d9022
+md5sum bam=b49542b9c2a6bce74fb049f8873d9022,bai=eb2e128cc7b5ce4bd4bb5a2770631930
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6159,7 +6187,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 65443cd0793f3879ebb377cb92a0fac0
+md5sum bam=65443cd0793f3879ebb377cb92a0fac0,bai=531d57f7154d1227f307fba536dfda99
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6192,7 +6220,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1636
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2
 objType file
@@ -6216,7 +6244,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1638
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
 objType table
@@ -6342,7 +6370,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum ecb7fb96775ccbab8033554234282f3f
+md5sum bam=ecb7fb96775ccbab8033554234282f3f,bai=a9e243707d48c928fd3547c71c082c48
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6369,7 +6397,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum ec3ef47efd4e156ae096aacc5fc5369d
+md5sum bam=ec3ef47efd4e156ae096aacc5fc5369d,bai=3209acd661d774efe56edfa20c126f90
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6397,7 +6425,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum e6027affb5310fb9175806906132ae0d
+md5sum bam=e6027affb5310fb9175806906132ae0d,bai=7d0ce53f821201eafb884de615c83658
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6425,7 +6453,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum a2f89cf26fcb7d3f07bc74ba6a21e0bf
+md5sum bam=a2f89cf26fcb7d3f07bc74ba6a21e0bf,bai=bb95ed70d41b7c57de4129ff031672d7
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6504,6 +6532,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 9b64b6e77b31420cb9c6b43a9992ffa4
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6528,6 +6557,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 7bb086e02f38e86bc54517056c3c3a5b
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6552,6 +6582,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 1eaa731e3060390920def92de527c39b
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6576,6 +6607,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 187d689352b61d09e954f0d510a1bda3
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6813,7 +6845,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 716b0304c6826d6eec9f056a2a6111c9
+md5sum bam=716b0304c6826d6eec9f056a2a6111c9,bai=60a3fd3fbcd4ad2d4c006744bc33c2c5
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6841,7 +6873,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 801604e36f69354a80d22a22b3e99e00
+md5sum bam=801604e36f69354a80d22a22b3e99e00,bai=ce6575149e44635177ecb7ae7f5ac3de
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7024,7 +7056,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 76c6099c1ce24acc59335f6e31354698
+md5sum bam=76c6099c1ce24acc59335f6e31354698,bai=9bcae5aa5cb93d3a6ea95e2e5d312478
 project wgEncode
 readType 2x75
 replicate 1
@@ -7050,7 +7082,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 536fc38bd41cd24fba14271a2b9aea57
+md5sum bam=536fc38bd41cd24fba14271a2b9aea57,bai=8da33db226f90653a9c371e246bab4c8
 project wgEncode
 readType 2x75
 replicate 2
@@ -7125,6 +7157,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 70049c16aff4446a473f1bdbbd3a9846
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -7148,6 +7181,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum f09c61a04a82906c092df0437e74c52c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -7171,6 +7205,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 01ee32f85f02b8e4449075b5ded2f1ac
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -7194,6 +7229,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 85b8477a09a39f5b620a87132edaaf6b
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -7420,7 +7456,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 21f7b4a09370c7732939c476ebb1a871
+md5sum bam=21f7b4a09370c7732939c476ebb1a871,bai=659639e302916e6a7c58e7036f592089
 project wgEncode
 readType 2x75
 replicate 1
@@ -7446,7 +7482,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 33934ac8aa13e7b38da48a1602328948
+md5sum bam=33934ac8aa13e7b38da48a1602328948,bai=792ca88a3ced81e942c6fd24d4e28cbf
 project wgEncode
 readType 2x75
 replicate 2
@@ -7622,7 +7658,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 923812c5c3a7938b2ce7a3f4eb9f8db3
+md5sum bam=923812c5c3a7938b2ce7a3f4eb9f8db3,bai=7bfa2235b23f05c71d6ff4209d0defc9
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7649,7 +7685,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum d0fcf94d7d3ac10e60e1e7b7c935a876
+md5sum bam=d0fcf94d7d3ac10e60e1e7b7c935a876,bai=79d36868185961b5695ad4b415955cb4
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7682,7 +7718,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1639
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2
 objType file
@@ -7706,7 +7742,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1645
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3
 objType table
@@ -7832,7 +7868,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 667c9cacf7150649650dae4026f33d2b
+md5sum bam=667c9cacf7150649650dae4026f33d2b,bai=1ed1363116448f112dc2fa41784d1973
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7859,7 +7895,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum bff9a47403b3b689071b49903950431b
+md5sum bam=bff9a47403b3b689071b49903950431b,bai=b56ae424f1489b868128d737f6f8de16
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7887,7 +7923,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 994c1089194c3fc735dcfb2a3e2d8aa9
+md5sum bam=994c1089194c3fc735dcfb2a3e2d8aa9,bai=b0949131457af254990eb860bb000abf
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7915,7 +7951,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 2cc9fdb535905e17682cae7efc9873a8
+md5sum bam=2cc9fdb535905e17682cae7efc9873a8,bai=215779942f4c1bd117a3b8ff7dbcd9ab
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7994,6 +8030,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 3c88bfe058d345627b19360c2cfd296f
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8018,6 +8055,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum e5005bcbedb456ec37693ef66ca4d945
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8042,6 +8080,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 748f7f1cfbeba2d58c3ec2e0ef5c6fe7
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8066,6 +8105,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 325c828fb2c63a84af9a12f546563705
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8303,7 +8343,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 5c4f0385227aa67b3bd11cdd3599687a
+md5sum bam=5c4f0385227aa67b3bd11cdd3599687a,bai=0b368d951e8b982cb505716ab84a3423
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8331,7 +8371,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum f032a8216e467cdc8e35c8cb6738f208
+md5sum bam=f032a8216e467cdc8e35c8cb6738f208,bai=bc84fe1e35b32569ebda28eb82e0460e
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8514,7 +8554,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 46079cae1a4f5978ff9bea2c90738ae7
+md5sum bam=46079cae1a4f5978ff9bea2c90738ae7,bai=31452197d9adc3544b920da3e6f0ca88
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8541,7 +8581,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 04c3bed4e84dfd806d5fe047171a357f
+md5sum bam=04c3bed4e84dfd806d5fe047171a357f,bai=99ccace987e8989d5821b671d1103c34
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8574,7 +8614,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1874
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dFastqRep2
 objType file
@@ -8598,7 +8638,7 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1646
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
 objType table
@@ -8724,7 +8764,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 6c5fe19781edaccc7ab88b95127cf03f
+md5sum bam=6c5fe19781edaccc7ab88b95127cf03f,bai=38a4781aa67c1c0969f4ae7247038271
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8751,7 +8791,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b6fcc38c93ab4cd45dcadad6b24159f4
+md5sum bam=b6fcc38c93ab4cd45dcadad6b24159f4,bai=878e66f4ea6dad2e2ec9e0481951684e
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8779,7 +8819,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 305076fb990e5f81e2246e72e9f6fa56
+md5sum bam=305076fb990e5f81e2246e72e9f6fa56,bai=7afe7f6e7fac1c2a70d09a4f2aa9eea9
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8807,7 +8847,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum b3dda219a1abd866ed07c5f2e172077e
+md5sum bam=b3dda219a1abd866ed07c5f2e172077e,bai=5d40a9a6df9001f077f46cd156cebfed
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8886,6 +8926,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum e875c01724900f877e56d1ae1d3adddb
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8909,6 +8950,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum ca0d6ac115e44f60e8724c78a73b17f1
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8933,6 +8975,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum a11eea94649481abf7bb2d1b33fdb3f5
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8956,6 +8999,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 7489e112f69e3f5d9a2477b2cd0f3877
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9193,7 +9237,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 5e5f8135899518696eaaf59fb781dc83
+md5sum bam=5e5f8135899518696eaaf59fb781dc83,bai=aceb4f12930994af9c9d04efa852c306
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9221,7 +9265,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum bd3e6dbc27eac2ff24fb22e558255bf5
+md5sum bam=bd3e6dbc27eac2ff24fb22e558255bf5,bai=ace475045b8a19cc89c91503a50584f6
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9404,7 +9448,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum dff28d0040fc6e7a69c7209db0f31bfa
+md5sum bam=dff28d0040fc6e7a69c7209db0f31bfa,bai=08723fcc237bbc5316b70a49692a833b
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9457,6 +9501,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 8f4b9bb3d698f0fabb7b3a70b6ae4f52
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9481,6 +9526,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 145342d9066eb0555371718ef2f7a87a
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9614,7 +9660,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 7046f7c502bd88db1c32a7f114fdf858
+md5sum bam=7046f7c502bd88db1c32a7f114fdf858,bai=7bd4bac910221437abedfa6a5b767fcd
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9747,6 +9793,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 5e4fba08147d0f0f874891f4753d33c9
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9770,6 +9817,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum ff1f9556f455944b96153dfce28e8ca2
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9872,7 +9920,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 34b4380f910b706b1c3def98eeedd73b
+md5sum bam=34b4380f910b706b1c3def98eeedd73b,bai=5f34d180db34ce346c562c01fcc03d18
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9925,7 +9973,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 56674d15b37e7601ac36e58d0d2f9465
+md5sum bam=56674d15b37e7601ac36e58d0d2f9465,bai=2b6a01e0f372efe76c42b838046dae9c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -10030,7 +10078,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum bf90494743bc9877cc6bc565154485ca
+md5sum bam=bf90494743bc9877cc6bc565154485ca,bai=98fd1fd0664b5bdafcd5dada78ec33d3
 project wgEncode
 readType 2x75
 replicate 1
@@ -10056,7 +10104,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 51a067ff282b9061fc39f1a3b98727cd
+md5sum bam=51a067ff282b9061fc39f1a3b98727cd,bai=e60c5c8cb7a63612abe04a6b559657fc
 project wgEncode
 readType 2x75
 replicate 2
@@ -10082,7 +10130,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum d30e635c48943bd85ad061bd5eb7294b
+md5sum bam=d30e635c48943bd85ad061bd5eb7294b,bai=f3eba71c2153f484ca6ad2fa17cdbdd3
 project wgEncode
 readType 2x75
 replicate 3
@@ -10183,6 +10231,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum b144ccab25a4ae10596a9b6d95352eb7
 project wgEncode
 readType 2x75
 replicate 1
@@ -10205,6 +10254,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 1f39b9e3b818f6da44dbd23ec4dace7c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -10228,6 +10278,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 914a451ea395a8929789c48d28f976df
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -10252,6 +10303,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum bdf0179ed4ecd7c98b4b51da897b0f13
 project wgEncode
 readType 2x75
 replicate 1
@@ -10274,6 +10326,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum acd6496ccd6d1785b60ead52e831c67e
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -10297,6 +10350,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum e189d91d06a615de4e18fa8e591386c3
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -10624,7 +10678,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum de0a84aca83f09e93205822f615cf108
+md5sum bam=de0a84aca83f09e93205822f615cf108,bai=7af9380bedc52b57b29fc33a1c16174d
 project wgEncode
 readType 2x75
 replicate 1
@@ -10650,7 +10704,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 3b111346ba963eb5b3958e1f7161268b
+md5sum bam=3b111346ba963eb5b3958e1f7161268b,bai=ae0ad7c3fc1bdffb01a8663c3baf72ef
 project wgEncode
 readType 2x75
 replicate 2
@@ -10676,7 +10730,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum e4454727fe54f4872d50e011278a744f
+md5sum bam=e4454727fe54f4872d50e011278a744f,bai=c20c3a35b5f1f285af2190fcf189ac92
 project wgEncode
 readType 2x75
 replicate 3
@@ -10927,7 +10981,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum d5b78f643ccf7993a885d79c9ac8ff90
+md5sum bam=d5b78f643ccf7993a885d79c9ac8ff90,bai=b9cae79caf35d08a8fa38cb3f1ef9406
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -10960,7 +11014,7 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1483
-view Fastq
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3
 objType table
@@ -11032,7 +11086,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum f1cbc66c36963d1a4db9372eec0c4918
+md5sum bam=f1cbc66c36963d1a4db9372eec0c4918,bai=86f8b7a334ae9c930b4400fffc82f3ff
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -11060,7 +11114,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 82eaf4aa0f4474ff6123a494a4e7bc3c
+md5sum bam=82eaf4aa0f4474ff6123a494a4e7bc3c,bai=2ed8cafe496bf68745fb3fe6b85e9177
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11087,7 +11141,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 102fb4b6454f275f27c3667541cefdda
+md5sum bam=102fb4b6454f275f27c3667541cefdda,bai=8252bf9e9d7bbdc0ec36bb96bd2eefa4
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11166,6 +11220,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum a9a01674724b6d8eeba00af97fee0603
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11189,6 +11244,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum a18d97f8ba14fc7574c0e84db27e508c
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11213,6 +11269,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum dac4b97033fb7e3a4d04349e586049b3
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11236,6 +11293,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 8993a7d4f97d295220dc53d619d4c7d9
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11472,7 +11530,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum d1419ff005feb525b8655b17c4f40e92
+md5sum bam=d1419ff005feb525b8655b17c4f40e92,bai=4145ccde9a59993af21fc29c38b350d5
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11499,7 +11557,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum e6ed66ee1e9173fa83317cff531e60d7
+md5sum bam=e6ed66ee1e9173fa83317cff531e60d7,bai=fcb03c981ac9c28ced7f8741d11835cd
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11682,7 +11740,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 562c779768d207625984bf7fb72d149a
+md5sum bam=562c779768d207625984bf7fb72d149a,bai=fbd5d973c6c8606a71948628431a22a5
 project wgEncode
 readType 2x75
 replicate 1
@@ -11708,7 +11766,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 698eb744de450f19a5859a4b0b31c20e
+md5sum bam=698eb744de450f19a5859a4b0b31c20e,bai=3a4011ed4bce8f730871979e82e1e6f9
 project wgEncode
 readType 2x75
 replicate 2
@@ -11783,6 +11841,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 9ad7e3ac8569e7c4b88880dca57a9d48
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -11806,6 +11865,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum 849b263f0ab8b5cc9c09820d90bcb35f
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -11829,6 +11889,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum c50d9844e78a1a66d9e88acaf33e3948
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -11852,6 +11913,7 @@ grant Myers
 insertLength 200
 lab Caltech
 localization cell
+md5sum a5b70601cb79b746d58606f99fd2e9d6
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -12078,7 +12140,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 0819108916df1d413755b208fe988811
+md5sum bam=0819108916df1d413755b208fe988811,bai=fa2fad06ba5c4ff5e93788adfafd0283
 project wgEncode
 readType 2x75
 replicate 1
@@ -12104,7 +12166,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 65903ccbdb793fb385541a44782d12d0
+md5sum bam=65903ccbdb793fb385541a44782d12d0,bai=623034a1e60a2b5864eebb44a7a0b3bf
 project wgEncode
 readType 2x75
 replicate 2
@@ -12264,4 +12326,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -799829860
+# MAGIC: -610601598

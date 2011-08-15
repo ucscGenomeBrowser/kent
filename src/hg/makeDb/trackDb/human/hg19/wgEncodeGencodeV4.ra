@@ -17,7 +17,6 @@ fileSortOrder tableName=Contents dccAccession=UCSC_Accession
 type genePred
 hgGene on
 hgsid on
-html wgEncodeGencode
 baseColorUseCds given
 baseColorDefault genomicCodons
 wgEncode 1
