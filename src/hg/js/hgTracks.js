@@ -222,7 +222,7 @@ function selectEnd(img, selection)
         newPosition = updatePosition(img, selection, singleClick);
 	if(newPosition != undefined) {
             if(inPlaceUpdate) {
-                navigateInPlace("position=" + newPosition);
+                navigateInPlace("position=" + newPosition, null);
             } else {
                 jQuery('body').css('cursor', 'wait');
 	        document.TrackHeaderForm.submit();
@@ -1003,7 +1003,7 @@ jQuery.fn.panImages = function(){
             $(pan).parents('td.tdData').css('cursor',"url(../images/grabber.cur),w-resize");
 
         pan.mousedown(function(e){
-             if (e.which > 1 || e.button > 1 || e.shiftKey || e.ctrlKey)
+             if (e.which > 1 || e.button > 1 || e.shiftKey)
                  return true;
             if(mouseIsDown == false) {
                 mouseIsDown = true;
@@ -1092,7 +1092,7 @@ jQuery.fn.panImages = function(){
             if(beyondImage) {
                 if(inPlaceUpdate) {
                     var pos = parsePosition(getPosition());
-                    navigateInPlace("position=" + encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end));
+                    navigateInPlace("position=" + encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end), null);
                 } else {
                     document.TrackHeaderForm.submit();
                 }
@@ -2619,9 +2619,6 @@ function handleUpdateTrackMap(response, status)
             hgTracks.trackDb = json.trackDb;
         }
     }
-    if(this.loadingId) {
-        hideLoadingImage(this.loadingId);
-    }
     if(imageV2 && this.id && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
           // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
@@ -2714,6 +2711,12 @@ function handleUpdateTrackMap(response, status)
         if(b[1]) {
             $('#chrom').attr('src', b[1]);
         }
+    }
+    if(this.disabledEle) {
+        this.disabledEle.attr('disabled', '');
+    }
+    if(this.loadingId) {
+        hideLoadingImage(this.loadingId);
     }
     jQuery('body').css('cursor', '');
 }
@@ -2859,25 +2862,27 @@ function handleZoomCodon(response, status)
 function navigateButtonClick(ele)
 {
 // code to update just the imgTbl in response to navigation buttons (zoom-out etc.).
-// currently experimental code (live only in larrym's tree).
+// This is currently experimental code (controlled by IN_PLACE_UPDATE in imageV2.h).
     if(mapIsUpdateable) {
         var params = ele.name + "=" + ele.value;
+        $(ele).attr('disabled', 'disabled');
         // dinking navigation needs additional data
         if(ele.name == "hgt.dinkLL" || ele.name == "hgt.dinkLR") {
             params += "&dinkL=" + $("input[name='dinkL']").val();
         } else if(ele.name == "hgt.dinkRL" || ele.name == "hgt.dinkRR") {
             params += "&dinkR=" + $("input[name='dinkR']").val();
         }
-        navigateInPlace(params);
+        navigateInPlace(params, $(ele));
         return false;
     } else {
         return true;
     }
 }
 
-function navigateInPlace(params)
+function navigateInPlace(params, disabledEle)
 {
 // request an hgTracks image, using params
+// disabledEle is optional; this element will be enabled when update is complete
     jQuery('body').css('cursor', '');
     $.ajax({
                type: "GET",
@@ -2889,6 +2894,7 @@ function navigateInPlace(params)
                error: errorHandler,
                cmd: 'wholeImage',
                loadingId: showLoadingImage("imgTbl"),
+               disabledEle: disabledEle,
                cache: false
            });
 }
