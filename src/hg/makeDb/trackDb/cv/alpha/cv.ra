@@ -3996,6 +3996,23 @@ color 65,105,225
 sex M
 protocol Ren:ES-Bruce4_Ren_protocol.pdf
 
+term Erythrobl
+tag ERYTHROBL
+type Cell Line
+organism mouse
+tissue Blood
+category primaryCells
+age ageUnknown
+strain Unknown
+description Erythroblast, ter119+ cells from liver PROVISIONAL 
+vendorName Mitch Weiss lab
+vendorId Erythroblast
+orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
+termId 7079
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+color 153,38,0
+sex U
+protocol Hardison:Erythroblast__Hardison_protocol.pdf
 
 term FatPad
 tag FAT
@@ -4263,8 +4280,7 @@ termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 86,180,233
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
+protocol Hardison:Megakaryocyte_Hardison_protocol.pdf
 
 #Needs protocol, VendorName and Term Id
 term MEL
