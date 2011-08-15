@@ -2316,7 +2316,7 @@ wgEncode 1
     maxLimit 12768
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction mean
+    windowingFunction mean+whiskers
    
 
 #	    track wgEncodeSydhTfbsHelas3Rad21IggrabSig
