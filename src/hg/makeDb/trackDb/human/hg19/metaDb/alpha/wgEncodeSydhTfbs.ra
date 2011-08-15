@@ -43755,6 +43755,134 @@ tableName wgEncodeSydhTfbsMcf10aesStat3TamStdSig
 treatment 4OHTAM_1uM_36hr
 view Signal
 
+metaObject wgEncodeSydhTfbsMcf7Gata3UcdAlnRep1
+objType file
+antibody GATA3_(SC-268)
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Gata3UcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4699
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMcf7Gata3UcdAlnRep2
+objType file
+antibody GATA3_(SC-268)
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Gata3UcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4699
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMcf7Gata3UcdPk
+objType table
+antibody GATA3_(SC-268)
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Gata3UcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4699
+tableName wgEncodeSydhTfbsMcf7Gata3UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep1
+objType file
+antibody GATA3_(SC-268)
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4699
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep2
+objType file
+antibody GATA3_(SC-268)
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep2.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4699
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMcf7Gata3UcdSig
+objType table
+antibody GATA3_(SC-268)
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Gata3UcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4699
+tableName wgEncodeSydhTfbsMcf7Gata3UcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsMcf7Hae2f1RawDataRep1
 objType file
 antibody HA-E2F1
@@ -44043,6 +44171,134 @@ project wgEncode
 setType input
 subId 3056
 tableName wgEncodeSydhTfbsMcf7InputUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMcf7Znf217UcdAlnRep1
+objType file
+antibody ZNF217
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Znf217UcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4700
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMcf7Znf217UcdAlnRep2
+objType file
+antibody ZNF217
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Znf217UcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4700
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMcf7Znf217UcdPk
+objType table
+antibody ZNF217
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Znf217UcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4700
+tableName wgEncodeSydhTfbsMcf7Znf217UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMcf7Znf217UcdRawDataRep1
+objType file
+antibody ZNF217
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Znf217UcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4700
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMcf7Znf217UcdRawDataRep2
+objType file
+antibody ZNF217
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Znf217UcdRawDataRep2.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4700
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMcf7Znf217UcdSig
+objType table
+antibody ZNF217
+cell MCF-7
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF-7/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-03
+dateUnrestricted 2012-05-03
+fileName wgEncodeSydhTfbsMcf7Znf217UcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4700
+tableName wgEncodeSydhTfbsMcf7Znf217UcdSig
 treatment None
 view Signal
 
@@ -46695,4 +46951,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 2089153943
+# MAGIC: -1414060643
