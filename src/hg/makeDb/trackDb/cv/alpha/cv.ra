@@ -1193,8 +1193,8 @@ sex F
 tier 3
 protocol Myers:ECC1_Myers_protocol.pdf
 
-term FetalPBDE
-tag FPBDE
+term PBDEFetal
+tag PBDEF
 type Cell Line
 tier 3
 organism human
