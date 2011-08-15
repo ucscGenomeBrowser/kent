@@ -23843,7 +23843,8 @@ while ((row = sqlNextRow(sr)) != NULL)
           firstTime = FALSE;
           printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank>%s</A>", grShort, grShort);
         } else {
-          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank>, %s</A>", grShort, grShort);
+          printf(", ");
+          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank>%s</A>", grShort, grShort);
         }
      }
      printf("<BR>");

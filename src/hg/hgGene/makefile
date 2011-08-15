@@ -10,7 +10,7 @@ O = hgGene.o altSplice.o ctd.o dnaBindMotif.o domains.o gad.o\
     flyBaseInfo.o go.o info.o links.o microarray.o \
     method.o localization.o mrnaDescriptions.o otherOrgs.o\
     pathways.o pseudoGene.o rgdInfo.o rnaStructure.o sequence.o swissProtComments.o \
-    synonym.o wikiTrack.o
+    synonym.o wikiTrack.o geneReviews.o
 
 include ../../inc/cgi_build_rules.mk
 
