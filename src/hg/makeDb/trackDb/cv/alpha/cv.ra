@@ -655,7 +655,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Lung_01-11002
-#same tag as BC_Lung_H12817N
 tag BCLUNG
 type Cell Line
 tier 3
@@ -3425,7 +3424,7 @@ tag THEK293
 type Cell Line
 tier 3
 organism human
-description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line (PROVISIONAL)
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line 
 lineage mesoderm
 karyotype cancer, hypotriploid, XXX
 sex F
@@ -8374,7 +8373,7 @@ term Contigs
 tag CONTIGS
 type view
 label Contigs
-description PROVISIONAL Contigs represent continuous regions of the genome that are covered by several overlapping RNA-seq reads. The score represents the logarithm of the expression level (read coverage depth).
+description Contigs represent continuous regions of the genome that are covered by several overlapping RNA-seq reads. The score represents the logarithm of the expression level (read coverage depth).
 
 term Excludable
 tag EXCLU
@@ -8447,7 +8446,7 @@ term GeneDeNovo
 tag GENEDENO
 type view
 label Genes De Novo
-description 'De novo' genes defined by Cufflinks with FPKM. PROVISIONAL 
+description 'De novo' genes defined by Cufflinks with FPKM. 
 
 term GeneGencV7 
 tag GENEGENCV7 
@@ -8483,7 +8482,7 @@ term Junctions
 tag JUNCTIONS
 type view
 label Junctions
-description TopHat-defined (Caltech) or STAR-defined (CSHL) splice junctions PROVISIONAL
+description TopHat-defined (Caltech) or STAR-defined (CSHL) splice junctions
 
 # Interactions may be a better view for this
 term Matrix
@@ -8508,13 +8507,13 @@ term PeakSeqConservPeaks
 tag PSCPEAKS
 type view
 label PeakSeq Conserved Peaks
-description Regions of conserved enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+description Regions of conserved enriched signal in experiment performed by PeakSeq 
 
 term PeakSeqOptimalPeak
 tag PSOPEAKS
 type view
 label PeakSeq Optimal Peaks
-description Regions of optimal enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+description Regions of optimal enriched signal in experiment performed by PeakSeq 
 
 term PeptideMapping
 tag PEPTIDEMAP
@@ -8635,13 +8634,13 @@ term SppConservPeaks
 tag SCPPEAKS
 type view
 label Spp Conservative Peaks
-description Regions of optimal enriched signal in experiment performed by Spp (PROVISIONAL)
+description Regions of optimal enriched signal in experiment performed by Spp
 
 term SppOptimalPeaks
 tag SOPPEAKS
 type view
 label SPP Optimal Peaks
-description Regions of conserved enriched signal in experiment performed by SPP (PROVISIONAL)
+description Regions of conserved enriched signal in experiment performed by SPP 
 
 term TranscriptDeNovo
 tag TRANSDENOVO
@@ -8683,7 +8682,7 @@ term UniformSignal
 tag UNISIG
 type view
 label Uniform Signal by AWG
-description Uniform Signal (PROVISIONAL)
+description Uniform Signal 
 
 term Uniqueness
 tag UNQ
