@@ -19,7 +19,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.2Da,msMsMassTolerance=0.5Da
 localization nucleus
 md5sum ae94d26d4b814417b0e2eb8b12ebbcdf
-origAssembly hg19
 project wgEncode
 subId 4184
 view RawSignal
@@ -41,7 +40,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.2Da,msMsMassTolerance=0.5Da
 localization nucleus
 md5sum 9856f1cec710e90ac373fa163ffc4b2a
-origAssembly hg19
 project wgEncode
 subId 4177
 tableName wgEncodeUncBsuProtGm12878NucleusSig
@@ -63,7 +61,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
 localization cytosol
 md5sum d8a53eed15fb882526361549e8935a43
-origAssembly hg19
 project wgEncode
 subId 4172
 view RawSignal
@@ -84,7 +81,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
 localization cytosol
 md5sum 3fa499e2c977964cce1f7339bedf3eb4
-origAssembly hg19
 project wgEncode
 subId 4171
 tableName wgEncodeUncBsuProtK562CytosolSig
@@ -106,7 +102,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
 localization membraneFraction
 md5sum 61598b6a23b39d6e7afa17638aa62d58
-origAssembly hg19
 project wgEncode
 subId 4182
 view RawSignal
@@ -128,7 +123,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
 localization membraneFraction
 md5sum 0c9d8bffb89338769234e0a660eadbb6
-origAssembly hg19
 project wgEncode
 subId 4174
 tableName wgEncodeUncBsuProtK562MembranefractionSig
@@ -150,7 +144,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
 localization mitochondria
 md5sum e16c1c0fccd61f1435b2cd02322aa42e
-origAssembly hg19
 project wgEncode
 subId 4180
 view RawSignal
@@ -171,7 +164,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
 localization mitochondria
 md5sum d1ce8faf0aa0116e44feb42dc5d154ec
-origAssembly hg19
 project wgEncode
 subId 4178
 tableName wgEncodeUncBsuProtK562MitoSig
@@ -193,7 +185,6 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
 localization nucleus
 md5sum 68fb4ffa048b542b79b622c2bd260a03
-origAssembly hg19
 project wgEncode
 subId 4181
 view RawSignal
@@ -214,10 +205,9 @@ lab UNC/BSU
 labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
 localization nucleus
 md5sum dd8b0570585f83eaec8e6afe22d342e6
-origAssembly hg19
 project wgEncode
 subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: 1754455549
+# MAGIC: -161372995

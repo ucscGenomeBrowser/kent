@@ -2529,6 +2529,30 @@ if(newWinWidth)
 if(hvgSide != hvg)
     hvGfxClose(&hvgSide);
 hvGfxClose(&hvg);
+
+#ifdef SUPPORT_CONTENT_TYPE
+// following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
+if(sameString(cartUsualString(cart, "hgt.contentType", "html"), "png"))
+    {
+    char buf[4096];
+    FILE *fd = fopen(gifTn.forCgi, "r");
+    if(fd == NULL)
+        // fail some other way (e.g. HTTP 500)?
+        errAbort("Couldn't open png for reading");
+    while(TRUE) 
+        {
+        size_t n = fread(buf, 1, sizeof(buf), fd);
+        if(n)
+            fwrite(buf, 1, n, stdout);
+        else
+            break;
+        }
+    fclose(fd);
+    unlink(gifTn.forCgi);
+    return;
+    }
+#endif
+
 if(theImgBox)
     {
     imageBoxDraw(theImgBox);
@@ -4594,6 +4618,38 @@ pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
+static void printTrackTiming()
+{
+hPrintf("<span class='trackTiming'>track, load time, draw time, total<br />\n");
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (track->visibility == tvHide)
+        continue;
+    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
+        {
+        struct track *subtrack;
+        for (subtrack = track->subtracks; subtrack != NULL;
+             subtrack = subtrack->next)
+            if (isSubtrackVisible(subtrack))
+                hPrintf("%s, %d, %d, %d<br />\n", subtrack->shortLabel,
+                            subtrack->loadTime, subtrack->drawTime,
+                            subtrack->loadTime + subtrack->drawTime);
+        }
+    else
+        {
+        hPrintf("%s, %d, %d, %d<br />\n",
+		    track->shortLabel, track->loadTime, track->drawTime,
+		    track->loadTime + track->drawTime);
+        if (startsWith("wigMaf", track->tdb->type))
+            if (track->subtracks)
+                if (track->subtracks->loadTime)
+                    hPrintf("&nbsp; &nbsp; %s wiggle, load %d<br />\n",
+                                track->shortLabel, track->subtracks->loadTime);
+        }
+    }
+hPrintf("</span>\n");
+}
 
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4635,7 +4691,7 @@ hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 #else///ifndef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
 #endif///ndef NEW_JQUERY
-if (!psOutput) cartSaveSession(cart);
+if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
 /* See if want to include sequence search results. */
@@ -4996,8 +5052,14 @@ makeActiveImage(trackList, psOutput);
 fflush(stdout);
 
 if(trackImgOnly)
+    {
     // bail out b/c we are done
+    if (measureTiming)
+        {
+        printTrackTiming();
+        }
     return;
+    }
 
 if (!hideControls)
     {
@@ -5237,35 +5299,8 @@ if (!hideControls)
 	}
 
     if (measureTiming)
-	{
-	hPrintf("track, load time, draw time, total<BR>\n");
-	for (track = trackList; track != NULL; track = track->next)
-	    {
-	    if (track->visibility == tvHide)
-		    continue;
-	    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-		{
-		struct track *subtrack;
-		for (subtrack = track->subtracks; subtrack != NULL;
-						    subtrack = subtrack->next)
-		    if (isSubtrackVisible(subtrack))
-			hPrintf("%s, %d, %d, %d<BR>\n", subtrack->shortLabel,
-				subtrack->loadTime, subtrack->drawTime,
-		subtrack->loadTime + subtrack->drawTime);
-		}
-	    else
-		{
-		hPrintf("%s, %d, %d, %d<BR>\n",
-		    track->shortLabel, track->loadTime, track->drawTime,
-		    track->loadTime + track->drawTime);
-		if (startsWith("wigMaf", track->tdb->type))
-		  if (track->subtracks)
-		      if (track->subtracks->loadTime)
-			 hPrintf("&nbsp; &nbsp; %s wiggle, load %d<BR>\n",
-			    track->shortLabel, track->subtracks->loadTime);
-		}
-	    }
-	}
+        printTrackTiming();
+
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
@@ -6048,6 +6083,7 @@ else
     tracksDisplay();
     }
 
+jsonHashAddBoolean(jsonForClient, "measureTiming", measureTiming);
 hPrintf("<script type='text/javascript'>\n");
 jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
 hPrintf("</script>\n");

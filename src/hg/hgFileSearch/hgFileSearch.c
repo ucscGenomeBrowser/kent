@@ -311,7 +311,7 @@ struct slPair *mdbSelects = NULL;
 if(metaDbExists)
     {
     struct slPair *mdbVars = mdbVarsSearchable(conn,FALSE,TRUE); // Not tables, just files
-    mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
+    mdbSelects = mdbSelectPairs(cart, mdbVars);
     char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols,TRUE); // restricted to file search
     if (output)
         {
