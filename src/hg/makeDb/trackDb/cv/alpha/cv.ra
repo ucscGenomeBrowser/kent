@@ -74,23 +74,24 @@ sex F
 tier 1
 protocol ENCODE:K562_protocol.pdf
 
-term K562b
-tag K562b
-type Cell Line
-organism human
-tissue Blood
-description leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
-vendorName ATCC
-vendorId CCL-243
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
-karyotype cancer
-lineage mesoderm
-termId BTO:0000664
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
-color 46,0,184
-sex F
-tier 1
-protocol Farnham:K562_protocol.pdf
+#deprecated, it's pretty much the same cell as K562.
+#term K562b
+#tag K562b
+#type Cell Line
+#organism human
+#tissue Blood
+#description leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
+#vendorName ATCC
+#vendorId CCL-243
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
+#karyotype cancer
+#lineage mesoderm
+#termId BTO:0000664
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
+#color 46,0,184
+#sex F
+#tier 1
+#protocol Farnham:K562_protocol.pdf
 
 term HepG2
 tag HEPG2
@@ -110,23 +111,24 @@ sex M
 tier 2
 protocol ENCODE:HepG2_protocol.pdf
 
-term HepG2b
-tag HEPG2b
-type Cell Line
-organism human
-description liver carcinoma (UCDavis alternate)
-tissue Liver
-vendorName ATCC
-vendorId HB-8065
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
-lineage endoderm
-karyotype cancer
-termId BTO:0000559
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
-color 189,0,157
-sex M
-tier 2
-protocol ENCODE:HepG2_protocol.pdf
+#deprecated, same cell as HepG2
+#term HepG2b
+#tag HEPG2b
+#type Cell Line
+#organism human
+#description liver carcinoma (UCDavis alternate)
+#tissue Liver
+#vendorName ATCC
+#vendorId HB-8065
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
+#lineage endoderm
+#karyotype cancer
+#termId BTO:0000559
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+#color 189,0,157
+#sex M
+#tier 2
+#protocol ENCODE:HepG2_protocol.pdf
 
 term HeLa-S3
 tag HELAS3
