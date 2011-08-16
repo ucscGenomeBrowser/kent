@@ -54,4 +54,11 @@ shortLabel ENC RNA Subcell Loc
 longLabel ENCODE RNA Subcellular Localization 
 wgEncode 1
 
+track wgEncodeProtGenoSuper
+superTrack on
+group expression
+shortLabel ENC ProtGeno
+longLabel ENCODE Proteogenomics
+wgEncode 1
+
 

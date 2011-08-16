@@ -87,7 +87,7 @@ if ($opt{'table'}){
 	$metadb = $opt{'table'};
 	#don't allow people to use metaDb directly
 	if ($metadb eq "metaDb"){
-		print STDERR "Direct modification of metaDb is not allowed, please use a sandbox table. Writing to Db has been disabled.\n";
+		print STDERR "Direct modification of metaDb is not allowed, please use a sandbox table. Writing to common metaDb table has been disabled.\n";
 		$writedb = 0;
 	}
 }
