@@ -688,6 +688,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam
 grant Gingeras
 lab GIS
@@ -714,6 +716,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam
 grant Gingeras
 lab GIS
@@ -740,6 +744,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
@@ -766,6 +772,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapClustersRep2.bed.gz
 grant Gingeras
 lab GIS
@@ -792,6 +800,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
@@ -817,6 +827,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab GIS
@@ -842,6 +854,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
@@ -867,6 +881,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab GIS
@@ -892,6 +908,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
@@ -918,6 +936,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapMinusRawRep2.bigWig
 grant Gingeras
 lab GIS
@@ -944,6 +964,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
@@ -970,6 +992,8 @@ dataType RnaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
+dccAccession wgEncodeEH001744
+expId 1744
 fileName wgEncodeGisRnaPetHelas3CellPapPlusRawRep2.bigWig
 grant Gingeras
 lab GIS
@@ -3485,4 +3509,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: -216389014
+# MAGIC: -676216320
