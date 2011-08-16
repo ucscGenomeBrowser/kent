@@ -73,7 +73,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId DHG001
@@ -384,7 +384,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000249
 expId 249
-fileName wgEncodeGisRnaPetGm12878NucleusPapClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetGm12878NucleusPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId DHG002
@@ -1372,7 +1372,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000252
 expId 252
-fileName wgEncodeGisRnaPetHepg2CytosolPapClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetHepg2CytosolPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId DHH002
@@ -1542,7 +1542,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000253
 expId 253
-fileName wgEncodeGisRnaPetHepg2NucleusPapClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetHepg2NucleusPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId DHH003
@@ -2052,7 +2052,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000254
 expId 254
-fileName wgEncodeGisRnaPetK562ChromatinTotalClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetK562ChromatinTotalClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId PHK001
@@ -2367,7 +2367,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000256
 expId 256
-fileName wgEncodeGisRnaPetK562NucleolusTotalClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetK562NucleolusTotalClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId DHK008
@@ -2537,7 +2537,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000257
 expId 257
-fileName wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId PHK002
@@ -2680,7 +2680,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000258
 expId 258
-fileName wgEncodeGisRnaPetK562NucleusPapClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetK562NucleusPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId DHK006
@@ -2850,7 +2850,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000259
 expId 259
-fileName wgEncodeGisRnaPetK562PolysomePapClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetK562PolysomePapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId DHK007
@@ -3356,7 +3356,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 dccAccession wgEncodeEH000262
 expId 262
-fileName wgEncodeGisRnaPetProstateCellPapClustersRep1.bed12.gz
+fileName wgEncodeGisRnaPetProstateCellPapClustersRep1.bed.gz
 grant Gingeras
 lab GIS
 labExpId DHP001
