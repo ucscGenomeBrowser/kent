@@ -1137,7 +1137,7 @@ lineage missing
 karyotype missing
 sex M
 tissue Skin
-vendorName 
+vendorName ATCC 
 vendorId CRL-1974
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1974&Template=cellBiology
 lab Crawford
@@ -2772,7 +2772,7 @@ lineage missing
 karyotype missing
 sex F
 tissue Uterus
-vendorName 
+vendorName SIGMA-ALDRICH
 vendorId 99040201
 orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?D7=0&N5=SEARCH_CONCAT_PNO%7CBRAND_KEY&N4=99040201%7CSIGMA&N25=0&QS=ON&F=SPEC
 lab Crawford
