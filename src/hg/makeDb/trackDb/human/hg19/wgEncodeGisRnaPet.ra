@@ -13,7 +13,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionB=rep dimensionD
 dimensionBchecked rep1
 dimensionDchecked Free,Based
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract labVersion=Lab_Version replicate=Replicate view=View bioRep=Cross_Lab<BR>BioReplicate labProtocolId=<i>Protocol<BR>ID</i> labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession origAssembly=Original<BR>Assembly seqPlatform=Platform fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
-sortOrder view=- cellType=+ localization=+ cloneed=+ rep=+
+sortOrder view=- cellType=+ localization=+ cloned=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 priority 0
