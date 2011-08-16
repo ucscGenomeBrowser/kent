@@ -1194,7 +1194,7 @@ tier 3
 protocol Myers:ECC1_Myers_protocol.pdf
 
 term PBDEFetal
-tag PBDEF
+tag PBDEFETAL
 type Cell Line
 tier 3
 organism human
