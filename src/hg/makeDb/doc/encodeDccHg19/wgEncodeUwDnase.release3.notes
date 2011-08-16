@@ -8,198 +8,198 @@ The composite track is wgEncodeUwDnase
 4 - table wgEncodeUwDnaseNhaAlnRep2 does not exist, from filetype bam
 5 - could not find None.bai file for wgEncodeUwDnaseHreAlnRep2.bam
 6 - table wgEncodeUwDnaseHreAlnRep2 does not exist, from filetype bam
-7 - could not find None.bai file for wgEncodeUwDnaseHepg2AlnRep2.bam
-8 - table wgEncodeUwDnaseHepg2AlnRep2 does not exist, from filetype bam
-9 - could not find None.bai file for wgEncodeUwDnasePanc1AlnRep2.bam
-10 - table wgEncodeUwDnasePanc1AlnRep2 does not exist, from filetype bam
-11 - could not find None.bai file for wgEncodeUwDnaseAg04449AlnRep1.bam
-12 - table wgEncodeUwDnaseAg04449AlnRep1 does not exist, from filetype bam
-13 - could not find None.bai file for wgEncodeUwDnaseAg04450AlnRep1.bam
-14 - table wgEncodeUwDnaseAg04450AlnRep1 does not exist, from filetype bam
-15 - table wgEncodeUwDnaseMonocd14HotspotsRep1 does not exist, from filetype broadPeak
-16 - could not find None.bai file for wgEncodeUwDnaseBe2cAlnRep2.bam
-17 - table wgEncodeUwDnaseBe2cAlnRep2 does not exist, from filetype bam
-18 - could not find None.bai file for wgEncodeUwDnaseHmfAlnRep1.bam
-19 - table wgEncodeUwDnaseHmfAlnRep1 does not exist, from filetype bam
-20 - could not find None.bai file for wgEncodeUwDnaseHaspAlnRep1.bam
-21 - table wgEncodeUwDnaseHaspAlnRep1 does not exist, from filetype bam
-22 - could not find None.bai file for wgEncodeUwDnaseNhdfadAlnRep2.bam
-23 - table wgEncodeUwDnaseNhdfadAlnRep2 does not exist, from filetype bam
-24 - could not find None.bai file for wgEncodeUwDnaseSaecAlnRep1.bam
-25 - table wgEncodeUwDnaseSaecAlnRep1 does not exist, from filetype bam
-26 - could not find None.bai file for wgEncodeUwDnaseHffAlnRep1.bam
-27 - table wgEncodeUwDnaseHffAlnRep1 does not exist, from filetype bam
-28 - could not find None.bai file for wgEncodeUwDnaseH7esAlnRep2.bam
-29 - table wgEncodeUwDnaseH7esAlnRep2 does not exist, from filetype bam
-30 - could not find None.bai file for wgEncodeUwDnaseNb4AlnRep2.bam
-31 - table wgEncodeUwDnaseNb4AlnRep2 does not exist, from filetype bam
-32 - could not find None.bai file for wgEncodeUwDnaseA549AlnRep2.bam
-33 - table wgEncodeUwDnaseA549AlnRep2 does not exist, from filetype bam
-34 - could not find None.bai file for wgEncodeUwDnaseBjAlnRep1.bam
-35 - table wgEncodeUwDnaseBjAlnRep1 does not exist, from filetype bam
-36 - could not find None.bai file for wgEncodeUwDnaseHmveclblAlnRep1.bam
-37 - table wgEncodeUwDnaseHmveclblAlnRep1 does not exist, from filetype bam
-38 - could not find None.bai file for wgEncodeUwDnaseWi38OhtamAlnRep2.bam
-39 - table wgEncodeUwDnaseWi38OhtamAlnRep2 does not exist, from filetype bam
-40 - could not find None.bai file for wgEncodeUwDnaseAg09309AlnRep1.bam
-41 - table wgEncodeUwDnaseAg09309AlnRep1 does not exist, from filetype bam
-42 - could not find None.bai file for wgEncodeUwDnaseH7esAlnRep1.bam
-43 - table wgEncodeUwDnaseH7esAlnRep1 does not exist, from filetype bam
-44 - could not find None.bai file for wgEncodeUwDnaseWerirb1AlnRep2.bam
-45 - table wgEncodeUwDnaseWerirb1AlnRep2 does not exist, from filetype bam
-46 - could not find None.bai file for wgEncodeUwDnaseHreAlnRep1.bam
-47 - table wgEncodeUwDnaseHreAlnRep1 does not exist, from filetype bam
-48 - could not find None.bai file for wgEncodeUwDnaseHmvecdneoAlnRep2.bam
-49 - table wgEncodeUwDnaseHmvecdneoAlnRep2 does not exist, from filetype bam
-50 - could not find None.bai file for wgEncodeUwDnaseWi38AlnRep1.bam
-51 - table wgEncodeUwDnaseWi38AlnRep1 does not exist, from filetype bam
-52 - could not find None.bai file for wgEncodeUwDnaseGm12865AlnRep1.bam
-53 - table wgEncodeUwDnaseGm12865AlnRep1 does not exist, from filetype bam
-54 - could not find None.bai file for wgEncodeUwDnaseHvmfAlnRep1.bam
-55 - table wgEncodeUwDnaseHvmfAlnRep1 does not exist, from filetype bam
-56 - could not find None.bai file for wgEncodeUwDnaseSkmcAlnRep2.bam
-57 - table wgEncodeUwDnaseSkmcAlnRep2 does not exist, from filetype bam
-58 - could not find None.bai file for wgEncodeUwDnaseAg04450AlnRep2.bam
-59 - table wgEncodeUwDnaseAg04450AlnRep2 does not exist, from filetype bam
-60 - could not find None.bai file for wgEncodeUwDnaseHcmAlnRep1.bam
-61 - table wgEncodeUwDnaseHcmAlnRep1 does not exist, from filetype bam
-62 - could not find None.bai file for wgEncodeUwDnaseHffmycAlnRep1.bam
-63 - table wgEncodeUwDnaseHffmycAlnRep1 does not exist, from filetype bam
-64 - could not find None.bai file for wgEncodeUwDnaseK562AlnRep1.bam
-65 - table wgEncodeUwDnaseK562AlnRep1 does not exist, from filetype bam
-66 - could not find None.bai file for wgEncodeUwDnaseHconfAlnRep2.bam
-67 - table wgEncodeUwDnaseHconfAlnRep2 does not exist, from filetype bam
-68 - could not find None.bai file for wgEncodeUwDnaseHsmmAlnRep1.bam
-69 - table wgEncodeUwDnaseHsmmAlnRep1 does not exist, from filetype bam
-70 - could not find None.bai file for wgEncodeUwDnaseHcfAlnRep1.bam
-71 - table wgEncodeUwDnaseHcfAlnRep1 does not exist, from filetype bam
-72 - could not find None.bai file for wgEncodeUwDnaseGm06990AlnRep1.bam
-73 - table wgEncodeUwDnaseGm06990AlnRep1 does not exist, from filetype bam
-74 - could not find None.bai file for wgEncodeUwDnaseHmecAlnRep2.bam
-75 - table wgEncodeUwDnaseHmecAlnRep2 does not exist, from filetype bam
-76 - could not find None.bai file for wgEncodeUwDnaseHuvecAlnRep2.bam
-77 - table wgEncodeUwDnaseHuvecAlnRep2 does not exist, from filetype bam
-78 - could not find None.bai file for wgEncodeUwDnaseHffAlnRep2.bam
-79 - table wgEncodeUwDnaseHffAlnRep2 does not exist, from filetype bam
-80 - could not find None.bai file for wgEncodeUwDnaseMonocd14AlnRep1.bam
-81 - table wgEncodeUwDnaseMonocd14AlnRep1 does not exist, from filetype bam
-82 - could not find None.bai file for wgEncodeUwDnaseHahAlnRep1.bam
-83 - table wgEncodeUwDnaseHahAlnRep1 does not exist, from filetype bam
-84 - could not find None.bai file for wgEncodeUwDnaseHmvecdneoAlnRep1.bam
-85 - table wgEncodeUwDnaseHmvecdneoAlnRep1 does not exist, from filetype bam
-86 - could not find None.bai file for wgEncodeUwDnaseHvmfAlnRep2.bam
-87 - table wgEncodeUwDnaseHvmfAlnRep2 does not exist, from filetype bam
-88 - could not find None.bai file for wgEncodeUwDnaseCmkAlnRep1.bam
-89 - table wgEncodeUwDnaseCmkAlnRep1 does not exist, from filetype bam
-90 - could not find None.bai file for wgEncodeUwDnaseHrpeAlnRep1.bam
-91 - table wgEncodeUwDnaseHrpeAlnRep1 does not exist, from filetype bam
-92 - could not find None.bai file for wgEncodeUwDnaseHct116AlnRep1.bam
-93 - table wgEncodeUwDnaseHct116AlnRep1 does not exist, from filetype bam
-94 - could not find None.bai file for wgEncodeUwDnaseNhdfneoAlnRep1.bam
-95 - table wgEncodeUwDnaseNhdfneoAlnRep1 does not exist, from filetype bam
-96 - could not find None.bai file for wgEncodeUwDnaseHgfAlnRep1.bam
-97 - table wgEncodeUwDnaseHgfAlnRep1 does not exist, from filetype bam
-98 - could not find None.bai file for wgEncodeUwDnaseSknshraAlnRep1.bam
-99 - table wgEncodeUwDnaseSknshraAlnRep1 does not exist, from filetype bam
-100 - could not find None.bai file for wgEncodeUwDnaseHeeAlnRep2.bam
-101 - table wgEncodeUwDnaseHeeAlnRep2 does not exist, from filetype bam
-102 - table wgEncodeUwDnaseMonocd14RawRep1 does not exist, from filetype bigWig
-103 - could not find None.bai file for wgEncodeUwDnaseNhdfneoAlnRep2.bam
-104 - table wgEncodeUwDnaseNhdfneoAlnRep2 does not exist, from filetype bam
-105 - could not find None.bai file for wgEncodeUwDnaseHcmAlnRep2.bam
-106 - table wgEncodeUwDnaseHcmAlnRep2 does not exist, from filetype bam
-107 - could not find None.bai file for wgEncodeUwDnaseHbmecAlnRep1.bam
-108 - table wgEncodeUwDnaseHbmecAlnRep1 does not exist, from filetype bam
-109 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyadAlnRep2.bam
-110 - table wgEncodeUwDnaseHmvecdlyadAlnRep2 does not exist, from filetype bam
-111 - could not find None.bai file for wgEncodeUwDnaseHmvecllyAlnRep1.bam
-112 - table wgEncodeUwDnaseHmvecllyAlnRep1 does not exist, from filetype bam
-113 - could not find None.bai file for wgEncodeUwDnaseHipeAlnRep2.bam
-114 - table wgEncodeUwDnaseHipeAlnRep2 does not exist, from filetype bam
-115 - could not find None.bai file for wgEncodeUwDnaseNhekAlnRep1.bam
-116 - table wgEncodeUwDnaseNhekAlnRep1 does not exist, from filetype bam
-117 - could not find None.bai file for wgEncodeUwDnaseHpfAlnRep2.bam
-118 - table wgEncodeUwDnaseHpfAlnRep2 does not exist, from filetype bam
-119 - could not find None.bai file for wgEncodeUwDnaseHcpeAlnRep2.bam
-120 - table wgEncodeUwDnaseHcpeAlnRep2 does not exist, from filetype bam
-121 - could not find None.bai file for wgEncodeUwDnaseHconfAlnRep1.bam
-122 - table wgEncodeUwDnaseHconfAlnRep1 does not exist, from filetype bam
-123 - could not find None.bai file for wgEncodeUwDnasePanc1AlnRep1.bam
-124 - table wgEncodeUwDnasePanc1AlnRep1 does not exist, from filetype bam
-125 - could not find None.bai file for wgEncodeUwDnaseJurkatAlnRep2.bam
-126 - table wgEncodeUwDnaseJurkatAlnRep2 does not exist, from filetype bam
-127 - could not find None.bai file for wgEncodeUwDnaseCaco2AlnRep2.bam
-128 - table wgEncodeUwDnaseCaco2AlnRep2 does not exist, from filetype bam
-129 - could not find None.bai file for wgEncodeUwDnaseMcf7AlnRep1.bam
-130 - table wgEncodeUwDnaseMcf7AlnRep1 does not exist, from filetype bam
-131 - could not find None.bai file for wgEncodeUwDnaseHpafAlnRep1.bam
-132 - table wgEncodeUwDnaseHpafAlnRep1 does not exist, from filetype bam
-133 - could not find None.bai file for wgEncodeUwDnaseA549AlnRep1.bam
-134 - table wgEncodeUwDnaseA549AlnRep1 does not exist, from filetype bam
-135 - could not find None.bai file for wgEncodeUwDnaseGm12865AlnRep2.bam
-136 - table wgEncodeUwDnaseGm12865AlnRep2 does not exist, from filetype bam
-137 - could not find None.bai file for wgEncodeUwDnaseK562AlnRep2.bam
-138 - table wgEncodeUwDnaseK562AlnRep2 does not exist, from filetype bam
-139 - could not find None.bai file for wgEncodeUwDnaseRptecAlnRep2.bam
-140 - table wgEncodeUwDnaseRptecAlnRep2 does not exist, from filetype bam
-141 - could not find None.bai file for wgEncodeUwDnaseHacAlnRep2.bam
-142 - table wgEncodeUwDnaseHacAlnRep2 does not exist, from filetype bam
-143 - could not find None.bai file for wgEncodeUwDnaseHelas3AlnRep2.bam
-144 - table wgEncodeUwDnaseHelas3AlnRep2 does not exist, from filetype bam
-145 - could not find None.bai file for wgEncodeUwDnaseAg10803AlnRep2.bam
-146 - table wgEncodeUwDnaseAg10803AlnRep2 does not exist, from filetype bam
-147 - could not find None.bai file for wgEncodeUwDnaseAoafAlnRep1.bam
-148 - table wgEncodeUwDnaseAoafAlnRep1 does not exist, from filetype bam
-149 - could not find None.bai file for wgEncodeUwDnaseNhlfAlnRep2.bam
-150 - table wgEncodeUwDnaseNhlfAlnRep2 does not exist, from filetype bam
-151 - could not find None.bai file for wgEncodeUwDnaseHaeAlnRep2.bam
-152 - table wgEncodeUwDnaseHaeAlnRep2 does not exist, from filetype bam
-153 - could not find None.bai file for wgEncodeUwDnaseGm12864AlnRep1.bam
-154 - table wgEncodeUwDnaseGm12864AlnRep1 does not exist, from filetype bam
-155 - could not find None.bai file for wgEncodeUwDnaseHahAlnRep2.bam
-156 - table wgEncodeUwDnaseHahAlnRep2 does not exist, from filetype bam
-157 - could not find None.bai file for wgEncodeUwDnaseSknmcAlnRep2.bam
-158 - table wgEncodeUwDnaseSknmcAlnRep2 does not exist, from filetype bam
-159 - could not find None.bai file for wgEncodeUwDnaseHuvecAlnRep1.bam
-160 - table wgEncodeUwDnaseHuvecAlnRep1 does not exist, from filetype bam
-161 - could not find None.bai file for wgEncodeUwDnaseHaspAlnRep2.bam
-162 - table wgEncodeUwDnaseHaspAlnRep2 does not exist, from filetype bam
-163 - could not find None.bai file for wgEncodeUwDnaseGm12878AlnRep2.bam
-164 - table wgEncodeUwDnaseGm12878AlnRep2 does not exist, from filetype bam
-165 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam
-166 - table wgEncodeUwDnaseHmvecdlyneoAlnRep2 does not exist, from filetype bam
-167 - could not find None.bai file for wgEncodeUwDnaseLncapAlnRep1.bam
-168 - table wgEncodeUwDnaseLncapAlnRep1 does not exist, from filetype bam
-169 - could not find None.bai file for wgEncodeUwDnaseHmvecllyAlnRep2.bam
-170 - table wgEncodeUwDnaseHmvecllyAlnRep2 does not exist, from filetype bam
-171 - could not find None.bai file for wgEncodeUwDnaseHnpceAlnRep2.bam
-172 - table wgEncodeUwDnaseHnpceAlnRep2 does not exist, from filetype bam
-173 - could not find None.bai file for wgEncodeUwDnaseHmvecdbladAlnRep1.bam
-174 - table wgEncodeUwDnaseHmvecdbladAlnRep1 does not exist, from filetype bam
-175 - could not find None.bai file for wgEncodeUwDnaseWi38AlnRep2.bam
-176 - table wgEncodeUwDnaseWi38AlnRep2 does not exist, from filetype bam
-177 - could not find None.bai file for wgEncodeUwDnaseNhdfadAlnRep1.bam
-178 - table wgEncodeUwDnaseNhdfadAlnRep1 does not exist, from filetype bam
-179 - could not find None.bai file for wgEncodeUwDnaseHrceAlnRep2.bam
-180 - table wgEncodeUwDnaseHrceAlnRep2 does not exist, from filetype bam
-181 - could not find None.bai file for wgEncodeUwDnaseHeeAlnRep1.bam
-182 - table wgEncodeUwDnaseHeeAlnRep1 does not exist, from filetype bam
-183 - could not find None.bai file for wgEncodeUwDnaseHffmycAlnRep2.bam
-184 - table wgEncodeUwDnaseHffmycAlnRep2 does not exist, from filetype bam
-185 - could not find None.bai file for wgEncodeUwDnaseHipeAlnRep1.bam
-186 - table wgEncodeUwDnaseHipeAlnRep1 does not exist, from filetype bam
-187 - could not find None.bai file for wgEncodeUwDnaseHcfAlnRep2.bam
-188 - table wgEncodeUwDnaseHcfAlnRep2 does not exist, from filetype bam
-189 - could not find None.bai file for wgEncodeUwDnaseHmveclblAlnRep2.bam
-190 - table wgEncodeUwDnaseHmveclblAlnRep2 does not exist, from filetype bam
-191 - could not find None.bai file for wgEncodeUwDnaseHpdlfAlnRep2.bam
-192 - table wgEncodeUwDnaseHpdlfAlnRep2 does not exist, from filetype bam
-193 - could not find None.bai file for wgEncodeUwDnaseHpafAlnRep2.bam
-194 - table wgEncodeUwDnaseHpafAlnRep2 does not exist, from filetype bam
-195 - could not find None.bai file for wgEncodeUwDnaseHsmmAlnRep2.bam
-196 - table wgEncodeUwDnaseHsmmAlnRep2 does not exist, from filetype bam
-197 - could not find None.bai file for wgEncodeUwDnaseNhekAlnRep2.bam
-198 - table wgEncodeUwDnaseNhekAlnRep2 does not exist, from filetype bam
+7 - could not find None.bai file for wgEncodeUwDnasePanc1AlnRep2.bam
+8 - table wgEncodeUwDnasePanc1AlnRep2 does not exist, from filetype bam
+9 - could not find None.bai file for wgEncodeUwDnaseAg04449AlnRep1.bam
+10 - table wgEncodeUwDnaseAg04449AlnRep1 does not exist, from filetype bam
+11 - could not find None.bai file for wgEncodeUwDnaseAg04450AlnRep1.bam
+12 - table wgEncodeUwDnaseAg04450AlnRep1 does not exist, from filetype bam
+13 - table wgEncodeUwDnaseMonocd14HotspotsRep1 does not exist, from filetype broadPeak
+14 - could not find None.bai file for wgEncodeUwDnaseBe2cAlnRep2.bam
+15 - table wgEncodeUwDnaseBe2cAlnRep2 does not exist, from filetype bam
+16 - could not find None.bai file for wgEncodeUwDnaseHmfAlnRep1.bam
+17 - table wgEncodeUwDnaseHmfAlnRep1 does not exist, from filetype bam
+18 - could not find None.bai file for wgEncodeUwDnaseHaspAlnRep1.bam
+19 - table wgEncodeUwDnaseHaspAlnRep1 does not exist, from filetype bam
+20 - could not find None.bai file for wgEncodeUwDnaseNhdfadAlnRep2.bam
+21 - table wgEncodeUwDnaseNhdfadAlnRep2 does not exist, from filetype bam
+22 - could not find None.bai file for wgEncodeUwDnaseSaecAlnRep1.bam
+23 - table wgEncodeUwDnaseSaecAlnRep1 does not exist, from filetype bam
+24 - could not find None.bai file for wgEncodeUwDnaseHffAlnRep1.bam
+25 - table wgEncodeUwDnaseHffAlnRep1 does not exist, from filetype bam
+26 - could not find None.bai file for wgEncodeUwDnaseH7esAlnRep2.bam
+27 - table wgEncodeUwDnaseH7esAlnRep2 does not exist, from filetype bam
+28 - could not find None.bai file for wgEncodeUwDnaseNb4AlnRep2.bam
+29 - table wgEncodeUwDnaseNb4AlnRep2 does not exist, from filetype bam
+30 - could not find None.bai file for wgEncodeUwDnaseA549AlnRep2.bam
+31 - table wgEncodeUwDnaseA549AlnRep2 does not exist, from filetype bam
+32 - could not find None.bai file for wgEncodeUwDnaseBjAlnRep1.bam
+33 - table wgEncodeUwDnaseBjAlnRep1 does not exist, from filetype bam
+34 - could not find None.bai file for wgEncodeUwDnaseHmveclblAlnRep1.bam
+35 - table wgEncodeUwDnaseHmveclblAlnRep1 does not exist, from filetype bam
+36 - could not find None.bai file for wgEncodeUwDnaseWi38OhtamAlnRep2.bam
+37 - table wgEncodeUwDnaseWi38OhtamAlnRep2 does not exist, from filetype bam
+38 - could not find None.bai file for wgEncodeUwDnaseAg09309AlnRep1.bam
+39 - table wgEncodeUwDnaseAg09309AlnRep1 does not exist, from filetype bam
+40 - could not find None.bai file for wgEncodeUwDnaseH7esAlnRep1.bam
+41 - table wgEncodeUwDnaseH7esAlnRep1 does not exist, from filetype bam
+42 - could not find None.bai file for wgEncodeUwDnaseWerirb1AlnRep2.bam
+43 - table wgEncodeUwDnaseWerirb1AlnRep2 does not exist, from filetype bam
+44 - could not find None.bai file for wgEncodeUwDnaseHreAlnRep1.bam
+45 - table wgEncodeUwDnaseHreAlnRep1 does not exist, from filetype bam
+46 - could not find None.bai file for wgEncodeUwDnaseHmvecdneoAlnRep2.bam
+47 - table wgEncodeUwDnaseHmvecdneoAlnRep2 does not exist, from filetype bam
+48 - could not find None.bai file for wgEncodeUwDnaseWi38AlnRep1.bam
+49 - table wgEncodeUwDnaseWi38AlnRep1 does not exist, from filetype bam
+50 - could not find None.bai file for wgEncodeUwDnaseGm12865AlnRep1.bam
+51 - table wgEncodeUwDnaseGm12865AlnRep1 does not exist, from filetype bam
+52 - could not find None.bai file for wgEncodeUwDnaseHvmfAlnRep1.bam
+53 - table wgEncodeUwDnaseHvmfAlnRep1 does not exist, from filetype bam
+54 - could not find None.bai file for wgEncodeUwDnaseSkmcAlnRep2.bam
+55 - table wgEncodeUwDnaseSkmcAlnRep2 does not exist, from filetype bam
+56 - could not find None.bai file for wgEncodeUwDnaseAg04450AlnRep2.bam
+57 - table wgEncodeUwDnaseAg04450AlnRep2 does not exist, from filetype bam
+58 - could not find None.bai file for wgEncodeUwDnaseHcmAlnRep1.bam
+59 - table wgEncodeUwDnaseHcmAlnRep1 does not exist, from filetype bam
+60 - could not find None.bai file for wgEncodeUwDnaseHffmycAlnRep1.bam
+61 - table wgEncodeUwDnaseHffmycAlnRep1 does not exist, from filetype bam
+62 - could not find None.bai file for wgEncodeUwDnaseK562AlnRep1.bam
+63 - table wgEncodeUwDnaseK562AlnRep1 does not exist, from filetype bam
+64 - could not find None.bai file for wgEncodeUwDnaseHconfAlnRep2.bam
+65 - table wgEncodeUwDnaseHconfAlnRep2 does not exist, from filetype bam
+66 - could not find None.bai file for wgEncodeUwDnaseHsmmAlnRep1.bam
+67 - table wgEncodeUwDnaseHsmmAlnRep1 does not exist, from filetype bam
+68 - could not find None.bai file for wgEncodeUwDnaseHcfAlnRep1.bam
+69 - table wgEncodeUwDnaseHcfAlnRep1 does not exist, from filetype bam
+70 - could not find None.bai file for wgEncodeUwDnaseGm06990AlnRep1.bam
+71 - table wgEncodeUwDnaseGm06990AlnRep1 does not exist, from filetype bam
+72 - could not find None.bai file for wgEncodeUwDnaseHmecAlnRep2.bam
+73 - table wgEncodeUwDnaseHmecAlnRep2 does not exist, from filetype bam
+74 - could not find None.bai file for wgEncodeUwDnaseHuvecAlnRep2.bam
+75 - table wgEncodeUwDnaseHuvecAlnRep2 does not exist, from filetype bam
+76 - could not find None.bai file for wgEncodeUwDnaseHffAlnRep2.bam
+77 - table wgEncodeUwDnaseHffAlnRep2 does not exist, from filetype bam
+78 - could not find None.bai file for wgEncodeUwDnaseMonocd14AlnRep1.bam
+79 - table wgEncodeUwDnaseMonocd14AlnRep1 does not exist, from filetype bam
+80 - could not find None.bai file for wgEncodeUwDnaseHahAlnRep1.bam
+81 - table wgEncodeUwDnaseHahAlnRep1 does not exist, from filetype bam
+82 - could not find None.bai file for wgEncodeUwDnaseHmvecdneoAlnRep1.bam
+83 - table wgEncodeUwDnaseHmvecdneoAlnRep1 does not exist, from filetype bam
+84 - could not find None.bai file for wgEncodeUwDnaseHvmfAlnRep2.bam
+85 - table wgEncodeUwDnaseHvmfAlnRep2 does not exist, from filetype bam
+86 - could not find None.bai file for wgEncodeUwDnaseCmkAlnRep1.bam
+87 - table wgEncodeUwDnaseCmkAlnRep1 does not exist, from filetype bam
+88 - could not find None.bai file for wgEncodeUwDnaseHrpeAlnRep1.bam
+89 - table wgEncodeUwDnaseHrpeAlnRep1 does not exist, from filetype bam
+90 - could not find None.bai file for wgEncodeUwDnaseHct116AlnRep1.bam
+91 - table wgEncodeUwDnaseHct116AlnRep1 does not exist, from filetype bam
+92 - could not find None.bai file for wgEncodeUwDnaseNhdfneoAlnRep1.bam
+93 - table wgEncodeUwDnaseNhdfneoAlnRep1 does not exist, from filetype bam
+94 - could not find None.bai file for wgEncodeUwDnaseHgfAlnRep1.bam
+95 - table wgEncodeUwDnaseHgfAlnRep1 does not exist, from filetype bam
+96 - could not find None.bai file for wgEncodeUwDnaseSknshraAlnRep1.bam
+97 - table wgEncodeUwDnaseSknshraAlnRep1 does not exist, from filetype bam
+98 - could not find None.bai file for wgEncodeUwDnaseHeeAlnRep2.bam
+99 - table wgEncodeUwDnaseHeeAlnRep2 does not exist, from filetype bam
+100 - table wgEncodeUwDnaseMonocd14RawRep1 does not exist, from filetype bigWig
+101 - could not find None.bai file for wgEncodeUwDnaseNhdfneoAlnRep2.bam
+102 - table wgEncodeUwDnaseNhdfneoAlnRep2 does not exist, from filetype bam
+103 - could not find None.bai file for wgEncodeUwDnaseHcmAlnRep2.bam
+104 - table wgEncodeUwDnaseHcmAlnRep2 does not exist, from filetype bam
+105 - could not find None.bai file for wgEncodeUwDnaseHbmecAlnRep1.bam
+106 - table wgEncodeUwDnaseHbmecAlnRep1 does not exist, from filetype bam
+107 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyadAlnRep2.bam
+108 - table wgEncodeUwDnaseHmvecdlyadAlnRep2 does not exist, from filetype bam
+109 - could not find None.bai file for wgEncodeUwDnaseHmvecllyAlnRep1.bam
+110 - table wgEncodeUwDnaseHmvecllyAlnRep1 does not exist, from filetype bam
+111 - could not find None.bai file for wgEncodeUwDnaseHipeAlnRep2.bam
+112 - table wgEncodeUwDnaseHipeAlnRep2 does not exist, from filetype bam
+113 - could not find None.bai file for wgEncodeUwDnaseNhekAlnRep1.bam
+114 - table wgEncodeUwDnaseNhekAlnRep1 does not exist, from filetype bam
+115 - could not find None.bai file for wgEncodeUwDnaseHpfAlnRep2.bam
+116 - table wgEncodeUwDnaseHpfAlnRep2 does not exist, from filetype bam
+117 - could not find None.bai file for wgEncodeUwDnaseHcpeAlnRep2.bam
+118 - table wgEncodeUwDnaseHcpeAlnRep2 does not exist, from filetype bam
+119 - could not find None.bai file for wgEncodeUwDnaseHconfAlnRep1.bam
+120 - table wgEncodeUwDnaseHconfAlnRep1 does not exist, from filetype bam
+121 - could not find None.bai file for wgEncodeUwDnasePanc1AlnRep1.bam
+122 - table wgEncodeUwDnasePanc1AlnRep1 does not exist, from filetype bam
+123 - could not find None.bai file for wgEncodeUwDnaseJurkatAlnRep2.bam
+124 - table wgEncodeUwDnaseJurkatAlnRep2 does not exist, from filetype bam
+125 - could not find None.bai file for wgEncodeUwDnaseCaco2AlnRep2.bam
+126 - table wgEncodeUwDnaseCaco2AlnRep2 does not exist, from filetype bam
+127 - could not find None.bai file for wgEncodeUwDnaseMcf7AlnRep1.bam
+128 - table wgEncodeUwDnaseMcf7AlnRep1 does not exist, from filetype bam
+129 - could not find None.bai file for wgEncodeUwDnaseHpafAlnRep1.bam
+130 - table wgEncodeUwDnaseHpafAlnRep1 does not exist, from filetype bam
+131 - could not find None.bai file for wgEncodeUwDnaseA549AlnRep1.bam
+132 - table wgEncodeUwDnaseA549AlnRep1 does not exist, from filetype bam
+133 - could not find None.bai file for wgEncodeUwDnaseGm12865AlnRep2.bam
+134 - table wgEncodeUwDnaseGm12865AlnRep2 does not exist, from filetype bam
+135 - could not find None.bai file for wgEncodeUwDnaseK562AlnRep2.bam
+136 - table wgEncodeUwDnaseK562AlnRep2 does not exist, from filetype bam
+137 - could not find None.bai file for wgEncodeUwDnaseRptecAlnRep2.bam
+138 - table wgEncodeUwDnaseRptecAlnRep2 does not exist, from filetype bam
+139 - could not find None.bai file for wgEncodeUwDnaseHacAlnRep2.bam
+140 - table wgEncodeUwDnaseHacAlnRep2 does not exist, from filetype bam
+141 - could not find None.bai file for wgEncodeUwDnaseHelas3AlnRep2.bam
+142 - table wgEncodeUwDnaseHelas3AlnRep2 does not exist, from filetype bam
+143 - could not find None.bai file for wgEncodeUwDnaseAg10803AlnRep2.bam
+144 - table wgEncodeUwDnaseAg10803AlnRep2 does not exist, from filetype bam
+145 - could not find None.bai file for wgEncodeUwDnaseAoafAlnRep1.bam
+146 - table wgEncodeUwDnaseAoafAlnRep1 does not exist, from filetype bam
+147 - could not find None.bai file for wgEncodeUwDnaseNhlfAlnRep2.bam
+148 - table wgEncodeUwDnaseNhlfAlnRep2 does not exist, from filetype bam
+149 - could not find None.bai file for wgEncodeUwDnaseHaeAlnRep2.bam
+150 - table wgEncodeUwDnaseHaeAlnRep2 does not exist, from filetype bam
+151 - could not find None.bai file for wgEncodeUwDnaseGm12864AlnRep1.bam
+152 - table wgEncodeUwDnaseGm12864AlnRep1 does not exist, from filetype bam
+153 - could not find None.bai file for wgEncodeUwDnaseHahAlnRep2.bam
+154 - table wgEncodeUwDnaseHahAlnRep2 does not exist, from filetype bam
+155 - could not find None.bai file for wgEncodeUwDnaseSknmcAlnRep2.bam
+156 - table wgEncodeUwDnaseSknmcAlnRep2 does not exist, from filetype bam
+157 - could not find None.bai file for wgEncodeUwDnaseHuvecAlnRep1.bam
+158 - table wgEncodeUwDnaseHuvecAlnRep1 does not exist, from filetype bam
+159 - could not find None.bai file for wgEncodeUwDnaseHaspAlnRep2.bam
+160 - table wgEncodeUwDnaseHaspAlnRep2 does not exist, from filetype bam
+161 - could not find None.bai file for wgEncodeUwDnaseGm12878AlnRep2.bam
+162 - table wgEncodeUwDnaseGm12878AlnRep2 does not exist, from filetype bam
+163 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam
+164 - table wgEncodeUwDnaseHmvecdlyneoAlnRep2 does not exist, from filetype bam
+165 - could not find None.bai file for wgEncodeUwDnaseLncapAlnRep1.bam
+166 - table wgEncodeUwDnaseLncapAlnRep1 does not exist, from filetype bam
+167 - could not find None.bai file for wgEncodeUwDnaseHmvecllyAlnRep2.bam
+168 - table wgEncodeUwDnaseHmvecllyAlnRep2 does not exist, from filetype bam
+169 - could not find None.bai file for wgEncodeUwDnaseHnpceAlnRep2.bam
+170 - table wgEncodeUwDnaseHnpceAlnRep2 does not exist, from filetype bam
+171 - could not find None.bai file for wgEncodeUwDnaseHmvecdbladAlnRep1.bam
+172 - table wgEncodeUwDnaseHmvecdbladAlnRep1 does not exist, from filetype bam
+173 - could not find None.bai file for wgEncodeUwDnaseWi38AlnRep2.bam
+174 - table wgEncodeUwDnaseWi38AlnRep2 does not exist, from filetype bam
+175 - could not find None.bai file for wgEncodeUwDnaseNhdfadAlnRep1.bam
+176 - table wgEncodeUwDnaseNhdfadAlnRep1 does not exist, from filetype bam
+177 - could not find None.bai file for wgEncodeUwDnaseHrceAlnRep2.bam
+178 - table wgEncodeUwDnaseHrceAlnRep2 does not exist, from filetype bam
+179 - could not find None.bai file for wgEncodeUwDnaseHeeAlnRep1.bam
+180 - table wgEncodeUwDnaseHeeAlnRep1 does not exist, from filetype bam
+181 - could not find None.bai file for wgEncodeUwDnaseHffmycAlnRep2.bam
+182 - table wgEncodeUwDnaseHffmycAlnRep2 does not exist, from filetype bam
+183 - could not find None.bai file for wgEncodeUwDnaseHipeAlnRep1.bam
+184 - table wgEncodeUwDnaseHipeAlnRep1 does not exist, from filetype bam
+185 - could not find None.bai file for wgEncodeUwDnaseHcfAlnRep2.bam
+186 - table wgEncodeUwDnaseHcfAlnRep2 does not exist, from filetype bam
+187 - could not find None.bai file for wgEncodeUwDnaseHmveclblAlnRep2.bam
+188 - table wgEncodeUwDnaseHmveclblAlnRep2 does not exist, from filetype bam
+189 - could not find None.bai file for wgEncodeUwDnaseHpdlfAlnRep2.bam
+190 - table wgEncodeUwDnaseHpdlfAlnRep2 does not exist, from filetype bam
+191 - could not find None.bai file for wgEncodeUwDnaseHpafAlnRep2.bam
+192 - table wgEncodeUwDnaseHpafAlnRep2 does not exist, from filetype bam
+193 - could not find None.bai file for wgEncodeUwDnaseHsmmAlnRep2.bam
+194 - table wgEncodeUwDnaseHsmmAlnRep2 does not exist, from filetype bam
+195 - could not find None.bai file for wgEncodeUwDnaseNhekAlnRep2.bam
+196 - table wgEncodeUwDnaseNhekAlnRep2 does not exist, from filetype bam
+197 - could not find None.bai file for wgEncodeUwDnaseHepg2AlnRep2.bam
+198 - table wgEncodeUwDnaseHepg2AlnRep2 does not exist, from filetype bam
 199 - table wgEncodeUwDnaseMonocd14PkRep1 does not exist, from filetype narrowPeak
 200 - could not find None.bai file for wgEncodeUwDnaseHrceAlnRep1.bam
 201 - table wgEncodeUwDnaseHrceAlnRep1 does not exist, from filetype bam
@@ -247,30 +247,30 @@ The composite track is wgEncodeUwDnase
 243 - table wgEncodeUwDnaseHmvecdbladAlnRep2 does not exist, from filetype bam
 244 - could not find None.bai file for wgEncodeUwDnaseSkmcAlnRep1.bam
 245 - table wgEncodeUwDnaseSkmcAlnRep1 does not exist, from filetype bam
-246 - could not find None.bai file for wgEncodeUwDnaseHrgecAlnRep1.bam
-247 - table wgEncodeUwDnaseHrgecAlnRep1 does not exist, from filetype bam
-248 - could not find None.bai file for wgEncodeUwDnaseSknshraAlnRep2.bam
-249 - table wgEncodeUwDnaseSknshraAlnRep2 does not exist, from filetype bam
-250 - could not find None.bai file for wgEncodeUwDnaseHcfaaAlnRep2.bam
-251 - table wgEncodeUwDnaseHcfaaAlnRep2 does not exist, from filetype bam
-252 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam
-253 - table wgEncodeUwDnaseHmvecdlyneoAlnRep1 does not exist, from filetype bam
-254 - could not find None.bai file for wgEncodeUwDnaseNhlfAlnRep1.bam
-255 - table wgEncodeUwDnaseNhlfAlnRep1 does not exist, from filetype bam
-256 - could not find None.bai file for wgEncodeUwDnaseAg04449AlnRep2.bam
-257 - table wgEncodeUwDnaseAg04449AlnRep2 does not exist, from filetype bam
-258 - could not find None.bai file for wgEncodeUwDnaseAg09319AlnRep1.bam
-259 - table wgEncodeUwDnaseAg09319AlnRep1 does not exist, from filetype bam
-260 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyadAlnRep1.bam
-261 - table wgEncodeUwDnaseHmvecdlyadAlnRep1 does not exist, from filetype bam
-262 - could not find None.bai file for wgEncodeUwDnaseHepg2AlnRep1.bam
-263 - table wgEncodeUwDnaseHepg2AlnRep1 does not exist, from filetype bam
-264 - could not find None.bai file for wgEncodeUwDnaseHacAlnRep1.bam
-265 - table wgEncodeUwDnaseHacAlnRep1 does not exist, from filetype bam
-266 - could not find None.bai file for wgEncodeUwDnaseHrgecAlnRep2.bam
-267 - table wgEncodeUwDnaseHrgecAlnRep2 does not exist, from filetype bam
-268 - could not find None.bai file for wgEncodeUwDnaseJurkatAlnRep1.bam
-269 - table wgEncodeUwDnaseJurkatAlnRep1 does not exist, from filetype bam
+246 - could not find None.bai file for wgEncodeUwDnaseJurkatAlnRep1.bam
+247 - table wgEncodeUwDnaseJurkatAlnRep1 does not exist, from filetype bam
+248 - could not find None.bai file for wgEncodeUwDnaseHrgecAlnRep1.bam
+249 - table wgEncodeUwDnaseHrgecAlnRep1 does not exist, from filetype bam
+250 - could not find None.bai file for wgEncodeUwDnaseSknshraAlnRep2.bam
+251 - table wgEncodeUwDnaseSknshraAlnRep2 does not exist, from filetype bam
+252 - could not find None.bai file for wgEncodeUwDnaseHcfaaAlnRep2.bam
+253 - table wgEncodeUwDnaseHcfaaAlnRep2 does not exist, from filetype bam
+254 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam
+255 - table wgEncodeUwDnaseHmvecdlyneoAlnRep1 does not exist, from filetype bam
+256 - could not find None.bai file for wgEncodeUwDnaseNhlfAlnRep1.bam
+257 - table wgEncodeUwDnaseNhlfAlnRep1 does not exist, from filetype bam
+258 - could not find None.bai file for wgEncodeUwDnaseAg04449AlnRep2.bam
+259 - table wgEncodeUwDnaseAg04449AlnRep2 does not exist, from filetype bam
+260 - could not find None.bai file for wgEncodeUwDnaseAg09319AlnRep1.bam
+261 - table wgEncodeUwDnaseAg09319AlnRep1 does not exist, from filetype bam
+262 - could not find None.bai file for wgEncodeUwDnaseHmvecdlyadAlnRep1.bam
+263 - table wgEncodeUwDnaseHmvecdlyadAlnRep1 does not exist, from filetype bam
+264 - could not find None.bai file for wgEncodeUwDnaseHepg2AlnRep1.bam
+265 - table wgEncodeUwDnaseHepg2AlnRep1 does not exist, from filetype bam
+266 - could not find None.bai file for wgEncodeUwDnaseHacAlnRep1.bam
+267 - table wgEncodeUwDnaseHacAlnRep1 does not exist, from filetype bam
+268 - could not find None.bai file for wgEncodeUwDnaseHrgecAlnRep2.bam
+269 - table wgEncodeUwDnaseHrgecAlnRep2 does not exist, from filetype bam
 270 - could not find None.bai file for wgEncodeUwDnaseHaeAlnRep1.bam
 271 - table wgEncodeUwDnaseHaeAlnRep1 does not exist, from filetype bam
 272 - could not find None.bai file for wgEncodeUwDnaseHmvecdblneoAlnRep1.bam
@@ -2012,6 +2012,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
 
-index.html
+README.txt
 files.txt
 md5sum.txt

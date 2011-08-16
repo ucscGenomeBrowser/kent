@@ -18,6 +18,7 @@ fileName wgEncodeGisChiaPetHCT116D000005584.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+md5sum 5ff50daf11b1e83adccdb0708dd66fbc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -41,6 +42,7 @@ fileName wgEncodeGisChiaPetHCT116D000005585.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+md5sum 3b046a958198e562564d08da8e4c9d59
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -64,6 +66,7 @@ fileName wgEncodeGisChiaPetHCT116D000005586.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+md5sum 3cef06f76622064c44c9ca5f2dd8b641
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -87,6 +90,7 @@ fileName wgEncodeGisChiaPetHCT116D000005587.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+md5sum 6ecedecc99e026588b4528327aac879e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -110,6 +114,7 @@ fileName wgEncodeGisChiaPetHCT116D000005588.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+md5sum 9499e230734f9f8483b680b04fa2ed07
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -133,6 +138,7 @@ fileName wgEncodeGisChiaPetHCT116D000005589.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+md5sum fa59bd12d48727d9106473c1b15f10d2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -225,6 +231,7 @@ fileName wgEncodeGisChiaPetHCT116D000005593.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+md5sum a3c7420aece4acfb15f80f4dfe9f1fb3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -248,6 +255,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005563.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+md5sum fcafaae45949f7fe6de17642093ff3e5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -271,6 +279,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005564.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+md5sum f85d8c01f44c1d7e1ac04a123222d646
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -294,6 +303,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005565.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+md5sum d108be78e1e1958238a71285a5f17ae8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -317,6 +327,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005566.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+md5sum 280c0f28665d175122d5a3e46831c6ec
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -340,6 +351,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005567.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+md5sum 06e12319f21926f29aa0c15935ac40cf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -363,6 +375,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005568.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+md5sum 4033c917d5d527edcf0be2e88fc82e45
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -455,6 +468,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005572.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+md5sum 21784c2156a93d1f86e0b9e145143cae
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -478,6 +492,7 @@ fileName wgEncodeGisChiaPetK562D000005622.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+md5sum 6d61f6fe5074a67e2bf469309a31213a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -501,6 +516,7 @@ fileName wgEncodeGisChiaPetK562D000005623.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+md5sum 12a81ab81fa3e2d79008534b540176d2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -524,6 +540,7 @@ fileName wgEncodeGisChiaPetK562D000005624.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+md5sum b80c9ed5ac88596280b0e919d7482e7c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -547,6 +564,7 @@ fileName wgEncodeGisChiaPetK562D000005625.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+md5sum bf5163aa5b82eed5b8ae1f008d647749
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -616,6 +634,7 @@ fileName wgEncodeGisChiaPetK562D000005628.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+md5sum 0936bbcabc35de98d4d781ad8591bbec
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -639,6 +658,7 @@ fileName wgEncodeGisChiaPetK562D000005636.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+md5sum b3708443ebebf83096acf62ceb9f02ae
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -662,6 +682,7 @@ fileName wgEncodeGisChiaPetK562D000005637.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+md5sum f03e114d41c9c280abf686a823e6e1de
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -685,6 +706,7 @@ fileName wgEncodeGisChiaPetK562D000005638.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+md5sum 0caa78c21988ca182658b17637a05fcf
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -708,6 +730,7 @@ fileName wgEncodeGisChiaPetK562D000005639.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+md5sum b159643a888a580c31e737e2a60ecfe4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -777,6 +800,7 @@ fileName wgEncodeGisChiaPetK562D000005642.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+md5sum f17061e1e486f276d9503b087a33a480
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -821,6 +845,7 @@ fileName wgEncodeGisChiaPetMCF7D000005608.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+md5sum d7597ef541e579bfa3e9c12f9338de88
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -844,6 +869,7 @@ fileName wgEncodeGisChiaPetMCF7D000005609.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+md5sum 6bcc0de4d66dbab1087f00e3c7bc6204
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -867,6 +893,7 @@ fileName wgEncodeGisChiaPetMCF7D000005610.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+md5sum f97ec6446c47ac5a017685bd35f4d60f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -890,6 +917,7 @@ fileName wgEncodeGisChiaPetMCF7D000005611.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+md5sum a4ec956f039b0b7c3644b509a5a7dc6a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -959,6 +987,7 @@ fileName wgEncodeGisChiaPetMCF7D000005614.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+md5sum eeb2e2aa92e55c926c053678cdab587f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -982,6 +1011,7 @@ fileName wgEncodeGisChiaPetMCF7D000005629.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+md5sum ec347887a1ec5e67cff75218d5b8601f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1005,6 +1035,7 @@ fileName wgEncodeGisChiaPetMCF7D000005630.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+md5sum 65f456f70799b4ca1ff6da82c25e0a2d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1028,6 +1059,7 @@ fileName wgEncodeGisChiaPetMCF7D000005631.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+md5sum 7a6fd0e14edbc39e7bba943dda7f6034
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1051,6 +1083,7 @@ fileName wgEncodeGisChiaPetMCF7D000005632.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+md5sum b151ce940bfe5d56a06bcb0f8b02e497
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1120,6 +1153,7 @@ fileName wgEncodeGisChiaPetMCF7D000005635.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+md5sum ab5cc552ab12f210e5f4f39b7642a21c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1143,6 +1177,7 @@ fileName wgEncodeGisChiaPetMCF7D000005643.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+md5sum 70f4ffb666e991c40e8c10be14cf8cc4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1166,6 +1201,7 @@ fileName wgEncodeGisChiaPetMCF7D000005644.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+md5sum 215859027c8219816997ac6f8c343754
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1189,6 +1225,7 @@ fileName wgEncodeGisChiaPetMCF7D000005645.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+md5sum 269880dde6a3a07842fb10702385e13d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1212,6 +1249,7 @@ fileName wgEncodeGisChiaPetMCF7D000005646.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+md5sum 33237eadd59f84e342076849bd50474f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1281,6 +1319,7 @@ fileName wgEncodeGisChiaPetMCF7D000005649.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+md5sum 610f6766adfacbbff4306d088e794d65
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1304,6 +1343,7 @@ fileName wgEncodeGisChiaPetMCF7D000005650.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+md5sum 193b28e6693fd6d6422bcd04af47f3ce
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1327,6 +1367,7 @@ fileName wgEncodeGisChiaPetMCF7D000005651.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+md5sum 6f14774d38fe0667db7d062a441e8893
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1350,6 +1391,7 @@ fileName wgEncodeGisChiaPetMCF7D000005652.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+md5sum c44c4d42f5ccebd2cbe58ba618a1fee2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1373,6 +1415,7 @@ fileName wgEncodeGisChiaPetMCF7D000005653.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+md5sum 41a545fd290a4ec3b338874b082bef73
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1442,6 +1485,7 @@ fileName wgEncodeGisChiaPetMCF7D000005656.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+md5sum bcc7fcb2440d67399df043551b57aae3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1465,6 +1509,7 @@ fileName wgEncodeGisChiaPetMCF7D000005657.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum f174d68245d662b2af384cd8d2c3d290
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1488,6 +1533,7 @@ fileName wgEncodeGisChiaPetMCF7D000005658.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum 0ce8ef2a380f481cf0e46b7b9fa164cf
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1511,6 +1557,7 @@ fileName wgEncodeGisChiaPetMCF7D000005659.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum bc948bc128352069bf447334b1cbe2fa
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1534,6 +1581,7 @@ fileName wgEncodeGisChiaPetMCF7D000005660.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum 27f63f9d0e45d9707914b5f63c9cee30
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1557,6 +1605,7 @@ fileName wgEncodeGisChiaPetMCF7D000005661.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum 50fcbcf61efae2c9e269d9aa50b5acb1
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1580,6 +1629,7 @@ fileName wgEncodeGisChiaPetMCF7D000005662.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum 40c0ea5e1b8bcf71e35c471f1006c01e
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1603,6 +1653,7 @@ fileName wgEncodeGisChiaPetMCF7D000005663.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum 9f69a7bf08d7b0b1eb0129594a23a38a
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1626,6 +1677,7 @@ fileName wgEncodeGisChiaPetMCF7D000005664.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum 6a043f8f2d9b13474a2d91b9cd11af4e
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1741,6 +1793,7 @@ fileName wgEncodeGisChiaPetMCF7D000005669.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+md5sum ce78d77b4396fb39f0c843d3082f6a22
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1764,6 +1817,7 @@ fileName wgEncodeGisChiaPetMCF7D000006821.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion RNAPII
+md5sum ab403381f8b25cc140c33dbcfa3f232a
 origAssembly hg19
 project wgEncode
 subId 3383
@@ -1785,6 +1839,7 @@ fileName wgEncodeGisChiaPetMCF7D000006822.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion ER
+md5sum 29ec2906aa5ea1573dd625814493f93d
 origAssembly hg19
 project wgEncode
 subId 3385
@@ -1806,6 +1861,7 @@ fileName wgEncodeGisChiaPetNB4D000005594.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+md5sum fe31b5e3a41b4843829ff82165a81a6c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1829,6 +1885,7 @@ fileName wgEncodeGisChiaPetNB4D000005595.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+md5sum 333edad391f933624f22e5adc26f5fac
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1852,6 +1909,7 @@ fileName wgEncodeGisChiaPetNB4D000005596.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+md5sum 918c0d01fd851f109c2165183dc7b47c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1875,6 +1933,7 @@ fileName wgEncodeGisChiaPetNB4D000005597.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+md5sum 9a7be1de6d473cc8f6db71051f030ee8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1898,6 +1957,7 @@ fileName wgEncodeGisChiaPetNB4D000005598.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+md5sum 4703967d38817db1ad4e87bb53a41731
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1921,6 +1981,7 @@ fileName wgEncodeGisChiaPetNB4D000005599.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+md5sum 657305c3a16e85f158427e4fc8abb6f3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2013,6 +2074,7 @@ fileName wgEncodeGisChiaPetNB4D000005603.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+md5sum 470bcbade24bd82555467598b32bcf68
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2036,6 +2098,7 @@ fileName wgEncodeGisChiaPetNB4D000005615.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+md5sum 67f644ca9a6a6d912c08627d965459e7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2059,6 +2122,7 @@ fileName wgEncodeGisChiaPetNB4D000005616.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+md5sum d34527aa4dd93d896eb4e00a4f33e849
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2082,6 +2146,7 @@ fileName wgEncodeGisChiaPetNB4D000005617.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+md5sum e373ade0d97ba85b00297259a540cc9c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2105,6 +2170,7 @@ fileName wgEncodeGisChiaPetNB4D000005618.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+md5sum 67d7f8a8a44c9c46be19fb313335277a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2174,6 +2240,7 @@ fileName wgEncodeGisChiaPetNB4D000005621.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+md5sum ce89721520f4250c74904ae67f59415a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2197,10 +2264,11 @@ fileName wgEncodeGisChiaPetNB4D000006819.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion RNAPII_NB4
+md5sum 2c7b403467fdbd473afa82738249c825
 origAssembly hg19
 project wgEncode
 subId 3381
 type bed 12
 view Interactions
 
-# MAGIC: 897639778
+# MAGIC: -1464285732

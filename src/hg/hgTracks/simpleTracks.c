@@ -3050,7 +3050,11 @@ if (withLabels)
     /* Special tweak for expRatio in pack mode: force all labels
      * left to prevent only a subset from being placed right: */
     snapLeft |= (startsWith("expRatio", tg->tdb->type));
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+    if (theImgBox == NULL && snapLeft)
+#else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
     if (snapLeft)        /* Snap label to the left. */
+#endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
         {
         textX = leftLabelX;
         assert(hvgSide != NULL);
@@ -3160,6 +3164,21 @@ for (item = tg->items; item != NULL; item = item->next)
             int eClp = (e > winEnd)   ? winEnd   : e;
             int x1 = round((sClp - winStart)*scale) + xOff;
             int x2 = round((eClp - winStart)*scale) + xOff;
+        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+            if (theImgBox != NULL && vis == tvFull)  // dragScroll >1x has no bed full leftlabels,
+                {                                    // but in image labels like pack.
+                char *name = tg->itemName(tg, item);
+                int nameWidth = mgFontStringWidth(font, name);
+                int textX = round((s - winStart)*scale) + xOff;
+                textX -= (nameWidth + 2);
+                if (textX >= insideX && nameWidth > 0)
+                    {
+                    x1 = textX; // extends the map item to cover this label
+                    Color itemNameColor = tg->itemNameColor(tg, item, hvg);
+                    hvGfxTextRight(hvg,textX,y,nameWidth,tg->heightPer,itemNameColor,font,name);
+                    }
+                }
+        #endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
             genericDrawNextItemStuff(tg, hvg, vis, item, x2, x1, y, tg->heightPer, FALSE,color);
             }
 #else//ifndef IMAGEv2_SHORT_MAPITEMS
@@ -4235,9 +4254,9 @@ if (sameString(choice, "manual"))
 else if (sameString(choice, "automatic"))
     dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\")");
 else if (sameString(choice, "manual_only"))
-    dyStringAppend(dyClause, "(transSrc.source not like \"%havana%\")");
+    dyStringAppend(dyClause, "(transSrc.source like \"%havana%\") and (transSrc.source not like \"%ensembl%\")");
 else if (sameString(choice, "automatic_only"))
-    dyStringAppend(dyClause, "(transSrc.source not like \"%ensembl%\")");
+    dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\") and (transSrc.source not like \"%havana%\")");
 else
     errAbort("BUG: filterByMethodChoice missing choice: \"%s\"", choice);
 }

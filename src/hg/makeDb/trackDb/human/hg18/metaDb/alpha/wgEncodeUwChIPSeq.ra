@@ -3212,7 +3212,7 @@ replicate 1
 setType exp
 subId 746
 tableName wgEncodeUwChIPSeqHotspotsRep1BjH3k36me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep1BjH3k4me3
 objType table
@@ -3429,7 +3429,7 @@ replicate 1
 setType exp
 subId 748
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k36me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k4me3
 objType table
@@ -3694,7 +3694,7 @@ replicate 1
 setType exp
 subId 747
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k36me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k4me3
 objType table
@@ -3913,7 +3913,7 @@ replicate 1
 setType exp
 subId 745
 tableName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k4me3
 objType table
@@ -4083,7 +4083,7 @@ replicate 1
 setType exp
 subId 749
 tableName wgEncodeUwChIPSeqHotspotsRep1HreH3k27me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep1HreH3k36me3
 objType table
@@ -4688,7 +4688,7 @@ replicate 2
 setType exp
 subId 742
 tableName wgEncodeUwChIPSeqHotspotsRep2BjH3k36me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep2BjH3k4me3
 objType table
@@ -4904,7 +4904,7 @@ replicate 2
 setType exp
 subId 744
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k36me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k4me3
 objType table
@@ -5144,7 +5144,7 @@ replicate 2
 setType exp
 subId 743
 tableName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k36me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k4me3
 objType table
@@ -5553,7 +5553,7 @@ replicate 2
 setType exp
 subId 750
 tableName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep2HuvecH3k4me3
 objType table
@@ -5866,7 +5866,7 @@ replicate 2
 setType exp
 subId 753
 tableName wgEncodeUwChIPSeqHotspotsRep2SknshraCtcf
-view cHot
+view Hotspots
 
 metaObject wgEncodeUwChIPSeqHotspotsRep2SknshraH3k27me3
 objType table
@@ -10210,7 +10210,7 @@ replicate 1
 setType exp
 subId 746
 tableName wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3
 objType table
@@ -10427,7 +10427,7 @@ replicate 1
 setType exp
 subId 748
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3
 objType table
@@ -10692,7 +10692,7 @@ replicate 1
 setType exp
 subId 747
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3
 objType table
@@ -10911,7 +10911,7 @@ replicate 1
 setType exp
 subId 745
 tableName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3
 objType table
@@ -11081,7 +11081,7 @@ replicate 1
 setType exp
 subId 749
 tableName wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3
 objType table
@@ -11686,7 +11686,7 @@ replicate 2
 setType exp
 subId 742
 tableName wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3
 objType table
@@ -11902,7 +11902,7 @@ replicate 2
 setType exp
 subId 744
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3
 objType table
@@ -12142,7 +12142,7 @@ replicate 2
 setType exp
 subId 743
 tableName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3
 objType table
@@ -12551,7 +12551,7 @@ replicate 2
 setType exp
 subId 750
 tableName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3
 objType table
@@ -12864,7 +12864,7 @@ replicate 2
 setType exp
 subId 753
 tableName wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf
-view zRawSig
+view RawSignal
 
 metaObject wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3
 objType table
@@ -12962,4 +12962,4 @@ subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 view RawSignal
 
-# MAGIC: -700019440
+# MAGIC: -612639130

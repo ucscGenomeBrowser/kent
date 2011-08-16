@@ -21,7 +21,7 @@ lab RIKEN
 labExpId K16
 labProtocolId 021WC+cage
 localization cell
-md5sum 4cfc99373e471ba419ec43760eb75d6f
+md5sum bam=4cfc99373e471ba419ec43760eb75d6f,bai=6a1f2a4043e6ee827db74e49b69212f2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -48,7 +48,7 @@ lab RIKEN
 labExpId K17
 labProtocolId 022WC+cage
 localization cell
-md5sum 19b5a4f9929fe434cb11983a93433584
+md5sum bam=19b5a4f9929fe434cb11983a93433584,bai=8382e9f1decfbe90bc25c2b19a8572a6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -75,6 +75,7 @@ labExpId K17,K16
 labProtocolId 022WC+cage,021WC+cage
 labVersion iIDR
 localization cell
+md5sum a13a7c771595fbb0df80f56c6b4f8051
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -259,6 +260,7 @@ lab RIKEN
 labExpId K16,K17
 labProtocolId 021WC+cage,022WC+cage
 localization cell
+md5sum 52d88c27c4545855e132da2eeaecf85c
 project wgEncode
 rnaExtract longPolyA
 subId 4517
@@ -282,7 +284,7 @@ lab RIKEN
 labExpId K12
 labProtocolId 017WC+cage
 localization cell
-md5sum b4e3933531d3d4ba91680a2d19cbd497
+md5sum bam=b4e3933531d3d4ba91680a2d19cbd497,bai=fde66c3c3d6613bfb9f142b84fc6f0af
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -309,7 +311,7 @@ lab RIKEN
 labExpId K13
 labProtocolId 018WC+cage
 localization cell
-md5sum 6137d7782b16a37eea79cf2580ffbce5
+md5sum bam=6137d7782b16a37eea79cf2580ffbce5,bai=1b5991705c53711377cfc1aed5da1729
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -336,6 +338,7 @@ labExpId K13,K12
 labProtocolId 018WC+cage,017WC+cage
 labVersion iIDR
 localization cell
+md5sum ed8dfd8b5c258048198450db16d0811c
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -520,6 +523,7 @@ lab RIKEN
 labExpId K12,K13
 labProtocolId 017WC+cage,018WC+cage
 localization cell
+md5sum 3016ad718c738c73a1b4464ebabfd966
 project wgEncode
 rnaExtract longPolyA
 subId 4520
@@ -543,7 +547,7 @@ lab RIKEN
 labExpId K18
 labProtocolId 037WC+cage
 localization cell
-md5sum a1132dad095044a9d2db183fdb09e3ff
+md5sum bam=a1132dad095044a9d2db183fdb09e3ff,bai=32292329cf614ce8fae8161ae5e4f385
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -570,7 +574,7 @@ lab RIKEN
 labExpId K19
 labProtocolId 038WC+cage
 localization cell
-md5sum f4f7f44b1ac7044c8e9a886cccd5c391
+md5sum bam=f4f7f44b1ac7044c8e9a886cccd5c391,bai=4967ce59a18a9317d9aca85351ca78ca
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -597,6 +601,7 @@ labExpId K18,K19
 labProtocolId 037WC+cage,038WC+cage
 labVersion iIDR
 localization cell
+md5sum 9da4d940415a6c13845ff8111dfc082a
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -781,6 +786,7 @@ lab RIKEN
 labExpId K18,K19
 labProtocolId 037WC+cage,038WC+cage
 localization cell
+md5sum 92dc5d616b8527bfef4565fc4894fcb8
 project wgEncode
 rnaExtract longPolyA
 subId 4498
@@ -804,6 +810,7 @@ lab RIKEN
 labExpId J72
 labProtocolId 003WC+cage
 localization cell
+md5sum bam=ea9f4c22893c4742e10c7a650eb708b1,bai=2f6dcd025e5cd4cf2f2c27588907ea4d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -830,6 +837,7 @@ lab RIKEN
 labExpId J73
 labProtocolId 004WC+cage
 localization cell
+md5sum bam=1f7c9c2db92bf0c340342d3b79c2bb56,bai=31c490fd5faccc8052d5c164607be4ab
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -856,6 +864,7 @@ labExpId J73,J72
 labProtocolId 004WC+cage,003WC+cage
 labVersion iIDR
 localization cell
+md5sum 1562c00184c58c4efc673eb98947ca09
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -881,6 +890,7 @@ lab RIKEN
 labExpId J72
 labProtocolId 003WC+cage
 localization cell
+md5sum 8cd60821188d81a0fff923b913a2f156
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -907,6 +917,7 @@ lab RIKEN
 labExpId J73
 labProtocolId 004WC+cage
 localization cell
+md5sum 4f1cbefb544bc5d8b00ebc089cf9178f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -933,6 +944,7 @@ lab RIKEN
 labExpId J72
 labProtocolId 003WC+cage
 localization cell
+md5sum 6b3c771491b80a0c2a79d908a5e1f60b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -959,6 +971,7 @@ lab RIKEN
 labExpId J73
 labProtocolId 004WC+cage
 localization cell
+md5sum 2c5e364b2affd07ca95a344f16ce8f26
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -985,6 +998,7 @@ lab RIKEN
 labExpId J72
 labProtocolId 003WC+cage
 localization cell
+md5sum d6c970a05ebafc50f8f109e9e8a515b0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1010,6 +1024,7 @@ lab RIKEN
 labExpId J73
 labProtocolId 004WC+cage
 localization cell
+md5sum b62e0151d40da03be7d5d2a31238a23c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1034,6 +1049,7 @@ lab RIKEN
 labExpId J72,J73
 labProtocolId 003WC+cage,004WC+cage
 localization cell
+md5sum 177c08c98076452c958bef6b6e1ad7a2
 project wgEncode
 rnaExtract longPolyA
 subId 4531
@@ -1059,7 +1075,7 @@ labExpId I27
 labProtocolId gen0104C-cage
 labVersion Delve version 0.9
 localization cytosol
-md5sum ce61eeed6ffb7b9ea07c9e912a2aa65d
+md5sum bam=ce61eeed6ffb7b9ea07c9e912a2aa65d,bai=057098a2247ac79249d48cc55e6e9ee5
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -1085,6 +1101,7 @@ labExpId I27
 labProtocolId gen0104C-cage
 labVersion iIDR
 localization cytosol
+md5sum eee2fdb57c3c5379c27b7c38d6933a25
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -1190,6 +1207,7 @@ lab RIKEN
 labExpId I27
 labProtocolId gen0104C-cage
 localization cytosol
+md5sum 4325ec242a56ce4d14b305a1ef2d7327
 project wgEncode
 rnaExtract longNonPolyA
 subId 4526
@@ -1213,6 +1231,7 @@ lab RIKEN
 labExpId J84
 labProtocolId 003C+cage
 localization cytosol
+md5sum bam=8cdec463b84758a0f9413ed98415aa0c,bai=8d586a3389dd7d10466aa277903a3116
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1239,6 +1258,7 @@ lab RIKEN
 labExpId J85
 labProtocolId 004C+cage
 localization cytosol
+md5sum bam=e8873a432725fff6acf71991c178b875,bai=3604a10a48d7d54a0b06cd560416a3b6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1265,6 +1285,7 @@ labExpId J85,J84
 labProtocolId 004C+cage,003C+cage
 labVersion iIDR
 localization cytosol
+md5sum b05c53bf481030f80a142decbbb29c9c
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -1290,6 +1311,7 @@ lab RIKEN
 labExpId J84
 labProtocolId 003C+cage
 localization cytosol
+md5sum 33171018a1b5f7ca9469e87db1f2d052
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1316,6 +1338,7 @@ lab RIKEN
 labExpId J85
 labProtocolId 004C+cage
 localization cytosol
+md5sum 8ef216b78facfa754fd26e7cf34b963d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1342,6 +1365,7 @@ lab RIKEN
 labExpId J84
 labProtocolId 003C+cage
 localization cytosol
+md5sum 591b45fc707da9b9e001622830803330
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1368,6 +1392,7 @@ lab RIKEN
 labExpId J85
 labProtocolId 004C+cage
 localization cytosol
+md5sum 3de885fbcf494db1ae4266a32d15dfaa
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1394,6 +1419,7 @@ lab RIKEN
 labExpId J84
 labProtocolId 003C+cage
 localization cytosol
+md5sum a00600b0be2b7f32ca5bfa1d37f9b1c2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1419,6 +1445,7 @@ lab RIKEN
 labExpId J85
 labProtocolId 004C+cage
 localization cytosol
+md5sum d04a9c6774f547e5aaee9f6dd78334e0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1443,6 +1470,7 @@ lab RIKEN
 labExpId J84,J85
 labProtocolId 003C+cage,004C+cage
 localization cytosol
+md5sum 5ed978912ffbdbd77193e22c9471cc05
 project wgEncode
 rnaExtract longPolyA
 subId 4508
@@ -1467,7 +1495,7 @@ lab RIKEN
 labExpId I69
 labProtocolId gen0109NLtcage
 localization nucleolus
-md5sum d4e4b81db44e2902ecb84ac658b3c7c2
+md5sum bam=d4e4b81db44e2902ecb84ac658b3c7c2,bai=d263538a905fe8faad8aaa73936c545a
 origAssembly hg18
 project wgEncode
 rnaExtract total
@@ -1493,6 +1521,7 @@ labExpId I69
 labProtocolId gen0109NLtcage
 labVersion iIDR
 localization nucleolus
+md5sum a0819757c0811615bd2fc50ec1216d21
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -1596,6 +1625,7 @@ lab RIKEN
 labExpId I69
 labProtocolId gen0109NLtcage
 localization nucleolus
+md5sum eacce8d334f65ef42d5145896f7434b0
 project wgEncode
 rnaExtract total
 subId 4506
@@ -1619,7 +1649,7 @@ lab RIKEN
 labExpId J59
 labProtocolId gen0110N-cage
 localization nucleus
-md5sum eff9f038c0e003bc34a4ea4516569c61
+md5sum bam=eff9f038c0e003bc34a4ea4516569c61,bai=bcba902d38cc8707af40ae425eb7d8f1
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -1645,6 +1675,7 @@ labExpId J59
 labProtocolId gen0110N-cage
 labVersion iIDR
 localization nucleus
+md5sum ded2c25c7fa7ecb2ce1ac68d8830b0a8
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -1746,6 +1777,7 @@ lab RIKEN
 labExpId J59
 labProtocolId gen0110N-cage
 localization nucleus
+md5sum 0869c5e6ef84ba26cb24b1d356f3b598
 project wgEncode
 rnaExtract longNonPolyA
 subId 4509
@@ -1769,6 +1801,7 @@ lab RIKEN
 labExpId J93
 labProtocolId 003N+cage
 localization nucleus
+md5sum bam=f1ebe561e26b754b40b344e312162fc2,bai=32329f56d20a34c34cc1203357771205
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1795,6 +1828,7 @@ lab RIKEN
 labExpId J94
 labProtocolId 004N+cage
 localization nucleus
+md5sum bam=f53ab0b4254874cabaf77484b20a2e4d,bai=8191307115d4461a5b8c3018afb73da3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1821,6 +1855,7 @@ labExpId J93,J94
 labProtocolId 003N+cage,004N+cage
 labVersion iIDR
 localization nucleus
+md5sum f517bffb4c3ac2467655b800fa58a8d5
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -1846,6 +1881,7 @@ lab RIKEN
 labExpId J93
 labProtocolId 003N+cage
 localization nucleus
+md5sum cd846b0203ddf3ac6dfee13acb9bf030
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1872,6 +1908,7 @@ lab RIKEN
 labExpId J94
 labProtocolId 004N+cage
 localization nucleus
+md5sum 0bce07d725d364eb5010391f105d48cb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1898,6 +1935,7 @@ lab RIKEN
 labExpId J93
 labProtocolId 003N+cage
 localization nucleus
+md5sum 63ec12b6dbeeabfa18346d71b448b5ef
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1924,6 +1962,7 @@ lab RIKEN
 labExpId J94
 labProtocolId 004N+cage
 localization nucleus
+md5sum 682f11c1765159727acadf7d102fa937
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1950,6 +1989,7 @@ lab RIKEN
 labExpId J93
 labProtocolId 003N+cage
 localization nucleus
+md5sum 902ac945214ffc8d988bf25bc4eaef57
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1975,6 +2015,7 @@ lab RIKEN
 labExpId J94
 labProtocolId 004N+cage
 localization nucleus
+md5sum 4978bdc6ef8596eeccf0390fffa5e986
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1999,6 +2040,7 @@ lab RIKEN
 labExpId J93,J94
 labProtocolId 003N+cage,004N+cage
 localization nucleus
+md5sum 4e86809330cd6d1ff3486ce84e4f205d
 project wgEncode
 rnaExtract longPolyA
 subId 4536
@@ -2023,7 +2065,7 @@ lab RIKEN
 labExpId I67
 labProtocolId gen0113WC-cage
 localization cell
-md5sum 9cd926fb78e6a109c6f83f67bba264f3
+md5sum bam=9cd926fb78e6a109c6f83f67bba264f3,bai=cdec53868897ea4a8ed857030d454dac
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -2050,6 +2092,7 @@ labExpId I67
 labProtocolId gen0113WC-cage
 labVersion iIDR
 localization cell
+md5sum 74a82df4d21216c5b646e274d0dc8a7e
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -2155,6 +2198,7 @@ lab RIKEN
 labExpId I67
 labProtocolId gen0113WC-cage
 localization cell
+md5sum 36f1f066b9e014ae349ccf85c97072c8
 project wgEncode
 rnaExtract longNonPolyA
 subId 4530
@@ -2178,7 +2222,7 @@ lab RIKEN
 labExpId J74
 labProtocolId 005WC+cage
 localization cell
-md5sum 8967b37d49e4aeb1a827c2bba18ff2dd
+md5sum bam=8967b37d49e4aeb1a827c2bba18ff2dd,bai=fe49657a52bfebb614b38fd2ae8f56cb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2205,7 +2249,7 @@ lab RIKEN
 labExpId J75
 labProtocolId 006WC+cage
 localization cell
-md5sum b2d2b1db4c8ea702619e5d43bf8b9faa
+md5sum bam=b2d2b1db4c8ea702619e5d43bf8b9faa,bai=168340e060fb954d738c35189b38839d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2232,6 +2276,7 @@ labExpId J75,J74
 labProtocolId 006WC+cage,005WC+cage
 labVersion iIDR
 localization cell
+md5sum 52229b163e96c33cd95538e712328ec8
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -2416,6 +2461,7 @@ lab RIKEN
 labExpId J74,J75
 labProtocolId 005WC+cage,006WC+cage
 localization cell
+md5sum d9e7aac643c14cefbd4c60c6bf2a435f
 project wgEncode
 rnaExtract longPolyA
 subId 4505
@@ -2439,7 +2485,7 @@ lab RIKEN
 labExpId J86
 labProtocolId 006C+cage
 localization cytosol
-md5sum 517fe6f8794493006e2756b5f1e1c2e7
+md5sum bam=517fe6f8794493006e2756b5f1e1c2e7,bai=8b05e80f60869129a4b2947d4a80bc02
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2466,6 +2512,7 @@ labExpId J86
 labProtocolId 006C+cage
 labVersion iIDR
 localization cytosol
+md5sum 48681042f5a39bbeaaf4f7f3e8f98955
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -2571,7 +2618,7 @@ lab RIKEN
 labExpId J95
 labProtocolId 006N+cage
 localization nucleus
-md5sum 13a82092ce42218948697041ae6942b9
+md5sum bam=13a82092ce42218948697041ae6942b9,bai=50104f02b4b7932e1daed24377dcde3d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2598,6 +2645,7 @@ labExpId J95
 labProtocolId 006N+cage
 labVersion iIDR
 localization nucleus
+md5sum bf50c8c45250ed28dcff459b5c576df3
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -2703,7 +2751,7 @@ lab RIKEN
 labExpId J80
 labProtocolId 011WC+cage
 localization cell
-md5sum 45d63896684904984986a8eee2b0801e
+md5sum bam=45d63896684904984986a8eee2b0801e,bai=951458bec43e7be84349f351d4061ee1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2730,7 +2778,7 @@ lab RIKEN
 labExpId J81
 labProtocolId 012WC+cage
 localization cell
-md5sum e856fe6b026f841fa8c7cfa3809fc9c8
+md5sum bam=e856fe6b026f841fa8c7cfa3809fc9c8,bai=3e77310275c3f3610cfed4bc616b2cb7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2757,6 +2805,7 @@ labExpId J80,J81
 labProtocolId 011WC+cage,012WC+cage
 labVersion iIDR
 localization cell
+md5sum f3a6cc2eb8cba6cb3d1599b385478fce
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -2941,6 +2990,7 @@ lab RIKEN
 labExpId J80,J81
 labProtocolId 011WC+cage,012WC+cage
 localization cell
+md5sum b80e83fd659c9c5ca2957c9fec15b1b9
 project wgEncode
 rnaExtract longPolyA
 subId 4504
@@ -2964,7 +3014,7 @@ lab RIKEN
 labExpId J56
 labProtocolId gen0121C-cage
 localization cytosol
-md5sum def431706c70f3d46525988474ed8f89
+md5sum bam=def431706c70f3d46525988474ed8f89,bai=edb78dd5e763ce19a68cbe3c47336a31
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -2990,6 +3040,7 @@ labExpId J56
 labProtocolId gen0121C-cage
 labVersion iIDR
 localization cytosol
+md5sum abf53a49f07f3593fd2bd949fc0a9eb4
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -3091,6 +3142,7 @@ lab RIKEN
 labExpId J56
 labProtocolId gen0121C-cage
 localization cytosol
+md5sum 655ca54c52650c26014ce4c38ef217f6
 project wgEncode
 rnaExtract longNonPolyA
 subId 4535
@@ -3114,7 +3166,7 @@ lab RIKEN
 labExpId J87
 labProtocolId 011C+cage
 localization cytosol
-md5sum af7972342466cd98b2059e0c24830aca
+md5sum bam=af7972342466cd98b2059e0c24830aca,bai=7215279de9e84437a46aee3349138b25
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3141,7 +3193,7 @@ lab RIKEN
 labExpId J88
 labProtocolId 012C+cage
 localization cytosol
-md5sum 52059340eaedef246a80e3f7cc3e66cd
+md5sum bam=52059340eaedef246a80e3f7cc3e66cd,bai=1587f48462fc945db485dd20c9177d4b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3168,6 +3220,7 @@ labExpId J88,J87
 labProtocolId 012C+cage,011C+cage
 labVersion iIDR
 localization cytosol
+md5sum b579a9f4916bc405cad0c535d15f1bf6
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -3352,6 +3405,7 @@ lab RIKEN
 labExpId J87,J88
 labProtocolId 011C+cage,012C+cage
 localization cytosol
+md5sum 1556fe4f56a0649fee371b48a90b7dc2
 project wgEncode
 rnaExtract longPolyA
 subId 4527
@@ -3375,7 +3429,7 @@ lab RIKEN
 labExpId J58
 labProtocolId gen0123NLtcage
 localization nucleolus
-md5sum e5fdab898b87acb8a98bc67ec2727dce
+md5sum bam=e5fdab898b87acb8a98bc67ec2727dce,bai=40d5d15a29d71b8c63617e068b6b8b44
 origAssembly hg18
 project wgEncode
 rnaExtract total
@@ -3401,6 +3455,7 @@ labExpId J58
 labProtocolId gen0123NLtcage
 labVersion iIDR
 localization nucleolus
+md5sum 900e597227fa4a74402306d1e9064ecf
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -3502,6 +3557,7 @@ lab RIKEN
 labExpId J58
 labProtocolId gen0123NLtcage
 localization nucleolus
+md5sum 3538e885cbbbf2ca3c991acb121dc65c
 project wgEncode
 rnaExtract total
 subId 4534
@@ -3525,7 +3581,7 @@ lab RIKEN
 labExpId J96
 labProtocolId 011N+cage
 localization nucleus
-md5sum 64ca6d02c8eefe813cc02030a07b83f7
+md5sum bam=64ca6d02c8eefe813cc02030a07b83f7,bai=a4b924787eebf0237b317ec0af2f2923
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3552,7 +3608,7 @@ lab RIKEN
 labExpId J97
 labProtocolId 012N+cage
 localization nucleus
-md5sum 3df468fc8f7c745a44d8d9856a6c6974
+md5sum bam=3df468fc8f7c745a44d8d9856a6c6974,bai=9cbbf3bf493ba598fe0cdd31dc35d041
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3579,6 +3635,7 @@ labExpId J96,J97
 labProtocolId 011N+cage,012N+cage
 labVersion iIDR
 localization nucleus
+md5sum 83ccdec1df0d0895fcdf5ea0f74fe4f3
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -3763,6 +3820,7 @@ lab RIKEN
 labExpId J96,J97
 labProtocolId 011N+cage,012N+cage
 localization nucleus
+md5sum 96a7bb5403f1fb1d328e663f7c4b1c6f
 project wgEncode
 rnaExtract longPolyA
 subId 4522
@@ -3786,7 +3844,7 @@ lab RIKEN
 labExpId K01
 labProtocolId 013WC+cage
 localization cell
-md5sum d9a71394518093f651170aba5575e7bc
+md5sum bam=d9a71394518093f651170aba5575e7bc,bai=2b04c00a9dac78af84b12bc50054029a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3813,7 +3871,7 @@ lab RIKEN
 labExpId K02
 labProtocolId 014WC+cage
 localization cell
-md5sum 64bc1bb977669eee40c05f36f4877c71
+md5sum bam=64bc1bb977669eee40c05f36f4877c71,bai=8c2f983afda1e567ad24ee3c6662ff47
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3840,6 +3898,7 @@ labExpId K02,K01
 labProtocolId 014WC+cage,013WC+cage
 labVersion iIDR
 localization cell
+md5sum 10e2d8fc256a0776b0fd4e213661b1ea
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -4024,6 +4083,7 @@ lab RIKEN
 labExpId K01,K02
 labProtocolId 013WC+cage,014WC+cage
 localization cell
+md5sum b69fce26cd814558e21bdfe31ba93cde
 project wgEncode
 rnaExtract longPolyA
 subId 4539
@@ -4049,7 +4109,7 @@ labExpId I42
 labProtocolId gen0125C-cage
 labVersion Delve version 0.9
 localization cytosol
-md5sum d09381a7e4e875d23af8f89ff8ef6c0e
+md5sum bam=d09381a7e4e875d23af8f89ff8ef6c0e,bai=2bf3965cee622380ecc1bcbda318adc8
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -4075,6 +4135,7 @@ labExpId I42
 labProtocolId gen0125C-cage
 labVersion iIDR
 localization cytosol
+md5sum 52ceaaa5a930f4996a3227dd0a9fabd0
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -4180,6 +4241,7 @@ lab RIKEN
 labExpId I42
 labProtocolId gen0125C-cage
 localization cytosol
+md5sum bd0d4473bd0de3317a08852a7f95851e
 project wgEncode
 rnaExtract longNonPolyA
 subId 4514
@@ -4203,7 +4265,7 @@ lab RIKEN
 labExpId J89
 labProtocolId 013C+cage
 localization cytosol
-md5sum deb03288f236c8ed5ec8d270b45659fd
+md5sum bam=deb03288f236c8ed5ec8d270b45659fd,bai=7714b1ea9abdf87be13daf81045f440d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4230,7 +4292,7 @@ lab RIKEN
 labExpId J90
 labProtocolId 014C+cage
 localization cytosol
-md5sum b8ca0c61793baf48fa30fd30ba3ba097
+md5sum bam=b8ca0c61793baf48fa30fd30ba3ba097,bai=d997fd95ed5a8165275e303170327f03
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4257,6 +4319,7 @@ labExpId J89,J90
 labProtocolId 013C+cage,014C+cage
 labVersion iIDR
 localization cytosol
+md5sum 071b3b5cf8cbe44919206f3a69f88c7b
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -4441,6 +4504,7 @@ lab RIKEN
 labExpId J89,J90
 labProtocolId 013C+cage,014C+cage
 localization cytosol
+md5sum 60c5bef504aa84c8f3452a401e250af8
 project wgEncode
 rnaExtract longPolyA
 subId 4513
@@ -4465,7 +4529,7 @@ lab RIKEN
 labExpId I68
 labProtocolId gen0127NLtcage
 localization nucleolus
-md5sum 274d002f9968cc52ba04eac8d0e4d1ec
+md5sum bam=274d002f9968cc52ba04eac8d0e4d1ec,bai=328c756547822177624f1ced8a1c181d
 origAssembly hg18
 project wgEncode
 rnaExtract total
@@ -4491,6 +4555,7 @@ labExpId I68
 labProtocolId gen0127NLtcage
 labVersion iIDR
 localization nucleolus
+md5sum 4825b309b01542669ccf29bd23b84ed5
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -4594,6 +4659,7 @@ lab RIKEN
 labExpId I68
 labProtocolId gen0127NLtcage
 localization nucleolus
+md5sum f73e9f94524221f59765ae0ea4ab31ef
 project wgEncode
 rnaExtract total
 subId 4519
@@ -4619,7 +4685,7 @@ labExpId I44
 labProtocolId gen0128N-cage
 labVersion Delve version 0.9
 localization nucleus
-md5sum 53561b0344a0a0dd0816a302464d962d
+md5sum bam=53561b0344a0a0dd0816a302464d962d,bai=c2c23a5afe21df4d184c52856ec1343c
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -4645,6 +4711,7 @@ labExpId I44
 labProtocolId gen0128N-cage
 labVersion iIDR
 localization nucleus
+md5sum f089f5a8bc5a629c0ae41a9154890d45
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -4750,6 +4817,7 @@ lab RIKEN
 labExpId I44
 labProtocolId gen0128N-cage
 localization nucleus
+md5sum b5f4f44fde655f7e3701875095665b2b
 project wgEncode
 rnaExtract longNonPolyA
 subId 4512
@@ -4773,7 +4841,7 @@ lab RIKEN
 labExpId J98
 labProtocolId 013N+cage
 localization nucleus
-md5sum cedcde207c25f5915ba125669078692b
+md5sum bam=cedcde207c25f5915ba125669078692b,bai=cd804a00e266cff3e3c6276aff634ae5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4800,7 +4868,7 @@ lab RIKEN
 labExpId J99
 labProtocolId 014N+cage
 localization nucleus
-md5sum 8b427967a1650d8f8f80b2bf621d7ae4
+md5sum bam=8b427967a1650d8f8f80b2bf621d7ae4,bai=615d7272e66bf4f482e798845fdf79bb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4827,6 +4895,7 @@ labExpId J98,J99
 labProtocolId 013N+cage,014N+cage
 labVersion iIDR
 localization nucleus
+md5sum 6ada26e7444a7cdd6fb38b5a95a0a31b
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -5011,6 +5080,7 @@ lab RIKEN
 labExpId J98,J99
 labProtocolId 013N+cage,014N+cage
 localization nucleus
+md5sum 193e981a4acfb1767c690433abc71fcf
 project wgEncode
 rnaExtract longPolyA
 subId 4528
@@ -5034,7 +5104,7 @@ lab RIKEN
 labExpId J78
 labProtocolId 009WC+cage
 localization cell
-md5sum 537b2508198602e5da0c6f947a25146b
+md5sum bam=537b2508198602e5da0c6f947a25146b,bai=740f8a7b69eb12c1ef235e6557f29295
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5061,7 +5131,7 @@ lab RIKEN
 labExpId J79
 labProtocolId 010WC+cage
 localization cell
-md5sum c50d709d79cd25c8de7b46bf3122db2a
+md5sum bam=c50d709d79cd25c8de7b46bf3122db2a,bai=7390e8b40729b84da2ecda1d8b64ae25
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5088,6 +5158,7 @@ labExpId J79,J78
 labProtocolId 010WC+cage,009WC+cage
 labVersion iIDR
 localization cell
+md5sum 38fc52bbaa7df42563b5f681d7876941
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -5272,6 +5343,7 @@ lab RIKEN
 labExpId J78,J79
 labProtocolId 009WC+cage,010WC+cage
 localization cell
+md5sum 032b9e1809a4993c2d3e8442d9d72142
 project wgEncode
 rnaExtract longPolyA
 subId 4503
@@ -5297,7 +5369,7 @@ labExpId I72
 labProtocolId gen0116C-cage
 labVersion Delve version 0.9
 localization cytosol
-md5sum a52493b98f0fa3a92d3b6a0185cb4b77
+md5sum bam=a52493b98f0fa3a92d3b6a0185cb4b77,bai=6a9e4f8d3b34acd2b73c548cc9a5a8e2
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -5323,6 +5395,7 @@ labExpId I72
 labProtocolId gen0116C-cage
 labVersion iIDR
 localization cytosol
+md5sum ede418fd3c228548fc16370b848c5781
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -5428,6 +5501,7 @@ lab RIKEN
 labExpId I72
 labProtocolId gen0116C-cage
 localization cytosol
+md5sum 7a15e490341fd955c3ef48eade9746c1
 project wgEncode
 rnaExtract longNonPolyA
 subId 4523
@@ -5451,7 +5525,7 @@ lab RIKEN
 labExpId K03
 labProtocolId 029C+cage
 localization cytosol
-md5sum 405a779918393752aff80fef296423de
+md5sum bam=405a779918393752aff80fef296423de,bai=e1d72966bf49dbccc9dfcadb217e62de
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -5478,7 +5552,7 @@ lab RIKEN
 labExpId K04
 labProtocolId 030C+cage
 localization cytosol
-md5sum 5772c68d93fcca419418180b7407b10f
+md5sum bam=5772c68d93fcca419418180b7407b10f,bai=2010b74ae9ff5ca16c36269a696e49b4
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -5505,6 +5579,7 @@ labExpId K04,K03
 labProtocolId 030C+cage,029C+cage
 labVersion iIDR
 localization cytosol
+md5sum 1f2601ae5daa4e989a1ed1b176585928
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -5689,6 +5764,7 @@ lab RIKEN
 labExpId K03,K04
 labProtocolId 029C+cage,030C+cage
 localization cytosol
+md5sum d0188926a6dd32bbf0b8768648a15c7a
 project wgEncode
 rnaExtract longPolyA
 subId 4515
@@ -5712,7 +5788,7 @@ lab RIKEN
 labExpId K05
 labProtocolId 029N+cage
 localization nucleus
-md5sum 9049b048deef9813a507943b4a143a9d
+md5sum bam=9049b048deef9813a507943b4a143a9d,bai=a98a9b6067cf2e4283391482d4a76d1c
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -5739,7 +5815,7 @@ lab RIKEN
 labExpId K06
 labProtocolId 030N+cage
 localization nucleus
-md5sum 8dbdc63630485064eb8849443f87d8ef
+md5sum bam=8dbdc63630485064eb8849443f87d8ef,bai=9b6e7df5b7b6138c8e9a1a713548ccb9
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -5766,6 +5842,7 @@ labExpId K06,K05
 labProtocolId 030N+cage,029N+cage
 labVersion iIDR
 localization nucleus
+md5sum 52a61a4e543c6f536312f6d0f588ecbf
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -5950,6 +6027,7 @@ lab RIKEN
 labExpId K05,K06
 labProtocolId 029N+cage,030N+cage
 localization nucleus
+md5sum 5a1524e7996607fb768feffec68bd90b
 project wgEncode
 rnaExtract longPolyA
 subId 4497
@@ -5973,7 +6051,7 @@ lab RIKEN
 labExpId J70
 labProtocolId 001WC+cage
 localization cell
-md5sum 72474aac692f85f799fce7390f57b0e8
+md5sum bam=72474aac692f85f799fce7390f57b0e8,bai=3657976be404b8230c4dc7eccdb21712
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6000,7 +6078,7 @@ lab RIKEN
 labExpId J71
 labProtocolId 002WC+cage
 localization cell
-md5sum 0b3b753312128c5bdaf4c26d5efa2fc2
+md5sum bam=0b3b753312128c5bdaf4c26d5efa2fc2,bai=089b535d5f71fa43726527fcf8cda804
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6027,6 +6105,7 @@ labExpId J70,J71
 labProtocolId 001WC+cage,002WC+cage
 labVersion iIDR
 localization cell
+md5sum 73e4a44613d9b044d446c993c12333d5
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -6211,6 +6290,7 @@ lab RIKEN
 labExpId J70,J71
 labProtocolId 001WC+cage,002WC+cage
 localization cell
+md5sum dc96479e4e99898c7d61bc6d1697e0ba
 project wgEncode
 rnaExtract longPolyA
 subId 4532
@@ -6236,7 +6316,7 @@ labExpId I35
 labProtocolId gen0134CHtcage
 labVersion Delve version 0.9
 localization chromatin
-md5sum 23910151fa6062f0e07eb805d812535c
+md5sum bam=23910151fa6062f0e07eb805d812535c,bai=549d4ef1e835680f805b13fa97d48e3f
 origAssembly hg18
 project wgEncode
 rnaExtract total
@@ -6262,6 +6342,7 @@ labExpId I35
 labProtocolId gen0134CHtcage
 labVersion iIDR
 localization chromatin
+md5sum 292140fd480b132cebf060d55a71b03a
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -6367,6 +6448,7 @@ lab RIKEN
 labExpId I35
 labProtocolId gen0134CHtcage
 localization chromatin
+md5sum 402b309cac2e2839a02c3c75258e235e
 project wgEncode
 rnaExtract total
 subId 4516
@@ -6391,7 +6473,7 @@ lab RIKEN
 labExpId I22
 labProtocolId gen0136C-cage
 localization cytosol
-md5sum 40da6c19aac1826ae56d9d1240a031db
+md5sum bam=40da6c19aac1826ae56d9d1240a031db,bai=b6d8d17af59357f22e473693624ba048
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -6418,6 +6500,7 @@ labExpId I22
 labProtocolId gen0136C-cage
 labVersion iIDR
 localization cytosol
+md5sum 75968d0a409ccf2842739e1d1617a387
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -6550,6 +6633,7 @@ lab RIKEN
 labExpId I22
 labProtocolId gen0136C-cage
 localization cytosol
+md5sum 78f9da37fee8723be7d5a14ea59bf92e
 project wgEncode
 rnaExtract longNonPolyA
 subId 4501
@@ -6576,7 +6660,7 @@ labExpId I40
 labProtocolId gen0137C+cage
 labVersion Delve version 0.9
 localization cytosol
-md5sum f412cac2323b33b71e378768059b294b
+md5sum bam=f412cac2323b33b71e378768059b294b,bai=ae958c869ea804040d2601a3293e0713
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
@@ -6602,7 +6686,7 @@ lab RIKEN
 labExpId J82
 labProtocolId 001C+cage
 localization cytosol
-md5sum 895bcf6430707991d108281ddf1e8977
+md5sum bam=895bcf6430707991d108281ddf1e8977,bai=4ac17fd619eb1549225c42c5eaf0b1dd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6629,7 +6713,7 @@ lab RIKEN
 labExpId J83
 labProtocolId 002C+cage
 localization cytosol
-md5sum f8e8546a0b4577b901612ab456004b6c
+md5sum bam=f8e8546a0b4577b901612ab456004b6c,bai=567f5a3fd9e77f8b56e34dc9032a29f8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6656,6 +6740,7 @@ labExpId J83,J82
 labProtocolId 002C+cage,001C+cage
 labVersion iIDR
 localization cytosol
+md5sum e01063dde8072f880a3d0d3d8e471897
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -6681,6 +6766,7 @@ labExpId I40
 labProtocolId gen0137C+cage
 labVersion iIDR
 localization cytosol
+md5sum f235ac533df3fb2b914f2aaad3ec18b1
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -6948,6 +7034,7 @@ lab RIKEN
 labExpId J82,J83
 labProtocolId 001C+cage,002C+cage
 localization cytosol
+md5sum 6eb16316a72e6613d7898f419e9317e5
 project wgEncode
 rnaExtract longPolyA
 subId 4500
@@ -6972,7 +7059,7 @@ lab RIKEN
 labExpId I33
 labProtocolId gen0144NLtcage
 localization nucleolus
-md5sum d2c294e100c3fc98f43cd5a4c77627ac
+md5sum bam=d2c294e100c3fc98f43cd5a4c77627ac,bai=e1ebbe752e9a6924ebfa1925195dadab
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -6998,6 +7085,7 @@ labExpId I33
 labProtocolId gen0144NLtcage
 labVersion iIDR
 localization nucleolus
+md5sum 132653cbea450072c5d890c094503d38
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -7101,6 +7189,7 @@ lab RIKEN
 labExpId I33
 labProtocolId gen0144NLtcage
 localization nucleolus
+md5sum c5a05dfe07287a865b65d23e159ed8a7
 project wgEncode
 rnaExtract total
 subId 4507
@@ -7126,7 +7215,7 @@ labExpId I34
 labProtocolId gen0147NPtcage
 labVersion Delve version 0.9
 localization nucleoplasm
-md5sum 979b0afae494798eee9261abb41b5674
+md5sum bam=979b0afae494798eee9261abb41b5674,bai=5cf2f271990b9f3f1d8c9e064e6fb0ec
 origAssembly hg18
 project wgEncode
 rnaExtract total
@@ -7152,6 +7241,7 @@ labExpId I34
 labProtocolId gen0147NPtcage
 labVersion iIDR
 localization nucleoplasm
+md5sum 0f186bd40aaa461e6685e3da859d6d3b
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -7257,6 +7347,7 @@ lab RIKEN
 labExpId I34
 labProtocolId gen0147NPtcage
 localization nucleoplasm
+md5sum 69a3159c51d6adc9047c038c78619127
 project wgEncode
 rnaExtract total
 subId 4525
@@ -7281,7 +7372,7 @@ lab RIKEN
 labExpId I23
 labProtocolId gen0149N-cage
 localization nucleus
-md5sum a77cd54e73cd13920cbd94f9d411b334
+md5sum bam=a77cd54e73cd13920cbd94f9d411b334,bai=1d8e0f06468efeffd4639cc82672d959
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -7307,6 +7398,7 @@ labExpId I23
 labProtocolId gen0149N-cage
 labVersion iIDR
 localization nucleus
+md5sum 2f3cec45953b8c254a6cb51a73a4c2df
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -7437,6 +7529,7 @@ lab RIKEN
 labExpId I23
 labProtocolId gen0149N-cage
 localization nucleus
+md5sum 219afcb8d1ca6063da98b32a8c788c72
 project wgEncode
 rnaExtract longNonPolyA
 subId 4537
@@ -7460,7 +7553,7 @@ lab RIKEN
 labExpId J91
 labProtocolId 001N+cage
 localization nucleus
-md5sum 7095cc38763f444217fcce8f70b3562a
+md5sum bam=7095cc38763f444217fcce8f70b3562a,bai=28dd5f1428870c45f78e513a31c77d1e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7487,7 +7580,7 @@ lab RIKEN
 labExpId J92
 labProtocolId 002N+cage
 localization nucleus
-md5sum 42b508a3c9c0f650ea0c9a329f5390e0
+md5sum bam=42b508a3c9c0f650ea0c9a329f5390e0,bai=841ce40b622cbeb4920645ba0fa37b60
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7514,6 +7607,7 @@ labExpId J92,J91
 labProtocolId 002N+cage,001N+cage
 labVersion iIDR
 localization nucleus
+md5sum dd76aba0250993eb2e9a00ad99d33e6d
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -7698,6 +7792,7 @@ lab RIKEN
 labExpId J91,J92
 labProtocolId 001N+cage,002N+cage
 localization nucleus
+md5sum 111a88c53fd3dc0ab47d921148a8d779
 project wgEncode
 rnaExtract longPolyA
 subId 4518
@@ -7723,7 +7818,7 @@ labExpId I32
 labProtocolId gen0152P-cage
 labVersion Delve version 0.9
 localization polysome
-md5sum 6e5c518d2b24e9b5f819a7f8e12e4e13
+md5sum bam=6e5c518d2b24e9b5f819a7f8e12e4e13,bai=58ccd47a6621c8c23b815a3d4d80a8c2
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -7749,6 +7844,7 @@ labExpId I32
 labProtocolId gen0152P-cage
 labVersion iIDR
 localization polysome
+md5sum e9c4d26b870f96489b4fb023500f5045
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -7854,6 +7950,7 @@ lab RIKEN
 labExpId I32
 labProtocolId gen0152P-cage
 localization polysome
+md5sum 68410324788ab99eafe2e13e6f7a3e08
 project wgEncode
 rnaExtract longNonPolyA
 subId 4511
@@ -7877,7 +7974,7 @@ lab RIKEN
 labExpId K07
 labProtocolId 015WC+cage
 localization cell
-md5sum db7303df970c7760e1e0adc88dbcff8b
+md5sum bam=db7303df970c7760e1e0adc88dbcff8b,bai=08df05de6bf93c0ce061de6fee13f36a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7905,7 +8002,7 @@ lab RIKEN
 labExpId K11
 labProtocolId 016WC+cage
 localization cell
-md5sum c50051557b805f73374c50f331822916
+md5sum bam=c50051557b805f73374c50f331822916,bai=6ec3fa7cebc12c17772031a6121d4adb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7932,6 +8029,7 @@ labExpId K11,K07
 labProtocolId 016WC+cage,015WC+cage
 labVersion iIDR
 localization cell
+md5sum d6decd0fd32face7c29bead15e69a36a
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -7956,6 +8054,7 @@ lab RIKEN
 labExpId K11
 labProtocolId 016WC+cage
 localization cell
+md5sum cedd987a5cc19fccbbb24af8de8c7381
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8007,6 +8106,7 @@ lab RIKEN
 labExpId K11
 labProtocolId 016WC+cage
 localization cell
+md5sum 92c3da85a2c004409f982fee8327f93c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8059,7 +8159,7 @@ lab RIKEN
 labExpId K07
 labProtocolId 015WC+cage
 localization cell
-md5sum 6f6e3091d024d9ad7e57f0213a501827
+md5sum b14be70fa85e86f98c6cdb6d515a7ad4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8110,6 +8210,7 @@ lab RIKEN
 labExpId K07,K11
 labProtocolId 015WC+cage,016WC+cage
 localization cell
+md5sum d06d095e747daaf1137f81da567c2d80
 project wgEncode
 rnaExtract longPolyA
 subId 4521
@@ -8133,7 +8234,7 @@ lab RIKEN
 labExpId J76
 labProtocolId 007WC+cage
 localization cell
-md5sum 883264f44451a2e311de7c8797b3e1d4
+md5sum bam=883264f44451a2e311de7c8797b3e1d4,bai=bca070302983d4e307c087bd7e94c488
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8160,7 +8261,7 @@ lab RIKEN
 labExpId J77
 labProtocolId 008WC+cage
 localization cell
-md5sum f5326f647a5302771f1ea7625f4d7042
+md5sum bam=f5326f647a5302771f1ea7625f4d7042,bai=d44b51e1de7b76a3d47a4793671b7c69
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8187,6 +8288,7 @@ labExpId J77,J76
 labProtocolId 008WC+cage,007WC+cage
 labVersion iIDR
 localization cell
+md5sum 2239f36db3740c96b3b1c0cba534e3d9
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -8371,6 +8473,7 @@ lab RIKEN
 labExpId J76,J77
 labProtocolId 007WC+cage,008WC+cage
 localization cell
+md5sum ce48cf1d307b8725c4555c88b956c598
 project wgEncode
 rnaExtract longPolyA
 subId 4499
@@ -8396,7 +8499,7 @@ labExpId I70
 labProtocolId gen0155C-cage
 labVersion Delve version 0.9
 localization cytosol
-md5sum 893a566d89dae3fa2944c35f6c339c96
+md5sum bam=893a566d89dae3fa2944c35f6c339c96,bai=291520a2a946b56c432c2d0f2684c005
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -8422,6 +8525,7 @@ labExpId I70
 labProtocolId gen0155C-cage
 labVersion iIDR
 localization cytosol
+md5sum b02f21895a4afbb3e0991d1e553a517b
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -8527,6 +8631,7 @@ lab RIKEN
 labExpId I70
 labProtocolId gen0155C-cage
 localization cytosol
+md5sum 7de935344118dd2c0c853d2dfcd4092a
 project wgEncode
 rnaExtract longNonPolyA
 subId 4533
@@ -8550,7 +8655,7 @@ lab RIKEN
 labExpId K08
 labProtocolId 027C+cage
 localization cytosol
-md5sum 2b048dee3ece6207be96d584917172db
+md5sum bam=2b048dee3ece6207be96d584917172db,bai=508aff49eb1d72bdff00634d59aa8c07
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -8578,7 +8683,7 @@ lab RIKEN
 labExpId K20
 labProtocolId 028C+cage
 localization cytosol
-md5sum 0826bda15b1784b4db2c45379c741a39
+md5sum bam=0826bda15b1784b4db2c45379c741a39,bai=b89c7d7ba0d1ebfa11c18bb492f33cbd
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -8605,6 +8710,7 @@ labExpId K20,K08
 labProtocolId 028C+cage,027C+cage
 labVersion iIDR
 localization cytosol
+md5sum ae42418e36a6c9152f24d97bd24abeb2
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -8629,6 +8735,7 @@ lab RIKEN
 labExpId K20
 labProtocolId 028C+cage
 localization cytosol
+md5sum b4b58eda0a31f20123eb8c137c675279
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -8680,6 +8787,7 @@ lab RIKEN
 labExpId K20
 labProtocolId 028C+cage
 localization cytosol
+md5sum 60e40619a63615bb8def540ced7cd844
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -8783,6 +8891,7 @@ lab RIKEN
 labExpId K08,K20
 labProtocolId 027C+cage,028C+cage
 localization cytosol
+md5sum e2c39dc6ee97ac5872f4a2efa0cd0e31
 project wgEncode
 rnaExtract longPolyA
 subId 4502
@@ -8808,7 +8917,7 @@ labExpId I71
 labProtocolId gen0157N-cage
 labVersion Delve version 0.9
 localization nucleus
-md5sum ea5528ee53c5fe8fd0ee3c41be3942e7
+md5sum bam=ea5528ee53c5fe8fd0ee3c41be3942e7,bai=c609c9316bbc0e80e8c43d57802c0fa2
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -8834,6 +8943,7 @@ labExpId I71
 labProtocolId gen0157N-cage
 labVersion iIDR
 localization nucleus
+md5sum a1fd5710672251a41752cf08d0784cd9
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -8939,6 +9049,7 @@ lab RIKEN
 labExpId I71
 labProtocolId gen0157N-cage
 localization nucleus
+md5sum f9e5b12e82965c9d1b7e8c154dcb2140
 project wgEncode
 rnaExtract longNonPolyA
 subId 4538
@@ -8962,7 +9073,7 @@ lab RIKEN
 labExpId K09
 labProtocolId 027N+cage
 localization nucleus
-md5sum 1c62e411bd0588cf11a275c2df0a8214
+md5sum bam=1c62e411bd0588cf11a275c2df0a8214,bai=46709d4998248b7a42e11960f67218b3
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -8989,6 +9100,7 @@ labExpId K09
 labProtocolId 027N+cage
 labVersion iIDR
 localization nucleus
+md5sum 80cb23e67a1d6c165515dd1571780340
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -9093,6 +9205,7 @@ lab RIKEN
 labExpId K09
 labProtocolId 027N+cage
 localization nucleus
+md5sum b90e2290be56f4844f30d0e74f34affc
 project wgEncode
 rnaExtract longPolyA
 subId 4529
@@ -9117,7 +9230,7 @@ lab RIKEN
 labExpId I09
 labProtocolId gen0159WC-cage
 localization cell
-md5sum 1d926e84501daaf20f7cde1c46108b77
+md5sum bam=1d926e84501daaf20f7cde1c46108b77,bai=014c00e373ac850d626e74af1997afce
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
@@ -9144,6 +9257,7 @@ labExpId I09
 labProtocolId gen0159WC-cage
 labVersion iIDR
 localization cell
+md5sum 2f42c7370f53c21d4651d8ddad4c458f
 origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
@@ -9278,7 +9392,7 @@ lab RIKEN
 labExpId K14
 labProtocolId 019WC+cage
 localization cell
-md5sum dd157c5757c5e85f4c7854089a09bbf2
+md5sum bam=dd157c5757c5e85f4c7854089a09bbf2,bai=deddd10a9ea249479aeb5a26a201c111
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9306,7 +9420,7 @@ lab RIKEN
 labExpId K15
 labProtocolId 020WC+cage
 localization cell
-md5sum e0edada032843539e6d28574d4a0f766
+md5sum bam=e0edada032843539e6d28574d4a0f766,bai=e3148691af40a89746f4b3d7abc54707
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9333,6 +9447,7 @@ labExpId K14,K15
 labProtocolId 019WC+cage,020WC+cage
 labVersion iIDR
 localization cell
+md5sum 67328ad82def5d1cf5e3da833943d068
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -9357,6 +9472,7 @@ lab RIKEN
 labExpId K14
 labProtocolId 019WC+cage
 localization cell
+md5sum c7d6b31c2be98961fbe5f56b1cdcdeff
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -9409,6 +9525,7 @@ lab RIKEN
 labExpId K14
 labProtocolId 019WC+cage
 localization cell
+md5sum aba33e70ca776b71c380a163f692c867
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -9513,9 +9630,10 @@ lab RIKEN
 labExpId K14,K15
 labProtocolId 019WC+cage,020WC+cage
 localization cell
+md5sum 8ad7deb793ed341deda73447d6d3e129
 project wgEncode
 rnaExtract longPolyA
 subId 4524
 view TssGencV7
 
-# MAGIC: -1114613205
+# MAGIC: -529104252

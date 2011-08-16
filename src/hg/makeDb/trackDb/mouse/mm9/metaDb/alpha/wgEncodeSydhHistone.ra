@@ -21,6 +21,7 @@ expId 2004
 fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
+md5sum bam=db16f3cb885ebe9fc84a99ba9104de80,bai=9cecf8ff52b6e7dd5cb09e7ed54a7a7d
 project wgEncode
 replicate 1
 setType exp
@@ -48,6 +49,7 @@ expId 2004
 fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep2.bam
 grant Snyder
 lab Yale-m
+md5sum bam=f9ee12ad8d2ae0e3bfe9f0b05b205be5,bai=ef0f1423ff6f71b563ebc86f5ecde10a
 project wgEncode
 replicate 2
 setType exp
@@ -75,6 +77,7 @@ fileName wgEncodeSydhHistCh12H3k4me3IggyalePk.narrowPeak.gz
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
+md5sum 85826b0e0c0c365cb123c8a4d4aac2ba
 project wgEncode
 setType exp
 sex F
@@ -101,6 +104,7 @@ expId 2004
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep1.fastq.gz
 grant Snyder
 lab Yale-m
+md5sum 5fbe47e031a0af4b67d356b5bd4c348a
 project wgEncode
 replicate 1
 setType exp
@@ -127,6 +131,7 @@ expId 2004
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep2.fastq.gz
 grant Snyder
 lab Yale-m
+md5sum 8f4923e506cc12d7803084b87985f99c
 project wgEncode
 replicate 2
 setType exp
@@ -154,6 +159,7 @@ fileName wgEncodeSydhHistCh12H3k4me3IggyaleSig.bigWig
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
+md5sum d8d04c4b5a2dcd33e4bd4fb0680a37b8
 project wgEncode
 setType exp
 sex F
@@ -181,6 +187,7 @@ expId 2001
 fileName wgEncodeSydhHistCh12InputIggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
+md5sum bam=0e030c2a38ce317817a6067cea669923,bai=28a51d2fea2afa965edf50b333d136d6
 project wgEncode
 replicate 1
 setType input
@@ -207,6 +214,7 @@ expId 2001
 fileName wgEncodeSydhHistCh12InputIggyaleRawData.fastq.gz
 grant Snyder
 lab Yale-m
+md5sum f7acb742cf7e0637878651b2b949aad1
 project wgEncode
 setType input
 sex F
@@ -233,6 +241,7 @@ fileName wgEncodeSydhHistCh12InputIggyaleSig.bigWig
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
+md5sum a603df9010bde0e6faa37806efa9daf0
 project wgEncode
 setType input
 sex F
@@ -259,6 +268,7 @@ expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
+md5sum bam=fdb21bf4417f3223bef45d73fe18788b,bai=7069117c4354a907a4b6bffa83ff972c
 project wgEncode
 replicate 1
 setType exp
@@ -285,6 +295,7 @@ expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep2.bam
 grant Snyder
 lab Yale-m
+md5sum bam=2312c60acac5c173942f73c92b38769f,bai=f941014ed4c303df0bc598bc768670b7
 project wgEncode
 replicate 2
 setType exp
@@ -312,6 +323,7 @@ fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyalePk.narrowPeak.gz
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
+md5sum be3574bdf93b3e81f45d9813323ae123
 project wgEncode
 setType exp
 sex M
@@ -338,6 +350,7 @@ expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleRawDataRep1.fastq.tgz
 grant Snyder
 lab Yale-m
+md5sum 8e8fb496358704915175b71df2d0f6f0
 project wgEncode
 replicate 1
 setType exp
@@ -364,6 +377,7 @@ expId 2005
 fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleRawDataRep2.fastq.tgz
 grant Snyder
 lab Yale-m
+md5sum b27e14b8ced0ccf0a7392377e2becf80
 project wgEncode
 replicate 2
 setType exp
@@ -391,6 +405,7 @@ fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleSig.bigWig
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
+md5sum a6b8413df50a9bb7d972df022d4c9fe6
 project wgEncode
 setType exp
 sex M
@@ -418,6 +433,7 @@ expId 2002
 fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
+md5sum bam=95464feddcd94b340fa28a1d3eb95f9f,bai=43e22a3958b02a8e3768785bb5b691bd
 project wgEncode
 replicate 1
 setType exp
@@ -445,6 +461,7 @@ expId 2002
 fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2.bam
 grant Snyder
 lab Yale-m
+md5sum bam=c5840f0df57d5fcd4c5b8de1dd34b3be,bai=cf19632e4b21531b4542bb6208f53970
 project wgEncode
 replicate 2
 setType exp
@@ -472,6 +489,7 @@ expId 2002
 fileName wgEncodeSydhHistMelH3k04me3IggyalePk.narrowPeak.gz
 grant Snyder
 lab Yale-m
+md5sum 43499fdbb651df0503e064cb176c6c61
 project wgEncode
 setType exp
 sex M
@@ -498,6 +516,7 @@ expId 2002
 fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep1.fastq.gz
 grant Snyder
 lab Yale-m
+md5sum 1490b45485453234e689a4048b4945eb
 project wgEncode
 replicate 1
 setType exp
@@ -524,6 +543,7 @@ expId 2002
 fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep2.fastq.gz
 grant Snyder
 lab Yale-m
+md5sum 6ea1d99c2036a998cf564208af9166bd
 project wgEncode
 replicate 2
 setType exp
@@ -551,6 +571,7 @@ fileName wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
+md5sum a3a54988c3d5e71d617a3e79cddeb4cf
 project wgEncode
 setType exp
 sex M
@@ -578,6 +599,7 @@ expId 1963
 fileName wgEncodeSydhHistMelInputDm2p5dIggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
+md5sum bam=4c0ba84d31fb920838ab84c95777d219,bai=3798b0275eeea3c04d0ec420cd2ffe05
 project wgEncode
 replicate 1
 setType input
@@ -605,6 +627,7 @@ expId 1963
 fileName wgEncodeSydhHistMelInputDm2p5dIggyaleRawDataRep1.fastq.tgz
 grant Snyder
 lab Yale-m
+md5sum 952d9e46d53205052aac1b43883a514a
 project wgEncode
 replicate 1
 setType input
@@ -633,6 +656,7 @@ fileName wgEncodeSydhHistMelInputDm2p5dIggyaleSig.bigWig
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
+md5sum da7d64b04904456bee5a3160db11f14b
 project wgEncode
 setType input
 sex M
@@ -660,6 +684,7 @@ expId 2003
 fileName wgEncodeSydhHistMelInputIggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
+md5sum bam=5714d286b5173e3591a89cefcb0a073d,bai=9e7c341584df86a63dad9e7812447a1a
 project wgEncode
 replicate 1
 setType input
@@ -686,6 +711,7 @@ expId 2003
 fileName wgEncodeSydhHistMelInputIggyaleRawData.fastq.gz
 grant Snyder
 lab Yale-m
+md5sum eabcf2edd72c69edd067cc5f10446ec8
 project wgEncode
 setType input
 sex M
@@ -712,6 +738,7 @@ fileName wgEncodeSydhHistMelInputIggyaleSig.bigWig
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
+md5sum b2b3b19c63bdb67a83345b118bed4088
 project wgEncode
 setType input
 sex M
@@ -721,4 +748,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -753750636
+# MAGIC: -820914158

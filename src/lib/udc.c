@@ -85,7 +85,8 @@ struct udcFile
     char *bitmapFileName;	/* Name of bitmap file. */
     char *sparseFileName;	/* Name of sparse data file. */
     int fdSparse;		/* File descriptor for sparse data file. */
-    char *sparseReadAhead;      /* Read-ahead buffer, if any */
+    boolean sparseReadAhead;    /* Read-ahead has something in the buffer */
+    char *sparseReadAheadBuf;   /* Read-ahead buffer, if any */
     bits64 sparseRAOffset;      /* Read-ahead buffer offset */
     struct udcBitmap *bits;     /* udcBitMap */
     bits64 startData;		/* Start of area in file we know to have data. */
@@ -924,7 +925,7 @@ if (file != NULL)
     freeMem(file->cacheDir);
     freeMem(file->bitmapFileName);
     freeMem(file->sparseFileName);
-    freeMem(file->sparseReadAhead);
+    freeMem(file->sparseReadAheadBuf);
     mustCloseFd(&(file->fdSparse));
     udcBitmapClose(&file->bits);
     }
@@ -1225,6 +1226,7 @@ bits64 end = start + size;
 if (end > file->size)
     end = file->size;
 size = end - start;
+char *cbuf = buf;
 
 /* use read-ahead buffer if present */
 int bytesRead = 0;
@@ -1233,35 +1235,34 @@ bits64 raStart;
 bits64 raEnd;
 while(TRUE)
     {
-    raStart = file->sparseRAOffset;
-    raEnd = raStart+READAHEADBUFSIZE;
     if (file->sparseReadAhead)
 	{
+	raStart = file->sparseRAOffset;
+	raEnd = raStart+READAHEADBUFSIZE;
 	if (start >= raStart && start < raEnd)
 	    {
 	    // copy bytes out of rabuf
 	    int endInBuf = min(raEnd, end);
 	    int sizeInBuf = endInBuf - start;
-	    memcpy(buf, file->sparseReadAhead + (start-raStart), sizeInBuf);
-	    buf += sizeInBuf;
+	    memcpy(cbuf, file->sparseReadAheadBuf + (start-raStart), sizeInBuf);
+	    cbuf += sizeInBuf;
 	    bytesRead += sizeInBuf;
-	    start = raEnd; 
+	    start = raEnd;
 	    size -= sizeInBuf;
 	    file->offset += sizeInBuf;
-	    mustLseek(file->fdSparse, start, SEEK_SET);
 	    if (size == 0)
 		break;
 	    }
-	else
-	    {
-	    freez(&file->sparseReadAhead);
-	    }
+	file->sparseReadAhead = FALSE;
+	mustLseek(file->fdSparse, start, SEEK_SET);
 	}
 
-    int saveEnd = end;
+    bits64 saveEnd = end;
     if (size < READAHEADBUFSIZE)
 	{
-	file->sparseReadAhead = needMem(READAHEADBUFSIZE);
+	file->sparseReadAhead = TRUE;
+	if (!file->sparseReadAheadBuf)
+	    file->sparseReadAheadBuf = needMem(READAHEADBUFSIZE);
 	file->sparseRAOffset = start;
 	size = READAHEADBUFSIZE;
 	end = start + size;
@@ -1294,13 +1295,13 @@ while(TRUE)
 
     if (file->sparseReadAhead)
 	{
-	mustReadFd(file->fdSparse, file->sparseReadAhead, size);
+	mustReadFd(file->fdSparse, file->sparseReadAheadBuf, size);
 	end = saveEnd;
 	size = end - start;
 	}
     else
 	{
-	mustReadFd(file->fdSparse, buf, size);
+	mustReadFd(file->fdSparse, cbuf, size);
 	file->offset += size;
 	bytesRead += size;
 	break;

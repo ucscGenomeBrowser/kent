@@ -45,15 +45,8 @@ void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, struct vcfFil
 {
 if (vcff != NULL && vcff->genotypeCount > 1)
     {
-// cluster haplotypes or just show allele summary?
-//   if clustering haplotypes:
-//      track height?
-//      thicken lines?
-//      outline center variant?
-//      choose center variant?  [hgc option to make this variant's coords the center of viewed region?]
-//      color haplotypes by red/blue or allele bases?
     printf("<TABLE cellpadding=0><TR><TD>"
-	   "<B>Haplotype sorting:</B> using ");
+	   "<B>Haplotype sorting order:</B> using ");
     char cartVar[1024];
     safef(cartVar, sizeof(cartVar), "%s.centerVariantChrom", tdb->track);
     char *centerChrom = cartOptionalString(cart, cartVar);
@@ -159,13 +152,81 @@ errCatchFree(&errCatch);
 return vcff;
 }
 
+static void vcfCfgHapClusterEnable(struct cart *cart, struct trackDb *tdb, char *name,
+				   boolean compositeLevel)
+/* Let the user enable/disable haplotype sorting display. */
+{
+printf("<B>Enable Haplotype sorting display: </B>");
+boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
+							VCF_HAP_ENABLED_VAR, TRUE);
+char varName[1024];
+safef(varName, sizeof(varName), "%s." VCF_HAP_ENABLED_VAR, name);
+cgiMakeCheckBox(varName, hapClustEnabled);
+printf("<BR>\n");
+}
+
+static void vcfCfgHapClusterColor(struct cart *cart, struct trackDb *tdb, char *name,
+				   boolean compositeLevel)
+/* Let the user choose how to color the sorted haplotypes. */
+{
+printf("<B>Color sorted haplotypes by:</B>\n");
+char *colorBy = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
+					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
+boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
+char varName[1024];
+safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, colorByRefAlt);
+printf("reference/alternate alleles (reference = blue, alternate = red)\n");
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, !colorByRefAlt);
+printf("first base of allele (A = red, C = blue, G = green, T = magenta)<BR>\n");
+}
+
+static void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
+				   char *name, boolean compositeLevel)
+/* Let the user specify a height for the track. */
+{
+if (vcff != NULL && vcff->genotypeCount > 1)
+    {
+    printf("<B>Haplotype sorting display height:</B> \n");
+    int cartHeight = cartUsualIntClosestToHome(cart, tdb, compositeLevel,
+					       VCF_HAP_HEIGHT_VAR, VCF_DEFAULT_HAP_HEIGHT);
+    char varName[1024];
+    safef(varName, sizeof(varName), "%s." VCF_HAP_HEIGHT_VAR, name);
+    cgiMakeIntVarInRange(varName, cartHeight, "Height (in pixels) of track", 5, "10", "2500");
+    }
+}
+
+static void vcfCfgHapCluster(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
+			     char *name)
+/* Show controls for haplotype-sorting display, which only makes sense to do when
+ * the VCF file describes multiple genotypes. */
+{
+boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
+vcfCfgHapClusterEnable(cart, tdb, name, compositeLevel);
+vcfCfgHaplotypeCenter(cart, tdb, vcff, NULL, NULL, 0, "mainForm");
+vcfCfgHapClusterColor(cart, tdb, name, compositeLevel);
+vcfCfgHapClusterHeight(cart, tdb, vcff, name, compositeLevel);
+//      thicken lines?
+//      outline center variant?
+//      color haplotypes by red/blue or allele bases?
+}
+
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* VCF: Variant Call Format.  redmine #3710 */
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 printf("<TABLE%s><TR><TD>", boxed ? " width='100%'" : "");
 struct vcfFile *vcff = vcfHopefullyOpenHeader(cart, tdb);
-vcfCfgHaplotypeCenter(cart, tdb, vcff, NULL, NULL, 0, "mainForm");
+if (vcff != NULL)
+    {
+    if (vcff->genotypeCount > 1)
+	vcfCfgHapCluster(cart, tdb, vcff, name);
+    }
+else
+    {
+    printf("Sorry, couldn't access VCF file.<BR>\n");
+    }
+
 // filter:
 //   by qual column
 //   by filter column

@@ -23,6 +23,7 @@ lab GIS
 labExpId crg-9
 labProtocolId gen0106C+
 localization cytosol
+md5sum bam=cbe74aad388e38dfb2ca4da93f6a9fee,bai=47e1118bdfe446d7951914f6e6e91db0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -50,6 +51,7 @@ lab GIS
 labExpId crg-9
 labProtocolId gen0106C+
 localization cytosol
+md5sum f2f6cad8fd4086144d22685c99af6ec6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -77,6 +79,7 @@ lab GIS
 labExpId crg-9
 labProtocolId gen0106C+
 localization cytosol
+md5sum 63eb77a143f6b3eb3d2b143eacd39b3c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -104,6 +107,7 @@ lab GIS
 labExpId crg-9
 labProtocolId gen0106C+
 localization cytosol
+md5sum 76cc978f317edb1b9082a8d19f053081
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -130,6 +134,7 @@ lab GIS
 labExpId crg-9
 labProtocolId gen0106C+
 localization cytosol
+md5sum 034eb5d9f7e4fa3c3c6163c26340ea09
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -156,6 +161,7 @@ lab GIS
 labExpId crg-16
 labProtocolId gen0115WC+
 localization cell
+md5sum bam=7081f6c40227464a083a267cfae0793c,bai=442bfbe42b283c7aabcdca3b434eeb7c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -183,6 +189,7 @@ lab GIS
 labExpId crg-16
 labProtocolId gen0115WC+
 localization cell
+md5sum 272f91d52f8be7b9a059d998012a561f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -210,6 +217,7 @@ lab GIS
 labExpId crg-16
 labProtocolId gen0115WC+
 localization cell
+md5sum d218ad22fac6126fcda6669242be4c97
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -237,6 +245,7 @@ lab GIS
 labExpId crg-16
 labProtocolId gen0115WC+
 localization cell
+md5sum 874413c608aaee5afc4f2c337a85bd81
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -263,6 +272,7 @@ lab GIS
 labExpId crg-48
 labProtocolId gen0139C+
 localization cytosol
+md5sum bam=ee30c5e4e0477cf211d80d6b9234b656,bai=2eb7e297f20fa5bfc3434f285cef0837
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -290,6 +300,7 @@ lab GIS
 labExpId crg-55
 labProtocolId gen0141C+
 localization cytosol
+md5sum bam=ab4c8b4cda763aa07c35bb7258b82593,bai=6184fd823d60bdc69abeada594989013
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -317,6 +328,7 @@ lab GIS
 labExpId crg-48
 labProtocolId gen0139C+
 localization cytosol
+md5sum 170514a331d6b9941b6756d0ad01b9fa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -344,6 +356,7 @@ lab GIS
 labExpId crg-55
 labProtocolId gen0141C+
 localization cytosol
+md5sum 9ae05b262ed17d43e56fda06cc1334ef
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -371,6 +384,7 @@ lab GIS
 labExpId crg-48
 labProtocolId gen0139C+
 localization cytosol
+md5sum 0e752e1b3df40d967c5578c6f5530206
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -398,6 +412,7 @@ lab GIS
 labExpId crg-55
 labProtocolId gen0141C+
 localization cytosol
+md5sum 97df76e6ccec64e13e158a232e70a182
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -425,6 +440,7 @@ lab GIS
 labExpId crg-55
 labProtocolId gen0141C+
 localization cytosol
+md5sum 045fd5d3ee6725132feed41e88341405
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -451,6 +467,7 @@ lab GIS
 labExpId crg-48
 labProtocolId gen0139C+
 localization cytosol
+md5sum ad87bb1990b0dabb15833377db5274b0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -477,6 +494,7 @@ lab GIS
 labExpId crg-55
 labProtocolId gen0141C+
 localization cytosol
+md5sum cbe31af94a51e64cc5421099a9a32bb2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -484,4 +502,4 @@ rnaExtract longPolyA
 subId 2323
 view RawData
 
-# MAGIC: -2085151267
+# MAGIC: -1865066114
