@@ -17,10 +17,13 @@ set calJac calJac1,calJac3
 set canFam canFam1,canFam2
 set cavPor cavPor3
 set cb cb1,cb3
-set ce ce2,ce4,ce6,ce9
+set ce ce2,ce4,ce6,ce9,ce10
+set choHof choHof1
 set ci ci1,ci2
-set cioSav cioSav1
+set cioSav cioSav1,cioSav2
 set danRer danRer3,danRer4,danRer5,danRer6,danRer7
+set dasNov dasNov2
+set dipOrd dipOrd1
 set dm dm1,dm2,dm3
 set dp dp2,dp3
 set droEre droEre1
@@ -28,7 +31,9 @@ set droMoj droMoj1,droMoj2
 set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1,droPer1,droSec1,droWil1
 set droVir droVir1,droVir2
 set droYak droYak1,droYak2
+set echTel echTel1
 set equCab equCab1,equCab2
+set eriEur eriEur1
 set felCat felCat3,felCat4
 set fr fr1,fr2
 set galGal galGal2,galGal3
@@ -38,30 +43,43 @@ set gorGor gorGor1
 set haeCon haeCon1
 set hg hg16,hg17,hg18,hg19
 set loxAfr loxAfr3
+set macEug macEug1
 set melInc melInc1
 set melHap melHap1
+set micMur micMur1
 set mm mm6,mm7,mm8,mm9
 set monDom monDom1,monDom4,monDom5
 set myoLuc myoLuc1,myoLuc2
+set nomLeu nomLeu1
+set ochPri ochPri2
 set ornAna ornAna1
 set oryCun oryCun2
 set oryLat oryLat2
+set otoGar otoGar1
 set oviAri oviAri1
 set panTro panTro1,panTro2,panTro3
 set petMar petMar1
 set ponAbe ponAbe2
 set priPac priPac1,priPac2
+set proCap proCap1
+set pteVam pteVam1
 set rheMac rheMac2
 set rn rn3,rn4
 set sacCer sacCer1,sacCer2
+set sorAra sorAra1
+set speTri speTri1
 set susScr susScr2
 set strPur strPur1,strPur2
+set tarSyr tarSyr1
 set taeGut taeGut1
 set tetNig tetNig1,tetNig2
+set tupBel tupBel1
+set turTru turTru1
+set vicPac vicPac1
 set xenTro xenTro1,xenTro2
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$turTru,$vicPac
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
@@ -2143,9 +2161,11 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd,!ce6,!ce9,!felCat3.ensGene.name chopAfter=.
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     $gbd.ensGtp.transcript chopAfter=. minCheck=0.94
-    $gbd.ensPep.name chopAfter=. minCheck=0.96
+    $gbd.ensPep.name chopAfter=. minCheck=0.93
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
+    $gbd.ensemblToGeneName.name
+    $gbd.ensemblSource.name
     $kgDb.knownToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
