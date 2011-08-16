@@ -8249,8 +8249,15 @@ if (archive != NULL)
 else
     safef(ensUrl, sizeof(ensUrl), "http://www.ensembl.org/%s", genomeStrEnsembl);
 
-boolean nonCoding = FALSE;
 char query[512];
+char *geneName = NULL;
+if (hTableExists(database, "ensemblToGeneName"))
+    {
+    safef(query, sizeof(query), "select value from ensemblToGeneName where name='%s' limit 1", itemName);
+    geneName = sqlQuickString(conn, query);
+    }
+
+boolean nonCoding = FALSE;
 safef(query, sizeof(query), "name = \"%s\"", itemName);
 struct genePred *gpList = genePredReaderLoadQuery(conn, "ensGene", query);
 if (gpList && gpList->name2)
@@ -8369,24 +8376,26 @@ if (hTableExists(database, "superfamily"))
     }
 if (hTableExists(database, "ensGtp") && (proteinID == NULL))
     {
-    if (nonCoding)
+    /* shortItemName removes version number but sometimes the ensGtp */
+    /* table has a transcript with version number so exact match not used */
+    safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
+    proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
+    if (proteinID != NULL)
 	{
-	printf("<B>Ensembl Protein: </B>none (non-coding)<BR>\n");
+	printf("<B>Ensembl Protein: </B>");
+	printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>",
+	    ensUrl,proteinID);
+	printf("%s</A><BR>\n", proteinID);
 	}
     else
 	{
-	/* shortItemName removes version number but sometimes the ensGtp */
-	/* table has a transcript with version number so exact match not used */
-	safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
-	proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
-	if (proteinID != NULL)
-	    {
-	    printf("<B>Ensembl Protein: </B>");
-	    printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>",
-		ensUrl,proteinID);
-	    printf("%s</A><BR>\n", proteinID);
-	    }
+	printf("<B>Ensembl Protein: </B>none (non-coding)<BR>\n");
 	}
+    }
+if (geneName)
+    {
+    printf("<B>Gene Name: </B>%s<BR>\n", geneName);
+    freeMem(geneName);
     }
 freeMem(shortItemName);
 }
