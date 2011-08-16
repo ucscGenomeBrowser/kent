@@ -153,6 +153,9 @@ struct section *geneReviewsSection(struct sqlConnection *conn,
         struct hash *sectionRa);
 /* create geneReviews section - print out GeneReviews for this gene. */
 
+void prGRShortKg(struct sqlConnection *conn, char *itemName);
+/* print GeneReviews short label associated to this refGene item */
+
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);

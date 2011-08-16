@@ -23806,18 +23806,18 @@ while ((row = sqlNextRow(sr)) != NULL)
           firstTime = FALSE;
           printf("<PRE>");
               // #1234567890123456789012345678901234567890
-          printf("Short name               Disease ID       GeneTests disease name<BR>");
+          printf("Short name    Disease ID     GeneTests disease name<BR>");
           printf("-----------------------------------------------------------");
           printf("-----------------------------------------------------------");  
           printf("----------------------------------<BR>");
         }      
         printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-        if (strlen(grShort) <= 20) {
-          for (i = 0; i <  28-strlen(grShort); i ++ )
+        if (strlen(grShort) <= 15) {
+          for (i = 0; i <  15-strlen(grShort); i ++ )
              { 
                 printf("%s", " " );
              }
-           }
+           } 
          printf("%-10s    %s<BR>", diseaseID, diseaseName);
     }  /* end while */
  printf("</PRE>");

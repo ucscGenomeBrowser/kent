@@ -346,7 +346,7 @@ static void addGoodSection(struct section *section,
 	struct sqlConnection *conn, struct section **pList)
 /* Add section to list if it is non-null and exists returns ok. */
 {
-printf("<br>adding %s section \n", section->name);fflush(stdout); /* here here */ 
+//printf("<br>adding %s section \n", section->name);fflush(stdout); 
 if (section != NULL && hashLookup(section->settings, "hide") == NULL
    && section->exists(section, conn, curGeneId))
      slAddHead(pList, section);
