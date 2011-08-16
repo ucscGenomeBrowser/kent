@@ -1,0 +1,2207 @@
+metaObject wgEncodeHaibGenotype
+objType composite
+composite wgEncodeHaibGenotype
+expVars lab,dataType,cell,treatment
+
+metaObject wgEncodeHaibGenotypeA549RegionsRep1
+objType table
+cell A549
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001282
+dccRep 1
+expId 1282
+fileName wgEncodeHaibGenotypeA549RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum de5708928542ecb64af01d3fc02c0e82
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeA549RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeAg04449RegionsRep1
+objType table
+cell AG04449
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001283
+dccRep 1
+expId 1283
+fileName wgEncodeHaibGenotypeAg04449RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum d7b2528e74e0f5da2687c6a3e854865b
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeAg04449RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeAg04450RegionsRep2
+objType table
+cell AG04450
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001284
+dccRep 1
+expId 1284
+fileName wgEncodeHaibGenotypeAg04450RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum abae119c648ac02c1329656b3ff14def
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeAg04450RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeAg09309RegionsRep1
+objType table
+cell AG09309
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001285
+dccRep 1
+expId 1285
+fileName wgEncodeHaibGenotypeAg09309RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum e690c9e9e64fed34e90426c19a5e8034
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeAg09309RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeAg09319RegionsRep2
+objType table
+cell AG09319
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001286
+dccRep 1
+expId 1286
+fileName wgEncodeHaibGenotypeAg09319RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 47402dc9934a9687c300b744efb0978e
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeAg09319RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeAg10803RegionsRep1
+objType table
+cell AG10803
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001287
+dccRep 1
+expId 1287
+fileName wgEncodeHaibGenotypeAg10803RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum e557e878f27a88892625deaad6ba024a
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeAg10803RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeAosmcRegionsRep1
+objType table
+cell AoSMC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001288
+dccRep 1
+expId 1288
+fileName wgEncodeHaibGenotypeAosmcRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 3bf46877afa8a27bc044bcf711c23dcc
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeAosmcRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeAstrocyRegionsRep1
+objType table
+cell Astrocy
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001289
+dccRep 1
+expId 1289
+fileName wgEncodeHaibGenotypeAstrocyRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum bcc5e51c79a12a026aea4607b25e837c
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeAstrocyRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1
+objType table
+cell BC_Jejunum_H12817N
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001290
+dccRep 1
+expId 1290
+fileName wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 66898df35d4628d18a9e1c0e3379ca72
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1
+objType table
+cell BC_Small_Intestine_01-11002
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001291
+dccRep 1
+expId 1291
+fileName wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum d0e8164fa4803c7deb4a2d01de43fa18
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeBjRegionsRep1
+objType table
+cell BJ
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001292
+dccRep 1
+expId 1292
+fileName wgEncodeHaibGenotypeBjRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 2ddb3aec648491df160f0ca5d43302c6
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeBjRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeCaco2RegionsRep1
+objType table
+cell Caco-2
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001294
+dccRep 1
+expId 1294
+fileName wgEncodeHaibGenotypeCaco2RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum e453b15fcc00c9f65d0ad5583ce6cd2e
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeCaco2RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeChorionRegionsRep1
+objType table
+cell Chorion
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001295
+dccRep 1
+expId 1295
+fileName wgEncodeHaibGenotypeChorionRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 15c37655bd6748388b072e72dd71fab5
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeChorionRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeCmkRegionsRep2
+objType table
+cell CMK
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001293
+dccRep 1
+expId 1293
+fileName wgEncodeHaibGenotypeCmkRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 8166f3848a4ed7e6e2b262bc9ffe4a12
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeCmkRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeGm06990RegionsRep1
+objType table
+cell GM06990
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001296
+dccRep 1
+expId 1296
+fileName wgEncodeHaibGenotypeGm06990RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 024f150517e539fb67078b294ee6323a
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeGm06990RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeGm12878RegionsRep1
+objType table
+cell GM12878
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-09
+dateUnrestricted 2012-02-09
+dccAccession wgEncodeEH000273
+dccRep 1
+expId 273
+fileName wgEncodeHaibGenotypeGm12878RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labExpId Illumina 1MDuo
+labVersion HudsonAlpha
+md5sum 02d0b2c753c7aef6eb1919fb56dc1c72
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4057
+tableName wgEncodeHaibGenotypeGm12878RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeGm12878RegionsRep2
+objType table
+cell GM12878
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-17
+dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000273
+dccRep 2
+expId 273
+fileName wgEncodeHaibGenotypeGm12878RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum f546825d454350eba8ed7597ca79e04c
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3536
+tableName wgEncodeHaibGenotypeGm12878RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeGm12891RegionsRep2
+objType table
+cell GM12891
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001297
+dccRep 1
+expId 1297
+fileName wgEncodeHaibGenotypeGm12891RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 9ec2a6ae3fac1af42857742c115f392e
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeGm12891RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeGm12892RegionsRep2
+objType table
+cell GM12892
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001298
+dccRep 1
+expId 1298
+fileName wgEncodeHaibGenotypeGm12892RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 7842ceacdad560df8495c6844f59caea
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeGm12892RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeGm19239RegionsRep1
+objType table
+cell GM19239
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001299
+dccRep 1
+expId 1299
+fileName wgEncodeHaibGenotypeGm19239RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum f0e08e9ad4abdaa7cd530f14dbb35e5e
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeGm19239RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeH1hescRegionsRep2
+objType table
+cell H1-hESC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001300
+dccRep 1
+expId 1300
+fileName wgEncodeHaibGenotypeH1hescRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 7e2e16634886365024d4fcf5d5f70a24
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeH1hescRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHaeRegionsRep1
+objType table
+cell HAEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001301
+dccRep 1
+expId 1301
+fileName wgEncodeHaibGenotypeHaeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 85c0f74db2bee0a5421794ebee180a12
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHaeRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHaeRegionsRep2
+objType table
+cell HAEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001301
+dccRep 2
+expId 1301
+fileName wgEncodeHaibGenotypeHaeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 1841e9b053e9f8440e5021dbe67762b0
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHaeRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHcfRegionsRep1
+objType table
+cell HCF
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001302
+dccRep 1
+expId 1302
+fileName wgEncodeHaibGenotypeHcfRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum f02504c7238a6af9a77fedf9deb44c35
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHcfRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHcfRegionsRep2
+objType table
+cell HCF
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001302
+dccRep 2
+expId 1302
+fileName wgEncodeHaibGenotypeHcfRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 07c08b35443853e63e01e270f171315f
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHcfRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHcmRegionsRep1
+objType table
+cell HCM
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001303
+dccRep 1
+expId 1303
+fileName wgEncodeHaibGenotypeHcmRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum b99d0b0b23abf22e05787704c00fb91d
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHcmRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHcmRegionsRep2
+objType table
+cell HCM
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001303
+dccRep 2
+expId 1303
+fileName wgEncodeHaibGenotypeHcmRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 8ca0c6d53bc4b30ac0c9b6a9a3d54c80
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHcmRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHcpeRegionsRep1
+objType table
+cell HCPEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001304
+dccRep 1
+expId 1304
+fileName wgEncodeHaibGenotypeHcpeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum d13728a5ff55fc0ddbcebcb5943f7895
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHcpeRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHcpeRegionsRep2
+objType table
+cell HCPEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001304
+dccRep 2
+expId 1304
+fileName wgEncodeHaibGenotypeHcpeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 137c0c42c3c9ceae994853b2d9224e08
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHcpeRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHeeRegionsRep2
+objType table
+cell HEEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001305
+dccRep 1
+expId 1305
+fileName wgEncodeHaibGenotypeHeeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 2997eb1d3c1d72da49ac75f3ae4ac3d8
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHeeRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHek293RegionsRep2
+objType table
+cell HEK293
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001306
+dccRep 1
+expId 1306
+fileName wgEncodeHaibGenotypeHek293RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum a42c1eda289c888ca343912cea008cd4
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHek293RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHelas3RegionsRep2
+objType table
+cell HeLa-S3
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001316
+dccRep 1
+expId 1316
+fileName wgEncodeHaibGenotypeHelas3RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum ab32df8dbb81b571593fed3b92ff57c5
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHelas3RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHepg2RegionsRep1
+objType table
+cell HepG2
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-17
+dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000274
+dccRep 1
+expId 274
+fileName wgEncodeHaibGenotypeHepg2RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum a941393d5c53f54c1109e3af39845282
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3536
+tableName wgEncodeHaibGenotypeHepg2RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHipeRegionsRep1
+objType table
+cell HIPEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001307
+dccRep 1
+expId 1307
+fileName wgEncodeHaibGenotypeHipeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum dd255b88ad735bf5b86299c55d7dd76a
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHipeRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHipeRegionsRep2
+objType table
+cell HIPEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001307
+dccRep 2
+expId 1307
+fileName wgEncodeHaibGenotypeHipeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 656c33127f1464512b66934bbb30cacd
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHipeRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHl60RegionsRep1
+objType table
+cell HL-60
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001308
+dccRep 1
+expId 1308
+fileName wgEncodeHaibGenotypeHl60RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum ff76eec28a1c967eaee0ef3f9384df28
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHl60RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHmecRegionsRep2
+objType table
+cell HMEC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001309
+dccRep 1
+expId 1309
+fileName wgEncodeHaibGenotypeHmecRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 18a0a8140092944e84bde02cbcc65af0
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHmecRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHnpceRegionsRep1
+objType table
+cell HNPCEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001310
+dccRep 1
+expId 1310
+fileName wgEncodeHaibGenotypeHnpceRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum f15f40adb7db8c6656ea8ccf6e1935a1
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHnpceRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHpaeRegionsRep1
+objType table
+cell HPAEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001311
+dccRep 1
+expId 1311
+fileName wgEncodeHaibGenotypeHpaeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum a59b9dbaa1e9e8379c214b898c978cdf
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHpaeRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHpaeRegionsRep2
+objType table
+cell HPAEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001311
+dccRep 2
+expId 1311
+fileName wgEncodeHaibGenotypeHpaeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 978f3352b0400ad5505c525aebaeb67f
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHpaeRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHrceRegionsRep1
+objType table
+cell HRCEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001262
+dccRep 1
+expId 1262
+fileName wgEncodeHaibGenotypeHrceRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 8ee287b9c40697c3b888679ea28957ee
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeHrceRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHrceRegionsRep2
+objType table
+cell HRCEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001262
+dccRep 2
+expId 1262
+fileName wgEncodeHaibGenotypeHrceRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 634defab2805797e8c57d4492fece00a
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeHrceRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHreRegionsRep1
+objType table
+cell HRE
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001263
+dccRep 1
+expId 1263
+fileName wgEncodeHaibGenotypeHreRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum aadb5aa57fd5ec5a91b016e947cf7c2e
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeHreRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHreRegionsRep2
+objType table
+cell HRE
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001263
+dccRep 2
+expId 1263
+fileName wgEncodeHaibGenotypeHreRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 8422fc518b8c4cd896aa97903e39d2b6
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeHreRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHrpeRegionsRep1
+objType table
+cell HRPEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001264
+dccRep 1
+expId 1264
+fileName wgEncodeHaibGenotypeHrpeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum d49231a5d768426c66e8a22401c864d2
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeHrpeRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHrpeRegionsRep2
+objType table
+cell HRPEpiC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001264
+dccRep 2
+expId 1264
+fileName wgEncodeHaibGenotypeHrpeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum f0918aa32663418a03706418579215a4
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeHrpeRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHsmmRegionsRep3
+objType table
+cell HSMM
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001312
+dccRep 1
+expId 1312
+fileName wgEncodeHaibGenotypeHsmmRegionsRep3.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 32466dac3e077dc246f7788938be774a
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 3
+subId 3432
+tableName wgEncodeHaibGenotypeHsmmRegionsRep3
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHsmmtRegionsRep2
+objType table
+cell HSMMtube
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001313
+dccRep 1
+expId 1313
+fileName wgEncodeHaibGenotypeHsmmtRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum cc2f339065fed1088fabb357158d3fc0
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHsmmtRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHtr8RegionsRep1
+objType table
+cell HTR8svn
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001314
+dccRep 1
+expId 1314
+fileName wgEncodeHaibGenotypeHtr8RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 80e2d9271130759a548ed6762fba9f4b
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeHtr8RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeHuvecRegionsRep2
+objType table
+cell HUVEC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001315
+dccRep 1
+expId 1315
+fileName wgEncodeHaibGenotypeHuvecRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum f9169678dcc44d1e9817e5acddc56489
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHuvecRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeImr90RegionsRep1
+objType table
+cell IMR90
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001265
+dccRep 1
+expId 1265
+fileName wgEncodeHaibGenotypeImr90RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 8f877001493a4929f098c6a446a54410
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeImr90RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeImr90RegionsRep2
+objType table
+cell IMR90
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001265
+dccRep 2
+expId 1265
+fileName wgEncodeHaibGenotypeImr90RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 05a091557a5aaac0f840881ad2690cfd
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeImr90RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeJurkatRegionsRep1
+objType table
+cell Jurkat
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001266
+dccRep 1
+expId 1266
+fileName wgEncodeHaibGenotypeJurkatRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 40d6ae87e3fea399bfc9f114e307322e
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeJurkatRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeJurkatRegionsRep2
+objType table
+cell Jurkat
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001266
+dccRep 2
+expId 1266
+fileName wgEncodeHaibGenotypeJurkatRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 70012462619c2f4d1ea3f9573c4cc571
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeJurkatRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeK562RegionsRep1
+objType table
+cell K562
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-17
+dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000275
+dccRep 1
+expId 275
+fileName wgEncodeHaibGenotypeK562RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 26615566e9a0c53d432ca39e218cb09e
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3536
+tableName wgEncodeHaibGenotypeK562RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeLncapRegionsRep1
+objType table
+cell LNCaP
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001267
+dccRep 1
+expId 1267
+fileName wgEncodeHaibGenotypeLncapRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum e1f7c716f9893818664b2199e06d382a
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeLncapRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep1
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001269
+dccRep 1
+expId 1269
+fileName wgEncodeHaibGenotypeMcf10aesRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 5c1e212305bf857ec7a796ceb2a588f7
+obtainedBy Stanford
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeMcf10aesRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep2
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001269
+dccRep 2
+expId 1269
+fileName wgEncodeHaibGenotypeMcf10aesRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum cc232ad88b8c25b1877ad39c978c902c
+obtainedBy Stanford
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeMcf10aesRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep3
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001269
+dccRep 3
+expId 1269
+fileName wgEncodeHaibGenotypeMcf10aesRegionsRep3.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum bb6a391af31ab6e89a04c60112739cb0
+obtainedBy Stanford
+origAssembly hg19
+project wgEncode
+replicate 3
+subId 3303
+tableName wgEncodeHaibGenotypeMcf10aesRegionsRep3
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001270
+dccRep 1
+expId 1270
+fileName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 77f9dfa60df8f5cdf912546bbab2effb
+obtainedBy Stanford
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
+treatment 4OHTAM_1uM_36hr
+view CNV
+
+metaObject wgEncodeHaibGenotypeMcf7RegionsRep1
+objType table
+cell MCF-7
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001268
+dccRep 1
+expId 1268
+fileName wgEncodeHaibGenotypeMcf7RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 770b9efe3f7975554598b391281e3546
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeMcf7RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeMcf7RegionsRep2
+objType table
+cell MCF-7
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001268
+dccRep 2
+expId 1268
+fileName wgEncodeHaibGenotypeMcf7RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum d31a40699640bd967a239492b1de384b
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeMcf7RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeMelanoRegionsRep1
+objType table
+cell Melano
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001317
+dccRep 1
+expId 1317
+fileName wgEncodeHaibGenotypeMelanoRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum b69cab289700edc0f5c7baccf9c77482
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeMelanoRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeMelanoRegionsRep2
+objType table
+cell Melano
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001317
+dccRep 2
+expId 1317
+fileName wgEncodeHaibGenotypeMelanoRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 24be800ab8990fe185549a737266875c
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeMelanoRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeMyometrRegionsRep1
+objType table
+cell Myometr
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001318
+dccRep 1
+expId 1318
+fileName wgEncodeHaibGenotypeMyometrRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum c334630343ee8cc639ea503c6954cfb1
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeMyometrRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeNb4RegionsRep1
+objType table
+cell NB4
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001271
+dccRep 1
+expId 1271
+fileName wgEncodeHaibGenotypeNb4RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum eaf78afebca4218f2e70fa4441a218c8
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeNb4RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeNb4RegionsRep2
+objType table
+cell NB4
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001271
+dccRep 2
+expId 1271
+fileName wgEncodeHaibGenotypeNb4RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 45a6c34a14fbf0da5749704abea1de25
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeNb4RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeNhaRegionsRep1
+objType table
+cell NH-A
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001272
+dccRep 1
+expId 1272
+fileName wgEncodeHaibGenotypeNhaRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum fb2ae062af6114141b1ed2e22c721d9a
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeNhaRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeNhaRegionsRep2
+objType table
+cell NH-A
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001272
+dccRep 2
+expId 1272
+fileName wgEncodeHaibGenotypeNhaRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 7f143bf0f6f1523cd85d86e573546701
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeNhaRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeNhbeRegionsRep1
+objType table
+cell NHBE
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001273
+dccRep 1
+expId 1273
+fileName wgEncodeHaibGenotypeNhbeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 27ed2f6424d4b5b4bae4a1416ab91bfd
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeNhbeRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeNhbeRegionsRep2
+objType table
+cell NHBE
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001273
+dccRep 2
+expId 1273
+fileName wgEncodeHaibGenotypeNhbeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 1eae10686f5a59a202eba565c575c3f8
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeNhbeRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeNhdfneoRegionsRep1
+objType table
+cell NHDF-neo
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001274
+dccRep 1
+expId 1274
+fileName wgEncodeHaibGenotypeNhdfneoRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 80d414cbaeecad9780a33305eaa96909
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeNhdfneoRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeNt2d1RegionsRep1
+objType table
+cell NT2-D1
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001275
+dccRep 1
+expId 1275
+fileName wgEncodeHaibGenotypeNt2d1RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 7b484a6324f427b993b6b7f25e304462
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeNt2d1RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeOvcar3RegionsRep1
+objType table
+cell ovcar-3
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001322
+dccRep 1
+expId 1322
+fileName wgEncodeHaibGenotypeOvcar3RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 226ea9bb5704e4c452ce16ee66133f41
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeOvcar3RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypePanc1RegionsRep1
+objType table
+cell PANC-1
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001276
+dccRep 1
+expId 1276
+fileName wgEncodeHaibGenotypePanc1RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 1b5583ccd783cec922ced6fdc28630bf
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypePanc1RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypePanc1RegionsRep2
+objType table
+cell PANC-1
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001276
+dccRep 2
+expId 1276
+fileName wgEncodeHaibGenotypePanc1RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 473234ad9ec1d0d7231ad093f426e1a4
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypePanc1RegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypePfsk1RegionsRep1
+objType table
+cell PFSK-1
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001319
+dccRep 1
+expId 1319
+fileName wgEncodeHaibGenotypePfsk1RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 4f24c6f3a83f2f942e1554295c8f748d
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypePfsk1RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypePrecRegionsRep1
+objType table
+cell PrEC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001277
+dccRep 1
+expId 1277
+fileName wgEncodeHaibGenotypePrecRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 5db74f04383adca8ab619554f9bc0623
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypePrecRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeRptecRegionsRep1
+objType table
+cell RPTEC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001278
+dccRep 1
+expId 1278
+fileName wgEncodeHaibGenotypeRptecRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum f377613e09afbb197048d38747e9b183
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeRptecRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeRptecRegionsRep2
+objType table
+cell RPTEC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001278
+dccRep 2
+expId 1278
+fileName wgEncodeHaibGenotypeRptecRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 54c7fb582e23ea07bc20e24504a451e3
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeRptecRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeSaecRegionsRep1
+objType table
+cell SAEC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001279
+dccRep 1
+expId 1279
+fileName wgEncodeHaibGenotypeSaecRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum fd7ac9c967b2bae1c5f229bf58a95858
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeSaecRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeSaecRegionsRep2
+objType table
+cell SAEC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001279
+dccRep 2
+expId 1279
+fileName wgEncodeHaibGenotypeSaecRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 6a3631a67d76f2855231fd7bd141f42f
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeSaecRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeSkmcRegionsRep1
+objType table
+cell SKMC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001281
+dccRep 1
+expId 1281
+fileName wgEncodeHaibGenotypeSkmcRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 15d39d2d3ae8a21ba80247a64ed7d9a9
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeSkmcRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeSkmcRegionsRep2
+objType table
+cell SKMC
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001281
+dccRep 2
+expId 1281
+fileName wgEncodeHaibGenotypeSkmcRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 101f2abf93670a9b69b78b5b6e14bedd
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeSkmcRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeSknshraRegionsRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001280
+dccRep 1
+expId 1280
+fileName wgEncodeHaibGenotypeSknshraRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum ceab4f73e39aa6195e97c01ed8812fcd
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3303
+tableName wgEncodeHaibGenotypeSknshraRegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeSknshraRegionsRep2
+objType table
+cell SK-N-SH_RA
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001280
+dccRep 2
+expId 1280
+fileName wgEncodeHaibGenotypeSknshraRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum be34194dad032f927f24d5d53414847f
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3303
+tableName wgEncodeHaibGenotypeSknshraRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeT47dRegionsRep2
+objType table
+cell T-47D
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001320
+dccRep 1
+expId 1320
+fileName wgEncodeHaibGenotypeT47dRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 143504ca9089824a39d584d2468f3051
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeT47dRegionsRep2
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeU87RegionsRep1
+objType table
+cell U87
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001321
+dccRep 1
+expId 1321
+fileName wgEncodeHaibGenotypeU87RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 086862d98c5d99a676d285c73b782c81
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3432
+tableName wgEncodeHaibGenotypeU87RegionsRep1
+treatment None
+view CNV
+
+# MAGIC: -279997394
