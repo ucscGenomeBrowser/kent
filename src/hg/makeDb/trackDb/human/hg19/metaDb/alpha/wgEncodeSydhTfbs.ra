@@ -3665,6 +3665,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEH002037
+expId 2037
 fileName wgEncodeSydhTfbsGm12878P300bStdAlnRep1.bam
 grant Snyder
 lab Stanford
@@ -3687,6 +3689,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEH002037
+expId 2037
 fileName wgEncodeSydhTfbsGm12878P300bStdAlnRep2.bam
 grant Snyder
 lab Stanford
@@ -3709,6 +3713,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEH002037
+expId 2037
 fileName wgEncodeSydhTfbsGm12878P300bStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -3732,6 +3738,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEH002037
+expId 2037
 fileName wgEncodeSydhTfbsGm12878P300bStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -3754,6 +3762,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEH002037
+expId 2037
 fileName wgEncodeSydhTfbsGm12878P300bStdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -3776,6 +3786,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEH002037
+expId 2037
 fileName wgEncodeSydhTfbsGm12878P300bStdSig.bigWig
 grant Snyder
 lab Stanford
@@ -43774,6 +43786,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002035
+expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdAlnRep1.bam
 grant Snyder
 lab USC
@@ -43796,6 +43810,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002035
+expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdAlnRep2.bam
 grant Snyder
 lab USC
@@ -43818,6 +43834,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002035
+expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
@@ -43841,6 +43859,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002035
+expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -43863,6 +43883,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002035
+expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
@@ -43885,6 +43907,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002035
+expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdSig.bigWig
 grant Snyder
 lab USC
@@ -44199,6 +44223,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002036
+expId 2036
 fileName wgEncodeSydhTfbsMcf7Znf217UcdAlnRep1.bam
 grant Snyder
 lab USC
@@ -44221,6 +44247,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002036
+expId 2036
 fileName wgEncodeSydhTfbsMcf7Znf217UcdAlnRep2.bam
 grant Snyder
 lab USC
@@ -44243,6 +44271,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002036
+expId 2036
 fileName wgEncodeSydhTfbsMcf7Znf217UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
@@ -44266,6 +44296,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002036
+expId 2036
 fileName wgEncodeSydhTfbsMcf7Znf217UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -44288,6 +44320,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002036
+expId 2036
 fileName wgEncodeSydhTfbsMcf7Znf217UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
@@ -44310,6 +44344,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
+dccAccession wgEncodeEH002036
+expId 2036
 fileName wgEncodeSydhTfbsMcf7Znf217UcdSig.bigWig
 grant Snyder
 lab USC
@@ -46969,4 +47005,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -707624183
+# MAGIC: 221242619
