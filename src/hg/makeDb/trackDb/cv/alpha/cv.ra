@@ -2378,7 +2378,7 @@ term HMVEC-dLy-Ad
 tag HMVECe
 type Cell Line
 organism human
-description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
+description Normal Adult Human Lymphatic Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
 lineage mesoderm
 vendorName Lonza
