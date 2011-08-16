@@ -8424,7 +8424,7 @@ if (geneName)
     }
 if (ensemblSource)
     {
-    printf("<B>Ensembl type: </B>%s<BR>\n", ensemblSource);
+    printf("<B>Ensembl Type: </B>%s<BR>\n", ensemblSource);
     freeMem(ensemblSource);
     }
 freeMem(shortItemName);

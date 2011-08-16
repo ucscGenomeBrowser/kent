@@ -1194,7 +1194,7 @@ tier 3
 protocol Myers:ECC1_Myers_protocol.pdf
 
 term PBDEFetal
-tag PBDEF
+tag PBDEFETAL
 type Cell Line
 tier 3
 organism human
@@ -2378,7 +2378,7 @@ term HMVEC-dLy-Ad
 tag HMVECe
 type Cell Line
 organism human
-description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
+description Normal Adult Human Lymphatic Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
 lineage mesoderm
 vendorName Lonza
@@ -2612,6 +2612,36 @@ sex U
 tier 3
 protocol Bernstein:HSMM_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf Stam:HSMM_Stam_protocol.pdf
 
+term HSMM_emb
+tag HSMMEMB
+type Cell Line
+tier 3
+organism human
+description embryonic myoblast
+lineage missing
+karyotype missing
+vendorName Duke/UNC/UT/EBI ENCODE group
+vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980 
+sex U
+tissue Muscle
+lab Crawford
+protocol Crawford:HSMMemb_Crawford_protocol.pdf
+
+term HSMM_FSHD
+tag HSMMFSHD
+type Cell Line
+tier 3
+organism human
+description primary myoblast from FSHD patient
+lineage missing
+karyotype missing
+vendorName Duke/UNC/UT/EBI ENCODE group
+vendorId Muscle needle biopsies
+sex U
+tissue Muscle
+lab Crawford
+protocol Crawford:HSMMFSHD_Crawford_protocol.pdf
+
 term HSMMtube
 tag HSMMt
 type Cell Line
@@ -2628,6 +2658,36 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Bernstein:HSMMtube_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
+
+term HSMMtube_emb
+tag HSMMTUBEEMB
+type Cell Line
+tier 3
+organism human
+description embryonic myotube
+lineage missing
+karyotype missing
+vendorName Duke/UNC/UT/EBI ENCODE group
+vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980 
+sex U
+tissue Muscle
+lab Crawford
+protocol Crawford:HSMMtubeemb_Crawford_protocol.pdf
+
+term HSMMtube_FSHD
+tag HSMMTUBEFSHD
+type Cell Line
+tier 3
+organism human
+description myotube from FSHD patient
+lineage missing
+karyotype missing
+vendorName Duke/UNC/UT/EBI ENCODE group
+vendorId Muscle needle biopsies
+sex U
+tissue Muscle
+lab Crawford
+protocol Crawford:HSMMtubeFSHD_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -3075,7 +3135,6 @@ protocol Crawford:NHBE_Crawford_protocol.pdf
 #termId BTO:0001845
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001845
 #protocol UW_Stam:NHBE_Stam_protocol.pdf
-
 
 term NHDF-Ad
 tag NHDFAD
