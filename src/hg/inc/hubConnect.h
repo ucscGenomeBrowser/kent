@@ -113,4 +113,11 @@ void hubDisconnect(struct cart *cart, char *url);
 
 boolean hubCheckForNew(char *database, struct cart *cart);
 /* see if the user just typed in a new hub url, return TRUE if so */
+
+struct trackHub *trackHubFromId(struct cart *cart, unsigned hubId);
+/* Given a hub ID number, return corresponding trackHub structure. 
+ * ErrAbort if there's a problem. */
+
+void hubSetErrorMessage(char *errorMessage, unsigned id);
+/* set the error message in the hubStatus table */
 #endif /* HUBCONNECT_H */
