@@ -550,3 +550,24 @@ char buffer[1024];
 safef(buffer, sizeof buffer, "hgHubConnect.hub.%d", id);
 cartRemove(cart, buffer);
 }
+
+void hubSetErrorMessage(char *errorMessage, unsigned id)
+/* set the error message in the hubStatus table */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[256];
+if (errorMessage != NULL)
+    {
+    safef(query, sizeof(query),
+	"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d",
+	hubStatusTableName, errorMessage, id);
+    }
+else
+    {
+    safef(query, sizeof(query),
+	"update %s set errorMessage=\"\", lastOkTime=now() where id=%d",
+	hubStatusTableName, id);
+    }
+sqlUpdate(conn, query);
+hDisconnectCentral(&conn);
+}
