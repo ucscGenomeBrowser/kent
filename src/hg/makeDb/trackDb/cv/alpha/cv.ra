@@ -368,7 +368,7 @@ term Astrocy
 tag ASTRO
 type Cell Line
 organism human
-description astrocytes
+description normal human astrocytes (also called NH-A) PROVISIONAL
 tissue Brain
 lineage ectoderm
 vendorName Lonza
@@ -1006,6 +1006,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage inner cell mass
 karyotype normal
+derivedFrom BG02ES
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -1194,7 +1195,7 @@ tier 3
 protocol Myers:ECC1_Myers_protocol.pdf
 
 term PBDEFetal
-tag PBDEF
+tag PBDEFETAL
 type Cell Line
 tier 3
 organism human
@@ -1530,6 +1531,7 @@ vendorId GM12878-XiMat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
 karyotype unknown
 lineage mesoderm
+derivedFrom GM12878
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
@@ -1547,6 +1549,7 @@ vendorId GM12878-XiPat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
 karyotype unknown
 lineage mesoderm
+derivedFrom GM12878
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
@@ -1795,6 +1798,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage inner cell mass
 karyotype unknown
+derivedFrom H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -1810,6 +1814,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage inner cell mass
 karyotype unknown
+derivedFrom H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -1825,6 +1830,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage inner cell mass
 karyotype unknown
+derivedFrom H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -1840,6 +1846,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage inner cell mass
 karyotype unknown
+derivedFrom H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -1855,6 +1862,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage inner cell mass
 karyotype unknown
+derivedFrom H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -1870,6 +1878,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage inner cell mass
 karyotype unknown
+derivedFrom H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2181,6 +2190,7 @@ organism human
 description Human Foreskin Fibroblast Cells Expressing Canine cMyc
 lineage Fibroblast
 karyotype normal (cMyc)
+derivedFrom HFF
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
@@ -2378,7 +2388,7 @@ term HMVEC-dLy-Ad
 tag HMVECe
 type Cell Line
 organism human
-description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
+description Normal Adult Human Lymphatic Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
 lineage mesoderm
 vendorName Lonza
@@ -2612,6 +2622,36 @@ sex U
 tier 3
 protocol Bernstein:HSMM_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf Stam:HSMM_Stam_protocol.pdf
 
+term HSMM_emb
+tag HSMMEMB
+type Cell Line
+tier 3
+organism human
+description embryonic myoblast
+lineage missing
+karyotype missing
+vendorName Duke/UNC/UT/EBI ENCODE group
+vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980 
+sex U
+tissue Muscle
+lab Crawford
+protocol Crawford:HSMMemb_Crawford_protocol.pdf
+
+term HSMM_FSHD
+tag HSMMFSHD
+type Cell Line
+tier 3
+organism human
+description primary myoblast from facioscapulohumeral muscular dystrophy patients
+lineage missing
+karyotype missing
+vendorName Duke/UNC/UT/EBI ENCODE group
+vendorId Muscle needle biopsies
+sex U
+tissue Muscle
+lab Crawford
+protocol Crawford:HSMMFSHD_Crawford_protocol.pdf
+
 term HSMMtube
 tag HSMMt
 type Cell Line
@@ -2619,6 +2659,7 @@ organism human
 description Normal human skeletal muscle myotubes differentiated from the HSMM cell line
 tissue Muscle
 lineage mesoderm
+derivedFrom HSMM
 vendorName Lonza
 vendorId See HSMM
 orderUrl http://www.lonza.com/
@@ -2628,6 +2669,38 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Bernstein:HSMMtube_Bernstein_protocol.pdf Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
+
+term HSMMtube_emb
+tag HSMMTUBEEMB
+type Cell Line
+tier 3
+organism human
+description embryonic myotube
+lineage missing
+karyotype missing
+derivedFrom HSMM_emb
+vendorName Duke/UNC/UT/EBI ENCODE group
+vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980 
+sex U
+tissue Muscle
+lab Crawford
+protocol Crawford:HSMMtubeemb_Crawford_protocol.pdf
+
+term HSMMtube_FSHD
+tag HSMMTUBEFSHD
+type Cell Line
+tier 3
+organism human
+description myotube from FSHD patient
+lineage missing
+karyotype missing
+derivedFrom HSMM_FSHD
+vendorName Duke/UNC/UT/EBI ENCODE group
+vendorId Muscle needle biopsies
+sex U
+tissue Muscle
+lab Crawford
+protocol Crawford:HSMMtubeFSHD_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -3027,7 +3100,7 @@ organism human
 tissue Nervous
 lineage ectoderm
 karyotype normal
-description normal human astrocytes
+description normal human astrocytes (also called Astrocy) PROVISIONAL
 vendorName Lonza
 vendorId CC-2565
 orderUrl http://www.lonza.com/
@@ -3053,29 +3126,29 @@ tier 3
 termId BTO:0002022
 protocol Crawford:NHBE_Crawford_protocol.pdf
 
-#
 # Note from Melissa: this is a new submission from UW.  NHBE is already registered.  This
 # is apparently NHBE with a retinoic acid treatment.  Propose to the lab that they submit
 # their experiments as NHBE with a retinoic acid treatment, and we save their protocol as
 # an appendix of the NHBE protocol.  Remove this stanza if it's not needed by 8/31/11.
-#
-#term NHBE
-#tag NHBE
-#type Cell Line
-#tier 3
-#organism human
-#description Normal Human Bronchial Epithelial Cells w/RA.
-#lineage missing
-#karyotype missing
-#sex F
-#tissue Bronchial Epithelium
-#vendorName Lonza
-#vendorId CC-2540, CC3170
-#orderUrl http://www.lonza.com
-#termId BTO:0001845
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001845
-#protocol UW_Stam:NHBE_Stam_protocol.pdf
-
+# Note from Jeff: this is an approved cell line, so the tag RA was applied.  It has
+# a unique vendorId. SK-N-SH and SK-N-SH_RA has a similar issue.
+term NHBE_RA
+tag NHBERA
+type Cell Line
+tier 3
+organism human
+description Normal Human Bronchial Epithelial Cells w/RA.
+lineage missing
+karyotype missing
+sex F
+tissue Bronchial Epithelium
+vendorName Lonza
+vendorId CC-2540, CC3170
+orderUrl http://www.lonza.com
+termId BTO:0001845
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001845
+lab Stam
+protocol UW_Stam:NHBE_Stam_protocol.pdf
 
 term NHDF-Ad
 tag NHDFAD
@@ -3394,6 +3467,7 @@ description neuroblastoma clonal subline of the neuroepithelioma cell line SK-N-
 tissue brain
 vendorName ATCC
 vendorId CC-2266
+derivedFrom SK-N-SH
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
 lineage ectoderm
 karyotype cancer, trisomy of 1q
@@ -3452,6 +3526,7 @@ vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
 lineage ectoderm
 karyotype cancer
+derivedFrom SK-N-SH
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 sex F
@@ -3519,6 +3594,7 @@ organism human
 description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line (PROVISIONAL)
 lineage mesoderm
 karyotype cancer, hypotriploid, XXX
+derivedFrom HEK293 
 sex F
 tissue Kidney
 vendorName Invitrogen

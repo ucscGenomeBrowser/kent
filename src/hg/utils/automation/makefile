@@ -19,7 +19,7 @@ SCRIPT_FILES = \
 	doBlastzChainNet.pl \
 	doEnsGeneUpdate.pl \
 	doHgNearBlastp.pl \
-	ensemblToGeneName.pl \
+	ensemblInfo.pl \
 	synBlastp.csh \
 	doRecipBest.pl \
 	doRepeatMasker.pl \

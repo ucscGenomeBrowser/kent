@@ -5,6 +5,8 @@ composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
+dccAccession wgEncodeEH001878
+expId 1878
 fileName wgEncodeGencodeAutoV3.gtf.gz
 grant Hubbard
 lab Sanger
@@ -22,6 +24,8 @@ composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
+dccAccession wgEncodeEH001878
+expId 1878
 fileName wgEncodeGencodeManualV3.gtf.gz
 grant Hubbard
 lab Sanger
@@ -39,6 +43,8 @@ composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
+dccAccession wgEncodeEH001878
+expId 1878
 expVars lab,dataType,labExpId
 fileName wgEncodeGencodePolyaV3.gtf.gz
 grant Hubbard
@@ -55,4 +61,4 @@ objType composite
 composite wgEncodeGencodeV3
 expVars lab,dataType,labExpId
 
-# MAGIC: -535968184
+# MAGIC: -1096984363
