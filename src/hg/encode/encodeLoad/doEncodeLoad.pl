@@ -566,7 +566,7 @@ unless (-e $readme){
 		
 	}
 	my $assm = $daf->{assembly};
-	open README, ">$readme.txt" or die "Can't open README file to write in directory $downloadDir\n";
+	open README, ">$readme" or die "Can't open README file to write in directory $downloadDir\n";
 	
 	foreach my $line (@template){
 		#interpolate in the name of the DB and composite name

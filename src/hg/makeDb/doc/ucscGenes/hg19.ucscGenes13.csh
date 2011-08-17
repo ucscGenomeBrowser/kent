@@ -718,11 +718,14 @@ subColumn 4 uncoding.bed txToAcc.tab ucscUncoding.bed
 subColumn 10 cdsToGenome.psl txToAcc.tab ucscProtMap.psl
 cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.tab ucscGenes.ev
 
-# Make files with protein and mrna accessions.  These will be taken from
-# RefSeq for the RefSeq ones, and derived from our transcripts for the rest.
+
+# Make files with (a) representative protein and mrna accessions, and (b) the protein
+# and mrna sequences representing direct transcription/translation of the bed blocks.  
+# The reresentative proteins and mrnas will be taken from RefSeq for the RefSeq ones, 
+# and derived from our transcripts for the rest.
 # Load these sequences into database. Takes 17 seconds.
-txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa \
-    refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
+txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa refToPep.tab \
+    refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa ucscGenesTx.fa ucscGenesTx.faa
 
 
 # Generate ucscGene/uniprot blat run.
@@ -835,6 +838,8 @@ hgLoadSqlTab $tempDb knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.
 hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
 hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
+hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
+hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
 
 
 
