@@ -34,71 +34,22 @@ class CvFile(RaFile):
 			else:
 				self.handler(NonmatchKeyError(e.name, e['organism'], 'organism'))
 				return ek, ev, None
-		elif type == 'Gene Type':
-			entry = GeneTypeStanza()
 		elif type == 'age':
 			entry = AgeStanza()
-		elif type == 'control':
-			entry = ControlStanza()
 		elif type == 'dataType':
 			entry = DataTypeStanza()
-		elif type == 'fragSize':
-			entry = FragSizeStanza()
-		elif type == 'freezeDate':
-			entry = FreezeDateStanza()
-		elif type == 'grant':
-			entry = GrantStanza()
-		elif type == 'insertLength':
-			entry = InsertLengthStanza()
 		elif type == 'lab':
 			entry = LabStanza()
-		elif type == 'localization':
-			entry = LocalizationStanza()
-		elif type == 'mapAlgorithm':
-			entry = MapAlgorithmStanza()
-		elif type == 'organism':
-			entry = OrganismStanza()
-		elif type == 'phase':
-			entry = PhaseStanza()
-		elif type == 'promoter':
-			entry = PromoterStanza()
-		elif type == 'protocol':
-			entry = ProtocolStanza()
-		elif type == 'readType':
-			entry = ReadTypeStanza()
-		elif type == 'region':
-			entry = RegionStanza()
-		elif type == 'restrictionEnzyme':
-			entry = RestrictionEnzymeStanza()
-		elif type == 'rnaExtract':
-			entry = RnaExtractStanza()
 		elif type == 'seqPlatform':
 			entry = SeqPlatformStanza()
-		elif type == 'sex':
-			entry = SexStanza()
-		elif type == 'species':
-			entry = SpeciesStanza()
-		elif type == 'strain':
-			entry = StrainStanza()
-		elif type == 'tier':
-			entry = TierStanza()
-		elif type == 'tissueSourceType':
-			entry = TissueSourceTypeStanza()
-		elif type == 'treatment':
-			entry = TreatmentStanza()
 		elif type == 'typeOfTerm':
 			entry = TypeOfTermStanza()
-		elif type == 'version':
-			entry = VersionStanza()
 		elif type == 'view':
 			entry = ViewStanza()
-		elif type == 'category':
-			entry = CategoryStanza()
-		elif type == 'attic':
-			entry = AtticStanza()
 		else:
-			self.handler(NonmatchKeyError(e.name, type, 'type'))
-			return ek, ev, None
+			entry = CvStanza()
+			#self.handler(NonmatchKeyError(e.name, type, 'type'))
+			#return ek, ev, None
 
 		key, val = entry.readStanza(stanza)
 		return key, val, entry
@@ -167,6 +118,10 @@ class CvStanza(RaStanza):
 
 		necessary = {'term', 'tag', 'type', 'description'}
 		self.checkMandatory(ra, necessary)
+		
+		if len(ra.filter(lambda s: s['term'] == self['type'] and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
+			ra.handler(InvalidTypeError(self.name, self['type']))
+		
 		self.checkDuplicates(ra)
 		
 	def checkDuplicates(self, ra):
@@ -196,6 +151,22 @@ class CvStanza(RaStanza):
 			if key not in keys and '__$$' not in key:
 				ra.handler(ExtraKeyError(self.name, key))
 	
+	def checkFullRelational(self, ra, key, other, type):
+		"""check that the value at key matches the value of another
+		stanza's value at other, where the stanza type is specified by type"""
+		
+		p = 0
+		if key not in self:
+			return
+		
+		for entry in ra.itervalues():
+			if 'type' in entry and other in entry:
+				if entry['type'] == type and self[key] == entry[other]:
+					p = 1
+					break
+		if p == 0:
+			ra.handler(NonmatchKeyError(self.name, key, other))
+	
 	def checkRelational(self, ra, key, other):
 		"""check that the value at key matches the value at other"""
 		p = 0
@@ -205,7 +176,6 @@ class CvStanza(RaStanza):
 		
 		for entry in ra.itervalues():
 			if 'type' in entry and other in entry:
-
 				if entry['type'] == key and self[key] == entry[other]:
 					p = 1
 					break
@@ -244,7 +214,7 @@ class MissingKeyError(CvError):
 		self.key = key
 	
 	def __str__(self):
-		return repr(self.stanza + ': missing key (' + self.key + ')')
+		return str(self.stanza + ': missing key (' + self.key + ')')
 	
 	
 class DuplicateKeyError(CvError):
@@ -255,7 +225,7 @@ class DuplicateKeyError(CvError):
 		self.key = key
 	
 	def __str__(self):
-		return repr(self.stanza + ': duplicate key (' + self.key + ')')
+		return str(self.stanza + ': duplicate key (' + self.key + ')')
 	
 	
 class BlankKeyError(CvError):
@@ -266,7 +236,7 @@ class BlankKeyError(CvError):
 		self.key = key
 	
 	def __str__(self):
-		return repr(self.stanza + ': key (' + self.key + ') is blank')
+		return str(self.stanza + ': key (' + self.key + ') is blank')
 	
 	
 class ExtraKeyError(CvError):
@@ -277,7 +247,7 @@ class ExtraKeyError(CvError):
 		self.key = key
 	
 	def __str__(self):
-		return repr(self.stanza + ': extra key (' + self.key + ')')	
+		return str(self.stanza + ': extra key (' + self.key + ')')	
 
 		
 class NonmatchKeyError(CvError):
@@ -289,88 +259,99 @@ class NonmatchKeyError(CvError):
 		self.val = val
 	
 	def __str__(self):
-		return repr(self.stanza + ': key (' + self.key + ') does not match any (' + self.val + ')')
+		return str(self.stanza + ': key (' + self.key + ') does not match any (' + self.val + ')')
 		
 		
-class GrantStanza(CvStanza):
+class InvalidTypeError(CvError):
+	"""raised if a relational key does not match any other value"""
 	
-	def __init__(self):
-		CvStanza.__init__(self)
-
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
-
-
-class RestrictionEnzymeStanza(CvStanza):
+	def __init__(self, stanza, key):
+		self.stanza = stanza
+		self.key = key
 	
-	def __init__(self):
-		CvStanza.__init__(self)
-
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
-
-
-class VersionStanza(CvStanza):
+	def __str__(self):
+		return str(self.stanza + ': ' + self.key + ' does not match any types')
+		
+		
+# class GrantStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 
-class TreatmentStanza(CvStanza):
+# class RestrictionEnzymeStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 
-class SexStanza(CvStanza):
+# class VersionStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 
-class FragSizeStanza(CvStanza):
+# class TreatmentStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 
-class LocalizationStanza(CvStanza):
+# class SexStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 
-class OrganismStanza(CvStanza):
+# class FragSizeStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 
-class GeneTypeStanza(CvStanza):
+# class LocalizationStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
+
+
+# class OrganismStanza(CvStanza):
+	
+	# def __init__(self):
+		# CvStanza.__init__(self)
+
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
+
+
+# class GeneTypeStanza(CvStanza):
+	
+	# def __init__(self):
+		# CvStanza.__init__(self)
+
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
 class LabStanza(CvStanza):
@@ -389,13 +370,13 @@ class LabStanza(CvStanza):
 		self.checkDuplicates(ra)
 
 
-class PhaseStanza(CvStanza):
+# class PhaseStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
 class AgeStanza(CvStanza):
@@ -424,13 +405,13 @@ class DataTypeStanza(CvStanza):
 		self.checkDuplicates(ra)
 
 
-class RegionStanza(CvStanza):
+# class RegionStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
 class CellLineStanza(CvStanza):
@@ -440,7 +421,7 @@ class CellLineStanza(CvStanza):
 
 	def validate(self, ra):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'sex', 'tier'}
-		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category', 'lots'}
+		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category', 'lots', 'derivedFrom'}
 
 		self.checkMandatory(ra, necessary)
 		self.checkOptional(ra, optional)
@@ -449,61 +430,65 @@ class CellLineStanza(CvStanza):
 		self.checkRelational(ra, 'sex', 'term')
 		self.checkRelational(ra, 'category', 'term')
 		self.checkRelational(ra, 'tier', 'term')
+		
+		if 'derivedFrom' in self and len(ra.filter(lambda s: s['term'] == self['derivedFrom'] and s['type'] == 'Cell Line', lambda s: s)) == 0:
+			ra.handler(NonmatchKeyError(self.name, self['derivedFrom'], 'Cell Line'))
+		
 		self.checkDuplicates(ra)
 
 
-class ReadTypeStanza(CvStanza):
+# class ReadTypeStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
-class MapAlgorithmStanza(CvStanza):
+# class MapAlgorithmStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
-class PromoterStanza(CvStanza):
+# class PromoterStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
-class TierStanza(CvStanza):
+# class TierStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 
-class RnaExtractStanza(CvStanza):
+# class RnaExtractStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
-class TissueSourceTypeStanza(CvStanza):
+# class TissueSourceTypeStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
 class SeqPlatformStanza(CvStanza):
@@ -550,13 +535,13 @@ class ViewStanza(CvStanza):
 		self.checkDuplicates(ra)
 
 
-class ControlStanza(CvStanza):
+# class ControlStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
 class TypeOfTermStanza(CvStanza):
@@ -568,40 +553,40 @@ class TypeOfTermStanza(CvStanza):
 		CvStanza.validate(self, ra)
 		
 
-class ProtocolStanza(CvStanza):
+# class ProtocolStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 
-class FreezeDateStanza(CvStanza):
+# class FreezeDateStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
-class StrainStanza(CvStanza):
+# class StrainStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
-class InsertLengthStanza(CvStanza):
+# class InsertLengthStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 
 class MouseStanza(CvStanza):
@@ -624,29 +609,29 @@ class MouseStanza(CvStanza):
 		self.checkDuplicates(ra)
 
 
-class SpeciesStanza(CvStanza):
+# class SpeciesStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 
 		
-class CategoryStanza(CvStanza):
+# class CategoryStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
 		
-class AtticStanza(CvStanza):
+# class AtticStanza(CvStanza):
 	
-	def __init__(self):
-		CvStanza.__init__(self)
+	# def __init__(self):
+		# CvStanza.__init__(self)
 
-	def validate(self, ra):
-		CvStanza.validate(self, ra)
+	# def validate(self, ra):
+		# CvStanza.validate(self, ra)
 		
