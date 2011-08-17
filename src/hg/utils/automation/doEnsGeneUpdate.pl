@@ -277,6 +277,8 @@ zcat ensPep.txt.gz \\
 	 | sed -e '/^\$/d; s/\*\$//' | sort > ensPep.$db.fa.tab
 hgPepPred $db tab ensPep ensPep.$db.fa.tab
 hgLoadSqlTab $db ensGtp ~/kent/src/hg/lib/ensGtp.sql process/ensGtp.tab
+hgLoadSqlTab $db ensemblToGeneName process/ensemblToGeneName.sql process/ensemblToGeneName.tab
+hgLoadSqlTab $db ensemblSource process/ensemblSource.sql process/ensemblSource.tab
 # verify names in ensGene is a superset of names in ensPep
 hgsql -N -e "select name from ensPep;" $db | sort > ensPep.name
 hgsql -N -e "select name from ensGene;" $db | sort > ensGene.name
@@ -394,6 +396,14 @@ _EOF_
 gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
     | gzip > $db.allGenes.gp.gz
 $Bin/extractGtf.pl infoOut.txt > ensGtp.tab
+$Bin/ensemblInfo.pl infoOut.txt > ensemblToGeneName.tab
+$Bin/ensemblInfo.pl -field2=source infoOut.txt > ensemblSource.tab
+set NL = `awk 'BEGIN{max=0}{if (length(\$1) > max) max=length(\$1)}END{print max}' ensemblToGeneName.tab`
+set VL = `awk 'BEGIN{max=0}{if (length(\$2) > max) max=length(\$2)}END{print max}' ensemblToGeneName.tab`
+sed -e "s/ knownTo / ensemblToGeneName /; s/known gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name(\$NL)/; s/value(12)/value(\$VL)/" \\
+            $ENV{'HOME'}/kent/src/hg/lib/knownTo.sql > ensemblToGeneName.sql
+sed -e "s/name(15)/name(\$NL)/" \\
+	$ENV{'HOME'}/kent/src/hg/lib/ensemblSource.sql > ensemblSource.sql
 _EOF_
   );
   if ($opt_vegaGene) {
