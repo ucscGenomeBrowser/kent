@@ -1,7 +1,7 @@
-# CSHL long rna-seq (wrangler: braney)
+# CSHL long rna-seq (wrangler: cricket)
 track wgEncodeCshlLongRnaSeq
 compositeTrack on
-superTrack wgEncodeRnaSeqSuper
+superTrack wgEncodeRnaSeqSuper dense
 shortLabel CSHL Long RNA-seq
 longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
