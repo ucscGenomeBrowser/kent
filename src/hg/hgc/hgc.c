@@ -2371,6 +2371,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
+
 hFindSplitTable(database, seqName, rootTable, table, &hasBin);
 safef(query, sizeof(query), "name = \"%s\"", name);
 gpList = genePredReaderLoadQuery(conn, table, query);
@@ -2400,13 +2401,31 @@ for (gp = gpList; gp != NULL; gp = gp->next)
         else
            printf("</b> %s<br>\n",gp->name2);
         }
+    char *ensemblSource = NULL;
+    if (sameString("ensGene", table))
+	{
+	if (hTableExists(database, "ensemblSource"))
+	    {
+	    safef(query, sizeof(query),
+		"select source from ensemblSource where name='%s'", name);
+	    ensemblSource = sqlQuickString(conn, query);
+	    }
+	}
     if ((gp->exonFrames != NULL) && (!genbankIsRefSeqNonCodingMRnaAcc(gp->name)))
-        {
-        printf("<b>CDS Start: </b>");
-        printCdsStatus((gp->strand[0] == '+') ? gp->cdsStartStat : gp->cdsEndStat);
-        printf("<b>CDS End: </b>");
-        printCdsStatus((gp->strand[0] == '+') ? gp->cdsEndStat : gp->cdsStartStat);
-        }
+	{
+	if (ensemblSource && differentString("protein_coding",ensemblSource))
+	    {
+	    printf("<b>CDS Start: </b> none (non-coding)<BR>\n");
+	    printf("<b>CDS End: </b> none (non-coding)<BR>\n");
+	    }
+	else
+	    {
+	    printf("<b>CDS Start: </b>");
+	    printCdsStatus((gp->strand[0] == '+') ? gp->cdsStartStat : gp->cdsEndStat);
+	    printf("<b>CDS End: </b>");
+	    printCdsStatus((gp->strand[0] == '+') ? gp->cdsEndStat : gp->cdsStartStat);
+	    }
+	}
     /* if a gene class table exists, get gene class and print */
     if (classTable != NULL)
         {
@@ -8249,8 +8268,21 @@ if (archive != NULL)
 else
     safef(ensUrl, sizeof(ensUrl), "http://www.ensembl.org/%s", genomeStrEnsembl);
 
-boolean nonCoding = FALSE;
 char query[512];
+char *geneName = NULL;
+if (hTableExists(database, "ensemblToGeneName"))
+    {
+    safef(query, sizeof(query), "select value from ensemblToGeneName where name='%s'", itemName);
+    geneName = sqlQuickString(conn, query);
+    }
+char *ensemblSource = NULL;
+if (hTableExists(database, "ensemblSource"))
+    {
+    safef(query, sizeof(query), "select source from ensemblSource where name='%s'", itemName);
+    ensemblSource = sqlQuickString(conn, query);
+    }
+
+boolean nonCoding = FALSE;
 safef(query, sizeof(query), "name = \"%s\"", itemName);
 struct genePred *gpList = genePredReaderLoadQuery(conn, "ensGene", query);
 if (gpList && gpList->name2)
@@ -8369,24 +8401,31 @@ if (hTableExists(database, "superfamily"))
     }
 if (hTableExists(database, "ensGtp") && (proteinID == NULL))
     {
-    if (nonCoding)
+    /* shortItemName removes version number but sometimes the ensGtp */
+    /* table has a transcript with version number so exact match not used */
+    safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
+    proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
+    if (proteinID != NULL)
 	{
-	printf("<B>Ensembl Protein: </B>none (non-coding)<BR>\n");
+	printf("<B>Ensembl Protein: </B>");
+	printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>",
+	    ensUrl,proteinID);
+	printf("%s</A><BR>\n", proteinID);
 	}
     else
 	{
-	/* shortItemName removes version number but sometimes the ensGtp */
-	/* table has a transcript with version number so exact match not used */
-	safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
-	proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
-	if (proteinID != NULL)
-	    {
-	    printf("<B>Ensembl Protein: </B>");
-	    printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>",
-		ensUrl,proteinID);
-	    printf("%s</A><BR>\n", proteinID);
-	    }
+	printf("<B>Ensembl Protein: </B>none (non-coding)<BR>\n");
 	}
+    }
+if (geneName)
+    {
+    printf("<B>Gene Name: </B>%s<BR>\n", geneName);
+    freeMem(geneName);
+    }
+if (ensemblSource)
+    {
+    printf("<B>Ensembl Type: </B>%s<BR>\n", ensemblSource);
+    freeMem(ensemblSource);
     }
 freeMem(shortItemName);
 }
@@ -23909,7 +23948,7 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (isHubTrack(track))
 	{
-	hubConnectAddHubForTrackAndFindTdb(cart, database, track, NULL, trackHash);
+	hubConnectAddHubForTrackAndFindTdb(database, track, NULL, trackHash);
 	}
     if (parentWigMaf)
         {

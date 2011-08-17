@@ -71,8 +71,6 @@ set debug=true
 set debug=false
 if ( $debug == "true" ) then
   echo "\ncontacts $contacts"
-    set contacts=`echo $contacts | sed "s/,/ /" | sed "s/ /\n/g" \
-    | perl -wpe '$_ = lcfirst($_);' | sort -u`
   echo "contactsReal $contacts"
   set contacts="larrym kate fan ann Hiram rachel Andy andy bob larry "
   echo "contactsDebug $contacts"

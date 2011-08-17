@@ -327,7 +327,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
                     }
                 }
             }
-            found = found || event.shiftKey || event.ctrlKey;
+            found = found || event.shiftKey;
             if(!found) {
                 return false;
             }
