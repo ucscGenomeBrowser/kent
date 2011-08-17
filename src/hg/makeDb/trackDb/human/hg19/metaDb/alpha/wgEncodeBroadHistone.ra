@@ -201,7 +201,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000029
 expId 29
 fileName wgEncodeBroadHistoneGm12878CtcfStdPk.broadPeak.gz
@@ -304,7 +304,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001033
 expId 1033
 fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep1.bam
@@ -329,7 +329,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001033
 expId 1033
 fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep2.bam
@@ -354,7 +354,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001033
 expId 1033
 fileName wgEncodeBroadHistoneGm12878H2azStdPk.broadPeak.gz
@@ -380,7 +380,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001033
 expId 1033
 fileName wgEncodeBroadHistoneGm12878H2azStdRawDataRep1.fastq.gz
@@ -406,7 +406,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001033
 expId 1033
 fileName wgEncodeBroadHistoneGm12878H2azStdRawDataRep2.fastq.gz
@@ -432,7 +432,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001033
 expId 1033
 fileName wgEncodeBroadHistoneGm12878H2azStdSig.bigWig
@@ -716,7 +716,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000030
 expId 30
 fileName wgEncodeBroadHistoneGm12878H3k27acStdPk.broadPeak.gz
@@ -1083,7 +1083,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000032
 expId 32
 fileName wgEncodeBroadHistoneGm12878H3k36me3StdPk.broadPeak.gz
@@ -1295,7 +1295,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000034
 expId 34
 fileName wgEncodeBroadHistoneGm12878H3k4me2StdPk.broadPeak.gz
@@ -1660,7 +1660,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000035
 expId 35
 fileName wgEncodeBroadHistoneGm12878H3k9acStdPk.broadPeak.gz
@@ -1764,7 +1764,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep1.bam
@@ -1789,7 +1789,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep2.bam
@@ -1814,7 +1814,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep3.bam
@@ -1839,7 +1839,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdPk.broadPeak.gz
@@ -1865,7 +1865,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdRawDataRep1.fastq.gz
@@ -1891,7 +1891,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdRawDataRep2.fastq.gz
@@ -1917,7 +1917,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdRawDataRep3.fastq.gz
@@ -1943,7 +1943,7 @@ controlId GM12878/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
 fileName wgEncodeBroadHistoneGm12878H3k9me3StdSig.bigWig
@@ -2023,7 +2023,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000036
 expId 36
 fileName wgEncodeBroadHistoneGm12878H4k20me1StdPk.broadPeak.gz
@@ -2473,7 +2473,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000997
 expId 997
 fileName wgEncodeBroadHistoneH1hescH3k27acStdPk.broadPeak.gz
@@ -5899,7 +5899,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001022
 expId 1022
 fileName wgEncodeBroadHistoneHepg2H2azStdPk.broadPeak.gz
@@ -6364,7 +6364,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001023
 expId 1023
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdPk.broadPeak.gz
@@ -6417,7 +6417,7 @@ controlId HepG2/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-12
-dateUnrestricted 2011-08-12
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001023
 expId 1023
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdRawDataRep2.fastq.gz
@@ -9273,7 +9273,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001036
 expId 1036
 fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep1.bam
@@ -9298,7 +9298,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001036
 expId 1036
 fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep2.bam
@@ -9323,7 +9323,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001036
 expId 1036
 fileName wgEncodeBroadHistoneHsmmH2azStdPk.broadPeak.gz
@@ -9349,7 +9349,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001036
 expId 1036
 fileName wgEncodeBroadHistoneHsmmH2azStdRawDataRep1.fastq.gz
@@ -9375,7 +9375,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001036
 expId 1036
 fileName wgEncodeBroadHistoneHsmmH2azStdRawDataRep2.fastq.gz
@@ -9401,7 +9401,7 @@ controlId HSMM/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001036
 expId 1036
 fileName wgEncodeBroadHistoneHsmmH2azStdSig.bigWig
@@ -10753,7 +10753,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000999
 expId 999
 fileName wgEncodeBroadHistoneHsmmH3k9me3StdPk.broadPeak.gz
@@ -13005,7 +13005,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000054
 expId 54
 fileName wgEncodeBroadHistoneHuvecCtcfStdPk.broadPeak.gz
@@ -13217,7 +13217,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000055
 expId 55
 fileName wgEncodeBroadHistoneHuvecH3k27acStdPk.broadPeak.gz
@@ -13402,7 +13402,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000038
 expId 38
 fileName wgEncodeBroadHistoneHuvecH3k27me3StdPk.broadPeak.gz
@@ -13587,7 +13587,7 @@ controlId HUVEC/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-12
-dateUnrestricted 2011-08-12
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000056
 expId 56
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdPk.broadPeak.gz
@@ -13799,7 +13799,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000039
 expId 39
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdPk.broadPeak.gz
@@ -13984,7 +13984,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000040
 expId 40
 fileName wgEncodeBroadHistoneHuvecH3k4me2StdPk.broadPeak.gz
@@ -14170,7 +14170,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000041
 expId 41
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdPk.broadPeak.gz
@@ -14382,7 +14382,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000057
 expId 57
 fileName wgEncodeBroadHistoneHuvecH3k9acStdPk.broadPeak.gz
@@ -14806,7 +14806,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000059
 expId 59
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdPk.broadPeak.gz
@@ -15018,7 +15018,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000061
 expId 61
 fileName wgEncodeBroadHistoneHuvecPol2bStdPk.broadPeak.gz
@@ -15282,7 +15282,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000042
 expId 42
 fileName wgEncodeBroadHistoneK562CtcfStdPk.broadPeak.gz
@@ -15385,7 +15385,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001038
 expId 1038
 fileName wgEncodeBroadHistoneK562H2azStdAlnRep1.bam
@@ -15410,7 +15410,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001038
 expId 1038
 fileName wgEncodeBroadHistoneK562H2azStdAlnRep2.bam
@@ -15435,7 +15435,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001038
 expId 1038
 fileName wgEncodeBroadHistoneK562H2azStdPk.broadPeak.gz
@@ -15461,7 +15461,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001038
 expId 1038
 fileName wgEncodeBroadHistoneK562H2azStdRawDataRep1.fastq.gz
@@ -15487,7 +15487,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001038
 expId 1038
 fileName wgEncodeBroadHistoneK562H2azStdRawDataRep2.fastq.gz
@@ -15513,7 +15513,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001038
 expId 1038
 fileName wgEncodeBroadHistoneK562H2azStdSig.bigWig
@@ -15593,7 +15593,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000043
 expId 43
 fileName wgEncodeBroadHistoneK562H3k27acStdPk.broadPeak.gz
@@ -15751,7 +15751,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000044
 expId 44
 fileName wgEncodeBroadHistoneK562H3k27me3StdPk.broadPeak.gz
@@ -15910,7 +15910,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000045
 expId 45
 fileName wgEncodeBroadHistoneK562H3k36me3StdPk.broadPeak.gz
@@ -16068,7 +16068,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000046
 expId 46
 fileName wgEncodeBroadHistoneK562H3k4me1StdPk.broadPeak.gz
@@ -16226,7 +16226,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000047
 expId 47
 fileName wgEncodeBroadHistoneK562H3k4me2StdPk.broadPeak.gz
@@ -16384,7 +16384,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000048
 expId 48
 fileName wgEncodeBroadHistoneK562H3k4me3StdPk.broadPeak.gz
@@ -16696,7 +16696,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000049
 expId 49
 fileName wgEncodeBroadHistoneK562H3k9acStdPk.broadPeak.gz
@@ -16906,7 +16906,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001040
 expId 1040
 fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep1.bam
@@ -16931,7 +16931,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001040
 expId 1040
 fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep2.bam
@@ -16956,7 +16956,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001040
 expId 1040
 fileName wgEncodeBroadHistoneK562H3k9me3StdPk.broadPeak.gz
@@ -16982,7 +16982,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001040
 expId 1040
 fileName wgEncodeBroadHistoneK562H3k9me3StdRawDataRep1.fastq.gz
@@ -17008,7 +17008,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001040
 expId 1040
 fileName wgEncodeBroadHistoneK562H3k9me3StdRawDataRep2.fastq.gz
@@ -17034,7 +17034,7 @@ controlId K562/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
-dateUnrestricted 2011-08-15
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001040
 expId 1040
 fileName wgEncodeBroadHistoneK562H3k9me3StdSig.bigWig
@@ -17114,7 +17114,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000051
 expId 51
 fileName wgEncodeBroadHistoneK562H4k20me1StdPk.broadPeak.gz
@@ -17272,7 +17272,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000053
 expId 53
 fileName wgEncodeBroadHistoneK562Pol2bStdPk.broadPeak.gz
@@ -19875,7 +19875,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000063
 expId 63
 fileName wgEncodeBroadHistoneNhekCtcfStdPk.broadPeak.gz
@@ -20087,7 +20087,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000064
 expId 64
 fileName wgEncodeBroadHistoneNhekH3k27acStdPk.broadPeak.gz
@@ -20299,7 +20299,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000065
 expId 65
 fileName wgEncodeBroadHistoneNhekH3k27me3StdPk.broadPeak.gz
@@ -20511,7 +20511,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000066
 expId 66
 fileName wgEncodeBroadHistoneNhekH3k36me3StdPk.broadPeak.gz
@@ -20723,7 +20723,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000062
 expId 62
 fileName wgEncodeBroadHistoneNhekH3k4me1StdPk.broadPeak.gz
@@ -20935,7 +20935,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000067
 expId 67
 fileName wgEncodeBroadHistoneNhekH3k4me2StdPk.broadPeak.gz
@@ -21147,7 +21147,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000068
 expId 68
 fileName wgEncodeBroadHistoneNhekH3k4me3StdPk.broadPeak.gz
@@ -21359,7 +21359,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000069
 expId 69
 fileName wgEncodeBroadHistoneNhekH3k9acStdPk.broadPeak.gz
@@ -21783,7 +21783,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000071
 expId 71
 fileName wgEncodeBroadHistoneNhekH4k20me1StdPk.broadPeak.gz
@@ -21968,7 +21968,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
-dateUnrestricted 2011-08-05
+dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000073
 expId 73
 fileName wgEncodeBroadHistoneNhekPol2bStdPk.broadPeak.gz
@@ -24823,4 +24823,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: 1153844916
+# MAGIC: 1153830523
