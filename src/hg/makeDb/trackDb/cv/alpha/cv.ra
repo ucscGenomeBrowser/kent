@@ -368,7 +368,7 @@ term Astrocy
 tag ASTRO
 type Cell Line
 organism human
-description astrocytes
+description normal human astrocytes (also called NH-A) PROVISIONAL
 tissue Brain
 lineage ectoderm
 vendorName Lonza
@@ -2642,7 +2642,7 @@ tag HSMMFSHD
 type Cell Line
 tier 3
 organism human
-description primary myoblast from FSHD patient
+description primary myoblast from facioscapulohumeral muscular dystrophy patients
 lineage missing
 karyotype missing
 vendorName Duke/UNC/UT/EBI ENCODE group
@@ -3100,7 +3100,7 @@ organism human
 tissue Nervous
 lineage ectoderm
 karyotype normal
-description normal human astrocytes
+description normal human astrocytes (also called Astrocy) PROVISIONAL
 vendorName Lonza
 vendorId CC-2565
 orderUrl http://www.lonza.com/
