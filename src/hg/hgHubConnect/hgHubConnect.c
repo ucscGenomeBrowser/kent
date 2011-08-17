@@ -271,7 +271,7 @@ if (url != NULL)
     struct errCatch *errCatch = errCatchNew();
     struct trackHub *tHub;
     if (errCatchStart(errCatch))
-	tHub = trackHubFromId(theCart, id);
+	tHub = trackHubFromId(id);
     errCatchEnd(errCatch);
     if (errCatch->gotError)
 	hubSetErrorMessage( errCatch->message->string, id);

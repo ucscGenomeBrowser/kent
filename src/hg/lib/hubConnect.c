@@ -137,7 +137,7 @@ boolean isHubUnlisted(struct hubConnectStatus *hub)
     return (hub->status & HUB_UNLISTED);
 }
 
-struct hubConnectStatus *hubConnectStatusForId(struct cart *cart, struct sqlConnection *conn, int id)
+struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id)
 /* Given a hub ID return associated status. Returns NULL if no such hub.  If hub
  * exists but has problems will return with errorMessage field filled in. */
  /* If the id is negative, then the hub is private and the number is the
@@ -160,7 +160,7 @@ struct sqlConnection *conn = hConnectCentral();
 for (pair = pairList; pair != NULL; pair = pair->next)
     {
     int id = hubIdFromCartName(pair->name);
-    hub = hubConnectStatusForId(cart, conn, id);
+    hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)
 	{
         slAddHead(&hubList, hub);
@@ -181,7 +181,7 @@ struct sqlConnection *conn = hConnectCentral();
 for (name = nameList; name != NULL; name = name->next)
     {
     int id = sqlSigned(name->name);
-    hub = hubConnectStatusForId(cart, conn, id);
+    hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)
 	{
         slAddHead(&hubList, hub);
@@ -204,7 +204,7 @@ char *ptr2 = strchr(ptr1 + 1, '.');
 return sqlUnsigned(ptr2+1);
 }
 
-int hubIdFromTrackName(char *trackName)
+unsigned hubIdFromTrackName(char *trackName)
 /* Given something like "hub_123_myWig" return 123 */
 {
 assert(startsWith("hub_", trackName));
@@ -231,12 +231,12 @@ assert(trackName != NULL);
 return trackName + 1;
 }
 
-struct trackHub *trackHubFromId(struct cart *cart, unsigned hubId)
+struct trackHub *trackHubFromId(unsigned hubId)
 /* Given a hub ID number, return corresponding trackHub structure. 
  * ErrAbort if there's a problem. */
 {
 struct sqlConnection *conn = hConnectCentral();
-struct hubConnectStatus *status = hubConnectStatusForId(cart, conn, hubId);
+struct hubConnectStatus *status = hubConnectStatusForId(conn, hubId);
 hDisconnectCentral(&conn);
 if (status == NULL)
     errAbort("The hubId %d was not found", hubId);
@@ -274,16 +274,15 @@ for(tdb = tdbList; tdb; tdb = next)
 return p;
 }
 
-struct trackDb *hubConnectAddHubForTrackAndFindTdb(struct cart *cart,
-	char *database, char *trackName, struct trackDb **pTdbList, 
-	struct hash *trackHash)
+struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database, 
+    char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
  * for it, appending to end of list and adding to trackHash.  Return the
  * trackDb associated with trackName. This will also fill in the html fields,
  * but just for that track and it's parents. */ 
 {
-int hubId = hubIdFromTrackName(trackName);
-struct trackHub *hub = trackHubFromId(cart, hubId);
+unsigned hubId = hubIdFromTrackName(trackName);
+struct trackHub *hub = trackHubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);

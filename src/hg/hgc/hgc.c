@@ -23860,7 +23860,7 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (isHubTrack(track))
 	{
-	hubConnectAddHubForTrackAndFindTdb(cart, database, track, NULL, trackHash);
+	hubConnectAddHubForTrackAndFindTdb(database, track, NULL, trackHash);
 	}
     if (parentWigMaf)
         {
