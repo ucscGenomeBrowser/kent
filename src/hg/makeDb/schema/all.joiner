@@ -68,7 +68,7 @@ set rn rn3,rn4
 set sacCer sacCer1,sacCer2
 set sorAra sorAra1
 set speTri speTri1
-set susScr susScr2
+set susScr susScr1,susScr2
 set strPur strPur1,strPur2
 set tarSyr tarSyr1
 set taeGut taeGut1
@@ -79,14 +79,21 @@ set vicPac vicPac1
 set xenTro xenTro1,xenTro2
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$turTru,$vicPac
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$turTru,$vicPac,$tupBel
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
-set wgs $rn,$panTro,$galGal,$melGal,$myoLuc,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
+set wgs $rn,$panTro,$galGal,$melGal,$myoLuc,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$cioSav,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$tupBel,$turTru,$vicPac
 
 # Define organism databases for which we build a xenoRefGene track:
 set xrg $panTro,$galGal,$melGal,$myoLuc,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal
+
+# Ensembl gene track lists constructed from update procedure
+set ensGeneDb ailMel1,anoCar2,bosTau4,calJac3,canFam2,cavPor3,ci2,cioSav2,danRer7,dm3,equCab2,fr2,galGal3,gasAcu1,hg19,loxAfr3,melGal1,mm9,monDom5,nomLeu1,ornAna1,oryCun2,oryLat2,panTro2,ponAbe2,rheMac2,rn4,susScr1,taeGut1,tetNig2
+
+set ensGeneWgs ce10,choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
+
+set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,mm9
@@ -1933,7 +1940,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!ce9,!sacCer1,!sacCer2.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -2158,14 +2165,14 @@ identifier ensemblProteinId3 external=Ensembl
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $gbd,!ce6,!ce9,!felCat3.ensGene.name chopAfter=.
+    $ensGeneDb.ensGene.name chopAfter=.
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
-    $gbd.ensGtp.transcript chopAfter=. minCheck=0.94
-    $gbd.ensPep.name chopAfter=. minCheck=0.93
+    $ensGeneDb.ensGtp.transcript chopAfter=. minCheck=0.94
+    $ensGeneDb.ensPep.name chopAfter=. minCheck=0.93
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
-    $gbd.ensemblToGeneName.name
-    $gbd.ensemblSource.name
+    $ensGeneDb.ensemblToGeneName.name minCheck=0.97
+    $ensGeneDb.ensemblSource.name minCheck=0.97
     $kgDb.knownToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
@@ -2175,6 +2182,20 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $danRer.mmBlastTab.query
     $danRer.rnBlastTab.query
     $danRer.scBlastTab.query
+
+identifier ensemblTranscriptWGS external=Ensembl dependency
+"Ensembl Transcript ID for WGS assemblies"
+    $ensGeneWgs.ensGene.name dupeOk
+    $ensGeneWgs.ensGtp.transcript minCheck=0.99
+    $ensGeneWgs.ensPep.name minCheck=0.99
+    $ensGeneWgs.ensInfo.name minCheck=0.99
+    $ensGeneWgs.ensemblToGeneName.name minCheck=0.99
+    $ensGeneWgs.ensemblSource.name minCheck=0.99
+
+identifier ensemblGeneScaffold external=Ensembl dependency
+"Ensembl gene scaffold table chrom names"
+    $ensGeneScaffold.chromInfo.chrom
+    $ensGeneScaffold.ensemblGeneScaffold.chrom
 
 #pulled this line into its own rule to reflect lack of dependency
 identifier ensemblTranscriptId2 external=Ensembl
@@ -2187,12 +2208,16 @@ identifier ensemblTranscriptIdCe external=Ensembl dependency
     $ce.ensGene.name chopAfter=. dupeOk
     $ce.ensGtp.transcript chopAfter=. minCheck=0.98
     $ce.ensPep.name chopAfter=. minCheck=0.98
+    ce10.ensemblToGeneName.name
+    ce10.ensemblSource.name
 
 identifier ensemblTranscriptIdFelCat external=Ensembl dependency
 "Ensembl Transcript ID for felCat"
     $felCat.ensGene.name dupeOk
     $felCat.ensGtp.transcript minCheck=0.99
     $felCat.ensPep.name minCheck=0.99
+    felCat3.ensemblToGeneName.name
+    felCat3.ensemblSource.name
 
 # UCSC to Ensembl chrom name translation
 identifier ensemblLinkId external=Ensembl dependency

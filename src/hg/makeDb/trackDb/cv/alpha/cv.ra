@@ -3267,7 +3267,7 @@ term PanIsletD
 tag PANISD
 type Cell Line
 organism human
-description Dedifferentiated human pancreatic islets
+description Dedifferentiated human pancreatic islets from one of the sources for PanIslets
 tissue Pancreas
 lineage endoderm
 vendorName National Disease Research Interchange (NDRI).
