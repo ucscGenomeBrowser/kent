@@ -138,7 +138,9 @@ for(hub = hubList; hub; hub = hub->next)
     if (isEmpty(hub->errorMessage))
 	ourPrintCell(hub->longLabel);
     else
-	printf("<TD>ERROR: %s</TD>", hub->errorMessage);
+	printf("<TD><span class=\"hubError\">ERROR: %s</span>"
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+	    hub->errorMessage);
 
     ourPrintCell(hub->hubUrl);
 
@@ -262,7 +264,23 @@ static void doResetHub(struct cart *theCart)
 char *url = cartOptionalString(cart, hgHubDataText);
 
 if (url != NULL)
-    hubResetError(url);
+    {
+    unsigned id = hubResetError(url);
+
+    /* try opening this again to reset error */
+    struct errCatch *errCatch = errCatchNew();
+    struct trackHub *tHub;
+    if (errCatchStart(errCatch))
+	tHub = trackHubFromId(id);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	hubSetErrorMessage( errCatch->message->string, id);
+    else
+	hubSetErrorMessage(NULL, id);
+    errCatchFree(&errCatch);
+
+    tHub = NULL;
+    }
 else
     errAbort("must specify url in %s\n", hgHubDataText);
 }
