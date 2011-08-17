@@ -1,0 +1,100 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+#use DataBrowser qw(browse);
+
+
+
+unless (scalar @ARGV == 4){
+	die "Checks that the dateUnrestricted for a given list of submissino ID's are before a given date.\n\nusage: qaDateCheck metaDbFile.ra subIds.list [date yyyy-mm-dd] [today's date]\nexample: qaDateCheck wgEncodeBroadHistone.ra subIds.list 2011-04-03 2011-08-20\n"
+
+}
+my $metafile = $ARGV[0];
+
+my $in = $ARGV[1];
+
+my $date = $ARGV[2];
+
+my $today = $ARGV[3];
+
+open IN, "$in" or die "Can't open list file\n";
+
+my %subids;
+
+while (<IN>){
+	
+	my $line = $_;
+	chomp $line;
+	if ($line =~ m/\,/){
+		my @numbers = split /,/, $line;
+		foreach my $num (@numbers){
+			if ($num =~ m/[\D]/){
+				print STDERR "$num contains non-numeric characters\n";
+				next;
+			} 
+			else {
+				unless (exists $subids{$num}){
+					$subids{$num} = 1;
+				}
+			}
+		}
+	
+	
+	}
+	elsif ($line =~ m/[\d]/) {
+		unless (exists $subids{$line}){
+			$subids{$line} = 1;
+		}
+	}
+
+}
+my %dates;
+close IN;
+
+open META, "$metafile" or die "Can't open metaDb.ra file\n";
+
+my $currobj;
+my $currdate;
+
+while (<META>){
+	my $line = $_;
+	chomp $line;
+	
+	if ($line =~ m/metaObject (\S+)/){
+		$currobj = $1;
+		$currdate = "";
+	}
+	if ($line =~ m/subId (\S+)/){
+		if (exists $subids{$1}){
+			unless (exists $dates{$1}){
+				$dates{$1} = {};
+				${$dates{$1}}{$currobj} = $currdate;
+			}
+			else {
+				${$dates{$1}}{$currobj} = $currdate;
+			}
+		}
+	}
+	if ($line =~ m/dateUnrestricted (\S+)/){
+		$currdate = $1;
+	}
+
+
+}
+
+
+
+
+
+foreach my $sub (sort {$a <=> $b} keys %dates){
+	print "Submission ID $sub:\n";
+	my %hash = %{$dates{$sub}};
+	foreach my $obj (keys %hash){
+		if ($hash{$obj} gt $date && $hash{$obj} gt $today){
+			print "\t$obj has dateUnrestricted: $hash{$obj}\n";
+			print "\tgreater than: $date\n";
+		}
+	}
+
+}
