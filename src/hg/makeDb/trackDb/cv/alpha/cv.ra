@@ -3148,7 +3148,7 @@ orderUrl http://www.lonza.com
 termId BTO:0001845
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001845
 lab Stam
-protocol UW_Stam:NHBE_Stam_protocol.pdf
+protocol UW_Stam:NHBERA_Stam_protocol.pdf
 
 term NHDF-Ad
 tag NHDFAD
