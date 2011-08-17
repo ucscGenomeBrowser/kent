@@ -4,6 +4,7 @@
  */
 
 #include "common.h"
+#include "dnautil.h"
 #include "errabort.h"
 #include <limits.h>
 #include "localmem.h"
