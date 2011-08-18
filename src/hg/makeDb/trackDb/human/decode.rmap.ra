@@ -60,7 +60,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 	parent femaleView
 	subGroups view=female
 	type bigWig 0.0 90.808
-	color 255,0,255
+	color 200,60,200
 	configurable on
 	priority 4
 
