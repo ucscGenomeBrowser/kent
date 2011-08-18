@@ -9733,6 +9733,23 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
+    // show GeneReviews  link(s)
+    if (sqlTablesExist(conn, "geneReviews"))
+        {
+        safef(query, sizeof(query),
+          "select distinct r.name2 from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
+        itemName, chrom, chromStart, chromEnd);
+        sr = sqlMustGetResult(conn, query);
+        if (sr != NULL)
+            {
+            while ((row = sqlNextRow(sr)) != NULL)
+                {
+                prGRShortRefGene(row[0]);
+                }
+            }
+        sqlFreeResult(&sr);
+        }
+
     // show Related UCSC Gene links
     safef(query, sizeof(query),
           "select distinct kgId from kgXref x, refLink l, mim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
@@ -10767,7 +10784,7 @@ if (startsWith("hg", database))
     printf("%s</A><BR>\n", rl->name);
     }
 printStanSource(rl->mrnaAcc, "mrna");
-prGRShortRefGene(conn,rl->name);
+prGRShortRefGene(rl->name);
 
 }
 
@@ -23861,32 +23878,38 @@ while ((row = sqlNextRow(sr)) != NULL)
     }  /* end while */
  printf("</PRE>");
  printf("<BR>");
+ sqlFreeResult(&sr);
 } /* end of prGeneReviews */
 
-void prGRShortRefGene(struct sqlConnection *conn, char *itemName)
+void prGRShortRefGene(char *itemName)
 /* print GeneReviews short label associated to this refGene item */
 {
+struct sqlConnection *conn  = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[512];
 boolean firstTime = TRUE;
 
-safef(query, sizeof(query), "select  grShort from geneReviewsRefGene where geneSymbol='%s'", itemName);
+safef(query, sizeof(query), "select grShort, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
         char *grShort = *row++;
+        char *diseaseName = *row++;
         if (firstTime)
         {
-          printf("<B> GeneReview: </B>");
+          printf("<B> GeneReviews: </B>");
           firstTime = FALSE;
-          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank>%s</A>", grShort, grShort);
+          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+          printf(" (%s) ", diseaseName);
         } else {
           printf(", ");
-          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank>%s</A>", grShort, grShort);
+          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+          printf(" (%s) ", diseaseName);
         }
      }
      printf("<BR>");
+     sqlFreeResult(&sr);
 } /* end of prGRShortRefGene */
 
 void doMiddle()

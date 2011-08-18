@@ -45,8 +45,9 @@ while ((row = sqlNextRow(sr)) != NULL)
           firstTime = FALSE;
         }
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s:</B></A>",row[1], row[1]);
-       printf(" %s (Id: %s)<BR>", row[3], row[2]);
+       printf(" ( %s )<BR>", row[3]);
      }
+     sqlFreeResult(&sr);
 }
 
 static boolean geneReviewsExists(struct section *section,
@@ -77,7 +78,7 @@ return FALSE;
 
 struct section *geneReviewsSection(struct sqlConnection *conn,
 	struct hash *sectionRa)
-/* Create geneReviews (aka Other Names) section. */
+/* Create geneReviews section. */
 {
 struct section *section = sectionNew(sectionRa, "geneReviews");
 section->exists = geneReviewsExists;
