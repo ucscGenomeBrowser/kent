@@ -26,14 +26,20 @@ var contextMenu;
 
 /* Data passed in from CGI via the hgTracks object:
  *
+ * string cgiVersion          // CGI_VERSION
  * string chromName           // current chromosome
  * int winStart               // genomic start coordinate (0-based, half-open)
  * int winEnd                 // genomic end coordinate
- * int newWinWidth            // new width if user clicks on the top ruler (in bps)
+ * int newWinWidth            // new width (in bps) if user clicks on the top ruler
  * boolean dragSelection      // true if we should allow drag and select
  * boolean revCmplDisp        // true if we are in reverse display
  * int insideX                // width of side-bar (in pixels)
  * int rulerClickHeight       // height of ruler (in pixels)
+ * boolean dragSelection      // true if drag-and-select turned on
+ * boolean inPlaceUpdate      // true if in-place-update is turned on
+ * int imgBox*                // various drag-scroll values
+ * boolean measureTiming      // true if measureTiming is on
+ * Object trackDb             // hash of trackDb entries for tracks which are visible on current page
  */
 
 function initVars()
