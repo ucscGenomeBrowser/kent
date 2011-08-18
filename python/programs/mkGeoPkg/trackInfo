@@ -1,0 +1,183 @@
+#!/hive/groups/encode/dcc/bin/python
+import sys, os, shutil, argparse
+from ucscgenomics.rafile.RaFile import *
+from ucscgenomics.softfile.SoftFile import *
+from ucscgenomics.cvfile.CvFile import *
+from ucscgenomics.compositetrack.CompositeTrack import *
+from ucscgenomics.textstyle.TextStyle import TextStyle
+
+def filesize(val):
+	if val > 1099511627776:
+		return str(round(float(val) / 1099511627776, 2)) + 'TB'
+	if val > 1073741824:
+		return str(round(float(val) / 1073741824, 2)) + 'GB'
+	if val > 1048576:
+		return str(round(float(val) / 1048576, 2)) + 'MB'
+	if val > 1024:
+		return str(round(float(val) / 1024, 2)) + 'KB'
+	else:
+		return str(val) + 'B'
+
+def getFileType(filename):
+	filename.replace('.gz', '')
+	return filename.rsplit('.')[1]
+	
+def isRawFile(filename):
+	return (getFileType(filename) == 'fastq' or getFileType(filename) == 'fasta')
+	
+def isSupplimentaryFile(filename):
+	return not isRawFile(filename)
+	
+def createMappings(mdb):
+	expIds = dict()
+	geoMapping = dict()
+	series = None
+	
+	for stanza in mdb.itervalues():
+		
+		if 'objType' in stanza and stanza['objType'] == 'composite':
+			series = stanza
+			continue
+
+		if 'expId' not in stanza:
+			continue
+		
+		expId = int(stanza['expId'])
+		
+		if expId not in expIds:
+			expIds[expId] = list()
+			
+		expIds[expId].append(stanza)
+		
+		if 'geoSampleAccession' in stanza:
+			# otherwise we keep track of the geo number for partially submitted samples
+			if expId not in geoMapping:
+				geoMapping[expId] = stanza['geoSampleAccession']
+			elif geoMapping[expId] != 'Inconsistent' and geoMapping[expId] != stanza['geoSampleAccession']:
+				geoMapping[expId] = 'Inconsistent'
+	
+	return expIds, geoMapping, series
+
+		
+def main():
+
+	parser = argparse.ArgumentParser(description = 'Provides information about a composite track.\nRed - Missing\nBlue - Already submitted\nYellow - Inconsistent GEO Accession per sample\nGreen - GEO Accession Number\nWhite - Unsubmitted file')
+	parser.add_argument('-u', '--unsubmitted', action='store_true', default=False, help='Do not list samples that have already been submitted')
+	parser.add_argument('-m', '--missing', action='store_true', default=False, help='List only missing files')
+	parser.add_argument('-s', '--size', action='store_true', default=False, help='Show file sizes')
+	parser.add_argument('-c', '--collapse', action='store_true', default=False, help='Collapses all sample files, showing just the sample list')
+	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
+	parser.add_argument('database', help='The database, typically hg19 or mm9')
+	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
+	parser.add_argument('expIds', nargs='*', help='Any number of expIds separated by spaces, you can also specify a range by using a hyphen, "140 150 160-170" for instance, or leave blank to specify the entire file')
+	
+	if len(sys.argv) == 1:
+		parser.print_usage()
+		return
+	
+	args = parser.parse_args(sys.argv[1:])
+	
+	compositeTrack = CompositeTrack(args.database, args.composite, args.trackPath)
+	
+	ids = list()
+	
+	for id in args.expIds:
+		if '-' in id:
+			start, end = id.split('-', 1)
+			ids.extend(range(int(start), int(end) + 1))
+		else:
+			ids.append(int(id))
+
+	expIds, geoMapping, series = createMappings(compositeTrack.alphaMetaDb)
+
+	if len(ids) == 0:
+		ids = expIds.keys()
+		ids.sort()
+	
+	out = list()
+	totalsize = 0
+	filecount = 0
+	
+	for idNum in ids:
+		
+		samplesize = 0
+		submittedfiles = 0
+		samplefiles = 0
+		expId = expIds[idNum]
+
+		for stanza in expId:
+			
+			if 'geoSampleAccession' in stanza and args.unsubmitted:
+				continue
+			
+			if stanza['fileName'] in compositeTrack.files and not args.missing:
+				file = compositeTrack.files[stanza['fileName']]
+				samplesize = samplesize + file.size
+				samplefiles = samplefiles + 1
+				totalsize = totalsize + file.size
+				filecount = filecount + 1
+				
+				if 'geoSampleAccession' in stanza:
+					submittedfiles = submittedfiles + 1
+				
+		size = ''
+		if args.size:
+			size = '[%s]' % filesize(samplesize)
+		
+		if idNum in geoMapping:
+			if geoMapping[idNum] == 'Inconsistent':
+				if not args.unsubmitted:
+					out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'blue'), TextStyle.style('[%s]' % geoMapping[idNum], 'yellow'), size, str(samplefiles)))
+			elif samplefiles == submittedfiles:
+				if not args.unsubmitted:
+					out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'blue'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
+			else:
+				out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'cyan'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
+		else:
+			out.append('\t%s %s %s - %s files' % (str(idNum), expId[0]['metaObject'], size, str(samplefiles)))
+
+		for stanza in expId:
+			
+			if 'geoSampleAccession' in stanza and args.unsubmitted or args.collapse:
+				continue
+
+			if stanza['fileName'] in compositeTrack.files:
+			
+				if args.missing:
+					continue
+			
+				file = compositeTrack.files[stanza['fileName']]
+				size = ''
+				if args.size:
+					size = '[%s]' % filesize(file.size)
+					
+				if 'geoSampleAccession' not in stanza:
+					out.append('\t\t%s %s' % (file.name, size))
+				elif idNum in geoMapping and geoMapping[idNum] == 'Inconsistent':
+					out.append('\t\t%s %s%s' % (TextStyle.style(file.name, 'blue'), TextStyle.style('[%s]' % stanza['geoSampleAccession'], 'green'), size))
+				else:
+					out.append('\t\t%s %s' % (TextStyle.style(file.name, 'blue'), size))
+			else:
+				out.append('\t\t%s' % TextStyle.style(stanza['fileName'], 'red'))
+
+	strsub = ''
+	if 'geoSeriesAccession' in series:
+		strsub = TextStyle.style('[%s]' % series['geoSeriesAccession'], 'green')
+	
+	modestr = ' '
+	for id in args.expIds:
+		modestr = modestr + id + ',' 
+	modestr = modestr[:len(modestr) - 1]
+	
+	size = ''
+	if args.size:
+		size = '[%s]' % filesize(totalsize)
+	
+	out.insert(0, '%s %s%s%s - %s files' % (compositeTrack.name, size, strsub, modestr, str(filecount)))
+
+	for line in out:
+		print line
+			
+	
+if __name__ == '__main__':
+	main()

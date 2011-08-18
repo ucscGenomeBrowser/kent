@@ -22,6 +22,7 @@ var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;  // turn on experimental zoom-to-codon functionality (currently only on in larrym's tree).
 var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate and mapIsUpdateable
+var contextMenu;
 
 /* Data passed in from CGI via the hgTracks object:
  *
@@ -35,7 +36,7 @@ var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpd
  * int rulerClickHeight       // height of ruler (in pixels)
  */
 
-function initVars(img)
+function initVars()
 {
 // There are various entry points, so we call initVars in several places to make sure this variables get updated.
     if(!originalPosition) {
@@ -43,12 +44,47 @@ function initVars(img)
         originalPosition = getOriginalPosition();
         originalSize = $('#size').text();
         originalCursor = jQuery('body').css('cursor');
+
+        jQuery.each(jQuery.browser, function(i, val) {
+            if(val) {
+                browser = i;
+            }
+            });
+        // jQuery load function with stuff to support drag selection in track img
+        if(browser == "safari") {
+            if(navigator.userAgent.indexOf("Chrome") != -1) {
+            // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
+            browser = "chrome";
+            } else {
+                // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
+                // though if you look in the DOM the changes are there). So we have to do a full form submission when the
+                // user changes visibility settings or track configuration.
+                // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
+                // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately, logs for 7/2011 show vast majority of safari users
+                // are pre-5.1 (5.0.5 is by far the most common).
+                //
+                // Early versions of Chrome had this problem too, but this problem went away as of Chrome 5.0.335.1 (or possibly earlier).
+                mapIsUpdateable = false;
+                var reg = new RegExp("Version\/(\[0-9]+\.\[0-9]+) Safari");
+                var a = reg.exec(navigator.userAgent);
+                if(a && a[1]) {
+                    var version = Number(a[1]);
+                    if(version >= 5.1) {
+                        mapIsUpdateable = true;
+                    }
+                }
+            }
+        }
+        inPlaceUpdate = hgTracks.inPlaceUpdate && mapIsUpdateable;
     }
 }
 
 function selectStart(img, selection)
 {
     initVars();
+    if(contextMenu) {
+        contextMenu.hide();
+    }
     var now = new Date();
     startDragZoom = now.getTime();
     blockUseMap = true;
@@ -105,6 +141,25 @@ function getOriginalPosition()
     return originalPosition || getPosition();
 }
 
+function markAsDirtyPage()
+{ // Page is marked as dirty so that the backbutton can be overridden
+    var dirty = $('#dirty');
+    if (dirty != undefined && dirty.length != 0)
+        $(dirty).val('yes');
+}
+
+function isDirtyPage()
+{ // returns true if page was marked as dirty
+  // This will allow the backbutton to be overridden
+
+    var dirty = $('#dirty');
+    if (dirty != undefined && dirty.length > 0) {
+        if ($(dirty).val() == 'yes')
+            return true;
+    }
+    return false;
+}
+
 function setPosition(position, size)
 {
 // Set value of position and size (in hiddens and input elements).
@@ -121,6 +176,7 @@ function setPosition(position, size)
     if(size) {
         $('#size').text(size);
     }
+    markAsDirtyPage();
 }
 
 function checkPosition(img, selection)
@@ -247,33 +303,8 @@ $(window).load(function () {
             browser = i;
         }
         });
-    // jQuery load function with stuff to support drag selection in track img
-    if(browser == "safari") {
-        if(navigator.userAgent.indexOf("Chrome") != -1) {
-        // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
-        browser = "chrome";
-        } else {
-            // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
-            // though if you look in the DOM the changes are there). So we have to do a full form submission when the
-            // user changes visibility settings or track configuration.
-            // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
-            // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately, logs for 7/2011 show vast majority of safari users
-            // are pre-5.1 (5.0.5 is by far the most common).
-            //
-            // Early versions of Chrome had this problem too, but this problem went away as of Chrome 5.0.335.1 (or possibly earlier).
-            mapIsUpdateable = false;
-            var reg = new RegExp("Version\/(\[0-9]+\.\[0-9]+) Safari");
-            var a = reg.exec(navigator.userAgent);
-            if(a && a[1]) {
-                var version = Number(a[1]);
-                if(version >= 5.1) {
-                    mapIsUpdateable = true;
-                }
-            }
-        }
-    }
+    initVars();
 
-    inPlaceUpdate = hgTracks.inPlaceUpdate && mapIsUpdateable;
     loadImgAreaSelect(true);
     if($('#hgTrackUiDialog'))
         $('#hgTrackUiDialog').hide();
@@ -715,6 +746,7 @@ function imgTblSetOrder(table)
     });
     if(names.length > 0) {
         setCartVars(names,values);
+        markAsDirtyPage();
     }
 }
 
@@ -987,7 +1019,6 @@ jQuery.fn.panImages = function(){
 
     // globals across all panImages
     portalWidth     = $(pan).width();
-    panAdjustHeight(prevX);
     // globals to one panImage
     var newX        = 0;
     var mouseDownX  = 0;
@@ -1002,10 +1033,15 @@ jQuery.fn.panImages = function(){
         if ( !($.browser.msie) ) // IE will override map items cursors as well!
             $(pan).parents('td.tdData').css('cursor',"url(../images/grabber.cur),w-resize");
 
+        panAdjustHeight(prevX);
+
         pan.mousedown(function(e){
              if (e.which > 1 || e.button > 1 || e.shiftKey)
                  return true;
             if(mouseIsDown == false) {
+                if(contextMenu) {
+                    contextMenu.hide();
+                }
                 mouseIsDown = true;
                 mouseDownX = e.clientX;
                 atEdge = (!beyondImage && (prevX >= leftLimit || prevX <= rightLimit));
@@ -1103,7 +1139,7 @@ jQuery.fn.panImages = function(){
             if(prevX != newX) {
                 prevX = newX;
                 if (!only1xScrolling) {
-                    // panAdjustHeight(newX); // NOTE: This will resize image after scrolling.  Do we want to while scrolling?
+                    //panAdjustHeight(newX); // NOTE: This will resize image after scrolling.  Do we want to while scrolling?
                     // This is important, since AJAX could lead to reinit after this within bounds scroll
                     hgTracks.imgBoxPortalOffsetX = (prevX * -1) - hgTracks.imgBoxLeftLabel;
                     hgTracks.imgBoxPortalLeft = newX.toString() + "px";
@@ -1348,6 +1384,19 @@ function postToSaveSettings(obj)
 
 $(document).ready(function()
 {
+    // The page may be reached via browser history (back button)
+    // If so, then this code should detect if the image has been changed via js/ajax
+    // and will reload the image if necessary.
+    initVars();
+    if (isDirtyPage()) {
+        jQuery('body').css('cursor', 'wait');
+        if(inPlaceUpdate)
+            navigateInPlace("", null);
+        else {
+            window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
+            return false;
+        }
+    }
     var db = getDb();
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         if(newJQuery) {
@@ -1392,7 +1441,6 @@ $(document).ready(function()
         // working, which is a major annoyance.
         // $('input#suggest').focus();
     }
-    initVars();
 
     if(jQuery.jStore) {
         // Experimental (currently dead) code to handle "user hits back button" problem.
@@ -1405,6 +1453,7 @@ $(document).ready(function()
         }
         jQuery.jStore.load();
     }
+
 
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
     if($("FORM").length > 0 && $('#trackSearch').length == 0) {
@@ -2012,7 +2061,7 @@ function makeImgTag(img)
 
 function loadContextMenu(img)
 {
-    var menu = img.contextMenu(
+    contextMenu = img.contextMenu(
         function() {
             popUpBoxCleanup();   // Popup box is not getting closed properly so must do it here
 
@@ -2538,6 +2587,7 @@ function afterImgTblReload()
     if(hgTracks.imgBoxPortal) {
         $("div.scroller").panImages();
     }
+    markAsDirtyPage();
 }
 
 function updateTrackImgForId(html, id)

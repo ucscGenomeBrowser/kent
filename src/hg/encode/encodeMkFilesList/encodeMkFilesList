@@ -174,11 +174,15 @@ my %cv = Encode::getControlledVocab($configdir);
 my %sizes;
 my @files;
 my @filemask;
-my $ls = `ls -lh *.* 2>/dev/null`;
+my $ls = `ls -lh 2>/dev/null`;
 my @list = split "\n", $ls;
 #parse through list to get the sizes and filenames
 foreach my $row (@list){
 	my @row = split /\s+/, $row;
+	#skip weird behaviors in ls
+	unless ($row[8]){next}
+	#skip directories
+	unless ($row =~ m/^\-/){next}
 	push @files, $row[8];
 	#only put files that pass filemask in @filemask to be processed
 	foreach my $mask (keys %filemask){
