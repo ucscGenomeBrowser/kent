@@ -3755,7 +3755,7 @@ if(metadataForTable(db,trackDb,NULL) != NULL)
     if (date != NULL)
         date = strSwapChar(date, ' ', 0);   // Truncate time (not expected, but just in case)
 
-    if (excludePast && dateIsOld(date,"%F"))
+    if (excludePast && !isEmpty(date) && dateIsOld(date,"%F"))
         freez(&date);
     }
 return date;

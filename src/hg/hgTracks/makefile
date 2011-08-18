@@ -46,10 +46,10 @@ compile: compileMain
 	@echo "run 'make hgRenderTracks' to obtain that binary"
 
 compileMain: $O
-	${CC} -o $A $O ${MYLIBS} ${L}
+	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
 
 ${RENDERA}: ${RENDERO}
-	${CC} -o ${RENDERA} ${RENDERO} ${MYLIBS} ${L}
+	${CC} ${CFLAGS} -o ${RENDERA} ${RENDERO} ${MYLIBS} ${L}
 
 # install of RENDERA is not enabled yet.
 #	When it is desired, would need three different targets:
