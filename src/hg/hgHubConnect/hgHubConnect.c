@@ -259,6 +259,25 @@ printf("</div>");
 hDisconnectCentral(&conn);
 }
 
+static void tryHubOpen(unsigned id)
+/* try to open hub, leaks trackHub structure */
+{
+/* try opening this again to reset error */
+struct errCatch *errCatch = errCatchNew();
+struct trackHub *tHub;
+if (errCatchStart(errCatch))
+    tHub = trackHubFromId(id);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    hubSetErrorMessage( errCatch->message->string, id);
+else
+    hubSetErrorMessage(NULL, id);
+errCatchFree(&errCatch);
+
+tHub = NULL;
+}
+
+
 static void doResetHub(struct cart *theCart)
 {
 char *url = cartOptionalString(cart, hgHubDataText);
@@ -266,20 +285,7 @@ char *url = cartOptionalString(cart, hgHubDataText);
 if (url != NULL)
     {
     unsigned id = hubResetError(url);
-
-    /* try opening this again to reset error */
-    struct errCatch *errCatch = errCatchNew();
-    struct trackHub *tHub;
-    if (errCatchStart(errCatch))
-	tHub = trackHubFromId(id);
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	hubSetErrorMessage( errCatch->message->string, id);
-    else
-	hubSetErrorMessage(NULL, id);
-    errCatchFree(&errCatch);
-
-    tHub = NULL;
+    tryHubOpen(id);
     }
 else
     errAbort("must specify url in %s\n", hgHubDataText);
@@ -365,7 +371,10 @@ printf("</div>\n");
 makeGenomePrint();
 
 // check to see if we have any new hubs
-boolean gotNew = hubCheckForNew(database, cart);
+unsigned newId = hubCheckForNew(database, cart);
+
+if (newId)
+    tryHubOpen(newId);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
@@ -409,7 +418,7 @@ cgiMakeButton("Submit", "Load Selected Hubs");
 printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</A> to add a public hub.</span>\n");
 printf("</div>");
 
-if (gotNew || gotDisconnect) // make MyHubs the default tab
+if ((newId != 0) || gotDisconnect) // make MyHubs the default tab
     {
     printf("<script type='text/javascript'>\n ");
     printf("var $tabs = $('#tabs').tabs();\n");
