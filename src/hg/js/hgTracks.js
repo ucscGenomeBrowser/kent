@@ -26,14 +26,20 @@ var contextMenu;
 
 /* Data passed in from CGI via the hgTracks object:
  *
+ * string cgiVersion          // CGI_VERSION
  * string chromName           // current chromosome
  * int winStart               // genomic start coordinate (0-based, half-open)
  * int winEnd                 // genomic end coordinate
- * int newWinWidth            // new width if user clicks on the top ruler (in bps)
+ * int newWinWidth            // new width (in bps) if user clicks on the top ruler
  * boolean dragSelection      // true if we should allow drag and select
  * boolean revCmplDisp        // true if we are in reverse display
  * int insideX                // width of side-bar (in pixels)
  * int rulerClickHeight       // height of ruler (in pixels)
+ * boolean dragSelection      // true if drag-and-select turned on
+ * boolean inPlaceUpdate      // true if in-place-update is turned on
+ * int imgBox*                // various drag-scroll values
+ * boolean measureTiming      // true if measureTiming is on
+ * Object trackDb             // hash of trackDb entries for tracks which are visible on current page
  */
 
 function initVars()
@@ -145,7 +151,7 @@ function markAsDirtyPage()
 { // Page is marked as dirty so that the backbutton can be overridden
     var dirty = $('#dirty');
     if (dirty != undefined && dirty.length != 0)
-        $(dirty).val('yes');
+        $(dirty).val('true');
 }
 
 function isDirtyPage()
@@ -154,7 +160,7 @@ function isDirtyPage()
 
     var dirty = $('#dirty');
     if (dirty != undefined && dirty.length > 0) {
-        if ($(dirty).val() == 'yes')
+        if ($(dirty).val() == 'true')
             return true;
     }
     return false;
@@ -396,6 +402,7 @@ function toggleTrackGroupVisibility(button, prefix)
 {
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
+    markAsDirtyPage();
         if(arguments.length > 2)
 	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
         else
@@ -406,6 +413,7 @@ function setAllTrackGroupVisibility(newState)
 {
 // Set visibility of all track groups to newState (true means expanded).
 // This code also modifies the corresponding hidden fields and the gif's of the +/- img tag.
+    markAsDirtyPage();
     $("img[id$='_button']").each( function (i) {
         if(this.src.indexOf("/remove") > 0 || this.src.indexOf("/add") > 0)
             toggleTrackGroupVisibility(this,this.id.substring(0,this.id.length - 7),newState); // clip '_button' suffix
@@ -1030,8 +1038,14 @@ jQuery.fn.panImages = function(){
 
     function initialize(){
 
-        if ( !($.browser.msie) ) // IE will override map items cursors as well!
-            $(pan).parents('td.tdData').css('cursor',"url(../images/grabber.cur),w-resize");
+        $(pan).parents('td.tdData').mousemove(function(e) {
+            if (e.shiftKey)
+                $(this).css('cursor',"crosshair");  // shift-dragZoom
+            else if ( $.browser.msie )     // IE will override map item cursors if this gets set
+                $(this).css('cursor',"");  // normal pointer when not over clickable item
+            else
+                $(this).css('cursor',"url(../images/grabber.cur),w-resize");  // dragScroll
+        });
 
         panAdjustHeight(prevX);
 
@@ -1341,7 +1355,7 @@ jQuery.jStore && jQuery.jStore.ready(function(engine) {
     // wait for the storage engine to be ready.
     engine.ready(function(){
         var engine = this;
-        var newToken = document.getElementById("hgt.token").value;
+        var newToken = hgTracks.time;
         if(newToken) {
             var oldToken = engine.get("token");
             if(oldToken && oldToken == newToken) {
@@ -1387,16 +1401,14 @@ $(document).ready(function()
     // The page may be reached via browser history (back button)
     // If so, then this code should detect if the image has been changed via js/ajax
     // and will reload the image if necessary.
-    initVars();
     if (isDirtyPage()) {
+        // mark as non dirty to avoid infinite loop in chrome.
+        $('#dirty').val('false');
         jQuery('body').css('cursor', 'wait');
-        if(inPlaceUpdate)
-            navigateInPlace("", null);
-        else {
             window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
             return false;
         }
-    }
+    initVars();
     var db = getDb();
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         if(newJQuery) {
@@ -1443,8 +1455,9 @@ $(document).ready(function()
     }
 
     if(jQuery.jStore) {
-        // Experimental (currently dead) code to handle "user hits back button" problem.
-        if(false) {
+        // Experimental code to handle "user hits back button" problem by reloading the page based on the user's cart
+        if(jQuery.browser.msie && jQuery.browser.version < 8) {
+            // IE 7 requires flash to support jStore.
             jQuery.extend(jQuery.jStore.defaults, {
                               project: 'hgTracks',
                               engine: 'flash',
@@ -1948,6 +1961,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                 initImgTblButtons();
                 loadImgAreaSelect(false);
             }
+            markAsDirtyPage();
         }
     } else if (cmd == 'hideComposite') {
         var rec = hgTracks.trackDb[id];
@@ -1962,6 +1976,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
             setCartVar(rec.parentTrack, 'hide' );
             initImgTblButtons();
             loadImgAreaSelect(false);
+            markAsDirtyPage();
             }
         }
         //else
@@ -1987,6 +2002,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
             $('#tr_' + id).remove();
             initImgTblButtons();
             loadImgAreaSelect(false);
+            markAsDirtyPage();
         } else if (!mapIsUpdateable) {
             jQuery('body').css('cursor', 'wait');
             if(selectUpdated) {

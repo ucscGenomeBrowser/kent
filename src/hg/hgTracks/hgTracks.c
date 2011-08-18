@@ -4950,7 +4950,7 @@ if (!hideControls)
 	 * so that zoom/scrolling always has current position to work
 	 * from. */
     #if IN_PLACE_UPDATE
-        hPrintf("<INPUT TYPE='text' style='display:none;' id='dirty' VALUE='no'>");
+        hPrintf("<INPUT TYPE='text' style='display:none;' id='dirty' VALUE='false'>");
     #endif/// IN_PLACE_UPDATE
 	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
