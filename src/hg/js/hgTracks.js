@@ -145,7 +145,7 @@ function markAsDirtyPage()
 { // Page is marked as dirty so that the backbutton can be overridden
     var dirty = $('#dirty');
     if (dirty != undefined && dirty.length != 0)
-        $(dirty).val('yes');
+        $(dirty).val('true');
 }
 
 function isDirtyPage()
@@ -154,7 +154,7 @@ function isDirtyPage()
 
     var dirty = $('#dirty');
     if (dirty != undefined && dirty.length > 0) {
-        if ($(dirty).val() == 'yes')
+        if ($(dirty).val() == 'true')
             return true;
     }
     return false;
@@ -1387,16 +1387,14 @@ $(document).ready(function()
     // The page may be reached via browser history (back button)
     // If so, then this code should detect if the image has been changed via js/ajax
     // and will reload the image if necessary.
-    initVars();
     if (isDirtyPage()) {
+        // mark as non dirty to avoid infinite loop in chrome.
+        $('#dirty').val('false');
         jQuery('body').css('cursor', 'wait');
-        if(inPlaceUpdate)
-            navigateInPlace("", null);
-        else {
-            window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
-            return false;
-        }
+        window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
+        return false;
     }
+    initVars();
     var db = getDb();
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         if(newJQuery) {
