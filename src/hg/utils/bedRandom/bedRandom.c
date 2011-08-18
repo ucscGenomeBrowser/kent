@@ -88,7 +88,7 @@ for (;;)
 	        {
 		++itemCount;
 		boolean negStrand = rand() % 2;
-		fprintf(f, "%s\t%lld\t%lld\trand%d\t%c\n",
+		fprintf(f, "%s\t%lld\t%lld\trand%d\t0\t%c\n",
 			chrom->name, start, end, itemCount, (negStrand ? '-' : '+'));
 		}
 	    break;
