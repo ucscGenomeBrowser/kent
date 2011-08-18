@@ -484,6 +484,8 @@ struct section *sectionList = NULL;
 printDescription(curGeneId, conn);
 sectionList = loadSectionList(conn);
 printIndex(sectionList);
+struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
+printUpdateTime(database, tdb, NULL);
 printSections(sectionList, conn, curGeneId);
 }
 
