@@ -1,6 +1,6 @@
 import sys
 import re
-from ordereddict.OrderedDict import *
+from ucscgenomics.ordereddict.OrderedDict import *
 	
 class SoftFile(OrderedDict):
 
@@ -95,7 +95,7 @@ class SoftFile(OrderedDict):
 class HighThroughputSoftFile(SoftFile):
 
 	def __init__(self, filePath=''):
-		SoftFile__init__(self, filePath)
+		SoftFile.__init__(self, filePath)
 
 	def readStanza(self, stanza):
 		if stanza[0].startswith('^SAMPLE'):
@@ -112,7 +112,7 @@ class HighThroughputSoftFile(SoftFile):
 class MicroArraySoftFile(SoftFile):
 
 	def __init__(self, filePath=''):
-		SoftFile__init__(self, filePath)
+		SoftFile.__init__(self, filePath)
 		
 	def readStanza(self, stanza):
 		if stanza[0].startswith('^SAMPLE'):
@@ -346,7 +346,8 @@ class SeriesStanza(SoftStanza):
 			'!Series_repeats': KeyZeroPlusNumbered,
 			'!Series_repeats_sample_list': KeyZeroPlusNumbered,
 			'!Series_sample_id': KeyOnePlus,
-			'!Series_geo_accession': KeyOptional
+			'!Series_geo_accession': KeyOptional,
+			'!Series_gp_id': KeyOptional
 		}
 				
 		SoftStanza.__init__(self, keys)

@@ -1,6 +1,6 @@
 import sys
 import re
-from ordereddict.OrderedDict import *
+from ucscgenomics.ordereddict.OrderedDict import *
 
 class RaFile(OrderedDict):
 	"""
@@ -49,7 +49,17 @@ class RaFile(OrderedDict):
 				stanza = list()
 
 		if len(stanza) > 0:
-			raise IOError('File is not newline terminated')
+			if keyValue == '':
+				keyValue, name, entry = self.readStanza(stanza)
+			else:
+				testKey, name, entry = self.readStanza(stanza)
+				if entry != None and keyValue != testKey:
+					raise KeyError('Inconsistent Key ' + testKey)
+			
+			if entry != None:
+				if name in self:
+					raise KeyError('Duplicate Key ' + name)
+				self[name] = entry
 
 		file.close()
 
@@ -114,12 +124,12 @@ class RaStanza(OrderedDict):
 		"""
 
 		for line in stanza:
-			self.__readLine(line)
+			self.readLine(line)
 
-		return self.__readName(stanza[0])
+		return self.readName(stanza[0])
 
 
-	def __readName(self, line):
+	def readName(self, line):
 		"""
 		Extracts the Stanza's name from the value of the first line of the
 		stanza.
@@ -132,25 +142,21 @@ class RaStanza(OrderedDict):
 		self._name = names[1]
 		return names
 
-	def __readLine(self, line):
+	def readLine(self, line):
 		"""
 		Reads a single line from the stanza, extracting the key-value pair
 		""" 
 
 		if line.startswith('#') or line == '':
 			OrderedDict.append(self, line)
-			#self._OrderedDict__ordering.append(line)
 		else:
 			raKey = line.split(' ', 1)[0]
 			raVal = ''
 			if (len(line.split(' ', 1)) == 2):
 				raVal = line.split(' ', 1)[1]
-			#raKey, raVal = map(str, line.split(' ', 1))
+			#if raKey in self:
+				#raise KeyError(raKey + ' already exists')
 			self[raKey] = raVal
-
-
-	def iter(self):
-		pass
 
 
 	def iterkeys(self):
@@ -171,6 +177,10 @@ class RaStanza(OrderedDict):
 				yield item, self[item]
 
 
+	def iter(self):
+		iterkeys(self)
+				
+				
 	def __str__(self):
 		str = ''
 		for key in self:

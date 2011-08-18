@@ -15709,7 +15709,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHek293tInputUcdAln
 objType file
 antibody Input
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -15732,7 +15732,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293tInputUcdRawData
 objType file
 antibody Input
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -15755,7 +15755,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293tInputUcdSig
 objType table
 antibody Input
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -15780,7 +15780,7 @@ view Signal
 metaObject wgEncodeSydhTfbsHek293tZnf263UcdAlnRep1
 objType file
 antibody ZNF263
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -15804,7 +15804,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293tZnf263UcdAlnRep2
 objType file
 antibody ZNF263
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -15828,7 +15828,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293tZnf263UcdPk
 objType table
 antibody ZNF263
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -15853,7 +15853,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsHek293tZnf263UcdRawDataRep1
 objType file
 antibody ZNF263
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -15878,7 +15878,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293tZnf263UcdRawDataRep2
 objType file
 antibody ZNF263
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -15903,7 +15903,7 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293tZnf263UcdSig
 objType table
 antibody ZNF263
-cell T-REx-HEK293
+cell HEK293-T-REx
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001784
@@ -45844,7 +45844,7 @@ view Signal
 metaObject wgEncodeSydhTfbsPbdefetalGata1UcdAlnRep1
 objType file
 antibody GATA-1
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -45868,7 +45868,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsPbdefetalGata1UcdAlnRep2
 objType file
 antibody GATA-1
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -45892,7 +45892,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsPbdefetalGata1UcdPk
 objType table
 antibody GATA-1
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -45917,7 +45917,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsPbdefetalGata1UcdRawDataRep1
 objType file
 antibody GATA-1
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -45941,7 +45941,7 @@ view RawData
 metaObject wgEncodeSydhTfbsPbdefetalGata1UcdRawDataRep2
 objType file
 antibody GATA-1
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -45965,7 +45965,7 @@ view RawData
 metaObject wgEncodeSydhTfbsPbdefetalGata1UcdSig
 objType table
 antibody GATA-1
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -45990,7 +45990,7 @@ view Signal
 metaObject wgEncodeSydhTfbsPbdefetalInputUcdAln
 objType file
 antibody Input
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -46013,7 +46013,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsPbdefetalInputUcdRawData
 objType file
 antibody Input
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -46036,7 +46036,7 @@ view RawData
 metaObject wgEncodeSydhTfbsPbdefetalInputUcdSig
 objType table
 antibody Input
-cell FetalPBDE
+cell PBDEFetal
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
@@ -47005,4 +47005,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 221242619
+# MAGIC: -43623061
