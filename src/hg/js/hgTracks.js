@@ -1341,7 +1341,7 @@ jQuery.jStore && jQuery.jStore.ready(function(engine) {
     // wait for the storage engine to be ready.
     engine.ready(function(){
         var engine = this;
-        var newToken = document.getElementById("hgt.token").value;
+        var newToken = hgTracks.time;
         if(newToken) {
             var oldToken = engine.get("token");
             if(oldToken && oldToken == newToken) {
@@ -1441,8 +1441,9 @@ $(document).ready(function()
     }
 
     if(jQuery.jStore) {
-        // Experimental (currently dead) code to handle "user hits back button" problem.
-        if(false) {
+        // Experimental code to handle "user hits back button" problem by reloading the page based on the user's cart
+        if(jQuery.browser.msie && jQuery.browser.version < 8) {
+            // IE 7 requires flash to support jStore.
             jQuery.extend(jQuery.jStore.defaults, {
                               project: 'hgTracks',
                               engine: 'flash',
