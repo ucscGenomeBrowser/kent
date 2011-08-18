@@ -2318,11 +2318,11 @@ if (withLeftLabels)
             y += REMOTE_TRACK_HEIGHT;
         else
             {
-        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox && track->limitedVis != tvDense)
                 y += sliceHeight;
             else
-        #endif ///defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
                 y = doLeftLabels(track, hvgSide, font, y);
             }
         }
@@ -2480,11 +2480,11 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
-    #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL && (theImgBox == NULL || track->limitedVis == tvDense))
-    #else ///!defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+    #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
-    #endif ///!defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+    #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
             y = doOwnLeftLabels(track, hvgSide, font, y);
         else
             y += trackPlusLabelHeight(track, fontHeight);
@@ -2539,7 +2539,7 @@ if(sameString(cartUsualString(cart, "hgt.contentType", "html"), "png"))
     if(fd == NULL)
         // fail some other way (e.g. HTTP 500)?
         errAbort("Couldn't open png for reading");
-    while(TRUE) 
+    while(TRUE)
         {
         size_t n = fread(buf, 1, sizeof(buf), fd);
         if(n)
@@ -3423,7 +3423,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         if (errCatchStart(errCatch))
 	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
         errCatchEnd(errCatch);
-	if (errCatch->gotError)
+        if (errCatch->gotError)
 	    hubSetErrorMessage( errCatch->message->string, hub->id);
 	else
 	    hubSetErrorMessage(NULL, hub->id);
@@ -4949,6 +4949,9 @@ if (!hideControls)
 	 * we need to repeat the position in a hidden variable here
 	 * so that zoom/scrolling always has current position to work
 	 * from. */
+    #if IN_PLACE_UPDATE
+        hPrintf("<INPUT TYPE='text' style='display:none;' id='dirty' VALUE='no'>");
+    #endif/// IN_PLACE_UPDATE
 	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
 	    hPrintf("\n%s", trackGroupsHidden1->string);
