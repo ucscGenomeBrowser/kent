@@ -396,16 +396,18 @@ function toggleTrackGroupVisibility(button, prefix)
 {
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
-        if(arguments.length > 2)
-	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
-        else
-	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false);
+    markAsDirtyPage()
+    if(arguments.length > 2)
+        return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
+    else
+        return setTableRowVisibility(button, prefix, "hgtgroup", "group", false);
 }
 
 function setAllTrackGroupVisibility(newState)
 {
 // Set visibility of all track groups to newState (true means expanded).
 // This code also modifies the corresponding hidden fields and the gif's of the +/- img tag.
+    markAsDirtyPage()
     $("img[id$='_button']").each( function (i) {
         if(this.src.indexOf("/remove") > 0 || this.src.indexOf("/add") > 0)
             toggleTrackGroupVisibility(this,this.id.substring(0,this.id.length - 7),newState); // clip '_button' suffix
