@@ -364,6 +364,8 @@ printf(
    "configure page. For more information, see the "
    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
    "User's Guide</A>.</P>\n"
+   "<P>NOTE: Because Track Hubs are created and maintained by external sources,"
+   " UCSC cannot be held responsible for their content.</P>"
    );
 printf("</div>\n");
 
