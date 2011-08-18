@@ -403,10 +403,10 @@ function toggleTrackGroupVisibility(button, prefix)
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
     markAsDirtyPage();
-    if(arguments.length > 2)
-        return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
-    else
-        return setTableRowVisibility(button, prefix, "hgtgroup", "group", false);
+        if(arguments.length > 2)
+	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
+        else
+	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false);
 }
 
 function setAllTrackGroupVisibility(newState)
@@ -1038,8 +1038,14 @@ jQuery.fn.panImages = function(){
 
     function initialize(){
 
-        if ( !($.browser.msie) ) // IE will override map items cursors as well!
-            $(pan).parents('td.tdData').css('cursor',"url(../images/grabber.cur),w-resize");
+        $(pan).parents('td.tdData').mousemove(function(e) {
+            if (e.shiftKey)
+                $(this).css('cursor',"crosshair");  // shift-dragZoom
+            else if ( $.browser.msie )     // IE will override map item cursors if this gets set
+                $(this).css('cursor',"");  // normal pointer when not over clickable item
+            else
+                $(this).css('cursor',"url(../images/grabber.cur),w-resize");  // dragScroll
+        });
 
         panAdjustHeight(prevX);
 
@@ -1399,9 +1405,9 @@ $(document).ready(function()
         // mark as non dirty to avoid infinite loop in chrome.
         $('#dirty').val('false');
         jQuery('body').css('cursor', 'wait');
-        window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
-        return false;
-    }
+            window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
+            return false;
+        }
     initVars();
     var db = getDb();
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
