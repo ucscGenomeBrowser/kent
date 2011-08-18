@@ -1401,6 +1401,7 @@ $(document).ready(function()
     // The page may be reached via browser history (back button)
     // If so, then this code should detect if the image has been changed via js/ajax
     // and will reload the image if necessary.
+    // NOTE: this is needed for IE but other browsers can detect the dirty page much earlier
     if (isDirtyPage()) {
         // mark as non dirty to avoid infinite loop in chrome.
         $('#dirty').val('false');
