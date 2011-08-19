@@ -228,7 +228,8 @@ static unsigned short *clusterChroms(const struct vcfFile *vcff, int centerIx,
 {
 int len = slCount(vcff->records);
 // Limit the number of variants that we compare, to keep from timing out:
-const int maxVariantsPerSide = 50;
+// (really what we should limit is the number of distinct haplo's passed to hacTree!)
+const int maxVariantsPerSide = 20;
 int startIx = max(0, centerIx - maxVariantsPerSide);
 int endIx = min(len, centerIx+1 + maxVariantsPerSide);
 double alpha = 0.5;
@@ -390,6 +391,9 @@ int pixIx;
 for (pixIx = 0;  pixIx < tg->height;  pixIx++)
     {
     int gtHapOrderIxStart = round(hapsPerPix * pixIx);
+    // Watch out for overflow:
+    if (gtHapOrderIxStart >= gtHapCount)
+	break;
     int gtHapOrderIxEnd = round(hapsPerPix * (pixIx + 1));
     if (gtHapOrderIxEnd == gtHapOrderIxStart)
 	gtHapOrderIxEnd++;

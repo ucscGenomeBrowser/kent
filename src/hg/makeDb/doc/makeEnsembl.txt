@@ -928,6 +928,49 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/;"
     # 28758401 bases of 2231332019 (1.289%) in intersection
 
 ############################################################################
+#  susScr2 - Pig - lifted susScr1 v63 genes to susScr2 (DONE - 2011-04-21 - Hiram)
+    mkdir /hive/data/genomes/susScr2/bed/ensGene.63
+    cd /hive/data/genomes/susScr2/bed/ensGene.63
+    ln -s ../../../susScr1/bed/ensGene.63/process/susScr1.allGenes.gp.gz .
+    zcat susScr1.allGenes.gp.gz > susScr1.allGenes.genePred
+    ln -s ../../../susScr1/bed/liftOver/susScr1ToSusScr2.over.chain.gz
+    zcat susScr1ToSusScr2.over.chain.gz > susScr1ToSusScr2.over.chain
+    liftOver -genePred susScr1.allGenes.genePred \
+        susScr1ToSusScr2.over.chain \
+        susScr2.allGenes.gp susScr1.liftOver.unMapped.txt
+    gzip susScr2.allGenes.gp
+    genePredCheck -db=susScr2 susScr2.allGenes.gp.gz
+    #	checked: 22017 failed: 0
+
+    hgLoadGenePred  -genePredExt susScr2 \
+	ensGene susScr2.allGenes.gp.gz > loadGenePred.errors.txt 2>&1
+
+    zcat \
+../../../susScr1/bed/ensGene.63/download/Sus_scrofa.Sscrofa9.63.pep.all.fa.gz \
+        | sed -e 's/^>.* transcript:/>/; s/ CCDS.*$//;' \
+	| gzip > ensPep.txt.gz
+    zcat ensPep.txt.gz \
+	| ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+	     | sed -e '/^$/d; s/*$//' | sort > ensPep.susScr2.fa.tab
+    hgPepPred susScr2 tab ensPep ensPep.susScr2.fa.tab
+    ln -s ../../../susScr1/bed/ensGene.63/process/ensGtp.tab .
+    hgLoadSqlTab susScr2 ensGtp ~/kent/src/hg/lib/ensGtp.sql ensGtp.tab
+    ln -s ../../../susScr1/bed/ensGene.63/process/ensembl*.* .
+    hgLoadSqlTab susScr2 ensemblSource ensemblSource.sql ensemblSource.tab
+    hgLoadSqlTab susScr2 ensemblToGeneName ensemblToGeneName.sql \
+	ensemblToGeneName.tab
+
+    hgsql -e 'INSERT INTO trackVersion \
+	(db, name, who, version, updateTime, comment, source, dateReference) \
+	VALUES("susScr2", "ensGene", "hiram", "63", now(), \
+        "dentical to previous version 60", \
+        "lifted susScr1 to susScr2 ftp://ftp.ensembl.org/pub/release-63/gtf/sus_scrofa/Sus_scrofa.Sscrofa9.63.gtf.gz", \
+        "current" );' hgFixed
+
+    featureBits susScr2 ensGene
+    #	28702434 bases of 2231298548 (1.286%) in intersection
+
+############################################################################
 #  taeGut1 - Zebra finch - Ensembl Genes version 63  (DONE - 2011-08-15 -
 #  hiram)
     ssh hgwdev

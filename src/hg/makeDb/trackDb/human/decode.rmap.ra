@@ -10,6 +10,7 @@ viewLimits 0:10
 maxHeightPixels 100:36:11
 visibility hide
 subGroup1 view Views male=Male female=Female avg=Sex_Average diff=Sex_Difference hot=Hot_Spots
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr16,chr14,chr15,chr17,chr18,chr19,chr20,chr22,chr21
 
     track avgView
     view avg
@@ -59,7 +60,7 @@ subGroup1 view Views male=Male female=Female avg=Sex_Average diff=Sex_Difference
 	parent femaleView
 	subGroups view=female
 	type bigWig 0.0 90.808
-	color 255,0,255
+	color 200,60,200
 	configurable on
 	priority 4
 
