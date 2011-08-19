@@ -5032,8 +5032,7 @@ lab Myers
 lots C1010
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
-validation CEBPD_(SC-636)(missing):human_CEBPD_SC-636_validation_Myers.pdf
-
+validation CEBPD_(SC-636)(IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
 
 term CHD2_(AB68301)
 tag CHD2
