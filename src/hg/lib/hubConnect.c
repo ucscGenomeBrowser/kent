@@ -438,7 +438,7 @@ id = getHubId(url, &errorMessage);
 return id;
 }
 
-static void getAndSetHubStatus(char *database, struct cart *cart, char *url, 
+static unsigned getAndSetHubStatus(char *database, struct cart *cart, char *url, 
     boolean set, boolean unlisted)
 {
 char *errorMessage = NULL;
@@ -447,18 +447,20 @@ unsigned id;
 if ((id = getHubId(url, &errorMessage)) == 0)
     {
     if ((id = fetchHub(database, url, unlisted)) == 0)
-	return;
+	return id;
     }
 else if (!hubHasDatabase(id, database))
     {
     warn("requested hub at %s does not have data for %s\n", url, database);
-    return;
+    return id;
     }
 
 char hubName[32];
 safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
 if (set)
     cartSetString(cart, hubName, "1");
+
+return id;
 }
 
 unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
@@ -480,19 +482,19 @@ if ((id = getHubId(url, errorMessage)) == 0)
 return id;
 }
 
-boolean hubCheckForNew(char *database, struct cart *cart)
-/* see if the user just typed in a new hub url, return TRUE if so */
+unsigned hubCheckForNew(char *database, struct cart *cart)
+/* see if the user just typed in a new hub url, return id if so */
 {
 char *url = cartOptionalString(cart, hgHubDataText);
 
 if (url != NULL)
     {
     trimSpaces(url);
-    getAndSetHubStatus(database, cart, url, TRUE, TRUE);
+    unsigned id = getAndSetHubStatus(database, cart, url, TRUE, TRUE);
     cartRemove(cart, hgHubDataText);
-    return TRUE;
+    return id;
     }
-return FALSE;
+return 0;
 }
 
 unsigned hubResetError(char *url)
