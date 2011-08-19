@@ -5416,21 +5416,21 @@ lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
 validation FOSL1_(SC-183)(Western_blot,IP-MassSpec):human_FOSL1-SC183_validation_Myers.pdf
-
-term FOSL1_(sc-605)
-tag FOSL1SC605
-type Antibody
-antibodyDescription Rabbit polyclonal antibody raised against the N-terminus of FOSL1 of rat origin.
-target FOSL1
-targetDescription The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2. These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1. As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
-vendorName Santa Cruz Biotech
-vendorId sc-605
-orderUrl http://www.scbt.com/datasheet-605-fra-1-r-20-antibody.html
-lab Wold
-lots G0109
-targetId Genecard:FOSL1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation missing
+#Not approved yet. ~Jeff
+#term FOSL1_(sc-605)
+#tag FOSL1SC605
+#type Antibody
+#antibodyDescription Rabbit polyclonal antibody raised against the N-terminus of FOSL1 of rat origin.
+#target FOSL1
+#targetDescription The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2. These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1. As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
+#vendorName Santa Cruz Biotech
+#vendorId sc-605
+#orderUrl http://www.scbt.com/datasheet-605-fra-1-r-20-antibody.html
+#lab Wold
+#lots G0109
+#targetId Genecard:FOSL1
+#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
+#validation missing
 
 term FOSL2
 tag FOSL2
@@ -5710,23 +5710,21 @@ lots DAM1540736
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
 validation missing
-
-term H3ac_(06-599)
-tag H3AC06599
-type Antibody
-antibodyDescription rabbit polyclonal antibody raised against a KLH-conjugated p
-eptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]
-STGG[K*]APRKQLC) where K* is acetylated
-target H3ac
-targetDescription missing
-vendorName Millipore
-vendorId 06-599
-orderUrl http://www.millipore.com/catalogue/item/06-599
-lab Wold
-lots missing
-targetId Genecard:HIST2H3C
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation missing
+#missing validation, not approved yet. ~Jeff
+#term H3ac_(06-599)
+#tag H3AC06599
+#type Antibody
+#antibodyDescription rabbit polyclonal antibody raised against a KLH-conjugated peptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]STGG[K*]APRKQLC) where K* is acetylated
+#target H3ac
+#targetDescription missing
+#vendorName Millipore
+#vendorId 06-599
+#orderUrl http://www.millipore.com/catalogue/item/06-599
+#lab Wold
+#lots missing
+#targetId Genecard:HIST2H3C
+#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+#validation missing
 
 term H3K4me1
 tag H3K04ME1
