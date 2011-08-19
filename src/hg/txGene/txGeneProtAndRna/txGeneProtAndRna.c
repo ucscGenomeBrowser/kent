@@ -69,7 +69,8 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     {
     info = hashMustFindVal(infoHash, bed->name);
     char *acc = hashMustFindVal(txToAccHash, bed->name);
-    bioSeq *repTxSeq, *repProtSeq, *dirTxSeq, *dirProtSeq = NULL;
+    bioSeq *repTxSeq, *repProtSeq = NULL;
+    bioSeq *dirTxSeq, *dirProtSeq = NULL;
     if (info->isRefSeq)
         {
 	char *refAcc = txAccFromTempName(bed->name);
