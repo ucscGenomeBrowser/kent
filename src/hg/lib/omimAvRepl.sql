@@ -8,6 +8,7 @@ CREATE TABLE omimAvRepl (
     dbSnpId varchar(255),	# dbSNP ID if available
               #Indices
     replStr varchar(255),	# AA replacement string
+    description varchar(255),   # description
     KEY(avId),
     KEY(omimId)
 );

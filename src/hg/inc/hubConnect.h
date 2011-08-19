@@ -110,8 +110,8 @@ void hubDisconnect(struct cart *cart, char *url);
 /* drop the information about this url from the hubStatus table, and 
  * the cart variable the references this hub */
 
-boolean hubCheckForNew(char *database, struct cart *cart);
-/* see if the user just typed in a new hub url, return TRUE if so */
+unsigned hubCheckForNew(char *database, struct cart *cart);
+/* see if the user just typed in a new hub url, return hubId if so */
 
 struct trackHub *trackHubFromId(unsigned hubId);
 /* Given a hub ID number, return corresponding trackHub structure. 
