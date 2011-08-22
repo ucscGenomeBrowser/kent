@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "twoBit.h"
 #include "dnaseq.h"
-#include "bamFile.h"
+#include "hgBam.h"
 #include "bbiFile.h"
 #include "bigWig.h"
 #include "errCatch.h"

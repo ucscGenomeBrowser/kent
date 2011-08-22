@@ -1,7 +1,7 @@
 /* bamFile -- interface to binary alignment format files using Heng Li's samtools lib. */
 
-#ifndef BAMUDC_H
-#define BAMUDC_H
+#ifndef BAMFILE_H
+#define BAMFILE_H
 
 #ifdef USE_BAM
 
@@ -34,15 +34,21 @@ typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
 #include "dystring.h"
 #endif
 
-boolean bamFileExistsUdc(char *bamFileName, char *udcFuseRoot);
+boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */
 
-samfile_t *bamOpenUdc(char *fileOrUrl, char **retBamFileName, char *udcFuseRoot);
-/* Return an open bam file, dealing with FUSE caching if need be. 
- * Return parameter if NON-null will return the file name after FUSing */
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
+/* Return an open bam file as well as the filename of the bam. */
 
-void bamFetchUdc(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-	samfile_t **pSamFile, char *udcFuseRoot);
+void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName, 
+			 char *position, bam_fetch_f callbackFunc, void *callbackData);
+/* With the open bam file, return items the same way with the callbacks as with bamFetch() */
+/* except in this case use an already-open bam file and index (use bam_index_load and free() for */
+/* the index). It seems a little strange to pass the filename in with the open bam, but */
+/* it's just used to report errors. */
+
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+	samfile_t **pSamFile);
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
  * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
@@ -129,4 +135,4 @@ char *bamGetTagString(const bam1_t *bam, char *tag, char *buf, size_t bufSize);
 void bamUnpackAux(const bam1_t *bam, struct dyString *dy);
 /* Unpack the tag:type:val part of bam into dy */
 
-#endif//ndef BAMUDC_H
+#endif//ndef BAMFILE_H
