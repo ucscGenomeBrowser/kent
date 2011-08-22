@@ -368,7 +368,7 @@ term Astrocy
 tag ASTRO
 type Cell Line
 organism human
-description normal human astrocytes (also called NH-A) PROVISIONAL
+description normal human astrocytes (also called NH-A) 
 tissue Brain
 lineage ectoderm
 vendorName Lonza
@@ -3099,7 +3099,7 @@ organism human
 tissue Nervous
 lineage ectoderm
 karyotype normal
-description normal human astrocytes (also called Astrocy) PROVISIONAL
+description normal human astrocytes (also called Astrocy)
 vendorName Lonza
 vendorId CC-2565
 orderUrl http://www.lonza.com/
@@ -4079,7 +4079,7 @@ tissue Blood
 category primaryCells
 age ageUnknown
 strain Unknown
-description Erythroblast, ter119+ cells from liver PROVISIONAL 
+description Erythroblast, ter119+ cells from liver 
 vendorName Mitch Weiss lab
 vendorId Erythroblast
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
@@ -8262,17 +8262,17 @@ description This data represents a control being compared to experiments using a
 term Control_32bp
 tag CNTRL32B
 type control
-description This data represents a control being compared to experiments using read length of 32 bp PROVISIONAL
+description This data represents a control being compared to experiments using read length of 32 bp 
 
 term Control_36bp
 tag CNTRL36B
 type control
-description This data represents a control being compared to experiments using read length of 36 bp PROVISIONAL
+description This data represents a control being compared to experiments using read length of 36 bp 
 
 term Control_50bp
 tag CNTRL50B
 type control
-description This data represents a control being compared to experiments using read length of 50 bp PROVISIONAL
+description This data represents a control being compared to experiments using read length of 50 bp 
 
 term Input
 tag INPUT
@@ -8538,27 +8538,27 @@ label MNase
 
 term Myoblast
 tag MYB
-description Grown in differentiation medium undifferediated (Wold) PROVISIONAL
+description Grown in differentiation medium undifferediated (Wold) 
 type treatment
 
 term Myocyte_24h
 tag MYC24H
-description Grown for 24 hours in differentiation medium (Wold) PROVISIONAL
+description Grown for 24 hours in differentiation medium (Wold) 
 type treatment
 
 term Myocyte_60h
 tag MYC60H
-description Grown for 60 hours in differentiation medium (Wold) PROVISIONAL
+description Grown for 60 hours in differentiation medium (Wold) 
 type treatment
 
 term Myocyte_5d
 tag MYC5D
-description Grown for 5 days in differentiation medium (Wold) PROVISIONAL
+description Grown for 5 days in differentiation medium (Wold) 
 type treatment
 
 term Myocyte_7d
 tag MYC7D
-description Grown for 7 days in differentiation medium (Wold) PROVISIONAL
+description Grown for 7 days in differentiation medium (Wold) 
 type treatment
 
 
@@ -9527,12 +9527,12 @@ description Unknown
 term revoked
 tag REVOKED
 type objStatus
-description This file has been REVOKED by the submitting laboratory for some reason.  It should not be used for further research. PROVISIONAL
+description This file has been REVOKED by the submitting laboratory for some reason.  It should not be used for further research. 
 
 term replaced
 tag REPLACED
 type objStatus
-description This file has been REPLACED by the submitting laboratory with an improved version. PROVISIONAL
+description This file has been REPLACED by the submitting laboratory with an improved version. 
 
 ## Organisms
 term human
@@ -10747,7 +10747,7 @@ term objStatus
 tag OBJSTAT   
 type typeOfTerm
 label Object Status
-description The status of the file or table object (revoked, replaced, etc)  PROVISIONAL
+description The status of the file or table object (revoked, replaced, etc)  
 searchable no
 hidden no
 cvDefined yes
