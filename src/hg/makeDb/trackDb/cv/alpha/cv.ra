@@ -10739,8 +10739,7 @@ label md5sum
 description The md5sum for the file associated with the object.
 searchable no
 cvDefined no
-validate regex: ^[0-9a-f]*$ | ^bam=[0-9a-f]*,bai=[0-9a-f]*$
-#[0-9a-f]*$\|bam=[0-9a-f]*,bai=[0-9a-f]*$  maybe this needs a \
+validate regex: ^[0-9a-f]*$\|^bam=[0-9a-f]*,bai=[0-9a-f]*$
 priority 999
 
 term objStatus
