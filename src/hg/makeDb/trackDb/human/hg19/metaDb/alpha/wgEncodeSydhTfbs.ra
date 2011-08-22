@@ -4504,6 +4504,7 @@ fileName wgEncodeSydhTfbsGm12878Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
 md5sum baa946e99406eabeb4f24296985983bf
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4529,6 +4530,7 @@ fileName wgEncodeSydhTfbsGm12878Pol2StdSig.bigWig
 grant Snyder
 lab Yale
 md5sum 3cbbea1a057b67488089a73e8a7fd3ca
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -47021,4 +47023,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 193416882
+# MAGIC: 217159950
