@@ -21,7 +21,7 @@ set Xdb = Mm9
 set ydb = canFam2
 set zdb = rheMac2
 set spDb = sp101005
-set pbDb = proteins100331
+set pbDb = proteins101005
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer5
@@ -724,8 +724,9 @@ cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.t
 # The reresentative proteins and mrnas will be taken from RefSeq for the RefSeq ones, 
 # and derived from our transcripts for the rest.
 # Load these sequences into database. Takes 17 seconds.
-txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa refToPep.tab \
-    refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa ucscGenesTx.fa ucscGenesTx.faa
+txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa \
+    refSeq.fa refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa \
+    ucscGenesTx.fa ucscGenesTx.faa
 
 
 # Generate ucscGene/uniprot blat run.
@@ -951,7 +952,7 @@ endif
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
 # 45 minutes to run.
-mkdir $dir/hgNearBlastp
+mkdir -p $dir/hgNearBlastp
 cd $dir/hgNearBlastp
 cat << _EOF_ > config.ra
 # Latest human vs. other Gene Sorter orgs:
@@ -1052,7 +1053,7 @@ gzip run.*/all.tab
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
-mkdir  rnaStruct
+mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
 # these commands take some significant time
@@ -1102,9 +1103,9 @@ mkdir -p $pfamScratch
 cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
 mkdir -p $dir/pfam
 cd $dir/pfam
-mkdir splitProt
+mkdir -p splitProt
 faSplit sequence $dir/ucscGenes.faa 10000 splitProt/
-mkdir result
+mkdir -p result
 ls -1 splitProt > prot.list
 cat << '_EOF_' > doPfam
 #!/bin/csh -ef
@@ -1156,9 +1157,9 @@ hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
-mkdir $dir/scop
+mkdir -p $dir/scop
 cd $dir/scop
-mkdir result
+mkdir -p result
 ls -1 ../pfam/splitProt > prot.list
 cat << '_EOF_' > doScop
 #!/bin/csh -ef
@@ -1280,7 +1281,7 @@ exit $status # BRACKET
 # The old pbStamp table seems OK, so no adjustment needed.
 
 # Do BioCyc Pathways build
-    mkdir $dir/bioCyc
+    mkdir -p $dir/bioCyc
     cd $dir/bioCyc
     grep -v '^#' $bioCycPathways > pathways.tab
     grep -v '^#' $bioCycGenes > genes.tab
@@ -1291,7 +1292,7 @@ exit $status # BRACKET
 #breakpoint
 
 # Do KEGG Pathways build
-    mkdir $dir/kegg
+    mkdir -p $dir/kegg
     cd $dir/kegg
 
     wget --timestamping -O hsa2.html \
@@ -1318,7 +1319,7 @@ exit $status # BRACKET
 
 # Do CGAP tables 
 
-    mkdir $dir/cgap
+    mkdir -p $dir/cgap
     cd $dir/cgap
     
     wget --timestamping -O Hs_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Hs_GeneData.dat"
@@ -1360,7 +1361,7 @@ hgsqladmin flush-tables
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
 # page, gene sorter, and proteome browser still need more tables.
-mkdir $dir/index
+mkdir -p $dir/index
 cd $dir/index
 hgKgGetText $db knownGene.text 
 ixIxx knownGene.text knownGene.ix knownGene.ixx
