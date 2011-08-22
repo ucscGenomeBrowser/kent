@@ -3005,6 +3005,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control
 md5sum bam=4a73d1b27da2c4ec65d3c46676825770,bai=1a3566d5ce05efddbfbeb265fed09edb
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3032,6 +3033,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control
 md5sum bam=dec85faf65b44d3ab8d33e0a4b1f848d,bai=b2a9ddbd496bc864f6e2faea70b0811c
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3113,6 +3115,7 @@ fileName wgEncodeSydhTfbsGm12878NfkbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 md5sum 2bd1a615859171ba5932a90f9792093d
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3139,6 +3142,7 @@ grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
 md5sum 73e3201613fb7f638a104e8de235c4ab
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3165,6 +3169,7 @@ grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
 md5sum e6c520f17cf6138d1003c128a5b08f66
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3244,6 +3249,7 @@ fileName wgEncodeSydhTfbsGm12878NfkbIggrabSig.bigWig
 grant Snyder
 lab Stanford
 md5sum 7c5f6fe46005f04129ba0af63d475eb9
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3271,6 +3277,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 md5sum bam=f4f6cd23620e64e1d11ef30807a97f65,bai=26caffdce34d8f904fe3943c19062118
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3298,6 +3305,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 md5sum bam=6cef37b54577399d804794bd49f4f946,bai=356e7ce0f730aee5fc455eb9f5613477
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3379,6 +3387,7 @@ fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 md5sum 4bf824cdf291406a4dc5d783a5b63a5c
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3405,6 +3414,7 @@ grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
 md5sum 35029320fbecc6b33fde639a063b2440
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3431,6 +3441,7 @@ grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded
 md5sum b0d934eec790fe6414f07e1a1e9903ff
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3508,6 +3519,7 @@ fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig.bigWig
 grant Snyder
 lab Stanford
 md5sum 949fe058283b7e197f02b4627ed63cf9
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3973,6 +3985,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum bam=0a3746183a82deed645674cec5dbbb37,bai=d8182e53d2dd6bd48979408f32ff97eb
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4000,6 +4013,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum bam=d202ab81b94d9e1efca9e928977f87f6,bai=ec3780b1eeef4664693eb2393736a725
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4027,6 +4041,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum bam=ae39aad4ef08e51aba5fc84691de309b,bai=073db929d7aa7ff86973bc5e02559b67
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4054,6 +4069,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum bam=938a196875dabe07694e6eaef308f0cc,bai=f2f050e9e3ebfd547d67cc4535e69e6e
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 4
@@ -4081,6 +4097,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control.
 md5sum bam=73a091e4c66231fba696810399acb1e5,bai=7adfe5ef261a5074896ef43263a4cabd
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 5
@@ -4162,6 +4179,7 @@ fileName wgEncodeSydhTfbsGm12878Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 md5sum b4f62eb38ce26a32b3b1eb1fdbae0f2d
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4188,6 +4206,7 @@ grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum 30578641eda3e3917ba71224cda1ee04
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4214,6 +4233,7 @@ grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum 286d0a3bb659e46ae55bffd211f85a03
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4240,6 +4260,7 @@ grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum edf25745594879f4b82c50b5067a7f88
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4266,6 +4287,7 @@ grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum ce00f2d669f97530a2f380fe12c0a870
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 4
@@ -4292,6 +4314,7 @@ grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control.
 md5sum a0a45be82bee0d1a0ab3500f96aecb9a
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 5
@@ -4371,6 +4394,7 @@ fileName wgEncodeSydhTfbsGm12878Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford
 md5sum 3d8773c82debcdfad9bc0f4e2c1542a4
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -47023,4 +47047,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 217159950
+# MAGIC: 502076766
