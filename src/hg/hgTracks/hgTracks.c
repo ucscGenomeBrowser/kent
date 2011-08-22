@@ -60,6 +60,26 @@
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
+/* Other than submit and Submit all these vars should start with hgt.
+ * to avoid weeding things out of other program's namespaces.
+ * Because the browser is a central program, most of it's cart
+ * variables are not hgt. qualified.  It's a good idea if other
+ * program's unique variables be qualified with a prefix though. */
+char *excludeVars[] = { "submit", "Submit", "hgt.reset",
+            "hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
+            "hgt.out1", "hgt.out2", "hgt.out3",
+            "hgt.left1", "hgt.left2", "hgt.left3",
+            "hgt.right1", "hgt.right2", "hgt.right3",
+            "hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
+            "hgt.tui", "hgt.hideAll", "hgt.visAllFromCt",
+	    "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
+	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
+	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
+            "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
+             TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
+            "hgt.contentType",
+            NULL };
+
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
 boolean baseShowPos;           /* TRUE if should display full position at top of base track */
@@ -4720,7 +4740,7 @@ if (cgiVarExists("hgt.nextItem"))
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
-if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cgiVarExists("hgt.imageV1"))
+if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
     // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
     // Set up imgBox dimensions
@@ -5529,7 +5549,7 @@ withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
-if (!cgiVarExists("hgt.imageV1"))
+if (!cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
 
 withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
@@ -5901,7 +5921,7 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
-measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
+measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);
