@@ -2716,9 +2716,6 @@ function handleUpdateTrackMap(response, status)
                         //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                     }
                 }
-                if(hgTracks.measureTiming) {
-                    updateTiming(response);
-                }
                 hgTracks = json;
                 originalPosition = undefined;
                 initVars();
@@ -2778,6 +2775,9 @@ function handleUpdateTrackMap(response, status)
         if(b[1]) {
             $('#chrom').attr('src', b[1]);
         }
+    }
+    if(hgTracks.measureTiming) {
+        updateTiming(response);
     }
     if(this.disabledEle) {
         this.disabledEle.attr('disabled', '');
