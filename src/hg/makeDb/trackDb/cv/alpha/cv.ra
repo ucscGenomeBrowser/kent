@@ -5032,7 +5032,7 @@ lab Myers
 lots C1010
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
-validation CEBPD_(SC-636)(IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
+validation CEBPD_(SC-636)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
 
 term CHD2_(AB68301)
 tag CHD2
@@ -5327,7 +5327,7 @@ vendorId sc-13030
 lab Farnham
 targetId GeneCard:ELK4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4
-validation ELK4(missing):human_ELK4_validation_Farnham.pdf
+validation ELK4(WesternBlot, ChIPseq):human_ELK4_validation_Farnham.pdf
 
 term ERalpha_a
 tag ERAA
@@ -10739,7 +10739,7 @@ label md5sum
 description The md5sum for the file associated with the object.
 searchable no
 cvDefined no
-validate regex: ^[0-9a-f]*$
+validate regex: ^[0-9a-f]*$\|^bam=[0-9a-f]*,bai=[0-9a-f]*$
 priority 999
 
 term objStatus
