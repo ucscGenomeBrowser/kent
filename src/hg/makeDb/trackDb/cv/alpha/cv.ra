@@ -5708,21 +5708,21 @@ lots DAM1540736
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
 validation missing
-#missing validation, not approved yet. ~Jeff
-#term H3ac_(06-599)
-#tag H3AC06599
-#type Antibody
-#antibodyDescription rabbit polyclonal antibody raised against a KLH-conjugated peptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]STGG[K*]APRKQLC) where K* is acetylated
-#target H3ac
-#targetDescription missing
-#vendorName Millipore
-#vendorId 06-599
-#orderUrl http://www.millipore.com/catalogue/item/06-599
-#lab Wold
-#lots missing
-#targetId Genecard:HIST2H3C
-#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-#validation missing
+
+term H3ac_(06-599)
+tag H3AC06599
+type Antibody
+antibodyDescription rabbit polyclonal antibody raised against a KLH-conjugated peptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]STGG[K*]APRKQLC) where K* is acetylated
+target H3ac
+targetDescription missing
+vendorName Millipore
+vendorId 06-599
+orderUrl http://www.millipore.com/catalogue/item/06-599
+lab Wold
+lots missing
+targetId Genecard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation missing
 
 term H3K4me1
 tag H3K04ME1
@@ -6356,8 +6356,7 @@ validation missing
 term MyoD_(sc-32758)
 tag MYODSC32758
 type Antibody
-antibodyDescription mouse monoclonal antibody raised against recombinant MyoD of
- mouse origin with an epitope mapping to amino acids 180-189
+antibodyDescription mouse monoclonal antibody raised against recombinant MyoD of mouse origin with an epitope mapping to amino acids 180-189
 target MyoD
 targetDescription This gene encodes a nuclear protein that belongs to the basic helix-loop-helix family of transcription factors and the myogenic factors subfamily. It regulates muscle cell differentiation by inducing cell cycle arrest, a prerequisite for myogenic initiation. The protein is also involved in muscle regeneration. It activates its own transcription which may stabilize commitment to myogenesis. (provided by RefSeq)
 vendorName Santa Cruz Biotech
