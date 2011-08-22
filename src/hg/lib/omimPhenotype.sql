@@ -1,4 +1,4 @@
-CREATE TABLE omimPhenotypeNew (
+CREATE TABLE omimPhenotype (
     omimId int not null,		# OMIM ID
     description blob,			# disorder description
     phenotypeId int,			# phnoteype ID

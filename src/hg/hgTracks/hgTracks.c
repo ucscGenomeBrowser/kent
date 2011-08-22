@@ -4950,7 +4950,11 @@ if (!hideControls)
 	 * so that zoom/scrolling always has current position to work
 	 * from. */
     #if IN_PLACE_UPDATE
-        hPrintf("<INPUT TYPE='text' style='display:none;' id='dirty' VALUE='no'>");
+        // This 'dirty' field is used to check if js/ajax changes to the page have occurred.
+        // If so and it is reached by the back button, a page reload will occur instead.
+        hPrintf("<INPUT TYPE='text' style='display:none;' id='dirty' VALUE='false'>\n");
+        // Unfortunately this does not work in IE, so that browser will get the reload only after this full load.
+        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == 'true') window.location = '%s?hgsid=%d';</script>\n",hgTracksName(),cart->userId);
     #endif/// IN_PLACE_UPDATE
 	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);

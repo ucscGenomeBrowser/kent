@@ -21,7 +21,7 @@
 #include "hubConnect.h"
 #include "hgTables.h"
 #include "asFilter.h"
-#include "bamFile.h"
+#include "hgBam.h"
 #include "samAlignment.h"
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"

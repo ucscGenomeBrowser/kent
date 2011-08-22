@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "cds.h"
-#include "bamFile.h"
+#include "hgBam.h"
 #include "wigCommon.h"
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"

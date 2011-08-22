@@ -41,10 +41,10 @@ The mappings displayed in this track are based on OMIM gene entries, their Entre
 the corresponding RefSeq Gene locations:
 <UL>
 <LI>The data file <TT>genemap.txt</TT> from OMIM was loaded into the MySQL table <TT>omimGeneMap</TT>.
-<LI>The data file <TT>mim2gene.txt</TT> from OMIM was loaded into the MySQL table <TT>mim2gene</TT>.
+<LI>The data file <TT>mim2gene.txt</TT> from OMIM was processed and loaded into the MySQL table <TT>omim2gene</TT>.
 <LI>Entries in <TT>genemap.txt</TT> having disorder info were parsed and loaded into the 
 <TT>omimPhenotype</TT> table.
-<LI>For each OMIM gene in the <TT>mim2gene</TT> table, the
+<LI>For each OMIM gene in the <TT>omim2gene</TT> table, the
 <A HREF="http://www.ncbi.nlm.nih.gov/gene" TARGET=_blank>Entrez Gene ID</A> was used to get the
 corresponding <A HREF="http://www.ncbi.nlm.nih.gov/RefSeq/" TARGET=_blank>RefSeq Gene ID</A> via
 the <TT>refLink</TT> table, and the RefSeq ID was used to get the genomic location from the
