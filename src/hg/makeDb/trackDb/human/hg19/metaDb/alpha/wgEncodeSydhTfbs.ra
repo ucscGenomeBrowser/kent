@@ -2109,7 +2109,7 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId wgEncodeEH000771
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -2136,7 +2136,7 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId wgEncodeEH000771
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -2163,7 +2163,7 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId wgEncodeEH000771
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -2188,7 +2188,7 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId wgEncodeEH000771
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-05
@@ -2213,7 +2213,7 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId wgEncodeEH000771
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -3059,6 +3059,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control
 md5sum bam=6bbdb30bedc30b87a0fea555bbca64bf,bai=671a820a000bf2397a5a24541a669a4b
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3086,6 +3087,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control
 md5sum bam=6da37769c2ef666c4e8150817e89ab36,bai=1de4424801ccb5988a6ef91bbe7520e0
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 4
@@ -3189,6 +3191,7 @@ grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
 md5sum 60e6cda7dcde9c603b56ae26afc19f00
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3215,6 +3218,7 @@ grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
 md5sum d30a6b918355fcd0cc42a083820fee09
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 4
@@ -3254,7 +3258,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3281,7 +3285,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3308,7 +3312,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3321,6 +3325,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 md5sum bam=6bbdb30bedc30b87a0fea555bbca64bf,bai=671a820a000bf2397a5a24541a669a4b
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3335,7 +3340,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -3348,6 +3353,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 md5sum bam=6da37769c2ef666c4e8150817e89ab36,bai=1de4424801ccb5988a6ef91bbe7520e0
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 4
@@ -3362,7 +3368,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
@@ -3387,7 +3393,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3413,7 +3419,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3439,7 +3445,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3450,6 +3456,7 @@ fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 md5sum 447b804ba647faea4f99e1243c8bcbf8
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3464,7 +3471,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -3475,6 +3482,7 @@ fileName wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 md5sum 7abf9f9908e538f1438594dd0d89ad37
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 4
@@ -3489,7 +3497,7 @@ antibody NFKB
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/TNFa/Input/IgG-rab
+controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -4100,6 +4108,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum bam=3686f77fb18b24d1c1ca939529eb0561,bai=afd440e6226e4be13ddf77705e771be3
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 6
@@ -4127,6 +4136,7 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum bam=d6ec5fcc7669935c34f522e2f6342f49,bai=113404efdade41892de372ca83366303
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 7
@@ -4308,6 +4318,7 @@ grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum 29e1c960d48bbc898b3144bfec1110f7
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 6
@@ -4334,6 +4345,7 @@ grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 md5sum 6a236b4f767dc6df729ba4671f870fcf
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 7
@@ -4384,6 +4396,7 @@ fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep1.fastq.gz
 grant Snyder
 lab Yale
 md5sum 6196fd472e9c73382acc57fae1421d55
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4409,6 +4422,7 @@ fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep2.fastq.gz
 grant Snyder
 lab Yale
 md5sum a5cee2ea69f2534a410b61678c457661
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4436,6 +4450,7 @@ grant Snyder
 lab Yale
 labVersion remapped from hg18
 md5sum bam=3686f77fb18b24d1c1ca939529eb0561,bai=afd440e6226e4be13ddf77705e771be3
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4463,6 +4478,7 @@ grant Snyder
 lab Yale
 labVersion remapped from hg18
 md5sum bam=d6ec5fcc7669935c34f522e2f6342f49,bai=113404efdade41892de372ca83366303
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4488,6 +4504,7 @@ fileName wgEncodeSydhTfbsGm12878Pol2StdPk.narrowPeak.gz
 grant Snyder
 lab Yale
 md5sum baa946e99406eabeb4f24296985983bf
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4513,6 +4530,7 @@ fileName wgEncodeSydhTfbsGm12878Pol2StdSig.bigWig
 grant Snyder
 lab Yale
 md5sum 3cbbea1a057b67488089a73e8a7fd3ca
+objStatus replaced
 origAssembly hg18
 project wgEncode
 setType exp
@@ -47005,4 +47023,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -43623061
+# MAGIC: 217159950

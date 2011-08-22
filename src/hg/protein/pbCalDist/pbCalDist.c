@@ -127,7 +127,7 @@ char *kgId;
 
 if (argc != 5) usage();
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZBJOU");
 
 /* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
 aa_hydro['A'] =  1.800;
