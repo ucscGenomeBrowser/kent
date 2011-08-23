@@ -167,7 +167,7 @@ o2 = mustOpen("pepResDist.tab", "w");
 conn  = hAllocConn(database);
 conn2 = hAllocConn(database);
 
-for (j=0; j<23; j++)
+for (j=0; j<strlen(aaAlphabet); j++)
     {
     aaResCnt[j] = 0;
     }
@@ -260,7 +260,7 @@ while (row2 != NULL)
     for (i=0; i<len; i++)
 	{
 	aaResFound = 0;
-	for (j=0; j<23; j++)
+	for (j=0; j<strlen(aaAlphabet); j++)
 	    {
 	    if (*chp == aaAlphabet[j])
 		{
@@ -299,7 +299,7 @@ while (row2 != NULL)
     }
 
 totalResCnt = 0;
-for (i=0; i<23; i++)
+for (i=0; i<strlen(aaAlphabet); i++)
     {
     totalResCnt = totalResCnt + aaResCnt[i];
     }

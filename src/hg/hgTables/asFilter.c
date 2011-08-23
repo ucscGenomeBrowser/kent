@@ -49,7 +49,7 @@ safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterCmpVar);
 char *cmp = cartOptionalString(cart, varName);
 safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterPatternVar);
 char *pat = cartOptionalString(cart, varName);
-if (!isEmpty(cmp) && !isEmpty(pat))
+if (!isEmpty(cmp) && !sameString(cmp, "ignored") && !isEmpty(pat))
     {
     AllocVar(filter);
     cgiToDoubleFilter(cmp, pat, &filter->op, &filter->thresholds);
@@ -66,7 +66,7 @@ safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterCmpVar);
 char *cmp = cartOptionalString(cart, varName);
 safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterPatternVar);
 char *pat = cartOptionalString(cart, varName);
-if (!isEmpty(cmp) && !isEmpty(pat))
+if (!isEmpty(cmp) && !sameString(cmp, "ignored") && !isEmpty(pat))
     {
     AllocVar(filter);
     cgiToLongFilter(cmp, pat, &filter->op, &filter->thresholds);

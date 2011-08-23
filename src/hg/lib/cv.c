@@ -23,6 +23,7 @@
 #define CV_SEARCHABLE_SINGLE_SELECT "select"
 #define CV_SEARCHABLE_MULTI_SELECT  "multiSelect"
 #define CV_SEARCHABLE_FREE_TEXT     "freeText"
+#define CV_SEARCHABLE_WILD_LIST     "wildList"
 
 const char *cvTypeNormalized(const char *sloppyTerm)
 // returns the proper term to use when requesting a typeOfTerm
@@ -221,7 +222,8 @@ while ((hEl = hashNext(&hc)) != NULL)
         if (setting == NULL
         || (   differentWord(setting,CV_SEARCHABLE_SINGLE_SELECT)
             && differentWord(setting,CV_SEARCHABLE_MULTI_SELECT)
-            && differentWord(setting,CV_SEARCHABLE_FREE_TEXT)))
+            && differentWord(setting,CV_SEARCHABLE_FREE_TEXT)
+            && differentWord(setting,CV_SEARCHABLE_WILD_LIST)))
            continue;
         }
     if (cvDefined)
@@ -259,6 +261,8 @@ if (termHash != NULL)
             return cvSearchByMultiSelect;
         if (sameWord(searchable,CV_SEARCHABLE_FREE_TEXT))
             return cvSearchByFreeText;
+        if (sameWord(searchable,CV_SEARCHABLE_WILD_LIST))
+            return cvSearchByWildList;
         if (sameWord(searchable,"date"))
             return cvSearchByDateRange;
         if (sameWord(searchable,"numeric"))

@@ -673,13 +673,13 @@ if (hTableExists(database, "arCOGs"))
 */
 
 arcogCount = 0;
-hasArCOG = false;
+hasArCOG = FALSE;
 row = NULL;
 sprintf(query, "show databases like 'arCogsDb'");
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
 {
-	hasArCOG = true;
+	hasArCOG = TRUE;
 }
 sqlFreeResult(&sr);
 

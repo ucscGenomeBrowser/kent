@@ -356,6 +356,16 @@ makeOrderedCommaFieldList(fieldList, dtfList, dy);
 slFreeList(&fieldList);
 }
 
+static void makeVcfOrderedCommaFieldList(struct joinerDtf *dtfList,
+	struct dyString *dy)
+/* Make comma-separated field list in same order as fields are in
+ * big bed. */
+{
+struct slName *fieldList = vcfGetFields(dtfList->table);
+makeOrderedCommaFieldList(fieldList, dtfList, dy);
+slFreeList(&fieldList);
+}
+
 
 struct tableJoiner
 /* List of fields in a single table. */
@@ -1001,6 +1011,8 @@ if (! doJoin)
 	makeBigBedOrderedCommaFieldList(dtfList, dy);
     else if (isBamTable(dtfList->table))
         makeBamOrderedCommaFieldList(dtfList, dy);
+    else if (isVcfTable(dtfList->table))
+        makeVcfOrderedCommaFieldList(dtfList, dy);
     else if (isCustomTrack(dtfList->table))
         makeCtOrderedCommaFieldList(dtfList, dy);
     else

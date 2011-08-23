@@ -1,7 +1,7 @@
 /* pbCalResStd- Calculate the avg frequency and standard deviation of each AA residue for the proteins in a specific genome*/
 
 #define MAXN 1000000
-#define MAXRES 23
+#define MAXRES 26
 
 #include "common.h"
 #include "hCommon.h"
@@ -15,11 +15,12 @@ void usage()
 errAbort(
   "pbCalResStd calculates the avg frequency and standard deviation of every AA residues of the proteins in a specific genome\n"
   "usage:\n"
-  "   pbCalResStd spDb taxNum gDb\n"
+  "   pbCalResStd proteinDb spDb taxNum gDb\n"
+  "      proteinDb is the protein database name\n"
   "      spDb is the SWISS-PROT database name\n"
   "      taxNumis the taxnomy number of the genome\n"
   "      gDb is the genome database name\n"
-  "Example: pbCalResStd sp050415 9606 hg17\n"
+  "Example: pbCalResStd proteins101005 sp101005 9606 hg19\n"
   );
 }
 
@@ -101,6 +102,7 @@ struct sqlResult *sr2;
 char **row2;
 char cond_str[255];
 char *proteinDatabaseName;
+char *swissprotDatabaseName;
 FILE *o1, *o2, *o3;
 FILE *fh[23];
 char temp_str[1000];;
@@ -121,13 +123,14 @@ char *taxon;
 char *database;
 int sortedCnt;
 
-if (argc != 4) usage();
+if (argc != 5) usage();
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZBJOU");
 
 proteinDatabaseName = argv[1];
-taxon = argv[2];
-database = argv[3];
+swissprotDatabaseName = argv[2];
+taxon = argv[3];
+database = argv[4];
 
 o2 = mustOpen("pbResAvgStd.tab", "w");
 
@@ -155,12 +158,12 @@ while (row2 != NULL)
     {
     protDisplayId = row2[0];   
     safef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
-    accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
+    accession = sqlGetField(swissprotDatabaseName, "displayId", "acc", cond_str);
 
     if (accession == NULL)
 	{
         safef(cond_str, sizeof(cond_str),  "acc='%s'", protDisplayId);
-    	accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
+    	accession = sqlGetField(swissprotDatabaseName, "displayId", "acc", cond_str);
 	if (accession == NULL)
 	    {
 	    verbose(2, "'%s' not found.\n", protDisplayId);
@@ -169,7 +172,7 @@ while (row2 != NULL)
 	}
     
     safef(cond_str, sizeof(cond_str),  "accession='%s'", accession);
-    answer = sqlGetField("proteins040115", "spXref2", "biodatabaseID", cond_str);
+    answer = sqlGetField(proteinDatabaseName, "spXref2", "biodatabaseID", cond_str);
     if (answer == NULL)
 	{
 	/* this protein might be a variant splice protein, and then it won't be in spXref2 */
@@ -182,7 +185,7 @@ while (row2 != NULL)
 	}
     
     safef(cond_str, sizeof(cond_str),  "acc='%s'", accession);
-    aaSeq = sqlGetField(proteinDatabaseName, "protein", "val", cond_str);
+    aaSeq = sqlGetField(swissprotDatabaseName, "protein", "val", cond_str);
     if (aaSeq == NULL)
 	{
 	printf("Can't find peptide sequence for %s, exiting ...\n", protDisplayId);
