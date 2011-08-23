@@ -928,7 +928,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/;"
     # 28758401 bases of 2231332019 (1.289%) in intersection
 
 ############################################################################
-#  susScr2 - Pig - lifted susScr1 v63 genes to susScr2 (DONE - 2011-04-21 - Hiram)
+#  susScr2 - Pig - lifted susScr1 v63 genes to susScr2 (DONE - 2011-08-17 - Hiram)
     mkdir /hive/data/genomes/susScr2/bed/ensGene.63
     cd /hive/data/genomes/susScr2/bed/ensGene.63
     ln -s ../../../susScr1/bed/ensGene.63/process/susScr1.allGenes.gp.gz .
