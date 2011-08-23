@@ -7,7 +7,7 @@
 #include "math.h"
 
 #define MAXN 20000000
-#define MAXRES 23
+#define MAXRES 26
 
 void usage()
 /* Explain usage and exit. */
@@ -118,14 +118,14 @@ int sortedCnt;
 if (argc != 2) usage();
 freq = needLargeZeroedMem(sizeof(double)*MAXN*MAXRES);
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZBJOU");
 
 sprintf(spDbName, "sp%s", argv[1]);
 sprintf(proteinsDbName, "proteins%s", argv[1]);
 
 o2 = mustOpen("pbResAvgStd.tab", "w");
 
-for (i=0; i<20; i++)
+for (i=0; i<MAXRES; i++)
     {
     safef(temp_str, sizeof(temp_str), "%c.txt", aaAlphabet[i]);
     fh[i] = mustOpen(temp_str, "w");
