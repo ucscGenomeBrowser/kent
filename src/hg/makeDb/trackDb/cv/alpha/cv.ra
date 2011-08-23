@@ -1137,7 +1137,7 @@ lineage missing
 karyotype missing
 sex M
 tissue Skin
-vendorName ATCC 
+vendorName ATCC
 vendorId CRL-1974
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1974&Template=cellBiology
 lab Crawford
@@ -2147,6 +2147,24 @@ protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf Snyder:HE
 #tier 3
 #protocol Snyder:HEK293b_Snyder_protocol.pdf
 
+term HEK293-T-REx
+tag HEK293T
+type Cell Line
+tier 3
+organism human
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line 
+lineage mesoderm
+karyotype cancer, hypotriploid, XXX
+derivedFrom HEK293
+sex F
+tissue Kidney
+vendorName Invitrogen
+vendorId r71007
+orderUrl http://products.invitrogen.com/ivgn/product/R71007
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
+protocol Farnham:T-REx-HEK293_Farnham_protocol.pdf
+
 term Hepatocytes
 tag HEPATO
 type Cell Line
@@ -2630,7 +2648,7 @@ description embryonic myoblast
 lineage missing
 karyotype missing
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980 
+vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
 sex U
 tissue Muscle
 lab Crawford
@@ -2679,7 +2697,7 @@ lineage missing
 karyotype missing
 derivedFrom HSMM_emb
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980 
+vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
 sex U
 tissue Muscle
 lab Crawford
@@ -3585,24 +3603,6 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
-term HEK293-T-REx
-tag HEK293T
-type Cell Line
-tier 3
-organism human
-description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line 
-lineage mesoderm
-karyotype cancer, hypotriploid, XXX
-derivedFrom HEK293 
-sex F
-tissue Kidney
-vendorName Invitrogen
-vendorId r71007
-orderUrl http://products.invitrogen.com/ivgn/product/R71007
-termId BTO:0000007
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
-protocol Farnham:T-REx-HEK293_Farnham_protocol.pdf
-
 term T98G
 tag T98G
 type Cell Line
@@ -3935,7 +3935,7 @@ tissue Skeletal Muscle
 category cellLine
 age immortalized
 strain C3H
-description Myoblast cell line derived from thigh muscle of C3H mice after crush injury 
+description Myoblast cell line derived from thigh muscle of C3H mice after crush injury
 vendorName Barbara Wold lab
 vendorId C2C12
 orderUrl http://woldlab.caltech.edu/
@@ -8291,10 +8291,10 @@ tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
 
-term RevXlinkChromatin 
+term RevXlinkChromatin
 tag RXLCH
 type control
-description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. 
+description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling.
 
 term None
 tag NONE
@@ -8720,7 +8720,7 @@ term Alignability
 tag ALIGNABI
 type view
 label Alignability
-description Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mapability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project. 
+description Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mapability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project.
 
 term Alignments
 tag ALN
@@ -8825,11 +8825,11 @@ type view
 label Genes De Novo
 description 'De novo' genes defined by Cufflinks with FPKM. 
 
-term GeneGencV7 
-tag GENEGENCV7 
+term GeneGencV7
+tag GENEGENCV7
 type view
-label Genes Gencode V7 
-description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format 
+label Genes Gencode V7
+description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format
 
 term GeneGencV3c
 tag GENEGENCV3C
@@ -8963,13 +8963,13 @@ term RepPeaks
 tag REPPEAKS
 type view
 label Replicate Peaks
-description Peaks determined per individual replicate  
+description Peaks determined per individual replicate
 
 term RepSignal
 tag REPSIGNAL
 type view
 label Replicate Signal
-description Signal determined per individual replicate 
+description Signal determined per individual replicate
 
 term Signal
 tag SIG
@@ -9023,13 +9023,13 @@ term TranscriptDeNovo
 tag TRANSDENOVO
 type view
 label TranscriptDeNovo
-description 'De novo' transcripts with FPKM produced by Cufflinks 
+description 'De novo' transcripts with FPKM produced by Cufflinks
 
-term TranscriptGencV7 
-tag TRANSGENCV7 
+term TranscriptGencV7
+tag TRANSGENCV7
 type view
-label Transcript Gencode V7 
-description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format 
+label Transcript Gencode V7
+description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format
 
 term TranscriptGencV3c
 tag TRANSGENCV3C
@@ -9050,7 +9050,7 @@ label TSS Gencode V3c
 description Expression level estimates for GENCODE v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
 
 term TssGencV7
-tag TssV7 
+tag TssV7
 type view
 label TSS Gencode V7
 description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
@@ -10304,6 +10304,8 @@ projectName UNC-Giddings
 #   searchable [no/select/date/numeric]  DEFAULT: NO
 #       select: drop-down selection of values discovered in mdb
 #  multiSelect: drop-down check-box list allowing selection of multiple values (e.g. [GM12878,K562] means search for either)
+#     freeText: searches by free text accept the wild card '%' and any subset of text
+#     wildList: one or more values delimited by commas ('%' wildcards accepted)
 #         date: by less than or greater than date range (not yet implemented)
 #      numeric: numeric by range (not yet implemented)
 #
@@ -10424,7 +10426,7 @@ label Cell type category
 description Cell type category, such as T for tissue, L for cell line, P for primary cells
 searchable no
 cvDefined yes
-hidden yes        
+hidden yes
 validate cv
 priority 470
 
@@ -10532,7 +10534,7 @@ tag DCCACCESSION
 type typeOfTerm
 label UCSC Accession
 description The accession number provided by the UCSC Genome Browser.
-searchable freeText
+searchable wildList
 cvDefined no
 validate regex: ^wgEncodeE[H,M][0-9]*$
 priority 312
@@ -10565,7 +10567,7 @@ tag EXPID
 type typeOfTerm
 label Experiment ID
 description The ENCODE DCC experiment identification number.
-searchable freeText
+searchable wildList
 cvDefined no
 hidden beta,public
 validate integer
@@ -10623,7 +10625,7 @@ tag GEOSAMPLE
 type typeOfTerm
 label GEO sample accession
 description GEO sample accession number applied to a single data set in a series of related data sets.
-searchable freeText
+searchable wildList
 cvDefined no
 validate regex: ^GSM[0-9]*$
 priority 345
@@ -10633,7 +10635,7 @@ tag GEOSERIES
 type typeOfTerm
 label GEO series accession
 description GEO series accession number applied to all data sets in a related series.
-searchable freeText
+searchable wildList
 cvDefined no
 validate regex: ^GSE[0-9]*$
 priority 340
@@ -10674,7 +10676,7 @@ tag LABEXPID
 type typeOfTerm
 label Lab provided identifier
 description An ID provided by a lab that uniquely identifies an experiment (dataset) to that lab.
-searchable freeText
+searchable wildList
 cvDefined no
 validate none
 priority 410
@@ -10741,15 +10743,15 @@ validate regex: ^[0-9a-f]*$\|^bam=[0-9a-f]*,bai=[0-9a-f]*$
 priority 999
 
 term objStatus
-tag OBJSTAT   
+tag OBJSTAT
 type typeOfTerm
 label Object Status
 description The status of the file or table object (revoked, replaced, etc)  
 searchable no
 hidden no
 cvDefined yes
-validate cv  
-priority 1   
+validate cv
+priority 1
 
 term obtainedBy
 tag OBTAINEDBY
@@ -10974,7 +10976,7 @@ tag SUBID
 type typeOfTerm
 label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
-searchable freeText
+searchable wildList
 cvDefined no
 validate integer
 priority 335
@@ -11026,11 +11028,11 @@ term type
 tag TYPE
 type typeOfTerm
 label File type
-description The type of the primary file associated with the object 
+description The type of the primary file associated with the object
 searchable multiSelect
 cvDefined no
 validate none
-priority 985 
+priority 985
 
 
 term uniqueness

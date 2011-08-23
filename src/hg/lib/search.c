@@ -139,7 +139,9 @@ if(numMetadataSelects)
                     slNameFreeList(&vals);
                     }
                 }
-            else if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByFreeText)
+            else if (searchBy == cvSearchBySingleSelect
+                 ||  searchBy == cvSearchByFreeText
+                 ||  searchBy == cvSearchByWildList)
                 val = cloneString(cartUsualString(cart, buf,ANYLABEL));
             //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
             //    {
@@ -229,8 +231,16 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
         }
     else if (searchBy == cvSearchByFreeText)
         {
-        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>contains</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",row,buf);
+        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>contains</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
+                       row,buf);
         dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal freeText' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracksMdbVarChanged(true);'>\n",
+                buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
+        }
+    else if (searchBy == cvSearchByWildList)
+        {
+        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is among</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
+                       row,buf);
+        dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal wildList' title='enter comma separated list of values' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracksMdbVarChanged(true);'>\n",
                 buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
         }
     //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)

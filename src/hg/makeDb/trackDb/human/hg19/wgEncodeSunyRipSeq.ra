@@ -353,16 +353,17 @@ noInherit on
         shortLabel GM12878 Input Pk
         longLabel GM12878 RIP-Input RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ripInput cellType=GM12878 rep=Pooled
-        type bed 9
+        type broadPeak
         color 153,38,0
         # subId=3306 dateSubmitted=2011-01-19
+        # was wgEncodeSunyRipSeqGm12878RipinPk cricket Tue Aug 23 08:07:49 2011
 
         track wgEncodeSunyRipSeqGm12878Elavl1Pk
         parent wgEncodeSunyRipSeqViewPeaks on
         shortLabel GM12878 ELAVL1 Pk
         longLabel GM12878 ELAVL1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ELAVL1 cellType=GM12878 rep=Pooled
-        type bed 9
+        type broadPeak
         color 153,38,0
         # subId=3306 dateSubmitted=2011-01-19
 
@@ -371,7 +372,7 @@ noInherit on
         shortLabel GM12878 PABPC1 Pk
         longLabel GM12878 PABPC1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=PABPC1 cellType=GM12878 rep=Pooled
-        type bed 9
+        type broadPeak
         color 153,38,0
         # subId=3306 dateSubmitted=2011-01-19
 
@@ -380,16 +381,17 @@ noInherit on
         shortLabel K562 Input Pk
         longLabel K562 RIP-Input RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ripInput cellType=K562 rep=Pooled
-        type bed 9
+        type broadPeak
         color 46,0,184
         # subId=3291 dateSubmitted=2011-01-18
+        # was wgEncodeSunyRipSeqK562RipinPk cricket Tue Aug 23 08:13:04 2011
 
         track wgEncodeSunyRipSeqK562Elavl1Pk
         parent wgEncodeSunyRipSeqViewPeaks on 
         shortLabel K562 ELAVL1 Pk
         longLabel K562 ELAVL1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ELAVL1 cellType=K562 rep=Pooled
-        type bed 9
+        type broadPeak
         color 46,0,184
         # subId=3291 dateSubmitted=2011-01-18
 
@@ -398,7 +400,7 @@ noInherit on
         shortLabel K562 PABPC1 Pk
         longLabel K562 PABPC1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=PABPC1 cellType=K562 rep=Pooled
-        type bed 9
+        type broadPeak
         color 46,0,184
         # subId=3291 dateSubmitted=2011-01-18
 

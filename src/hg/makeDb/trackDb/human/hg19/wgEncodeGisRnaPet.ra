@@ -27,6 +27,16 @@ wgEncode 1
     visibility full
     subTrack wgEncodeGisRnaPet
 
+        track wgEncodeGisRnaPetNhekNucleusPapClustersRep1
+        parent wgEncodeGisRnaPetViewClusters off
+        shortLabel NHEK nucl pA+ 1
+        longLabel NHEK nucleus polyA+ RNA PET Clusters Rep 1 from ENCODE/GIS 
+        subGroups view=Clusters cellType=NHEK cloned=Free localization=nucleus rnaExtract=PAP rep=rep1
+        type bed 12
+        color 179,0,134
+        # subId=4028 dateSubmitted=2011-05-05
+        # subId=2118 dateSubmitted=2010-10-09
+
         track wgEncodeGisRnaPetGm12878NucleusPapClustersRep1 
         parent wgEncodeGisRnaPetViewClusters on
         shortLabel GM12 nucl pA+ 1
@@ -410,6 +420,16 @@ wgEncode 1
         type bam
         color 224,75,0
         # subId=4031 dateSubmitted=2011-05-05
+
+        track wgEncodeGisRnaPetNhekNucleusPapAlnRep1
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel NHEK nucl pA+ A 1
+        longLabel NHEK nucleus polyA+ RNA PET Alignments Rep 1 from ENCODE/GIS
+        subGroups view=Alignments cellType=NHEK cloned=Free localization=nucleus rnaExtract=PAP rep=rep1
+        type bam
+        color 179,0,134
+        # subId=2118 dateSubmitted=2010-10-09
+        # should this be 4028
 
         track wgEncodeGisRnaPetNhekCytosolPapAlnRep1
         parent wgEncodeGisRnaPetViewAlignments off

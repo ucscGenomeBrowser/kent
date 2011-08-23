@@ -654,8 +654,8 @@ char *cloneLine = cloneString(line);
                 *end = '\0';
                 val++;
                 }
-            // handle comma separated list of vals (if unquoted)
-            if (strchr(val,',') != NULL)
+            // handle comma separated list of vals (if not framed with widcards)
+            if (strchr(val,',') != NULL && (*val != '%' || *(val + strlen(val) - 1) != '%'))
                 {
                 char * aVal = NULL;
                 while((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
@@ -1376,29 +1376,45 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
             (strchr(rootVar->var,'%')?"LIKE":"="), rootVar->var);
 
         struct mdbLimbVal *limbVal;
-        boolean multiVals = FALSE;
+        boolean multiVals = (rootVar->vals != NULL && rootVar->vals->next != NULL);
+        boolean wilds = FALSE;
+        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+            {
+            if (strchr(limbVal->val,'%') != NULL)
+                wilds = TRUE;
+            }
         for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
             {
             if(limbVal->val == NULL || strlen(limbVal->val) < 1)
                 continue;
 
-            if(!multiVals)
+            if(limbVal==rootVar->vals) // First val
                 {
-                dyStringPrintf(dy, " AND T%d.val ",tix);
+                if (wilds && multiVals)
+                    dyStringPrintf(dy, " AND (T%d.val ",tix);
+                else
+                    dyStringPrintf(dy, " AND T%d.val ",tix);
+                }
+            else                      // successive vals
+                {
+                if (wilds && multiVals)
+                    dyStringPrintf(dy, " or T%d.val ",tix);
+                else
+                    dyStringPrintf(dy, ",");
+                }
+
+            if (limbVal==rootVar->vals   // First val
+            ||  (wilds && multiVals))      // and successive if wildcards
+                {
                 if(rootVar->notEqual)
                     dyStringPrintf(dy, "%s",(strchr(limbVal->val,'%') || limbVal->next)?"NOT ":"!");
-                if(limbVal->next == NULL) // only one val
-                    {
-                    dyStringPrintf(dy, "%s '%s'",
-                        (strchr(limbVal->val,'%')?"LIKE":"="), sqlEscapeString(limbVal->val));
-                    break;
-                    }
+                if (strchr(limbVal->val,'%') != NULL)
+                    dyStringPrintf(dy, "LIKE ");
+                else if (!multiVals || wilds)
+                    dyStringPrintf(dy, "= ");
                 else
                     dyStringPrintf(dy, "IN (");
-                multiVals=TRUE;
                 }
-            else
-                dyStringPrintf(dy, ",");
             dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
             }
         if(multiVals)
@@ -3090,7 +3106,9 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     if (isEmpty(((char *)(onePair->val)))) // NOTE: All the parens are needed to get the macro to do the right thing
         continue;
     enum cvSearchable searchBy = cvSearchMethod(onePair->name);
-    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
+    if (searchBy == cvSearchByMultiSelect  // multiSelect val will be filled with a comma delimited list
+    || searchBy == cvSearchBySingleSelect
+    || searchBy == cvSearchByWildList)
         {
         if (strchr((char *)onePair->val,' '))
             dyStringPrintf(dyTerms,"%s=\"%s\" ",onePair->name,(char *)onePair->val);
