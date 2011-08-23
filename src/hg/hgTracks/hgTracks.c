@@ -2647,9 +2647,7 @@ else if (sameWord(scientificName, "Saccharomyces cerevisiae"))
 
 if (sameWord(chrName, "chrM"))
     name = "chrMt";
-localStart = start;
-localEnd = end + 1; // Ensembl base-1 display coordinates
-ensUrl = ensContigViewUrl(database, dir, name, seqBaseCount, localStart, localEnd, archive);
+ensUrl = ensContigViewUrl(database, dir, name, seqBaseCount, start+1, end, archive);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: you can not freeMem(dir) because sometimes it is a literal
  * constant */
@@ -3564,10 +3562,9 @@ else
     /* disable TB for CGB servers */
     if (!hIsCgbServer())
 	{
-	    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-	    database, chromName, winStart+1, winEnd,
-	cartSessionVarName(),
-	    cartSessionId(cart),
+	    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&%s=%u\" "
+		    "class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+		    database, cartSessionVarName(), cartSessionId(cart),
 	"Tables");
 	}
     }
@@ -3594,9 +3591,8 @@ if (!psOutput)
     if (!hIsCgbServer())
     if (liftOverChainForDb(database) != NULL)
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"");
-        hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d",
-            uiVars->string, database, chromName, winStart+1, winEnd);
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgConvert?%s&db=%s",
+		uiVars->string, database);
         hPrintf("\" class=\"topbar\">Convert</A>&nbsp;&nbsp;</TD>");
         }
     }
