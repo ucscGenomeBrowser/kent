@@ -2,110 +2,10 @@
 
 #include "common.h"
 #include "portable.h"
-#include "bamUdc.h"
+#include "bamFile.h"
 #ifdef USE_BAM
 #include "htmshell.h"
 #include "udc.h"
-
-static boolean isRegularFile(char *filename)
-/* File not only exists, but is also a file not a directory. */
-{
-struct stat mystat;
-if (stat(filename, &mystat) != 0)
-    return FALSE;
-return S_ISREG(mystat.st_mode);
-}
-
-static char *samtoolsFileNameUdcFuse(char *fileOrUrl, char *udcFuseRoot)
-/* If udcFuse is configured, and we have a URL, convert it into a filename in
- * the udcFuse filesystem for use by samtools.  Thus samtools will think it's
- * working on a local file, but udcFuse will pass access requests to udc and
- * we'll get the benefits of sparse-file local caching and https support.
- * udcFuse needs us to open udc files before invoking udcFuse paths, so open
- * both the .bam and .bai (index) URLs with udc here.  
- * If udcFuse is not configured, or fileOrUrl is not an URL, just pass through fileOrUrl. */
-{
-char *protocol = NULL, *afterProtocol = NULL, *colon = NULL, *auth = NULL;
-udcParseUrlFull(fileOrUrl, &protocol, &afterProtocol, &colon, &auth);
-if (udcFuseRoot != NULL && afterProtocol != NULL)
-    {
-    struct dyString *dy = dyStringNew(0);
-    if (auth == NULL)
-	auth = "";
-    dyStringPrintf(dy, "%s/%s/%s%s", udcFuseRoot, protocol, auth, afterProtocol);
-    char *bamFileName = dyStringCannibalize(&dy);
-    if (!isRegularFile(bamFileName))
-	{
-	verbose(2, "going to call udcFileMayOpen(%s).\n", fileOrUrl);
-	struct udcFile *udcf = udcFileMayOpen(fileOrUrl, NULL);
-	if (udcf != NULL)
-	    {
-	    udcFileClose(&udcf);
-	    verbose(2, "closed udcf. testing existence of %s.\n", bamFileName);
-	    if (!isRegularFile(bamFileName))
-		{
-		warn("Cannot find %s -- remount udcFuse?", bamFileName);
-		freeMem(bamFileName);
-		return cloneString(fileOrUrl);
-		}
-	    }
-	else
-	    {
-	    warn("Failed to open BAM URL \"%s\" with udc", fileOrUrl);
-	    freeMem(bamFileName);
-	    return cloneString(fileOrUrl);
-	    }
-	}
-    // Look for index file: xxx.bam.bai or xxx.bai.  Look for both in udcFuse,
-    // and only open the URL with udc if neither udcFuse file exists.
-    int urlLen = strlen(fileOrUrl), fLen = strlen(bamFileName);
-    char *indexFileName = needMem(fLen+5);
-    safef(indexFileName, fLen+5, "%s.bai", bamFileName);
-    if (!isRegularFile(indexFileName))
-	{
-	verbose(2, "%s does not already exist\n", indexFileName);
-	char *altIndexFileName = NULL;
-	if (endsWith(fileOrUrl, ".bam"))
-	    {
-	    altIndexFileName = cloneString(indexFileName);
-	    strcpy(altIndexFileName+fLen-1, "i");
-	    }
-	if (!(altIndexFileName && isRegularFile(altIndexFileName)))
-	    {
-	    char *indexUrl = needMem(urlLen+5);
-	    safef(indexUrl, urlLen+5, "%s.bai", fileOrUrl);
-	    verbose(2, "going to call udcFileMayOpen(%s).\n", indexUrl);
-	    struct udcFile *udcf = udcFileMayOpen(indexUrl, NULL);
-	    if (udcf != NULL)
-		udcFileClose(&udcf);
-	    else if (altIndexFileName != NULL)
-		{
-		char *altIndexUrl = cloneString(indexUrl);
-		strcpy(altIndexUrl+urlLen-1, "i");
-		verbose(2, "going to call udcFileMayOpen(%s).\n", altIndexUrl);
-		udcf = udcFileMayOpen(altIndexUrl, NULL);
-		if (udcf == NULL)
-		    {
-		    warn("Cannot find BAM index file (%s or %s)", indexUrl, altIndexUrl);
-		    return cloneString(fileOrUrl);
-		    }
-		udcFileClose(&udcf);
-		freeMem(altIndexUrl);
-		}
-	    else
-		{
-		warn("Cannot find BAM index file for \"%s\"", fileOrUrl);
-		return cloneString(fileOrUrl);
-		}
-	    freeMem(indexUrl);
-	    }
-	freeMem(altIndexFileName);
-	}
-    freeMem(indexFileName);
-    return bamFileName;
-    }
-return cloneString(fileOrUrl);
-}
 
 #ifndef KNETFILE_HOOKS
 static char *getSamDir()
@@ -125,10 +25,10 @@ return samDir;
 }
 #endif//ndef KNETFILE_HOOKS
 
-boolean bamFileExistsUdc(char *fileOrUrl, char *udcFuseRoot)
+boolean bamFileExists(char *fileOrUrl)
 /* Return TRUE if we can successfully open the bam file and its index file. */
 {
-char *bamFileName = samtoolsFileNameUdcFuse(fileOrUrl, udcFuseRoot);
+char *bamFileName = fileOrUrl;
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 boolean usingUrl = TRUE; 
 usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
@@ -160,11 +60,11 @@ if (fh != NULL)
 return FALSE;
 }
 
-samfile_t *bamOpenUdc(char *fileOrUrl, char **retBamFileName, char *udcFuseRoot)
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
 /* Return an open bam file, dealing with FUSE caching if need be. 
  * Return parameter if NON-null will return the file name after FUSing */
 {
-char *bamFileName = samtoolsFileNameUdcFuse(fileOrUrl, udcFuseRoot);
+char *bamFileName = fileOrUrl;
 if (retBamFileName != NULL)
     *retBamFileName = bamFileName;
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
@@ -174,9 +74,6 @@ if (fh == NULL)
     struct dyString *urlWarning = dyStringNew(0);
     if (usingUrl)
 	{
-	boolean usingUdc = (udcFuseRoot != NULL && startsWith(udcFuseRoot, bamFileName));
-	if (usingUdc)
-	    dyStringAppend(urlWarning, " (using udcFuse)");
 	dyStringAppend(urlWarning,
 		       ". If you are able to access the URL with your web browser, "
 		       "please try reloading this page.");
@@ -196,8 +93,27 @@ if (pSamFile != NULL)
     }
 }
 
-void bamFetchUdc(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-		     samfile_t **pSamFile, char *udcFuseRoot)
+void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName, 
+			 char *position, bam_fetch_f callbackFunc, void *callbackData)
+/* With the open bam file, return items the same way with the callbacks as with bamFetch() */
+/* except in this case use an already-open bam file and index (use bam_index_load and free() for */
+/* the index). It seems a little strange to pass the filename in with the open bam, but */
+/* it's just used to report errors. */
+{
+int chromId, start, end;
+int ret = bam_parse_region(samfile->header, position, &chromId, &start, &end);
+if (ret != 0 && startsWith("chr", position))
+    ret = bam_parse_region(samfile->header, position+strlen("chr"), &chromId, &start, &end);
+if (ret != 0)
+    // If the bam file does not cover the current chromosome, OK
+    return;
+ret = bam_fetch(samfile->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
+if (ret != 0)
+    warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
+}
+
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+		 samfile_t **pSamFile)
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
  * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
@@ -205,18 +121,11 @@ void bamFetchUdc(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void
  * the benefit of the callback function, with the open samFile.  */
 {
 char *bamFileName = NULL;
-samfile_t *fh = bamOpenUdc(fileOrUrl, &bamFileName, udcFuseRoot);
+samfile_t *fh = bamOpen(fileOrUrl, &bamFileName);
 boolean usingUrl = TRUE;
 usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
 if (pSamFile != NULL)
     *pSamFile = fh;
-int chromId, start, end;
-int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
-if (ret != 0 && startsWith("chr", position))
-    ret = bam_parse_region(fh->header, position+strlen("chr"), &chromId, &start, &end);
-if (ret != 0)
-    // If the bam file does not cover the current chromosome, OK
-    return;
 #ifndef KNETFILE_HOOKS
 // Since samtools' url-handling code saves the .bai file to the current directory,
 // chdir to a trash directory before calling bam_index_load, then chdir back.
@@ -234,9 +143,7 @@ if (idx == NULL)
     warn("bam_index_load(%s) failed.", bamFileName);
 else
     {
-    ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
-    if (ret != 0)
-	warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
+    bamFetchAlreadyOpen(fh, idx, bamFileName, position, callbackFunc, callbackData);
     free(idx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
     }
 bamClose(&fh);
@@ -577,15 +484,15 @@ while (s < bam->data + bam->data_len)
 #else
 // If we're not compiling with samtools, make stub routines so compile won't fail:
 
-boolean bamFileExistsUdcFuse(char *bamFileName, char *udcFuseRoot)
+boolean bamFileExists(char *bamFileName)
 /* Return TRUE if we can successfully open the bam file and its index file. */
 {
-warn(COMPILE_WITH_SAMTOOLS, "bamFileExistsUdcFuse");
+warn(COMPILE_WITH_SAMTOOLS, "bamFileExists");
 return FALSE;
 }
 
-samfile_t *bamOpenUdcFuse(char *fileOrUrl, char **retBamFileName)
-/* Return an open bam file, dealing with some FUSE caching if need be. */
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
+/* Return an open bam file */
 {
 warn(COMPILE_WITH_SAMTOOLS, "bamOpenUdc");
 return FALSE;
@@ -597,8 +504,8 @@ void bamClose(samfile_t **pSamFile)
 errAbort(COMPILE_WITH_SAMTOOLS, "bamClose");
 }
 
-void bamFetchUdcFuse(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-		     samfile_t **pSamFile, char *udcFuseRoot)
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+	      samfile_t **pSamFile)
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
  * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl.

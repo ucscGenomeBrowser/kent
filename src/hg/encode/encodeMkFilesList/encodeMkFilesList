@@ -87,7 +87,7 @@ if ($opt{'table'}){
 	$metadb = $opt{'table'};
 	#don't allow people to use metaDb directly
 	if ($metadb eq "metaDb"){
-		print STDERR "Direct modification of metaDb is not allowed, please use a sandbox table. Writing to Db has been disabled.\n";
+		print STDERR "Direct modification of metaDb is not allowed, please use a sandbox table. Writing to common metaDb table has been disabled.\n";
 		$writedb = 0;
 	}
 }
@@ -96,7 +96,9 @@ if ($opt{'table'}){
 my $workdir = getcwd();
 if ($opt{'directory'}){
 	$workdir = "$opt{'directory'}";
+	#remove leading double slashes
 	$workdir =~ s/^\/\//\//;
+	#remove trailing slashes
 	$workdir =~ s/\/$//;
 }
 unless ($opt{'verbose'}){$opt{'verbose'} = 0}
@@ -108,6 +110,7 @@ unless ($workdir =~ m/wgEncode/){
 	print STDERR "Directory is not an encode directory: $workdir. Must match wgEncode*\n"; 
 	usage()
 }
+#change to working directory
 my $err = chdir($workdir);
 unless ($err) {die "die: can't change to directory $workdir\n"}
 
@@ -174,11 +177,15 @@ my %cv = Encode::getControlledVocab($configdir);
 my %sizes;
 my @files;
 my @filemask;
-my $ls = `ls -lh *.* 2>/dev/null`;
+my $ls = `ls -lh 2>/dev/null`;
 my @list = split "\n", $ls;
 #parse through list to get the sizes and filenames
 foreach my $row (@list){
 	my @row = split /\s+/, $row;
+	#skip weird behaviors in ls
+	unless ($row[8]){next}
+	#skip directories
+	unless ($row =~ m/^\-/){next}
 	push @files, $row[8];
 	#only put files that pass filemask in @filemask to be processed
 	foreach my $mask (keys %filemask){
@@ -861,7 +868,8 @@ sub md5sum {
 	binmode(FILE);
 		
 	my $sum = Digest::MD5->new->addfile(*FILE)->hexdigest;
-	
+	#lock shared threadstatus variable for thread-safeness
+	lock(%thrdstat);
 	$thrdstat{$id} = $file;
 	return ($sum);
 	

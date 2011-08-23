@@ -2864,7 +2864,6 @@ void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVis
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
-int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int buttonW = heightPer-1 + 2*NEXT_ITEM_ARROW_BUFFER;
 int s = tg->itemStart(tg, item);
 int e = tg->itemEnd(tg, item);
@@ -2926,6 +2925,8 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
+#ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 #ifdef IMAGEv2_SHORT_MAPITEMS
     char *name = tg->itemName(tg, item);
     if (*name != '\0')
@@ -2935,6 +2936,7 @@ else if (vis == tvFull)
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
         s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
 #endif///ndef IMAGEv2_SHORT_MAPITEMS
+#endif///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     /* Make the button mapboxes. */
     if (lButton)
         tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
@@ -3050,11 +3052,11 @@ if (withLabels)
     /* Special tweak for expRatio in pack mode: force all labels
      * left to prevent only a subset from being placed right: */
     snapLeft |= (startsWith("expRatio", tg->tdb->type));
-#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
     if (theImgBox == NULL && snapLeft)
-#else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+#else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     if (snapLeft)        /* Snap label to the left. */
-#endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+#endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         {
         textX = leftLabelX;
         assert(hvgSide != NULL);
@@ -3164,7 +3166,7 @@ for (item = tg->items; item != NULL; item = item->next)
             int eClp = (e > winEnd)   ? winEnd   : e;
             int x1 = round((sClp - winStart)*scale) + xOff;
             int x2 = round((eClp - winStart)*scale) + xOff;
-        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox != NULL && vis == tvFull)  // dragScroll >1x has no bed full leftlabels,
                 {                                    // but in image labels like pack.
                 char *name = tg->itemName(tg, item);
@@ -3178,7 +3180,7 @@ for (item = tg->items; item != NULL; item = item->next)
                     hvGfxTextRight(hvg,textX,y,nameWidth,tg->heightPer,itemNameColor,font,name);
                     }
                 }
-        #endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
             genericDrawNextItemStuff(tg, hvg, vis, item, x2, x1, y, tg->heightPer, FALSE,color);
             }
 #else//ifndef IMAGEv2_SHORT_MAPITEMS

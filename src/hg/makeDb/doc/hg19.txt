@@ -16420,3 +16420,84 @@ hgLoadBed -allowStartEqualEnd  hg19 cosmic cosmic.bed
 #Loaded 30671 elements of size 3
 
 ############################################################################
+# adding new decode data (DONE - 2011-08-18 - Hiram)
+# liftOver from hg18 tracks:
+    mkdir /hive/data/outside/decode/hg19
+    cd /hive/data/outside/decode/hg19
+# some of the items end up overlapping as result of liftOver,
+# this filters them out:
+export OVERLAPS="9202536|9235404|9225403|9215395|9192536|9182536|9172536|110561813|110582154|110572154|110552191|110542194|110532192|110522233|110512223|110502226|110492220|110482221|110472216|36283195|36273203|36252392|81325902|36262322"
+
+for T in female female_carrier female_noncarrier male male_carrier \
+        male_noncarrier sex-averaged sex-averaged_carrier \
+        sex-averaged_noncarrier maleFemale
+do
+liftOver ../hg18/${T}.bedGraph \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+        ${T}.hg19.txt ${T}.unMapped.bedGraph
+wc -l ${T}.hg19.txt ${T}.unMapped.bedGraph
+awk '$3-$2 > 8000 && $3-$2 < 12000' ${T}.hg19.txt | sort -k1,1 -k2,2n \
+	| egrep -v "${OVERLAPS}" > ${T}.hg19.bedGraph
+awk '$3-$2 < 8001 || $3-$2 > 11999' ${T}.hg19.txt >> ${T}.unMapped.bedGraph
+awk '$3-$2 > 8000 && $3-$2 < 12000' ${T}.hg19.txt | sort -k1,1 -k2,2n \
+    | egrep "${OVERLAPS}" >> ${T}.unMapped.bedGraph
+bedGraphToBigWig ${T}.hg19.bedGraph /hive/data/genomes/hg19/chrom.sizes ${T}.bw
+wc -l ${T}.hg19.txt ${T}.hg19.bedGraph ${T}.unMapped.bedGraph
+done
+
+    # load the bigWig files into SQL table name friendly tables:
+    mkdir /gbdb/hg19/decode
+for C in female female_carrier female_noncarrier \
+	male male_carrier male_noncarrier \
+	sex-averaged sex-averaged_carrier sex-averaged_noncarrier
+do
+    N=${C}
+    case ${C} in
+        female) N="Female" ;;
+        female_carrier) N="FemaleCarrier" ;;
+        female_noncarrier) N="FemaleNonCarrier" ;;
+        male) N="Male" ;;
+        male_carrier) N="MaleCarrier" ;;
+        male_noncarrier) N="MaleNonCarrier" ;;
+        sex-averaged) N="SexAveraged" ;;
+        sex-averaged_carrier) N="SexAveragedCarrier" ;;
+        sex-averaged_noncarrier) N="SexAveragedNonCarrier" ;;
+    esac
+    echo $C $N
+    rm -f /gbdb/hg19/decode/${C}.bw /gbdb/hg19/decode/${N}.bw
+    ln -s `pwd`/${C}.bw /gbdb/hg19/decode/${N}.bw
+    hgsql -e "drop table decode${N};" hg19
+    hgBbiDbLink hg19 decode${N} /gbdb/hg19/decode/${N}.bw
+done
+
+    # compute male - female difference
+    awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' male.hg19.bedGraph \
+	| sort > ordered.male.txt
+    awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' female.hg19.bedGraph \
+	| sort > ordered.female.txt
+    join ordered.male.txt ordered.female.txt > maleFemale.txt
+
+    awk '{printf "%s\t%.6f\n", $1, $2-$3}' maleFemale.txt \
+	| sed -e "s/_/\t/g" | sort -k1,1 -k2,2n > maleFemale.bedGraph
+    # same result as what was lifted:
+    sum maleFemale.hg19.bedGraph maleFemale.bedGraph
+    #	14015  7950 maleFemale.hg19.bedGraph
+    #	14015  7950 maleFemale.bedGraph
+
+
+    # and hot spots
+    awk '$4 > 9.99' female.hg19.bedGraph > hotSpotFemale.bed
+    awk '$4 > 9.99' male.hg19.bedGraph > hotSpotMale.bed
+
+    hgLoadBed hg19 decodeHotSpotFemale hotSpotFemale.bed
+    #	Loaded 4135 elements of size 4
+    hgLoadBed hg19 decodeHotSpotMale hotSpotMale.bed
+    #	Loaded 4771 elements of size 4
+
+    bedGraphToBigWig maleFemale.bedGraph /hive/data/genomes/hg19/chrom.sizes \
+        MaleFemaleDifference.bw
+    ln -s `pwd`/MaleFemaleDifference.bw /gbdb/hg19/decode/
+    hgsql -e "drop table decodeMaleFemaleDifference;" hg19
+    hgBbiDbLink hg19 decodeMaleFemaleDifference /gbdb/hg19/decode/MaleFemaleDifference.bw
+
+#############################################################################

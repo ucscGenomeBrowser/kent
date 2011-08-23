@@ -351,6 +351,7 @@ struct gsidSeq
     char *subjId;
     };
 
+extern char *excludeVars[];
 extern struct trackLayout tl;
 extern struct jsonHashElement *jsonForClient;
 
@@ -1328,6 +1329,8 @@ int tgCmpPriority(const void *va, const void *vb);
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
 
 #define measureTime uglyTime
+
+#define SUPPORT_CONTENT_TYPE 1
 
 #endif /* HGTRACKS_H */
 

@@ -3988,5 +3988,3 @@ priority 500.4
 visibility hide
 type bedDetail 6
 color 128,0,128
-
-include decode.rmap.ra

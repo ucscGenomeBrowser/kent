@@ -558,12 +558,12 @@ html wgEncodeHaibMethylRrbs.new
         type bed 9
         # subId=3159 dateSubmitted=2011-01-06
 
-        #track wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
-        #parent wgEncodeHaibMethylRrbs off
-        #shortLabel HSMMtube 3
-        #longLabel HSMMtube Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
-        #subGroups cellType=HSMMt obtainedBy=Duke treatment=zNone rep=rep3
-        #type bed 9
+        track wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
+        parent wgEncodeHaibMethylRrbs off
+        shortLabel HSMMtube 3
+        longLabel HSMMtube Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
+        subGroups cellType=HSMMt obtainedBy=Duke treatment=zNone rep=rep3
+        type bed 9
         # subId=3159 dateSubmitted=2011-01-06
 
         track wgEncodeHaibMethylRrbsSknshHaibSitesRep1
