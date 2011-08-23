@@ -62,7 +62,7 @@ fileName wgEncodeSunyRipSeqGm12878Elavl1Pk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
-md5sum 3077dc1d93897220cc65700e55295385
+md5sum 17c56dd022ace9785367ebceb76ff581
 project wgEncode
 subId 3306
 tableName wgEncodeSunyRipSeqGm12878Elavl1Pk
@@ -213,7 +213,7 @@ fileName wgEncodeSunyRipSeqGm12878Pabpc1Pk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
-md5sum 4343366c8e80a83eaedf2d437a1ffdf1
+md5sum 4031b3142d6ca841405544e019c32435
 project wgEncode
 subId 3306
 tableName wgEncodeSunyRipSeqGm12878Pabpc1Pk
@@ -361,7 +361,7 @@ expId 798
 fileName wgEncodeSunyRipSeqGm12878RipinputPk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
-md5sum 8ceb9892cd831621ab5681d1b5a05d96
+md5sum b671dce6abc995f5e47157f84b6e0226
 project wgEncode
 subId 3306
 tableName wgEncodeSunyRipSeqGm12878RipinputPk
@@ -638,7 +638,7 @@ fileName wgEncodeSunyRipSeqK562Elavl1Pk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
-md5sum e8b74cce4afad60891a09deb7274cd24
+md5sum cd3aa5ead63cb1fef3e27d2fc8181054
 project wgEncode
 subId 3291
 tableName wgEncodeSunyRipSeqK562Elavl1Pk
@@ -789,7 +789,7 @@ fileName wgEncodeSunyRipSeqK562Pabpc1Pk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
-md5sum d1b3e9fe4e4db73d501dc0df46d68ae6
+md5sum b9d48a69d2e1699398e2f87da4161815
 project wgEncode
 subId 3291
 tableName wgEncodeSunyRipSeqK562Pabpc1Pk
@@ -937,7 +937,7 @@ expId 795
 fileName wgEncodeSunyRipSeqK562RipinputPk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
-md5sum 0ee14834175d79656f94286560cb4667
+md5sum 8732a97b404b05e6cdcfc9157e752b10
 project wgEncode
 subId 3291
 tableName wgEncodeSunyRipSeqK562RipinputPk
@@ -1155,4 +1155,4 @@ subId 3407
 tableName wgEncodeSunyRipSeqK562T7tagSigRep2
 view Signal
 
-# MAGIC: 396511432
+# MAGIC: -1302774945
