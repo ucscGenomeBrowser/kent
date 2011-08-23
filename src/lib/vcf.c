@@ -268,8 +268,6 @@ if (firstEq == NULL)
     vcfFileErr(vcff, "Metadata line lacks '=': \"%s\"", line);
     return;
     }
-// Every metadata line is saved here:
-hashAddN(vcff->metaDataHash, ptr, (firstEq - ptr), vcfFileCloneStr(vcff, firstEq+1));
 regmatch_t substrs[8];
 // Some of the metadata lines are crucial for parsing the rest of the file:
 if (startsWith("##fileformat=", line) || startsWith("##format", line))
@@ -385,7 +383,6 @@ static struct vcfFile *vcfFileNew()
 {
 struct vcfFile *vcff = NULL;
 AllocVar(vcff);
-vcff->metaDataHash = hashNew(0);
 vcff->pool = hashNew(0);
 return vcff;
 }
@@ -404,10 +401,15 @@ vcff->lf = lf;
 vcff->fileOrUrl = vcfFileCloneStr(vcff, lf->fileName);
 vcff->maxErr = (maxErr < 0) ? INT_MAX : maxErr;
 
+struct dyString *dyHeader = dyStringNew(1024);
 char *line = NULL;
 // First, metadata lines beginning with "##":
 while (lineFileNext(lf, &line, NULL) && startsWith("##", line))
+    {
+    dyStringAppend(dyHeader, line);
+    dyStringAppendC(dyHeader, '\n');
     parseMetadataLine(vcff, line);
+    }
 slReverse(&(vcff->infoDefs));
 slReverse(&(vcff->filterDefs));
 slReverse(&(vcff->gtFormatDefs));
@@ -422,7 +424,10 @@ if ((vcff->majorVersion != 4 || (vcff->minorVersion != 0 && vcff->minorVersion !
 if (line == NULL)
     // EOF after metadata
     return vcff;
+dyStringAppend(dyHeader, line);
+dyStringAppendC(dyHeader, '\n');
 parseColumnHeaderRow(vcff, line);
+vcff->headerString = dyStringCannibalize(&dyHeader);
 return vcff;
 }
 
@@ -670,9 +675,9 @@ void vcfFileFree(struct vcfFile **pVcff)
 if (pVcff == NULL || *pVcff == NULL)
     return;
 struct vcfFile *vcff = *pVcff;
+freez(&(vcff->headerString));
 hashFree(&(vcff->pool));
 hashFree(&(vcff->byName));
-hashFree(&(vcff->metaDataHash));
 lineFileClose(&(vcff->lf));
 freez(pVcff);
 }

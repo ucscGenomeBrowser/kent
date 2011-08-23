@@ -4,7 +4,7 @@ track wgEncodeUncBsuProt
 compositeTrack on
 superTrack wgEncodeProtGenoSuper dense
 shortLabel UNC/BSU ProtGeno
-longLabel ENCODE UNC/BSU Proteogenomics
+longLabel Proteogenomics from ENCODE/Univ. North Carolina/Boise State Univ.
 group expression
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup2 localization Localization cytosol=cytosol membraneFraction=membrane mito=mitochondria nucleus=nucleus 

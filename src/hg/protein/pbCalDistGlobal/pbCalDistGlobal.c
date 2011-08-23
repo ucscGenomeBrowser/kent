@@ -136,7 +136,7 @@ int ipcnt={0};
 int interProCount;
 if (argc != 3) usage();
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZBJOU");
 
 /* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
 aa_hydro['A'] =  1.800;
@@ -175,7 +175,7 @@ o2 = mustOpen("pepResDist.tab", "w");
 conn2 = sqlConnect(database);
 conn3 = sqlConnect(protDbName);
 
-for (j=0; j<23; j++)
+for (j=0; j<strlen(aaAlphabet); j++)
     {
     aaResCnt[j] = 0;
     }
@@ -225,7 +225,7 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
     for (i=0; i<len; i++)
 	{
 	aaResFound = 0;
-	for (j=0; j<23; j++)
+	for (j=0; j<strlen(aaAlphabet); j++)
 	    {
 	    if (*chp == aaAlphabet[j])
 		{
@@ -274,7 +274,7 @@ sqlDisconnect(&conn2);
 sqlDisconnect(&conn3);
 
 totalResCnt = 0;
-for (i=0; i<23; i++)
+for (i=0; i<strlen(aaAlphabet); i++)
     {
     totalResCnt = totalResCnt + aaResCnt[i];
     }
