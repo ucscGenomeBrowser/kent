@@ -440,6 +440,9 @@ return id;
 
 static unsigned getAndSetHubStatus(char *database, struct cart *cart, char *url, 
     boolean set, boolean unlisted)
+/* look in the hubStatus table for this url, add it if it isn't in there
+ * Set the cart variable to turn the hub on if set == TRUE.  
+ * Return id from that status table*/
 {
 char *errorMessage = NULL;
 unsigned id;
