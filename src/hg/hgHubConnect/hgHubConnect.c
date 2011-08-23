@@ -353,6 +353,7 @@ webIncludeResourceFile("jquery-ui.css");
 
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
+jsIncludeFile("jquery.cookie.js", NULL);
 webIncludeResourceFile("hgHubConnect.css");
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
