@@ -2147,6 +2147,24 @@ protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf Snyder:HE
 #tier 3
 #protocol Snyder:HEK293b_Snyder_protocol.pdf
 
+term HEK293-T-REx
+tag HEK293T
+type Cell Line
+tier 3
+organism human
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line 
+lineage mesoderm
+karyotype cancer, hypotriploid, XXX
+derivedFrom HEK293
+sex F
+tissue Kidney
+vendorName Invitrogen
+vendorId r71007
+orderUrl http://products.invitrogen.com/ivgn/product/R71007
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
+protocol Farnham:T-REx-HEK293_Farnham_protocol.pdf
+
 term Hepatocytes
 tag HEPATO
 type Cell Line
@@ -3584,24 +3602,6 @@ orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
-
-term HEK293-T-REx
-tag HEK293T
-type Cell Line
-tier 3
-organism human
-description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line 
-lineage mesoderm
-karyotype cancer, hypotriploid, XXX
-derivedFrom HEK293
-sex F
-tissue Kidney
-vendorName Invitrogen
-vendorId r71007
-orderUrl http://products.invitrogen.com/ivgn/product/R71007
-termId BTO:0000007
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
-protocol Farnham:T-REx-HEK293_Farnham_protocol.pdf
 
 term T98G
 tag T98G

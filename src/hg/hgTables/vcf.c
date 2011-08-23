@@ -119,7 +119,7 @@ for (i = 0;  i < rec->infoCount;  i++)
 	dyStringAppendC(dy, ';');
     const struct vcfInfoElement *el = &(rec->infoElements[i]);
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
-    enum vcfInfoType type = def? def->type : type;
+    enum vcfInfoType type = def? def->type : vcfInfoNoType;
     dyStringAppend(dy, el->key);
     if (el->count > 0)
 	dyStringAppendC(dy, '=');

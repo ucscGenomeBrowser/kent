@@ -362,7 +362,12 @@ public class QADBLibrary {
 
     ArrayList kgList = new ArrayList();
     String    dbURL  = jdbcURL(dbinfo);
-    String    query  = "SELECT name, chrom, txStart, txEnd, proteinID FROM " + table;
+    String    query;
+    if (pb) {
+      query  = "SELECT name, chrom, txStart, txEnd, proteinID FROM " + table;
+    }else{
+      query  = "SELECT name, chrom, txStart, txEnd FROM " + table;
+    }
 
     try {
 
@@ -374,7 +379,10 @@ public class QADBLibrary {
         String chromVar     = rs.getString("chrom");
         int txStartVar      = rs.getInt("txStart");
         int txEndVar        = rs.getInt("txEnd");
-        String proteinIdVar = rs.getString("proteinID");
+        String proteinIdVar = null;
+        if (pb) {
+          proteinIdVar = rs.getString("proteinID");
+        }
         KnownGene kg;
         if (pb) {
           kg = new KnownGene (nameVar, chromVar, txStartVar, txEndVar, proteinIdVar);
