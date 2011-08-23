@@ -300,6 +300,10 @@ foreach my $key (sort keys %typeofterms){
 	unless (exists ${$typeofterms{$key}}{'priority'}){next}
 	#multidimensional array sort, @sort is the multidimentional one
 	#@array is a secondary array pushed onto the first one (@sort)
+	if (${$typeofterms{$key}}{'priority'} =~ m/\D/){
+		print STDERR "$key has non-numeric characters in the priority field\n";
+		${$typeofterms{$key}}{'priority'} =~ s/\D//g;
+	}
 	my @array;
 	push @array, $key;
 	push @array, ${$typeofterms{$key}}{'priority'};
@@ -317,7 +321,7 @@ foreach my $key (sort keys %typeofterms){
 #so it's sorting on priority, then term, remember the structure above:
 #term is $a->[0] and $b->[0], it compares two values at a time and shuffles them around,
 #priority is $a->[1] and $b->[1], so if priority is equal, then sort of term (alphanumerically)
-@sort = sort {$a->[1] cmp $b->[1] || $a->[0] cmp $b->[0]} @sort;
+@sort = sort {$a->[1] <=> $b->[1] || $a->[0] cmp $b->[0]} @sort;
 if ($opt{'verbose'} >=3 ){
 	print STDERR "\npriority list\n";
 	foreach my $sortval (@sort){
@@ -640,10 +644,11 @@ foreach my $file (@filemask){
 		}
 		
 		if ($opt{'verbose'} >=4){
-			print STDERR "mdb infor for table $tablename:\n";
+			print STDERR "mdb info for table $tablename:\n";
 			foreach my $mdbobj (keys %filehash){
 				print STDERR "$mdbobj = $filehash{$mdbobj}\n";
 			}
+			print STDERR "\n";
 		}
 		#this should be pulled out into 2 subroutines whenever we get comma delimited lists into fileName in metaDb
 		#currently it is a lot of special casing because bai's aren't included in the meta, we have to make the assumption that
@@ -821,7 +826,6 @@ if ($opt{'verbose'} >= 2){
 #alphanumeric sort
 foreach my $file (sort { $a cmp $b } keys %fileinfo){
 	print FILE "$file\t";
-	print FILE "size=$sizes{$file}; ";
 	
 	#print each element according to sort order
 	foreach my $key (@sortorder){
@@ -831,6 +835,7 @@ foreach my $file (sort { $a cmp $b } keys %fileinfo){
 			print FILE "$key=${$fileinfo{$file}}{$key}; ";
 		}
 	}
+	print FILE "size=$sizes{$file}";
 	print FILE "\n";
 }
 close FILE;
