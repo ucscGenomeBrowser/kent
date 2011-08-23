@@ -1,6 +1,6 @@
 track wgEncodeSunyAlbanyGeneSt
 compositeTrack on
-shortLabel SUNY RIP GeneST 
+shortLabel SUNY RIP GeneST
 longLabel RNA Binding Protein Associated RNA by RIP-chip GeneST from ENCODE/SUNY Albany 
 group regulation
 superTrack wgEncodeRbpSuper dense
@@ -19,6 +19,7 @@ type bed 3
 wgEncode 1
 origAssembly hg18
 noInherit on
+html wgEncodeSunyAlbanyGeneSt.new
 
     track wgEncodeSunyAlbanyGeneStView
     shortLabel SunyAlbanyGeneSt
