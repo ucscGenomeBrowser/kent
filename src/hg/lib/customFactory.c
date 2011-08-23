@@ -2127,6 +2127,7 @@ if (doExtraChecking)
     }
 if (isNotEmpty(dyErr->string))
     track->networkErrMsg = dyStringCannibalize(&dyErr);
+track->dbTrackType = cloneString("vcfTabix");
 return track;
 }
 
