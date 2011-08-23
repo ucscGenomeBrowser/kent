@@ -376,7 +376,7 @@ noInherit on
         color 153,38,0
         # subId=3306 dateSubmitted=2011-01-19
 
-        track wgEncodeSunyRipSeqK562RipinputPk
+        track wgEncodeSunyRipSeqK562RipinPk
         parent wgEncodeSunyRipSeqViewPeaks off
         shortLabel K562 Input Pk
         longLabel K562 RIP-Input RIP-seq Analysis from ENCODE/SUNY
@@ -384,7 +384,6 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=3291 dateSubmitted=2011-01-18
-        # was wgEncodeSunyRipSeqK562RipinPk cricket Tue Aug 23 08:13:04 2011
 
         track wgEncodeSunyRipSeqK562Elavl1Pk
         parent wgEncodeSunyRipSeqViewPeaks on 

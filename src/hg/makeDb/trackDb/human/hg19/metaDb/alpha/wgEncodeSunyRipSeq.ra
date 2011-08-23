@@ -58,7 +58,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000796
 expId 796
-fileName wgEncodeSunyRipSeqGm12878Elavl1Pk.bed.gz
+fileName wgEncodeSunyRipSeqGm12878Elavl1Pk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -209,7 +209,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000797
 expId 797
-fileName wgEncodeSunyRipSeqGm12878Pabpc1Pk.bed.gz
+fileName wgEncodeSunyRipSeqGm12878Pabpc1Pk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -358,7 +358,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000798
 expId 798
-fileName wgEncodeSunyRipSeqGm12878RipinputPk.bed.gz
+fileName wgEncodeSunyRipSeqGm12878RipinputPk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 md5sum 8ceb9892cd831621ab5681d1b5a05d96
@@ -634,7 +634,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000793
 expId 793
-fileName wgEncodeSunyRipSeqK562Elavl1Pk.bed.gz
+fileName wgEncodeSunyRipSeqK562Elavl1Pk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -785,7 +785,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000794
 expId 794
-fileName wgEncodeSunyRipSeqK562Pabpc1Pk.bed.gz
+fileName wgEncodeSunyRipSeqK562Pabpc1Pk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -934,7 +934,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000795
 expId 795
-fileName wgEncodeSunyRipSeqK562RipinputPk.bed.gz
+fileName wgEncodeSunyRipSeqK562RipinputPk.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 md5sum 0ee14834175d79656f94286560cb4667
@@ -1155,4 +1155,4 @@ subId 3407
 tableName wgEncodeSunyRipSeqK562T7tagSigRep2
 view Signal
 
-# MAGIC: 252145804
+# MAGIC: 396511432
