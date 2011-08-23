@@ -15,13 +15,11 @@ static struct asObject *asForTableOrDie(struct sqlConnection *conn, char *table)
 {
 struct asObject *asObj = NULL;
 if (isBigBed(database, table, curTrack, ctLookupName))
-    {
     asObj = bigBedAsForTable(table, conn);
-    }
 else if (isBamTable(table))
-    {
     asObj = bamAsObj();
-    }
+else if (isVcfTable(table))
+    asObj = vcfAsObj();
 else
     {
     if (sqlTableExists(conn, "tableDescriptions"))
