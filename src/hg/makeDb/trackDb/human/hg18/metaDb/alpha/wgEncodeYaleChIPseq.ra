@@ -2417,7 +2417,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2bInputV2
 objType file
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -2441,7 +2441,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4V2
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -6282,7 +6282,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4V2
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -10889,7 +10889,7 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksHepg2bTr4
 objType table
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -12330,7 +12330,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataHepg2bInput
 objType file
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -14763,7 +14763,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -18329,7 +18329,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -23794,7 +23794,7 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalHepg2bInput
 objType table
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -23817,7 +23817,7 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalHepg2bTr4
 objType table
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -25122,4 +25122,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 1140329884
+# MAGIC: 1139598526

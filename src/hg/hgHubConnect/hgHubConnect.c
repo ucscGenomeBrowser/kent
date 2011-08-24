@@ -353,6 +353,7 @@ webIncludeResourceFile("jquery-ui.css");
 
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
+jsIncludeFile("jquery.cookie.js", NULL);
 webIncludeResourceFile("hgHubConnect.css");
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
@@ -365,8 +366,8 @@ printf(
    "configure page. For more information, see the "
    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
    "User's Guide</A>.</P>\n"
-   "<P>NOTE: Because Track Hubs are created and maintained by external sources,"
-   " UCSC cannot be held responsible for their content.</P>"
+   "<P><B>NOTE: Because Track Hubs are created and maintained by external sources,"
+   " UCSC cannot be held responsible for their content.</B></P>"
    );
 printf("</div>\n");
 

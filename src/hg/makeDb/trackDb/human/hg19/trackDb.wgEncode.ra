@@ -159,8 +159,8 @@ include wgEncodeOpenChromChip.new.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra 
-
+include wgEncodeHaibTfbs.ra beta,public
+include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra alpha
 
@@ -182,8 +182,7 @@ include wgEncodeSunyAlbanyTiling.ra
 include wgEncodeSunySwitchgear.ra
 
 # SUNY Rip-seq (wrangler: cricket)
-include wgEncodeSunyRipSeq.ra
-
+include wgEncodeSunyRipSeq.ra alpha,beta 
 
 # Other miscellany ------------------------------------
 

@@ -1,5 +1,5 @@
 # generated with encodeMkChangeNotes 0.9
-This is a release1/ of the "ENCODE wgEncodeSunyRipSeq"
+This is a release1 of the "ENCODE wgEncodeSunyRipSeq"
 The composite track is wgEncodeSunyRipSeq
 
 Categories of tables and files('):
@@ -10,7 +10,7 @@ B) Deprecated - are currently on RR but will no longer be needed and should not 
 C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
-Summary total counts for release1/ (new+untouched):
+Summary total counts for release1 (new+untouched):
     Tables: 38
     Files: 73
     Gbdbs: 48
@@ -73,7 +73,7 @@ C') New files (70 downloadables, 48 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1Pk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1Pk.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1SigRep1.bigWig
@@ -82,7 +82,7 @@ C') New files (70 downloadables, 48 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1Pk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1Pk.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1SigRep1.bigWig
@@ -91,7 +91,7 @@ C') New files (70 downloadables, 48 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputPk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputPk.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputSigRep1.bigWig
@@ -108,7 +108,7 @@ C') New files (70 downloadables, 48 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1Pk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1Pk.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1SigRep1.bigWig
@@ -117,7 +117,7 @@ C') New files (70 downloadables, 48 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1Pk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1Pk.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1SigRep1.bigWig
@@ -126,7 +126,7 @@ C') New files (70 downloadables, 48 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputPk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputPk.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputSigRep1.bigWig
