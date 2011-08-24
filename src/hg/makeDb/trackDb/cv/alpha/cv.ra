@@ -8411,6 +8411,10 @@ tag DM002P24H
 description 24 h with 0.02% DMSO (Myers)
 type treatment
 
+term DMSO_0.02pct_7d
+tag DM002P7D
+description 7 d with 0.02% DMSO (Myers)
+type treatment
 
 term DMSO_2.0pct
 #tag DMSO20

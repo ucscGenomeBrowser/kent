@@ -7,7 +7,7 @@ longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
 subGroup1 view Views Contigs=Contigs PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal Junctions=Splice_Junctions Alignments=Alignments
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLaS3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC HSMM=HSMM MCF7=MCF-7 NHEK=NHEK  NHLF=NHLF SKNSHRA=SK-N-SH_<i>retinoic_acid</i>
-subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol NUCLEUS=Nucleus POLYSOME=Polysome NUCLEOPLASM=Nucleoplasm CHROMATIN=Chromatin NUCLEOLUS=Nucleolos
+subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol NUCLEUS=Nucleus POLYSOME=Polysome NUCLEOPLASM=Nucleoplasm CHROMATIN=Chromatin NUCLEOLUS=Nucleolus
 subGroup4 rnaExtract RNA_Extract PAP=PolyA+ PAM=PolyA- TOTAL=Total_RNA
 subGroup5 rep Rep rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 Pooled=Pooled 
 dimensions dimensionY=cellType dimensionX=localization dimensionZ=rnaExtract dimensionA=rep
@@ -822,7 +822,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
-		shortLabel K562 nlos tot + 4
+		shortLabel K562 nlus tot + 4
 		longLabel K562 nucleolus total Long RNA-seq Plus strand signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 3090993.000000
@@ -832,7 +832,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
-		shortLabel K562 nlos tot + 3
+		shortLabel K562 nlus tot + 3
 		longLabel K562 nucleolus total Long RNA-seq Plus strand signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 3553953.000000
@@ -1995,7 +1995,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
-		shortLabel K562 nlos tot - 4
+		shortLabel K562 nlus tot - 4
 		longLabel K562 nucleolus total Long RNA-seq Minus Strand Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 5373313.000000
@@ -2005,7 +2005,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
-		shortLabel K562 nlos tot - 3
+		shortLabel K562 nlus tot - 3
 		longLabel K562 nucleolus total Long RNA-seq Minus Strand Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 4348115.000000
@@ -3165,7 +3165,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel K562 nlos tot A 4
+		shortLabel K562 nlus tot A 4
 		longLabel K562 nucleolus total Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep2
 		type bam
@@ -3175,7 +3175,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel K562 nlos tot A 3
+		shortLabel K562 nlus tot A 3
 		longLabel K562 nucleolus total Long RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
 		type bam
@@ -3924,7 +3924,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqK562NucleolusTotalContigs
         parent wgEncodeCshlLongRnaSeqViewContigs on
-        shortLabel K562 nlos tot C 
+        shortLabel K562 nlus tot C 
         longLabel K562 nucleolus total Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL
         type bed 6
@@ -4465,7 +4465,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
-        shortLabel K562 nlos tot J 
+        shortLabel K562 nlus tot J 
         longLabel K562 nucleolus total PolyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL
         type bed 6

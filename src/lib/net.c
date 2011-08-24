@@ -120,7 +120,7 @@ if (res < 0)
 		}
 	    else
 		{
-		warn("TCP non-blocking connect() timed-out in select() after %ld milliseconds - Cancelling!", msTimeout);
+		warn("TCP non-blocking connect() to %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, msTimeout);
 		close(sd);
 		return -1;
 		}
