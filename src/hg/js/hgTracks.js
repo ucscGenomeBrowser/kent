@@ -1166,11 +1166,12 @@ jQuery.fn.panImages = function(){
     function panUpdatePosition(newOffsetX,bounded)
     {
         // Updates the 'position/search" display with change due to panning
-        var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart - 1; // Correction for half open portal coords
+        var closedPortalStart = hgTracks.imgBoxPortalStart + 1;   // Correction for half open portal coords
+        var portalWidthBases = hgTracks.imgBoxPortalEnd - closedPortalStart;
         var portalScrolledX  = (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel) + newOffsetX;
         var recalculate = false;
 
-        var newPortalStart = hgTracks.imgBoxPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
+        var newPortalStart = closedPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
         if( newPortalStart < hgTracks.chromStart && bounded) {     // Stay within bounds
             newPortalStart = hgTracks.chromStart;
             recalculate = true;
@@ -1186,7 +1187,7 @@ jQuery.fn.panImages = function(){
             setPosition(newPos, 0); // 0 means no need to change the size
         }
         if (recalculate && hgTracks.imgBoxBasesPerPixel > 0) { // Need to recalculate X for bounding drag
-            portalScrolledX = (hgTracks.imgBoxPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
+            portalScrolledX = (closedPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
             newOffsetX = portalScrolledX - (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel);
         }
         return newOffsetX;
