@@ -169,8 +169,8 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-right: 5px;
 }
 
-table.chainTbl {border-collapse: collapse;}
-table.chainTbl td {border: 1px solid black; padding: 5px;}
+table.chainTbl, .descTbl {border-collapse: collapse;}
+table.chainTbl td, .descTbl td {border: 1px solid #666; padding: 5px;}
 
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }

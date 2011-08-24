@@ -1,5 +1,5 @@
 # generated with encodeMkChangeNotes 0.9
-This is a release1/ of the "ENCODE wgEncodeSunyRipSeq"
+This is a release1 of the "ENCODE wgEncodeSunyRipSeq"
 The composite track is wgEncodeSunyRipSeq
 
 Categories of tables and files('):
@@ -10,7 +10,7 @@ B) Deprecated - are currently on RR but will no longer be needed and should not 
 C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
-Summary total counts for release1/ (new+untouched):
+Summary total counts for release1 (new+untouched):
     Tables: 38
     Files: 73
     Gbdbs: 48
@@ -65,80 +65,80 @@ wgEncodeSunyRipSeqK562T7tagSigRep2
 
 C') New files (70 downloadables, 48 gbdbs):
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/
     NOT on RR but must be placed in:
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1Pk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Elavl1SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1Pk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878Pabpc1SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputPk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878RipinputSigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878T7tagRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878T7tagRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878T7tagSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqGm12878T7tagSigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1Pk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Elavl1SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1Pk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562Pabpc1SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputPk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562RipinputSigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562T7tagAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562T7tagAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562T7tagAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562T7tagAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562T7tagRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562T7tagRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562T7tagSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//wgEncodeSunyRipSeqK562T7tagSigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1Pk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Elavl1SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1Pk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878Pabpc1SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878RipinputSigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878T7tagRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878T7tagRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878T7tagSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqGm12878T7tagSigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1Pk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Elavl1SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1Pk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562Pabpc1SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562RipinputSigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562T7tagAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562T7tagAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562T7tagAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562T7tagAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562T7tagRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562T7tagRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562T7tagSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/wgEncodeSunyRipSeqK562T7tagSigRep2.bigWig
 
 /gbdb/hg19/bbi/wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam.bai
@@ -191,10 +191,10 @@ C') New files (70 downloadables, 48 gbdbs):
 
 D) Additional items:
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//README.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//files.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1//md5sum.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyRipSeq/release1/md5sum.txt

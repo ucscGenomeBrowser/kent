@@ -60,6 +60,26 @@
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
+/* Other than submit and Submit all these vars should start with hgt.
+ * to avoid weeding things out of other program's namespaces.
+ * Because the browser is a central program, most of it's cart
+ * variables are not hgt. qualified.  It's a good idea if other
+ * program's unique variables be qualified with a prefix though. */
+char *excludeVars[] = { "submit", "Submit", "hgt.reset",
+            "hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
+            "hgt.out1", "hgt.out2", "hgt.out3",
+            "hgt.left1", "hgt.left2", "hgt.left3",
+            "hgt.right1", "hgt.right2", "hgt.right3",
+            "hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
+            "hgt.tui", "hgt.hideAll", "hgt.visAllFromCt",
+	    "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
+	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
+	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
+            "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
+             TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
+            "hgt.contentType",
+            NULL };
+
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
 boolean baseShowPos;           /* TRUE if should display full position at top of base track */
@@ -2318,11 +2338,11 @@ if (withLeftLabels)
             y += REMOTE_TRACK_HEIGHT;
         else
             {
-        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox && track->limitedVis != tvDense)
                 y += sliceHeight;
             else
-        #endif ///defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
                 y = doLeftLabels(track, hvgSide, font, y);
             }
         }
@@ -2480,11 +2500,11 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
-    #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL && (theImgBox == NULL || track->limitedVis == tvDense))
-    #else ///!defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+    #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
-    #endif ///!defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+    #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
             y = doOwnLeftLabels(track, hvgSide, font, y);
         else
             y += trackPlusLabelHeight(track, fontHeight);
@@ -2539,7 +2559,7 @@ if(sameString(cartUsualString(cart, "hgt.contentType", "html"), "png"))
     if(fd == NULL)
         // fail some other way (e.g. HTTP 500)?
         errAbort("Couldn't open png for reading");
-    while(TRUE) 
+    while(TRUE)
         {
         size_t n = fread(buf, 1, sizeof(buf), fd);
         if(n)
@@ -2627,9 +2647,7 @@ else if (sameWord(scientificName, "Saccharomyces cerevisiae"))
 
 if (sameWord(chrName, "chrM"))
     name = "chrMt";
-localStart = start;
-localEnd = end + 1; // Ensembl base-1 display coordinates
-ensUrl = ensContigViewUrl(database, dir, name, seqBaseCount, localStart, localEnd, archive);
+ensUrl = ensContigViewUrl(database, dir, name, seqBaseCount, start+1, end, archive);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: you can not freeMem(dir) because sometimes it is a literal
  * constant */
@@ -3423,27 +3441,10 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         if (errCatchStart(errCatch))
 	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
         errCatchEnd(errCatch);
-	struct sqlConnection *conn = hConnectCentral();
-	char query[256];
         if (errCatch->gotError)
-	    {
-	    safef(query, sizeof(query),
-		"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d"
-		, hubStatusTableName
-		, errCatch->message->string
-		, hub->id
-		);
-	    }
+	    hubSetErrorMessage( errCatch->message->string, hub->id);
 	else
-	    {
-	    safef(query, sizeof(query),
-		"update %s set errorMessage=\"\", lastOkTime=now() where id=%d"
-		, hubStatusTableName
-		, hub->id
-		);
-	    }
-	sqlUpdate(conn, query);
-	hDisconnectCentral(&conn);
+	    hubSetErrorMessage(NULL, hub->id);
         errCatchFree(&errCatch);
 	}
     }
@@ -3561,10 +3562,9 @@ else
     /* disable TB for CGB servers */
     if (!hIsCgbServer())
 	{
-	    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-	    database, chromName, winStart+1, winEnd,
-	cartSessionVarName(),
-	    cartSessionId(cart),
+	    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&%s=%u\" "
+		    "class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+		    database, cartSessionVarName(), cartSessionId(cart),
 	"Tables");
 	}
     }
@@ -3591,9 +3591,8 @@ if (!psOutput)
     if (!hIsCgbServer())
     if (liftOverChainForDb(database) != NULL)
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"");
-        hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d",
-            uiVars->string, database, chromName, winStart+1, winEnd);
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgConvert?%s&db=%s",
+		uiVars->string, database);
         hPrintf("\" class=\"topbar\">Convert</A>&nbsp;&nbsp;</TD>");
         }
     }
@@ -4737,7 +4736,7 @@ if (cgiVarExists("hgt.nextItem"))
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
-if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cgiVarExists("hgt.imageV1"))
+if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
     // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
     // Set up imgBox dimensions
@@ -4966,6 +4965,13 @@ if (!hideControls)
 	 * we need to repeat the position in a hidden variable here
 	 * so that zoom/scrolling always has current position to work
 	 * from. */
+    #if IN_PLACE_UPDATE
+        // This 'dirty' field is used to check if js/ajax changes to the page have occurred.
+        // If so and it is reached by the back button, a page reload will occur instead.
+        hPrintf("<INPUT TYPE='text' style='display:none;' id='dirty' VALUE='false'>\n");
+        // Unfortunately this does not work in IE, so that browser will get the reload only after this full load.
+        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == 'true') window.location = '%s?hgsid=%d';</script>\n",hgTracksName(),cart->userId);
+    #endif/// IN_PLACE_UPDATE
 	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
 	    hPrintf("\n%s", trackGroupsHidden1->string);
@@ -5539,7 +5545,7 @@ withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
-if (!cgiVarExists("hgt.imageV1"))
+if (!cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
 
 withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
@@ -5911,7 +5917,7 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
-measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
+measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);

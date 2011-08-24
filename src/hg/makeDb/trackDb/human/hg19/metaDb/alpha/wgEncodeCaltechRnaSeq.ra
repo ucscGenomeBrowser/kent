@@ -9456,7 +9456,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3477
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1
-treatment DIFF_7d
+treatment Myocyte_7d
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dExonsGencV3cRep1V3
@@ -9483,7 +9483,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment DIFF_7d
+treatment Myocyte_7d
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd1Rep1
@@ -9508,7 +9508,7 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3477
-treatment DIFF_7d
+treatment Myocyte_7d
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd2Rep1
@@ -9533,7 +9533,7 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3477
-treatment DIFF_7d
+treatment Myocyte_7d
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneDeNovoRep1V3
@@ -9560,7 +9560,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment DIFF_7d
+treatment Myocyte_7d
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneGencV3cRep1V3
@@ -9587,7 +9587,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment DIFF_7d
+treatment Myocyte_7d
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dJunctionsRep1V3
@@ -9614,7 +9614,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment DIFF_7d
+treatment Myocyte_7d
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
@@ -9641,7 +9641,7 @@ replicate 1
 rnaExtract longPolyA
 subId 4105
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
-treatment DIFF_7d
+treatment Myocyte_7d
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1
@@ -9668,7 +9668,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3477
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1
-treatment DIFF_7d
+treatment Myocyte_7d
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTSSRep1V3
@@ -9695,7 +9695,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment DIFF_7d
+treatment Myocyte_7d
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3
@@ -9722,7 +9722,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment DIFF_7d
+treatment Myocyte_7d
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3
@@ -9749,7 +9749,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment DIFF_7d
+treatment Myocyte_7d
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3
@@ -12326,4 +12326,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -610601598
+# MAGIC: -249114546

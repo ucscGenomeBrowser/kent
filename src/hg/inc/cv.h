@@ -97,7 +97,8 @@ enum cvSearchable
     cvNotSearchable        =0,  // Txt is default
     cvSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list (NOT YET IMPLEMENTED)
     cvSearchBySingleSelect =2,  // Search by drop down single-select of supplied list
-    cvSearchByFreeText     =3,  // Search by free text field (NOT YET IMPLEMENTED)
+    cvSearchByFreeText     =3,  // Search by free text field
+    cvSearchByWildList     =4,  // Search by comma delimited list (accepts '%' wildcard)
     cvSearchByDateRange    =4,  // Search by discovered date range (NOT YET IMPLEMENTED)
     cvSearchByIntegerRange =5   // Search by discovered integer range (NOT YET IMPLEMENTED)
     };

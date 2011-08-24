@@ -4069,3 +4069,4 @@ searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
 termiRegex HSA_NumtS_*
 
+include decode.rmap.ra

@@ -44,6 +44,8 @@ public class HGGeneCheck {
      return true;
    if (track.equals("sgdGene"))
      return true;
+   if (track.equals("rgdGene2"))
+     return true;
    return false;
  }
 
