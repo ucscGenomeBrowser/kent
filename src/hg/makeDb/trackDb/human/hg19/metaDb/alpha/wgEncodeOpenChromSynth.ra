@@ -15,6 +15,7 @@ fileName wgEncodeOpenChromSynthGlioblaPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum cbb62ef8ce878c352ce5ff5f366025e8
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -36,6 +37,7 @@ fileName wgEncodeOpenChromSynthGm12878Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum 9eca10ae9befc4b05367fc0067adc047
 origAssembly hg19
 project wgEncode
 subId 3273
@@ -54,6 +56,7 @@ fileName wgEncodeOpenChromSynthGm12891Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum 09fd9068a3d09434e9fd9e1930d9a83a
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -73,6 +76,7 @@ fileName wgEncodeOpenChromSynthGm12892Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum e2cef743d0698bbdd3f91d70babd0e83
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -92,6 +96,7 @@ fileName wgEncodeOpenChromSynthGm18507Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum 0603900586dd9aa4987fe41dddce5e86
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -111,6 +116,7 @@ fileName wgEncodeOpenChromSynthGm19239Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum 3b431cec383917eb19087f88eaff6082
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -132,6 +138,7 @@ fileName wgEncodeOpenChromSynthH1hescPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum 8a7ea29f5487682f2419bd05c93de25c
 origAssembly hg19
 project wgEncode
 subId 3273
@@ -150,6 +157,7 @@ fileName wgEncodeOpenChromSynthHelas3Ifna4hPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum e6438d386e4365418e68ce370c272c12
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -171,6 +179,7 @@ fileName wgEncodeOpenChromSynthHelas3Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum eb3a68156fc116417ba55e138517b93a
 origAssembly hg19
 project wgEncode
 subId 3273
@@ -191,6 +200,7 @@ fileName wgEncodeOpenChromSynthHepg2Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum 8ac1aaf0b790e9c5dd97ba95d485f02e
 origAssembly hg19
 project wgEncode
 subId 3273
@@ -209,6 +219,7 @@ fileName wgEncodeOpenChromSynthHtr8Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum 90e341c4d507edb004db6c5c494838da
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -230,6 +241,7 @@ fileName wgEncodeOpenChromSynthHuvecPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum 709ea9923efeb86611291422487a074f
 origAssembly hg19
 project wgEncode
 subId 3273
@@ -250,6 +262,7 @@ fileName wgEncodeOpenChromSynthK562Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum f2aaa141709427412637165beb79e8e8
 origAssembly hg19
 project wgEncode
 subId 3273
@@ -268,6 +281,7 @@ fileName wgEncodeOpenChromSynthMedulloPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum ecb7af99237359208914944a4d5d84e4
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -289,6 +303,7 @@ fileName wgEncodeOpenChromSynthNhekPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum ec74a1db24a84a646d9b563c85bc6f93
 origAssembly hg19
 project wgEncode
 subId 3273
@@ -307,6 +322,7 @@ fileName wgEncodeOpenChromSynthPanisletsPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum bed9cf8b650524207cee7a7352383c8e
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -326,6 +342,7 @@ fileName wgEncodeOpenChromSynthUrothelUt189Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+md5sum ab0a72ca9aa1b91ed64d5cfc4026166b
 origAssembly hg19
 project wgEncode
 subId 4630
@@ -333,4 +350,4 @@ tableName wgEncodeOpenChromSynthUrothelUt189Pk
 treatment UT189
 view Peaks
 
-# MAGIC: 2071389588
+# MAGIC: 617672087

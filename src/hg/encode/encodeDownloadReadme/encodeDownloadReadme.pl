@@ -109,7 +109,7 @@ foreach my $folder (@list){
 	close README;
 }
 
-
+print STDERR "\n\nPlease send out an e-mail reminder that the README.txt has been updated. We wouldn't want to have tracks in QA leaking out an older version.\n\n";
 
 
 

@@ -4,6 +4,7 @@
  */
 
 #include "common.h"
+#include "dnautil.h"
 #include "errabort.h"
 #include <limits.h>
 #include "localmem.h"
@@ -426,6 +427,26 @@ return vcff;
 }
 
 
+#define VCF_MAX_INFO 512
+
+static void parseRefAndAlt(struct vcfFile *vcff, struct vcfRecord *record, char *ref, char *alt)
+/* Make an array of alleles, ref first, from the REF and comma-sep'd ALT columns.
+ * Use the length of the reference sequence to set record->chromEnd.
+ * Note: this trashes the alt argument, since this is expected to be its last use. */
+{
+char *altAlleles[VCF_MAX_INFO];
+int altCount = chopCommas(alt, altAlleles);
+record->alleleCount = 1 + altCount;
+record->alleles = vcfFileAlloc(vcff, record->alleleCount * sizeof(record->alleles[0]));
+record->alleles[0] = vcfFilePooledStr(vcff, ref);
+int i;
+for (i = 0;  i < altCount;  i++)
+    record->alleles[1+i] = vcfFilePooledStr(vcff, altAlleles[i]);
+int refLen = strlen(ref);
+if (refLen == dnaFilteredSize(ref))
+    record->chromEnd = record->chromStart + refLen;
+}
+
 static void parseFilterColumn(struct vcfFile *vcff, struct vcfRecord *record, char *filterStr)
 /* Transform ;-separated filter codes into count + string array. */
 {
@@ -478,10 +499,8 @@ if (def == NULL)
 return def->type;
 }
 
-#define VCF_MAX_INFO 512
-
-int parseInfoValue(struct vcfRecord *record, char *infoKey, enum vcfInfoType type, char *valStr,
-		   union vcfDatum **pData)
+static int parseInfoValue(struct vcfRecord *record, char *infoKey, enum vcfInfoType type,
+			  char *valStr, union vcfDatum **pData)
 /* Parse a comma-separated list of values into array of union vcfInfoDatum and return count. */
 {
 char *valWords[VCF_MAX_INFO];
@@ -533,6 +552,7 @@ if (record->infoCount >= VCF_MAX_INFO)
     vcfFileErr(vcff, "INFO column contains at least %d elements; "
 	       "VCF_MAX_INFO may need to be increased in vcf.c!", VCF_MAX_INFO);
 record->infoElements = vcfFileAlloc(vcff, record->infoCount * sizeof(struct vcfInfoElement));
+char *emptyString = vcfFilePooledStr(vcff, "");
 int i;
 for (i = 0;  i < record->infoCount;  i++)
     {
@@ -550,7 +570,7 @@ for (i = 0;  i < record->infoCount;  i++)
 	    if (type == vcfInfoString)
 		{
 		el->values = vcfFileAlloc(vcff, sizeof(union vcfDatum));
-		el->values[0].datString = vcfFilePooledStr(vcff, "");
+		el->values[0].datString = emptyString;
 		}
 	    }
 	continue;
@@ -585,11 +605,10 @@ while ((wordCount = lineFileChop(vcff->lf, words)) > 0)
     record->file = vcff;
     record->chrom = vcfFilePooledStr(vcff, words[0]);
     record->chromStart = lineFileNeedNum(vcff->lf, words, 1) - 1;
-    // chromEnd may be modified by parseInfoColumn, if INFO column includes END.
-    record->chromEnd = record->chromStart + 1;
+    // chromEnd may be overwritten by parseRefAndAlt and parseInfoColumn.
+    record->chromEnd = record->chromStart+1;
     record->name = vcfFilePooledStr(vcff, words[2]);
-    record->ref = vcfFilePooledStr(vcff, words[3]);
-    record->alt = vcfFilePooledStr(vcff, words[4]);
+    parseRefAndAlt(vcff, record, words[3], words[4]);
     record->qual = vcfFilePooledStr(vcff, words[5]);
     parseFilterColumn(vcff, record, words[6]);
     parseInfoColumn(vcff, record, words[7]);
@@ -758,12 +777,22 @@ safecpy(format, sizeof(format), record->format);
 char *formatWords[VCF_MAX_FORMAT];
 int formatWordCount = chopByChar(format, ':', formatWords, ArraySize(formatWords));
 if (formatWordCount >= VCF_MAX_FORMAT)
+    {
     vcfFileErr(vcff, "The FORMAT column has at least %d words; "
 	       "VCF_MAX_FORMAT may need to be increased in vcf.c!", VCF_MAX_FORMAT);
+    formatWordCount = VCF_MAX_FORMAT;
+    }
 if (differentString(formatWords[0], vcfGtGenotype))
     vcfFileErr(vcff, "FORMAT column should begin with \"%s\" but begins with \"%s\"",
 	       vcfGtGenotype, formatWords[0]);
 int i;
+// Store the pooled format word pointers and associated types for use in inner loop below.
+enum vcfInfoType formatTypes[VCF_MAX_FORMAT];
+for (i = 0;  i < formatWordCount;  i++)
+    {
+    formatTypes[i] = typeForGtFormat(vcff, formatWords[i]);
+    formatWords[i] = vcfFilePooledStr(vcff, formatWords[i]);
+    }
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
     char *string = record->genotypeUnparsedStrings[i];
@@ -798,9 +827,9 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 		gt->hapIxB = atoi(sep+1);
 	    }
 	struct vcfInfoElement *el = &(gt->infoElements[j]);
-	el->key = vcfFilePooledStr(vcff, formatWords[j]);
-	enum vcfInfoType type = typeForGtFormat(vcff, formatWords[j]);
-	el->count = parseInfoValue(record, formatWords[j], type, gtWords[j], &(el->values));
+	el->key = formatWords[j];
+	el->count = parseInfoValue(record, formatWords[j], formatTypes[j], gtWords[j],
+				   &(el->values));
 	if (el->count >= VCF_MAX_INFO)
 	    vcfFileErr(vcff, "A single element of the genotype column for \"%s\" "
 		       "has at least %d values; "

@@ -23,7 +23,7 @@ lab CSHL
 labExpId LID20749
 labProtocolId 021WCs
 localization cell
-md5sum d7e227b6da65127a37e13f4d00954bbe
+md5sum bam=d7e227b6da65127a37e13f4d00954bbe,bai=b22fbec2d35b687588ae84ea1d238c4b
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -52,7 +52,7 @@ lab CSHL
 labExpId LID20750
 labProtocolId 022WCs
 localization cell
-md5sum c5e1089ebbc3813538b430c870abab5c
+md5sum bam=c5e1089ebbc3813538b430c870abab5c,bai=c71a9d8f35612a85f5d75a62554a38a7
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -81,6 +81,7 @@ labExpId LID20749,LID20750
 labProtocolId 021WCs,022WCs
 labVersion iIDR
 localization cell
+md5sum 217dc4f7a375e33d37964518cef11620
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -106,6 +107,7 @@ labExpId LID20749,LID20750
 labProtocolId 021WCs,022WCs
 labVersion iIDR
 localization cell
+md5sum c6ab458a388bcb739ec4a735d190ab1c
 project wgEncode
 rnaExtract shortTotal
 subId 4134
@@ -129,6 +131,7 @@ labExpId LID20749,LID20750
 labProtocolId 021WCs,022WCs
 labVersion iIDR
 localization cell
+md5sum 47c72ed0cdab185322dcb5319eddfbcf
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -325,7 +328,7 @@ lab CSHL
 labExpId LID20745
 labProtocolId 017WCs
 localization cell
-md5sum 037b138f43f920f809ad501447d1d3d8
+md5sum bam=037b138f43f920f809ad501447d1d3d8,bai=40f01c0d6853a85013477664a43b519e
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -354,7 +357,7 @@ lab CSHL
 labExpId LID20746
 labProtocolId 018WCs
 localization cell
-md5sum 52e5e21990c255f31ca59085bfc9d449
+md5sum bam=52e5e21990c255f31ca59085bfc9d449,bai=b8877b581864cf7b082f5bb5b2931714
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -383,6 +386,7 @@ labExpId LID20745,LID20746
 labProtocolId 017WCs,018WCs
 labVersion iIDR
 localization cell
+md5sum f9b4cc552834e30f60800f334f1d876e
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -408,6 +412,7 @@ labExpId LID20745,LID20746
 labProtocolId 017WCs,018WCs
 labVersion iIDR
 localization cell
+md5sum 238681b216a2528c117ecb805e2e8ddc
 project wgEncode
 rnaExtract shortTotal
 subId 4141
@@ -431,6 +436,7 @@ labExpId LID20745,LID20746
 labProtocolId 017WCs,018WCs
 labVersion iIDR
 localization cell
+md5sum d6e76e3be0c10faacc3ce69d167f3952
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -627,7 +633,7 @@ lab CSHL
 labExpId LID20909
 labProtocolId 037WCs
 localization cell
-md5sum 37b9f5f7941794ae15d5d77bb928c3f7
+md5sum bam=37b9f5f7941794ae15d5d77bb928c3f7,bai=e763a2872fcb77584ea602ba852a5890
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -656,7 +662,7 @@ lab CSHL
 labExpId LID20910
 labProtocolId 038WCs
 localization cell
-md5sum c2ae5eab4f1100b16b035f771d7c89c4
+md5sum bam=c2ae5eab4f1100b16b035f771d7c89c4,bai=b7dc6f376373490ce27dbc0fcdd7b81e
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -685,6 +691,7 @@ labExpId LID20909,LID20910
 labProtocolId 037WCs,038WCs
 labVersion iIDR
 localization cell
+md5sum 386e2e4b4e8801711fab878802338544
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -710,6 +717,7 @@ labExpId LID20909,LID20910
 labProtocolId 037WCs,038WCs
 labVersion iIDR
 localization cell
+md5sum ac6354788cc133bf38c12269816673fa
 project wgEncode
 rnaExtract shortTotal
 subId 4129
@@ -733,6 +741,7 @@ labExpId LID20909,LID20910
 labProtocolId 037WCs,038WCs
 labVersion iIDR
 localization cell
+md5sum 93e865c8d5babba78f233ad73fed851d
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -933,7 +942,7 @@ labExpId crg-2
 labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
-md5sum 03df08790fe81801c7e4fea90777a788
+md5sum bam=03df08790fe81801c7e4fea90777a788,bai=2dbd19bdf1c4eb1cd79c48b6cfee3d6a
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -1047,7 +1056,7 @@ lab CSHL
 labExpId LID20899
 labProtocolId 003WCs
 localization cell
-md5sum 26935ba53a77022957bb761f98a7791c
+md5sum bam=26935ba53a77022957bb761f98a7791c,bai=9fe72c813cbde82341860ce19aee4c4e
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1076,7 +1085,7 @@ lab CSHL
 labExpId LID20902
 labProtocolId 004WCs
 localization cell
-md5sum 689d64234d0da419adb9f0471ce50950
+md5sum bam=689d64234d0da419adb9f0471ce50950,bai=a20e51205ec82a4aeb21527d48ed259f
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1105,6 +1114,7 @@ labExpId LID20899,LID20902
 labProtocolId 003WCs,004WCs
 labVersion iIDR
 localization cell
+md5sum a1e5a27211cfdff8494520f340f6d03b
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -1130,6 +1140,7 @@ labExpId LID20899,LID20902
 labProtocolId 003WCs,004WCs
 labVersion iIDR
 localization cell
+md5sum a2ba3e20c86f049aebf0157bde6b11af
 project wgEncode
 rnaExtract shortTotal
 subId 4136
@@ -1153,6 +1164,7 @@ labExpId LID20899,LID20902
 labProtocolId 003WCs,004WCs
 labVersion iIDR
 localization cell
+md5sum ecb360155d1dcd894b8cefaa78652bf3
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -1353,7 +1365,7 @@ labExpId crg-4
 labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
-md5sum 5290526e35e0d92d9659e230324d9699
+md5sum bam=5290526e35e0d92d9659e230324d9699,bai=88c9193ef535b92265ba2c5a52cfbb95
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -1497,7 +1509,7 @@ lab CSHL
 labExpId LID20901
 labProtocolId 003Cs
 localization cytosol
-md5sum 32e18ca6acd794dbbb9ce8cc1f986f10
+md5sum bam=32e18ca6acd794dbbb9ce8cc1f986f10,bai=2d3d34079adf8051249e50d1c025ebe8
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1526,7 +1538,7 @@ lab CSHL
 labExpId LID20904
 labProtocolId 004Cs
 localization cytosol
-md5sum e41f8dd0aaf9c019f6f1f055c8ea9952
+md5sum bam=e41f8dd0aaf9c019f6f1f055c8ea9952,bai=f92da2727205c0a9135ae50a1953be59
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1555,6 +1567,7 @@ labExpId LID20901,LID20904
 labProtocolId 003Cs,004Cs
 labVersion iIDR
 localization cytosol
+md5sum bcf3e8ad072f93dfd84a5ccd567f20dc
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -1580,6 +1593,7 @@ labExpId LID20901,LID20904
 labProtocolId 003Cs,004Cs
 labVersion iIDR
 localization cytosol
+md5sum c466da1337a56d9da781f629bbf2d155
 project wgEncode
 rnaExtract shortTotal
 subId 4143
@@ -1603,6 +1617,7 @@ labExpId LID20901,LID20904
 labProtocolId 003Cs,004Cs
 labVersion iIDR
 localization cytosol
+md5sum b3e4bf177ec4d02b548464a4f2e3d45f
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -1803,7 +1818,7 @@ labExpId crg-6
 labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
-md5sum d710bdf4ab5e03a5309e1783fb75c0df
+md5sum bam=d710bdf4ab5e03a5309e1783fb75c0df,bai=94e066bc51ed7d73499ad8c63405557a
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -1947,7 +1962,7 @@ lab CSHL
 labExpId LID20900
 labProtocolId 003Ns
 localization nucleus
-md5sum 302ca6e4b1ea53fbe1d3e68cf0a59670
+md5sum bam=302ca6e4b1ea53fbe1d3e68cf0a59670,bai=eb0df8cc04baf79ed269e99a4d9bc972
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1976,7 +1991,7 @@ lab CSHL
 labExpId LID20903
 labProtocolId 004Ns
 localization nucleus
-md5sum 23650e6de625f0de1148522020e302c9
+md5sum bam=23650e6de625f0de1148522020e302c9,bai=68df2dc58a3e36daf7ea15dce9fd97f9
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2005,6 +2020,7 @@ labExpId LID20900,LID20903
 labProtocolId 003Ns,004Ns
 labVersion iIDR
 localization nucleus
+md5sum 2f2ce24b9bf1fd9013c008e7132ce2d2
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -2030,6 +2046,7 @@ labExpId LID20900,LID20903
 labProtocolId 003Ns,004Ns
 labVersion iIDR
 localization nucleus
+md5sum e589b5a127e84ef6c542af4618d1d93c
 project wgEncode
 rnaExtract shortTotal
 subId 4131
@@ -2053,6 +2070,7 @@ labExpId LID20900,LID20903
 labProtocolId 003Ns,004Ns
 labVersion iIDR
 localization nucleus
+md5sum 1f9ac70bbb56b4836f727535934e1975
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -2249,7 +2267,7 @@ lab CSHL
 labExpId LID20905
 labProtocolId 005WCs
 localization cell
-md5sum f2599972fca418b1ce0ab702f38aebb0
+md5sum bam=f2599972fca418b1ce0ab702f38aebb0,bai=20b8d76b4be3fe2735e77c3dd0469b35
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2278,7 +2296,7 @@ lab CSHL
 labExpId LID20906
 labProtocolId 006WCs
 localization cell
-md5sum cc23a429bfe42213ae82c221514457b8
+md5sum bam=cc23a429bfe42213ae82c221514457b8,bai=192a92b922959e8f9ddfe49c436aec7a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2307,6 +2325,7 @@ labExpId LID20905,LID20906
 labProtocolId 005WCs,006WCs
 labVersion iIDR
 localization cell
+md5sum bf44c855af6b732e2c5a568e05fa2258
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -2332,6 +2351,7 @@ labExpId LID20905,LID20906
 labProtocolId 005WCs,006WCs
 labVersion iIDR
 localization cell
+md5sum 9953d4be542e0882b1c36619ff740cc3
 project wgEncode
 rnaExtract shortTotal
 subId 4139
@@ -2355,6 +2375,7 @@ labExpId LID20905,LID20906
 labProtocolId 005WCs,006WCs
 labVersion iIDR
 localization cell
+md5sum b7915f6c1f4f1832bbc23715c888d01f
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -2551,7 +2572,7 @@ lab CSHL
 labExpId LID20908
 labProtocolId 006Cs
 localization cytosol
-md5sum fd572bffc038fe6b7943623867cb8250
+md5sum bam=fd572bffc038fe6b7943623867cb8250,bai=32343ad3ad52bfa64847cd11f5441739
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2580,6 +2601,7 @@ labExpId LID20908
 labProtocolId 006Cs
 labVersion iIDR
 localization cytosol
+md5sum 4c9189c3c337664de4580ebe2eee9a21
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -2605,6 +2627,7 @@ labExpId LID20908
 labProtocolId 006Cs
 labVersion iIDR
 localization cytosol
+md5sum dbe10268f0f8bdb5406dcf91dcb0296f
 project wgEncode
 readType 1x36
 rnaExtract shortTotal
@@ -2630,6 +2653,7 @@ labExpId LID20908
 labProtocolId 006Cs
 labVersion iIDR
 localization cytosol
+md5sum 3f17c0c427a08e4308e314655d037ccb
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -2740,7 +2764,7 @@ lab CSHL
 labExpId LID20907
 labProtocolId 006Ns
 localization nucleus
-md5sum 773fae1c64130b176774ed9f69aef8e6
+md5sum bam=773fae1c64130b176774ed9f69aef8e6,bai=4c42e9f1a7adeb5cac1766a85e782698
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2769,6 +2793,7 @@ labExpId LID20907
 labProtocolId 006Ns
 labVersion iIDR
 localization nucleus
+md5sum e90437eb2ae08f4a3ef95e5315abfcb2
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -2794,6 +2819,7 @@ labExpId LID20907
 labProtocolId 006Ns
 labVersion iIDR
 localization nucleus
+md5sum 356583e2024df8aedc22c383adbe10b7
 project wgEncode
 readType 1x36
 rnaExtract shortTotal
@@ -2819,6 +2845,7 @@ labExpId LID20907
 labProtocolId 006Ns
 labVersion iIDR
 localization nucleus
+md5sum 6fd7e6b3c821057ec1f2c159f6eb845f
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -2929,7 +2956,7 @@ lab CSHL
 labExpId LID21143
 labProtocolId 011WCs
 localization cell
-md5sum bb601ea89be697303c2148860ddd9ec1
+md5sum bam=bb601ea89be697303c2148860ddd9ec1,bai=d65f50a8660a9665df78bcb1f3d016fe
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2958,7 +2985,7 @@ lab CSHL
 labExpId LID21146
 labProtocolId 012WCs
 localization cell
-md5sum 1027f7e402f98a0ac1dae6125ce2a445
+md5sum bam=1027f7e402f98a0ac1dae6125ce2a445,bai=0ffbdd41a73dd17f7672ccccd428f770
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2987,6 +3014,7 @@ labExpId LID21143,LID21146
 labProtocolId 011WCs,012WCs
 labVersion iIDR
 localization cell
+md5sum 5efe6568b7fa4614857d4471abda172a
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -3012,6 +3040,7 @@ labExpId LID21143,LID21146
 labProtocolId 011WCs,012WCs
 labVersion iIDR
 localization cell
+md5sum d9f219209b28be16f1a5d5a459bdd435
 project wgEncode
 rnaExtract shortTotal
 subId 4140
@@ -3035,6 +3064,7 @@ labExpId LID21143,LID21146
 labProtocolId 011WCs,012WCs
 labVersion iIDR
 localization cell
+md5sum dec20cad92d74f7c44ed4d6ea4ba80f3
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -3231,7 +3261,7 @@ lab CSHL
 labExpId LID21145
 labProtocolId 011Cs
 localization cytosol
-md5sum 10a1ec54fb3bdf40a29a4163cc5e9995
+md5sum bam=10a1ec54fb3bdf40a29a4163cc5e9995,bai=6b7c0a42ff436233dbf9eb254acf24e7
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3260,7 +3290,7 @@ lab CSHL
 labExpId LID21148
 labProtocolId 012Cs
 localization cytosol
-md5sum 7eddb273e507a3a79df0173ff42e05f2
+md5sum bam=7eddb273e507a3a79df0173ff42e05f2,bai=14548ff52156047ee27635a9af5b9af5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3289,6 +3319,7 @@ labExpId LID21145,LID21148
 labProtocolId 011Cs,012Cs
 labVersion iIDR
 localization cytosol
+md5sum b208542b76b5fd9230f895c5a4fa1b6a
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -3314,6 +3345,7 @@ labExpId LID21145,LID21148
 labProtocolId 011Cs,012Cs
 labVersion iIDR
 localization cytosol
+md5sum e2f7662c19813fe24fccd21c2fcee335
 project wgEncode
 rnaExtract shortTotal
 subId 4142
@@ -3337,6 +3369,7 @@ labExpId LID21145,LID21148
 labProtocolId 011Cs,012Cs
 labVersion iIDR
 localization cytosol
+md5sum 8720b5fa41a309297deb9cc539dbcc7a
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -3533,7 +3566,7 @@ lab CSHL
 labExpId LID21144
 labProtocolId 011Ns
 localization nucleus
-md5sum edd0a9021247c896f5346bbb3f707c33
+md5sum bam=edd0a9021247c896f5346bbb3f707c33,bai=8648c674337cfabe90d0e7d4a6a2b683
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3562,7 +3595,7 @@ lab CSHL
 labExpId LID21147
 labProtocolId 012Ns
 localization nucleus
-md5sum bc3384ce4c6994a844333c3f5a712d8c
+md5sum bam=bc3384ce4c6994a844333c3f5a712d8c,bai=dc00f5567cf02840987016f5fdd9e9cf
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3591,6 +3624,7 @@ labExpId LID21144,LID21147
 labProtocolId 011Ns,012Ns
 labVersion iIDR
 localization nucleus
+md5sum 2e5c6908b1a586c0f44a3c0a1e8cf7d6
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -3616,6 +3650,7 @@ labExpId LID21144,LID21147
 labProtocolId 011Ns,012Ns
 labVersion iIDR
 localization nucleus
+md5sum 2e03b12bf3f8678a517d0b50729b7113
 project wgEncode
 rnaExtract shortTotal
 subId 4124
@@ -3639,6 +3674,7 @@ labExpId LID21144,LID21147
 labProtocolId 011Ns,012Ns
 labVersion iIDR
 localization nucleus
+md5sum d801e25952c2bbaa88f79a6f2ee95b6d
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -3835,7 +3871,7 @@ lab CSHL
 labExpId LID44460
 labProtocolId 013WCs
 localization cell
-md5sum 2c351dc6f0523f40fc7e86dba023ba48
+md5sum bam=2c351dc6f0523f40fc7e86dba023ba48,bai=00d2403ee824ae186bca827b5122c50e
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3864,7 +3900,7 @@ lab CSHL
 labExpId LID44461
 labProtocolId 014WCs
 localization cell
-md5sum 8cefbe45153562f2f273ae51ea7091d7
+md5sum bam=8cefbe45153562f2f273ae51ea7091d7,bai=8c7fbcc72da910f50cf19a8f7ccc5966
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3893,6 +3929,7 @@ labExpId LID44460,LID44461
 labProtocolId 013WCs,014WCs
 labVersion iIDR
 localization cell
+md5sum 8bb1782751cab973d00e11c39f871361
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -3918,6 +3955,7 @@ labExpId LID44460,LID44461
 labProtocolId 013WCs,014WCs
 labVersion iIDR
 localization cell
+md5sum 9dffab1afa8f551f4d76aa4f7fccceeb
 project wgEncode
 rnaExtract shortTotal
 subId 4132
@@ -3941,6 +3979,7 @@ labExpId LID44460,LID44461
 labProtocolId 013WCs,014WCs
 labVersion iIDR
 localization cell
+md5sum 11308f834bc398b2796c05d84f5e0917
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -4137,7 +4176,7 @@ lab CSHL
 labExpId LID44465
 labProtocolId 014Cs
 localization cytosol
-md5sum 09ddd4ebe294058bdee825d659c6e76d
+md5sum bam=09ddd4ebe294058bdee825d659c6e76d,bai=35c3406a03eacd66aaf75fc99e006a13
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4166,6 +4205,7 @@ labExpId LID44464,LID44465
 labProtocolId 013Cs,014Cs
 labVersion iIDR
 localization cytosol
+md5sum 34599be058b95480f5e9b699b4736f75
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -4191,6 +4231,7 @@ labExpId LID44464,LID44465
 labProtocolId 013Cs,014Cs
 labVersion iIDR
 localization cytosol
+md5sum 444656c83b42344acaef5d04c87b63f0
 project wgEncode
 rnaExtract shortTotal
 subId 4138
@@ -4214,6 +4255,7 @@ labExpId LID44464,LID44465
 labProtocolId 013Cs,014Cs
 labVersion iIDR
 localization cytosol
+md5sum 71b0fe60cf3d5e604f6c97ad1e44ab72
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -4324,7 +4366,7 @@ lab CSHL
 labExpId LID44462
 labProtocolId 013Ns
 localization nucleus
-md5sum 2a8762293f390f29085bb94f0e159d49
+md5sum bam=2a8762293f390f29085bb94f0e159d49,bai=c295404effc2bab97c0db00fbb7124a1
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4353,7 +4395,7 @@ lab CSHL
 labExpId LID44463
 labProtocolId 014Ns
 localization nucleus
-md5sum d65830bc54ac0f261b7ec07a8e88c387
+md5sum bam=d65830bc54ac0f261b7ec07a8e88c387,bai=f3d2fc0a6479e1f260cbc1e12054974d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4382,6 +4424,7 @@ labExpId LID44462,LID44463
 labProtocolId 013Ns,014Ns
 labVersion iIDR
 localization nucleus
+md5sum 994a37af064de8f6b9bb9f68cfe416b6
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -4407,6 +4450,7 @@ labExpId LID44462,LID44463
 labProtocolId 013Ns,014Ns
 labVersion iIDR
 localization nucleus
+md5sum c58ff8d60a81d163d836d5a6e2449556
 project wgEncode
 rnaExtract shortTotal
 subId 4133
@@ -4430,6 +4474,7 @@ labExpId LID44462,LID44463
 labProtocolId 013Ns,014Ns
 labVersion iIDR
 localization nucleus
+md5sum 9d4e5af3ce150589f057ec364acd3a7f
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -4684,6 +4729,7 @@ labExpId LID21054,LID21055
 labProtocolId 009WCs,010WCs
 labVersion iIDR
 localization cell
+md5sum 896d711e7dc65bc1807551020a0c20dc
 project wgEncode
 rnaExtract shortTotal
 subId 4147
@@ -4937,6 +4983,7 @@ labExpId LID21057,LID21059
 labProtocolId 029Cs,030Cs
 labVersion iIDR
 localization cytosol
+md5sum c1d89c41137c04cb330c590172dc1e37
 project wgEncode
 rnaExtract shortTotal
 subId 4123
@@ -5132,7 +5179,7 @@ lab CSHL
 labExpId LID21056
 labProtocolId 029Ns
 localization nucleus
-md5sum ff04ccf2cac390a81fc9f7c1275a96b8
+md5sum bam=ff04ccf2cac390a81fc9f7c1275a96b8,bai=0f947831315ddd98fb5cc331d0c861bf
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -5161,7 +5208,7 @@ lab CSHL
 labExpId LID21058
 labProtocolId 030Ns
 localization nucleus
-md5sum b6a9fba1306499191fe7e562b833c210
+md5sum bam=b6a9fba1306499191fe7e562b833c210,bai=932c7e5c98573a9b47b6a770f595adfb
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -5190,6 +5237,7 @@ labExpId LID21056,LID21058
 labProtocolId 029Ns,030Ns
 labVersion iIDR
 localization nucleus
+md5sum 221ea8cf09e5611b983839106891457c
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -5215,6 +5263,7 @@ labExpId LID21056,LID21058
 labProtocolId 029Ns,030Ns
 labVersion iIDR
 localization nucleus
+md5sum 4bbafff532486c86e2a862ac07ed28d7
 project wgEncode
 rnaExtract shortTotal
 subId 4128
@@ -5238,6 +5287,7 @@ labExpId LID21056,LID21058
 labProtocolId 029Ns,030Ns
 labVersion iIDR
 localization nucleus
+md5sum 672a54c83780a160aa72362283199787
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -5438,7 +5488,7 @@ labExpId crg-31
 labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
-md5sum b8b6d993a31cda4827f9cd23a9a4d618
+md5sum bam=b8b6d993a31cda4827f9cd23a9a4d618,bai=2bd965ce0f4530b9f8871e0bb5527302
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -5582,7 +5632,7 @@ lab CSHL
 labExpId LID10567
 labProtocolId 001WCs
 localization cell
-md5sum d43bf7295915a91092026ad2c0a8c2d2
+md5sum bam=d43bf7295915a91092026ad2c0a8c2d2,bai=90d2326e515e8e0b882c4bb39b295ecc
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -5611,7 +5661,7 @@ lab CSHL
 labExpId LID10568
 labProtocolId 002WCs
 localization cell
-md5sum 5d4da451d8fc41bf2c806919caa4815d
+md5sum bam=5d4da451d8fc41bf2c806919caa4815d,bai=9d5d82bc2a78122abef85683d433c199
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -5640,6 +5690,7 @@ labExpId LID10567,LID10568
 labProtocolId 001WCs,002WCs
 labVersion iIDR
 localization cell
+md5sum 8d3512b90ae8261f7221fb13ec4fa769
 project wgEncode
 readType 1x36
 rnaExtract shortTotal
@@ -5666,6 +5717,7 @@ labExpId LID10567,LID10568
 labProtocolId 001WCs,002WCs
 labVersion iIDR
 localization cell
+md5sum cfa00313d3e5c58e37634405d197ba61
 project wgEncode
 rnaExtract shortTotal
 subId 4121
@@ -5689,6 +5741,7 @@ labExpId LID10567,LID10568
 labProtocolId 001WCs,002WCs
 labVersion iIDR
 localization cell
+md5sum 8620fd9dec11870e9f7da20fe80e7564
 project wgEncode
 readType 1x36
 rnaExtract shortTotal
@@ -5890,7 +5943,7 @@ labExpId crg-32
 labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
-md5sum 99a96758feefaa37e4810bcfb268eaf8
+md5sum bam=99a96758feefaa37e4810bcfb268eaf8,bai=e9d6d908381a831eefa0948ebfd53c8a
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -6034,7 +6087,7 @@ lab CSHL
 labExpId LID8930
 labProtocolId 025CHs
 localization chromatin
-md5sum 44588996b7c1830a145ea17d8e3a52d1
+md5sum bam=44588996b7c1830a145ea17d8e3a52d1,bai=e6ab6fd7b2ecd3fe843c04a481628711
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -6063,7 +6116,7 @@ lab CSHL
 labExpId LID18560
 labProtocolId 026CHs
 localization chromatin
-md5sum 1f818c6d6b7b4dbc36da9632d2635ec8
+md5sum bam=1f818c6d6b7b4dbc36da9632d2635ec8,bai=23ada0b4fc26df82da7abe7be17b3f6f
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -6092,6 +6145,7 @@ labExpId LID8930,LID18560
 labProtocolId 025CHs,026CHs
 labVersion iIDR
 localization chromatin
+md5sum 0a7551b32768a6ec5447a99b6cd8b7cb
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -6117,6 +6171,7 @@ labExpId LID8930,LID18560
 labProtocolId 025CHs,026CHs
 labVersion iIDR
 localization chromatin
+md5sum 9a26b822ce282a38b18e9f1cbca04892
 project wgEncode
 rnaExtract shortTotal
 subId 4130
@@ -6140,6 +6195,7 @@ labExpId LID8930,LID18560
 labProtocolId 025CHs,026CHs
 labVersion iIDR
 localization chromatin
+md5sum 3b56c3b4f10c128458c0bda30438597f
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -6340,7 +6396,7 @@ labExpId crg-36
 labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
-md5sum 0cc50ede720498592566740908ac669f
+md5sum bam=0cc50ede720498592566740908ac669f,bai=9ca3a421bd96e0d077fc14e54273c4b1
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -6484,7 +6540,7 @@ lab CSHL
 labExpId LID10572
 labProtocolId 001Cs
 localization cytosol
-md5sum 45fedb7b863fab34cc9a1864eefe58d0
+md5sum bam=45fedb7b863fab34cc9a1864eefe58d0,bai=d8e7a114b29ea72a699cffc43bcc1a7a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -6513,7 +6569,7 @@ lab CSHL
 labExpId LID10571
 labProtocolId 002Cs
 localization cytosol
-md5sum 1dd42d818027c74149a30b341be8a9ea
+md5sum bam=1dd42d818027c74149a30b341be8a9ea,bai=9f8ac7373accb45b041183b864af8a96
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -6542,6 +6598,7 @@ labExpId LID10572,LID10571
 labProtocolId 001Cs,002Cs
 labVersion iIDR
 localization cytosol
+md5sum b5378d4f1500d900b98f95b085c77349
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -6590,6 +6647,7 @@ labExpId LID10572,LID10571
 labProtocolId 001Cs,002Cs
 labVersion iIDR
 localization cytosol
+md5sum 8faebd571ecacaea9a8ebafd6f8824f9
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -6790,7 +6848,7 @@ labExpId crg-37
 labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
-md5sum 92bc993126f0a9034a9396a1caf5f36b
+md5sum bam=92bc993126f0a9034a9396a1caf5f36b,bai=bf9af5435daaf488b35e7623d9fa99aa
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -6934,7 +6992,7 @@ lab CSHL
 labExpId LID8928
 labProtocolId 025NLs
 localization nucleolus
-md5sum 63fb0bb9ad9c1a7bbcb9cc2cd44be86d
+md5sum bam=63fb0bb9ad9c1a7bbcb9cc2cd44be86d,bai=1b941e63297d5f451091797bb6814c9a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -6963,7 +7021,7 @@ lab CSHL
 labExpId LID18558
 labProtocolId 026NLs
 localization nucleolus
-md5sum 4166bbab0e923c0f407861b9d230cd63
+md5sum bam=4166bbab0e923c0f407861b9d230cd63,bai=39451aad620cabf2605017dfdd08cf45
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -6992,6 +7050,7 @@ labExpId LID8928,LID18558
 labProtocolId 025NLs,026NLs
 labVersion iIDR
 localization nucleolus
+md5sum fa393924c1215b59a971cece81a37cf4
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -7017,6 +7076,7 @@ labExpId LID8928,LID18558
 labProtocolId 025NLs,026NLs
 labVersion iIDR
 localization nucleolus
+md5sum a009f13487ceefd150a566951703b70c
 project wgEncode
 rnaExtract shortTotal
 subId 4135
@@ -7040,6 +7100,7 @@ labExpId LID8928,LID18558
 labProtocolId 025NLs,026NLs
 labVersion iIDR
 localization nucleolus
+md5sum 16e37beddb6a8d43426a1d646d95bb9e
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -7240,7 +7301,7 @@ labExpId crg-39
 labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
-md5sum 55f429d4f6b1d49fc7794a3277473cd4
+md5sum bam=55f429d4f6b1d49fc7794a3277473cd4,bai=a65f37ad014019833c6e8cdf0368aa2a
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -7384,7 +7445,7 @@ lab CSHL
 labExpId LID8929
 labProtocolId 025NPs
 localization nucleoplasm
-md5sum 9810e20cb34749352426228fe22f2fe0
+md5sum bam=9810e20cb34749352426228fe22f2fe0,bai=a8cb8ee02041cc431bdd6556489ec42f
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -7413,7 +7474,7 @@ lab CSHL
 labExpId LID18559
 labProtocolId 026NPs
 localization nucleoplasm
-md5sum 4e180551cf0af4c72d4687e3a3f4a0be
+md5sum bam=4e180551cf0af4c72d4687e3a3f4a0be,bai=7eec99bf1310b714b26f6f52840e98e8
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -7442,6 +7503,7 @@ labExpId LID8929,LID18559
 labProtocolId 025NPs,026NPs
 labVersion iIDR
 localization nucleoplasm
+md5sum 7d9f93b207553332898243a4722baeea
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -7467,6 +7529,7 @@ labExpId LID8929,LID18559
 labProtocolId 025NPs,026NPs
 labVersion iIDR
 localization nucleoplasm
+md5sum d19fd45976c215f21e2dce91924f4453
 project wgEncode
 rnaExtract shortTotal
 subId 4149
@@ -7490,6 +7553,7 @@ labExpId LID8929,LID18559
 labProtocolId 025NPs,026NPs
 labVersion iIDR
 localization nucleoplasm
+md5sum fa3c27ef7846dae19b90a3642c2cb600
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -7690,7 +7754,7 @@ labExpId crg-42
 labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
-md5sum fa47b4158cfa85da47bdfb92aa292110
+md5sum bam=fa47b4158cfa85da47bdfb92aa292110,bai=e6a521aa8435252f4660f573b8a96bf0
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -7834,7 +7898,7 @@ lab CSHL
 labExpId LID10570
 labProtocolId 001Ns
 localization nucleus
-md5sum 938a80d561e144724d05d72faeee629a
+md5sum bam=938a80d561e144724d05d72faeee629a,bai=452593789b1044809eacd46b91ab9989
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -7863,7 +7927,7 @@ lab CSHL
 labExpId LID10569
 labProtocolId 002Ns
 localization nucleus
-md5sum 770d18aceac7c6dbce6c09fbd7169650
+md5sum bam=770d18aceac7c6dbce6c09fbd7169650,bai=a4e2f0a4355c19a2507f121d58ecb6ad
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -7892,6 +7956,7 @@ labExpId LID10570,LID10569
 labProtocolId 001Ns,002Ns
 labVersion iIDR
 localization nucleus
+md5sum c8ddec9a5865f3dd5fe3e6ec6cbd0bc4
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -7917,6 +7982,7 @@ labExpId LID10570,LID10569
 labProtocolId 001Ns,002Ns
 labVersion iIDR
 localization nucleus
+md5sum 90d218ef5968be51ff762b15f1716210
 project wgEncode
 rnaExtract shortTotal
 subId 4144
@@ -7940,6 +8006,7 @@ labExpId LID10570,LID10569
 labProtocolId 001Ns,002Ns
 labVersion iIDR
 localization nucleus
+md5sum ee64e445a0f98c4b6a8391d6cd9a9aa3
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -8139,7 +8206,7 @@ labExpId crg-44
 labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
-md5sum 1d6729a0e7ef60365ef0c12627666b41
+md5sum bam=1d6729a0e7ef60365ef0c12627666b41,bai=5b32aca4a321202ab1903d7eb482bfab
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -8279,7 +8346,7 @@ lab CSHL
 labExpId LID20743
 labProtocolId 015WCs
 localization cell
-md5sum 9d25c9ec6d8159c490ca1faa9e95b014
+md5sum bam=9d25c9ec6d8159c490ca1faa9e95b014,bai=d9cffb4ecaa8877df5433fb8781d808a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -8308,7 +8375,7 @@ lab CSHL
 labExpId LID20744
 labProtocolId 016WCs
 localization cell
-md5sum cf84774a08bbe3fa3cff37dbe8853645
+md5sum bam=cf84774a08bbe3fa3cff37dbe8853645,bai=6e0a7b365572442adb418b0e8ce8b7c5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -8337,6 +8404,7 @@ labExpId LID20743,LID20744
 labProtocolId 015WCs,016WCs
 labVersion iIDR
 localization cell
+md5sum c8c3b59423ed20dd967ceafabd93647c
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -8362,6 +8430,7 @@ labExpId LID20743,LID20744
 labProtocolId 015WCs,016WCs
 labVersion iIDR
 localization cell
+md5sum 8bf936fdb236360ddec5ccdfb9ff2f8c
 project wgEncode
 rnaExtract shortTotal
 subId 4145
@@ -8385,6 +8454,7 @@ labExpId LID20743,LID20744
 labProtocolId 015WCs,016WCs
 labVersion iIDR
 localization cell
+md5sum 5c5c105b1f11a73199337f0aa0495964
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -8581,7 +8651,7 @@ lab CSHL
 labExpId LID20999
 labProtocolId 007WCs
 localization cell
-md5sum 3f6f90b587214ce0e8a2bbafe80b025e
+md5sum bam=3f6f90b587214ce0e8a2bbafe80b025e,bai=1c71f337d97f1300a8a4d511aa72f533
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -8610,7 +8680,7 @@ lab CSHL
 labExpId LID21000
 labProtocolId 008WCs
 localization cell
-md5sum ab6ac9d935ef9c2c9538512946c5f4ac
+md5sum bam=ab6ac9d935ef9c2c9538512946c5f4ac,bai=331637cf83a20d6dcc671e4b3e01a6a5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -8639,6 +8709,7 @@ labExpId LID20999,LID21000
 labProtocolId 007WCs,008WCs
 labVersion iIDR
 localization cell
+md5sum bae2ae03d5edd75ab6e411c67ae56bcb
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -8664,6 +8735,7 @@ labExpId LID20999,LID21000
 labProtocolId 007WCs,008WCs
 labVersion iIDR
 localization cell
+md5sum 6f569a4d8a1c055bd7a96665abbff523
 project wgEncode
 rnaExtract shortTotal
 subId 4126
@@ -8687,6 +8759,7 @@ labExpId LID20999,LID21000
 labProtocolId 007WCs,008WCs
 labVersion iIDR
 localization cell
+md5sum 86221a4263bc19708058ec39e990ff9b
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -8883,7 +8956,7 @@ lab CSHL
 labExpId LID21002
 labProtocolId 027Cs
 localization cytosol
-md5sum 22df271f2e055ac3a6ba4f82f411bb29
+md5sum bam=22df271f2e055ac3a6ba4f82f411bb29,bai=a901cfd4ed7fcb7ff1d532abb64170d8
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -8912,7 +8985,7 @@ lab CSHL
 labExpId LID21004
 labProtocolId 028Cs
 localization cytosol
-md5sum 72345303233f9f492d7b40a7ad3d8872
+md5sum bam=72345303233f9f492d7b40a7ad3d8872,bai=299c73516e46504512a79fc44dceb25c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -8941,6 +9014,7 @@ labExpId LID21002,LID21004
 labProtocolId 027Cs,028Cs
 labVersion iIDR
 localization cytosol
+md5sum 460bc5fb3778faf597f0e657e51115aa
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -8966,6 +9040,7 @@ labExpId LID21002,LID21004
 labProtocolId 027Cs,028Cs
 labVersion iIDR
 localization cytosol
+md5sum 836ee2bc2dd4fa533462b218c7d7876b
 project wgEncode
 rnaExtract shortTotal
 subId 4122
@@ -8989,6 +9064,7 @@ labExpId LID21002,LID21004
 labProtocolId 027Cs,028Cs
 labVersion iIDR
 localization cytosol
+md5sum dc206f3ab00485e7fd9659c376981e8b
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -9185,7 +9261,7 @@ lab CSHL
 labExpId LID21001
 labProtocolId 027Ns
 localization nucleus
-md5sum 86dfffadc9e67c5f19870f957198ce4d
+md5sum bam=86dfffadc9e67c5f19870f957198ce4d,bai=44fbb70c74744a372f8e867ccc874fce
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -9214,7 +9290,7 @@ lab CSHL
 labExpId LID21003
 labProtocolId 028Ns
 localization nucleus
-md5sum 055e5581e306819524a51f19749eaa58
+md5sum bam=055e5581e306819524a51f19749eaa58,bai=11b532bec87b6284b8f0d102fe1d02d8
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -9243,6 +9319,7 @@ labExpId LID21001,LID21003
 labProtocolId 027Ns,028Ns
 labVersion iIDR
 localization nucleus
+md5sum a8db72a5363723d34d8ba3ef9fbe1115
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -9268,6 +9345,7 @@ labExpId LID21001,LID21003
 labProtocolId 027Ns,028Ns
 labVersion iIDR
 localization nucleus
+md5sum e95a8061ba56e13e77c5caed2441a56b
 project wgEncode
 rnaExtract shortTotal
 subId 4146
@@ -9291,6 +9369,7 @@ labExpId LID21001,LID21003
 labProtocolId 027Ns,028Ns
 labVersion iIDR
 localization nucleus
+md5sum 7c4ab7c6178ec276264cc459ae2c0558
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -9519,7 +9598,7 @@ labExpId crg-61
 labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
-md5sum 8ee9ea5b2f0854fcacda49f88725baf6
+md5sum bam=8ee9ea5b2f0854fcacda49f88725baf6,bai=c3b0190ef41a3178226e64aab0e129cb
 origAssembly hg18
 project wgEncode
 rnaExtract shortTotal
@@ -9630,7 +9709,7 @@ lab CSHL
 labExpId LID20747
 labProtocolId 019WCs
 localization cell
-md5sum 5cadbe1fc66d9ae3f761c1d790f02d15
+md5sum bam=5cadbe1fc66d9ae3f761c1d790f02d15,bai=f0b7aa64a574189b47c640142d077b30
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9657,7 +9736,7 @@ lab CSHL
 labExpId LID20748
 labProtocolId 020WCs
 localization cell
-md5sum 913ee61cd5a672cd3a549a233ae2b156
+md5sum bam=913ee61cd5a672cd3a549a233ae2b156,bai=101fc9a22f36362cffbb19f030c12b29
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -9686,6 +9765,7 @@ labExpId LID20747,LID20748
 labProtocolId 019WCs,020WCs
 labVersion iIDR
 localization cell
+md5sum b7ba23fcab0bcc81e49d5846601f0ad5
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -9711,6 +9791,7 @@ labExpId LID20747,LID20748
 labProtocolId 019WCs,020WCs
 labVersion iIDR
 localization cell
+md5sum 376268cfe8abca558f8331ef462fe5be
 project wgEncode
 rnaExtract shortTotal
 subId 4125
@@ -9734,6 +9815,7 @@ labExpId LID20747,LID20748
 labProtocolId 019WCs,020WCs
 labVersion iIDR
 localization cell
+md5sum bdf7c62de15dd40edeaafc705ea498f3
 project wgEncode
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -9906,4 +9988,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 793072671
+# MAGIC: -872880611

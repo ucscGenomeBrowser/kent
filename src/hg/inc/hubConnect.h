@@ -49,8 +49,8 @@ void hubConnectStatusFree(struct hubConnectStatus **pHub);
 void hubConnectStatusFreeList(struct hubConnectStatus **pList);
 /* Free a list of dynamically allocated hubConnectStatus's */
 
-struct hubConnectStatus *hubConnectStatusForId(struct cart *cart,
-    struct sqlConnection *conn, int id);
+struct hubConnectStatus *hubConnectStatusForId( struct sqlConnection *conn, 
+    int id);
 /* Given a hub ID return associated status. */
 
 struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart);
@@ -80,12 +80,11 @@ struct slName  *hubConnectHubsInCart(struct cart *cart);
 int hubIdFromCartName(char *trackName);
 /* Given something like "hgHubConnect.hub.123" return 123 */
 
-int hubIdFromTrackName(char *trackName);
+unsigned hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
 
-struct trackDb *hubConnectAddHubForTrackAndFindTdb(struct cart *cart,
-    char *database, char *trackName, struct trackDb **pTdbList, 
-    struct hash *trackHash);
+struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database, 
+    char *trackName, struct trackDb **pTdbList, struct hash *trackHash);
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
  * for it, appending to end of list and adding to trackHash.  Return the
  * trackDb associated with trackName. */
@@ -101,6 +100,9 @@ unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
     char *url, char **errorMessage);
 /* find or add a URL to the status table */
 
+unsigned hubResetError(char *url);
+/* clear the error for this url in the hubStatus table,return the id */
+
 unsigned hubClearStatus(char *url);
 /* drop the information about this url from the hubStatus table,return the id */
 
@@ -108,6 +110,13 @@ void hubDisconnect(struct cart *cart, char *url);
 /* drop the information about this url from the hubStatus table, and 
  * the cart variable the references this hub */
 
-boolean hubCheckForNew(char *database, struct cart *cart);
-/* see if the user just typed in a new hub url, return TRUE if so */
+unsigned hubCheckForNew(char *database, struct cart *cart);
+/* see if the user just typed in a new hub url, return hubId if so */
+
+struct trackHub *trackHubFromId(unsigned hubId);
+/* Given a hub ID number, return corresponding trackHub structure. 
+ * ErrAbort if there's a problem. */
+
+void hubSetErrorMessage(char *errorMessage, unsigned id);
+/* set the error message in the hubStatus table */
 #endif /* HUBCONNECT_H */

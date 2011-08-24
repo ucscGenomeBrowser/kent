@@ -466,25 +466,31 @@ if (hIsBetaHost())
     subDir = "/beta";                        // it's downloads server is "hgdownload.cse.ucsc.edu"
     }
 
-printf("<BR><A HREF='http://%s/goldenPath/%s/%s/'><img src='../images/ab_up.gif'>Parent directory</A> for %s downloads.<BR>\n",
-                server,db,ENCODE_DCC_DOWNLOADS,db);
 cgiDown(0.9);
 puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
 puts("in publication  until the restriction date noted for the given data file.</B>");
 
 cgiDown(0.7);
-puts("Supporting documents:");
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> is a tab-separated file with the name and metadata for each download.\n",
+puts("Additional resources:");
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> - lists the name and metadata for each download.\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.\n",
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> - lists the md5sum output for each download.\n",
+                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s'>downloads server</A></B> - alternative access to downloadable files (may include obsolete data).\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>Supplemental materials</A></B> contains additional files provided by the laboratory related to these downloads.\n",
+    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>supplemental materials</A></B> - any related files provided by the laboratory.\n",
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
+if (hIsPreviewHost())
+    printf("<BR><b>WARNING</b>: This data is provided for early access via the Preview Browser -- it is unreviewed and subject to change. For high quality reviewed annotations, see the <a target=_blank href='http://%s/cgi-bin/hgFileUi?db=%s&g=%s'>Genome Browser</a>.",
+        "genome.ucsc.edu", db, tdb->track);
+else
+    printf("<BR><b>NOTE</b>: Early access to additional track data may be available on the <a target=_blank href='http://%s/cgi-bin/hgFileUi?db=%s&g=%s'>Preview Browser</A>.",
+        "genome-preview.ucsc.edu", db, tdb->track);
 }
 
 static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,boolean filterable)

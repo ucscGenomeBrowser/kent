@@ -40,6 +40,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
+            "hgt.contentType",
             NULL };
 
 int main(int argc, char *argv[])
@@ -71,8 +72,8 @@ else
     cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
     {
-    fprintf(stdout, "Overall total time: %ld millis<BR>\n",
-    clock1000() - enteredMainTime);
+    fprintf(stdout, "<span class='timing'>Overall total time: %ld millis<br /></span>\n",
+            clock1000() - enteredMainTime);
     }
 return 0;
 }

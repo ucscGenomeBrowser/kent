@@ -19,6 +19,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=73ceacd96d6340593f7063d02d490eb5,bai=b3f5ee7e5dfc381e376866ba813df104
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -43,6 +44,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=4dd6716a0af3d9dd760e665f6c21a90f,bai=40ba37d1a81006d74d7e0d3efa99a739
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -67,6 +69,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum dab29e01f678fd54430857815061de7a
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -91,6 +94,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum a96e9f71210ee3c26b25b88cbd17ea77
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -115,6 +119,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB8470
+md5sum fe21c95a32bb0a41d7476f008b46ce6b
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -139,6 +144,7 @@ fileName wgEncodeOpenChromChipFibroblInputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=0508b60fa6b9d866c13d0ed55812d4e6,bai=6478ca3133d4f9dbebca385e1bcfa0c9
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -162,6 +168,7 @@ fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum eb732363b7174de8db9770eebcdff881
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -186,6 +193,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=cb9ad3b39b54948ca0e0b13de3f9155b,bai=8bd066791f332a1eb187c003555e53be
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -209,6 +217,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=17cceba0c599059404c86a9b538331f5,bai=8c69c942b7dcb4dfd06f995b086e3c58
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -232,6 +241,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum a08838e65d616457cd30fadae6f7a3e1
 origAssembly hg19
 project wgEncode
 setType exp
@@ -255,6 +265,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum e27c1acde99518f5f34f251f54c957a2
 origAssembly hg19
 project wgEncode
 setType exp
@@ -277,6 +288,7 @@ expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 849b9f6f615b1d7c8aa3622a9687274e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -299,6 +311,7 @@ expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum ed32408f66371c6e766d1035a501d070
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -322,6 +335,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_H54
+md5sum 7dfd806cf4dbbfa9980babf5711ab159
 origAssembly hg19
 project wgEncode
 setType exp
@@ -345,6 +359,7 @@ fileName wgEncodeOpenChromChipGlioblaInputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=b09f98aa75167ac425faee948d1fe94f,bai=9888201b3955aa46bbb8fbb30b41c983
 origAssembly hg19
 project wgEncode
 setType input
@@ -366,6 +381,7 @@ expId 1129
 fileName wgEncodeOpenChromChipGlioblaInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum b1fb67288714bb4a83d4f087718c4a6d
 origAssembly hg19
 project wgEncode
 setType input
@@ -388,6 +404,7 @@ fileName wgEncodeOpenChromChipGlioblaInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum ec236967dbddff045a95b8762ee6839f
 origAssembly hg19
 project wgEncode
 setType input
@@ -411,6 +428,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=e2f98f53ef44d375a9a5fd4c5e6e9512,bai=4261b7f21d61de4bc912c6aeb40ffae0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -434,6 +452,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=7911b09080f688105056bf22c0dcf1b3,bai=1706d39abde8bb827302ca42b794bfe1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -457,6 +476,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum d39e100ae543ad90c4d0092a6c0436f9
 origAssembly hg19
 project wgEncode
 setType exp
@@ -480,6 +500,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 97a044a6db51ad201006ae8fa72c21f6
 origAssembly hg19
 project wgEncode
 setType exp
@@ -502,6 +523,7 @@ expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 11a3ad89c2effc4ea915a3f996c4eec0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -524,6 +546,7 @@ expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum e828cc6ce8470b3c74c3d9a3a9fe7b4e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -547,6 +570,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_H54
+md5sum dea5a9191b4693da6421a0c35fbca3b0
 origAssembly hg19
 project wgEncode
 setType exp
@@ -571,6 +595,7 @@ fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=8ce078f811af718f44a34c2146a3858f,bai=934999b6cc645852fd6b7fb471feed01
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -595,6 +620,7 @@ fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=7b15fc2ea3fddb719626d68569432a22,bai=3867e8c1833442c9578ea7e2e0f13960
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -619,6 +645,7 @@ fileName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum c541180cfc5e956ad595e8ed9ce3d777
 origAssembly hg18
 project wgEncode
 setType exp
@@ -643,6 +670,7 @@ fileName wgEncodeOpenChromChipGm12878CmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.001
+md5sum 06cbc50b630d710ae406dfce63ec642e
 origAssembly hg18
 project wgEncode
 setType exp
@@ -665,6 +693,7 @@ expId 547
 fileName wgEncodeOpenChromChipGm12878CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum c1de271c9500a813ceb21d13419894f2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -687,6 +716,7 @@ expId 547
 fileName wgEncodeOpenChromChipGm12878CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 833ff9e94d7e1f32da61fe3670ac117e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -711,6 +741,7 @@ fileName wgEncodeOpenChromChipGm12878CmycSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_GM12878
+md5sum 4aaf1ff788c2e45d2c7a067e8f9a3c6b
 origAssembly hg18
 project wgEncode
 setType exp
@@ -735,6 +766,7 @@ fileName wgEncodeOpenChromChipGm12878CmycValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 764998ed632d7689fa67ef10536ce880
 project wgEncode
 setType exp
 subId 3832
@@ -756,6 +788,7 @@ fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=49a0bd6730c3950087edd7162a7a286d,bai=335f8c4328e6115b9a169a41cc7d71b1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -779,6 +812,7 @@ fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=24c25b458cd7e472af7cff89b91ce706,bai=0d3119b01481ddbc44e2195460e68bf0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -802,6 +836,7 @@ fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=c7afb31b2e0b6a6c11c3f7f6793ff9cc,bai=f9115cdb4214f9cffc6fa0d5272823fb
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -825,6 +860,7 @@ fileName wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum a2fc6645e422a6e460c66140efa93422
 origAssembly hg18
 project wgEncode
 setType exp
@@ -848,6 +884,7 @@ fileName wgEncodeOpenChromChipGm12878CtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum a6f856eb3742b57cd1515cf4669b620d
 origAssembly hg18
 project wgEncode
 setType exp
@@ -871,6 +908,7 @@ expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 49d078a7cc72e52fdca9c9806c9d375f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -894,6 +932,7 @@ expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 8857dc283de4486075d9220966431943
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -917,6 +956,7 @@ expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 60159eff02f764d871ed8c38882debb7
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -940,6 +980,7 @@ fileName wgEncodeOpenChromChipGm12878CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_GM12878
+md5sum 9f97e9172995f5241263237eb5e91b20
 origAssembly hg18
 project wgEncode
 setType exp
@@ -964,6 +1005,7 @@ fileName wgEncodeOpenChromChipGm12878CtcfValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 6ce33a140c328e68d52bd1124d610624
 project wgEncode
 setType exp
 subId 3832
@@ -986,6 +1028,7 @@ fileName wgEncodeOpenChromChipGm12878InputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=fc01a486efc03b42f259299c64210069,bai=2db851f92ca557f0e0bb8ca52bb97c8a
 origAssembly hg18
 project wgEncode
 setType input
@@ -1007,6 +1050,7 @@ expId 528
 fileName wgEncodeOpenChromChipGm12878InputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum b7b552c10494212ce4f100d1b4bf75d5
 origAssembly hg18
 project wgEncode
 setType input
@@ -1030,6 +1074,7 @@ fileName wgEncodeOpenChromChipGm12878InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum c8ac97d5267c4a404cc519c3057e5751
 origAssembly hg18
 project wgEncode
 setType input
@@ -1054,6 +1099,7 @@ fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=5aca492cee5a348430c7d65f0bec5adc,bai=6f56f0b134aec743d37fc2dab92dd0ab
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1078,6 +1124,7 @@ fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=ee515d05481406ce25952295920c986d,bai=23b1339750042a5d0b1285c9691fc079
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1102,6 +1149,7 @@ fileName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 759f21263591ed1916db81b7d426ddde
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1126,6 +1174,7 @@ fileName wgEncodeOpenChromChipGm12878Pol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 15373f463f3d6821047e8a4167a978c1
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1148,6 +1197,7 @@ expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 284e70e9916c0b35a8340784d8e08238
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1170,6 +1220,7 @@ expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 7dc1d7dbf009327e1344261758218e3e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1194,6 +1245,7 @@ fileName wgEncodeOpenChromChipGm12878Pol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_GM12878
+md5sum 216df87085ad3667fe9963c01f4a0756
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1218,6 +1270,7 @@ fileName wgEncodeOpenChromChipGm12878Pol2Validation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 2be0fbf348e706ba4862cc72c5df2a13
 project wgEncode
 setType exp
 subId 3832
@@ -1240,6 +1293,7 @@ fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=46fb8c464840ead4f7e4556aa64ca27b,bai=196f5b859ffb0ee0a8dd2dfa5b62fd09
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1264,6 +1318,7 @@ fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=fecb5a179c90c42b70d74a980bf20075,bai=acfa4f6f409d22c7dfcde436e89a30cb
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1288,6 +1343,7 @@ fileName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 9ffdfb5b6d776952ef20220eaf71184c
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1312,6 +1368,7 @@ fileName wgEncodeOpenChromChipGm12891CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 9c8ce6b60bbee76bcc1d88097bdf6705
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1334,6 +1391,7 @@ expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 750523aba52772a9dadc23039e4c1c5c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1356,6 +1414,7 @@ expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum d8c16ab6d6a9ea6b5341612cad9ced07
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1380,6 +1439,7 @@ fileName wgEncodeOpenChromChipGm12891CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
+md5sum 950bc7bd1cb829eca1b368ea3d9c095c
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1404,6 +1464,7 @@ fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=63bc5d9187713ebe105eef4228d8483d,bai=16639a67b9768894a9ae49f3e3babce2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1428,6 +1489,7 @@ fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=7f1cf674026051df7efe2c06e764db3e,bai=5367ac8c1f2e37eb43a59ffc3a862b1a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1452,6 +1514,7 @@ fileName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 02de06dc507b2524dea24ef623934462
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1476,6 +1539,7 @@ fileName wgEncodeOpenChromChipGm12892CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 62afc2eada9b495bce82f8793934e08b
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1498,6 +1562,7 @@ expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 6c7c24ce8e70f7bbf35a8da1b156fa91
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1520,6 +1585,7 @@ expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 5c8dfa6ed9836d3ffc05cf658ff2a8c0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1544,6 +1610,7 @@ fileName wgEncodeOpenChromChipGm12892CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_female
+md5sum f1e7baf374a5d7b23c155da7dd58e044
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1568,6 +1635,7 @@ fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=261bc5471368995fa812d11ad10cdb00,bai=d724e739ede4539b62d9cd36e1d4741f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1592,6 +1660,7 @@ fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=d39f5a80b0557ea8cf7c534adcfb6edf,bai=3b9ce91df82eb05097c2d8606bccd197
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1616,6 +1685,7 @@ fileName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum fdf68c14d53504d5593842073c002d1f
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1640,6 +1710,7 @@ fileName wgEncodeOpenChromChipGm19238CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum fc1b839efa8f54f75eb47cc6803b478c
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1662,6 +1733,7 @@ expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 07373500f01bce3a0972539a4b2ef05c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1684,6 +1756,7 @@ expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum d409893fcecbd001bf148b23977fc1c8
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1708,6 +1781,7 @@ fileName wgEncodeOpenChromChipGm19238CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_female
+md5sum 929da66e7c4cf42d4f52e2d52c265e83
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1732,6 +1806,7 @@ fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=ccb9a29b87e6e2cbce5499f79c2cb8c4,bai=b7cafb68818f905c4af432876581c4d9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1756,6 +1831,7 @@ fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=866bb0b95cd46b91e20519f20387172a,bai=581be16a8ff1cc7b9ba7287dc3aaf83c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1780,6 +1856,7 @@ fileName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 9a97a40c4bb6a13aa905d1782f27e4bc
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1804,6 +1881,7 @@ fileName wgEncodeOpenChromChipGm19239CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 12e1b7e9a3f42051505faad4dcc6d71b
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1826,6 +1904,7 @@ expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 5bc645a3b5ee7de9e8ccee37623ac7bb
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1848,6 +1927,7 @@ expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 4945a7cffebee93482a650d31e5e4f74
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1872,6 +1952,7 @@ fileName wgEncodeOpenChromChipGm19239CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
+md5sum a6f3b11d1c3ae388c0aaa16e4aeeb5bc
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1896,6 +1977,7 @@ fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=ca212abe7c98829cb8e7d52576e459d2,bai=43c3a3ac3d8bdcc32689366d82d1b5d4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1920,6 +2002,7 @@ fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=37f25389cf72fa497dd83156f1ae1520,bai=fe0d1c89b2ad06dec69f505272168d16
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1944,6 +2027,7 @@ fileName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 595e2946698d0d9719b42c39b2b6c33c
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1968,6 +2052,7 @@ fileName wgEncodeOpenChromChipGm19240CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum ec2da19aaf0112aa496eca7c788a7bb0
 origAssembly hg18
 project wgEncode
 setType exp
@@ -1990,6 +2075,7 @@ expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 774b7d8eb142528fe79073a5344d3d43
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2012,6 +2098,7 @@ expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum e23d448d34c29350e90cf06279666b59
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2036,6 +2123,7 @@ fileName wgEncodeOpenChromChipGm19240CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_female
+md5sum b07d0222385819e211056fb179022ec2
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2060,6 +2148,7 @@ fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=cf878eea152e6a33a95845a5c6c0365f,bai=97c5f9d1fda1ce2b46cc6fc4fc80b885
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2084,6 +2173,7 @@ fileName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 70702c7a2b92ccc7cd47ed11913384d5
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2108,6 +2198,7 @@ fileName wgEncodeOpenChromChipH1hescCmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
+md5sum 3babd9bdcb6dd59af96e8091adc56f05
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2130,6 +2221,7 @@ expId 596
 fileName wgEncodeOpenChromChipH1hescCmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 80eae886c68f29570bfa5c89ac6a0f6a
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2153,6 +2245,7 @@ fileName wgEncodeOpenChromChipH1hescCmycSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
+md5sum efd5f96ba4caa0366c5673243a107bb8
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2177,6 +2270,7 @@ fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=da737f64a7e9d1e5c89af9d4e0d0e18d,bai=73f413971720b7930a99497f50090105
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2201,6 +2295,7 @@ fileName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum bebcc1e380b2317d8dc84e8c0fec2487
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2225,6 +2320,7 @@ fileName wgEncodeOpenChromChipH1hescCtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum f184dbeabc74f58f3dcf39b997556962
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2247,6 +2343,7 @@ expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 10a7190630c1cf28e238423cb98b5cfa
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2270,6 +2367,7 @@ fileName wgEncodeOpenChromChipH1hescCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
+md5sum b22bd7d64bd459f3fd07ac0202fa48fd
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2294,6 +2392,7 @@ fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=c6bf635d2aca79d018b187650ebda162,bai=f8d23b0b281474fb1c8d6f00d7d2a26f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2318,6 +2417,7 @@ fileName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 4220a3e55a2b03312dc54e617f9fca50
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2342,6 +2442,7 @@ fileName wgEncodeOpenChromChipH1hescPol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 9574fdb9b41b1a550abb70dc98e89964
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2364,6 +2465,7 @@ expId 563
 fileName wgEncodeOpenChromChipH1hescPol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 118d25425882ec15bc6159e2b1006fa9
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2387,6 +2489,7 @@ fileName wgEncodeOpenChromChipH1hescPol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
+md5sum 9e81c4b450c321317f715180a6c34f9f
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2411,6 +2514,7 @@ fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=7b7e1ee1d1761a9bfce909a3b9457c92,bai=54f8022100d93e7de3563b0d8dd1057c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2435,6 +2539,7 @@ fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=051d25b8dea30181a64ddc9e1088a9dc,bai=325eab0b2936de7c94706c9b97e7b2bf
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2459,6 +2564,7 @@ fileName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum e9bbf86b1b80a401cdcb6b16327b5297
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2483,6 +2589,7 @@ fileName wgEncodeOpenChromChipHelas3CmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
+md5sum fdb401701d25d6e7aa7309739253846d
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2506,6 +2613,7 @@ expId 542
 fileName wgEncodeOpenChromChipHelas3CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 0174582a01bae667f78c9c297bd1ea3e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2529,6 +2637,7 @@ expId 542
 fileName wgEncodeOpenChromChipHelas3CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 0a68c601fabbdb3422d41842e2e29842
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2553,6 +2662,7 @@ fileName wgEncodeOpenChromChipHelas3CmycSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
+md5sum 8c2fdb3ea1cca541b094847c75db51b9
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2577,6 +2687,7 @@ fileName wgEncodeOpenChromChipHelas3CmycValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 98b048f424a4efa688b855649491c915
 project wgEncode
 setType exp
 subId 4161
@@ -2600,6 +2711,7 @@ fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=2b65880e833378cc733a722988a276bd,bai=bfb553a4887e09a3ac0750bf6f288827
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2624,6 +2736,7 @@ fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=229c4ad186d379815cd294f20cc8d6ea,bai=568f36edd41c082e85cb210c857606d2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2648,6 +2761,7 @@ fileName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 07839dee5546df25753bc24b05650477
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2672,6 +2786,7 @@ fileName wgEncodeOpenChromChipHelas3CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 96fd9d6f3d25f6cfd8b0b3a88de4b7b7
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2695,6 +2810,7 @@ expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum cc6dede9ef9834b2b68ff569789bea6e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2718,6 +2834,7 @@ expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum fe0a03481b3d2f4de90dedeab1cd8f7b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2742,6 +2859,7 @@ fileName wgEncodeOpenChromChipHelas3CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
+md5sum c2ad03507a59f4494f225cc6ea8e0825
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2766,6 +2884,7 @@ fileName wgEncodeOpenChromChipHelas3CtcfValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 88185a631c09336b00d44c347d63b33f
 project wgEncode
 setType exp
 subId 4161
@@ -2789,6 +2908,7 @@ fileName wgEncodeOpenChromChipHelas3InputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=e3e3b38e6df3b0ca68360c84ca05373f,bai=ba25f6ea085eb5013657ae90da96aec5
 origAssembly hg18
 project wgEncode
 setType input
@@ -2811,6 +2931,7 @@ fileName wgEncodeOpenChromChipHelas3InputRawData.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina, pooled
+md5sum 44654f51fcfcec8d2dd4edcd880fb533
 origAssembly hg18
 project wgEncode
 setType input
@@ -2834,6 +2955,7 @@ fileName wgEncodeOpenChromChipHelas3InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum a0586cf612d6f9498c8f9d7153f4dcaf
 origAssembly hg18
 project wgEncode
 setType input
@@ -2858,6 +2980,7 @@ fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=8d8a3c7e5d4608dee152ba15c295d39d,bai=629ad4dabbfe02d89dcf8fe20906adbb
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2882,6 +3005,7 @@ fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=fc36a0db2084920b756ce159d1d4afd9,bai=60a66b66d7e57e4df08a974859b41509
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2906,6 +3030,7 @@ fileName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum cfe43f3b2e4d38c2a05fc1d9bfc5a558
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2930,6 +3055,7 @@ fileName wgEncodeOpenChromChipHelas3Pol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum edcfd33a19590f9c6be568e40d917e47
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2952,6 +3078,7 @@ expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 6d03920b23df44c9b2c131fd65aa4c92
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2975,6 +3102,7 @@ expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 87e64f48658b0be49698f0d4ba6f127e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2999,6 +3127,7 @@ fileName wgEncodeOpenChromChipHelas3Pol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
+md5sum c985a92e67392524fd9c286a911897c4
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3023,6 +3152,7 @@ fileName wgEncodeOpenChromChipHelas3Pol2Validation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 34865f200442fa5564697487fb17c48e
 project wgEncode
 setType exp
 subId 4161
@@ -3046,6 +3176,7 @@ fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=e16628ab15130e6327b04d7d0f94b608,bai=2080405a333e696e9010b14456f9a9c8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3070,6 +3201,7 @@ fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=0cc72233eef1f2bd1d0d106e1203823c,bai=adbf9c964a6e7c94bb775ee1dfd075de
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3094,6 +3226,7 @@ fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=e0f9645f7a89419ed198e6cc81f9d740,bai=f3ec1d19cf13fc0e9cfa9f04947c80f4
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3118,6 +3251,7 @@ fileName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 74591ee7453fa9011cddd9b9b50f0eb6
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3142,6 +3276,7 @@ fileName wgEncodeOpenChromChipHepg2CmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
+md5sum d2af1dbad600c784333d1548bd30442b
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3165,6 +3300,7 @@ expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum f2fa084d57e032045dcacd669d11e268
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3188,6 +3324,7 @@ expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 8807afa94c7be0451a1aef92d15ed3ac
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3211,6 +3348,7 @@ expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 55aaa5192ac5d2a668f2e23eab9b2823
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3235,6 +3373,7 @@ fileName wgEncodeOpenChromChipHepg2CmycSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HepG2
+md5sum 75e5d29e8fd52dedd1f086ff321930f9
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3259,6 +3398,7 @@ fileName wgEncodeOpenChromChipHepg2CmycValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum ac8465e690ca7f90046ced7ae1f1a8b8
 project wgEncode
 setType exp
 subId 4161
@@ -3282,6 +3422,7 @@ fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=0421dbb3a39f0fc2450920bd7f96a978,bai=632a1be255d83e4a8d17800df8826fc5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3306,6 +3447,7 @@ fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=b9a0a82095cd5aba8ceb50cac4397c52,bai=90132e85227b1b36ba70f867164ab85f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3330,6 +3472,7 @@ fileName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum b7dce093849e8bf0299298b418d92985
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3354,6 +3497,7 @@ fileName wgEncodeOpenChromChipHepg2CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum aefe60b388b602f45494cebd7fe7b00c
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3377,6 +3521,7 @@ expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 8265f525858edd5e00a75471499bc650
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3400,6 +3545,7 @@ expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 3b236e74cf471a3f1c60dfd0599f6238
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3424,6 +3570,7 @@ fileName wgEncodeOpenChromChipHepg2CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HepG2
+md5sum d33260c7525ff41275cf26d62229b776
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3448,6 +3595,7 @@ fileName wgEncodeOpenChromChipHepg2CtcfValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 9ebf789ffc7436d49712af26b5cdb04e
 project wgEncode
 setType exp
 subId 4161
@@ -3471,6 +3619,7 @@ fileName wgEncodeOpenChromChipHepg2InputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=45a4ec67c0ff64a23bccec6ac8624766,bai=e7fe8c85f567aaddf2df709ca36e0e3e
 origAssembly hg18
 project wgEncode
 setType input
@@ -3493,6 +3642,7 @@ fileName wgEncodeOpenChromChipHepg2InputRawData.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina, pooled
+md5sum 4c7956a71015a34d68ab5f9930f0be94
 origAssembly hg18
 project wgEncode
 setType input
@@ -3516,6 +3666,7 @@ fileName wgEncodeOpenChromChipHepg2InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum fdbceaaf29af05ddf745da26e4cc2f36
 origAssembly hg18
 project wgEncode
 setType input
@@ -3540,6 +3691,7 @@ fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=d18a64ffdb81931877c11a0020670ee9,bai=bd7f186c9e8bce81dc8f9f3fc57002a3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3564,6 +3716,7 @@ fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=1297a5ffc620f1c90726ca6fffa8b0c1,bai=eb31fc1e7053d3d4d70cd2c24c7c1c7b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3588,6 +3741,7 @@ fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=302e27359693d38d8ffdb3d6e5657381,bai=6fd8f8cd6999504d88ed769f168b51c9
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3612,6 +3766,7 @@ fileName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 671bc68d811082fe82c6dfd433cf6154
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3636,6 +3791,7 @@ fileName wgEncodeOpenChromChipHepg2Pol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 405b4330b21e58252dfa43bb6f4f244d
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3659,6 +3815,7 @@ expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 603257a462a1010ba9d09d0266cc07b8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3681,6 +3838,7 @@ expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 355ea63de92cdab471b34b8da210a266
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3703,6 +3861,7 @@ expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 20e856e8da4099c3ff8960322fe386b8
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3727,6 +3886,7 @@ fileName wgEncodeOpenChromChipHepg2Pol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HepG2
+md5sum 95bc2e50be5484c40556f4ec6172a27d
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3751,6 +3911,7 @@ fileName wgEncodeOpenChromChipHepg2Pol2Validation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 7ccb555ae66fce8818d8657a10815b0e
 project wgEncode
 setType exp
 subId 4161
@@ -3774,6 +3935,7 @@ fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=b2253794c1f7fa0a60c442a3b35a96cc,bai=e516956e349fe926654c9b313d7feb77
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3798,6 +3960,7 @@ fileName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 6b7e43c82e2615417557623cf43f945e
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3822,6 +3985,7 @@ fileName wgEncodeOpenChromChipHuvecCmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
+md5sum 7d4ce26014fe47628cf45bf77bb5c3b2
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3844,6 +4008,7 @@ expId 561
 fileName wgEncodeOpenChromChipHuvecCmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 760dbd85983c80cae6f30ca06d98d94e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3868,6 +4033,7 @@ fileName wgEncodeOpenChromChipHuvecCmycSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
+md5sum 10293e34b061c92348c8eeb2c40b2795
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3892,6 +4058,7 @@ fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=630474c9b8d2e6020f4e77eb71966b50,bai=ed0f1fe793e356f7d199a9aae535698f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3916,6 +4083,7 @@ fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=ab0804b9fda67f8ad14f6fff793659b6,bai=94fd7c76855cf0ab6e3538c245192249
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3940,6 +4108,7 @@ fileName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 3f9125377300a4366db589d1b6105ee1
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3964,6 +4133,7 @@ fileName wgEncodeOpenChromChipHuvecCtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 822b039ee9aa4e2e5c8813657c2a970f
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3986,6 +4156,7 @@ expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 27774230b1d8e487d14960b579c92a06
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4008,6 +4179,7 @@ expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 74b5a7630b8685d94f76343594d3b641
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4032,6 +4204,7 @@ fileName wgEncodeOpenChromChipHuvecCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
+md5sum 70630558c58e252c96f1ed6a4c7b420d
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4056,6 +4229,7 @@ fileName wgEncodeOpenChromChipHuvecCtcfValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 22523937cc38103ddf57625577db7002
 project wgEncode
 setType exp
 subId 4161
@@ -4079,6 +4253,7 @@ fileName wgEncodeOpenChromChipHuvecInputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=1d0b2378e7327fefb5b81a7fe9029251,bai=d459b48986547c7ddd0529f3ed96b8f2
 origAssembly hg18
 project wgEncode
 setType input
@@ -4100,6 +4275,7 @@ expId 550
 fileName wgEncodeOpenChromChipHuvecInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 1243f5fc0b82f2f059ddf6b81c886a82
 origAssembly hg18
 project wgEncode
 setType input
@@ -4123,6 +4299,7 @@ fileName wgEncodeOpenChromChipHuvecInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 4ca75b710935db81dc09a4f2a9d5cecc
 origAssembly hg18
 project wgEncode
 setType input
@@ -4147,6 +4324,7 @@ fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=700ce1f6710422d57b69106ee0dd3203,bai=b770c00d83caffdd4df46dc8910c00c4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4171,6 +4349,7 @@ fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=2106c8f9eeb67d68b6057d6c9e3f7187,bai=9b6e06f63ecf526e093f75a6ccce568a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4195,6 +4374,7 @@ fileName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum d93b6d9a8f45fec2722b7077f4ebe844
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4219,6 +4399,7 @@ fileName wgEncodeOpenChromChipHuvecPol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum b77f6a78edd00ce73c3c9d4bdee43cbc
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4241,6 +4422,7 @@ expId 552
 fileName wgEncodeOpenChromChipHuvecPol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum c950e3248495e3952a5f5d9676d97ebe
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4263,6 +4445,7 @@ expId 552
 fileName wgEncodeOpenChromChipHuvecPol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 2335dfc6e65ba78aac14af943101b0f2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4287,6 +4470,7 @@ fileName wgEncodeOpenChromChipHuvecPol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
+md5sum 62b70e1aee65e9e41e4717139f88343b
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4311,6 +4495,7 @@ fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=9eff836229f83a0cf38614f075b72729,bai=1e25d10dbf7cb56296b5090ddf0eb0bc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4335,6 +4520,7 @@ fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=987882ebc78baa6bc53babce7e53d439,bai=46900ae534c93255a3080635413e11c3
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4359,6 +4545,7 @@ fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=0547986e5dd992de98ab149d8ca2e932,bai=522f4542d9d3b9efffaab5766cc85ec7
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4383,6 +4570,7 @@ fileName wgEncodeOpenChromChipK562CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum b3051f4439559401743c547b289d4f56
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4407,6 +4595,7 @@ fileName wgEncodeOpenChromChipK562CmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
+md5sum 286efa162c05702c48d2945e6062b946
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4430,6 +4619,7 @@ expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 79cc7260d5c1c77f6cfd586aadd18984
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4453,6 +4643,7 @@ expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 65aaa71a340369df8dca70a50a78a92a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4476,6 +4667,7 @@ expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 59b616640a9f9254f8515e7748cc5934
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4500,6 +4692,7 @@ fileName wgEncodeOpenChromChipK562CmycSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_K562
+md5sum ac8a6c353b4fdbf087f31e54f56643f5
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4524,6 +4717,7 @@ fileName wgEncodeOpenChromChipK562CmycValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 1c69f30938898c91098f969c6bd46fa0
 project wgEncode
 setType exp
 subId 3832
@@ -4546,6 +4740,7 @@ fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=b6f045181f3c736fe61f1115a8f0769f,bai=6cdcec5b93422fb1340edb76824043e1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4570,6 +4765,7 @@ fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=ffca69645c43876754c54eadf64fbd4a,bai=bb77343bea05e9c408ecd660221d000e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4594,6 +4790,7 @@ fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=d8c249b29be04638c9b23cc197c7dba1,bai=1e9414d3104dc112e5dbabe958c251b0
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4618,6 +4815,7 @@ fileName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 9dccab6eae0c53c747788ef69a6e8ede
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4642,6 +4840,7 @@ fileName wgEncodeOpenChromChipK562CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 984abaf5e5a6fa22237906bc107644ac
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4665,6 +4864,7 @@ expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum e7d01096a547d126f43b37595ab9a73e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4688,6 +4888,7 @@ expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum f5483a78de4fddd0f3b92e3edb3beea7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4711,6 +4912,7 @@ expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 6f38b2c666e66d2ea2cacb4ce5b6f079
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4735,6 +4937,7 @@ fileName wgEncodeOpenChromChipK562CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_K562
+md5sum 71923247a2a46e312b55a484700e8f5e
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4759,6 +4962,7 @@ fileName wgEncodeOpenChromChipK562CtcfValidation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 19a8516b14dad6f7216581b3e52c9e1e
 project wgEncode
 setType exp
 subId 3832
@@ -4781,6 +4985,7 @@ fileName wgEncodeOpenChromChipK562InputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=7ff0918d3b3ab1496824af7488de1a17,bai=6dc006badd2f47beb55e0b14517ba4a3
 origAssembly hg18
 project wgEncode
 setType input
@@ -4803,6 +5008,7 @@ fileName wgEncodeOpenChromChipK562InputRawData.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
+md5sum faef9165afd3051ee701f853027a4d34
 origAssembly hg18
 project wgEncode
 setType input
@@ -4826,6 +5032,7 @@ fileName wgEncodeOpenChromChipK562InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 782bf5a344f4a710fe91b369b1d9ee71
 origAssembly hg18
 project wgEncode
 setType input
@@ -4850,6 +5057,7 @@ fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=430800736a44af531dad4f97f89ee865,bai=48be89e0a1bcdbcab50121211570baf5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4874,6 +5082,7 @@ fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=af9f57932eeb79b4e46b76597b24df2a,bai=07add7b4e318af4cda2ad9db0e520bae
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4898,6 +5107,7 @@ fileName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum d1210e4a2aaf005be098667cc80e4208
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4922,6 +5132,7 @@ fileName wgEncodeOpenChromChipK562Pol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum cce54edb5e2bd0631db9d67b6025055e
 origAssembly hg18
 project wgEncode
 setType exp
@@ -4944,6 +5155,7 @@ expId 555
 fileName wgEncodeOpenChromChipK562Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 0cb2219e1742000f919c7b74b042a8ec
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4966,6 +5178,7 @@ expId 555
 fileName wgEncodeOpenChromChipK562Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum be625e4898d465f75fd1f350e6beeecb
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4990,6 +5203,7 @@ fileName wgEncodeOpenChromChipK562Pol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_K562
+md5sum 5bb41aa2179a19a05518a75aea37e446
 origAssembly hg18
 project wgEncode
 setType exp
@@ -5014,6 +5228,7 @@ fileName wgEncodeOpenChromChipK562Pol2Validation.tgz
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
+md5sum 1ed0e72b3eebdf93ffedec9ed945696b
 project wgEncode
 setType exp
 subId 3832
@@ -5035,6 +5250,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=594616943fff9d12eeec3b46ea61b3ed,bai=6f9e0041bd107684ce5cd3686224287e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5059,6 +5275,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=d1417675a3a73c9f349c09b0ccbdf6df,bai=d6cd1c56b2e1aa2e8f7b6f1b85c495ce
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5083,6 +5300,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum b22dc17c76058bedb2863ea6650660af
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5107,6 +5325,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum bea123167eb09018fddc1f18affb7aa9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5131,6 +5350,7 @@ expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 65c6553a41d94e026f83f14c7aa940eb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5154,6 +5374,7 @@ expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 1d1def9ab536ed88c77c918ea96dd93b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5178,6 +5399,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum 0282eec6fd400d049da8db1b301ab5e4
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5202,6 +5424,7 @@ expId 599
 fileName wgEncodeOpenChromChipMcf7CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum e38e1dfbd4b44347aed9538791f4d9f7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5225,6 +5448,7 @@ expId 599
 fileName wgEncodeOpenChromChipMcf7CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 0967f7364de1ed61c39f1c85da3648c5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5248,6 +5472,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=ec57082fd8c8206f6ab158fce21e9a63,bai=b89e86e8a637966d217f945c56f851b9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5272,6 +5497,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=2099fab6d38caa9e2572c8a2dd0d2c69,bai=fc95b2fe8b3bb57e2f09d482e8967205
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5296,6 +5522,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 95efee2a1802c02bd991bb8fd7deff23
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5320,6 +5547,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum f17bfac31153100ea484b0a73946e194
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5343,6 +5571,7 @@ expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum ffe77bc6be2de28593a7bf90608d209b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5366,6 +5595,7 @@ expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 17e0fbe3f94e55a76ee889d84341efc4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5390,6 +5620,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum d64fe6c1d7c55ad862dc3988815ec917
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5415,6 +5646,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=fe704d42067e1ce265e3eaa8e0d68909,bai=602299fdc3125198929d74342df10dd0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5439,6 +5671,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=f1cdeda8b02e54e5a7732af96b2636f5,bai=321e606c1c7ed3a2b9fad17c2730cf82
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5463,6 +5696,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum c158e59bea1530ecd7824c8e19dab722
 origAssembly hg18
 project wgEncode
 setType exp
@@ -5486,6 +5720,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=4f37357d3bd4cc180642e03c49ec7a2c,bai=a14446295131c8edf01c127334427954
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5510,6 +5745,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=4f9ba92d0a7d65776bdc61a1b5975378,bai=945c7b33ce5ac406fd51087561fee2e4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5534,6 +5770,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 6d40f266af8f3b71930056c4052cb905
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5558,6 +5795,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum eb4322e60c37f8b88cbfc12a9abe8c4f
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5581,6 +5819,7 @@ expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 3e46b33103320ac66d233ec3656504a0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5604,6 +5843,7 @@ expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum e396639e76ca8be3160884eb591e3563
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5628,6 +5868,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum c9c9b8ab3ece7e97aad4cd7163c1c073
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5653,6 +5894,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 2a7778dac2cb0e23cb3a83c5eea41cf9
 origAssembly hg18
 project wgEncode
 setType exp
@@ -5675,6 +5917,7 @@ expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 6a9a967f5fb8216c48726339eb549ce4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5697,6 +5940,7 @@ expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 4c3ffa144de1488fb762aad6c6876522
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5721,6 +5965,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum e571b7261138ee39de4bde330018149d
 origAssembly hg18
 project wgEncode
 setType exp
@@ -5744,6 +5989,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=2394c7f6cfc5681ce37eb68b7b6f8d87,bai=46ddbd1c92e5c008fa94b9abc80a95cf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5768,6 +6014,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=82b289023adaad17b34ed589d53c8775,bai=8758c8c2c23d6cb168229c91be4d823e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5792,6 +6039,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum ed38d8e86f9e258032408d67e82d6517
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5816,6 +6064,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum ad2972e4ab6e0b01298aef5d8a8eae23
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5839,6 +6088,7 @@ expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 0a6bdde8340853b0651ae5374b6db476
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5862,6 +6112,7 @@ expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum e5a1de99ebb821a6d89fdb876c44be75
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5886,6 +6137,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum 8452bed735ecf46f2725287e9bae18ba
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5911,6 +6163,7 @@ fileName wgEncodeOpenChromChipMcf7InputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=af4ee4b58bdfb92878ee0035295474ca,bai=f32cc452beae010fec42c84e9b03d9df
 origAssembly hg18
 project wgEncode
 setType input
@@ -5932,6 +6185,7 @@ expId 589
 fileName wgEncodeOpenChromChipMcf7InputRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum a50029660a56274542b1b9bf3a1024bd
 origAssembly hg18
 project wgEncode
 setType input
@@ -5955,6 +6209,7 @@ fileName wgEncodeOpenChromChipMcf7InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 78db549a6772a68e73403e017650cfbd
 origAssembly hg18
 project wgEncode
 setType input
@@ -5978,6 +6233,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=3fc7a5fc647f75ec15397cbc8e731ffb,bai=9a48914f8ca7f7f3b24954665148552a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6001,6 +6257,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=cac2f2ca52dc7f0a6448e3ccf2204205,bai=175e61d3d3d6d100acc23064743f5b32
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6024,6 +6281,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum e4d4a98d05318da7160cbbc4791ba83d
 origAssembly hg19
 project wgEncode
 setType exp
@@ -6047,6 +6305,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum d1cebd057ea17dd9de18487291bd39de
 origAssembly hg19
 project wgEncode
 setType exp
@@ -6069,6 +6328,7 @@ expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 370f92afe8a636afc509e5946651b947
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6091,6 +6351,7 @@ expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 985ae9d76701893603bc8bec0c029cef
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6114,6 +6375,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum 42ce7255186688d5881ea9cb5b6b81c7
 origAssembly hg19
 project wgEncode
 setType exp
@@ -6137,6 +6399,7 @@ fileName wgEncodeOpenChromChipMonocd14InputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=490c5d71e6c847ca77d93b562f173a6a,bai=543d82be8f8ca67f7313949a86733e7d
 origAssembly hg19
 project wgEncode
 setType input
@@ -6158,6 +6421,7 @@ expId 1137
 fileName wgEncodeOpenChromChipMonocd14InputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum f8628418043a552db8de137ffdadcabf
 origAssembly hg19
 project wgEncode
 setType input
@@ -6180,6 +6444,7 @@ fileName wgEncodeOpenChromChipMonocd14InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 10c502bdfbdcdbf2fffee2318626c6e7
 origAssembly hg19
 project wgEncode
 setType input
@@ -6204,6 +6469,7 @@ fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=bd3fa70c82f88d94c75de76ceeddd591,bai=c231cdb8dc973cea4584a02a488a1ce3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6228,6 +6494,7 @@ fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=1c5ae1e8842a492830a129065f4f6643,bai=6af0b26a067ea150410d7c05b6540798
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6252,6 +6519,7 @@ fileName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 34df3542a3a540eefc53a062d3c25e08
 origAssembly hg18
 project wgEncode
 setType exp
@@ -6276,6 +6544,7 @@ fileName wgEncodeOpenChromChipNhekCtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 5def847dbb8a583b91d6da68b345c434
 origAssembly hg18
 project wgEncode
 setType exp
@@ -6298,6 +6567,7 @@ expId 559
 fileName wgEncodeOpenChromChipNhekCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 594b3053658ae156d87456abaee6cf6f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6320,6 +6590,7 @@ expId 559
 fileName wgEncodeOpenChromChipNhekCtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 74d0f1b86a363f808b9f1b2ce4025a90
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6344,6 +6615,7 @@ fileName wgEncodeOpenChromChipNhekCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_female
+md5sum 84ed7d10bea8e3b18ebb03a9f3c87c2b
 origAssembly hg18
 project wgEncode
 setType exp
@@ -6368,6 +6640,7 @@ fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=77acfa12f34d420e7ec34f6fad5f889c,bai=c6c8bc9285a19b11eb90893955605d09
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6393,6 +6666,7 @@ fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=92e8605b20e95980ed0bad990f2ee952,bai=5e40a5f387e81ac2055a935a085f6ec9
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6418,6 +6692,7 @@ fileName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 49121e163375eb91b2bacde791f2f0d0
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6443,6 +6718,7 @@ fileName wgEncodeOpenChromChipProgfibCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum b206dcb204aba0d956dffd12095ddc12
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6469,6 +6745,7 @@ fileName wgEncodeOpenChromChipProgfibCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
+md5sum 88f498c99eb611a53eb6d734f7be2627
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6494,6 +6771,7 @@ fileName wgEncodeOpenChromChipProgfibInputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=1a759e20bda9d3191d38fded13bf9c59,bai=65f00f8e614a4aeab2bb871c90337292
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6518,6 +6796,7 @@ fileName wgEncodeOpenChromChipProgfibInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 8bd8a3811ae589a90b1aca3faa28085b
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6543,6 +6822,7 @@ fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=05b7208b6d9aef9ad895295d9b620123,bai=6256f52e58c0ab3b07493ac7d397c30f
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6568,6 +6848,7 @@ fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+md5sum bam=14d6eba1644fc4bcb61fdadc4a6543a3,bai=20e151758e6ed2840010cc4c8258be4a
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6593,6 +6874,7 @@ fileName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum ab54164fe8ac926a2acda80a9d0bf5a9
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6618,6 +6900,7 @@ fileName wgEncodeOpenChromChipProgfibPol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 1b1edb6a3d0322e1bd22b4a472e739d9
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6644,6 +6927,7 @@ fileName wgEncodeOpenChromChipProgfibPol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
+md5sum 6f9a94bc5fd2e7ae7e161162a639d057
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6652,4 +6936,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -249768854
+# MAGIC: -167033199

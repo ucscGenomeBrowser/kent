@@ -127,7 +127,7 @@ replicate 1
 rnaExtract total
 subId 752
 tableName wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
 objType table
@@ -146,7 +146,7 @@ replicate 1
 rnaExtract total
 subId 752
 tableName wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
 objType table
@@ -166,7 +166,7 @@ rnaExtract longPolyA
 subId 752
 submittedDataVersion V2 - file format change
 tableName wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
 objType table
@@ -185,7 +185,7 @@ replicate 2
 rnaExtract total
 subId 752
 tableName wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
 objType table
@@ -204,7 +204,7 @@ replicate 2
 rnaExtract total
 subId 752
 tableName wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal
 objType table

@@ -327,7 +327,7 @@ gClass_Ambiguous 100,91,191
 itemClassTbl pseudoYale60Class
 dataVersion December 2010
 urlLabel Yale pseudogene.org link:
-url http://tables.pseudogene.org/human55/$$
+url http://tables.pseudogene.org/index.cgi?table=Human60&value=$$
 
 searchTable pseudoYale60
 searchType genePred
@@ -4069,3 +4069,4 @@ searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
 termiRegex HSA_NumtS_*
 
+include decode.rmap.ra

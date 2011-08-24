@@ -85,6 +85,7 @@ int guidelineSpacing = 12;  /* Pixels between guidelines. */
 boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
 
 int rulerMode = tvHide;         /* on, off, full */
+struct hvGfx *hvgSide = NULL;     // An extra pointer to a side label image that can be built if needed
 
 char *rulerMenu[] =
 /* dropdown for ruler visibility */
@@ -1319,7 +1320,7 @@ int portX = insideX;
 // If a portal was established, then set the portal dimensions
 int portalStart,chromStart;
 double basesPerPixel;
-if (imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
+if (theImgBox && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
     {
     portX = (int)((portalStart - chromStart) / basesPerPixel);
     portX += gfxBorder;
@@ -1337,12 +1338,26 @@ labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
 hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
-mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
+mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
+#ifdef IMAGEv2_SHORT_MAPITEMS
+char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
+int width = portWidth - (2 * arrowButtonWidth);
+int x = portX + arrowButtonWidth;
+// make toggle cover only actual label
+int size = mgFontStringWidth(font,label) + 12;  // get close enough to the label
+if (width > size)
+    {
+    x += width/2 - size/2;
+    width = size;
+    }
+mapBoxToggleVis(hvg, x, y + 1, width, insideHeight, (theImgBox ? track : parentTrack));
+#else///ifndef IMAGEv2_SHORT_MAPITEMS
 mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
+#endif///ndef IMAGEv2_SHORT_MAPITEMS
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
-mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
+mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
@@ -1376,8 +1391,19 @@ if (track->limitedVis != tvHide)
                 }
             }
         if (!toggleDone)
+            {
+        #ifdef IMAGEv2_SHORT_MAPITEMS
+            // make toggle cover only actual label
+            int size = mgFontStringWidth(font,label) + 12;  // get close enough to the label
+            if (trackPastTabWidth > size)
+                {
+                trackPastTabX = insideX + insideWidth/2 - size/2;
+                trackPastTabWidth = size;
+                }
+        #endif///def IMAGEv2_SHORT_MAPITEMS
             mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight,
                             (theImgBox ? track : parentTrack));
+            }
         y += fontHeight;
         }
     y += track->totalHeight(track, track->limitedVis);
@@ -1534,8 +1560,10 @@ switch (track->limitedVis)
                             {
                             if (isCenterLabelIncluded(subtrack))
                                 y += fontHeight;
+                        #ifndef IMAGEv2_DRAG_SCROLL
                             if(theImgBox && subtrack->limitedVis == tvDense)
                                 mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, track->lineHeight, subtrack);
+                        #endif///ndef IMAGEv2_DRAG_SCROLL
                             y += subtrack->totalHeight(subtrack, subtrack->limitedVis);
                             }
                         }
@@ -1554,9 +1582,11 @@ switch (track->limitedVis)
             mapHeight = track->height;
         else
             mapHeight = track->lineHeight;
+    #ifndef IMAGEv2_DRAG_SCROLL
         int maxWinToDraw = getMaxWindowToDraw(track->tdb);
         if (maxWinToDraw <= 1 || (winEnd - winStart) <= maxWinToDraw)
             mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
+    #endif///ndef IMAGEv2_DRAG_SCROLL
         y += mapHeight;
         break;
     case tvHide:
@@ -1898,7 +1928,6 @@ leftLabelWidth = insideX - gfxBorder*3;
 
 struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
 struct image *theSideImg = NULL; // Because dragScroll drags off end of image, the side label gets seen. Therefore we need 2 images!!
-struct hvGfx *hvgSide = NULL;    // Strategy an extra pointer to a side image that can be built if needed
 //struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
@@ -1932,7 +1961,7 @@ if(theImgBox)
     if (withLeftLabels)
         {
         sliceWidth[stButton]   = trackTabWidth + 1;
-        sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 2;
+        sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 1;
         sliceOffsetX[stSide]   = (revCmplDisp? (tl.picWidth - sliceWidth[stSide] - sliceWidth[stButton]) : sliceWidth[stButton]);
         sliceOffsetX[stButton] = (revCmplDisp? (tl.picWidth - sliceWidth[stButton]) : 0);
         }
@@ -2199,10 +2228,13 @@ if (withLeftLabels && psOutput == NULL)
 
 if (withLeftLabels)
     {
-    Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
+    if (theImgBox == NULL)
+        {
+        Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
 
-    hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
-        gfxBorder, pixHeight, lightRed);
+        hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
+            gfxBorder, pixHeight, lightRed);
+        }
     y = gfxBorder;
     if (rulerMode != tvHide)
         {
@@ -2285,7 +2317,14 @@ if (withLeftLabels)
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
         else
-            y = doLeftLabels(track, hvgSide, font, y);
+            {
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+            if (theImgBox && track->limitedVis != tvDense)
+                y += sliceHeight;
+            else
+        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
+                y = doLeftLabels(track, hvgSide, font, y);
+            }
         }
     }
 else
@@ -2408,8 +2447,10 @@ if (withCenterLabels)
         else
             y = doDrawItems(track, hvg, font, y, &lastTime);
 
+        #ifndef IMAGEv2_DRAG_SCROLL
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track); // Strange mabBoxToggleLogic handles reverse complement itself so x=0, width=tl.picWidth
+        #endif///ndef IMAGEv2_DRAG_SCROLL
 
         if(yEnd!=y)
             warn("Slice height does not add up.  Expecting %d != %d actual",yEnd - yStart - 1,y-yStart);
@@ -2439,7 +2480,11 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
+    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+        else if (track->drawLeftLabels != NULL && (theImgBox == NULL || track->limitedVis == tvDense))
+    #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
+    #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
             y = doOwnLeftLabels(track, hvgSide, font, y);
         else
             y += trackPlusLabelHeight(track, fontHeight);
@@ -2484,6 +2529,30 @@ if(newWinWidth)
 if(hvgSide != hvg)
     hvGfxClose(&hvgSide);
 hvGfxClose(&hvg);
+
+#ifdef SUPPORT_CONTENT_TYPE
+// following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
+if(sameString(cartUsualString(cart, "hgt.contentType", "html"), "png"))
+    {
+    char buf[4096];
+    FILE *fd = fopen(gifTn.forCgi, "r");
+    if(fd == NULL)
+        // fail some other way (e.g. HTTP 500)?
+        errAbort("Couldn't open png for reading");
+    while(TRUE)
+        {
+        size_t n = fread(buf, 1, sizeof(buf), fd);
+        if(n)
+            fwrite(buf, 1, n, stdout);
+        else
+            break;
+        }
+    fclose(fd);
+    unlink(gifTn.forCgi);
+    return;
+    }
+#endif
+
 if(theImgBox)
     {
     imageBoxDraw(theImgBox);
@@ -3354,27 +3423,10 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         if (errCatchStart(errCatch))
 	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
         errCatchEnd(errCatch);
-	struct sqlConnection *conn = hConnectCentral();
-	char query[256];
         if (errCatch->gotError)
-	    {
-	    safef(query, sizeof(query),
-		"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d"
-		, hubStatusTableName
-		, errCatch->message->string
-		, hub->id
-		);
-	    }
+	    hubSetErrorMessage( errCatch->message->string, hub->id);
 	else
-	    {
-	    safef(query, sizeof(query),
-		"update %s set errorMessage=\"\", lastOkTime=now() where id=%d"
-		, hubStatusTableName
-		, hub->id
-		);
-	    }
-	sqlUpdate(conn, query);
-	hDisconnectCentral(&conn);
+	    hubSetErrorMessage(NULL, hub->id);
         errCatchFree(&errCatch);
 	}
     }
@@ -3834,7 +3886,7 @@ grpFreeList(&grps);
 	slSort(&hubList, hubCmpAlpha);	// alphabetize
 	minPriority -= 1.0;             // priority is 1-based
 	// the idea here is to get enough room between priority 1
-	// (which is custom tracks) and the group with the next 
+	// (which is custom tracks) and the group with the next
 	// priority number, so that the hub nestle inbetween the
 	// custom tracks and everything else at the top of the list
 	// of track groups
@@ -4112,8 +4164,11 @@ if (wikiTrackEnabled(database, NULL))
     wikiDisconnect(&conn);
     }
 
-loadTrackHubs(&trackList, &hubList);
-slReverse(&hubList);
+if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
+    { // If a single track was asked for and it is from a hub, then it is already in trackList
+    loadTrackHubs(&trackList, &hubList);
+    slReverse(&hubList);
+    }
 loadCustomTracks(&trackList);
 groupTracks(hubList, &trackList, pGroupList, vis);
 setSearchedTrackToPackOrFull(trackList);
@@ -4546,6 +4601,38 @@ pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
+static void printTrackTiming()
+{
+hPrintf("<span class='trackTiming'>track, load time, draw time, total<br />\n");
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (track->visibility == tvHide)
+        continue;
+    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
+        {
+        struct track *subtrack;
+        for (subtrack = track->subtracks; subtrack != NULL;
+             subtrack = subtrack->next)
+            if (isSubtrackVisible(subtrack))
+                hPrintf("%s, %d, %d, %d<br />\n", subtrack->shortLabel,
+                            subtrack->loadTime, subtrack->drawTime,
+                            subtrack->loadTime + subtrack->drawTime);
+        }
+    else
+        {
+        hPrintf("%s, %d, %d, %d<br />\n",
+		    track->shortLabel, track->loadTime, track->drawTime,
+		    track->loadTime + track->drawTime);
+        if (startsWith("wigMaf", track->tdb->type))
+            if (track->subtracks)
+                if (track->subtracks->loadTime)
+                    hPrintf("&nbsp; &nbsp; %s wiggle, load %d<br />\n",
+                                track->shortLabel, track->subtracks->loadTime);
+        }
+    }
+hPrintf("</span>\n");
+}
 
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4587,7 +4674,7 @@ hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 #else///ifndef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
 #endif///ndef NEW_JQUERY
-if (!psOutput) cartSaveSession(cart);
+if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
 /* See if want to include sequence search results. */
@@ -4862,6 +4949,13 @@ if (!hideControls)
 	 * we need to repeat the position in a hidden variable here
 	 * so that zoom/scrolling always has current position to work
 	 * from. */
+    #if IN_PLACE_UPDATE
+        // This 'dirty' field is used to check if js/ajax changes to the page have occurred.
+        // If so and it is reached by the back button, a page reload will occur instead.
+        hPrintf("<INPUT TYPE='text' style='display:none;' id='dirty' VALUE='false'>\n");
+        // Unfortunately this does not work in IE, so that browser will get the reload only after this full load.
+        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == 'true') window.location = '%s?hgsid=%d';</script>\n",hgTracksName(),cart->userId);
+    #endif/// IN_PLACE_UPDATE
 	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
 	    hPrintf("\n%s", trackGroupsHidden1->string);
@@ -4948,8 +5042,14 @@ makeActiveImage(trackList, psOutput);
 fflush(stdout);
 
 if(trackImgOnly)
+    {
     // bail out b/c we are done
+    if (measureTiming)
+        {
+        printTrackTiming();
+        }
     return;
+    }
 
 if (!hideControls)
     {
@@ -5113,7 +5213,7 @@ if (!hideControls)
 	    /* First track group that is not the custom track group (#1)
 	     * or a track hub, gets the Base Position track
 	     * unless it's collapsed. */
-	    if (!showedRuler && !isHubTrack(group->name) && 
+	    if (!showedRuler && !isHubTrack(group->name) &&
 		    differentString(group->name, "user") )
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
@@ -5189,35 +5289,8 @@ if (!hideControls)
 	}
 
     if (measureTiming)
-	{
-	hPrintf("track, load time, draw time, total<BR>\n");
-	for (track = trackList; track != NULL; track = track->next)
-	    {
-	    if (track->visibility == tvHide)
-		    continue;
-	    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-		{
-		struct track *subtrack;
-		for (subtrack = track->subtracks; subtrack != NULL;
-						    subtrack = subtrack->next)
-		    if (isSubtrackVisible(subtrack))
-			hPrintf("%s, %d, %d, %d<BR>\n", subtrack->shortLabel,
-				subtrack->loadTime, subtrack->drawTime,
-		subtrack->loadTime + subtrack->drawTime);
-		}
-	    else
-		{
-		hPrintf("%s, %d, %d, %d<BR>\n",
-		    track->shortLabel, track->loadTime, track->drawTime,
-		    track->loadTime + track->drawTime);
-		if (startsWith("wigMaf", track->tdb->type))
-		  if (track->subtracks)
-		      if (track->subtracks->loadTime)
-			 hPrintf("&nbsp; &nbsp; %s wiggle, load %d<BR>\n",
-			    track->shortLabel, track->subtracks->loadTime);
-		}
-	    }
-	}
+        printTrackTiming();
+
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
@@ -5254,6 +5327,7 @@ hPrintf("</FORM>\n");
 
 /* hidden form for track hub CGI */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
+cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTracks");
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
@@ -5829,7 +5903,7 @@ cart = theCart;
 
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount, 
+    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
@@ -5999,6 +6073,7 @@ else
     tracksDisplay();
     }
 
+jsonHashAddBoolean(jsonForClient, "measureTiming", measureTiming);
 hPrintf("<script type='text/javascript'>\n");
 jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
 hPrintf("</script>\n");

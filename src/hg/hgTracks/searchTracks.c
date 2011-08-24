@@ -32,7 +32,7 @@
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
 
-#define SUPPORT_QUOTES_IN_NAME_SEARCH
+#define SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -90,62 +90,6 @@ else if (sortBy == sbAbc)
 else
     slReverse(pTrack);
 }
-
-#ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
-
-// XXXX make a matchString function to support "contains", "is" etc. and wildcards in contains
-
-//    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
-
-static boolean isNameMatch(struct track *track, char *str, char *op)
-{
-return str && strlen(str) &&
-    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
-    (sameString(op, "is") && !strcasecmp(track->longLabel, str)) ||
-    (sameString(op, "contains") && containsStringNoCase(track->shortLabel, str) != NULL) ||
-    (sameString(op, "contains") && containsStringNoCase(track->longLabel, str) != NULL));
-}
-
-static boolean isDescriptionMatch(struct track *track, char **words, int wordCount)
-// We parse str and look for every word at the start of any word in track description (i.e. google style).
-{
-if(words)
-    {
-    // We do NOT lookup up parent hierarchy for html descriptions.
-    char *html = track->tdb->html;
-    if(!isEmpty(html))
-        {
-        /* This probably could be made more efficient by parsing the html into some kind of b-tree, but I am assuming
-           that the inner html loop while only happen for 1-2 words for vast majority of the tracks. */
-
-        int i, numMatches = 0;
-        html = stripRegEx(html, "<[^>]*>", REG_ICASE);
-        for(i = 0; i < wordCount; i++)
-            {
-            char *needle = words[i];
-            char *haystack, *tmp = cloneString(html);
-            boolean found = FALSE;
-            while((haystack = nextWord(&tmp)))
-                {
-                char *ptr = strstrNoCase(haystack, needle);
-                if(ptr != NULL && ptr == haystack)
-                    {
-                    found = TRUE;
-                    break;
-                    }
-                }
-            if(found)
-                numMatches++;
-            else
-                break;
-            }
-        if(numMatches == wordCount)
-            return TRUE;
-        }
-    }
-return FALSE;
-}
-#endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
 
 static int getFormatTypes(char ***pLabels, char ***pTypes)
 {
@@ -221,25 +165,55 @@ for(ix=0;ix<count;ix++)
 return count;
 }
 
-static struct slRef *simpleSearchForTracksstruct(struct trix *trix,char **descWords,int descWordCount)
+static struct slRef *simpleSearchForTracksstruct(char *simpleEntry)
 // Performs the simple search and returns the found tracks.
 {
 struct slRef *tracks = NULL;
 
-struct trixSearchResult *tsList;
-for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
+// Prepare for trix search
+if (!isEmpty(simpleEntry))
     {
-    struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
-    if (track != NULL)  // It is expected that this is NULL (e.g. when the trix references trackDb tracks which have no tables)
+    int trixWordCount = 0;
+    char *tmp = cloneString(simpleEntry);
+    char *val = nextWord(&tmp);
+    struct slName *el, *trixList = NULL;
+    while (val != NULL)
         {
-        refAdd(&tracks, track);
+        slNameAddTail(&trixList, val);
+        trixWordCount++;
+        val = nextWord(&tmp);
+        }
+    if (trixWordCount > 0)
+        {
+        // Unfortunately trixSearch can't handle the slName list
+        int i;
+        char **trixWords = needMem(sizeof(char *) * trixWordCount);
+        for(i = 0, el = trixList; el != NULL; i++, el = el->next)
+            trixWords[i] = strLower(el->name);
+
+        // Now open the trix file
+        char trixFile[HDB_MAX_PATH_STRING];
+        getSearchTrixFile(database, trixFile, sizeof(trixFile));
+        struct trix *trix = trixOpen(trixFile);
+
+        struct trixSearchResult *tsList;
+        for(tsList = trixSearch(trix, trixWordCount, trixWords, TRUE); tsList != NULL; tsList = tsList->next)
+            {
+            struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
+            if (track != NULL)  // It is expected that this is NULL (e.g. when the trix references trackDb tracks which have no tables)
+                {
+                refAdd(&tracks, track);
+                }
+            }
+        //trixClose(trix);  // don't bother (this is a CGI that is about to end)
         }
     }
 return tracks;
 }
 
-static struct slRef *advancedSearchForTracks(struct sqlConnection *conn,struct group *groupList, char **descWords,int descWordCount,
-                                             char *nameSearch, char *typeSearch, char *descSearch, char *groupSearch, struct slPair *mdbPairs)
+static struct slRef *advancedSearchForTracks(struct sqlConnection *conn,struct group *groupList,
+                                             char *nameSearch, char *typeSearch, char *descSearch,
+                                             char *groupSearch, struct slPair *mdbPairs)
 // Performs the advanced search and returns the found tracks.
 {
 int tracksFound = 0;
@@ -252,99 +226,100 @@ for (; pair!= NULL;pair=pair->next)
         numMetadataNonEmpty++;
     }
 
-    if(!isEmpty(nameSearch) || typeSearch != NULL || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty)
+if(!isEmpty(groupSearch) && sameString(groupSearch,ANYLABEL))
+    groupSearch = NULL;
+if(!isEmpty(typeSearch) && sameString(typeSearch,ANYLABEL))
+    typeSearch = NULL;
+
+if(isEmpty(nameSearch) && isEmpty(typeSearch) && isEmpty(descSearch)
+&& isEmpty(groupSearch) && numMetadataNonEmpty == 0)
+    return NULL;
+
+// First do the metaDb searches, which can be done quickly for all tracks with db queries.
+struct hash *matchingTracks = NULL;
+
+if (numMetadataNonEmpty)
+    {
+    struct mdbObj *mdbObj, *mdbObjs = mdbObjRepeatedSearch(conn,mdbPairs,TRUE,FALSE);
+    if (mdbObjs)
         {
-        // First do the metaDb searches, which can be done quickly for all tracks with db queries.
-        struct hash *matchingTracks = NULL;
-
-        if (numMetadataNonEmpty)
+        for (mdbObj = mdbObjs; mdbObj != NULL; mdbObj = mdbObj->next)
             {
-            struct mdbObj *mdbObj, *mdbObjs = mdbObjRepeatedSearch(conn,mdbPairs,TRUE,FALSE);
-            if (mdbObjs)
-                {
-                for (mdbObj = mdbObjs; mdbObj != NULL; mdbObj = mdbObj->next)
-                    {
-                    if (matchingTracks == NULL)
-                        matchingTracks = newHash(0);
-                    hashAddInt(matchingTracks, mdbObj->obj, 1);
-                    }
-                mdbObjsFree(&mdbObjs);
-                }
-           if (matchingTracks == NULL)
-                return NULL;
+            if (matchingTracks == NULL)
+                matchingTracks = newHash(0);
+            hashAddInt(matchingTracks, mdbObj->obj, 1);
             }
+        mdbObjsFree(&mdbObjs);
+        }
+    if (matchingTracks == NULL)
+        return NULL;
+    }
 
-    #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-        // Set the word lists up once
-        struct slName *nameList = NULL;
-        if (nameSearch)
-            nameList = slNameListOfUniqueWords(cloneString(nameSearch),TRUE); // TRUE means respect quotes
-        struct slName *descList = NULL;
-        if (descSearch)
-            descList = slNameListOfUniqueWords(cloneString(descSearch),TRUE);
-    #endif///def SUPPORT_QUOTES_IN_NAME_SEARCH
+// Set the word lists up once
+struct slName *nameList = NULL;
+if (!isEmpty(nameSearch))
+    nameList = slNameListOfUniqueWords(cloneString(nameSearch),TRUE); // TRUE means respect quotes
+struct slName *descList = NULL;
+if (!isEmpty(descSearch))
+    descList = slNameListOfUniqueWords(cloneString(descSearch),TRUE);
 
-        struct group *group;
-        for (group = groupList; group != NULL; group = group->next)
+struct group *group;
+for (group = groupList; group != NULL; group = group->next)
+    {
+    if(isEmpty(groupSearch) || sameString(group->name, groupSearch))
+        {
+        if (group->trackList == NULL)
+            continue;
+
+        struct trackRef *tr;
+        for (tr = group->trackList; tr != NULL; tr = tr->next)
             {
-            if(groupSearch == NULL || sameString(group->name, groupSearch))
+            struct track *track = tr->track;
+            char *trackType = cloneFirstWord(track->tdb->type); // will be spilled
+            if ((matchingTracks == NULL || hashLookup(matchingTracks, track->track) != NULL)
+            && (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb)))
+            && (isEmpty(nameSearch) || searchNameMatches(track->tdb, nameList))
+            && (isEmpty(descSearch) || searchDescriptionMatches(track->tdb, descList)))
                 {
-                if (group->trackList != NULL)
+                if (track != NULL)
                     {
-                    struct trackRef *tr;
-                    for (tr = group->trackList; tr != NULL; tr = tr->next)
+                    tracksFound++;
+                    refAdd(&tracks, track);
+                    }
+                else
+                    warn("found group track is NULL.");
+                }
+            if (track->subtracks != NULL)
+                {
+                struct track *subTrack;
+                for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
+                    {
+                    trackType = cloneFirstWord(subTrack->tdb->type); // will be spilled
+                    if ((matchingTracks == NULL || hashLookup(matchingTracks, subTrack->track) != NULL)
+                    && (isEmpty(typeSearch) || sameWord(typeSearch, trackType))
+                    && (isEmpty(nameSearch) || searchNameMatches(subTrack->tdb, nameList))
+                #ifdef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
+                    && (isEmpty(descSearch)
+                        || searchDescriptionMatches(subTrack->tdb, descList)
+                        || (tdbIsCompositeChild(subTrack->tdb) && subTrack->parent
+                            && searchDescriptionMatches(subTrack->parent->tdb, descList))))
+                #else///ifndef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
+                    && (isEmpty(descSearch) || searchDescriptionMatches(subTrack->tdb, descList)))
+                #endif///ndef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
                         {
-                        struct track *track = tr->track;
-                        char *trackType = cloneFirstWord(track->tdb->type); // will be spilled
-                #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-                        if((isEmpty(nameSearch) || searchNameMatches(track->tdb, nameList))
-                        && (isEmpty(descSearch) || searchDescriptionMatches(track->tdb, descList))
-                #else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
-                        if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains"))
-                        && (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount))
-                #endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
-                        && (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb)))
-                        && (matchingTracks == NULL || hashLookup(matchingTracks, track->track) != NULL))
+                        if (track != NULL)
                             {
-                            if (track != NULL)
-                                {
-                                tracksFound++;
-                                refAdd(&tracks, track);
-                                }
-                            else
-                                warn("found group track is NULL.");
+                            tracksFound++;
+                            refAdd(&tracks, subTrack);
                             }
-                        if (track->subtracks != NULL)
-                            {
-                            struct track *subTrack;
-                            for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
-                                {
-                                trackType = cloneFirstWord(subTrack->tdb->type); // will be spilled
-                        #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-                                if((isEmpty(nameSearch) || searchNameMatches(subTrack->tdb, nameList))
-                                && (isEmpty(descSearch) || searchDescriptionMatches(subTrack->tdb, descList))
-                        #else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
-                                if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains"))
-                                && (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount))
-                        #endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
-                                && (isEmpty(typeSearch) || sameWord(typeSearch, trackType))
-                                && (matchingTracks == NULL || hashLookup(matchingTracks, subTrack->track) != NULL))
-                                    {
-                                    if (track != NULL)
-                                        {
-                                        tracksFound++;
-                                        refAdd(&tracks, subTrack);
-                                        }
-                                    else
-                                        warn("found subtrack is NULL.");
-                                    }
-                                }
-                            }
+                        else
+                            warn("found subtrack is NULL.");
                         }
                     }
                 }
             }
         }
+    }
 
 return tracks;
 }
@@ -601,43 +576,24 @@ char *labels[128];
 int numGroups = 1;
 groups[0] = ANYLABEL;
 labels[0] = ANYLABEL;
-char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
-char *typeSearch = cartOptionalString(cart, TRACK_SEARCH_ON_TYPE);
-char *descSearch = NULL;
-char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
+char *nameSearch  = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
+char *typeSearch  = cartUsualString(   cart, TRACK_SEARCH_ON_TYPE,ANYLABEL);
+char *simpleEntry = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
+char *descSearch  = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
+char *groupSearch = cartUsualString(  cart, TRACK_SEARCH_ON_GROUP,ANYLABEL);
 boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 int tracksFound = 0;
-struct trix *trix;
-char trixFile[HDB_MAX_PATH_STRING];
-char **descWords = NULL;
-int descWordCount = 0;
 boolean searchTermsExist = FALSE;
 int cols;
 char buf[512];
 
-enum searchTab selectedTab = simpleTab;
 char *currentTab = cartUsualString(cart, TRACK_SEARCH_CURRENT_TAB, "simpleTab");
-if(sameString(currentTab, "simpleTab"))
-    {
-    selectedTab = simpleTab;
-    descSearch = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
-    freez(&nameSearch);
-    }
-else if(sameString(currentTab, "advancedTab"))
-    {
-    selectedTab = advancedTab;
-    descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
-    }
+enum searchTab selectedTab = (sameString(currentTab, "advancedTab") ? advancedTab : simpleTab);
 
-#ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-if(descSearch && selectedTab == simpleTab) // TODO: could support quotes in simple tab by detecting quotes and choosing to use doesNameMatch() || doesDescriptionMatch()
-    stripChar(descSearch, '"');
-#else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
-if(descSearch)
-    stripChar(descSearch, '"');
-#endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
+if(selectedTab == simpleTab && !isEmpty(simpleEntry)) // NOTE: could support quotes in simple tab by detecting quotes and choosing to use doesNameMatch() || doesDescriptionMatch()
+    stripChar(simpleEntry, '"');
 trackList = getTrackList(&groupList, -2); // global
 makeGlobalTrackHash(trackList);
 
@@ -645,8 +601,6 @@ makeGlobalTrackHash(trackList);
 // This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 
-getSearchTrixFile(database, trixFile, sizeof(trixFile));
-trix = trixOpen(trixFile);
 slSort(&groupList, gCmpGroup);
 for (group = groupList; group != NULL; group = group->next)
     {
@@ -686,8 +640,8 @@ hPrintf("<div id='tabs' style='display:none; %s'>\n"
 
 hPrintf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
 hPrintf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracksSearchButtonsEnable(true);'>\n",
-        TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
-if (selectedTab==simpleTab && descSearch)
+        TRACK_SEARCH_SIMPLE,simpleEntry == NULL ? "" : simpleEntry);
+if (selectedTab==simpleTab && simpleEntry)
     searchTermsExist = TRUE;
 
 hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
@@ -719,7 +673,7 @@ hPrintf("<td colspan='%d'>", cols - 4);
 hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
         TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 hPrintf("</td></tr>\n");
-if (selectedTab==advancedTab && descSearch)
+if (selectedTab==advancedTab && !isEmpty(descSearch))
     searchTermsExist = TRUE;
 
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
@@ -728,7 +682,7 @@ hPrintf("<td align='right'>is</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
 cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%; font-size:.9em;'");
 hPrintf("</td></tr>\n");
-if (selectedTab==advancedTab && groupSearch)
+if (selectedTab==advancedTab && !isEmpty(groupSearch) && !sameString(groupSearch,ANYLABEL))
     searchTermsExist = TRUE;
 
 // Track Type is (drop down)
@@ -741,7 +695,7 @@ char **formatLabels = NULL;
 int formatCount = getFormatTypes(&formatLabels, &formatTypes);
 cgiMakeDropListFull(TRACK_SEARCH_ON_TYPE, formatLabels, formatTypes, formatCount, typeSearch, "class='typeSearch' style='min-width:40%; font-size:.9em;'");
 hPrintf("</td></tr>\n");
-if (selectedTab==advancedTab && typeSearch)
+if (selectedTab==advancedTab && !isEmpty(typeSearch) && !sameString(typeSearch,ANYLABEL))
     searchTermsExist = TRUE;
 
 // mdb selects
@@ -749,7 +703,7 @@ struct slPair *mdbSelects = NULL;
 if(metaDbExists)
     {
     struct slPair *mdbVars = mdbVarsSearchable(conn,TRUE,FALSE); // Tables but not file only objects
-    mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
+    mdbSelects = mdbSelectPairs(cart, mdbVars);
     char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols,FALSE);  // not a fileSearch
     if (output)
         {
@@ -775,41 +729,14 @@ cgiDown(0.8);
 if (measureTiming)
     measureTime("Rendered tabs");
 
-if(descSearch != NULL && !strlen(descSearch))
-    descSearch = NULL;
-if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
-    groupSearch = NULL;
-if(typeSearch != NULL && sameString(typeSearch, ANYLABEL))
-    typeSearch = NULL;
-
-if(!isEmpty(descSearch))
-    {
-    char *tmp = cloneString(descSearch);
-    char *val = nextWord(&tmp);
-    struct slName *el, *descList = NULL;
-    int i;
-    while (val != NULL)
-        {
-        slNameAddTail(&descList, val);
-        descWordCount++;
-        val = nextWord(&tmp);
-        }
-    descWords = needMem(sizeof(char *) * descWordCount);
-    for(i = 0, el = descList; el != NULL; i++, el = el->next)
-        descWords[i] = strLower(el->name);
-    }
-
-if (doSearch && selectedTab==simpleTab && descWordCount <= 0)
-    doSearch = FALSE;
-
 if(doSearch)
     {
     // Now search
     struct slRef *tracks = NULL;
-    if(selectedTab==simpleTab)
-        tracks = simpleSearchForTracksstruct(trix,descWords,descWordCount);
+    if(selectedTab==simpleTab && !isEmpty(simpleEntry))
+        tracks = simpleSearchForTracksstruct(simpleEntry);
     else if(selectedTab==advancedTab)
-        tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,typeSearch,descSearch,groupSearch,mdbSelects);
+        tracks = advancedSearchForTracks(conn,groupList,nameSearch,typeSearch,descSearch,groupSearch,mdbSelects);
 
     if (measureTiming)
         measureTime("Searched for tracks");

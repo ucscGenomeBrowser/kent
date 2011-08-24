@@ -19,6 +19,7 @@ lab HudsonAlpha
 labExpId SL330
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=7cb94d10118040531c2fc60023890525,bai=97de9083cb4c179dc476d2b0a7ede159
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -45,6 +46,7 @@ lab HudsonAlpha
 labExpId SL332
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=a154a46ac816ed6d86610f8cabf7e07e,bai=41e259a5e5e9eaf95d5c6e028cbae8a3
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -71,6 +73,7 @@ lab HudsonAlpha
 labExpId SL330
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e668bdd571f0970dbd1b91ba34ba3703
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -96,6 +99,7 @@ lab HudsonAlpha
 labExpId SL332
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 67fa3acfd94f8669ba0cb6a7d99b803c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -121,6 +125,7 @@ lab HudsonAlpha
 labExpId SL330
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 898e283285ccc8208d27827396312023
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -147,6 +152,7 @@ lab HudsonAlpha
 labExpId SL332
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum debbfa054db409bd5d589136881144c0
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -173,6 +179,7 @@ lab HudsonAlpha
 labExpId SL330
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum f17d6db856fb441db58f39e9a090a542
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -198,6 +205,7 @@ lab HudsonAlpha
 labExpId SL332
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 221ec0237a4ae41cd81ece143808df44
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -223,6 +231,7 @@ lab HudsonAlpha
 labExpId SL1256
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=0ded6b90923a104880771d7a0b7ad11f,bai=60633ba24360e1753c356e404e0abb0c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -249,6 +258,7 @@ lab HudsonAlpha
 labExpId SL1261
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=b8a06105a92641a9f52a897e27a4102e,bai=ec39f52cac3d071d7f7962c9bde0d3d2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -275,6 +285,7 @@ lab HudsonAlpha
 labExpId SL1256
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e9968cb195f2fa60dab4cb34cea7b4d5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -300,6 +311,7 @@ lab HudsonAlpha
 labExpId SL1261
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum b3fc42b3199153f71866c74c4bfbfce5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -325,6 +337,7 @@ lab HudsonAlpha
 labExpId SL1256
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 46b4b1f16c5b4b9b462c3e140e755a94
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -351,6 +364,7 @@ lab HudsonAlpha
 labExpId SL1261
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 3dd9d3ca86150728184aac68f7188928
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -377,6 +391,7 @@ lab HudsonAlpha
 labExpId SL1256
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum a97fa83c2def177e52b096c531e49ed9
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -402,6 +417,7 @@ lab HudsonAlpha
 labExpId SL1261
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 6f4b443e91d7e610646fd9236d1e882e
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -427,6 +443,7 @@ lab HudsonAlpha
 labExpId SL1258
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=ef7a23239dcbea4ec241a1cf5b2e439e,bai=0488f0925ed3e782bb1455c0d16aa607
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -453,6 +470,7 @@ lab HudsonAlpha
 labExpId SL1263
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=77bd96287c527ac9322091dd583bf7e9,bai=7904cbc1fca1d82d37434d54f7d8a991
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -479,6 +497,7 @@ lab HudsonAlpha
 labExpId SL1258
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 6ea2f47572885ebe46f9ad827bfbb9c1
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -504,6 +523,7 @@ lab HudsonAlpha
 labExpId SL1263
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 6c851d7a6e7d772e9f069326bdde98fc
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -529,6 +549,7 @@ lab HudsonAlpha
 labExpId SL1258
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 5b08a06a58b85f286d7dbe5daabd5806
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -555,6 +576,7 @@ lab HudsonAlpha
 labExpId SL1263
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum dea0917e6752d2ae57fb8d0d60ce5fe4
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -581,6 +603,7 @@ lab HudsonAlpha
 labExpId SL1258
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 528c42560ea437a83b68dc3e024ec73f
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -606,6 +629,7 @@ lab HudsonAlpha
 labExpId SL1263
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 9a1b33408f2a588a7d76c2e5607c8d56
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -631,6 +655,7 @@ lab HudsonAlpha
 labExpId SL1257
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=8b5ee911f871662ad824ec5b568d0e50,bai=49213962402561acca7a2d190da13a00
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -657,6 +682,7 @@ lab HudsonAlpha
 labExpId SL1262
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=9a770026e019ad9e35a3bca805b05824,bai=7e134801574ed3fb79007faaba997900
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -683,6 +709,7 @@ lab HudsonAlpha
 labExpId SL1257
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum b2052f96d2958d92a4ef6eea0247f58d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -708,6 +735,7 @@ lab HudsonAlpha
 labExpId SL1262
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bdaa236a90a9f9e76fef7faa583d2e8a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -733,6 +761,7 @@ lab HudsonAlpha
 labExpId SL1257
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 4192ba7abae511cc077da057377621d3
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -759,6 +788,7 @@ lab HudsonAlpha
 labExpId SL1262
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e134f02705ebb17ddc9d0cb5a8ba77bd
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -785,6 +815,7 @@ lab HudsonAlpha
 labExpId SL1257
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 97f3ca611d2b0029ffe8d60ea8b85e6a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -810,6 +841,7 @@ lab HudsonAlpha
 labExpId SL1262
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 3190ee82114f9cb59ee9e393823038b5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -835,6 +867,7 @@ lab HudsonAlpha
 labExpId SL1259
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=05546e590d5975d8a69961e5b57b5a68,bai=29eb4793020b005315ffdfbd9f5f742f
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -861,6 +894,7 @@ lab HudsonAlpha
 labExpId SL1264
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=a031eb061a58b1fb0e6f41f56bb90b57,bai=773a6f2b459cb1926d14b5009fb31a68
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -887,6 +921,7 @@ lab HudsonAlpha
 labExpId SL1259
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 8bfab9006a5ff64727b74256b8063f6d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -912,6 +947,7 @@ lab HudsonAlpha
 labExpId SL1264
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 2a637fbdef18d7af427b7b327f951caf
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -937,6 +973,7 @@ lab HudsonAlpha
 labExpId SL1259
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 1835514cee42c51c9b82b85fbfebd49a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -963,6 +1000,7 @@ lab HudsonAlpha
 labExpId SL1264
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 3c49a5cb0d51b786671fc8388de65855
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -989,6 +1027,7 @@ lab HudsonAlpha
 labExpId SL1259
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum f00fe059eb2b0c12dece1afcc3457498
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1014,6 +1053,7 @@ lab HudsonAlpha
 labExpId SL1264
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 583fad5907fa2c49aeeb1a7d64c68481
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1039,6 +1079,7 @@ lab HudsonAlpha
 labExpId SL331
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=d3ae13b583a505be25101d83f57d8bed,bai=77c580f86533ee8c7406877f0a8d5626
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1065,6 +1106,7 @@ lab HudsonAlpha
 labExpId SL333
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=e6b2f8a365e9845c4d22e8bef0a48c39,bai=b99c13c5e1189394ffba60aa83e20635
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1091,6 +1133,7 @@ lab HudsonAlpha
 labExpId SL1255
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=6be1ae16cbbda7b7576a4c4b0ffbd6d1,bai=24ab77b993ffe943cf35c6c4db95fb64
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1117,6 +1160,7 @@ lab HudsonAlpha
 labExpId SL1260
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=eabc370c45bb514789a5a381cb27a02c,bai=59cc7fd32b8409993d7f59fc70b3a05f
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1143,6 +1187,7 @@ lab HudsonAlpha
 labExpId SL331
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 5d2255d2b5859cb86740f490f1c37808
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1168,6 +1213,7 @@ lab HudsonAlpha
 labExpId SL333
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e7db27f8afa1e832f407e4e35b4d4ed6
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1193,6 +1239,7 @@ lab HudsonAlpha
 labExpId SL1255
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 0ad203370360e102cb05be8886168656
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1218,6 +1265,7 @@ lab HudsonAlpha
 labExpId SL1260
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 1872879e6edcab751ca56f5a61e7f89f
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1243,6 +1291,7 @@ lab HudsonAlpha
 labExpId SL331
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bd15af281c3bcfb56ecb4e981fd1edec
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1269,6 +1318,7 @@ lab HudsonAlpha
 labExpId SL333
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 8c1cca3db94bd7e7f8a422f0421d6258
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1295,6 +1345,7 @@ lab HudsonAlpha
 labExpId SL1255
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum a90ce847c6443c245db06714bf738484
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1321,6 +1372,7 @@ lab HudsonAlpha
 labExpId SL1260
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 7503d145357c2250acfa8144f864158c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1347,6 +1399,7 @@ lab HudsonAlpha
 labExpId SL331
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 67a3f6544a6994a5fceb57978f620eae
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1372,6 +1425,7 @@ lab HudsonAlpha
 labExpId SL333
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum d4b21b6dbad7343cb1c1486acd4881a3
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1397,6 +1451,7 @@ lab HudsonAlpha
 labExpId SL1255
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 9c96553073705fe7e676a668c0161bd3
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1422,6 +1477,7 @@ lab HudsonAlpha
 labExpId SL1260
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 41417d9289111dc213796e4f09928204
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1447,6 +1503,7 @@ lab HudsonAlpha
 labExpId SL524
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=ab174cb6afd65df60d03a6c275326aa1,bai=be0f2c0f4a749e8cdbd2d4e80e53a1b2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1473,6 +1530,7 @@ lab HudsonAlpha
 labExpId SL525
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=ae98aef01ba1eaef54646b38d4c53a43,bai=db013c5bf793742892707ec8cf63925c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1499,6 +1557,7 @@ lab HudsonAlpha
 labExpId SL524
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 38b78f1314d1cbdd53a05a63efe6337c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1524,6 +1583,7 @@ lab HudsonAlpha
 labExpId SL525
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 6ec2525142974cbc34e514c620806d0a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1549,6 +1609,7 @@ lab HudsonAlpha
 labExpId SL524
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e25c661b681e7ac6dd237028a8904d49
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1575,6 +1636,7 @@ lab HudsonAlpha
 labExpId SL525
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 0a352d1c3c53cca950d651bc3335ba59
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1601,6 +1663,7 @@ lab HudsonAlpha
 labExpId SL524
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 7730f3b979cec4eb2f0bb00ca091a395
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1627,6 +1690,7 @@ lab HudsonAlpha
 labExpId SL525
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum f26bdb848768194e316573fe95ea97a1
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1653,6 +1717,7 @@ lab HudsonAlpha
 labExpId SL1552
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=058c49538500ddea54c0807c606c1276,bai=215e16c112ff0d6f5b668c50fde268da
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1679,6 +1744,7 @@ lab HudsonAlpha
 labExpId SL2859
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=a507e04d67e2537916d2f14579d19e84,bai=7a9a96263c224e096a229ab29dd0ff41
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1705,6 +1771,7 @@ lab HudsonAlpha
 labExpId SL1552
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 7deea219a9f4eef7c5c3215ab0604277
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1730,6 +1797,7 @@ lab HudsonAlpha
 labExpId SL2859
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum dcbf4f4e14d6da0f1c22d40d11121287
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1755,6 +1823,7 @@ lab HudsonAlpha
 labExpId SL1552
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 305679cc89147ca2220e462628066c35
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1781,6 +1850,7 @@ lab HudsonAlpha
 labExpId SL2859
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 274952a5b1bd8f5bd50d452dac6717d0
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1807,6 +1877,7 @@ lab HudsonAlpha
 labExpId SL1552
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bd06258f215ac5cf0fa8a39119151156
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1832,6 +1903,7 @@ lab HudsonAlpha
 labExpId SL2859
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 37f882590677bacb314f9fed3672587c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1857,6 +1929,7 @@ lab HudsonAlpha
 labExpId SL989
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=26c6982cf1a35e913efcec45df0b87d9,bai=808b35e92f17123a460b97fe5881988e
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1883,6 +1956,7 @@ lab HudsonAlpha
 labExpId SL2861
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=4aeab267219f4b22d490b2a7ab971aff,bai=faf31772a5338ca5d2efe4a2f3cc1b71
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1909,6 +1983,7 @@ lab HudsonAlpha
 labExpId SL989
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 2e6494231267fcddb77381d70e6ee642
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1934,6 +2009,7 @@ lab HudsonAlpha
 labExpId SL2861
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum be015937cbaefba3726de374580e020f
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1959,6 +2035,7 @@ lab HudsonAlpha
 labExpId SL989
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bb8c29a5212d9a6290a10eb8e0cd2881
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -1985,6 +2062,7 @@ lab HudsonAlpha
 labExpId SL2861
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum cba6e8a319d369b638067cb1e793efab
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2011,6 +2089,7 @@ lab HudsonAlpha
 labExpId SL989
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 0fca8e76a7a25387c8723542857cb97d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2036,6 +2115,7 @@ lab HudsonAlpha
 labExpId SL2861
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 95fcca7b3a25900ae7cc27de00d0debc
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2061,6 +2141,7 @@ lab HudsonAlpha
 labExpId SL990
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=0fb859edbff7a7457065e434d190e62d,bai=0ca594a9829ed9015b32a97b34dfde2d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2087,6 +2168,7 @@ lab HudsonAlpha
 labExpId SL2932
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=985bdd0be14291dfda4696e7be34c214,bai=5a50f4e2d192636129dd9f5920428268
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2113,6 +2195,7 @@ lab HudsonAlpha
 labExpId SL990
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bfd653c924db7f8418f95b68814ba887
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2138,6 +2221,7 @@ lab HudsonAlpha
 labExpId SL2932
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 7a9bb5c155a93249cf097438d2a0b798
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2163,6 +2247,7 @@ lab HudsonAlpha
 labExpId SL990
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 12bfe7905ed7050b64c7c83775a7e891
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2189,6 +2274,7 @@ lab HudsonAlpha
 labExpId SL2932
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum a5358b2157fd4eb44acfb8ea1aa77b4d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2215,6 +2301,7 @@ lab HudsonAlpha
 labExpId SL990
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 0feaf0506a5cb311c2195abb7ab6c6e6
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2240,6 +2327,7 @@ lab HudsonAlpha
 labExpId SL2932
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 0d0c8667f85075d27f3ee681b02acfc2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2265,6 +2353,7 @@ lab HudsonAlpha
 labExpId SL991
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=2dfbdbb276de0f892aec4b60353cf903,bai=c70f5b72ccd804bbfdd101d49fa7e8ee
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2291,6 +2380,7 @@ lab HudsonAlpha
 labExpId SL2860
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=4c3301cd4b954ea63e420253d0dbcce9,bai=c55f28c7d6db118dbffc756daf733999
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2317,6 +2407,7 @@ lab HudsonAlpha
 labExpId SL991
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 177b91daf318c027b880a135c87d78fd
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2342,6 +2433,7 @@ lab HudsonAlpha
 labExpId SL2860
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum a5af1c7501b9e75020725e87fa3d0b33
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2367,6 +2459,7 @@ lab HudsonAlpha
 labExpId SL991
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 54d6bb0201ed6b884c71a4a18dae0be7
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2393,6 +2486,7 @@ lab HudsonAlpha
 labExpId SL2860
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum a607eab6bbfb0e9a8f8a307cffab7cf9
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2419,6 +2513,7 @@ lab HudsonAlpha
 labExpId SL991
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 1e72e47f4c61b02f1cdaeb98c332a221
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2444,6 +2539,7 @@ lab HudsonAlpha
 labExpId SL2860
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 0969372ed92582d9da515c5216453bf3
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2469,6 +2565,7 @@ lab HudsonAlpha
 labExpId SL316
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=c5ed0353c53dd0279760c5c30db6d37f,bai=f6cd84f81add6073b066eb97d350c87b
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2495,6 +2592,7 @@ lab HudsonAlpha
 labExpId SL317
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=89324b65a79404ab8a2bf25efe34cdc5,bai=ebe6e4df654816b33c76408ccbfc103e
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2521,6 +2619,7 @@ lab HudsonAlpha
 labExpId SL316
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 66984a9eff43b098e6d6b326177a464c
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2546,6 +2645,7 @@ lab HudsonAlpha
 labExpId SL317
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 7f972381ff98d9286849d58b89051226
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2571,6 +2671,7 @@ lab HudsonAlpha
 labExpId SL317
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum f5ef99df76cc33dff4d47b3d58016087
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2597,6 +2698,7 @@ lab HudsonAlpha
 labExpId SL316
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 5322d5b76f5747f1c5b614c50dd6a797
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2623,6 +2725,7 @@ lab HudsonAlpha
 labExpId SL317
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 2da478f98e8904a2325ea6eb45e8762e
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2649,6 +2752,7 @@ lab HudsonAlpha
 labExpId SL528
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=86db8134e39d605318028fba85adeba8,bai=84ea0bcb00cc94c6c13e99cd3a6ed3ed
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2675,6 +2779,7 @@ lab HudsonAlpha
 labExpId SL529
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=8c459d73db4fbdf3f4d74232b11f4eaa,bai=a866803890a4b590ff60bfafab042eb5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2701,6 +2806,7 @@ lab HudsonAlpha
 labExpId SL528
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 3c08555b3dd54331161d3af721d8741a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2726,6 +2832,7 @@ lab HudsonAlpha
 labExpId SL529
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 7857ecb47e98b9d43c2d60715fab7e05
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2751,6 +2858,7 @@ lab HudsonAlpha
 labExpId SL528
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 9bcf3589998fcb7cc5ce601fdde24f1d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2777,6 +2885,7 @@ lab HudsonAlpha
 labExpId SL529
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 9362883d3e51c4ac9a7d672fb58d36cc
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2803,6 +2912,7 @@ lab HudsonAlpha
 labExpId SL528
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum fa6e5f8bed24030909373f3f9f3f0b3a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2829,6 +2939,7 @@ lab HudsonAlpha
 labExpId SL529
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 2d0ebe6947a886719614358007116d90
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2855,6 +2966,7 @@ lab HudsonAlpha
 labExpId SL530
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=7fb343ace87094379e9890442bebb9dc,bai=6b16b664ac8c6cc204b9d1e1d9c55f5b
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2881,6 +2993,7 @@ lab HudsonAlpha
 labExpId SL531
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=6ee3495b6dc47021c4750ca017427d8f,bai=0c6225464ae2c0cbe6443f2660957d8c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2907,6 +3020,7 @@ lab HudsonAlpha
 labExpId SL530
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e7d5c03826a514f7a6f0211b342a6f3a
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2932,6 +3046,7 @@ lab HudsonAlpha
 labExpId SL531
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 35d277790d80d61364e1b784155723c4
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2957,6 +3072,7 @@ lab HudsonAlpha
 labExpId SL530
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum db1b75353bc7b28b298ef8a793973ff3
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -2983,6 +3099,7 @@ lab HudsonAlpha
 labExpId SL531
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum af936f5b7eabcb322118dedef9f1ee6d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3009,6 +3126,7 @@ lab HudsonAlpha
 labExpId SL530
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum b97547abbddbc183add27104e7770ea5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3035,6 +3153,7 @@ lab HudsonAlpha
 labExpId SL531
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 4974f535328c89d0e261d552bebde912
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3061,6 +3180,7 @@ lab HudsonAlpha
 labExpId SL526
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=5e3e3ebf884a57cfbfa13821e34ce4da,bai=a536ea30217b8d1c1adb0f09a9708ba1
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3087,6 +3207,7 @@ lab HudsonAlpha
 labExpId SL527
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=99f8164264c9b838be97f6b83f67d9ca,bai=8c058fe6214d4d9e5b26cc9139e6869b
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3113,6 +3234,7 @@ lab HudsonAlpha
 labExpId SL526
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 5b5b9ee4162d4eee41b642c6696dd19c
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3138,6 +3260,7 @@ lab HudsonAlpha
 labExpId SL527
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 709d16c56f3956262f82e08f60f0897d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3163,6 +3286,7 @@ lab HudsonAlpha
 labExpId SL526
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e34bec87c31f36bd32972b4386ea35e9
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3189,6 +3313,7 @@ lab HudsonAlpha
 labExpId SL527
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 87427f67ec1aedbf01386f533673ef42
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3215,6 +3340,7 @@ lab HudsonAlpha
 labExpId SL526
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 724d09e3de3b7f98cc03f3cf74adc44b
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3241,6 +3367,7 @@ lab HudsonAlpha
 labExpId SL527
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum db31a990b8f18ff0d11bb284f9681edd
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3267,6 +3394,7 @@ lab HudsonAlpha
 labExpId SL1550
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=d968b46fa2c6486050a31a7c9ae010ef,bai=dde5c4a684c528ccef1f2393250e4237
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3293,6 +3421,7 @@ lab HudsonAlpha
 labExpId SL1911
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=ced7b36c5208d03f3aa2b9a0c8f3a7d6,bai=1fdfe188eef3f67357cbf9c6e3df36ed
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3319,6 +3448,7 @@ lab HudsonAlpha
 labExpId SL1550
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 00529fc523a3b6bfe3419842ac3e1cca
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3344,6 +3474,7 @@ lab HudsonAlpha
 labExpId SL1911
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 419ecc266c9a68c12162731f9b16a265
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3369,6 +3500,7 @@ lab HudsonAlpha
 labExpId SL1550
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 6953449e46ceafe1aa70c5e00ab52318
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3395,6 +3527,7 @@ lab HudsonAlpha
 labExpId SL1911
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 5861f895d465ba3935bad453f735b384
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3421,6 +3554,7 @@ lab HudsonAlpha
 labExpId SL1550
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 4750cf6939c4a979c35f6ec2fecc7d1b
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3446,6 +3580,7 @@ lab HudsonAlpha
 labExpId SL1911
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 2a5aad1c6f30032aa8ceebd19f88e3a1
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3471,6 +3606,7 @@ lab HudsonAlpha
 labExpId SL1244
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=4574ffe6be88c8f5c34c205b47eead2b,bai=9bfcc59b1ba61019d29c587b19cd9181
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3497,6 +3633,7 @@ lab HudsonAlpha
 labExpId SL1547
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=501f2b5c7667f4da9279b8edf23c50b7,bai=12ef39802ee47e223f6c997636058416
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3523,6 +3660,7 @@ lab HudsonAlpha
 labExpId SL1244
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e6582a7b3835c90fc01d0dd35643e972
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3548,6 +3686,7 @@ lab HudsonAlpha
 labExpId SL1547
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum e0f0edce4cdcb460556a3f2a76e566af
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3573,6 +3712,7 @@ lab HudsonAlpha
 labExpId SL1244
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 0f9bb941a69219404d941336d8e91fbf
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3599,6 +3739,7 @@ lab HudsonAlpha
 labExpId SL1547
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 8df3c5b19bfc8461f1f8c013016b49fe
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3625,6 +3766,7 @@ lab HudsonAlpha
 labExpId SL1244
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 099143d1817324850adacdc526f06aec
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3650,6 +3792,7 @@ lab HudsonAlpha
 labExpId SL1547
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 84750348de0939f5cf6cacf9aa1b10b0
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3675,6 +3818,7 @@ lab HudsonAlpha
 labExpId SL1245
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=7f2ad471980bf8bd0c74883d583ac3ec,bai=dfd52b7accd6ab523a4a876b8391ebff
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3701,6 +3845,7 @@ lab HudsonAlpha
 labExpId SL1548
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=2b68dbcf1e9933091aaee1f06c47d4a6,bai=52a74c844608e3baae5b8a2bc296e3c8
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3727,6 +3872,7 @@ lab HudsonAlpha
 labExpId SL1245
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 6060a28da8fbdcb7c79164797509289d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3752,6 +3898,7 @@ lab HudsonAlpha
 labExpId SL1548
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum ae7fbf473f77baa00a6559523fef76a8
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3777,6 +3924,7 @@ lab HudsonAlpha
 labExpId SL1245
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 4ba5b21613e3fc2a35205a9b9b66e173
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3803,6 +3951,7 @@ lab HudsonAlpha
 labExpId SL1548
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum ccf6217d7c421873610e58fc81895e7b
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3829,6 +3978,7 @@ lab HudsonAlpha
 labExpId SL1245
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum cffed63ec8a594374a7ee8ee743b3252
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3854,6 +4004,7 @@ lab HudsonAlpha
 labExpId SL1548
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 601bc8f3b4cfff2538f93a409336e8cc
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3879,6 +4030,7 @@ lab HudsonAlpha
 labExpId SL1246
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=e85c05d5d169bb644d79ff4c1b1e51f7,bai=196000fd47cb4172a354c5e3f7cd9af9
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3905,6 +4057,7 @@ lab HudsonAlpha
 labExpId SL1549
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=26bfb2952489a924041acc1d8dfbddfb,bai=dcab5c0bb3cab91f330b325c84912f7e
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3931,6 +4084,7 @@ lab HudsonAlpha
 labExpId SL1246
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 78bba043d63718071849fca12c07fef3
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3956,6 +4110,7 @@ lab HudsonAlpha
 labExpId SL1549
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum c9d8cfca06ee9ff96288a81540494186
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -3981,6 +4136,7 @@ lab HudsonAlpha
 labExpId SL1246
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 7a4236a7c91f020f98ed4156ad47a578
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4007,6 +4163,7 @@ lab HudsonAlpha
 labExpId SL1549
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum c93feb53a2a79d1b9d29da1072f8af3b
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4033,6 +4190,7 @@ lab HudsonAlpha
 labExpId SL1246
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 0535b3d5447c4c4a323c261bda2a1d05
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4058,6 +4216,7 @@ lab HudsonAlpha
 labExpId SL1549
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 4128c69eaba29c024b1e4388b7412cb5
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4083,6 +4242,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=7f0106c1d7d4da6d67717aa247a24cce,bai=ee177b76d5f812ecd733c5ae59f0fab3
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4109,6 +4269,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum bam=956938709fdaa7a7032474a546dea8c0,bai=18a48c23e1484cd994d749fa86872447
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4135,6 +4296,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum c7fc99666fc48e4aede662b0442a2314
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4160,6 +4322,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 544dd61705de9157e80fc033d741a6ff
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4185,6 +4348,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 34a2c4401616083fb01c7bb9bcfc520d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4211,6 +4375,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum af74f97c429ed68f3df3cf5200ccfc94
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4237,6 +4402,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum a40beb1651796926cb46d54d9325b05d
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4263,6 +4429,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 3bff9469750f53be5348d38abd6dc161
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4273,4 +4440,4 @@ tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
 
-# MAGIC: -732883830
+# MAGIC: 1747612080

@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV='Content-Type' CONTENT='text/html;CHARSET=iso-8859-1'>
+<META http-equiv='Content-Script-Type' content='text/javascript'>
+<META HTTP-EQUIV='Pragma' CONTENT='no-cache'>
+<META HTTP-EQUIV='Expires' CONTENT='-1'>
+<TITLE>Redirecting...</TITLE>
+<LINK rel='STYLESHEET' href='../style/HGStyle-1304985632.css' TYPE='text/css' />
+
+<script type="text/javascript">
+
+window.onload = function() {
+var oURL = window.location; // get current url
+var oProtocol = oURL.protocol; // gets the http part
+var sHost = oURL.host; // gets the host part
+var sAssembly = oURL.toString().split("/").reverse().splice(3,1);  // get the third dir in from the url
+var sDestination = oURL.toString().split("/").reverse().splice(1,1); // get the first dir in from the url
+
+window.location.replace( oProtocol + "//" + sHost + "/cgi-bin/hgFileUi?db=" + sAssembly + "&g=" + sDestination );
+}
+</script>
+
+</HEAD>
+<BODY>
+<p>
+Redirecting ... 
+</p>
+</BODY>
+</HTML>

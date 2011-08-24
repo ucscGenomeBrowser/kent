@@ -2,7 +2,7 @@
 LIST=\
 wgEncodeMapability.ra \
 wgEncodeGisDnaPet.ra \
-wgEncodeGencode.ra \
+wgEncodeGencodeV4.ra \
 wgEncodeCshlShortRnaSeq.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeAffyRnaChip.ra \
@@ -30,6 +30,8 @@ wgEncodeBroadHmm.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeSydhNsome.ra \
+wgEncodeHaibGenotype.ra \
+wgEncodeSunySwitchgear.ra \
 
 include ../../../../makefile.metaDb
 
