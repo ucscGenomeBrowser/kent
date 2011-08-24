@@ -23856,11 +23856,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 
         if (firstTime)
         {
-          printf("<BR><B> GeneReview available for %s:</B><BR>",itemName);
-          printf("%s<BR>",clickMsg);
-
+          printf("<BR><B> GeneReview available for %s:</B> (%s)<BR>",itemName,clickMsg);
           firstTime = FALSE;
-          printf("<PRE>");
+          printf("<PRE><TT>"); 
               // #1234567890123456789012345678901234567890
           printf("Short name    Disease ID     GeneTests disease name<BR>");
           printf("-----------------------------------------------------------");
@@ -23876,8 +23874,8 @@ while ((row = sqlNextRow(sr)) != NULL)
            } 
          printf("%-10s    %s<BR>", diseaseID, diseaseName);
     }  /* end while */
- printf("</PRE>");
- printf("<BR>");
+ printf("</TT></PRE>");
+ //printf("<BR>");
  sqlFreeResult(&sr);
 } /* end of prGeneReviews */
 
