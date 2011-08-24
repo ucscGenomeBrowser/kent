@@ -4077,6 +4077,7 @@ longLabel Gene Reviews
 group phenDis
 priority 155
 visibility hide
+color 0, 80, 0
 type bed 4
 itemRgb on
 html geneReviews
