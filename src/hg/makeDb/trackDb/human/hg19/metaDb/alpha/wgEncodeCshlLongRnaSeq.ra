@@ -4647,7 +4647,7 @@ localization cell
 md5sum bam=dcd233c01bc856e5cc496b7d49771d67,bai=9f8a94015f2f5609cde523b62e6fc4f3
 origAssembly hg18
 project wgEncode
-replicate 102
+replicate 1
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
@@ -4675,7 +4675,7 @@ localization cell
 md5sum bam=2e931b7df0bb6175b28bb20d6979fe36,bai=36b45efefc6ed8123603e0289f2a7752
 origAssembly hg18
 project wgEncode
-replicate 103
+replicate 2
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2
@@ -4702,7 +4702,7 @@ localization cell
 md5sum 462b83b5e97c42e67687c9eeb3f90fae
 origAssembly hg18
 project wgEncode
-replicate 102
+replicate 1
 rnaExtract total
 subId 752
 view RawData
@@ -4728,7 +4728,7 @@ localization cell
 md5sum 5afae9e6c83681896b94f62665754df1
 origAssembly hg18
 project wgEncode
-replicate 103
+replicate 2
 rnaExtract total
 subId 752
 view RawData
@@ -4755,7 +4755,7 @@ localization cell
 md5sum cadc625e69182fb0af58e4e6a48b2687
 origAssembly hg18
 project wgEncode
-replicate 102
+replicate 1
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
@@ -4783,7 +4783,7 @@ localization cell
 md5sum 6cacaa26ba8546a42ded06e443bca381
 origAssembly hg18
 project wgEncode
-replicate 103
+replicate 2
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2
@@ -4811,7 +4811,7 @@ localization cell
 md5sum 9ca68b5ab1aab4a0768f949edc2c34d2
 origAssembly hg18
 project wgEncode
-replicate 102
+replicate 1
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
@@ -4839,7 +4839,7 @@ localization cell
 md5sum bb977f7faab0e17a5288a2a63d0aac18
 origAssembly hg18
 project wgEncode
-replicate 103
+replicate 2
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2
@@ -8596,7 +8596,6 @@ md5sum 64729e3a52e43964b8814a5597ac3742
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3615
@@ -8654,7 +8653,6 @@ md5sum 4defbc733193d97212c3754237e3de29
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3615
@@ -8711,7 +8709,6 @@ md5sum bd43a50643e2de5fdcfa03e015d272a1
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3615
@@ -8796,7 +8793,6 @@ md5sum e65c0ae5a928665d3691f69ffe13db58
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3615
@@ -8884,7 +8880,6 @@ md5sum 1f04425ae2bc49731463433b4e4f8f00
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
@@ -8999,7 +8994,6 @@ md5sum b66dfcc78bea3683a27ff42c816eb7b7
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
@@ -9055,7 +9049,6 @@ md5sum 7864af4790692f5ac939e49e8d72d620
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
@@ -9200,7 +9193,6 @@ md5sum 0488d9106305f5f568cd4ef81ef63700
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
@@ -9405,7 +9397,6 @@ md5sum 3fc46419a04be282e18a82a47ba119b6
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3617
@@ -9463,7 +9454,6 @@ md5sum 47c04c87f7f8a865fe4ab821d1283687
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3617
@@ -9520,7 +9510,6 @@ md5sum 9f519ebfce233184c0c644c29e0ad225
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3617
@@ -9605,7 +9594,6 @@ md5sum 899c8b53877ccfdf9ef0dcdee4976254
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3617
@@ -9693,7 +9681,6 @@ md5sum 36deddc56093445edf48667ef244ec15
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
@@ -9808,7 +9795,6 @@ md5sum f4d902fd1ad922d41c6e96f755244377
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
@@ -9864,7 +9850,6 @@ md5sum b707c8043b87b986a062d2891317ee7f
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
@@ -10009,7 +9994,6 @@ md5sum e0112810b25b82608cada28e948c10a3
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
@@ -11410,7 +11394,6 @@ md5sum 86b4ee2f5323ff857ddd2a799b2f5291
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3631
@@ -11468,7 +11451,6 @@ md5sum a4ebc691e01b20043e9aa0564a9e0d9a
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3631
@@ -11525,7 +11507,6 @@ md5sum 6a70d7f136b54fecd0a181bc1e13d004
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3631
@@ -11635,7 +11616,6 @@ md5sum a85c5c335f12025b0f2c6d3426eeff99
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3631
@@ -17213,7 +17193,6 @@ md5sum ee82beac3fd7bd49e7cb5ef4c1479f80
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3619
@@ -17271,7 +17250,6 @@ md5sum 97000d9831c170051e012936dcde348a
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3619
@@ -17328,7 +17306,6 @@ md5sum 72bd2e0441a098290bc37d108dbc0a6e
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3619
@@ -17413,7 +17390,6 @@ md5sum 3175f40745ceb0fc558c226bdf0b38de
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3619
@@ -17501,7 +17477,6 @@ md5sum d4cc69f4acfab349520373b4a2ab813a
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
@@ -17616,7 +17591,6 @@ md5sum 11e01859abe6b4632b3cf241c7527790
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
@@ -17672,7 +17646,6 @@ md5sum 2e61eb84be4e1a7c6f20f9d615cecf74
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
@@ -17817,7 +17790,6 @@ md5sum 823561655be3f7fe84989003179023b6
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
@@ -23669,7 +23641,7 @@ localization cell
 md5sum bam=6240c7fb95a9a460acb47f9d50aab122,bai=8c3a1323da706273fc342ff9eb71a971
 origAssembly hg18
 project wgEncode
-replicate 131
+replicate 1
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
@@ -23697,7 +23669,7 @@ localization cell
 md5sum bam=e9b5a54cab5b51c11e1996d984fc565c,bai=296b9020125f71f4d0acac97238decc9
 origAssembly hg18
 project wgEncode
-replicate 132
+replicate 2
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2
@@ -23724,7 +23696,7 @@ localization cell
 md5sum 95b6b0776dcaaa3898af091018c28146
 origAssembly hg18
 project wgEncode
-replicate 131
+replicate 1
 rnaExtract total
 subId 752
 view RawData
@@ -23750,7 +23722,7 @@ localization cell
 md5sum bfed41799fffb55a938c35bfa39e4c60
 origAssembly hg19
 project wgEncode
-replicate 132
+replicate 2
 rnaExtract total
 subId 752
 view RawData
@@ -23777,7 +23749,7 @@ localization cell
 md5sum 0bbb121f4ff9cfd78cc667d844def78b
 origAssembly hg18
 project wgEncode
-replicate 131
+replicate 1
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1
@@ -23805,7 +23777,7 @@ localization cell
 md5sum 0a2a36f2d51c9acf19c044bf836a24c6
 origAssembly hg18
 project wgEncode
-replicate 132
+replicate 2
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2
@@ -23833,7 +23805,7 @@ localization cell
 md5sum a500212157a56feeeb34006c2958aa8a
 origAssembly hg18
 project wgEncode
-replicate 131
+replicate 1
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1
@@ -23861,7 +23833,7 @@ localization cell
 md5sum 917dcac982a5b25da460327ad6b8180b
 origAssembly hg18
 project wgEncode
-replicate 132
+replicate 2
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
@@ -29546,7 +29518,6 @@ md5sum 5056155544db7223c2f4447aebded3f1
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3657
@@ -29633,7 +29604,6 @@ md5sum 23f9e197fb1c78f415be1536ec91459b
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3657
@@ -29689,7 +29659,6 @@ localization cell
 md5sum ee03d88791ff770da4f538574f9a8033
 origAssembly hg19
 project wgEncode
-replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
@@ -29719,7 +29688,6 @@ md5sum 958fbd2f5cf6633133eaa3b2bb8ea815
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3657
@@ -29914,7 +29882,6 @@ md5sum d52fa8d3fdc74f52d1b3b987826d9ccd
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3657
@@ -29971,7 +29938,6 @@ localization cell
 md5sum 2c38a07267bf15feae17b718651c1abe
 origAssembly hg19
 project wgEncode
-replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
@@ -30094,7 +30060,6 @@ md5sum 1f74fdd50ff7a9aaa4eaae3f40e73fea
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
@@ -30355,7 +30320,6 @@ md5sum 819923c32c333e7af2ec9ee6532184c3
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
@@ -30411,7 +30375,6 @@ localization cell
 md5sum 4f5c2266c474c5cf805587447c38f1c3
 origAssembly hg19
 project wgEncode
-replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
@@ -30441,7 +30404,6 @@ md5sum 92e19e55055e0dd805de7849751c168a
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
@@ -30816,7 +30778,6 @@ md5sum 77801c03809242b4be449e1bb42f7338
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
@@ -30873,7 +30834,6 @@ localization cell
 md5sum 8dd1b15fbc3d9a85ca10e1de207ace9b
 origAssembly hg19
 project wgEncode
-replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
@@ -31052,7 +31012,6 @@ md5sum 31e6d9969d3a2438eb078499b50b9084
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
@@ -31110,7 +31069,6 @@ md5sum df9e9730efa6ddd07bc5250aba66b259
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
@@ -31167,7 +31125,6 @@ md5sum 60fec923f4af2ed87685e16d5059c0e7
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
@@ -31252,7 +31209,6 @@ md5sum 7653ff7942e66b9105c412539cbf3eb7
 origAssembly hg19
 project wgEncode
 readType 2x76D
-replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
@@ -35427,4 +35383,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -624351447
+# MAGIC: -1052560007

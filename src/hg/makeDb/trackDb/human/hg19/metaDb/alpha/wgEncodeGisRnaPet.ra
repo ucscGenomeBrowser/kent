@@ -3,6 +3,35 @@ objType composite
 composite wgEncodeGisRnaPet
 expVars lab,dataType,cell,localization,rnaExtract
 
+metaObject wgEncodeGisRnaPetGm12878CytosolPapAlnFree
+objType table
+bioRep gen0107C
+cell GM12878
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-13
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
+dccAccession wgEncodeEH000248
+expId 248
+fileName wgEncodeGisRnaPetGm12878CytosolPapAlnFree.bam
+grant Gingeras
+lab GIS
+labExpId IHG024
+labProtocolId gen0107C+pet
+labVersion clone-free
+localization cytosol
+md5sum bam=4449565e58dcbce0ab7f04a61bf63f8e,bai=11c1a897f3c3215ac69ee77fdb030cac
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2
+subId 4022
+tableName wgEncodeGisRnaPetGm12878CytosolPapAlnFree
+view Alignments
+
 metaObject wgEncodeGisRnaPetGm12878CytosolPapAlnRep1
 objType table
 bioRep gen0105C
@@ -32,7 +61,7 @@ subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1
 view Alignments
 
-metaObject wgEncodeGisRnaPetGm12878CytosolPapAlnRep2
+metaObject wgEncodeGisRnaPetGm12878CytosolPapClustersFree
 objType table
 bioRep gen0107C
 cell GM12878
@@ -44,22 +73,22 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep2.bam
+fileName wgEncodeGisRnaPetGm12878CytosolPapClustersFree.bed.gz
 grant Gingeras
 lab GIS
 labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum bam=4449565e58dcbce0ab7f04a61bf63f8e,bai=11c1a897f3c3215ac69ee77fdb030cac
+md5sum 43d7ca9a887f31047a1baccb796d9c8b
 origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
 subId 4022
-tableName wgEncodeGisRnaPetGm12878CytosolPapAlnRep2
-view Alignments
+tableName wgEncodeGisRnaPetGm12878CytosolPapClustersFree
+view Clusters
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapClustersRep1
 objType table
@@ -90,8 +119,8 @@ subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1
 view Clusters
 
-metaObject wgEncodeGisRnaPetGm12878CytosolPapClustersRep2
-objType table
+metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Free
+objType file
 bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
@@ -102,22 +131,21 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep2.bed.gz
+fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Free.fastq.gz
 grant Gingeras
 lab GIS
 labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum 43d7ca9a887f31047a1baccb796d9c8b
+md5sum fc34aca1582ce3c791a4f5df7311ca96
 origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
 subId 4022
-tableName wgEncodeGisRnaPetGm12878CytosolPapClustersRep2
-view Clusters
+view FastqRd1
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1
 objType file
@@ -147,7 +175,7 @@ seqPlatform Illumina_GA2
 subId 778
 view FastqRd1
 
-metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep2
+metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Free
 objType file
 bioRep gen0107C
 cell GM12878
@@ -159,21 +187,21 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep2.fastq.gz
+fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Free.fastq.gz
 grant Gingeras
 lab GIS
 labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum fc34aca1582ce3c791a4f5df7311ca96
+md5sum a124b93ec33b6930e9ba241a13c749a8
 origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
 subId 4022
-view FastqRd1
+view FastqRd2
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1
 objType file
@@ -203,8 +231,8 @@ seqPlatform Illumina_GA2
 subId 778
 view FastqRd2
 
-metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep2
-objType file
+metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree
+objType table
 bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
@@ -215,21 +243,21 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep2.fastq.gz
+fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree.bigWig
 grant Gingeras
 lab GIS
 labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum a124b93ec33b6930e9ba241a13c749a8
+md5sum f89ce7a4a60a27d2b406f8ab40b6e798
 origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
 subId 4022
-view FastqRd2
+tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree
+view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
 objType table
@@ -260,7 +288,7 @@ subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
 view MinusRawSignal
 
-metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2
+metaObject wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree
 objType table
 bioRep gen0107C
 cell GM12878
@@ -272,21 +300,21 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2.bigWig
+fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree.bigWig
 grant Gingeras
 lab GIS
 labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum f89ce7a4a60a27d2b406f8ab40b6e798
+md5sum 8abeabbf4976dd5318d80d62f15b87ae
 origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 4022
-tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2
-view MinusRawSignal
+tableName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree
+view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
 objType table
@@ -315,34 +343,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2
 subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
-view PlusRawSignal
-
-metaObject wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2
-objType table
-bioRep gen0107C
-cell GM12878
-composite wgEncodeGisRnaPet
-dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2010-08-13
-dateSubmitted 2009-11-13
-dateUnrestricted 2010-08-13
-dccAccession wgEncodeEH000248
-expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2.bigWig
-grant Gingeras
-lab GIS
-labExpId IHG024
-labProtocolId gen0107C+pet
-labVersion clone-free
-localization cytosol
-md5sum 8abeabbf4976dd5318d80d62f15b87ae
-origAssembly hg18
-project wgEncode
-replicate 2
-rnaExtract longPolyA
-subId 4022
-tableName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2
 view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878NucleusPapAlnRep1
@@ -3545,4 +3545,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 1988254900
+# MAGIC: 1670996138

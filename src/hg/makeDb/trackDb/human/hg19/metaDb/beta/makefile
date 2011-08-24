@@ -33,6 +33,7 @@ wgEncodeSydhNsome.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeHaibGenotype.ra \
 wgEncodeSunyRipSeq.ra \
+wgEncodeUncBsuProt.ra \
 
 
 include ../../../../makefile.metaDb

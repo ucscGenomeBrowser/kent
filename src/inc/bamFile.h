@@ -3,6 +3,9 @@
 #ifndef BAMFILE_H
 #define BAMFILE_H
 
+#include "dnaseq.h"
+#include "dystring.h"
+
 #ifdef USE_BAM
 
 // bam.h is incomplete without _IOLIB set to 1, 2 or 3.  2 is used by Makefile.generic:
@@ -14,6 +17,7 @@
 
 #else // no USE_BAM
 typedef struct { } bam1_t;
+typedef struct { } bam_index_t;
 typedef struct { } samfile_t;
 typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
 
@@ -26,13 +30,6 @@ typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
 
 #endif // USE_BAM
 
-#ifndef DNASEQ_H
-#include "dnaseq.h"
-#endif
-
-#ifndef DYSTRING_H
-#include "dystring.h"
-#endif
 
 boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */

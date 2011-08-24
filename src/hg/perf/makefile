@@ -17,4 +17,4 @@ compile: hgTracksRandom.o rangeQuery.o ${MYLIBS}
 	${CC} -o rangeQuery rangeQuery.o ${MYLIBS} $L
 
 clean::
-	rm -f ${O} rangeQuery.o
+	rm -f ${O} rangeQuery.o rangeQuery hgTracksRandom

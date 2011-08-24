@@ -1079,15 +1079,15 @@ jQuery.fn.panImages = function(){
                     blockUseMap = true;
                 }
                 var decelerator = 1;
-                var wingSize    = 1000; // 0 stops the scroll at the edges.
+                //var wingSize    = 1000; // 0 stops the scroll at the edges.
                 // Remeber that offsetX (prevX) is negative
                 newX = prevX + relativeX;
                 if ( newX >= leftLimit ) { // scrolled all the way to the left
                     if(atEdge) {  // Do not drag straight off edge.  Force second drag
                         beyondImage = true;
                         newX = leftLimit + (newX - leftLimit)/decelerator;// slower
-                        if( newX >= leftLimit + wingSize) // Don't go too far over the edge!
-                        newX =  leftLimit + wingSize;
+                        //if (newX >= leftLimit + wingSize) // Don't go too far over the edge!
+                        //    newX =  leftLimit + wingSize;
                     } else
                         newX = leftLimit;
 
@@ -1095,8 +1095,8 @@ jQuery.fn.panImages = function(){
                     if(atEdge) {  // Do not drag straight off edge.  Force second drag
                         beyondImage = true;
                         newX = rightLimit - (rightLimit - newX)/decelerator;// slower
-                        if( newX < rightLimit - wingSize) // Don't go too far over the edge!
-                            newX = rightLimit - wingSize;
+                        //if (newX < rightLimit - wingSize) // Don't go too far over the edge!
+                        //    newX = rightLimit - wingSize;
                     } else
                         newX = rightLimit;
 
@@ -1166,7 +1166,7 @@ jQuery.fn.panImages = function(){
     function panUpdatePosition(newOffsetX,bounded)
     {
         // Updates the 'position/search" display with change due to panning
-        var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
+        var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart - 1; // Correction for half open portal coords
         var portalScrolledX  = (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel) + newOffsetX;
         var recalculate = false;
 
@@ -1182,10 +1182,8 @@ jQuery.fn.panImages = function(){
             recalculate = true;
         }
         if(newPortalStart > 0) {
-            // XXXX ? hgTracks.imgBoxPortalStart = newPortalStart;
-            // XXXX ? hgTracks.imgBoxPortalEnd = newPortalEnd;
             var newPos = hgTracks.chromName + ":" + commify(newPortalStart) + "-" + commify(newPortalEnd);
-            setPosition(newPos, (newPortalEnd - newPortalStart + 1));
+            setPosition(newPos, 0); // 0 means no need to change the size
         }
         if (recalculate && hgTracks.imgBoxBasesPerPixel > 0) { // Need to recalculate X for bounding drag
             portalScrolledX = (hgTracks.imgBoxPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
@@ -2716,9 +2714,6 @@ function handleUpdateTrackMap(response, status)
                         //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                     }
                 }
-                if(hgTracks.measureTiming) {
-                    updateTiming(response);
-                }
                 hgTracks = json;
                 originalPosition = undefined;
                 initVars();
@@ -2778,6 +2773,9 @@ function handleUpdateTrackMap(response, status)
         if(b[1]) {
             $('#chrom').attr('src', b[1]);
         }
+    }
+    if(hgTracks.measureTiming) {
+        updateTiming(response);
     }
     if(this.disabledEle) {
         this.disabledEle.attr('disabled', '');

@@ -21,6 +21,7 @@
 #include "hPrint.h"
 #include "jsHelper.h"
 #include "obscure.h"
+#include "hgConfig.h"
 
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
@@ -352,6 +353,7 @@ webIncludeResourceFile("jquery-ui.css");
 
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
+jsIncludeFile("jquery.cookie.js", NULL);
 webIncludeResourceFile("hgHubConnect.css");
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
@@ -364,8 +366,8 @@ printf(
    "configure page. For more information, see the "
    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
    "User's Guide</A>.</P>\n"
-   "<P>NOTE: Because Track Hubs are created and maintained by external sources,"
-   " UCSC cannot be held responsible for their content.</P>"
+   "<P><B>NOTE: Because Track Hubs are created and maintained by external sources,"
+   " UCSC cannot be held responsible for their content.</B></P>"
    );
 printf("</div>\n");
 
@@ -417,7 +419,11 @@ printf("</div>");
 
 printf("<div class=\"tabFooter\">");
 cgiMakeButton("Submit", "Load Selected Hubs");
-printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</A> to add a public hub.</span>\n");
+
+char *emailAddress = cfgOptionDefault("hub.emailAddress","genome@soe.ucsc.edu");
+printf("<span class=\"small\">"
+    "Contact <A HREF=\"mailto:%s\">%s</A> to add a public hub."
+    "</span>\n", emailAddress,emailAddress);
 printf("</div>");
 
 if ((newId != 0) || gotDisconnect) // make MyHubs the default tab
