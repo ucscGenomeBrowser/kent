@@ -8,6 +8,7 @@ $(function(){
 
 
 // initializes the tabs - with cookie option
+// cookie option requires jquery.cookie.js
 $(function() {
 	$( "#tabs" ).tabs({ cookie: { name: 'hubTab_cookie', expires: 30 } });
 });
