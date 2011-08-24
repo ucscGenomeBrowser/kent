@@ -1,0 +1,191 @@
+# for emacs: -*- mode: sh; -*-
+
+# Saccharomyces cerevisiae
+# Saccharomyces Genome Database, Stanford
+
+#######################################################################
+# Download data  (DONE - 2011-08-24 - Hiram)
+    mkdir -p /hive/data/genomes/sacCer3/genbank
+    cd /hive/data/genomes/sacCer3/genbank
+    wget --timestamping -r --cut-dirs=7 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/fungi/Saccharomyces_cerevisiae/SacCer_Apr2011/*"
+
+    mkdir ucsc
+
+ls assembled_chromosomes/AGP | sed -e "s#.comp.agp.gz##" | while read F
+do
+    name=`zcat assembled_chromosomes/AGP/${F}.comp.agp.gz | grep -v "^#"
+\
+        | awk -F'\t' '{print $1}'`
+    echo $name
+    zcat assembled_chromosomes/AGP/${F}.comp.agp.gz \
+        | sed -e "s/^${name}/${F}/" > ucsc/${F}.agp
+done
+
+ls assembled_chromosomes/AGP | sed -e "s#.comp.agp.gz##" | while read F
+do
+    echo ">${F}" > ucsc/${F}.fa
+    zcat assembled_chromosomes/FASTA/${F}.fa.gz | grep -v "^>" >>
+ucsc/${F}.fa
+    gzip ucsc/${F}.fa
+    ls -ld ucsc/${F}.fa.gz
+done
+
+    faSize ucsc/*.fa.gz
+    #	12071326 bases (0 N's 12071326 real 12071326 upper 0 lower) in 16
+    #	sequences in 16 files
+    faSize assembled_chromosomes/FASTA/*.fa.gz
+    #	12071326 bases (0 N's 12071326 real 12071326 upper 0 lower) in 16
+    #	sequences in 16 files
+
+#######################################################################
+# Initial genome build (DONE - 2011-08-24 - Hiram)
+    cd /hive/data/genomes/sacCer3]
+    cat << '_EOF_' > sacCer3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db sacCer3
+scientificName Saccharomyces cerevisiae
+commonName S. cerevisiae
+assemblyDate Apr. 2011
+assemblyShortLabel SacCer_Apr2011
+assemblyLabel Saccharomyces cerevisiae S288c assembly from Saccharomyces Genome Database (GCA_000146055.2)
+orderKey 998
+mitoAcc NC_001224
+#       override the check for max size of 25,000
+mitoSize        90000
+fastaFiles /hive/data/genomes/sacCer3/genbank/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/sacCer3/genbank/ucsc/*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir sacCer
+taxId   559292
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -stop=agp sacCer3.config.ra > agp.log 2>&1
+    #	real    0m14.802s
+    tail -3 agp.log
+    #	if ( All AGP and FASTA entries agree - both files are valid != All AGP and FASTA entries agree - both files are valid ) then
+    #	*** All done!  (through the 'agp' step)
+
+    time makeGenomeDb.pl -continue=db sacCer3.config.ra > db.log 2>&1
+    #	real    0m14.088s
+
+    # no need for repeat masking
+    ln -s sacCer3.unmasked.2bit sacCer3.2bit
+    ln -s `pwd`/sacCer3.2bit /gbdb/sacCer3/sacCer3.2bit 
+
+#######################################################################
+# sacCer3 - S. cerevisiae - Ensembl Genes version 52 (DONE - 2009-02-04 - hiram)
+    ssh swarm
+    # there is now no 2-micron sequence, remove it from the Ensembl GTF file
+    cd /hive/data/genomes/sacCer3
+    cat << '_EOF_' > sacCer3.ensGene.ra
+# required db variable
+db sacCer3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^VIII/chrVIII/; s/^VII/chrVII/; s/^VI/chrVI/; s/^V/chrV/; s/^XIII/chrXIII/; s/^XII/chrXII/; s/^XIV/chrXIV/; s/^XI/chrXI/; s/^XVI/chrXVI/; s/^XV/chrXV/; s/^X/chrX/; s/^III/chrIII/; s/^IV/chrIV/; s/^II/chrII/; s/^IX/chrIX/; s/^I/chrI/; s/^MT/chrM/; s/2-micron/2micron/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=63 sacCer3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer3/bed/ensGene.63
+    featureBits sacCer3 ensGene
+    # 8912929 bases of 12157105 (73.315%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2009-02-04 - Hiram)
+    #	repMatch = 1024 * sizeof(sacCer3)/sizeof(hg18)
+    #	4.32 = 1024 * (12162995/2881515245)
+    #	use 10 to be very conservative
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer3
+    blat sacCer3.2bit /dev/null /dev/null -tileSize=11 \
+	-makeOoc=jkStuff/sacCer3.11.ooc -repMatch=10
+    #	Wrote 3137 overused 11-mers to 11.ooc
+    mkdir /hive/data/staging/data/sacCer3
+    #	copy this to scratch data
+    cp -p jkStuff/sacCer3.11.ooc chrom.sizes sacCer3.2bit \
+	/hive/data/staging/data/sacCer3
+
+#########################################################################
+# CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE - 2009-02-10 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/sgdAnnotations
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations
+    wget  --timestamping \
+http://downloads.yeastgenome.org/chromosomal_feature/saccharomyces_cerevisiae.gff
+    #	trim the delivered S.cerevisiae.gff file to get rid of the FASTA section
+    #	and fixup the chrM and 2-micron chrom names:
+    awk '
+BEGIN { keepGoing = 1 }
+{
+if (match($1, "^##FASTA")) { keepGoing = 0; }
+if (keepGoing) print;
+}
+' saccharomyces_cerevisiae.gff \
+        | sed -e "/^2-micron/d; s/^chrmt/chrM/" > S.cerevisiae.gff
+
+    #	wrote this perl script to specifically parse this particular instance
+    #	of the sgd gff file.
+    $HOME/kent/src/hg/makeDb/outside/yeast/hgSgdGff3/sgdGffToGtf.pl \
+        S.cerevisiae.gff > sacCer2.sgdGene.gtf 2> sacCer2.gtf.stderr
+
+############################################################################
+# AUTO UPDATE GENBANK RUN  (Done - 2011-08-24 - Hiram)
+    # align with latest genbank process.
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add sacCer3 just before sacCer1
+
+# sacCer3 S. cerevisiae
+sacCer3.serverGenome = /hive/data/genomes/sacCer3/sacCer3.2bit
+sacCer3.clusterGenome = /scratch/data/sacCer3/sacCer3.2bit
+sacCer3.ooc = no
+sacCer3.maxIntron = 5000
+sacCer3.lift = no
+sacCer3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+sacCer3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+sacCer3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+sacCer3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+sacCer3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+#sacCer3.perChromTables = no  # doesn't work in the browser
+sacCer3.genbank.mrna.xeno.load = no
+sacCer3.refseq.mrna.native.load = no
+sacCer3.downloadDir = sacCer3
+
+    git commit -m "adding sacCer3" genbank.conf
+    git pull
+    git push
+
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial sacCer3 &
+    #	logFile: var/build/logs/2011.08.24-16:16:56.sacCer3.initalign.log
+XXX - running Wed Aug 24 16:17:10 PDT 2011
+
+    #	real    173m1.570s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad sacCer3
+    #	logFile: var/dbload/hgwdev/logs/2009.02.10-14:25:48.dbload.log
+    #	real    18m21.436s
+
+    # enable daily alignment and update of hgwdev (DONE - 2009-02-24 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add sacCer3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added sacCer3 - S. cerevisiae" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+############################################################################
