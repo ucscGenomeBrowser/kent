@@ -4970,7 +4970,8 @@ if (!hideControls)
         // If so and it is reached by the back button, a page reload will occur instead.
         hPrintf("<INPUT TYPE='text' style='display:none;' id='dirty' VALUE='false'>\n");
         // Unfortunately this does not work in IE, so that browser will get the reload only after this full load.
-        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == 'true') window.location = '%s?hgsid=%d';</script>\n",hgTracksName(),cart->userId);
+        // NOTE: Larry and I have seen that the new URL is not even used, but this will abort the page load and hasten the isDirty() check in hgTracks.js
+        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == 'true') window.location = '%s?hgsid=%d';</script>\n",hgTracksName(),cart->sessionId);
     #endif/// IN_PLACE_UPDATE
 	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
