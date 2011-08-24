@@ -113,6 +113,12 @@ for (i = 0;  i < rec->infoCount;  i++)
 puts("</TABLE>");
 }
 
+static void ignoreEm(char *format, va_list args)
+/* Ignore warnings from genotype parsing -- when there's one, there
+ * are usually hundreds more just like it. */
+{
+}
+
 static void vcfGenotypesDetails(struct vcfRecord *rec, char *track)
 /* Print genotypes in some kind of table... */
 {
@@ -122,7 +128,9 @@ if (vcff->genotypeCount == 0)
 static struct dyString *tmp1 = NULL;
 if (tmp1 == NULL)
     tmp1 = dyStringNew(0);
+pushWarnHandler(ignoreEm);
 vcfParseGenotypes(rec);
+popWarnHandler();
 // Tally genotypes and alleles for summary:
 int refs = 0, alts = 0, refRefs = 0, refAlts = 0, altAlts = 0, gtOther = 0, phasedGts = 0;
 int i;
@@ -201,7 +209,7 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
     printf("<TR><TD>%s</TD><TD>%s%c%s</TD><TD>%s</TD>", vcff->genotypeIds[i],
 	   hapA, sep, hapB, phasing);
     int j;
-    for (j = 0;  j < formatCount;  j++)
+    for (j = 0;  j < gt->infoCount;  j++)
 	{
 	if (sameString(formatKeys[j], vcfGtGenotype))
 	    continue;
@@ -273,7 +281,7 @@ struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 // TODO: will need to handle per-chrom files like bam, maybe fold bamFileNameFromTable into this::
 char *fileOrUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 hFreeConn(&conn);
-int vcfMaxErr = 100;
+int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();

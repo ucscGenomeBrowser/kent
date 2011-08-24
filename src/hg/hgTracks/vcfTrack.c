@@ -638,6 +638,12 @@ hvGfxUnclip(hvgLL);
 hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 }
 
+static void ignoreEm(char *format, va_list args)
+/* Ignore warnings from genotype parsing -- when there's one, there
+ * are usually hundreds more just like it. */
+{
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -652,9 +658,11 @@ boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, compositeLevel,
 					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
 boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
+pushWarnHandler(ignoreEm);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     vcfParseGenotypes(rec);
+popWarnHandler();
 unsigned short gtHapCount = 0;
 int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 struct hacTree *ht = NULL;
@@ -729,7 +737,7 @@ else
     fileOrUrl = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
     hFreeConn(&conn);
     }
-int vcfMaxErr = 100;
+int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, compositeLevel,
