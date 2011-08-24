@@ -1182,10 +1182,8 @@ jQuery.fn.panImages = function(){
             recalculate = true;
         }
         if(newPortalStart > 0) {
-            // XXXX ? hgTracks.imgBoxPortalStart = newPortalStart;
-            // XXXX ? hgTracks.imgBoxPortalEnd = newPortalEnd;
             var newPos = hgTracks.chromName + ":" + commify(newPortalStart) + "-" + commify(newPortalEnd);
-            setPosition(newPos, (newPortalEnd - newPortalStart + 1));
+            setPosition(newPos, 0); // 0 means no need to change the size
         }
         if (recalculate && hgTracks.imgBoxBasesPerPixel > 0) { // Need to recalculate X for bounding drag
             portalScrolledX = (hgTracks.imgBoxPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
