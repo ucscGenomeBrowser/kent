@@ -15,17 +15,8 @@ Summary total counts for release2 (new+untouched):
     Files: 27
     Gbdbs: 0
 
-A) Untouched Tables (0):
+A) Untouched Tables (24):
 
-A') Untouched Files (0 downloadables, 0 gbdbs):
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/
-    on RR:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/
-
-
-
-B) Deprecated tables (24):
 wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
@@ -51,11 +42,9 @@ wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 
-B') Deprecated files (24 downloadables, 0 gbdbs):
-    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
-    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+A') Untouched Files (24 downloadables, 0 gbdbs):
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1/
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/
     on RR:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/
 
