@@ -2664,6 +2664,7 @@ function handleUpdateTrackMap(response, status)
 
     // update local hgTracks.trackDb to reflect possible side-effects of ajax request.
     var json = scrapeVariable(response, "hgTracks");
+    var oldTrackDb = hgTracks.trackDb;
     if(json == undefined) {
         showWarning("hgTracks object is missing from the response");
     } else {
@@ -2716,6 +2717,16 @@ function handleUpdateTrackMap(response, status)
                         //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                     }
                 }
+/* This (disabled) code handles dynamic addition of tracks:
+                for (id in hgTracks.trackDb) {
+                    if(oldTrackDb[id] == undefined) {
+                        // XXXX Tim, what s/d abbr attribute be?
+                        $('#imgTbl').append("<tr id='tr_" + id + "' class='imgOrd trDraggable'></tr>");
+                        updateTrackImgForId(response, id);
+                        updateVisibility(id, visibilityStrsOrder[hgTracks.trackDb[id].visibility]);
+                    }
+                }
+*/
                 hgTracks = json;
                 originalPosition = undefined;
                 initVars();
@@ -2964,4 +2975,34 @@ function navigateInPlace(params, disabledEle)
                disabledEle: disabledEle,
                cache: false
            });
+}
+
+function updateButtonClick(ele)
+{
+// code to update the imgTbl based on changes in the track controls.
+// This is currently experimental code and is dead in the main branch.
+    if(mapIsUpdateable) {
+        var data = "";
+        $("select").each(function(index, o) {
+                                               var cmd = $(this).val();
+                                               if(cmd == "hide") {
+                                                     if(hgTracks.trackDb[this.name] != undefined) {
+                                                         alert("Need to implement hide");
+                                                     }
+                                               } else {
+                                                     if(hgTracks.trackDb[this.name] == undefined || cmd != visibilityStrsOrder[hgTracks.trackDb[this.name].visibility]) {
+                                                        if(data.length > 0) {
+                                                             data = data + "&";
+                                                        }
+                                                        data = data + this.name + "=" + cmd;
+                                                     }
+                                               }
+                                            });
+        if(data.length > 0) {
+            navigateInPlace(data, null);
+        }
+        return false;
+    } else {
+        return true;
+    }
 }
