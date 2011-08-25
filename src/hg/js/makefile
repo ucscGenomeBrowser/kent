@@ -4,6 +4,7 @@ include ../../inc/common.mk
 
 JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js \
     jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
+    ui.core.js ui.dropdownchecklist.js \
     jquery.autocomplete.js ui.core.js ui.dropdownchecklist.js  \
     jquery.cookie.js
 

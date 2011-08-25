@@ -1,7 +1,7 @@
 track wgEncodeCshlShortRnaSeq
 compositeTrack on
 shortLabel CSHL Sm RNA-seq
-	longLabel Small RNA-seq from ENCODE/Cold Spring Harbor Lab
+longLabel Small RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
 subGroup1 view Views Contigs=Contigs Transfrags=TransFrags PlusRawSignal=Plus_Signal MinusRawSignal=Minus_Signal Alignments=Alignments 
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2Huvec=HUVEC&nbsp;(Tier_2) AG04450=AG04450 A549=A549 BJ=BJ MCF7=MCF-7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_RA
