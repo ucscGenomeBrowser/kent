@@ -212,7 +212,7 @@ table.chainTbl td, .descTbl td {border: 1px solid #666; padding: 5px;}
 */
 
 /* waitMask allows waiting on long running javascript using utils.js::waitOnFunction */
-.waitMask { display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #fff; opacity: 0; }
+.waitMask { display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #fff; }
 .inOutButton { height: 24px; width: 24px; border-style: outset; } /* A [+][-] button can be toggled by waitOnFunction during long running scripts */
 
 /* imageV2 */
