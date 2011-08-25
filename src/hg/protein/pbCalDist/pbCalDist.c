@@ -2,6 +2,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
+#include "pbCommon.h"
 #include "spDb.h"
 
 void usage()
@@ -127,7 +128,7 @@ char *kgId;
 
 if (argc != 5) usage();
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
+strcpy(aaAlphabet, AA_ALPHABET);
 
 /* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
 aa_hydro['A'] =  1.800;
@@ -156,6 +157,13 @@ aa_hydro['W'] = -0.900;
 /* Tyr: -1.300  Val:  4.200  Asx: -3.500  Glx: -3.500  Xaa: -0.490 */
 aa_hydro['Y'] = -1.300;
 aa_hydro['V'] =  4.200;
+aa_hydro['B'] = -3.500;
+aa_hydro['Z'] = -3.500;
+aa_hydro['X'] = -0.490;
+
+/* Sec: unknown, approximated from Cys (2.500).  Pyr: unknown, approximated from K (-3.900) */
+aa_hydro['U'] =  2.500;
+aa_hydro['O'] = -3.900;
 
 proteinDatabaseName = argv[1];
 protDbName 	    = argv[2];
@@ -167,7 +175,7 @@ o2 = mustOpen("pepResDist.tab", "w");
 conn  = hAllocConn(database);
 conn2 = hAllocConn(database);
 
-for (j=0; j<23; j++)
+for (j=0; j<strlen(aaAlphabet); j++)
     {
     aaResCnt[j] = 0;
     }
@@ -299,7 +307,7 @@ while (row2 != NULL)
     }
 
 totalResCnt = 0;
-for (i=0; i<23; i++)
+for (i=0; i<strlen(aaAlphabet); i++)
     {
     totalResCnt = totalResCnt + aaResCnt[i];
     }
