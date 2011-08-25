@@ -1,7 +1,7 @@
 track wgEncodeCshlShortRnaSeq
 compositeTrack on
 shortLabel CSHL Sm RNA-seq
-	longLabel Small RNA-seq from ENCODE/Cold Spring Harbor Lab
+longLabel Small RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
 subGroup1 view Views Contigs=Contigs Transfrags=TransFrags PlusRawSignal=Plus_Signal MinusRawSignal=Minus_Signal Alignments=Alignments 
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2Huvec=HUVEC&nbsp;(Tier_2) AG04450=AG04450 A549=A549 BJ=BJ MCF7=MCF-7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_RA
@@ -69,7 +69,7 @@ html wgEncodeCshlShortRnaSeq.new
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleolusShortAln
         #parent wgEncodeCshlShortRnaSeqViewAlignments on
-        #shortLabel K562 nlos sm A 1
+        #shortLabel K562 nlus sm A 1
         #longLabel K562 nucleolus small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         #type bam
@@ -404,7 +404,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments on
-        shortLabel K562 nlos sm A 2
+        shortLabel K562 nlus sm A 2
         longLabel K562 nucleolus small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep2
         type bam
@@ -414,7 +414,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments on
-        shortLabel K562 nlos sm A 1
+        shortLabel K562 nlus sm A 1
         longLabel K562 nucleolus small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         type bam
@@ -724,7 +724,7 @@ html wgEncodeCshlShortRnaSeq.new
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
         #parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
-        #shortLabel K562 nlos sm - 1
+        #shortLabel K562 nlus sm - 1
         #longLabel K562 nucleolus small RNA-seq Minus signal Generation 0 from ENCODE/CSHL
         #subGroups view=MinusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         #type bigWig 1.000000 1097360.000000
@@ -1057,7 +1057,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
-        shortLabel K562 nlos sm - 2
+        shortLabel K562 nlus sm - 2
         longLabel K562 nucleolus small RNA-seq Minus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 941876.000000
@@ -1067,7 +1067,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
-        shortLabel K562 nlos sm - 1
+        shortLabel K562 nlus sm - 1
         longLabel K562 nucleolus small RNA-seq Minus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 939926.000000
@@ -1377,7 +1377,7 @@ html wgEncodeCshlShortRnaSeq.new
         #ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
         #parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
-        #shortLabel K562 nlos sm + 1
+        #shortLabel K562 nlus sm + 1
         #longLabel K562 nucleolus small RNA-seq Plus signal Generation 0 from ENCODE/CSHL
         #subGroups view=PlusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         #type bigWig 1.000000 901616.000000
@@ -1710,7 +1710,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
-        shortLabel K562 nlos sm + 2
+        shortLabel K562 nlus sm + 2
         longLabel K562 nucleolus small RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 1283816.000000
@@ -1720,7 +1720,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
-        shortLabel K562 nlos sm + 1
+        shortLabel K562 nlus sm + 1
         longLabel K562 nucleolus small RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 1901395.000000
