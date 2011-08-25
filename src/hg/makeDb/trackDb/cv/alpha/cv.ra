@@ -368,7 +368,7 @@ term Astrocy
 tag ASTRO
 type Cell Line
 organism human
-description normal human astrocytes (also called NH-A) PROVISIONAL
+description normal human astrocytes (also called NH-A) 
 tissue Brain
 lineage ectoderm
 vendorName Lonza
@@ -657,7 +657,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Lung_01-11002
-#same tag as BC_Lung_H12817N
 tag BCLUNG
 type Cell Line
 tier 3
@@ -1138,7 +1137,7 @@ lineage missing
 karyotype missing
 sex M
 tissue Skin
-vendorName ATCC 
+vendorName ATCC
 vendorId CRL-1974
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1974&Template=cellBiology
 lab Crawford
@@ -2631,7 +2630,7 @@ description embryonic myoblast
 lineage missing
 karyotype missing
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980 
+vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
 sex U
 tissue Muscle
 lab Crawford
@@ -2680,7 +2679,7 @@ lineage missing
 karyotype missing
 derivedFrom HSMM_emb
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980 
+vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
 sex U
 tissue Muscle
 lab Crawford
@@ -3100,7 +3099,7 @@ organism human
 tissue Nervous
 lineage ectoderm
 karyotype normal
-description normal human astrocytes (also called Astrocy) PROVISIONAL
+description normal human astrocytes (also called Astrocy)
 vendorName Lonza
 vendorId CC-2565
 orderUrl http://www.lonza.com/
@@ -3591,10 +3590,10 @@ tag HEK293T
 type Cell Line
 tier 3
 organism human
-description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line (PROVISIONAL)
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line 
 lineage mesoderm
 karyotype cancer, hypotriploid, XXX
-derivedFrom HEK293 
+derivedFrom HEK293
 sex F
 tissue Kidney
 vendorName Invitrogen
@@ -3936,7 +3935,7 @@ tissue Skeletal Muscle
 category cellLine
 age immortalized
 strain C3H
-description Myoblast cell line derived from thigh muscle of C3H mice after crush injury 
+description Myoblast cell line derived from thigh muscle of C3H mice after crush injury
 vendorName Barbara Wold lab
 vendorId C2C12
 orderUrl http://woldlab.caltech.edu/
@@ -4080,7 +4079,7 @@ tissue Blood
 category primaryCells
 age ageUnknown
 strain Unknown
-description Erythroblast, ter119+ cells from liver PROVISIONAL 
+description Erythroblast, ter119+ cells from liver 
 vendorName Mitch Weiss lab
 vendorId Erythroblast
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
@@ -5709,21 +5708,21 @@ lots DAM1540736
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
 validation missing
-#missing validation, not approved yet. ~Jeff
-#term H3ac_(06-599)
-#tag H3AC06599
-#type Antibody
-#antibodyDescription rabbit polyclonal antibody raised against a KLH-conjugated peptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]STGG[K*]APRKQLC) where K* is acetylated
-#target H3ac
-#targetDescription missing
-#vendorName Millipore
-#vendorId 06-599
-#orderUrl http://www.millipore.com/catalogue/item/06-599
-#lab Wold
-#lots missing
-#targetId Genecard:HIST2H3C
-#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-#validation missing
+
+term H3ac_(06-599)
+tag H3AC06599
+type Antibody
+antibodyDescription rabbit polyclonal antibody raised against a KLH-conjugated peptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]STGG[K*]APRKQLC) where K* is acetylated
+target H3ac
+targetDescription missing
+vendorName Millipore
+vendorId 06-599
+orderUrl http://www.millipore.com/catalogue/item/06-599
+lab Wold
+lots missing
+targetId Genecard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation missing
 
 term H3K4me1
 tag H3K04ME1
@@ -6357,8 +6356,7 @@ validation missing
 term MyoD_(sc-32758)
 tag MYODSC32758
 type Antibody
-antibodyDescription mouse monoclonal antibody raised against recombinant MyoD of
- mouse origin with an epitope mapping to amino acids 180-189
+antibodyDescription mouse monoclonal antibody raised against recombinant MyoD of mouse origin with an epitope mapping to amino acids 180-189
 target MyoD
 targetDescription This gene encodes a nuclear protein that belongs to the basic helix-loop-helix family of transcription factors and the myogenic factors subfamily. It regulates muscle cell differentiation by inducing cell cycle arrest, a prerequisite for myogenic initiation. The protein is also involved in muscle regeneration. It activates its own transcription which may stabilize commitment to myogenesis. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -8261,17 +8259,17 @@ description This data represents a control being compared to experiments using a
 term Control_32bp
 tag CNTRL32B
 type control
-description This data represents a control being compared to experiments using read length of 32 bp PROVISIONAL
+description This data represents a control being compared to experiments using read length of 32 bp 
 
 term Control_36bp
 tag CNTRL36B
 type control
-description This data represents a control being compared to experiments using read length of 36 bp PROVISIONAL
+description This data represents a control being compared to experiments using read length of 36 bp 
 
 term Control_50bp
 tag CNTRL50B
 type control
-description This data represents a control being compared to experiments using read length of 50 bp PROVISIONAL
+description This data represents a control being compared to experiments using read length of 50 bp 
 
 term Input
 tag INPUT
@@ -8293,10 +8291,10 @@ tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
 
-term RevXlinkChromatin 
+term RevXlinkChromatin
 tag RXLCH
 type control
-description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling. 
+description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling.
 
 term None
 tag NONE
@@ -8537,27 +8535,27 @@ label MNase
 
 term Myoblast
 tag MYB
-description Grown in differentiation medium undifferediated (Wold) PROVISIONAL
+description Grown in differentiation medium undifferediated (Wold) 
 type treatment
 
 term Myocyte_24h
 tag MYC24H
-description Grown for 24 hours in differentiation medium (Wold) PROVISIONAL
+description Grown for 24 hours in differentiation medium (Wold) 
 type treatment
 
 term Myocyte_60h
 tag MYC60H
-description Grown for 60 hours in differentiation medium (Wold) PROVISIONAL
+description Grown for 60 hours in differentiation medium (Wold) 
 type treatment
 
 term Myocyte_5d
 tag MYC5D
-description Grown for 5 days in differentiation medium (Wold) PROVISIONAL
+description Grown for 5 days in differentiation medium (Wold) 
 type treatment
 
 term Myocyte_7d
 tag MYC7D
-description Grown for 7 days in differentiation medium (Wold) PROVISIONAL
+description Grown for 7 days in differentiation medium (Wold) 
 type treatment
 
 
@@ -8722,7 +8720,7 @@ term Alignability
 tag ALIGNABI
 type view
 label Alignability
-description Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mapability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project. 
+description Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mapability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project.
 
 term Alignments
 tag ALN
@@ -8752,7 +8750,7 @@ term Contigs
 tag CONTIGS
 type view
 label Contigs
-description PROVISIONAL Contigs represent continuous regions of the genome that are covered by several overlapping RNA-seq reads. The score represents the logarithm of the expression level (read coverage depth).
+description Contigs represent continuous regions of the genome that are covered by several overlapping RNA-seq reads. The score represents the logarithm of the expression level (read coverage depth).
 
 term Excludable
 tag EXCLU
@@ -8825,13 +8823,13 @@ term GeneDeNovo
 tag GENEDENO
 type view
 label Genes De Novo
-description 'De novo' genes defined by Cufflinks with FPKM. PROVISIONAL 
+description 'De novo' genes defined by Cufflinks with FPKM. 
 
-term GeneGencV7 
-tag GENEGENCV7 
+term GeneGencV7
+tag GENEGENCV7
 type view
-label Genes Gencode V7 
-description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format 
+label Genes Gencode V7
+description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format
 
 term GeneGencV3c
 tag GENEGENCV3C
@@ -8861,7 +8859,7 @@ term Junctions
 tag JUNCTIONS
 type view
 label Junctions
-description TopHat-defined (Caltech) or STAR-defined (CSHL) splice junctions PROVISIONAL
+description TopHat-defined (Caltech) or STAR-defined (CSHL) splice junctions
 
 # Interactions may be a better view for this
 term Matrix
@@ -8886,13 +8884,13 @@ term PeakSeqConservPeaks
 tag PSCPEAKS
 type view
 label PeakSeq Conserved Peaks
-description Regions of conserved enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+description Regions of conserved enriched signal in experiment performed by PeakSeq 
 
 term PeakSeqOptimalPeak
 tag PSOPEAKS
 type view
 label PeakSeq Optimal Peaks
-description Regions of optimal enriched signal in experiment performed by PeakSeq (PROVISIONAL)
+description Regions of optimal enriched signal in experiment performed by PeakSeq 
 
 term PeptideMapping
 tag PEPTIDEMAP
@@ -8965,13 +8963,13 @@ term RepPeaks
 tag REPPEAKS
 type view
 label Replicate Peaks
-description Peaks determined per individual replicate  
+description Peaks determined per individual replicate
 
 term RepSignal
 tag REPSIGNAL
 type view
 label Replicate Signal
-description Signal determined per individual replicate 
+description Signal determined per individual replicate
 
 term Signal
 tag SIG
@@ -9013,25 +9011,25 @@ term SppConservPeaks
 tag SCPPEAKS
 type view
 label Spp Conservative Peaks
-description Regions of optimal enriched signal in experiment performed by Spp (PROVISIONAL)
+description Regions of optimal enriched signal in experiment performed by Spp
 
 term SppOptimalPeaks
 tag SOPPEAKS
 type view
 label SPP Optimal Peaks
-description Regions of conserved enriched signal in experiment performed by SPP (PROVISIONAL)
+description Regions of conserved enriched signal in experiment performed by SPP 
 
 term TranscriptDeNovo
 tag TRANSDENOVO
 type view
 label TranscriptDeNovo
-description 'De novo' transcripts with FPKM produced by Cufflinks 
+description 'De novo' transcripts with FPKM produced by Cufflinks
 
-term TranscriptGencV7 
-tag TRANSGENCV7 
+term TranscriptGencV7
+tag TRANSGENCV7
 type view
-label Transcript Gencode V7 
-description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format 
+label Transcript Gencode V7
+description Expression level estimates at the transcript level for the GENCODE V7 annotation in gtf format
 
 term TranscriptGencV3c
 tag TRANSGENCV3C
@@ -9052,7 +9050,7 @@ label TSS Gencode V3c
 description Expression level estimates for GENCODE v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
 
 term TssGencV7
-tag TssV7 
+tag TssV7
 type view
 label TSS Gencode V7
 description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
@@ -9061,7 +9059,7 @@ term UniformSignal
 tag UNISIG
 type view
 label Uniform Signal by AWG
-description Uniform Signal (PROVISIONAL)
+description Uniform Signal 
 
 term Uniqueness
 tag UNQ
@@ -9526,12 +9524,12 @@ description Unknown
 term revoked
 tag REVOKED
 type objStatus
-description This file has been REVOKED by the submitting laboratory for some reason.  It should not be used for further research. PROVISIONAL
+description This file has been REVOKED by the submitting laboratory for some reason.  It should not be used for further research. 
 
 term replaced
 tag REPLACED
 type objStatus
-description This file has been REPLACED by the submitting laboratory with an improved version. PROVISIONAL
+description This file has been REPLACED by the submitting laboratory with an improved version. 
 
 ## Organisms
 term human
@@ -10306,6 +10304,8 @@ projectName UNC-Giddings
 #   searchable [no/select/date/numeric]  DEFAULT: NO
 #       select: drop-down selection of values discovered in mdb
 #  multiSelect: drop-down check-box list allowing selection of multiple values (e.g. [GM12878,K562] means search for either)
+#     freeText: searches by free text accept the wild card '%' and any subset of text
+#     wildList: one or more values delimited by commas ('%' wildcards accepted)
 #         date: by less than or greater than date range (not yet implemented)
 #      numeric: numeric by range (not yet implemented)
 #
@@ -10426,7 +10426,7 @@ label Cell type category
 description Cell type category, such as T for tissue, L for cell line, P for primary cells
 searchable no
 cvDefined yes
-hidden yes        
+hidden yes
 validate cv
 priority 470
 
@@ -10534,7 +10534,7 @@ tag DCCACCESSION
 type typeOfTerm
 label UCSC Accession
 description The accession number provided by the UCSC Genome Browser.
-searchable freeText
+searchable wildList
 cvDefined no
 validate regex: ^wgEncodeE[H,M][0-9]*$
 priority 312
@@ -10567,7 +10567,7 @@ tag EXPID
 type typeOfTerm
 label Experiment ID
 description The ENCODE DCC experiment identification number.
-searchable freeText
+searchable wildList
 cvDefined no
 hidden beta,public
 validate integer
@@ -10625,7 +10625,7 @@ tag GEOSAMPLE
 type typeOfTerm
 label GEO sample accession
 description GEO sample accession number applied to a single data set in a series of related data sets.
-searchable freeText
+searchable wildList
 cvDefined no
 validate regex: ^GSM[0-9]*$
 priority 345
@@ -10635,7 +10635,7 @@ tag GEOSERIES
 type typeOfTerm
 label GEO series accession
 description GEO series accession number applied to all data sets in a related series.
-searchable freeText
+searchable wildList
 cvDefined no
 validate regex: ^GSE[0-9]*$
 priority 340
@@ -10676,7 +10676,7 @@ tag LABEXPID
 type typeOfTerm
 label Lab provided identifier
 description An ID provided by a lab that uniquely identifies an experiment (dataset) to that lab.
-searchable freeText
+searchable wildList
 cvDefined no
 validate none
 priority 410
@@ -10739,19 +10739,19 @@ label md5sum
 description The md5sum for the file associated with the object.
 searchable no
 cvDefined no
-validate regex: ^[0-9a-f]*$
+validate regex: ^[0-9a-f]*$\|^bam=[0-9a-f]*,bai=[0-9a-f]*$
 priority 999
 
 term objStatus
-tag OBJSTAT   
+tag OBJSTAT
 type typeOfTerm
 label Object Status
-description The status of the file or table object (revoked, replaced, etc)  PROVISIONAL
+description The status of the file or table object (revoked, replaced, etc)  
 searchable no
 hidden no
 cvDefined yes
-validate cv  
-priority 1   
+validate cv
+priority 1
 
 term obtainedBy
 tag OBTAINEDBY
@@ -10976,7 +10976,7 @@ tag SUBID
 type typeOfTerm
 label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
-searchable freeText
+searchable wildList
 cvDefined no
 validate integer
 priority 335
@@ -11028,11 +11028,11 @@ term type
 tag TYPE
 type typeOfTerm
 label File type
-description The type of the primary file associated with the object 
+description The type of the primary file associated with the object
 searchable multiSelect
 cvDefined no
 validate none
-priority 985 
+priority 985
 
 
 term uniqueness

@@ -162,6 +162,11 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
             dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
                             name);
             }
+        else if (searchBy == cvSearchByWildList)
+            {
+            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal wildList' title='enter comma separated list of values' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
+                            name);
+            }
         else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
             {
             // TO BE IMPLEMENTED

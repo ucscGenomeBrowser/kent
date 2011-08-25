@@ -1886,3 +1886,87 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
+############################################################################
+# running cpgIsland business (DONE - 2011-08-22 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/cpgIsland
+    cd /hive/data/genomes/anoCar2/bed/cpgIsland
+    ln -s ../../../danRer6/bed/cpgIsland/cpglh.exe .
+
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../anoCar2.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh encodek
+    cd /hive/data/genomes/anoCar2/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | egrep "^chr|^Zv" | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+# Completed: 6457 of 6457 jobs
+# CPU time in finished jobs:        135s       2.25m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                 16267s     271.11m     4.52h    0.19d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:              28s       0.47m     0.01h    0.00d
+# Submission to last job:           871s      14.52m     0.24h    0.01d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    # verify longest unique chrom name:
+    cut -f1 cpgIsland.bed | sed -e 's/_random//' \
+	| awk '{print length($0)}' | sort -rn | head -1
+    #	18
+    # update the length 14 in the template to be 16:
+    sed -e "s/14/18/" $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
+
+    cd /hive/data/genomes/anoCar2/bed/cpgIsland
+    hgLoadBed anoCar2 cpgIslandExt -tab -sqlTable=cpgIslandExt.sql cpgIsland.bed
+# Loaded 15374 elements of size 10
+
+
+    featureBits anoCar2 cpgIslandExt
+    #	6520314 bases of 1701353770 (0.383%) in intersection
+
+    # there should be no output from checkTableCoords:
+    checkTableCoords -verboseBlocks -table=cpgIslandExt anoCar2
+
+    #	cleanup
+    rm -fr hardMaskedFa
+
+############################################################################

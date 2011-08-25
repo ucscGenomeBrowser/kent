@@ -128,6 +128,7 @@ char *kgId;
 
 if (argc != 5) usage();
 
+
 strcpy(aaAlphabet, AA_ALPHABET);
 
 /* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
@@ -268,7 +269,7 @@ while (row2 != NULL)
     for (i=0; i<len; i++)
 	{
 	aaResFound = 0;
-	for (j=0; j<23; j++)
+	for (j=0; j<strlen(aaAlphabet); j++)
 	    {
 	    if (*chp == aaAlphabet[j])
 		{

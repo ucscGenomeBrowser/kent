@@ -163,7 +163,9 @@ for (info = infoList; info != NULL; info = info->next)
 	chopSuffix(mRNA);
 	}
 
-    /* Still no joy? Try genbank RNA records. */
+    /* Still no joy? Try genbank RNA records. 
+     * First, try to get the symbol and description from 
+     * the same record */
     if (geneSymbol == NULL || description == NULL)
 	{
 	if (ev != NULL)
@@ -173,34 +175,71 @@ for (info = infoList; info != NULL; info = info->next)
 		{
 		char *acc = ev->accs[i];
 		chopSuffix(acc);
-		if (geneSymbol == NULL)
+		if (geneSymbol == NULL || description == NULL)
 		    {
 		    safef(query, sizeof(query), 
 			"select geneName.name from gbCdnaInfo,geneName "
-			"where geneName.id=gbCdnaInfo.geneName and gbCdnaInfo.acc = '%s'", acc);
+			"where geneName.id=gbCdnaInfo.geneName and geneName.name != 'n/a'"
+                        "and gbCdnaInfo.description > 0 and gbCdnaInfo.acc = '%s'", acc);
 		    geneSymbol = sqlQuickString(gConn, query);
-		    if (geneSymbol != NULL)
+                    if (geneSymbol != NULL) 
 			{
-			if (sameString(geneSymbol, "n/a"))
-			   geneSymbol = NULL;
-			}
-		    }
-		if (description == NULL)
-		    {
-		    safef(query, sizeof(query), 
-			"select description.name from gbCdnaInfo,description "
-			"where description.id=gbCdnaInfo.description "
-			"and gbCdnaInfo.acc = '%s'", acc);
-		    description = sqlQuickString(gConn, query);
-		    if (description != NULL)
-			{
-			if (sameString(description, "n/a"))
-			   description = NULL;
-			}
+			safef(query, sizeof(query), 
+			      "select description.name from gbCdnaInfo,description "
+			      "where description.id=gbCdnaInfo.description "
+			      "and gbCdnaInfo.acc = '%s'", acc);
+			description = sqlQuickString(gConn, query);
+			if (description != NULL) 
+			    {
+			    if (sameString(description, "n/a"))
+				description = NULL;
+			    }
+		        }
 		    }
 		}
 	    }
 	}
+
+    /* And if that failed too, try getting them from different records
+     * and HOPING that they match... */
+    if (geneSymbol == NULL || description == NULL)
+        {
+        if (ev != NULL)
+            {
+            int i;
+            for (i=0; i<ev->accCount; ++i)
+                {
+                char *acc = ev->accs[i];
+                chopSuffix(acc);
+                if (geneSymbol == NULL)
+                    {
+                    safef(query, sizeof(query),
+                        "select geneName.name from gbCdnaInfo,geneName "
+			  "where geneName.id=gbCdnaInfo.geneName and gbCdnaInfo.acc = '%s'", acc);
+                    geneSymbol = sqlQuickString(gConn, query);
+                    if (geneSymbol != NULL)
+                        {
+                        if (sameString(geneSymbol, "n/a"))
+			    geneSymbol = NULL;
+                        }
+                    }
+                if (description == NULL)
+                    {
+                    safef(query, sizeof(query),
+                        "select description.name from gbCdnaInfo,description "
+                        "where description.id=gbCdnaInfo.description "
+			  "and gbCdnaInfo.acc = '%s'", acc);
+                    description = sqlQuickString(gConn, query);
+                    if (description != NULL)
+                        {
+                        if (sameString(description, "n/a"))
+			    description = NULL;
+                        }
+                    }
+                }
+            }
+        }
+
     if (geneSymbol == NULL)
         geneSymbol = mRNA;
     if (description == NULL)
