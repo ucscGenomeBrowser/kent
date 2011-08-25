@@ -74,6 +74,12 @@ sex F
 tier 1
 protocol ENCODE:K562_protocol.pdf
 
+term K562b
+tag K562b
+type Cell Line
+organism human
+deprecated same as K562
+
 #deprecated, it's pretty much the same cell as K562.
 #term K562b
 #tag K562b
@@ -1193,23 +1199,6 @@ sex F
 tier 3
 protocol Myers:ECC1_Myers_protocol.pdf
 
-term PBDEFetal
-tag PBDEFETAL
-type Cell Line
-tier 3
-organism human
-description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
-lineage mesoderm
-karyotype normal
-sex U
-tissue Liver
-vendorName Bouhassira Lab
-vendorId FetalPBDE
-orderUrl http://www.einstein.yu.edu/cellbiology/Lab/Bouhassira/default.htm
-termId BTO:0000553
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000553
-protocol Farnham:FetalPBDE_Farnham_protocol.pdf
-
 term Fibrobl
 tag FIBROBL
 type Cell Line
@@ -2129,6 +2118,12 @@ sex U
 tier 3
 protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf Snyder:HEK293b_Snyder_protocol.pdf
 
+term HEK293(b)
+tag HEK293b
+type Cell Line
+organism human
+deprecated same as HEK293
+
 #We are trying to eliminate these "b" terms.  We will not erase fully until 9/1/11.
 #term HEK293(b)
 #tag HEK293b
@@ -2650,6 +2645,7 @@ karyotype missing
 vendorName Duke/UNC/UT/EBI ENCODE group
 vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
 sex U
+orderUrl http://depts.washington.edu/biowww/faculty/hauschka-steve/
 tissue Muscle
 lab Crawford
 protocol Crawford:HSMMemb_Crawford_protocol.pdf
@@ -2698,6 +2694,7 @@ karyotype missing
 derivedFrom HSMM_emb
 vendorName Duke/UNC/UT/EBI ENCODE group
 vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
+orderUrl http://depts.washington.edu/biowww/faculty/hauschka-steve/
 sex U
 tissue Muscle
 lab Crawford
@@ -3328,6 +3325,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Farnham:PBDE_Farnham_protocol.pdf
+
+term PBDEFetal
+tag PBDEFETAL
+type Cell Line
+tier 3
+organism human
+description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
+lineage mesoderm
+karyotype normal
+sex U
+tissue Liver
+vendorName Bouhassira Lab
+vendorId FetalPBDE
+orderUrl http://www.einstein.yu.edu/cellbiology/Lab/Bouhassira/default.htm
+termId BTO:0000553
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000553
+protocol Farnham:FetalPBDE_Farnham_protocol.pdf
 
 term PBMC
 tag PBMC
@@ -5326,7 +5340,7 @@ vendorId sc-13030
 lab Farnham
 targetId GeneCard:ELK4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4
-validation ELK4(WesternBlot, ChIPseq):human_ELK4_validation_Farnham.pdf
+validation ELK4(WesternBlot,ChIPseq):human_ELK4_validation_Farnham.pdf
 
 term ERalpha_a
 tag ERAA
@@ -10743,8 +10757,11 @@ label md5sum
 description The md5sum for the file associated with the object.
 searchable no
 cvDefined no
-validate regex: ^[0-9a-f]*$\|^bam=[0-9a-f]*,bai=[0-9a-f]*$
+validate regex: ^[0-9a-f]{32}$\|^bam=[0-9a-f]{32},bai=[0-9a-f]{32}$
 priority 999
+#This can either be a valid md5sum 920afe925b7f7b4d7617ef538160579c with 32 digits
+#in the case of bam files, it can be a pair bam=2aac07f3f113b5bd708915081eb1a11d,bai=0da3b2adf4f21d5bb50e7cae31b91f2c
+
 
 term objStatus
 tag OBJSTAT
