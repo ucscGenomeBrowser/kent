@@ -1345,7 +1345,7 @@ rnaExtract longPolyA
 subId 3436
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2V2
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2
 objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
@@ -1355,7 +1355,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -1395,7 +1395,7 @@ rnaExtract longPolyA
 subId 3436
 view FastqRd2
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2
 objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
@@ -1405,7 +1405,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -2024,7 +2024,7 @@ rnaExtract longPolyA
 subId 3441
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2V2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
@@ -2034,7 +2034,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -2100,7 +2100,7 @@ rnaExtract longPolyA
 subId 3441
 view FastqRd2
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2V2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
@@ -2110,7 +2110,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -12326,4 +12326,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -752406423
+# MAGIC: -2019258743
