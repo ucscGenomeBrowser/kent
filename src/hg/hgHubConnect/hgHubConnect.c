@@ -140,7 +140,7 @@ for(hub = hubList; hub; hub = hub->next)
 	ourPrintCell(hub->longLabel);
     else
 	printf("<TD><span class=\"hubError\">ERROR: %s</span>"
-	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\"> Debug</a></TD>", 
 	    hub->errorMessage);
 
     ourPrintCell(hub->hubUrl);
@@ -425,14 +425,6 @@ printf("<span class=\"small\">"
     "Contact <A HREF=\"mailto:%s\">%s</A> to add a public hub."
     "</span>\n", emailAddress,emailAddress);
 printf("</div>");
-
-if ((newId != 0) || gotDisconnect) // make MyHubs the default tab
-    {
-    printf("<script type='text/javascript'>\n ");
-    printf("var $tabs = $('#tabs').tabs();\n");
-    printf(" $tabs.tabs('select',1);\n");
-    printf("</script>\n");
-    }
 
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 
