@@ -7,9 +7,9 @@ class RaFile(OrderedDict):
 	Stores an Ra file in a set of entries, one for each stanza in the file.
 	"""
 
-	def __init__(self, filePath=''):
+	def __init__(self, filePath=None):
 		OrderedDict.__init__(self)
-		if filePath != '':
+		if filePath != None:
 			self.read(filePath) 
 
 	def read(self, filePath):
@@ -94,6 +94,27 @@ class RaFile(OrderedDict):
 				yield [item]
 
 
+	def filter(self, where, select):
+		"""
+		select useful data from matching criteria
+		
+		where: the conditional function that must be met. Where takes one argument, the stanza and should return true or false
+		select: the data to return. Takes in stanza, should return whatever to be added to the list for that stanza.
+		
+		For each stanza, if where(stanza) holds, it will add select(stanza) to the list of returned entities.
+		Also forces silent failure of key errors, so you don't have to check that a value is or is not in the stanza.
+		"""
+		
+		ret = list()
+		for stanza in self.itervalues():
+			try:
+				if where(stanza):
+					ret.append(select(stanza))
+			except KeyError:
+				continue
+		return ret
+				
+				
 	def __str__(self):
 		str = ''
 		for item in self.iteritems():
