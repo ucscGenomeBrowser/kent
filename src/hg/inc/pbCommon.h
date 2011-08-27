@@ -7,12 +7,8 @@
 /* define the expected amino acid residues */
 #define AA_ALPHABET "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-char *txAccFromTempName(char *tempName);
-/* Given name in this.that.acc.version format, return
- * just acc.version. */
-
-void txGeneAccFromId(int id, char acc[16]);
-/* Convert ID to accession in uc123ABC format. */
+/* define the size of the standard amino acid alphabet */
+#define NUM_STANDARD_AAS 20
 
 #endif /* PBCOMMON_H */
 
