@@ -166,6 +166,18 @@ function isDirtyPage()
     return false;
 }
 
+function linkFixup(pos, name, reg, endParamName)
+{
+// fixup external links (e.g. ensembl)
+    if($('#' + name).length) {
+        var link = $('#' + name).attr('href');
+        var a = reg.exec(link);
+        if(a && a[1]) {
+            $('#' + name).attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
+        }
+    }
+}
+
 function setPosition(position, size)
 {
 // Set value of position and size (in hiddens and input elements).
@@ -181,6 +193,38 @@ function setPosition(position, size)
     }
     if(size) {
         $('#size').text(size);
+    }
+    var pos = parsePosition(position);
+    if(pos) {
+        // fixup external static links on page'
+        
+        // Example ensembl link: http://www.ensembl.org/Homo_sapiens/contigview?chr=21&start=33031934&end=33041241
+        linkFixup(pos, "ensemblLink", new RegExp("(.+start=)[0-9]+"), "end");
+
+        // Example NCBI link: http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
+        linkFixup(pos, "ncbiLink", new RegExp("(.+BEG=)[0-9]+"), "END");
+              
+        // Example medaka link: http://utgenome.org/medakabrowser_ens_jump.php?revision=version1.0&chr=chromosome18&start=14435198&end=14444829
+        linkFixup(pos, "medakaLink", new RegExp("(.+start=)[0-9]+"), "end");
+        
+        if($('#wormbaseLink').length) {
+            // e.g. http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=II:14646301-14667800
+            var link = $('#wormbaseLink').attr('href');
+            var reg = new RegExp("(.+:)[0-9]+");
+            var a = reg.exec(link);
+            if(a && a[1]) {
+                $('#wormbaseLink').attr('href', a[1] + pos.start + "-" + pos.end);
+            }
+        }
+        // Fixup DNA link; e.g.: hgc?hgsid=2999470&o=114385768&g=getDna&i=mixed&c=chr7&l=114385768&r=114651696&db=panTro2&hgsid=2999470
+        if($('#dnaLink').length) {
+            var link = $('#dnaLink').attr('href');
+            var reg = new RegExp("(.+&o=)[0-9]+.+&db=[^&]+(.*)");
+            var a = reg.exec(link);
+            if(a && a[1]) {
+                $('#dnaLink').attr('href', a[1] + (pos.start - 1) + "&g=getDna&i=mixed&c=" + pos.chrom + "&l=" + (pos.start - 1) + "&r=" + pos.end + "&db=" + getDb() + a[2]);
+            }
+        }
     }
     markAsDirtyPage();
 }
