@@ -1181,7 +1181,7 @@ file->startData = fetchedStart;
 file->endData = fetchedEnd;
 }
 
-static boolean udcCachePreload(struct udcFile *file, bits64 offset, int size)
+static boolean udcCachePreload(struct udcFile *file, bits64 offset, bits64 size)
 /* Make sure that given data is in cache - fetching it remotely if need be. 
  * Return TRUE on success. */
 {
@@ -1214,7 +1214,7 @@ return ok;
 }
 
 #define READAHEADBUFSIZE 4096
-int udcRead(struct udcFile *file, void *buf, int size)
+bits64 udcRead(struct udcFile *file, void *buf, bits64 size)
 /* Read a block from file.  Return amount actually read. */
 {
 
@@ -1229,7 +1229,7 @@ size = end - start;
 char *cbuf = buf;
 
 /* use read-ahead buffer if present */
-int bytesRead = 0;
+bits64 bytesRead = 0;
 
 bits64 raStart;
 bits64 raEnd;
@@ -1242,8 +1242,8 @@ while(TRUE)
 	if (start >= raStart && start < raEnd)
 	    {
 	    // copy bytes out of rabuf
-	    int endInBuf = min(raEnd, end);
-	    int sizeInBuf = endInBuf - start;
+	    bits64 endInBuf = min(raEnd, end);
+	    bits64 sizeInBuf = endInBuf - start;
 	    memcpy(cbuf, file->sparseReadAheadBuf + (start-raStart), sizeInBuf);
 	    cbuf += sizeInBuf;
 	    bytesRead += sizeInBuf;
@@ -1311,12 +1311,12 @@ while(TRUE)
 return bytesRead;
 }
 
-void udcMustRead(struct udcFile *file, void *buf, int size)
+void udcMustRead(struct udcFile *file, void *buf, bits64 size)
 /* Read a block from file.  Abort if any problem, including EOF before size is read. */
 {
-int sizeRead = udcRead(file, buf, size);
+bits64 sizeRead = udcRead(file, buf, size);
 if (sizeRead < size)
-    errAbort("udc couldn't read %d bytes from %s, did read %d", size, file->url, sizeRead);
+    errAbort("udc couldn't read %llu bytes from %s, did read %llu", size, file->url, sizeRead);
 }
 
 int udcGetChar(struct udcFile *file)

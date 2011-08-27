@@ -130,7 +130,7 @@ origAssembly hg18
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 nlos tot 
+        shortLabel K562 nlus tot 
         longLabel K562 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=60-nucleolus rnaExtract=total
         type broadPeak
@@ -233,7 +233,7 @@ origAssembly hg18
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel HepG2 nlos tot 
+        shortLabel HepG2 nlus tot 
         color 189,0,157
         longLabel HepG2 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=HepG2 localization=60-nucleolus rnaExtract=total
@@ -241,7 +241,7 @@ origAssembly hg18
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags on
-        shortLabel GM12878 nlos tot 
+        shortLabel GM12878 nlus tot 
         color 153,38,0
         longLabel GM12878 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=GM12878 localization=60-nucleolus rnaExtract=total

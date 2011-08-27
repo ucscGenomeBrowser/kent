@@ -9432,6 +9432,33 @@ subId 3593
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum bam=34b4380f910b706b1c3def98eeedd73b,bai=5f34d180db34ce346c562c01fcc03d18
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3476
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1
 objType table
 cell LHCN-M2
@@ -9903,33 +9930,6 @@ rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
 view Junctions
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2
-objType table
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-28
-dateUnrestricted 2012-01-28
-dccAccession wgEncodeEH001669
-expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum bam=34b4380f910b706b1c3def98eeedd73b,bai=5f34d180db34ce346c562c01fcc03d18
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3476
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2
-view Alignments
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
 objType table
@@ -12326,4 +12326,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -249114546
+# MAGIC: -752406423

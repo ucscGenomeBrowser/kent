@@ -4,8 +4,6 @@ Encyclopedia of DNA Elements (ENCODE) Project</A>.
 This track displays transcriptional fragments associated with RBP in 
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A> K562 and GM12878,
 using Ribonomic profiling via Illumina SBS.
-The <i>RBP Assoc RNA</i> view shows the genomic location of sequencing peaks.
-All experiments had two replicates.
 </P>
 
 <P>In eukaryotic organisms gene regulatory networks require an additional
@@ -24,7 +22,6 @@ targeted RNA-binding proteins using RIP-Seq profiling.
 are multiple subtracks that display individually in the browser.
 The subtracks within this track correspond to different antibodies/target
 proteins tested in different cell lines.
-This track is initially released with a single view:
 </P>
 
 <P>
@@ -37,6 +34,8 @@ This track is initially released with a single view:
 <P>
 <DT><I>Alignments</I>
 <DD>The Alignments view shows reads mapped to the genome.
+The alignment file follows the standard SAM format of Bowtie output. 
+See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. 
 </DD>
 </DL>
 
@@ -49,34 +48,31 @@ Instructions for configuring multi-view tracks are
 RNA samples were amplified and converted to cDNA with the <A HREF="http://www.nugeninc.com">Nugen</A> Ovation&#169; RNA-Seq System and prepped for sequencing with the
 <A HREF="http://www.illumina.com">Illumina</A> mRNA-Seq protocol.  
 
-Approximately 30 million single end sequencing reads reads were obtained for each K562 and GM12878.
+Approximately 30 million single end sequencing reads were obtained for each K562 and GM12878.
 RIP samples were analyzed for signal that was at or above the 60th percentile and statistically enriched compared to the negative control.
 Sequences were analyzed using <A HREF="http://tophat.cbcb.umd.edu/">TopHat</A> (Trapnell <EM>et al.</EM>, 2009) with 
 <A HREF="http://bowtie-bio.sourceforge.net/index.shtml">Bowtie</A> (Langmead <EM>et al.</EM>, 2009).
 </P>
 <P>
-Peaks were called from the top 40 &#37; of TopHat normalized reads,
+Peaks were called from the top 40&#37; of TopHat normalized reads,
 with a max gap,  min run of (24:48).
-Unions of overlapping peak regions from total RNA replicates are presented with p-value from a one tailed t-test for average signal from replicates versus 0 
-(no cut-off was used for totals).
-Replicate overlap for positive RIP treatment peaks are presented with pVal from one tailed t-test versus signal for same region in negative control replicates. RIP peaks were from sequences longer than 120 bp and p-value &lt; .05.
-For both totals and RIPs, the peak scores are scaled relative p-values between treatment and control.
+Unions of overlapping peak regions from total RNA replicates (RIP-Input) are presented with p-value 
+from a one tailed t-test for average signal from replicates versus 0 
+(no cut-off was used for totals). Replicate overlap for positive RIP treatment peaks (ELAVL1 and PABPC1)  
+are presented with a p-value from one tailed t-test versus signal for same the region in negative 
+control replicates (T7-tag). RIP peaks were from sequences longer than 120 bp and p-value &lt; .05.
+For both totals (RIP-input) and RIPs, the peak scores are scaled relative p-values between treatment and control.
 </P>
 
 
 <H2>Credits</H2>
 <P>These data were produced and analyzed by a collaboration between the
 <A HREF="http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml"
-TARGET=_BLANK>
-Tenenbaum lab</A>
-at the University at Albany-SUNY, College of Nanoscale
-Science and Engineering, <br>
-the <A HREF="http://www.uthscsa.edu/csb/faculty/penalva.asp" TARGET=_BLANK>
-Luiz Penalva group</A>
-at the Greehey Children's Cancer Research Institute,
-University of Texas Health Science Center and 
-<br>the <A HREF="http://www.cfgbiotech.com/microarray/index.htm" TARGET=_BLANK>
-Microarray Core Facility</A> at the Center for Functional Genomics, Rensselaer, NY .
+TARGET=_BLANK> Tenenbaum lab</A> at the University at Albany-SUNY, College of Nanoscale
+Science and Engineering,the <A HREF="http://gccri.uthscsa.edu/lpenalva.asp" TARGET=_BLANK>
+Luiz Penalva group</A> at the Greehey Children's Cancer Research Institute,
+University of Texas Health Science Center and the <A HREF="http://www.cfgbiotech.com/microarray/index.htm" TARGET=_BLANK>
+Microarray Core Facility</A> at the Center for Functional Genomics, Rensselaer, NY.
 </P>
 
 <P>

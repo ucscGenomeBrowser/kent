@@ -440,6 +440,9 @@ return id;
 
 static unsigned getAndSetHubStatus(char *database, struct cart *cart, char *url, 
     boolean set, boolean unlisted)
+/* look in the hubStatus table for this url, add it if it isn't in there
+ * Set the cart variable to turn the hub on if set == TRUE.  
+ * Return id from that status table*/
 {
 char *errorMessage = NULL;
 unsigned id;
@@ -556,12 +559,20 @@ void hubSetErrorMessage(char *errorMessage, unsigned id)
 /* set the error message in the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[256];
+char query[4096];
+
 if (errorMessage != NULL)
     {
+    // make sure there is no newline at the end.  This should be unneccesary
+    // but there are many, many places where newlines are added in calls
+    // to warn and errAbort
+    char buffer[4096];
+    strcpy(buffer, errorMessage);
+    while (lastChar(buffer) == '\n')
+	buffer[strlen(buffer) - 1] = '\0';
     safef(query, sizeof(query),
 	"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d",
-	hubStatusTableName, errorMessage, id);
+	hubStatusTableName, buffer, id);
     }
 else
     {
