@@ -12,7 +12,7 @@ specific locus to get an improved representation without affecting users who
 need chromosome coordinate stability.
 </p>
 
-<a href='ftp://hgdownload.cse.ucsc.edu/gbdb/hg19/hg19Patch2/' target=_blank>Download</a>
+<a href='ftp://hgdownload.cse.ucsc.edu/gbdb/hg19/hg19Patch5/' target=_blank>Download</a>
 the GRC Patch Release track data sets from the Genome Browser downloads server.
 
 <h3>Haplotypes</h3>
@@ -20,7 +20,8 @@ the GRC Patch Release track data sets from the Genome Browser downloads server.
 Items in the <em>Haplotype</em> track show sequence variation present in the
 population for certain sections of the genome. Items in this track were either 
 designated as alternate loci or novel patches by GRC. To view the alternate 
-sequence, click on the &quot;Fetch alternate sequence&quot; link above.
+sequence, click on the &quot;Fetch alternate sequence&quot; link that appears on the sequence 
+details pages.
 </p>
 
 <h3>Patches</h3>
@@ -28,7 +29,8 @@ sequence, click on the &quot;Fetch alternate sequence&quot; link above.
 Items in the <em>Patch</em> track indicate areas of the sequence that have 
 been corrected by GRC and will be updated to new sequence in the next full 
 human assembly release. To view the new, corrected sequence, click on the 
-&quot;Fetch alternate sequence&quot; link above.
+&quot;Fetch alternate sequence&quot; link that appears on the sequence 
+details pages.
 </p>
 
 <H3>Alignment</H3>
@@ -62,11 +64,11 @@ location (in thousands) of the match for each matching alignment.
 By default, the chains to chromosome-based assemblies are colored
 based on which chromosome they map to in the aligning organism. To turn
 off the coloring, check the &quot;off&quot; button next to: Color
-track based on chromosome.
+track based on chromosome (click "Chains" text in controls to view options).
 </P><P>
 To display only the chains of one chromosome in the aligning
 sequence, enter the name of that chromosome (e.g. chr4) in box next to:
-Filter by chromosome.
+Filter by chromosome (click "Chains" text in controls to view options).
 </P>
 
 <H3>Net Track</H3>
@@ -100,7 +102,8 @@ Individual items in the display are categorized as one of four types
 <LI><B>Syn</B> - line-ups on the same chromosome as the gap in the level above
 it.
 <LI><B>Inv</B> - a line-up on the same chromosome as the gap above it, but in
-the opposite orientation.																		    <LI><B>NonSyn</B> - a match to a chromosome different from the gap in the
+the opposite orientation.							
+<LI><B>NonSyn</B> - a match to a chromosome different from the gap in the
 level above.
 </UL></P>
 
@@ -108,11 +111,13 @@ level above.
 <h3>Haplotype/Patch tracks</h3>
 <P>
 The locations of the Patches and Haplotypes were established by NCBI and 
-specified in the files at: 
+specified in the files at:<br> 
 <A HREF="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/"
-TARGET=_blank>ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/</A>
-ALT_REF_LOCI_*/placed_scaffolds/alt_locus_scaf*primary.pos
-and the patch release site:
+TARGET=_blank>ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/
+GRCh37/</A>ALT_REF_LOCI_*/placed_scaffolds/alt_locus_scaf*primary.pos
+</p>
+
+<p>And the patch release site:<br>
 <A HREF="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/"
 TARGET=_blank>ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/</A>
 GRCh37.p*/PATCHES/alt_scaffolds/alt_scaffold_placement.txt
@@ -144,7 +149,7 @@ $chainLinearGap
 <H3>Net track</H3>
 <P>
 Chains were derived from lastz alignments, using the methods
-described in the chain track description page above, and sorted with the 
+described in the chain track description above, and sorted with the 
 highest-scoring chains in the genome ranked first. The program
 chainNet was then used to place the chains one at a time, trimming them as 
 necessary to fit into sections not already covered by a higher-scoring chain. 
