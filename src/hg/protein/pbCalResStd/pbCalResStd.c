@@ -6,6 +6,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
+#include "pbCommon.h"
 #include "spDb.h"
 #include "math.h"
 
