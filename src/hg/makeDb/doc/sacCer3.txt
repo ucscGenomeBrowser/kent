@@ -76,7 +76,7 @@ taxId   559292
     ln -s `pwd`/sacCer3.2bit /gbdb/sacCer3/sacCer3.2bit 
 
 #######################################################################
-# sacCer3 - S. cerevisiae - Ensembl Genes version 52 (DONE - 2009-02-04 - hiram)
+# sacCer3 - S. cerevisiae - Ensembl Genes version 63 (DONE - 2011-08-24 - hiram)
     ssh swarm
     # there is now no 2-micron sequence, remove it from the Ensembl GTF file
     cd /hive/data/genomes/sacCer3
@@ -96,7 +96,7 @@ nameTranslation "s/^VIII/chrVIII/; s/^VII/chrVII/; s/^VI/chrVI/; s/^V/chrV/; s/^
     # 8912929 bases of 12157105 (73.315%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE - 2009-02-04 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-08-24 - Hiram)
     #	repMatch = 1024 * sizeof(sacCer3)/sizeof(hg18)
     #	4.32 = 1024 * (12162995/2881515245)
     #	use 10 to be very conservative
@@ -111,7 +111,7 @@ nameTranslation "s/^VIII/chrVIII/; s/^VII/chrVII/; s/^VI/chrVI/; s/^V/chrV/; s/^
 	/hive/data/staging/data/sacCer3
 
 #########################################################################
-# CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE - 2009-02-10 - Hiram)
+# CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE - 2011-08-29 - Hiram)
     mkdir /hive/data/genomes/sacCer3/bed/sgdAnnotations
     cd /hive/data/genomes/sacCer3/bed/sgdAnnotations
     wget  --timestamping \
@@ -129,11 +129,138 @@ if (keepGoing) print;
 
     #	wrote this perl script to specifically parse this particular instance
     #	of the sgd gff file.
+    # constructs the files: leftOvers.gff, notes.txt, otherFeatures.bed,
+    #	and descriptions.txt
     $HOME/kent/src/hg/makeDb/outside/yeast/hgSgdGff3/sgdGffToGtf.pl \
-        S.cerevisiae.gff > sacCer2.sgdGene.gtf 2> sacCer2.gtf.stderr
+        S.cerevisiae.gff > sacCer3.sgdGene.gtf 2> sacCer3.gtf.stderr
+
+    cat sacCer3.sgdGene.gtf | ./chrName.sh | sed -e "s/_CDS//" \
+	> sacCer3.sgdGene.roman.gtf
+    # NOTE: if you reload this table, a command below:
+    #	hgProtIdToGenePred sacCer3 sgdGene sgdToSwissProt name value
+    # needs to be run to add a protein column to the sgdGene tabl3e
+    ldHgGene -gtf sacCer3 sgdGene sacCer3.sgdGene.roman.gtf
+    #	Read 7063 transcripts in 7450 lines in 1 files
+    #	7063 groups 17 seqs 1 sources 3 feature types
+    #	6692 gene predictions
+    # for table cleaning below, get the names for a reference:
+    hgsql -N -e "select name from sgdGene;" sacCer3 | sort -u > name.sgdGene.txt
+
+    #	some of the otherFeatures have start == end, use option:
+    cat otherFeatures.bed | ./chrName.sh > otherFeatures.roman.bed
+    hgLoadBed -allowStartEqualEnd sacCer3 sgdOther otherFeatures.roman.bed \
+        -tab -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
+    #	Loaded 2476 elements of size 7
+# XXX errors here
+# chromStart == chromEnd (31228) (zero-length item)
+# Use -allowStartEqualEnd if that is legit (e.g. for insertion point).
+
+    # process the peptides into a format that hgSgdPep can handle
+    # actually, a few more lines here could perform the hgSgdPep function
+    cat << '_EOF_' > pepPred.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "zcat ../../yeastgenome.org/orf_trans_all.fasta.gz|") or
+        die "can not zcat ../../yeastgenome.org/orf_trans_all.fasta.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        my @a = split('\s+', $line);
+        my $name = $a[0];
+        $name =~ s/^>//;
+        my $orf = $a[1];
+        printf ">ORFP:%s\t%s\n", $name, $orf;
+    } else {
+        printf "%s", $line;
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x pepPred.pl
+    ./pepPred.pl > sgdPep.fsa
+
+    hgSgdPep sgdPep.fsa sgdPep.fa stdout | sort > symbol.raw.txt
+    # the ^I here needs to be two keystrokes: ctrl-v I
+    join -t "^I" name.sgdGene.txt symbol.raw.txt > symbol.txt
+    wc -l name.sgdGene.txt symbol.raw.txt symbol.txt
+    #	6692 name.sgdGene.txt
+    #	6717 symbol.raw.txt
+    #	6692 symbol.txt
+    faToTab -type=protein sgdPep.fa stdout | sort > sgdPep.tab
+    # the ^I here needs to be two keystrokes: ctrl-v I
+    join -t"^I" name.sgdGene.txt sgdPep.tab > sgdPep.toLoad.tab
+
+    wc -l name.sgdGene.txt sgdPep.tab sgdPep.toLoad.tab
+    #	6692 name.sgdGene.txt
+    #	6717 sgdPep.tab
+    #	6692 sgdPep.toLoad.tab
+
+    hgPepPred sacCer3 tab sgdPep sgdPep.toLoad.tab
+    hgsql sacCer3 -e 'create table sgdToName ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));'
+    hgsql sacCer3 -e 'load data local infile "symbol.txt" \
+          into table sgdToName;'
+
+    # the ^I here needs to be two keystrokes: ctrl-v I
+    join -t"^I" name.sgdGene.txt descriptions.txt > descriptions.toLoad.txt
+    wc -l name.sgdGene.txt descriptions.txt descriptions.toLoad.txt
+    #	6692 name.sgdGene.txt
+    #	6712 descriptions.txt
+    #	6691 descriptions.toLoad.txt
+
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/sgdDescription.sql
+    hgsql sacCer3 -e 'load data local infile "descriptions.toLoad.txt" \
+          into table sgdDescription;'
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/sgdOtherDescription.sql
+    hgsql sacCer3 -e 'load data local infile "notes.txt" \
+          into table sgdOtherDescription;'
 
 ############################################################################
-# AUTO UPDATE GENBANK RUN  (Done - 2011-08-24 - Hiram)
+# ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE - 2011-08-29 - Hiram)
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations
+    wget --timestamping \
+http://downloads.yeastgenome.org/chromosomal_feature/dbxref.tab
+
+    grep "UniProt" dbxref.tab \
+	| awk '{printf("%s\t%s\n", $5, $1);}' > sgdToSwissProt.txt
+    hgsql sacCer3 -e 'create table sgdToSwissProt ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));'
+    hgsql sacCer3 -e 'load data local infile "sgdToSwissProt.txt" \
+          into table sgdToSwissProt;'
+    hgProtIdToGenePred sacCer3 sgdGene sgdToSwissProt name value
+
+    # verify all names are valid
+    cut -f1 sgdToSwissProt.txt | sort -u > name.sgdToSwissProt.txt
+    wc -l name.sgdToSwissProt.txt name.sgdGene.txt
+    #	5897 name.sgdToSwissProt.txt
+    #	6692 name.sgdGene.txt
+
+    comm -12 name.sgdToSwissProt.txt name.sgdGene.txt | wc -l
+    # 5879
+    # remove the 18 from sgdToSwissProt that are not in sgdGene:
+    comm -23 name.sgdToSwissProt.txt name.sgdGene.txt | wc -l
+    #	18
+    comm -23 name.sgdToSwissProt.txt name.sgdGene.txt | while read N
+do
+    hgsql -e "delete from sgdToSwissProt where name=\"${N}\";" sacCer3
+done
+
+
+# interesting to note that sgdTOSwissProt has one accession not
+# in sgdGene.name:  KHS1  (BK 2009-07-14)
+
+############################################################################
+# AUTO UPDATE GENBANK RUN  (Done - 2011-08-24,29 - Hiram)
     # align with latest genbank process.
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
@@ -167,25 +294,26 @@ sacCer3.downloadDir = sacCer3
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial sacCer3 &
     #	logFile: var/build/logs/2011.08.24-16:16:56.sacCer3.initalign.log
-XXX - running Wed Aug 24 16:17:10 PDT 2011
-
-    #	real    173m1.570s
+    # the system was slow due to hive loads:
+    #	26h 17m == 1577m
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad sacCer3
-    #	logFile: var/dbload/hgwdev/logs/2009.02.10-14:25:48.dbload.log
-    #	real    18m21.436s
+    #	logFile: var/dbload/hgwdev/logs/2011.08.29-14:16:10.dbload.log
+    #	real    10m7.094s
 
     # enable daily alignment and update of hgwdev (DONE - 2009-02-24 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
+    git pull
     cvsup
     # add sacCer3 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added sacCer3 - S. cerevisiae" \
+    git commit -m "Added sacCer3 - S. cerevisiae" \
 	etc/align.dbs etc/hgwdev.dbs
+    git push
     make etc-update
 
 ############################################################################
