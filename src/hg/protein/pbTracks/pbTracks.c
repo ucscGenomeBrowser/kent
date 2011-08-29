@@ -93,6 +93,9 @@ double yScale = 100.0;
 
 struct pbStampPict *stampPictPtr;
 
+double avg[NUM_STANDARD_AMINO_ACIDS];
+double stddev[NUM_STANDARD_AMINO_ACIDS];
+
 int exStart[500], exEnd[500];
 int exCount;
 int aaStart[500], aaEnd[500];
