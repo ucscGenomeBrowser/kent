@@ -150,6 +150,32 @@ mafColors[6]    = ORANGE;   /* not compatible with fold, double subs */
 mafColors[7]    = MAGENTA;  /* not compatible with fold, involves indel */
 }
 
+char *hDbOrganism(char *databaseIn)
+/* Function to get organism from the genome db */
+{
+struct sqlConnection *connCentral = hConnectCentral();
+char buf[256];
+char query[256];
+char *res;
+char *database;
+char *chp;
+
+database = strdup(databaseIn);
+
+// process special case like "hg19.chr21"
+chp = strstr(database, ".");
+if (chp != NULL)
+    {
+    *chp = '\0';
+    }
+
+safef(query, sizeof(query), "select organism from dbDb where name = '%s'", database);
+res = strdup(sqlQuickQuery(connCentral, query, buf, sizeof(buf)));
+hDisconnectCentral(&connCentral);
+return res;
+}
+
+
 void htmlPrintMafAndFold(FILE *f, struct mafAli *maf, char *fold, double *scores, int lineSize)
 /* HTML pretty print maf and fold to f. If scores is non-null then
  * scores are indicated below alignemnt.*/
@@ -208,7 +234,7 @@ if (scores)
 /* Find max. length of source (species) field. */
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
-    int len = strlen(mc->src);
+    int len = strlen(mc->src)+strlen(hDbOrganism(mc->src)) + 1;
     if (srcChars < len)
         srcChars = len;
     }
@@ -218,6 +244,7 @@ fprintf(f, "<PRE><TT>");
 for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     {
     int size;
+    char buf[256];
     lineEnd = lineStart + lineSize;
     if (lineEnd >= maf->textSize)
         lineEnd = maf->textSize;
@@ -225,7 +252,8 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     fprintf(f, "%-*s %.*s\n", srcChars, positionTag, lineSize, adjPosString + lineStart);
     for (mc = maf->components, i = 0; mc != NULL; mc = mc->next, i++)
         {
-	fprintf(f, "%-*s ", srcChars, mc->src);
+	safef(buf, sizeof(buf), "%s/%s", mc->src, hDbOrganism(mc->src));
+	fprintf(f, "%-*s ", srcChars, buf);
 	htmlColorPrintString(f, mc->text + lineStart, mafColorFormats[i] + lineStart, mafColors, lineSize);
 	fprintf(f, "\n");
 	}

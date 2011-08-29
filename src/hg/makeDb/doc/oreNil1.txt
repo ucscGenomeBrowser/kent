@@ -1,0 +1,17 @@
+# for emacs: -*- mode: sh; -*-
+
+# Oreochromis niloticus  - Nile Tilapia
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Oreochromis_niloticus
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AERX01
+#
+
+#############################################################################
+# Download sequence from NCBI  (DONE - 2011-04-20 - Hiram)
+mkdir -p /hive/data/genomes/oreNil1/ncbi
+cd /hive/data/genomes/oreNil1/ncbi
+
+wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Oreochromis_niloticus/Orenil1.0/*"
+
+#############################################################################
