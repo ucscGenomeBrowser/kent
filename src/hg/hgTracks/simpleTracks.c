@@ -2960,6 +2960,11 @@ else if (vis == tvFull)
         {
         geneMapBoxX = textX;
         geneMapBoxW = x2-geneMapBoxX;
+        if (geneMapBoxW < 5) // Full with short labels but don't make tiny map items
+            {
+            geneMapBoxX -= (5 - geneMapBoxW)/2;
+            geneMapBoxW = 5;
+            }
         }
 #endif//def IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),

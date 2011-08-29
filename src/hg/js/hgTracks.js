@@ -166,6 +166,18 @@ function isDirtyPage()
     return false;
 }
 
+function linkFixup(pos, name, reg, endParamName)
+{
+// fixup external links (e.g. ensembl)
+    if($('#' + name).length) {
+        var link = $('#' + name).attr('href');
+        var a = reg.exec(link);
+        if(a && a[1]) {
+            $('#' + name).attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
+        }
+    }
+}
+
 function setPosition(position, size)
 {
 // Set value of position and size (in hiddens and input elements).
@@ -181,6 +193,38 @@ function setPosition(position, size)
     }
     if(size) {
         $('#size').text(size);
+    }
+    var pos = parsePosition(position);
+    if(pos) {
+        // fixup external static links on page'
+        
+        // Example ensembl link: http://www.ensembl.org/Homo_sapiens/contigview?chr=21&start=33031934&end=33041241
+        linkFixup(pos, "ensemblLink", new RegExp("(.+start=)[0-9]+"), "end");
+
+        // Example NCBI link: http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
+        linkFixup(pos, "ncbiLink", new RegExp("(.+BEG=)[0-9]+"), "END");
+              
+        // Example medaka link: http://utgenome.org/medakabrowser_ens_jump.php?revision=version1.0&chr=chromosome18&start=14435198&end=14444829
+        linkFixup(pos, "medakaLink", new RegExp("(.+start=)[0-9]+"), "end");
+        
+        if($('#wormbaseLink').length) {
+            // e.g. http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=II:14646301-14667800
+            var link = $('#wormbaseLink').attr('href');
+            var reg = new RegExp("(.+:)[0-9]+");
+            var a = reg.exec(link);
+            if(a && a[1]) {
+                $('#wormbaseLink').attr('href', a[1] + pos.start + "-" + pos.end);
+            }
+        }
+        // Fixup DNA link; e.g.: hgc?hgsid=2999470&o=114385768&g=getDna&i=mixed&c=chr7&l=114385768&r=114651696&db=panTro2&hgsid=2999470
+        if($('#dnaLink').length) {
+            var link = $('#dnaLink').attr('href');
+            var reg = new RegExp("(.+&o=)[0-9]+.+&db=[^&]+(.*)");
+            var a = reg.exec(link);
+            if(a && a[1]) {
+                $('#dnaLink').attr('href', a[1] + (pos.start - 1) + "&g=getDna&i=mixed&c=" + pos.chrom + "&l=" + (pos.start - 1) + "&r=" + pos.end + "&db=" + getDb() + a[2]);
+            }
+        }
     }
     markAsDirtyPage();
 }
@@ -1166,11 +1210,12 @@ jQuery.fn.panImages = function(){
     function panUpdatePosition(newOffsetX,bounded)
     {
         // Updates the 'position/search" display with change due to panning
-        var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart - 1; // Correction for half open portal coords
+        var closedPortalStart = hgTracks.imgBoxPortalStart + 1;   // Correction for half open portal coords
+        var portalWidthBases = hgTracks.imgBoxPortalEnd - closedPortalStart;
         var portalScrolledX  = (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel) + newOffsetX;
         var recalculate = false;
 
-        var newPortalStart = hgTracks.imgBoxPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
+        var newPortalStart = closedPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
         if( newPortalStart < hgTracks.chromStart && bounded) {     // Stay within bounds
             newPortalStart = hgTracks.chromStart;
             recalculate = true;
@@ -1186,7 +1231,7 @@ jQuery.fn.panImages = function(){
             setPosition(newPos, 0); // 0 means no need to change the size
         }
         if (recalculate && hgTracks.imgBoxBasesPerPixel > 0) { // Need to recalculate X for bounding drag
-            portalScrolledX = (hgTracks.imgBoxPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
+            portalScrolledX = (closedPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
             newOffsetX = portalScrolledX - (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel);
         }
         return newOffsetX;
@@ -2662,6 +2707,7 @@ function handleUpdateTrackMap(response, status)
 
     // update local hgTracks.trackDb to reflect possible side-effects of ajax request.
     var json = scrapeVariable(response, "hgTracks");
+    var oldTrackDb = hgTracks.trackDb;
     if(json == undefined) {
         showWarning("hgTracks object is missing from the response");
     } else {
@@ -2714,6 +2760,16 @@ function handleUpdateTrackMap(response, status)
                         //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                     }
                 }
+/* This (disabled) code handles dynamic addition of tracks:
+                for (id in hgTracks.trackDb) {
+                    if(oldTrackDb[id] == undefined) {
+                        // XXXX Tim, what s/d abbr attribute be?
+                        $('#imgTbl').append("<tr id='tr_" + id + "' class='imgOrd trDraggable'></tr>");
+                        updateTrackImgForId(response, id);
+                        updateVisibility(id, visibilityStrsOrder[hgTracks.trackDb[id].visibility]);
+                    }
+                }
+*/
                 hgTracks = json;
                 originalPosition = undefined;
                 initVars();
@@ -2962,4 +3018,34 @@ function navigateInPlace(params, disabledEle)
                disabledEle: disabledEle,
                cache: false
            });
+}
+
+function updateButtonClick(ele)
+{
+// code to update the imgTbl based on changes in the track controls.
+// This is currently experimental code and is dead in the main branch.
+    if(mapIsUpdateable) {
+        var data = "";
+        $("select").each(function(index, o) {
+                                               var cmd = $(this).val();
+                                               if(cmd == "hide") {
+                                                     if(hgTracks.trackDb[this.name] != undefined) {
+                                                         alert("Need to implement hide");
+                                                     }
+                                               } else {
+                                                     if(hgTracks.trackDb[this.name] == undefined || cmd != visibilityStrsOrder[hgTracks.trackDb[this.name].visibility]) {
+                                                        if(data.length > 0) {
+                                                             data = data + "&";
+                                                        }
+                                                        data = data + this.name + "=" + cmd;
+                                                     }
+                                               }
+                                            });
+        if(data.length > 0) {
+            navigateInPlace(data, null);
+        }
+        return false;
+    } else {
+        return true;
+    }
 }

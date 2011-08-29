@@ -11,6 +11,7 @@
 #include "hash.h"
 #include "verbose.h"
 #include "options.h"
+#include <limits.h>
 
 static char const rcsid[] = "$Id: options.c,v 1.29 2009/12/02 19:10:38 kent Exp $";
 
@@ -335,15 +336,19 @@ int optionInt(char *name, int defaultVal)
 {
 char *s = optGet(name);
 char *valEnd;
-int val;
+long lval;
 if (s == NULL)
     return defaultVal;
 if (sameString(s,"on"))
     return defaultVal;
-val = strtol(s, &valEnd, 10);
+lval = strtol(s, &valEnd, 10);  // use strtol since strtoi does not exist
 if ((*s == '\0') || (*valEnd != '\0'))
     errAbort("value of -%s is not a valid integer: \"%s\"", name, s);
-return val;
+if (lval > INT_MAX)
+    errAbort("value of -%s is is too large: %ld, integer maximum is %d", name, lval, INT_MAX);
+if (lval < INT_MIN)
+    errAbort("value of -%s is is too small: %ld, integer minimum is %d", name, lval, INT_MIN);
+return lval;
 }
 
 long long optionLongLong(char *name, long long defaultVal)
