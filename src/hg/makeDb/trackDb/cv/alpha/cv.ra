@@ -3768,7 +3768,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178
-sex M
+sex F
 tier 3
 protocol Stam:WERI-Rb-1_Stam_protocol.pdf
 
@@ -5182,31 +5182,16 @@ term E2F6
 tag E2F6
 type Antibody
 target E2F6
-targetDescription epitope corresponding to amino acids 232-281 mapping at the C-terminus of E2F-6 of human origin
-antibodyDescription rabbit polyclonal
+targetDescription  This gene encodes a member of the E2F transcription factor protein family. E2F family members play a crucial role in control of the cell cycle and of the action of tumor suppressor proteins. They are also a target of the transforming proteins of small DNA tumor viruses. Many E2F proteins contain several evolutionarily conserved domains: a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. The encoded protein of this gene is atypical because it lacks the transactivation and tumor suppressor protein association domains. It contains a modular suppression domain and is an inhibitor of E2F-dependent transcription. The protein is part of a multimeric protein complex that contains a histone methyltransferase and the transcription factors Mga and Max. Multiple transcript variants have been reported for this gene, but it has not been clearly demonstrated that they encode valid isoforms (RefSeq).
+antibodyDescription   Rabbit polyclonal IgG, epitope corresponding to a.a. 232-281 mapping at the C-terminus of E2F-6 of human origin.
 vendorName Santa Cruz Biotech
 vendorId sc-22823
 orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
-lab Farnham
+lab Farnham, Myers
+lots D1206 (Myers)
 targetId GeneCard:E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
-validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf
-
-term  E2F6_(SC-22823)
-tag  E2F6b
-type Antibody
-target  E2F6
-antibodyDescription  Rabbit polyclonal IgG, epitope corresponding to a.a. 232-281 mapping at the C-terminus of E2F-6 of human origin.
-targetDescription  This gene encodes a member of the E2F transcription factor protein family. E2F family members play a crucial role in control of the cell cycle and of the action of tumor suppressor proteins. They are also a target of the transforming proteins of small DNA tumor viruses. Many E2F proteins contain several evolutionarily conserved domains: a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. The encoded protein of this gene is atypical because it lacks the transactivation and tumor suppressor protein association domains. It contains a modular suppression domain and is an inhibitor of E2F-dependent transcription. The protein is part of a multimeric protein complex that contains a histone methyltransferase and the transcription factors Mga and Max. Multiple transcript variants have been reported for this gene, but it has not been clearly demonstrated that they encode valid isoforms (RefSeq).
-vendorName Santa Cruz Biotech
-vendorId sc-22823
-orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
-lab Myers
-lots D1206
-targetId E2F6
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
-validation E2F6_(SC-22823)(WesternBlot,IP-MassSpec):human_E2F6_SC-22823_validation_Myers.pdf
-
+validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf E2F6_(Myers)(WesternBlot,IP-MassSpec):human_E2F6_validation_Myers.pdf
 
 term EBF1_(SC-137065)
 tag EBF1
