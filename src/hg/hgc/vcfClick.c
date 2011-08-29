@@ -161,18 +161,25 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	}
     }
 printf("<B>Genotype count:</B> %d (%d phased)<BR>\n", vcff->genotypeCount, phasedGts);
-printf("<B>Alleles:</B> %s: %d (%.2f); %s: %d (%.2f)<BR>\n",
-       rec->alleles[0], refs, (double)refs/(2*vcff->genotypeCount),
-       rec->alleles[1], alts, (double)alts/(2*vcff->genotypeCount));
+double refAf = (double)refs/(2*vcff->genotypeCount);
+double altAf = (double)alts/(2*vcff->genotypeCount);
+printf("<B>Alleles:</B> %s: %d (%.3f%%); %s: %d (%.3f%%)<BR>\n",
+       rec->alleles[0], refs, 100*refAf,  rec->alleles[1], alts, 100*altAf);
 if (vcff->genotypeCount > 1)
     {
-    printf("<B>Genotypes:</B> %s/%s: %d (%.2f); %s/%s: %d (%.2f); %s/%s: %d (%.2f)",
-	   rec->alleles[0], rec->alleles[0], refRefs, (double)refRefs/vcff->genotypeCount,
-	   rec->alleles[0], rec->alleles[1], refAlts, (double)refAlts/vcff->genotypeCount,
-	   rec->alleles[1], rec->alleles[1], altAlts, (double)altAlts/vcff->genotypeCount);
+    printf("<B>Genotypes:</B> %s/%s: %d (%.3f%%); %s/%s: %d (%.3f%%); %s/%s: %d (%.3f%%)",
+	   rec->alleles[0], rec->alleles[0], refRefs, 100*(double)refRefs/vcff->genotypeCount,
+	   rec->alleles[0], rec->alleles[1], refAlts, 100*(double)refAlts/vcff->genotypeCount,
+	   rec->alleles[1], rec->alleles[1], altAlts, 100*(double)altAlts/vcff->genotypeCount);
     if (gtOther > 0)
-	printf("; other: %d (%.2f)", gtOther, (double)gtOther/vcff->genotypeCount);
+	printf("; other: %d (%.3f)", gtOther, (double)gtOther/vcff->genotypeCount);
     printf("<BR>\n");
+    if (rec->alleleCount == 2)
+	printf("<B>Hardy-Weinberg equilibrium:</B> "
+	       "P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%<BR>",
+	       rec->alleles[0], rec->alleles[0], 100*refAf*refAf,
+	       rec->alleles[0], rec->alleles[1], 100*2*refAf*altAf,
+	       rec->alleles[1], rec->alleles[1], 100*altAf*altAf);
     }
 jsBeginCollapsibleSection(cart, track, "genotypes", "Detailed genotypes", FALSE);
 dyStringClear(tmp1);
