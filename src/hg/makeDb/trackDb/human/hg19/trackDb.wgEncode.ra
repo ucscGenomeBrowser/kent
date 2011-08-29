@@ -103,7 +103,7 @@ include wgEncodeCshlLongRnaSeq.ra alpha
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
-include wgEncodeSydhRnaSeq.ra alpha
+include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
