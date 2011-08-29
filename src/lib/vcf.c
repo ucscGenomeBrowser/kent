@@ -171,9 +171,13 @@ static void vcfFileErr(struct vcfFile *vcff, char *format, ...)
 va_list args;
 va_start(args, format);
 char formatPlus[1024];
-sprintf(formatPlus, "%s:%d: %s", vcff->lf->fileName, vcff->lf->lineIx, format);
+if (vcff->lf != NULL)
+    sprintf(formatPlus, "%s:%d: %s", vcff->lf->fileName, vcff->lf->lineIx, format);
+else
+    strcpy(formatPlus, format);
 vaWarn(formatPlus, args);
 va_end(args);
+vcff->errCnt++;
 if (vcfFileStopDueToErrors(vcff))
     errAbort("VCF: %d parser errors, quitting", vcff->errCnt);
 }
@@ -245,7 +249,7 @@ static const char *infoOrFormatRegex =
     "Description=\"?([^\"]+)\"?>$";
 static const char *filterOrAltRegex =
     "^##(FILTER|ALT)="
-    "<ID=([A-Za-z0-9_:-]+),"
+    "<ID=([^,]+),"
     "(Description|Type)=\"([^\"]+)\">$";
 
 INLINE void nonAsciiWorkaround(char *line)
@@ -841,7 +845,6 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 		       "VCF_MAX_INFO may need to be increased in vcf.c!",
 		       gt->id, VCF_MAX_INFO);
 	}
-
     }
 record->genotypeUnparsedStrings = NULL;
 }

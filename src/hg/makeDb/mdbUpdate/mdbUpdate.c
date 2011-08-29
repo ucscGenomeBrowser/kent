@@ -99,6 +99,7 @@ if(argc == 1)
     usage();
 
 struct mdbObj * mdbObjs = NULL;
+int retCode = 0;
 
 optionInit(&argc, argv, optionSpecs);
 
@@ -175,7 +176,7 @@ if(recreate)
         sqlDisconnect(&conn);
         if(optionExists("obj") || optionExists("vars") || argc > 2)
                 verbose(1, "Can't test further commands.  Consider '-db= [-table=] -recreate' as the only arguments.\n");
-            return 0;  // Don't test any update if we haven't actually created the table!
+            return -1;  // Don't test any update if we haven't actually created the table!
             }
         }
     else
@@ -309,7 +310,10 @@ if (mdbObjs != NULL)
             boolean updateAccession = (optionExists("accession"));
             struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary,updateAccession); // 1=warnings
             if (updatable == NULL)
+                {
                 verbose(1, "No Experiment ID updates were discovered in %d object(s).\n", slCount(mdbObjs));
+                retCode = 2;
+                }
             else
                 {
                 if (testIt)
@@ -322,6 +326,8 @@ if (mdbObjs != NULL)
         // Finally the actual update (or test update)
         count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
         }
+    if (count <= 0)
+        retCode = 1;
 
     if (testIt && encodeExp == NULL)
         {
@@ -339,5 +345,5 @@ else
 
 sqlDisconnect(&conn);
 mdbObjsFree(&mdbObjs);
-return 0;
+return retCode;
 }
