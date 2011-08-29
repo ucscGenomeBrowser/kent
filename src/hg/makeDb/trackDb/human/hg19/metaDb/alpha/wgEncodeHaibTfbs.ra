@@ -15054,7 +15054,7 @@ fileName wgEncodeHaibTfbsGm12892RxlchV0416101RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1783
-md5sum 3490da61c7cf4025acae51e196319eca
+md5sum 443c7dc1ad63ad8820290311e6b71c0e
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -44196,4 +44196,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 1624289888
+# MAGIC: -2031324910
