@@ -183,7 +183,7 @@ include wgEncodeSunyAlbanyTiling.ra
 include wgEncodeSunySwitchgear.ra
 
 # SUNY Rip-seq (wrangler: cricket)
-include wgEncodeSunyRipSeq.ra alpha,beta 
+include wgEncodeSunyRipSeq.ra 
 
 # Other miscellany ------------------------------------
 
