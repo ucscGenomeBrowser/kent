@@ -3627,22 +3627,23 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
-term T98G
-tag T98G
-type Cell Line
-organism human
-description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
-karyotype cancer
-tissue Brain
-lineage ectoderm
-vendorName ATCC
-vendorId CRL-1690
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
-termId BTO:0001583
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
-sex M
-tier 3
-protocol Myers:T98G_Myers_protocol.pdf
+# Never submitted data. ~Jeff
+#term T98G
+#tag T98G
+#type Cell Line
+#organism human
+#description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
+#karyotype cancer
+#tissue Brain
+#lineage ectoderm
+#vendorName ATCC
+#vendorId CRL-1690
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
+#termId BTO:0001583
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
+#sex M
+#tier 3
+#protocol Myers:T98G_Myers_protocol.pdf
 
 term TBEC
 tag TBEC
