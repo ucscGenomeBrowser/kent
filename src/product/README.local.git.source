@@ -42,7 +42,7 @@ To get the latest UCSC release:
 
 Updates:
 
- UCSC generally updates the origin/beta branch every two weeks. If you are 
+ UCSC generally updates the origin/beta branch every three weeks. If you are 
  updating database tables for a mirror site, we recommend that you update the
  source at the same time, as source code is sometimes modified to include
  operations on new columns that have been added to database tables.

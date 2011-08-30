@@ -2492,9 +2492,9 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         if (!valid)
             {
             if (startsWith("ERROR in ",reason))
-                verbose(1,"%s\n",reason);
+                printf("%s\n",reason);
             else
-                verbose(1,"%s in %s: %s\n",reason,MDB_OBJ,mdbObj->obj);
+                printf("%s in %s: %s\n",reason,MDB_OBJ,mdbObj->obj);
             invalids++;
             }
         }

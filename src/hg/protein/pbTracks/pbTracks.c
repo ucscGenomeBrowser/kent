@@ -90,8 +90,11 @@ double tx[100000], ty[100000];
 
 double xScale = 50.0;
 double yScale = 100.0;
-
+ 
 struct pbStampPict *stampPictPtr;
+
+double avg[NUM_STANDARD_AMINO_ACIDS];
+double stddev[NUM_STANDARD_AMINO_ACIDS];
 
 int exStart[500], exEnd[500];
 int exCount;
