@@ -1,4 +1,4 @@
-#+ Controlled vocabulary from ENCODE
+# Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
 
@@ -21,7 +21,8 @@
 # type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
 # organism (used in many ways.  Should correspond to a "type organism" stanza. required)
 # description (human-readable description of cell type, for cell type cellTypes.html. required)
-# tissue (general tissue type, for categorizing cell types.  optional)
+# tissue (general tissue type, for categorizing cell types, 
+#          all words uppercase, space separated, optional)
 # vendorName (name of vendor or lab that provides these cells. required)
 # vendorId (the ID of the cell type in the vendor's catalog. optional)
 # orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html. required)
@@ -213,7 +214,7 @@ tag H1HESC
 type Cell Line
 organism human
 description embryonic stem cells
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 vendorName Cellular Dynamics
 #vendorId
 orderUrl http://www.cellulardynamics.com/
@@ -236,7 +237,7 @@ tier 3
 lineage endoderm
 karyotype cancer
 sex F
-tissue liver
+tissue Liver
 vendorName DSMZ
 vendorId ACC 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
@@ -393,7 +394,7 @@ type Cell Line
 tier 3
 organism human
 description adipose tissue, donor UHN0001, age 35, African American, DNA extract
-tissue Adipose tissue
+tissue Adipose Tissue
 #lineage mesoderm
 karyotype normal
 sex F
@@ -410,7 +411,7 @@ type Cell Line
 tier 3
 organism human
 description adrenal gland, donor H12803N, age 88, caucasian, DNA extract
-tissue Adrenal gland
+tissue Adrenal Gland
 lineage ectoderm, mesoderm
 # http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 karyotype normal
@@ -479,7 +480,7 @@ type Cell Line
 tier 3
 organism human
 description uterine cervix, donor BN0773, age 44, Asian, DNA extract
-tissue Uterine cervix
+tissue Uterine Cervix
 lineage mesoderm
 # http://en.wikipedia.org/wiki/Paramesonephric_duct
 karyotype normal
@@ -617,7 +618,7 @@ type Cell Line
 tier 3
 organism human
 description left ventricle, donor N41, age 26, Asian, DNA extract
-tissue Left ventricle
+tissue Left Ventricle
 lineage mesoderm
 karyotype normal
 sex M
@@ -634,7 +635,7 @@ type Cell Line
 tier 3
 organism human
 description peripheral blood mononuclear cell, donor UHN00204, age 54, caucasian, DNA extract
-tissue Peripheral blood mononuclear cell
+tissue Peripheral Blood Mononuclear Cell
 lineage mesoderm
 karyotype normal
 sex M
@@ -771,7 +772,7 @@ type Cell Line
 tier 3
 organism human
 description prostate gland, donor H12817N, age 71, caucasian, DNA extract
-tissue Prostate gland
+tissue Prostate Gland
 lineage endoderm
 karyotype normal
 sex M
@@ -805,7 +806,7 @@ type Cell Line
 tier 3
 organism human
 description skeletal muscle, donor 01-11002, age 83, caucasian, DNA and RNA extract
-tissue Skeletal muscle
+tissue Skeletal Muscle
 lineage mesoderm
 karyotype normal
 sex F
@@ -822,7 +823,7 @@ type Cell Line
 tier 3
 organism human
 description skeletal muscle, donor H12817N, age 71, caucasian, DNA and RNA extract
-tissue Skeletal muscle
+tissue Skeletal Muscle
 lineage mesoderm
 karyotype normal
 sex M
@@ -856,7 +857,7 @@ type Cell Line
 tier 3
 organism human
 description small intestine, donor 01-11002, age 83, caucasian, DNA and RNA extract
-tissue Small intestine
+tissue Small Intestine
 lineage endoderm
 karyotype normal
 sex F
@@ -992,7 +993,7 @@ tag BG02ES
 type Cell Line
 organism human
 description human Embryonic Stem Cell (hESC), BG02, treatment: H9 Conditioned Medium
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype normal
@@ -1007,7 +1008,7 @@ tag BG02ESEBD
 type Cell Line
 organism human
 description  human Embryonic Stem Cell (hESC), BG02, Embryoid Body-Derived
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype normal
@@ -1077,7 +1078,7 @@ tier 3
 lineage mesoderm
 karyotype cancer
 sex F
-tissue lymphocyte
+tissue Blood
 vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
 vendorId CLL
 orderUrl http://www.dfhcc.harvard.edu/membership/profile/member/669/0/
@@ -1107,7 +1108,7 @@ tag CHORION
 type Cell Line
 organism human
 description chorion cells (outermost of two fetal membranes), fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
-tissue FetalMembrane
+tissue Fetal Membrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
 lineage extraembryonic mesoderm, trophectoderm
@@ -1187,11 +1188,11 @@ tag ECC1
 type Cell Line
 organism human
 description ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes
-tissue luminal epithelium
+tissue Luminal Epithelium
 vendorName ATCC
 vendorId CRL-2923
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2923&Template=cellBiology
-lineage epithelial
+lineage epithelia
 karyotype cancer
 termId BTO:0000194
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000194
@@ -1767,7 +1768,7 @@ tag H9ES
 type Cell Line
 organism human
 description human embryonic stem cell (hESC) H9
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype unknown
@@ -1782,7 +1783,7 @@ tag H9ESE
 type Cell Line
 organism human
 description human embryonic stem cell (hESC) H9, endoderm
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype unknown
@@ -1798,7 +1799,7 @@ tag H9ESAFP
 type Cell Line
 organism human
 description human embryonic stem cell (hESC), H9-derived, Treatment: H9 AFP+
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype unknown
@@ -1814,7 +1815,7 @@ tag H9ESAFPb
 type Cell Line
 organism human
 description human embryonic stem cell (hESC), H9-derived, Treatment: H9 AFP-
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype unknown
@@ -1830,7 +1831,7 @@ tag H9ESEB
 type Cell Line
 organism human
 description human embryonic stem cell (hESC) H9, embryoid bodies
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype unknown
@@ -1846,7 +1847,7 @@ tag H9ESEBD
 type Cell Line
 organism human
 description human embryonic stem cell (hESC) H9, embryoid body-derived
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype unknown
@@ -1862,7 +1863,7 @@ tag H9ESCM
 type Cell Line
 organism human
 description human embryonic stem cell (hESC) H9, Treatment: H9 conditioned medium
-tissue EmbryonicStemCell
+tissue Embryonic Stem Cell
 tier 3
 lineage inner cell mass
 karyotype unknown
@@ -1882,7 +1883,7 @@ description Human Astrocytes-cerebellar
 lineage ectoderm
 karyotype normal
 sex U
-tissue cerebellar
+tissue Cerebellar
 vendorName ScienCell
 vendorId 1810
 orderUrl http://www.sciencellonline.com/site/products/1810.php
@@ -1912,7 +1913,7 @@ description Human Astrocytes-hippocampal
 lineage ectoderm
 karyotype normal
 sex U
-tissue brain hippocampus
+tissue Brain Hippocampus
 vendorName ScienCell
 vendorId 1830
 orderUrl http://www.sciencellonline.com/site/products/1830.php
@@ -1940,7 +1941,7 @@ tag HASP
 type Cell Line
 organism human
 description Human astrocytes spinal cord
-tissue Spinal cord
+tissue Spinal Cord
 vendorName ScienCell
 vendorId 1820
 orderUrl http://www.sciencellonline.com/site/products/1820.php
@@ -2186,7 +2187,7 @@ description Human Foreskin Fibroblast
 lineage Fibroblast
 karyotype normal
 sex M
-tissue foreskin
+tissue Foreskin
 vendorName Dr. Torok-Storb, FHCRC
 vendorId HFF
 orderUrl http://myprofile.cos.com/torokstorb
@@ -2204,7 +2205,7 @@ lineage Fibroblast
 karyotype normal (cMyc)
 derivedFrom HFF
 sex M
-tissue foreskin
+tissue Foreskin
 vendorName Dr. Torok-Storb, FHCRC
 vendorId HFF-Myc
 orderUrl http://myprofile.cos.com/torokstorb
@@ -2328,7 +2329,7 @@ type Cell Line
 organism human
 description human mammary fibroblasts
 # mammary stromal cell line
-tissue mammary
+tissue Mammary
 vendorName ScienCell
 vendorId 7630
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7630
@@ -2516,10 +2517,10 @@ tier 3
 organism human
 description normal human pancreatic duct cells immortalized with E6E7 gene of HPV
 lineage endoderm
-karyotype  Unknown
+karyotype Unknown
 sex F
-tissue  Pancreatic Duct
-vendorName  Dr. Ming-Sound Tsao, Ontario Cancer Institute
+tissue Pancreatic Duct
+vendorName Dr. Ming-Sound Tsao, Ontario Cancer Institute
 vendorId HPDE6-E6E7
 orderUrl http://www.uhnresearch.ca/researchers/profile.php?lookup=6118
 termId BTO:0002362
@@ -2595,7 +2596,7 @@ description Human Renal Glomerular Endothelial Cells
 lineage mesoderm
 karyotype normal
 sex U
-tissue kidney
+tissue Kidney
 vendorName ScienCell
 vendorId 4000
 orderUrl http://www.sciencellonline.com/site/products/4000.php
@@ -2768,16 +2769,16 @@ termId BTO:0001079
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001079
 protocol Crawford:HTR8svn_Crawford_protocol.pdf
 
-term  Huh-7
-tag  HUH7
+term Huh-7
+tag HUH7
 type Cell Line
 tier 3
 organism human
-description  Hepatocellular carcinoma
-lineage  endoderm
+description Hepatocellular carcinoma
+lineage endoderm
 karyotype cancer
 sex M
-tissue  Liver
+tissue Liver
 vendorName  Ravi Jhaveri, Duke University
 vendorId Huh-7
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
@@ -2785,8 +2786,8 @@ termId BTO:0001950
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001950
 protocol Crawford:Huh-7_Crawford_protocol.pdf
 
-term  Huh-7.5
-tag  HUH7.5
+term Huh-7.5
+tag HUH7.5
 type Cell Line
 tier 3
 organism human
@@ -2794,7 +2795,7 @@ description  Hepatocellular carcinoma, hepatocytes selected for high levels of h
 lineage endoderm
 karyotype cancer
 sex M
-tissue  Liver
+tissue Liver
 vendorName  Ravi Jhaveri, Duke University
 vendorId Huh-7.5
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
@@ -2837,11 +2838,11 @@ tag IPS
 type Cell Line
 tier 3
 organism human
-description  induced pluripotent stem cell
+description  induced pluripotent stem cell derived from skin fibroblast
 lineage  induced pluripotent stem cell derived from skin fibroblast
 karyotype  Unknown
 sex B
-tissue  iPS stem cell derived from skin fibroblast
+tissue Induced Pluripotent Stem Cell 
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
@@ -2891,7 +2892,7 @@ description skeletal myoblasts derived from satellite cells from the pectoralis 
 lineage mesoderm
 #karyotype
 sex M
-tissue Skeletal muscle myoblast
+tissue Skeletal Muscle Myoblast
 vendorName Woodring Wright, M.D., Ph.D.
 vendorId (None)
 orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
@@ -3067,7 +3068,7 @@ description Monocytes-CD14+ are CD14-positive cells from human leukapheresis pro
 lineage mesoderm
 karyotype normal
 sex F
-tissue monocytes
+tissue Monocytes
 vendorName S. Heimfeld Laboratory, FHCRC
 vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
@@ -3448,7 +3449,7 @@ tag RAJI
 type Cell Line
 organism human
 description B lymphocyte, "The Raji line of lymphoblast-like cells was established by R.J.V. Pulvertaft in 1963 from a Burkitt's lymphoma of the left maxilla of an 11-year-old Black male." - ATCC. (PMID: 14086209)
-tissue Hematopoietic
+tissue Blood
 vendorName ATCC
 vendorId CCl-86
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-86&Template=cellBiology
@@ -3495,7 +3496,7 @@ tag SHSY5Y
 type Cell Line
 organism human
 description neuroblastoma clonal subline of the neuroepithelioma cell line SK-N-SH that had been established in 1970 from the bone marrow biopsy of a 4-year-old girl with metastatic neuroblastoma
-tissue brain
+tissue Brain
 vendorName ATCC
 vendorId CC-2266
 derivedFrom SK-N-SH
@@ -3571,7 +3572,7 @@ protocol Stam:Stam_15_protocols.pdf
 #type Cell Line
 #organism human
 #description neuroblastoma, parental cell line: SK-N-SH
-#tissue bone marrow
+#tissue Bone Marrow
 #vendorName ATCC
 #vendorId bone marrow
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
@@ -3609,7 +3610,7 @@ description  Human Hepatic Stellate Cells, Liver that was perfused with collagen
 lineage endoderm
 karyotype  normal
 sex F
-tissue  Liver
+tissue Liver
 vendorName  Steve Choi, Duke University
 vendorId Stellate
 orderUrl http://www.dukehealth.org/physicians/steve_s_choi
@@ -3692,7 +3693,7 @@ tag T47D
 type Cell Line
 organism human
 description T-47D is a human epithelial cell line derived from an mammary ductal carcinoma.
-tissue duct
+tissue Duct
 vendorName ATCC
 vendorId HTB-133
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-133&Template=cellBiology
@@ -3712,7 +3713,7 @@ tier 3
 # lineage
 karyotype normal
 sex F
-tissue urothelium
+tissue Urothelium
 vendorName lab of Dr. D Sens (University of N. Dakota)
 vendorId Urothelia
 orderUrl http://pathology.med.und.nodak.edu/dept_home/MaryAnn.cfm
@@ -3743,7 +3744,7 @@ tag U2OS
 type Cell Line
 organism human
 description Osteosarcoma from the tibia of a 15 year old human female, J. Ponten and E. Saksela derived this line (originally 2T) in 1964 from a moderately differentiated sarcoma, viruses were not detected during co-cultivation with WI-38 cells or in CF tests against SV40, RSV or adenoviruses, mycoplasma contamination was detected and eliminated in 1972. (PMID: 6081590)
-tissue bone
+tissue Bone
 vendorName ATCC
 vendorId HTB-96
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-96&Template=cellBiology
@@ -3781,7 +3782,7 @@ description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 c
 lineage endoderm
 karyotype normal (RAF)
 sex F
-tissue embryonic lung
+tissue Embryonic Lung
 vendorName Dr. Carl Mann, SBIGeM
 vendorId WI-38
 orderUrl http://www-dsv.cea.fr/dsv/instituts/institut-de-biologie-et-de-technologies-de-saclay-ibitec-s/unites/service-de-biologie-integrative-et-genetique-moleculaire-sbigem/laboratoire-stress-oxydants-et-cancer-lsoc/equipe-mecanismes-de-stabilite-genomique-c.-mann
@@ -4339,7 +4340,7 @@ term MEF
 tag MEF
 type Cell Line
 organism mouse
-tissue MEF
+tissue Embryonic Fibroblast
 age ageUnknown
 strain Unknown
 category primaryCells
@@ -4463,7 +4464,7 @@ term OlfactBulb
 tag OLFACTORY
 type Cell Line
 organism mouse
-tissue OlfactoryBulb
+tissue Olfactory Bulb
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4536,7 +4537,7 @@ term SmIntestine
 tag SMINTESTINE
 type Cell Line
 organism mouse
-tissue SmallIntestine
+tissue Small Intestine
 category Tissue
 age ageUnknown
 strain Unknown
@@ -5769,7 +5770,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me2(Dot_blot):human_H3K4me2_validation_Bernstein.pdf
 
 term H3K4me2_(ab32356)
-tag H3K4ME2AB32356
+tag AB32356
 type Antibody
 antibodyDescription Rabbit polyclonal
 target H3K4me2
@@ -6002,7 +6003,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
 
 term H3K79me2_(ab3594)
-tag H3K79ME2AB3594
+tag AB3594
 type Antibody
 antibodyDescription Rabbit polyclonal
 target H3K79me2
@@ -6017,7 +6018,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K79me3_(ab2621)
-tag H3K79ME3AB2621
+tag AB2621
 type Antibody
 antibodyDescription Rabbit polyclonal
 target H3K79me3
@@ -6353,7 +6354,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
 validation missing
 
 term MyoD_(sc-32758)
-tag MYODSC32758
+tag SC32758
 type Antibody
 antibodyDescription mouse monoclonal antibody raised against recombinant MyoD of mouse origin with an epitope mapping to amino acids 180-189
 target MyoD
@@ -6368,7 +6369,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MyoD1
 validation missing
 
 term Myogenin_(sc-12732)
-tag MYOGENINSC12732
+tag SC12732
 type Antibody
 antibodyDescription mouse monoclonal antibody; epitope mapping within amino acids 138-158 of myogenin of rat origin
 target Myogenin
@@ -8538,30 +8539,28 @@ label MNase
 
 term Myoblast
 tag MYB
-description Grown in differentiation medium undifferediated (Wold) 
+description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_24h
 tag MYC24H
-description Grown for 24 hours in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 24 hours (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_60h
 tag MYC60H
-description Grown for 60 hours in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 60 hours (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_5d
 tag MYC5D
-description Grown for 5 days in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 5 days (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_7d
 tag MYC7D
-description Grown for 7 days in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 7 days (Wold) PROVISIONAL
 type treatment
-
-
 
 
 term NaBut
