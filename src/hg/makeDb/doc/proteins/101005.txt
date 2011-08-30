@@ -1,0 +1,631 @@
+#!/bin/tcsh -efx
+
+# This file describes how the proteins090821 database was
+# built.  See also the sp090821 database doc, which needs
+# to be built first.
+
+# use this if(0) statement to control section of script to run
+#	Look for the BRACKET word to find the corresponding endif and exit
+if (0) then  # BRACKET
+#	this section is completed, look for the corresponding endif
+#	to find the next section that is running.
+
+
+#hgsqladmin create proteins101005
+
+cd /hive/data/inside/proteins
+#mkdir 101005
+cd 101005
+mkdir build
+
+# Get HGNC data
+~/src/hg/protein/getHgnc.pl >hgnc.tab
+
+hgsql proteins101005 < ~/src/hg/lib/hgnc.sql
+hgsql proteins101005 -e 'load data local infile "hgnc.tab" into table hgnc ignore 1 lines'
+ 
+pbHgnc 101005   
+hgsql proteins101005 < ~/src/hg/lib/hgncXref.sql
+hgsql proteins101005 -e 'load data local infile "hgncXref.tab" into table hgncXref'
+
+# BUILD spXref2 and spXref3 tables.
+cd /hive/data/inside/proteins/101005/build
+
+# Create a bioentry table to use as an internal replacement for accession.
+# Takes a minute
+hgsql sp101005 -e "create table bioentryID (acc char(16) NOT NULL, bioentryID int not null auto_increment, primary key (bioentryID), unique (acc))"
+hgsql sp101005 -e "insert into bioentryID (acc) select acc from sp101005.info order by acc"
+
+# get records with HUGL symbol and descriptions
+hgsql sp101005 -N -e 'select d.acc, d.val, taxon, id.bioentryID, 2-isCurated, des.val,hx.symbol, hx.description from displayId d, info i, accToTaxon t, bioentryID id, description des, proteins101005.hgncXref hx where  d.acc=t.acc and d.acc=i.acc and d.acc=id.acc and d.acc = id.acc and d.acc=des.acc and hx.uniProt=d.acc ' >spXref3a.tab
+
+# get records with HUGL symbol and descriptions for variant splice proteins
+hgsql sp101005 -N -e 'select v.varAcc, v.varAcc, taxon, id.bioentryID, 2-isCurated, des.val,hx.symbol, hx.description from varAcc v, displayId d, info i, accToTaxon t, bioentryID id, description des, proteins101005.hgncXref hx where v.parAcc=d.acc and d.acc=t.acc and d.acc=i.acc and d.acc=id.acc and d.acc = id.acc and d.acc=des.acc and hx.uniProt=d.acc ' >spXref3av.tab
+
+# get all records and set HUGO symbol and description to "" 
+
+hgsql sp101005 -N -e 'select d.acc, d.val, taxon, id.bioentryID, 2-isCurated, des.val,"", "" from displayId d, info i, accToTaxon t, bioentryID id, description des where  d.acc=t.acc and d.acc=i.acc and d.acc=id.acc and d.acc = id.acc and d.acc=des.acc ' >spXref3b.tab
+
+# get all records and set HUGO symbol and description to "" for variant splice proteins 
+
+hgsql sp101005 -N -e 'select v.varAcc, v.varAcc, taxon, id.bioentryID, 2-isCurated, des.val,"", "" from varAcc v, displayId d, info i, accToTaxon t, bioentryID id, description des where v.parAcc=d.acc and  d.acc=t.acc and d.acc=i.acc and d.acc=id.acc and d.acc = id.acc and d.acc=des.acc ' >spXref3bv.tab
+
+# Clean up temp table.
+hgsql sp101005 -e "drop table bioentryID"
+
+# collect all data from the resulting 4 files.
+
+cat spXref3a.tab  spXref3b.tab  spXref3av.tab spXref3bv.tab >spXref3.tab
+
+# load into the spXref3 table
+hgLoadSqlTab proteins101005 spXref3 ~/kent/src/hg/lib/spXref3.sql spXref3.tab
+
+# load the same data into a second temp table
+hgLoadSqlTab proteins101005 spXref3B ~/kent/src/hg/lib/spXref3.sql spXref3.tab
+
+# remove records that have empty HUGO symbol, yet other records 
+# of the same accession does have non-empty HUGO symbols.
+hgsql proteins101005 -e 'delete spXref3 from spXref3, spXref3B where spXref3.accession=spXref3B.accession and spXref3.hugoSymbol="" and spXref3B.hugoSymbol!=""'
+
+# Drop temp table
+hgsql proteins101005 -e "drop table spXref3B"
+
+
+######################################################################
+# BUILD spXref2 TABLE 
+
+# This step takes several hours and produces a table of ~100 million lines.
+/cluster/home/fanhsu/bin/x86_64/spToSpXref2 101005 >spXref2.tab
+
+# create and load the big spXref2 table
+hgsql proteins101005 < ~/src/hg/lib/spXref2.sql
+hgsql proteins101005 -e 'load data local infile "spXref2.tab" into table spXref2'
+
+# create the indices, took about 40 minutes for each index. 
+
+hgsql proteins101005 -e 'create index displayID on spXref2(displayID)'
+hgsql proteins101005 -e 'create index extAC on spXref2(extAC)'
+hgsql proteins101005 -e 'create index accession on spXref2(accession)'
+
+
+########################################################################
+# Build spOrganism table
+hgsql sp101005 -N -e 'select d.val, taxon from displayId d, accToTaxon t where d.acc=t.acc ' >spOrganism.tab
+
+hgLoadSqlTab proteins101005 spOrganism ~/kent/src/hg/lib/spOrganism.sql ./spOrganism.tab
+
+#	Build spSecondaryID table
+cd /hive/data/inside/proteins/101005
+hgsql -e "select displayId.val, displayId.acc, otherAcc.val from displayId, \
+        otherAcc where otherAcc.acc = displayId.acc;" sp101005 \
+	| sed -e "1d" > spSecondaryID.tab
+
+hgLoadSqlTab proteins101005 spSecondaryID ~/kent/src/hg/lib/spSecondaryID.sql ./spSecondaryID.tab
+
+#	Build pfamXref and pfamDesc tables
+# First get pfam info into /hive/data/outside/pfam/current/Pfam-A.full.gz somehow.
+# Did it this time with
+#   wget --timestamping ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam-A.full.gz
+cd    /hive/data/outside/pfam/current/
+
+gunzip -c Pfam-A.full.gz | pfamXref proteins101005 stdin pfamADesc.tab pfamAXref.tab >pfamXref.log
+
+hgLoadSqlTab proteins101005 pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamADesc.tab
+hgLoadSqlTab proteins101005 pfamXref ~/kent/src/hg/lib/pfamXref.sql pfamAXref.tab
+
+#	Build the pdbSP table, new process using extDbRef data from spXXXXXX
+
+cd /hive/data/inside/proteins/101005
+
+hgsql sp101005 -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb where x.acc=d.acc and extDb.val="PDB" and x.extDb=extDb.id'|sort -u >pdbSP.tab
+
+hgLoadSqlTab proteins101005 pdbSP ~/kent/src/hg/lib/pdbSP.sql pdbSP.tab
+
+#	Build the spDisease table
+
+hgsql -N -e \
+'select comment.acc, displayId.val, commentVal.val from comment, commentVal, commentType ct, displayId where comment.commentType=ct.id and ct.val="DISEASE" and commentVal.id=comment.commentVal and displayId.acc=comment.acc;' \
+sp101005 > spDisease.tab
+
+hgLoadSqlTab proteins101005 spDisease ~/kent/src/hg/lib/spDisease.sql spDisease.tab
+
+# create swInterPro table
+
+cd /hive/data/inside/proteins/101005/build
+# Fetch interpro file, last time like so:
+#  wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz"
+gunzip protein2ipr.dat.gz
+# rearrange col positioin to match the old format
+cut -f 1 protein2ipr.dat >j1
+cut -f 2,3 protein2ipr.dat >j23
+cut -f 4,5,6 protein2ipr.dat >j456
+paste j1 j456 j23 > interProXref.tab
+rm j1 j456 j23
+
+hgLoadSqlTab proteins101005 interProXref ~/kent/src/hg/lib/interProXref.sql ./interProXref.tab
+
+hgsql proteins101005 -N -e 'select accession, interProId from interProXref;'|sort -u >swInterPro.tab
+hgLoadSqlTab proteins101005 swInterPro ~/kent/src/hg/lib/swInterPro.sql ./swInterPro.tab
+
+# BUILD TABLES FOR pbGlobal (PB V1.1)
+
+cd /hive/data/inside/proteins/101005
+mkdir pbGlobal
+cd pbGlobal
+
+# Calculate Pi values for all proteins
+pbCalPi sp101005 pi101005.tab
+
+
+hgLoadSqlTab proteins101005 pepPi ~/kent/src/hg/lib/pepPi.sql ./pi101005.tab
+
+# Build pepMwAa table
+
+hgsql sp101005 -N -e "select acc, molWeight, aaSize from info" >pepMwAa.tab
+hgLoadSqlTab proteins101005 pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
+
+
+nice pbCalDistGlobal sp101005 proteins101005
+
+# Load the tables
+
+# Calculate global protein property distributions
+
+hgLoadSqlTab proteins101005 pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql pepCCntDist.tab
+hgLoadSqlTab proteins101005 pepHydroDist ~/kent/src/hg/lib/pepHydroDist.sql pepHydroDist.tab
+hgLoadSqlTab proteins101005 pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql pepIPCntDist.tab
+hgLoadSqlTab proteins101005 pepMolWtDist ~/kent/src/hg/lib/pepMolWtDist.sql pepMolWtDist.tab
+hgLoadSqlTab proteins101005 pepPiDist ~/kent/src/hg/lib/pepPiDist.sql pepPiDist.tab
+hgLoadSqlTab proteins101005 pepResDist ~/kent/src/hg/lib/pepResDist.sql pepResDist.tab
+
+# Calculate global AA residue distributions
+
+pbCalResStdGlobal 101005
+
+# Load distribution tables:
+
+hgLoadSqlTab proteins101005 pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
+hgLoadSqlTab proteins101005 pbResAvgStd  ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
+
+# Get taxonomy names table from NCBI.
+
+cd /hive/data/inside/proteins/101005
+mkdir taxon
+cd taxon
+wget --timestamping ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdmp.zip
+unzip taxdmp.zip
+
+# Create table taxonNames in proteins101005
+
+# Load from the file names.dmp into taxonNames table.
+
+# hgsql proteins101005 -e 'drop table taxonNames'
+hgsql proteins101005 < ~/kent/src/hg/lib/taxonNames.sql    
+hgsql proteins101005 -e 'load data local infile "names.dmp" into table taxonNames fields terminated by "|" enclosed by "\t";'
+
+# Load and edit pbStamp table
+
+cd /hive/data/inside/proteins/101005
+hgsql proteins060115 -N -e "select * from pbStamp" > pbStamp.tab
+
+hgLoadSqlTab proteins101005 pbStamp ~/kent/src/hg/lib/pbStamp.sql ./pbStamp.tab
+
+cd /hive/data/inside/proteins/101005
+mkdir alias
+cd alias
+
+hgsql proteins101005 -N -e 'select accession, accession,  "uAcc", "2006-01-15" from spXref3' >j1.tmp
+hgsql proteins101005 -N -e 'select accession, accession2, "u2Ac", "2006-01-15" from spSecondaryID' >j2.tmp
+hgsql proteins101005 -N -e 'select accession, displayID,  "uDis", "2006-01-15" from spXref3' >j3.tmp
+
+hgsql proteins040515 -N -e 'select accession, displayID,  "oDis", "2004-05-15" from spXref3' >j4.tmp
+# PLEASE NOTE: proteins041115 was later deleted by Fan when hgwdev mySQL space was at 100%.
+# So, use protein040515 instead.
+
+cat j1.tmp j2.tmp j3.tmp j4.tmp >uniProtAlias.tab
+rm j1.tmp j2.tmp j3.tmp j4.tmp
+
+hgLoadSqlTab proteins101005 uniProtAlias ~/kent/src/hg/lib/uniProtAlias.sql ./uniProtAlias.tab
+hgsql proteins101005 -e 'create index alias on uniProtAlias(alias)'
+
+hgsql proteins050415 -N -e 'select * from spOldNew' >spOldNew.tab
+hgLoadSqlTab proteins101005 spOldNew ~/kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
+
+hgsql proteins101005 -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
+hgsql proteins101005 -e 'create index newDisplayId on spOldNew(newDisplayId)'
+
+# Build spDeleted table
+
+# Download list of deleted accession numbers from UniProt
+cd /hive/data/inside/proteins/101005
+
+wget --timestamping http://ca.expasy.org/txt/delac_tr.txt
+cp delac_tr.txt spDeleted.tab
+
+# Edit spDeleted.tab to get rid of other lines except accession numbers
+
+vi spDeleted.tab
+hgLoadSqlTab proteins101005 spDeleted ~/kent/src/hg/lib/spDeleted.sql ./spDeleted.tab
+
+# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
+
+hgsql proteins101005 -N -e 'select accession,accession from spXref3' >j1
+cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
+cat j1 |grep -v "-" >>j3
+cat j2 j3 |sort -u >spVariant.tab
+rm j1 j2 j3
+
+
+hgLoadSqlTab proteins101005 spVariant ~/kent/src/hg/lib/spVariant.sql ./spVariant.tab
+hgsql proteins101005 -e 'create index parent on spVariant(parent)'
+
+# EXTEND pfamXref TO COVER VARIANT SPLICE PROTEINS
+
+hgsql proteins101005 -N -e \
+'select pfamAC, variant, variant from spVariant, pfamXref where swissAC = parent and variant like "%-%" and swissAC=parent;' \
+>pfamXrefVar.tab
+
+hgLoadSqlTab -append proteins101005 pfamXref ~/kent/src/hg/lib/pfamXref.sql ./pfamXrefVar.tab
+
+# SWITCH SYMBOLIC PROTEIN DATABASE LINKS (TBD)
+
+# Ask system admin to switch the following symbolic database links:
+
+       swissProt --> sp101005
+       proteins  --> proteins101005
+
+# Run some simple test on hgTracks, hgNear, hgGene, pbTracks, and pbGlobal  
+# to make sure things are running OK.
+
+# First check to see if pbGateway and pbGlobal are working.
+
+# Then edit pbStamp.tab to adjust maximum y values for various stamps 
+# and load it to pbStamp tables until all their scales look reasonable.
+# For this particular release, no adjustment seems necessary.	
+    
+#########################################################
+# CREATE REACTOME TABLES 
+
+# Obtain the ucsc_events24.dat.txt and ucsc_entity24.dat from Reactome.
+# Contact: Gopinathrao, Gopal [gopinath@cshl.edu]
+# Note - Gopal is no longer with Reactome, and the format has changed.  For now
+# just using previous data.  Should double-check that Reactome links still work
+# both on hg18 and with the hg19 build....
+
+cd /hive/data/outside/reactome/reactome24
+
+hgsql proteins101005 < ~/kent/src/hg/lib/spReactomeEvent.sql
+hgsql proteins101005 -e 'load data local infile "ucsc_events24.tab" into table spReactomeEvent'
+
+hgsql proteins101005 < ~/kent/src/hg/lib/spReactomeId.sql
+hgsql proteins101005 -e 'load data local infile "ucsc_entity24.tab" into table spReactomeId'
+
+# move this endif statement past business that has been successfully completed
+
+#########################################################
+# UPDATE REACTOME TABLES WITH V32 DATA (DONE, Fan 3/19/10)
+
+# Obtain the ucsc_events32.dat.txt and ucsc_entity32.dat from Reactome.
+# Contact: Lisa Matthews [lmatthews.nyumc@gmail.com]
+
+ssh hgwdev
+mkdir /hive/data/outside/reactome/reactome32
+rm /hive/data/outside/reactome/current
+ln -s /hive/data/outside/reactome/reactome32 /hive/data/outside/reactome/current
+rm /hive/data/outside/reactome/reactome
+ln -s /hive/data/outside/reactome/reactome32 /hive/data/outside/reactome/reactome 
+cd /hive/data/outside/reactome/reactome
+
+# save these two .dat files to this subdirectory.
+
+cp ucsc_events32.dat ucsc_events32.tab
+cp ucsc_entity32.dat ucsc_entity32.tab
+
+# edit two .tab files to get rid of top head lines.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events32.tab" into table spReactomeEvent'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity32.tab" into table spReactomeId'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg17.lis
+
+hgsql hg18 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg18.lis
+
+hgsql hg19 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg19.lis
+
+hgsql mm9 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm9.lis
+
+hgsql mm8 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm8.lis
+
+hgsql rn4 -N -e 'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >rn4.lis
+
+# !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
+# AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
+
+endif # BRACKET
+#########################################################
+# UPDATE REACTOME TABLES WITH V33 DATA (DONE, Fan 6/22/10)
+
+# Obtain the ucsc_events33.dat.txt and ucsc_entity33.dat from Reactome.
+# Contact: Robin Haw [Robin.Haw@oicr.on.ca]
+
+ssh hgwdev
+mkdir /hive/data/outside/reactome/reactome33
+rm /hive/data/outside/reactome/current
+ln -s /hive/data/outside/reactome/reactome33 /hive/data/outside/reactome/current
+rm /hive/data/outside/reactome/reactome
+ln -s /hive/data/outside/reactome/reactome33 /hive/data/outside/reactome/reactome 
+cd /hive/data/outside/reactome/reactome
+
+# save these two .dat files to this subdirectory.
+
+cp ucsc_events33.dat ucsc_events33.tab
+cp ucsc_entity33.dat ucsc_entity33.tab
+
+# edit two .tab files to get rid of top head lines.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events33.tab" into table spReactomeEvent'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity33.tab" into table spReactomeId'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg17.lis
+
+hgsql hg18 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg18.lis
+
+hgsql hg19 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg19.lis
+
+hgsql mm9 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm9.lis
+
+hgsql mm8 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm8.lis
+
+hgsql rn4 -N -e 'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >rn4.lis
+
+# !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
+# AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
+
+#########################################################
+# UPDATE REACTOME TABLES WITH V34 DATA (DONE, Fan 10/25/10)
+
+# Obtain the ucsc_events34.dat.txt and ucsc_entity34.dat from Reactome.
+# Contact: Robin Haw [Robin.Haw@oicr.on.ca]
+
+ssh hgwdev
+mkdir /hive/data/outside/reactome/reactome34
+rm /hive/data/outside/reactome/current
+ln -s /hive/data/outside/reactome/reactome34 /hive/data/outside/reactome/current
+rm /hive/data/outside/reactome/reactome
+ln -s /hive/data/outside/reactome/reactome34 /hive/data/outside/reactome/reactome 
+cd /hive/data/outside/reactome/reactome
+
+# save these two .dat files to this subdirectory.
+
+cp ucsc_events34.dat ucsc_events34.tab
+cp ucsc_entity34.dat ucsc_entity34.tab
+
+# edit two .tab files to get rid of top head lines.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events34.tab" into table spReactomeEvent'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity34.tab" into table spReactomeId'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg17 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg17.lis
+
+hgsql hg18 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg18.lis
+
+hgsql hg19 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg19.lis
+
+hgsql mm9 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm9.lis
+
+hgsql mm8 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm8.lis
+
+hgsql rn4 -N -e \
+'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >rn4.lis
+
+# !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
+# AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
+
+#########################################################
+# UPDATE REACTOME TABLES WITH V35 DATA (DONE, Fan 01/03/10)
+
+# Obtain the ucsc_events35 and ucsc_entity35 from Reactome.
+# Contact: Robin Haw [Robin.Haw@oicr.on.ca]
+
+ssh hgwdev
+mkdir /hive/data/outside/reactome/reactome35
+rm /hive/data/outside/reactome/current
+ln -s /hive/data/outside/reactome/reactome35 /hive/data/outside/reactome/current
+rm /hive/data/outside/reactome/reactome
+ln -s /hive/data/outside/reactome/reactome35 /hive/data/outside/reactome/reactome 
+cd /hive/data/outside/reactome/reactome
+
+# save these two .dat files to this subdirectory.
+
+cp ucsc_events35 ucsc_events35.tab
+cp ucsc_entity35 ucsc_entity35.tab
+
+# edit two .tab files to get rid of top head lines.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events35.tab" into table spReactomeEvent'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity35.tab" into table spReactomeId'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg17 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg17.lis
+
+hgsql hg18 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg18.lis
+
+hgsql hg19 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg19.lis
+
+hgsql mm9 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm9.lis
+
+hgsql mm8 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm8.lis
+
+hgsql rn4 -N -e \
+'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >rn4.lis
+
+# !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
+# AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
+
+#########################################################
+# UPDATE REACTOME TABLES WITH V36 DATA (DONE, Fan 03/18/2011)
+
+# Obtain the ucsc_events36 and ucsc_entity36 from Reactome.
+# Contact: Robin Haw [Robin.Haw@oicr.on.ca]
+
+ssh hgwdev
+mkdir /hive/data/outside/reactome/reactome36
+rm /hive/data/outside/reactome/current
+ln -s /hive/data/outside/reactome/reactome36 /hive/data/outside/reactome/current
+rm /hive/data/outside/reactome/reactome
+ln -s /hive/data/outside/reactome/reactome36 /hive/data/outside/reactome/reactome 
+cd /hive/data/outside/reactome/reactome
+
+# save these two .dat files to this subdirectory.
+
+cp ucsc_events36.dat ucsc_events36.tab
+cp ucsc_entity36.dat ucsc_entity36.tab
+
+# edit two .tab files to get rid of top head lines.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events36.tab" into table spReactomeEvent'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity36.tab" into table spReactomeId'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg17 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg17.lis
+
+hgsql hg18 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg18.lis
+
+hgsql hg19 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg19.lis
+
+hgsql mm9 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm9.lis
+
+hgsql mm8 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm8.lis
+
+hgsql rn4 -N -e \
+'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >rn4.lis
+
+# !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
+# AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
+
+
+#########################################################
+# UPDATE REACTOME TABLES WITH V37 DATA (DONE, Fan 07/01/2011)
+
+# Obtain the ucsc_events37 and ucsc_entity37 from Reactome.
+# Contact: Robin Haw [Robin.Haw@oicr.on.ca]
+
+ssh hgwdev
+mkdir /hive/data/outside/reactome/reactome37
+rm /hive/data/outside/reactome/current
+ln -s /hive/data/outside/reactome/reactome37 /hive/data/outside/reactome/current
+rm /hive/data/outside/reactome/reactome
+ln -s /hive/data/outside/reactome/reactome37 /hive/data/outside/reactome/reactome 
+cd /hive/data/outside/reactome/reactome
+
+# save these two .dat files to this subdirectory.
+
+cp ucsc_events37 ucsc_events37.tab
+cp ucsc_entity37 ucsc_entity37.tab
+
+# edit two .tab files to get rid of top head lines.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events37.tab" into table spReactomeEvent'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity37.tab" into table spReactomeId'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg17 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg17.lis
+
+hgsql hg18 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg18.lis
+
+hgsql hg19 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg19.lis
+
+hgsql mm9 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm9.lis
+
+hgsql mm8 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm8.lis
+
+hgsql rn4 -N -e \
+'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >rn4.lis
+
+# !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
+# AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
+
+endif # BRACKET

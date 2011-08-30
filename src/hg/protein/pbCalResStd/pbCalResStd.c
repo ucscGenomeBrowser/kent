@@ -158,6 +158,7 @@ for (j=0; j<MAXRES; j++)
 while (row2 != NULL)
     {
     protDisplayId = row2[0];   
+    printf("working on protein %s, icnt now %d\n", protDisplayId, icnt);  /* ## help */
     safef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
     accession = sqlGetField(swissprotDatabaseName, "displayId", "acc", cond_str);
 
