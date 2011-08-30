@@ -5769,7 +5769,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me2(Dot_blot):human_H3K4me2_validation_Bernstein.pdf
 
 term H3K4me2_(ab32356)
-tag H3K4ME2AB32356
+tag AB32356
 type Antibody
 antibodyDescription Rabbit polyclonal
 target H3K4me2
@@ -6002,7 +6002,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
 
 term H3K79me2_(ab3594)
-tag H3K79ME2AB3594
+tag AB3594
 type Antibody
 antibodyDescription Rabbit polyclonal
 target H3K79me2
@@ -6017,7 +6017,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K79me3_(ab2621)
-tag H3K79ME3AB2621
+tag AB2621
 type Antibody
 antibodyDescription Rabbit polyclonal
 target H3K79me3
@@ -6353,7 +6353,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
 validation missing
 
 term MyoD_(sc-32758)
-tag MYODSC32758
+tag SC32758
 type Antibody
 antibodyDescription mouse monoclonal antibody raised against recombinant MyoD of mouse origin with an epitope mapping to amino acids 180-189
 target MyoD
@@ -6368,7 +6368,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MyoD1
 validation missing
 
 term Myogenin_(sc-12732)
-tag MYOGENINSC12732
+tag SC12732
 type Antibody
 antibodyDescription mouse monoclonal antibody; epitope mapping within amino acids 138-158 of myogenin of rat origin
 target Myogenin
@@ -8538,30 +8538,28 @@ label MNase
 
 term Myoblast
 tag MYB
-description Grown in differentiation medium undifferediated (Wold) 
+description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_24h
 tag MYC24H
-description Grown for 24 hours in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 24 hours (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_60h
 tag MYC60H
-description Grown for 60 hours in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 60 hours (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_5d
 tag MYC5D
-description Grown for 5 days in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 5 days (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_7d
 tag MYC7D
-description Grown for 7 days in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 7 days (Wold) PROVISIONAL
 type treatment
-
-
 
 
 term NaBut
