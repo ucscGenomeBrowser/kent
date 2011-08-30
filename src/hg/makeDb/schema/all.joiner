@@ -3397,6 +3397,7 @@ tablesIgnored $gbd
     cytoBand
     cytoBandIdeo
     evofold
+    evofoldV2
     exoniphy
     firstEF
     gbLoaded
