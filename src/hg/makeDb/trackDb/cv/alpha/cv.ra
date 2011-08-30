@@ -79,6 +79,7 @@ term K562b
 tag K562b
 type Cell Line
 organism human
+description OBSOLETE, K562b is identical to K562
 deprecated same as K562
 
 #deprecated, it's pretty much the same cell as K562.
@@ -117,6 +118,13 @@ color 189,0,157
 sex M
 tier 2
 protocol ENCODE:HepG2_protocol.pdf
+
+term HepG2b
+tag HEPG2B
+type Cell Line
+organism human
+description OBSOLETE, HepG2b is identical to HepG2
+deprecated same as HepG2 
 
 #deprecated, same cell as HepG2
 #term HepG2b
@@ -2123,6 +2131,7 @@ term HEK293(b)
 tag HEK293b
 type Cell Line
 organism human
+description OBSOLETE, HEK293(b) is identical to HEK293
 deprecated same as HEK293
 
 #We are trying to eliminate these "b" terms.  We will not erase fully until 9/1/11.
