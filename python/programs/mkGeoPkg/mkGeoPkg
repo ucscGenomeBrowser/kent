@@ -53,9 +53,13 @@ datatypes = {
 
 #compare this to the source in datatype, give GP ids depending on the type
 gpIds = {
-	'genomic': '63443',
-	'transcriptomic': '30709',
-	'protein': '63447'
+	'human genomic': '63443',
+	'human transcriptomic': '30709',
+	'human protein': '63447',
+	
+	'mouse genomic': '63471',
+	'mouse transcriptomic': '66167',
+	'mouse protein': '63475'
 }
 
 cvDetails = {
@@ -128,14 +132,14 @@ def isRawFile(file):
 	
 def isSupplimentaryFile(file):
 	return not isRawFile(file)
-
-def sampleTitle(stanza, expVars):
+	
+def sampleTitle(stanza, expVars, warn=False):
 	concat = stanza[expVars[0]].replace('-m', '')
 	for expVar in expVars[1:len(expVars)]:
-		if expVar in stanza:
+		if expVar in stanza and stanza[expVar] != 'None':
 			concat += '_' + stanza[expVar]
-		else:
-			print 'warning: %s not in %s' % (expVar, stanza.name)
+		elif warn:
+			print 'warning: %s is None or not in %s' % (expVar, stanza.name)
 	return concat
 	
 def createMappings(mdb):
@@ -196,13 +200,13 @@ def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series, 
 	if '!Series_summary' in replace:
 		seriesStanza['!Series_summary'] = replace['!Series_summary']
 	else:
-		raise Error('no series summary found. Please include in replace file.')
+		print 'warning: no series summary found. Please include in replace file.'
 		seriesStanza['!Series_summary'] = '[REPLACE]'
 		
 	if '!Series_overall_design' in replace:
 		seriesStanza['!Series_overall_design'] = replace['!Series_overall_design']
 	else:
-		raise Error('no series overall design found. Please include in replace file.')
+		print 'no series overall design found. Please include in replace file.'
 		seriesStanza['!Series_overall_design'] = '[REPLACE]'
 		
 	seriesStanza['!Series_web_link'] = [ compositeTrack.url, 'http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html' ]
@@ -212,7 +216,7 @@ def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series, 
 	else:
 		seriesStanza['!Series_contributor'] = '[REPLACE]'
 		
-	seriesStanza['!Series_gp_id'] = gpIds[datatype.source]
+	seriesStanza['!Series_gp_id'] = gpIds[compositeTrack.organism + ' ' + datatype.source]
 	
 	# could use !Series_variable_* and !Series_repeats_*
 	
@@ -242,7 +246,7 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
 		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
 		sample = HighThroughputSampleStanza()
 
-		sample['^SAMPLE'] = sampleTitle(firstStanza, expVars)
+		sample['^SAMPLE'] = sampleTitle(firstStanza, expVars, 1)
 		sample['!Sample_type'] = 'SRA'
 		sample['!Sample_title'] = sample['^SAMPLE']
 		
@@ -521,7 +525,7 @@ def main():
 		submission = expIds
 	else:
 		for expId in ids:
-			submission[expId] = expIds[expId]
+			submission[str(expId)] = expIds[str(expId)]
 	
 	expIdStr = ' '
 	for id in args.expIds:
