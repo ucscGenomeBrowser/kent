@@ -31653,6 +31653,74 @@ done
     hgBbiDbLink hg18 decodeMaleFemaleDifference /gbdb/hg18/decode/MaleFemaleDifference.bw
 
 #############################################################################
+# HapMap recombination maps added to deCODE track (DONE - 2011-08-30 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/hapmap/release24
+    cd /hive/data/genomes/hg18/bed/hapmap/release24
+    wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_CEU.tgz
+
+wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_YRI.tgz
+
+wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_combined.tgz
+
+    mkdir CEU
+    cd CEU
+    tar xvzf ../genetic_map_b36_CEU.tgz
+    cd ..
+    mkdir YRI
+    cd YRI
+    tar xvzf ../genetic_map_b36_YRI.tgz
+    cd ..
+    mkdir combined
+    cd combined
+    tar xvzf ../genetic_map_b36_combined.tgz
+
+for F in CEU/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_CEU_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24CEURecombMap.bedGraph
+
+for F in YRI/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_YRI_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24YRIRecombMap.bedGraph
+
+for F in combined/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_combined_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24CombinedRecombMap.bedGraph
+
+for F in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+bedGraphToBigWig -verbose=2 ${F}.bedGraph \
+        /hive/data/genomes/hg18/chrom.sizes ${F}.bw > ${F}.log 2>&1
+done
+
+for T in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+    rm -f /gbdb/hg18/decode/${T}.bw
+    ln -s `pwd`/${T}.bw /gbdb/hg18/decode/${T}.bw
+    hgsql -e "drop table ${T};" hg18
+    hgBbiDbLink hg18 ${T} /gbdb/hg18/decode/${T}.bw
+done
+
+#############################################################################
 # HI SEQ DEPTH (DONE 7/15/11 angie)
     mkdir /hive/data/genomes/hg18/bed/hiSeqDepth
     cd /hive/data/genomes/hg18/bed/hiSeqDepth
