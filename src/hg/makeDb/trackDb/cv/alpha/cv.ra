@@ -1,4 +1,4 @@
-#+ Controlled vocabulary from ENCODE
++ Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
 
@@ -236,7 +236,7 @@ tier 3
 lineage endoderm
 karyotype cancer
 sex F
-tissue liver
+tissue Liver
 vendorName DSMZ
 vendorId ACC 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
@@ -771,7 +771,7 @@ type Cell Line
 tier 3
 organism human
 description prostate gland, donor H12817N, age 71, caucasian, DNA extract
-tissue Prostate gland
+tissue Prostate Gland
 lineage endoderm
 karyotype normal
 sex M
@@ -1077,7 +1077,7 @@ tier 3
 lineage mesoderm
 karyotype cancer
 sex F
-tissue lymphocyte
+tissue Lymphocyte
 vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
 vendorId CLL
 orderUrl http://www.dfhcc.harvard.edu/membership/profile/member/669/0/
@@ -1187,11 +1187,11 @@ tag ECC1
 type Cell Line
 organism human
 description ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes
-tissue luminal epithelium
+tissue Luminal Epithelium
 vendorName ATCC
 vendorId CRL-2923
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2923&Template=cellBiology
-lineage epithelial
+lineage epithelia
 karyotype cancer
 termId BTO:0000194
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000194
@@ -1882,7 +1882,7 @@ description Human Astrocytes-cerebellar
 lineage ectoderm
 karyotype normal
 sex U
-tissue cerebellar
+tissue Cerebellar
 vendorName ScienCell
 vendorId 1810
 orderUrl http://www.sciencellonline.com/site/products/1810.php
@@ -1912,7 +1912,7 @@ description Human Astrocytes-hippocampal
 lineage ectoderm
 karyotype normal
 sex U
-tissue brain hippocampus
+tissue Brain hippocampus
 vendorName ScienCell
 vendorId 1830
 orderUrl http://www.sciencellonline.com/site/products/1830.php
@@ -2186,7 +2186,7 @@ description Human Foreskin Fibroblast
 lineage Fibroblast
 karyotype normal
 sex M
-tissue foreskin
+tissue Foreskin
 vendorName Dr. Torok-Storb, FHCRC
 vendorId HFF
 orderUrl http://myprofile.cos.com/torokstorb
@@ -2204,7 +2204,7 @@ lineage Fibroblast
 karyotype normal (cMyc)
 derivedFrom HFF
 sex M
-tissue foreskin
+tissue Foreskin
 vendorName Dr. Torok-Storb, FHCRC
 vendorId HFF-Myc
 orderUrl http://myprofile.cos.com/torokstorb
@@ -2328,7 +2328,7 @@ type Cell Line
 organism human
 description human mammary fibroblasts
 # mammary stromal cell line
-tissue mammary
+tissue Mammary
 vendorName ScienCell
 vendorId 7630
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7630
@@ -2516,10 +2516,10 @@ tier 3
 organism human
 description normal human pancreatic duct cells immortalized with E6E7 gene of HPV
 lineage endoderm
-karyotype  Unknown
+karyotype Unknown
 sex F
-tissue  Pancreatic Duct
-vendorName  Dr. Ming-Sound Tsao, Ontario Cancer Institute
+tissue Pancreatic Duct
+vendorName Dr. Ming-Sound Tsao, Ontario Cancer Institute
 vendorId HPDE6-E6E7
 orderUrl http://www.uhnresearch.ca/researchers/profile.php?lookup=6118
 termId BTO:0002362
@@ -2595,7 +2595,7 @@ description Human Renal Glomerular Endothelial Cells
 lineage mesoderm
 karyotype normal
 sex U
-tissue kidney
+tissue Kidney
 vendorName ScienCell
 vendorId 4000
 orderUrl http://www.sciencellonline.com/site/products/4000.php
@@ -2768,16 +2768,16 @@ termId BTO:0001079
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001079
 protocol Crawford:HTR8svn_Crawford_protocol.pdf
 
-term  Huh-7
-tag  HUH7
+term Huh-7
+tag HUH7
 type Cell Line
 tier 3
 organism human
-description  Hepatocellular carcinoma
-lineage  endoderm
+description Hepatocellular carcinoma
+lineage endoderm
 karyotype cancer
 sex M
-tissue  Liver
+tissue Liver
 vendorName  Ravi Jhaveri, Duke University
 vendorId Huh-7
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
@@ -2785,8 +2785,8 @@ termId BTO:0001950
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001950
 protocol Crawford:Huh-7_Crawford_protocol.pdf
 
-term  Huh-7.5
-tag  HUH7.5
+term Huh-7.5
+tag HUH7.5
 type Cell Line
 tier 3
 organism human
@@ -2794,7 +2794,7 @@ description  Hepatocellular carcinoma, hepatocytes selected for high levels of h
 lineage endoderm
 karyotype cancer
 sex M
-tissue  Liver
+tissue Liver
 vendorName  Ravi Jhaveri, Duke University
 vendorId Huh-7.5
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
@@ -2841,7 +2841,7 @@ description  induced pluripotent stem cell
 lineage  induced pluripotent stem cell derived from skin fibroblast
 karyotype  Unknown
 sex B
-tissue  iPS stem cell derived from skin fibroblast
+tissue iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
@@ -3067,7 +3067,7 @@ description Monocytes-CD14+ are CD14-positive cells from human leukapheresis pro
 lineage mesoderm
 karyotype normal
 sex F
-tissue monocytes
+tissue Monocytes
 vendorName S. Heimfeld Laboratory, FHCRC
 vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
@@ -3495,7 +3495,7 @@ tag SHSY5Y
 type Cell Line
 organism human
 description neuroblastoma clonal subline of the neuroepithelioma cell line SK-N-SH that had been established in 1970 from the bone marrow biopsy of a 4-year-old girl with metastatic neuroblastoma
-tissue brain
+tissue Brain
 vendorName ATCC
 vendorId CC-2266
 derivedFrom SK-N-SH
@@ -3571,7 +3571,7 @@ protocol Stam:Stam_15_protocols.pdf
 #type Cell Line
 #organism human
 #description neuroblastoma, parental cell line: SK-N-SH
-#tissue bone marrow
+#tissue Bone Marrow
 #vendorName ATCC
 #vendorId bone marrow
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
@@ -3609,7 +3609,7 @@ description  Human Hepatic Stellate Cells, Liver that was perfused with collagen
 lineage endoderm
 karyotype  normal
 sex F
-tissue  Liver
+tissue Liver
 vendorName  Steve Choi, Duke University
 vendorId Stellate
 orderUrl http://www.dukehealth.org/physicians/steve_s_choi
@@ -3692,7 +3692,7 @@ tag T47D
 type Cell Line
 organism human
 description T-47D is a human epithelial cell line derived from an mammary ductal carcinoma.
-tissue duct
+tissue Duct
 vendorName ATCC
 vendorId HTB-133
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-133&Template=cellBiology
@@ -3712,7 +3712,7 @@ tier 3
 # lineage
 karyotype normal
 sex F
-tissue urothelium
+tissue Urothelium
 vendorName lab of Dr. D Sens (University of N. Dakota)
 vendorId Urothelia
 orderUrl http://pathology.med.und.nodak.edu/dept_home/MaryAnn.cfm
@@ -3743,7 +3743,7 @@ tag U2OS
 type Cell Line
 organism human
 description Osteosarcoma from the tibia of a 15 year old human female, J. Ponten and E. Saksela derived this line (originally 2T) in 1964 from a moderately differentiated sarcoma, viruses were not detected during co-cultivation with WI-38 cells or in CF tests against SV40, RSV or adenoviruses, mycoplasma contamination was detected and eliminated in 1972. (PMID: 6081590)
-tissue bone
+tissue Bone
 vendorName ATCC
 vendorId HTB-96
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-96&Template=cellBiology
@@ -3781,7 +3781,7 @@ description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 c
 lineage endoderm
 karyotype normal (RAF)
 sex F
-tissue embryonic lung
+tissue Embryonic Lung
 vendorName Dr. Carl Mann, SBIGeM
 vendorId WI-38
 orderUrl http://www-dsv.cea.fr/dsv/instituts/institut-de-biologie-et-de-technologies-de-saclay-ibitec-s/unites/service-de-biologie-integrative-et-genetique-moleculaire-sbigem/laboratoire-stress-oxydants-et-cancer-lsoc/equipe-mecanismes-de-stabilite-genomique-c.-mann
