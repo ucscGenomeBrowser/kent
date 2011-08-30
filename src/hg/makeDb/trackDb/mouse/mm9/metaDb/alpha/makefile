@@ -9,5 +9,6 @@ wgEncodeLicrTfbs.ra \
 wgEncodePsuHistone.ra \
 wgEncodeSydhRnaSeq.ra \
 wgEncodeLicrRnaSeq.ra \
-wgEncodeUwRnaSeq.ra
+wgEncodeUwRnaSeq.ra \
+wgEncodeCaltechTfbs.ra
 include ../../../../makefile.metaDb
