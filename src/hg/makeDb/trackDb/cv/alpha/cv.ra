@@ -8538,30 +8538,28 @@ label MNase
 
 term Myoblast
 tag MYB
-description Grown in differentiation medium undifferediated (Wold) 
+description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_24h
 tag MYC24H
-description Grown for 24 hours in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 24 hours (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_60h
 tag MYC60H
-description Grown for 60 hours in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 60 hours (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_5d
 tag MYC5D
-description Grown for 5 days in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 5 days (Wold) PROVISIONAL
 type treatment
 
 term Myocyte_7d
 tag MYC7D
-description Grown for 7 days in differentiation medium (Wold) 
+description Myocytes differentiated from myoblasts for 7 days (Wold) PROVISIONAL
 type treatment
-
-
 
 
 term NaBut
