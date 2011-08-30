@@ -65,7 +65,7 @@ set proCap proCap1
 set pteVam pteVam1
 set rheMac rheMac2
 set rn rn3,rn4
-set sacCer sacCer1,sacCer2
+set sacCer sacCer1,sacCer2,sacCer3
 set sorAra sorAra1
 set speTri speTri1
 set susScr susScr1,susScr2
@@ -1371,10 +1371,10 @@ identifier estAccession typeOf=estOrMrnaAccession
 identifier nativeEstAccession typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
     $gbd.all_est.qName dupeOk
-    $gbd,!sacCer2.est.qName $split full
-    $gbd,!sacCer2,!caeJap1.intronEst.qName $split
-    sacCer2.est.qName splitPrefix=%\_ full
-    sacCer2.intronEst.qName splitPrefix=%\_
+    $gbd,!sacCer2,!sacCer3.est.qName $split full
+    $gbd,!sacCer2,!sacCer3,!caeJap1.intronEst.qName $split
+    sacCer2,sacCer3.est.qName splitPrefix=%\_ full
+    sacCer2,sacCer3.intronEst.qName splitPrefix=%\_
     caeJap1.intronEst.qName
     ailMel1.intronEst.qName
     $gbd.estOrientInfo.name full
@@ -1771,8 +1771,8 @@ identifier humanFosmidEndId
 identifier dbStsId external=dbSts fuzzy
 "NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
     $hg.all_sts_primer.qName chopBefore=dbSTS_
-    $gbd.all_sts_seq.qName
-    $gbd.stsInfo2.dbSTSid
+    $gbd,!sacCer3.all_sts_seq.qName
+    $gbd,!sacCer3.stsInfo2.dbSTSid
 
 identifier ucscStsId
 "UCSC STS (Sequenced Tagged Site, aka mapping sequence) ID"
@@ -1790,7 +1790,7 @@ identifier ucscMouseStsId
 identifier stsName fuzzy
 "STS (Sequenced Tagged Site, aka mapping sequence) Name"
     $hg.fishClones.stsNames comma
-    $gbd.stsInfo2.otherNames comma
+    $gbd,!sacCer3.stsInfo2.otherNames comma
     $mm.stsInfoMouseNew.alias separator=;
 
 identifier stsTrueName typeOf=stsName
@@ -1940,7 +1940,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2,!sacCer3.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -2009,7 +2009,7 @@ identifier flyBase2004IdDm external=FlyBase
     $dm,!dm1.flyBaseToDescription.name
     $dm,!dm1.flyP2P.query minCheck=0.98
     $dm,!dm1.flyP2P.target minCheck=0.98
-    hg17,hg18,danRer3,mm7,mm8,mm9,rn3,rn4,ce2,sacCer1,sacCer2.dmBlastTab.target minCheck=0.90
+    hg17,hg18,danRer3,mm7,mm8,mm9,rn3,rn4,ce2,sacCer1,sacCer2,sacCer3.dmBlastTab.target minCheck=0.90
 
 identifier flyBase2004IdDp external=FlyBase
 "FlyBase Xref as of 2004 for dp3"
@@ -3397,6 +3397,7 @@ tablesIgnored $gbd
     cytoBand
     cytoBandIdeo
     evofold
+    evofoldV2
     exoniphy
     firstEF
     gbLoaded
