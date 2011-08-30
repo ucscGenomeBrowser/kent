@@ -250,6 +250,7 @@ int main(int argc, char *argv[])
 struct mdbObj   * mdbObjs   = NULL;
 struct mdbByVar * mdbByVars = NULL;
 int objsCnt=0, varsCnt=0,valsCnt=0;
+int retCode = 0;
 
 if(argc == 1)
     usage();
@@ -371,7 +372,10 @@ else
         }
 
     if(queryResults == NULL)
+        {
         verbose(1, "No metadata met your selection criteria\n");
+        retCode = 1;
+        }
     else
         {
         objsCnt=mdbObjCount(queryResults,TRUE);
@@ -391,12 +395,16 @@ else
                 {
                 struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&queryResults,2,FALSE,FALSE); // 2=full experiments described
                 printf("%d of %d obj%s can have their experiment IDs updated now.\n",slCount(updatable),objsCnt,(objsCnt==1?"":"s"));
+                if (slCount(updatable) < objsCnt)
+                    retCode = 2;
                 mdbObjsFree(&updatable);
                 }
             else if (validate) // Validate vars and vals against cv.ra
                 {
                 int invalids = mdbObjsValidate(queryResults,optionExists("validateFull"));
                 printf("%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
+                if (invalids > 0)
+                    retCode = 3;
                 }
             else
                 mdbObjPrint(queryResults,raStyle);
@@ -425,5 +433,5 @@ if(mdbObjs)
 if(mdbByVars)
     mdbByVarsFree(&mdbByVars);
 
-return 0;
+return retCode;
 }

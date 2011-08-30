@@ -47,4 +47,4 @@ for line in secondFile:
     elif readingTableSizeSummary and not re.search("^#", line):
         tokens = line.split()
         if tableSizesFirstDb.has_key(tokens[1]):
-            print "%s\t%s\t%s" % (tokens[1], tokens[0], tableSizesFirstDb[tokens[1]])
+            print "%s\t%s\t%s" % (tokens[1], tableSizesFirstDb[tokens[1]], tokens[0])

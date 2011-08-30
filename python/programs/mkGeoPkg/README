@@ -13,12 +13,3 @@ This script takes data from:
 
 There is also a lot of hand-curated data in the top of the program, namely the DataType, which you might want to modify.
 
-Usage:
-mkGeoPkg database composite [expIdStart expIdLength]
-
-database: typically hg19 or potentially mm9, the database to look in
-composite: the name of the composite we wish to submit
-expIdStart: if you want to submit a part of the composite, this is the first expId to submit
-expIdLength:
-
-mkGeoPkg hg19 wgEncodeCshlLongRnaSeq 143 10
