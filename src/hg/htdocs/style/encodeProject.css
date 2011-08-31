@@ -1,0 +1,27 @@
+/* Style for ENCODE Project */
+
+/* mostly re-using GB styles */
+/* over-riding alignment so we don't have to nest in a table */
+.topBlueBar {
+    text-align: left;
+}
+
+body {
+    font-family: arial,Geneva,Helvetica,sans-serif;
+}
+
+.encodeHeader {
+    color: #004D99;
+    font-size: 30px;
+    margin-top: 15px;
+    height: 70px;
+}
+
+.encodeHeader img {
+    float: left;
+    height: 70px;
+}
+
+.encodeHeader span {
+    vertical-align: middle;
+}
