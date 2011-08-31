@@ -480,3 +480,33 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+################
+# CREATE SGD-BASED CLONE TRACK (DONE - 2011-08-31 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/sgdClone
+    cd /hive/data/genomes/sacCer3/bed/sgdClone
+    # since sacCer1, these coordinates have become 0-relative ?
+    wget --timestamping \
+ftp://genome-ftp.stanford.edu/pub/yeast/data_download/chromosomal_feature/clone.tab
+
+    awk -F '\t' '{printf("%d\t%d\t%d\t%s\t%s\n", $3, $4, $5, $2, $1);}' \
+    	clone.tab | sed -e \
+"s/^8/chrVIII/; s/^7/chrVII/; s/^6/chrVI/; s/^5/chrV/;
+s/^13/chrXIII/; s/^12/chrXII/; s/^14/chrXIV/; s/^11/chrXI/;
+s/^16/chrXVI/; s/^15/chrXV/; s/^10/chrX/; s/^3/chrIII/;
+s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
+	> sgdClone.bed
+    hgLoadBed sacCer3 sgdClone  sgdClone.bed -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
+
+############################################################################
+## simpleRepeats (DONE - 2011-08-31 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/simpleRepeat
+    cd /hive/data/genomes/sacCer3/bed/simpleRepeat
+    doSimpleRepeat.pl -buildDir=`pwd` -smallClusterHub=swarm \
+	-workhorse=hgwdev sacCer3 > do.log 2>&1
+    # about 1 minute 20 seconds
+
+    featureBits sacCer3 simpleRepeat
+    #	110704 bases of 12157105 (0.911%) in intersection
+
+#########################################################################
