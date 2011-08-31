@@ -4849,6 +4849,7 @@ targetDescription Activating transcription factor 3. A bZIP transcription factor
 orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-188
+lots J2209, E1406
 lab Myers
 targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
@@ -5123,6 +5124,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 lab Snyder, Myers
 lots I1010 (Myers)
 validation missing
+
+term CEBPB_(SC-49548)
+tag CEBPBSC49548
+type Antibody
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of CEBPB of rat origin.
+target CEBPB
+targetDescription The protein encoded by this intronless gene is a bZIP transcription factor which can bind as a homodimer to certain DNA regulatory regions.  It can also form heterodimers with the related proteins CEBP-alpha, CEBP-delta, and CEBP-gamma.  The encoded protein is important in the regulation of genes involved in immune and inflammatory responses and has been shown to bind to the IL-1 response element in the IL-6 gene, as well as to regulatory regions of several acute-phase and cytokine genes.  In addition, the encoded protein can bind the promoter and upstream element and stimulate the expression of the collagen type I gene (provided by RefSeq).
+vendorName Santa Cruz Biotech 
+vendorId sc-49548
+orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
+lab Myers
+lots I1010
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
+validation CEBPB_(SC-49548)(missing):human_CEBPB_SC-150_sc-49548_validation_Myers.pdf
 
 term CEBPD_(SC-636)
 tag CEBPDSC636
@@ -5428,6 +5444,7 @@ targetDescription This gene encodes an estrogen receptor, a ligand-activated tra
 vendorName Santa Cruz Biotech
 vendorId sc-543
 orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
+lots C2510, G1509
 lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
@@ -5488,6 +5505,7 @@ vendorId sc-350
 orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
 targetId GeneCard:ETS1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ETS1
+lots A1608
 lab Myers
 validation ETS1(Immunoprecipitation-WesternBlot,MassSpec):human_ETS1_validation_Myers.pdf
 
@@ -5678,6 +5696,7 @@ orderUrl http://www.scbt.com/datasheet-267-gata-2-cg2-96-antibody.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
+lots E2708
 validation GATA2_(SC-267)(Immunoprecipitation-WesternBlot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
 
 term  GATA3_(SC-268)
@@ -6153,7 +6172,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
 term  HDAC2_(SC-6296)
-tag  HDAC2
+tag  HDAC2SC6296
 type Antibody
 target  HDAC2
 antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of HDAC2 of human origin.
@@ -6212,7 +6231,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation missing
 
 term HNF4A_(SC-8987)
-tag HNF4Ab
+tag HNF4ASC8987
 type Antibody
 target HNF4A
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to a.a. 295-465 mapping at the C-terminus of HNF4A of human origin.
@@ -6221,6 +6240,7 @@ orderUrl http://www.scbt.com/datasheet-8987-hnf-4alpha-h-171-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-8987
 lab Myers
+lots G1309
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation HNF4A_(SC-8987)(Immunoprecipitation-WesternBlot,MassSpec):human_HNF4a_SC-8987_validation_Myers.pdf
