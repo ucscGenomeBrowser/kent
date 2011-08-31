@@ -79,8 +79,12 @@ term K562b
 tag K562b
 type Cell Line
 organism human
+tier 1
 description OBSOLETE, K562b is identical to K562
 deprecated same as K562
+sex F
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
+vendorName ATCC
 
 #deprecated, it's pretty much the same cell as K562.
 #term K562b
@@ -383,7 +387,7 @@ term Astrocy
 tag ASTRO
 type Cell Line
 organism human
-description normal human astrocytes (also called NH-A) 
+description normal human astrocytes, Astrocy is the same as cell line NH-A 
 tissue Brain
 lineage ectoderm
 vendorName Lonza
@@ -1044,7 +1048,7 @@ tier 3
 protocol Stam:BJ_Stam_protocol.pdf
 
 term CD20+
-tag CD20+
+tag CD20
 type Cell Line
 tier 3
 organism human
@@ -1059,6 +1063,60 @@ orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
+
+term CD20+_RO01778
+tag CD20RO01778
+type Cell Line
+tier 3
+organism human
+description Human B cells, Caucasian, Draw Number 1
+lineage missing
+karyotype missing
+sex F
+age 43
+tissue Blood
+vendorName Rajinder Kaul, UW
+vendorId CD20+_RO01778
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+termId BTO:0000776
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
+protocol missing
+
+term CD20+_RO01794
+tag CD20RO01794
+type Cell Line
+tier 3
+organism human
+description Human B cells, African American, Draw Number 1
+lineage missing
+karyotype missing
+sex F
+age 27
+tissue Blood
+vendorName Rajinder Kaul, UW
+vendorId CD20+_RO01794
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+termId BTO:0000776
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
+protocol missing
+
+term CD20+_RO01746
+tag CD20RO01746
+type Cell Line
+tier 3
+organism human
+description Human B cells, Caucasian, Draw Number 2
+lineage missing
+karyotype missing
+sex F
+age 27
+tissue Blood
+vendorName Rajinder Kaul, UW
+vendorId CD20+_RO01746
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+termId BTO:0000776
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
+protocol missing
 
 term CD34+_Mobilized
 tag CD34+MOBILIZED
@@ -2133,6 +2191,11 @@ type Cell Line
 organism human
 description OBSOLETE, HEK293(b) is identical to HEK293
 deprecated same as HEK293
+vendorName ATCC
+vendorId CRL-1573
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
+sex U
+tier 3
 
 #We are trying to eliminate these "b" terms.  We will not erase fully until 9/1/11.
 #term HEK293(b)
@@ -2636,7 +2699,7 @@ tissue Muscle
 lineage mesoderm
 vendorName Refer to the protocol documents for differing sources
 vendorId CC-2580
-#orderUrl http://www.lonza.com/
+orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
@@ -8192,8 +8255,6 @@ tag NONPOLYA
 type rnaExtract
 description Depleted Poly(A) RNA
 label PolyA-
-
-
 
 term proteinRnaExtracts
 tag PROTEINRNAEXTRACTS
