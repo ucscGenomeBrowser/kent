@@ -3748,7 +3748,6 @@ sex F
 tier 3
 protocol Myers:U-87_Myers_protocol.pdf
 
-
 term U2OS
 tag U2OS
 type Cell Line
@@ -3765,6 +3764,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Farnham:U2OS_Farnham_protocol.pdf
+
+term UCH-1
+tag UCH1
+type Cell Line
+tier 3
+organism human
+description Chordoma cell line
+lineage missing
+karyotype missing
+sex M
+tissue Chordoma
+vendorName Chordoma Research
+vendorId Foundation
+orderUrl http://www.chordomafoundation.org/research/
+termId BTO:0001248
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
+lab Crawford
+protocol Crawford:UCH1_Crawford_protocol.pdf
 
 term WERI-Rb-1
 tag WERIRB1
