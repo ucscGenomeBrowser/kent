@@ -749,14 +749,10 @@ if (x < xEnd)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
         // Add map item to currnent map (TODO: pass in map)
         #ifdef IMAGEv2_SHORT_MAPITEMS
-            if(x < insideX && xEnd > insideX)
-                {
-                if((insideX - x) < (xEnd - insideX))
+            if(!revCmplDisp && x < insideX && xEnd > insideX)  // Why does insideX=118 in reverse complement??
                     x = insideX;
-                else
-                    xEnd = insideX-1;
-                //warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  insideX:%d  link:[%s]",track,x, y, xEnd, yEnd, insideX, link);
-                }
+            else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
+                    xEnd = insideWidth - 1;
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd, track);
         }
