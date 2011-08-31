@@ -1,0 +1,17 @@
+name human
+db hg19
+
+name mouse
+db mm9
+
+name rat
+db rn4
+
+name zebrafish
+db danRer7
+
+name drosophila
+db dm3
+
+name cElegans
+db ce6
