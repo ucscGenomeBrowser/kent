@@ -3771,8 +3771,8 @@ type Cell Line
 tier 3
 organism human
 description Chordoma cell line
-lineage missing
-karyotype missing
+lineage ectoderm
+karyotype cancer 
 sex M
 tissue Chordoma
 vendorName Chordoma Research
