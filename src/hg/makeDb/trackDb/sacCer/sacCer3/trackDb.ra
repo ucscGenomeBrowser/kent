@@ -1,0 +1,18 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+chromosomes none
+
+track transRegCode override
+visibility hide
+
+track sgdOther override
+noScoreFilter .
+
+track blastHg18KG override
+visibility hide
