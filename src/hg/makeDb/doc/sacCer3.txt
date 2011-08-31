@@ -335,3 +335,14 @@ s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
         -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
 
 ############################################################################
+## simpleRepeats (DONE - 2011-08-31 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/simpleRepeat
+    cd /hive/data/genomes/sacCer3/bed/simpleRepeat
+    doSimpleRepeat.pl -buildDir=`pwd` -smallClusterHub=swarm \
+	-workhorse=hgwdev sacCer3 > do.log 2>&1
+    # about 1 minute 20 seconds
+
+    featureBits sacCer3 simpleRepeat
+    #	110704 bases of 12157105 (0.911%) in intersection
+
+#########################################################################
