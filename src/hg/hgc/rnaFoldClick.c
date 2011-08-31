@@ -372,8 +372,8 @@ if (fileExists(fileName))
 freeMem(seq);
 printf("<p>The UCSC Genome Browser mirror site at the Molecular Diagnostic Laboratory (MDL) at Aarhus University Hospital Skejby in Denmark offers a VARNA Java applet to view the above RNA structure with more options, ");
 printf("<A HREF=\"");
-printf("http://genome-mirror.moma.ki.au.dk/cgi-bin/hgc?db=%s&o=%d&t=%d&g=evofold&i=%s",
-database, item->chromStart, item->chromEnd, cgiEncode(item->name));
+printf("http://genome-mirror.moma.ki.au.dk/cgi-bin/hgc?db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=evofold&i=%s",
+database, item->chrom, item->chromStart, item->chromEnd, item->chromStart, item->chromEnd, cgiEncode(item->name)); // c, l and r are needed because mirror may have no cart for us.  Not actually used, however.
 printf("\" TARGET=_blank>%s</A></p>", "click here to go to genome-mirror.moma.ki.au.dk.");
 }
 
@@ -404,8 +404,8 @@ if (fileExists(fileName))
 freeMem(seq);
 printf("<p>The UCSC Genome Browser mirror site at the Molecular Diagnostic Laboratory (MDL) at Aarhus University Hospital Skejby in Denmark offers a VARNA Java applet to view the above RNA structure with more options, ");
 printf("<A HREF=\"");
-printf("http://genome-mirror.moma.ki.au.dk/cgi-bin/hgc?db=%s&o=%d&t=%d&g=evofoldV2&i=%s",
-database, item->chromStart, item->chromEnd, cgiEncode(item->name));
+printf("http://genome-mirror.moma.ki.au.dk/cgi-bin/hgc?db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=evofoldV2&i=%s",
+database, item->chrom, item->chromStart, item->chromEnd, item->chromStart, item->chromEnd, cgiEncode(item->name));  // c, l and r are needed because mirror may have no cart for us.  Not actually used, however.
 printf("\" TARGET=_blank>%s</A></p>", "click here to go to genome-mirror.moma.ki.au.dk.");
 }
 

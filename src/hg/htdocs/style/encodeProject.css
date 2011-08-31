@@ -2,13 +2,16 @@
 
 /* mostly re-using GB styles */
 /* over-riding alignment so we don't have to nest in a table */
-.topBlueBar {
-    text-align: left;
-}
+
 
 body {
     font-family: arial,Geneva,Helvetica,sans-serif;
 }
+
+.topBlueBar {
+    text-align: left;
+}
+
 
 .encodeHeader {
     color: #004D99;
@@ -24,4 +27,10 @@ body {
 
 .encodeHeader span {
     vertical-align: middle;
+}
+
+
+/*A way to push text down the page*/
+.push {
+    height: 6em;
 }
