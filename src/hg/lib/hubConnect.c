@@ -567,7 +567,7 @@ if (errorMessage != NULL)
     // but there are many, many places where newlines are added in calls
     // to warn and errAbort
     char buffer[4096];
-    safef(buffer, sizeof buffer, errorMessage);
+    safecpy(buffer, sizeof buffer, errorMessage);
     while (lastChar(buffer) == '\n')
 	buffer[strlen(buffer) - 1] = '\0';
     safef(query, sizeof(query),
