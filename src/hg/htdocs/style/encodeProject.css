@@ -34,3 +34,16 @@ body {
 .push {
     height: 6em;
 }
+
+/*General styles*/
+.thick {
+    font-weight:bold;
+}
+
+.under {
+    text-decoration:underline
+}
+
+.center {
+    text-align: center
+}
