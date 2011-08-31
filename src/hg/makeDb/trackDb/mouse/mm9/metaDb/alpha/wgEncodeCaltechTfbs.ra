@@ -1032,21 +1032,21 @@ control Control_50bp
 controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-11
-dateUnrestricted 2012-05-11
+dateSubmitted 2011-08-05
+dateUnrestricted 2012-05-05
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xAlnRep1.bam
 grant Hardison
 lab Caltech-m
-labExpId 11638
-labVersion 11638
-md5sum cacf7e381cbe6ff023c09f60489cb539
+labExpId 11612
+labVersion 11612
+md5sum 94f7681c9cebc9e83db062dca0d8cc5b
 project wgEncode
 protocol PCR1x
 replicate 1
 setType input
 sex F
 strain C3H
-subId 4715
+subId 4448
 treatment Myoblast
 view Alignments
 
@@ -1088,21 +1088,21 @@ control Control_50bp
 controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-11
-dateUnrestricted 2012-05-11
+dateSubmitted 2011-08-05
+dateUnrestricted 2012-05-05
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
-labExpId 11638
-labVersion 11638
-md5sum 48ffea56fb7dec9b36f0f411efb85ae4
+labExpId 11612
+labVersion 11612
+md5sum 3584664c6dd01fd5bae747ee529061be
 project wgEncode
 protocol PCR1x
 replicate 1
 setType input
 sex F
 strain C3H
-subId 4715
+subId 4448
 treatment Myoblast
 view RawData
 
@@ -1144,21 +1144,21 @@ control Control_50bp
 controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-11
-dateUnrestricted 2012-05-11
+dateSubmitted 2011-08-05
+dateUnrestricted 2012-05-05
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
-labExpId 11638
-labVersion 11638
-md5sum cc6884771c7de79555546536f0e84ece
+labExpId 11612
+labVersion 11612
+md5sum 3001478b347637f5d62b9e40d073617c
 project wgEncode
 protocol PCR1x
 replicate 1
 setType input
 sex F
 strain C3H
-subId 4715
+subId 4448
 tableName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep1
 treatment Myoblast
 view Signal
@@ -3300,4 +3300,4 @@ tableName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bMyc60hPcr1xSigRep1
 treatment Myocyte_60h
 view Signal
 
-# MAGIC: -1082582041
+# MAGIC: 1708142360
