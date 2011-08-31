@@ -36,17 +36,29 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct slName *getAllChroms(struct bbiFile *fileList)
+
+static int bbiChromInfoCmpStringsWithEmbeddedNumbers(const void *va, const void *vb)
+/* Compare strings such as gene names that may have embedded numbers,
+ * so that bmp4a comes before bmp14a */
+{
+const struct bbiChromInfo *a = *((struct bbiChromInfo **)va);
+const struct bbiChromInfo *b = *((struct bbiChromInfo **)vb);
+return cmpStringsWithEmbeddedNumbers(a->name, b->name);
+}
+
+struct bbiChromInfo *getAllChroms(struct bbiFile *fileList)
 /* Read chromosomes from all files and make sure they agree, and return merged list. */
 {
 struct bbiFile *file;
 struct hash *hash = hashNew(0);
-struct slName *nameList = NULL;
+struct bbiChromInfo *nameList = NULL;
 for (file = fileList; file != NULL; file = file->next)
     {
-    struct bbiChromInfo *info, *infoList = bbiChromList(file);
-    for (info = infoList; info != NULL; info = info->next)
+    struct bbiChromInfo *info, *next, *infoList = bbiChromList(file);
+    for (info = infoList; info != NULL; info = next)
         {
+	next = info->next;
+
 	struct bbiChromInfo *oldInfo = hashFindVal(hash, info->name);
 	if (oldInfo != NULL)
 	    {
@@ -58,11 +70,11 @@ for (file = fileList; file != NULL; file = file->next)
 	else
 	    {
 	    hashAdd(hash, info->name, info);
-	    slNameAddHead(&nameList, info->name);
+	    slAddHead(&nameList, info);
 	    }
 	}
     }
-slSort(&nameList, slNameCmpStringsWithEmbeddedNumbers);
+slSort(&nameList, bbiChromInfoCmpStringsWithEmbeddedNumbers);
 return nameList;
 }
 
@@ -108,7 +120,7 @@ for (i=0; i<inCount; ++i)
 
 FILE *f = mustOpen(outFile, "w");
 
-struct slName *chrom, *chromList = getAllChroms(inFileList);
+struct bbiChromInfo *chrom, *chromList = getAllChroms(inFileList);
 verbose(1, "Got %d chromosomes from %d bigWigs\nProcessing", 
 	slCount(chromList), slCount(inFileList));
 double *mergeBuf = NULL;
@@ -118,7 +130,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     struct lm *lm = lmInit(0);
 
     /* Make sure merge buffer is big enough. */
-    int chromSize = bbiChromSize(inFileList, chrom->name);
+    int chromSize = chrom->size;
     verboseDot();
     verbose(2, "Processing %s (%d bases)\n", chrom->name, chromSize);
     if (chromSize > mergeBufSize)
