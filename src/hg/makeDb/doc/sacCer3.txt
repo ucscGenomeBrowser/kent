@@ -304,7 +304,7 @@ sacCer3.downloadDir = sacCer3
     #	logFile: var/dbload/hgwdev/logs/2011.08.29-14:16:10.dbload.log
     #	real    10m7.094s
 
-    # enable daily alignment and update of hgwdev (DONE - 2009-02-24 - Hiram)
+    # enable daily alignment and update of hgwdev (DONE - 2011-08-29 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     cvsup
@@ -508,5 +508,106 @@ s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
 
     featureBits sacCer3 simpleRepeat
     #	110704 bases of 12157105 (0.911%) in intersection
+
+#########################################################################
+## Regulatory Code (DONE - 2011-08-31 - Hiram)
+    #	liftOver from sacCer1
+    mkdir /hive/data/genomes/sacCer3/bed/transRegCode
+    cd /hive/data/genomes/sacCer3/bed/transRegCode
+    #	lifting sacCer1 data to this assembly
+    hgsql -N -e "select chrom,chromStart,chromEnd,name,score,chipEvidence,consSpecies from transRegCode" sacCer1 \
+    | liftOver -bedPlus=5 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+	transRegCode.lifted.bed transRegCode.unMapped.bed
+
+    hgsql -N -e "select chrom,chromStart,chromEnd,name,tfCount,tfList,bindVals from transRegCodeProbe;" sacCer1 \
+    | liftOver -bedPlus=4 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+        transRegCodeProbe.lifted.bed transRegCodeProbe.unMapped.bed
+
+    hgLoadBed sacCer3 transRegCode transRegCode.lifted.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
+    #	Loaded 206558 elements of size 7
+    hgLoadBed sacCer3 transRegCodeProbe transRegCodeProbe.lifted.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/transRegCodeProbe.sql -tab
+    #	Loaded 6178 elements of size 7
+
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/transRegCodeCondition.sql
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/transRegCodeMotif.sql
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/growthCondition.sql
+
+    hgsql -N -e "select * from transRegCodeCondition;" sacCer1 \
+    | hgsql sacCer3 -e \
+'load data local infile "/dev/stdin" into table transRegCodeCondition'
+
+    hgsql -N -e "select * from transRegCodeMotif;" sacCer1 \
+    | hgsql sacCer3 -e \
+'load data local infile "/dev/stdin" into table transRegCodeMotif'
+
+    hgsql -N -e "select * from growthCondition;" sacCer1 \
+    | hgsql sacCer3 -e \
+'load data local infile "/dev/stdin" into table growthCondition'
+
+#########################################################################
+# Oreganno track - (DONE - 2011-08-31 - Hiram)
+    #	liftOver from sacCer1 database
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,id,strand,name from oreganno;" sacCer1 \
+    | liftOver -bedPlus=4 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+        oreganno.lifted.bed oreganno.unMapped.bed
+
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/oreganno.sql
+
+    hgLoadBed -oldTable sacCer3 oreganno oreganno.lifted.bed -tab
+    #	Loaded 7299 elements of size 6
+
+    #	and load non-positional tracks from sacCer1:
+    hgsql -N -e "select * from oregannoAttr;" sacCer1 \
+	| hgLoadSqlTab -oldTable sacCer3 oregannoAttr \
+	    ~/humPhen/kent/src/hg/lib/oreganno.sql stdin
+    hgsql -N -e "select * from oregannoLink;" sacCer1 \
+	| hgLoadSqlTab -oldTable sacCer3 oregannoLink \
+	    ~/humPhen/kent/src/hg/lib/oreganno.sql stdin
+
+#########################################################################
+# Regulatory Module - (DONE - 2011-08-31 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/regModule
+    cd /hive/data/genomes/sacCer3/bed/regModule
+    #	liftOver data from sacCer1
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,name,score,strand from esRegUpstreamRegion;" \
+	sacCer1 | liftOver -bedPlus=6 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+        esRegUpstreamRegion.lifted.bed esRegUpstreamRegion.unMapped.bed
+
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,name,score,strand,gene from esRegGeneToMotif;" \
+	sacCer1 | liftOver -bedPlus=6 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+        esRegGeneToMotif.lifted.bed esRegGeneToMotif.unMapped.bed
+
+    #	I do not see instructions in sacCer1 to create these tables,
+    #	so, dump their schemas:
+    hgsqldump --all -c -d --tab=. sacCer1 esRegUpstreamRegion esRegGeneToMotif
+    #	and data for these other two:
+    chmod 777 .
+    hgsqldump --all -c --tab=. sacCer1 esRegGeneToModule esRegMotif
+    chmod 775 .
+
+    hgsql sacCer3 < esRegGeneToMotif.sql
+
+    hgLoadBed sacCer3 esRegGeneToMotif -sqlTable=esRegGeneToMotif.sql -tab \
+	esRegGeneToMotif.lifted.bed
+    #	Loaded 4002 elements of size 7
+    hgLoadBed sacCer3 esRegUpstreamRegion -sqlTable=esRegUpstreamRegion.sql \
+	-tab esRegUpstreamRegion.lifted.bed
+    #	Loaded 1670 elements of size 6
+    hgsql sacCer3 < esRegMotif.sql
+    hgsql sacCer3 -e \
+'load data local infile "esRegMotif.txt" into table esRegMotif;'
+    hgsql sacCer3 < esRegGeneToModule.sql
+    hgsql sacCer3 -e \
+'load data local infile "esRegGeneToModule.txt" into table esRegGeneToModule;'
 
 #########################################################################
