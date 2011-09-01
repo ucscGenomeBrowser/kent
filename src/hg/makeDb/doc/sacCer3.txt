@@ -759,4 +759,110 @@ lastz.csh $(path1) $(path2) $(root1).$(root2) {check out exists+ psl/$(root1).$(
 # Longest finished job:             328s       5.47m     0.09h    0.00d
 # Submission to last job:           468s       7.80m     0.13h    0.01d
 
+    mkdir -p axtChain/run
+    cd axtChain/run
+    ls ../../../fasta | sed -e "s/.fa//" > species.list
+    ls ../../../sacCer3 | sed -e "s/.fa//" > chrom.list
+
+    cat << '_EOF_' > chain.csh
+#!/bin/csh -ef
+set S = $1
+set C = $2
+set IN = ../../psl/${C}.${S}.psl.gz
+set OUT = ${S}/${C}.chain
+mkdir -p ${S}
+zcat ${IN} \
+| axtChain -psl -verbose=0  -minScore=1000 -linearGap=medium stdin \
+    /hive/data/genomes/sacCer3/sacCer3.2bit \
+    -faQ ../../../fasta/${S}.fa stdout \
+| chainAntiRepeat /hive/data/genomes/sacCer3/sacCer3.2bit \
+    ../../../2bit/${S}.2bit stdin ${OUT}
+'_EOF_'
+    # << happy emacs
+    chmod +x chain.csh
+
+    cat << '_EOF_' > template
+#LOOP
+chain.csh $(path1) $(path2) {check out line+ $(root1)/$(root2).chain}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 species.list chrom.list template jobList
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 544 of 544 jobs
+# CPU time in finished jobs:        639s      10.65m     0.18h    0.01d  0.000 y
+# IO & Wait Time:                  2789s      46.48m     0.77h    0.03d  0.000 y
+# Average job time:                   6s       0.11m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:            64s       1.07m     0.02h    0.00d
+
+    #	merge the individual results
+    cd /hive/data/genomes/sacCer3/bed/strains/align/axtChain
+    foreach S (`cat run/species.list`)
+echo $S
+find ./run/${S} -name "*.chain" \
+    | chainMergeSort -inputList=stdin | gzip -c > sacCer3.${S}.all.chain.gz
+end
+    #	split them again to get consistent chain ID numbering
+    foreach S (`cat run/species.list`)
+echo $S
+chainSplit chain.${S} sacCer3.${S}.all.chain.gz
+end
+
+    #	netting the chains
+    cat << '_EOF_' > netChains.csh
+#!/bin/csh -ef
+
+set S0 = "../../../../chrom.sizes"
+
+foreach S (`cat run/species.list`)
+    echo $S
+    chainPreNet sacCer3.${S}.all.chain.gz ${S0} ../sizes/${S} stdout \
+    | chainNet stdin -minSpace=1 ${S0} ../sizes/${S} stdout /dev/null \
+        | netSyntenic stdin noClass.${S}.net
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x netChains.csh
+    time ./netChains.csh
+    #	real    0m14.122s
+
+    # construct MAF files
+    cat << '_EOF_' > mkMafs.csh
+#!/bin/csh -ef
+
+set TOP = `pwd`
+set S0 = "/hive/data/genomes/sacCer3/chrom.sizes"
+
+foreach S (`cat run/species.list`)
+    cd ${TOP}
+    # Make axtNet for download: one .axt per sacCer3 seq.
+    netSplit noClass.${S}.net net.${S}
+    cd ..
+    rm -fr axtNet.${S}
+    mkdir axtNet.${S}
+    foreach f (axtChain/net.${S}/*.net)
+    netToAxt $f axtChain/chain.${S}/$f:t:r.chain \
+      /hive/data/genomes/sacCer3/sacCer3.2bit ../2bit/${S}.2bit stdout \
+      | axtSort stdin stdout \
+      | gzip -c > axtNet.${S}/$f:t:r.sacCer3.${S}.net.axt.gz
+    end
+
+    # Make mafNet for multiz: one .maf per sacCer3 seq.
+    rm -fr mafNet.${S}
+    mkdir mafNet.${S}
+    foreach f (axtNet.${S}/*.sacCer3.${S}.net.axt.gz)
+      axtToMaf -tPrefix=sacCer3. -qPrefix=${S}. $f \
+            ${S0} ../sizes/${S} stdout \
+      | gzip -c > mafNet.${S}/$f:t:r:r:r:r:r.maf.gz
+    end
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x mkMafs.csh
+    time ./mkMafs.csh
+    #	real    7m16.117s
+
 #########################################################################
