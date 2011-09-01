@@ -3597,6 +3597,23 @@ if (!psOutput)
         }
     }
 
+if (!psOutput)
+    {
+    if (wikiLinkEnabled())
+        {
+        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
+        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
+        cartSessionVarName(), cartSessionId(cart));
+        }
+    }
+
+if (!psOutput)
+    {
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
+        cartSessionId(cart), "PDF/PS");
+    }
+
+
 char ensVersionString[256];
 char ensDateReference[256];
 ensGeneTrackVersion(database, ensVersionString, ensDateReference,
@@ -3792,21 +3809,6 @@ if (!psOutput)
         }
     }
 
-if (!psOutput)
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
-        cartSessionId(cart), "PDF/PS");
-    }
-
-if (!psOutput)
-    {
-    if (wikiLinkEnabled())
-        {
-        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
-        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
-        cartSessionVarName(), cartSessionId(cart));
-        }
-    }
 if (hIsGisaidServer())
     {
     //hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"/goldenPath/help/gisaidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
@@ -3821,6 +3823,7 @@ else
     {
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
     }
+
 hPuts("<TD colspan=20>&nbsp;</TD></TR></TABLE></TD>");
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
