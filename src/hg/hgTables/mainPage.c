@@ -469,7 +469,7 @@ nbSpaces(2);
 cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
     "checkboxGreat",
     "onclick=\"return onSelectGreat();\"");
-hPrintf(" <A HREF=\"http://great.stanford.edu/help/index.php/Main_Page\" target=_BLANK>GREAT</A>");
+hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
 hPrintf("</TD></TR>\n");
 }
 
