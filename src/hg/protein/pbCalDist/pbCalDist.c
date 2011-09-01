@@ -314,7 +314,7 @@ for (i=0; i<strlen(aaAlphabet); i++)
     }
 
 /* write out residue count distribution */
-for (i=0; i<NUM_STANDARD_AAS; i++)
+for (i=0; i<NUM_STANDARD_AMINO_ACIDS; i++)
     {
     aaResCntDouble[i] = ((double)aaResCnt[i])/((double)totalResCnt);
     fprintf(o2, "%d\t%f\n", i+1, (float)aaResCntDouble[i]);

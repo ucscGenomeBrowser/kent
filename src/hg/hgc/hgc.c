@@ -23124,7 +23124,7 @@ if (gotExtra)
 		chp--;
 		chp--;
 		*chp = '\0';
-		printf(" (<A HREF=\"http://www.komp.org/geneinfo.php?project=%s\" target=_blank>",
+		printf(" (<A HREF=\"http://www.knockoutmouse.org/search_results?criteria=%s\" target=_blank>",
 		       ++ptr);
 		printf("order %s)", productStr);fflush(stdout);
 		}
