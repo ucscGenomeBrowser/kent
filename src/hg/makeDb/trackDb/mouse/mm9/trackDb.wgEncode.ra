@@ -7,7 +7,7 @@ include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.newR2.ra alpha
 
 # Stan/Yale Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra
+include wgEncodeSydhHist.ra
 
 # UW DNaseI HS (wrangler: Venkat)
 include wgEncodeUwDnase.ra beta,public
