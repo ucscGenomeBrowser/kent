@@ -568,7 +568,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsAstrocyDukeRawDataRep1
 objType file
-cell Astrocy
+cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
@@ -590,7 +590,7 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsAstrocyDukeRawDataRep2
 objType file
-cell Astrocy
+cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
@@ -611,8 +611,9 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
-objType table
-cell Astrocy
+objType file
+attic supExp
+cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
@@ -636,7 +637,8 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2
 objType table
-cell Astrocy
+attic supExp
+cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
@@ -9447,4 +9449,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -1778430650
+# MAGIC: -1779744756
