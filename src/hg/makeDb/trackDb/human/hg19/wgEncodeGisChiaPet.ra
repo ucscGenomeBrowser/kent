@@ -17,6 +17,40 @@ priority 0
 wgEncode on
 type bed 12
 
+    track wgEncodeGisChiaPetSignal
+    shortLabel Signal
+    view Signal
+    visibility full
+    subTrack wgEncodeGisChiaPet
+    maxHeightPixels 100:24:16
+    minLimit .005
+    maxLimit 25183
+    viewLimits 0:30
+    autoScale off 
+    transformFunc NONE
+    windowingFunction mean+whiskers
+
+
+    track wgEncodeGisChiaPetAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility hide
+    subTrack wgEncodeGisChiaPet
+    type bam
+    pairEndsByName on
+    showNames off
+    noColorTag .
+    bamColorMode gray
+    bamGrayMode aliQual
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    #maxWindowToDraw 1000000
+
+
 	track wgEncodeGisChiaPetInteractions	
         parent wgEncodeGisChiaPet
         shortLabel Interactions

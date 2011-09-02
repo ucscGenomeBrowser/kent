@@ -47,7 +47,7 @@ superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl RRBS
 longLabel DNA Methylation by Reduced Representation Bisulfite Seq from ENCODE/HudsonAlpha
 group regulation
-subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BE2C=BE2C BJ=BJ CMK=CMK Caco2=Caco2 ECC1=ECC-1 Fibrobl=Fibrobl GM06990=GM06990 GM12878XiMat=GM12878-Xi-Mat GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HL60=HL60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTR8=HTR-8 Hepatocytes=Hepatocytes IMR90=IMR90  Jurkat=Jurkat LNCaP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 ovcar3=ovcar3 Osteobl=Osteoblast PANC1=PANC-1 PFSK1=PFSK-1 PanIslets=PanIslets PrEC=PrEC ProgFib=ProgFib RPTEC=RPTEC SAEC=SAEC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA SKMC=SKMC SKNMC=SK-N-MC T47D=T-47D U87=U87 BCAdrenalGlandH12803N=BCAdrenalGlandH12803N BCBrainH11058N=BCBrainH11058N BCBreast0203015=BCBreast0203015 BCKidney0111002=BCKidney0111002 BCLeftVentricleN41=BCLeftVentricleN41 BCLeukocyteUHN00204=BCLeukocyteUHN00204 BCLiver0111002=BCLiver0111002 BCLung0111002=BCLung0111002 BCPancreasH12817N=BCPancreasH12817N BCPericardiumH12529N=BCPericardiumH12529N BCPlacentaUHN00189=BCPlacentaUHN00189 BCSkeletalMuscle0111002=BCSkeletalMuscle0111002 BCSkeletalMuscleH12817N=BCSkeletalMuscleH12817N BCSkin0111002=BCSkin0111002 BCStomach0111002=BCStomach0111002 BCTestisN30=BCTestisN30 BCUterusBN0765=BCUterusBN0765
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2C BJ=BJ CMK=CMK Caco2=Caco2 ECC1=ECC-1 Fibrobl=Fibrobl GM06990=GM06990 GM12878XiMat=GM12878-Xi-Mat GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HL60=HL60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTR8=HTR-8 Hepatocytes=Hepatocytes IMR90=IMR90  Jurkat=Jurkat LNCaP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NHA NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 ovcar3=ovcar3 Osteobl=Osteoblast PANC1=PANC-1 PFSK1=PFSK-1 PanIslets=PanIslets PrEC=PrEC ProgFib=ProgFib RPTEC=RPTEC SAEC=SAEC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA SKMC=SKMC SKNMC=SK-N-MC T47D=T-47D U87=U87 BCAdrenalGlandH12803N=BCAdrenalGlandH12803N BCBrainH11058N=BCBrainH11058N BCBreast0203015=BCBreast0203015 BCKidney0111002=BCKidney0111002 BCLeftVentricleN41=BCLeftVentricleN41 BCLeukocyteUHN00204=BCLeukocyteUHN00204 BCLiver0111002=BCLiver0111002 BCLung0111002=BCLung0111002 BCPancreasH12817N=BCPancreasH12817N BCPericardiumH12529N=BCPericardiumH12529N BCPlacentaUHN00189=BCPlacentaUHN00189 BCSkeletalMuscle0111002=BCSkeletalMuscle0111002 BCSkeletalMuscleH12817N=BCSkeletalMuscleH12817N BCSkin0111002=BCSkin0111002 BCStomach0111002=BCStomach0111002 BCTestisN30=BCTestisN30 BCUterusBN0765=BCUterusBN0765
 #subGroup2 view View Sites=Sites
 subGroup2 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 
 subGroup3 treatment Treatment zNone=None ANDRO=Methyltrienolone(androgen) TAM=4-hydroxytamoxifen DM002P24H=DMSO EST10NM24H=Estradiol
@@ -204,20 +204,21 @@ html wgEncodeHaibMethylRrbs.new
         type bed 9
         # subId=3159 dateSubmitted=2011-01-06
 
-        track wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
-        parent wgEncodeHaibMethylRrbs off
-        shortLabel Astrocy 1
-        longLabel Astrocy Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
-        subGroups cellType=Astrocy obtainedBy=Duke treatment=zNone rep=rep1
-        type bed 9
+        #These are going to the attic because UW already submitted NHA, these were submitted as Astrocy but are the same as NHA
+        #track wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
+        #parent wgEncodeHaibMethylRrbs off
+        #shortLabel NHA 1
+        #longLabel NHA Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+        #subGroups cellType=NHA obtainedBy=Duke treatment=zNone rep=rep1
+        #type bed 9
         # subId=3159 dateSubmitted=2011-01-06
 
-        track wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2
-        parent wgEncodeHaibMethylRrbs off
-        shortLabel Astrocy 2
-        longLabel Astrocy Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
-        subGroups cellType=Astrocy obtainedBy=Duke treatment=zNone rep=rep2
-        type bed 9
+        #track wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2
+        #parent wgEncodeHaibMethylRrbs off
+        #shortLabel NHA 2
+        #longLabel NHA Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        #subGroups cellType=NHA obtainedBy=Duke treatment=zNone rep=rep2
+        #type bed 9
         # subId=3159 dateSubmitted=2011-01-06
 
         track wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep1
