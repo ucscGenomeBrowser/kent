@@ -8408,20 +8408,11 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 8/1/11 angie)
-# Updated 6/9/11
-# Updated 4/1/11 (last one to use snp131)
-# Updated 3/1/11
-# Updated 2/1/11
-# Updated 12/7/10
-# Updated 11/1/10
-# Updated 10/6/10
-# Updated 9/1/10
-# Updated 8/2/10
-# Updated 6/2/10
-# Updated 5/12/10 (last one to use snp130)
-# Updated 4/1/10
-# Updated 3/1/10
+# NHGRI GWAS CATALOG (DONE 9/2/11 angie)
+# NEXT TIME: use snp134 and squelch multiple-mappers!
+# Updated 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
+# Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
+# Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
@@ -8440,7 +8431,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 6717 elements of size 22
+#Loaded 7096 elements of size 22
 
 
 ######################################################################## 
@@ -16526,6 +16517,7 @@ liftUp /hive/data/genomes/hg19/jkStuff/liftContigs.lft
 refAssemblyLabel GRCh37.p2
 ignoreDbSnpContigs NW_0033159[0-9][0-9]
 EOF
+    # << emacs
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
 
 
