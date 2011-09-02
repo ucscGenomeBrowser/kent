@@ -1050,34 +1050,6 @@ subId 4448
 treatment Myoblast
 view Alignments
 
-metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xAlnRep2
-objType file
-age immortalized
-antibody Input
-cell C2C12
-composite wgEncodeCaltechTfbs
-control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-11
-dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xAlnRep2.bam
-grant Hardison
-lab Caltech-m
-labExpId 11670
-labVersion 11670
-md5sum 26200ae1ed9a258677ba647287b1dbd4
-project wgEncode
-protocol PCR1x
-replicate 2
-setType input
-sex F
-strain C3H
-subId 4717
-treatment Myoblast
-view Alignments
-
 metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xRawDataRep1
 objType file
 age immortalized
@@ -1116,9 +1088,37 @@ control Control_50bp
 controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-11
-dateUnrestricted 2012-05-11
+dateSubmitted 2011-09-01
+dateUnrestricted 2012-06-01
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xRawDataRep2.fastq.gz
+grant Hardison
+lab Caltech-m
+labExpId 11638
+labVersion 11638
+md5sum 48ffea56fb7dec9b36f0f411efb85ae4
+project wgEncode
+protocol PCR1x
+replicate 2
+setType input
+sex F
+strain C3H
+subId 4715
+treatment Myoblast
+view RawData
+
+metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xRawDataRep3
+objType file
+age immortalized
+antibody Input
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_50bp
+controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-02
+dateUnrestricted 2012-06-01
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xRawDataRep3.fastq.gz
 grant Hardison
 lab Caltech-m
 labExpId 11670
@@ -1126,7 +1126,7 @@ labVersion 11670
 md5sum 0d12b8a2789e6c1523752773db41bd20
 project wgEncode
 protocol PCR1x
-replicate 2
+replicate 3
 setType input
 sex F
 strain C3H
@@ -1173,9 +1173,38 @@ control Control_50bp
 controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-11
-dateUnrestricted 2012-05-11
+dateSubmitted 2011-09-01
+dateUnrestricted 2012-06-01
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep2.bigWig
+grant Hardison
+lab Caltech-m
+labExpId 11638
+labVersion 11638
+md5sum cc6884771c7de79555546536f0e84ece
+project wgEncode
+protocol PCR1x
+replicate 2
+setType input
+sex F
+strain C3H
+subId 4715
+tableName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep2
+treatment Myoblast
+view Signal
+
+metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep3
+objType table
+age immortalized
+antibody Input
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_50bp
+controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-02
+dateUnrestricted 2012-06-01
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep3.bigWig
 grant Hardison
 lab Caltech-m
 labExpId 11670
@@ -1183,12 +1212,12 @@ labVersion 11670
 md5sum f9f74e100d8054bbf501b695a0d397db
 project wgEncode
 protocol PCR1x
-replicate 2
+replicate 3
 setType input
 sex F
 strain C3H
 subId 4717
-tableName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep2
+tableName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep3
 treatment Myoblast
 view Signal
 
@@ -2044,6 +2073,92 @@ strain C3H
 subId 4710
 tableName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMybPcr2xSigRep1
 treatment Myoblast
+view Signal
+
+metaObject wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xPkRep1
+objType table
+age immortalized
+antibody Myogenin_(sc-12732)
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_32bp
+controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-01
+dateUnrestricted 2012-06-01
+fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xPkRep1.narrowPeak.gz
+grant Hardison
+lab Caltech-m
+labExpId 10150
+labVersion 10150
+md5sum ebd6a75dde6536d6e79a2350c64dc723
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+sex F
+strain C3H
+subId 4450
+tableName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xPkRep1
+treatment Myocyte_24h
+view Peaks
+
+metaObject wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xRawDataRep1
+objType file
+age immortalized
+antibody Myogenin_(sc-12732)
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_32bp
+controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-01
+dateUnrestricted 2012-06-01
+fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xRawDataRep1.fastq.tgz
+grant Hardison
+lab Caltech-m
+labExpId 10150
+labVersion 10150
+md5sum fc91ba265f483938fe3bae1473d362ca,be92ef9736275606984ebcfe4179361a,341647bc78352d3e3160b039fcd1a617,600eb727a483764b46d9e2daf6b039c9,1c436e97e0485b3ee0df1df829e1ef29,352bd4c325bd879e83eda00db4a7c427
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+sex F
+strain C3H
+subId 4450
+treatment Myocyte_24h
+view RawData
+
+metaObject wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xSigRep1
+objType table
+age immortalized
+antibody Myogenin_(sc-12732)
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_32bp
+controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-01
+dateUnrestricted 2012-06-01
+fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xSigRep1.bigWig
+grant Hardison
+lab Caltech-m
+labExpId 10150
+labVersion 10150
+md5sum 84952444a3193cc40dfb19c74045ad10
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+sex F
+strain C3H
+subId 4450
+tableName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xSigRep1
+treatment Myocyte_24h
 view Signal
 
 metaObject wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc60hPcr2xAlnRep1
@@ -3300,4 +3415,4 @@ tableName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bMyc60hPcr1xSigRep1
 treatment Myocyte_60h
 view Signal
 
-# MAGIC: 1708142360
+# MAGIC: 1421334014
