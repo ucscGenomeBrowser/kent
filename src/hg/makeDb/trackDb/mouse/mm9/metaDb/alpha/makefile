@@ -1,6 +1,6 @@
 
 LIST=\
-wgEncodeSydhHistone.ra \
+wgEncodeSydhHist.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUwDnase.ra \
 wgEncodeLicrHistone.ra \
