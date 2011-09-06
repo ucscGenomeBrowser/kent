@@ -1047,23 +1047,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Stam:BJ_Stam_protocol.pdf
-
-term CD20+
-tag CD20
-type Cell Line
-tier 3
-organism human
-description Human B cells.
-lineage missing
-karyotype missing
-sex F
-tissue Blood
-vendorName Heimfeld Lab, FHCRC
-vendorId CD20+
-orderUrl http://labs.fhcrc.org/heimfeld/index.html
-termId BTO:0000776
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol Stam:CD20+_Stam_protocol.pdf
+#Commented out Sept 6 2011 ~JCL
+#term CD20+
+#tag CD20
+#type Cell Line
+#tier 3
+#organism human
+#description Human B cells.
+#lineage missing
+#karyotype missing
+#sex F
+#tissue Blood
+#vendorName Heimfeld Lab, FHCRC
+#vendorId CD20+
+#orderUrl http://labs.fhcrc.org/heimfeld/index.html
+#termId BTO:0000776
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
+#protocol Stam:CD20+_Stam_protocol.pdf
 
 term CD20+_RO01778
 tag CD20RO01778
