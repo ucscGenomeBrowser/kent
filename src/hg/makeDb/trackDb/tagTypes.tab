@@ -52,6 +52,7 @@ chromosomes *
 codingAnnoLabel_snp130CodingDbSnp bed
 codingAnnoLabel_snp131CodingDbSnp bed
 codingAnnoLabel_snp132CodingDbSnp bed
+codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
 color *
 colorByStrand bigBed bed
