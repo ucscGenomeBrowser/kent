@@ -5,7 +5,7 @@ longLabel RNA Binding Protein Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 group regulation
 superTrack wgEncodeRbpSuper dense
 subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna
-subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2)
+subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2)
 subGroup3 factor Antibody_Target  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=RIP-Input
 dimensions dimensionX=factor dimensionY=cellType
 sortOrder cellType=+ factor=+ 
@@ -174,7 +174,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	subTrack wgEncodeSunyAlbanyGeneStView off
 	shortLabel HepG2 RIP-Input
 	longLabel HepG2 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-	subGroups view=RbpAssocRna cellType=2HepG2 factor=ripInput
+	subGroups view=RbpAssocRna cellType=2HEPG2 factor=ripInput
         origAssembly hg18
 	type broadPeak
 	color 189,0,157
@@ -226,7 +226,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	parent wgEncodeSunyAlbanyGeneStView off
 	shortLabel HepG2 T7Tag
 	longLabel HepG2 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-	subGroups view=RbpAssocRna cellType=2HepG2 factor=T7Tag
+	subGroups view=RbpAssocRna cellType=2HEPG2 factor=T7Tag
         origAssembly hg18
 	type broadPeak
 	color 189,0,157
@@ -237,7 +237,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	parent wgEncodeSunyAlbanyGeneStView off
 	shortLabel HepG2 PABPC1
 	longLabel HepG2 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-	subGroups view=RbpAssocRna cellType=2HepG2 factor=PABPC1
+	subGroups view=RbpAssocRna cellType=2HEPG2 factor=PABPC1
         origAssembly hg18
 	type broadPeak
 	color 189,0,157
@@ -247,7 +247,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	parent wgEncodeSunyAlbanyGeneStView off
 	shortLabel HepG2 ELAVL1
 	longLabel HepG2 ELAVL1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-	subGroups view=RbpAssocRna cellType=2HepG2 factor=ELAVL1
+	subGroups view=RbpAssocRna cellType=2HEPG2 factor=ELAVL1
         origAssembly hg18
 	type broadPeak
 	color 189,0,157
