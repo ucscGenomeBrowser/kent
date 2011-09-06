@@ -29904,6 +29904,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum bam=50880a93051766c219a91708626d5857,bai=e30ebd50584c8613cf413abd4ec148fb
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -29957,6 +29958,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 08ae3a5f7d3a3632df386628087d0e95
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -30010,6 +30012,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 4ff5736682fcda748d29c31ef122b3a3
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -30062,6 +30065,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 3031bfe034d268676a087bfd5507b24c
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -44196,4 +44200,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -2031324910
+# MAGIC: -1991127926
