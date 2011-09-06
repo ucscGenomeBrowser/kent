@@ -5523,21 +5523,21 @@ lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
 validation FOSL1_(SC-183)(Western_blot,IP-MassSpec):human_FOSL1-SC183_validation_Myers.pdf
-#Not approved yet. ~Jeff
-#term FOSL1_(sc-605)
-#tag FOSL1SC605
-#type Antibody
-#antibodyDescription Rabbit polyclonal antibody raised against the N-terminus of FOSL1 of rat origin.
-#target FOSL1
-#targetDescription The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2. These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1. As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
-#vendorName Santa Cruz Biotech
-#vendorId sc-605
-#orderUrl http://www.scbt.com/datasheet-605-fra-1-r-20-antibody.html
-#lab Wold
-#lots G0109
-#targetId Genecard:FOSL1
-#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-#validation missing
+
+term FOSL1_(sc-605)
+tag FOSL1SC605
+type Antibody
+antibodyDescription Rabbit polyclonal antibody raised against the N-terminus of FOSL1 of rat origin.
+target FOSL1
+targetDescription The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2. These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1. As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-605
+orderUrl http://www.scbt.com/datasheet-605-fra-1-r-20-antibody.html
+lab Wold
+lots G0109
+targetId Genecard:FOSL1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
+validation missing
 
 term FOSL2
 tag FOSL2
@@ -10994,15 +10994,17 @@ cvDefined yes
 validate cv
 priority 160
 
-term run
-tag RUN
-type typeOfTerm
-label Sequencing Run
-description Sequencing run
-searchable multiSelect
-cvDefined no
-validate regex: ^[0-9]*r[0-9]*$
-priority 500
+#term run
+#tag RUN
+#type typeOfTerm
+#label Sequencing Run
+#description Sequencing run
+#searchable multiSelect
+#cvDefined no
+#validate regex: ^[0-9]*r[0-9]*$
+#priority 500
+#This term was for the fastqs being submitted as separate lanes.  However, we are now bundling them as a tgz
+#We should remove this term  Sept 2 2011
 
 term seqPlatform
 tag SEQPLATFORM
