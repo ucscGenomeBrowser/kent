@@ -197,16 +197,16 @@ function setPosition(position, size)
     var pos = parsePosition(position);
     if(pos) {
         // fixup external static links on page'
-        
+
         // Example ensembl link: http://www.ensembl.org/Homo_sapiens/contigview?chr=21&start=33031934&end=33041241
         linkFixup(pos, "ensemblLink", new RegExp("(.+start=)[0-9]+"), "end");
 
         // Example NCBI link: http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
         linkFixup(pos, "ncbiLink", new RegExp("(.+BEG=)[0-9]+"), "END");
-              
+
         // Example medaka link: http://utgenome.org/medakabrowser_ens_jump.php?revision=version1.0&chr=chromosome18&start=14435198&end=14444829
         linkFixup(pos, "medakaLink", new RegExp("(.+start=)[0-9]+"), "end");
-        
+
         if($('#wormbaseLink').length) {
             // e.g. http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=II:14646301-14667800
             var link = $('#wormbaseLink').attr('href');
@@ -1215,7 +1215,11 @@ jQuery.fn.panImages = function(){
         var portalScrolledX  = (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel) + newOffsetX;
         var recalculate = false;
 
-        var newPortalStart = closedPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
+        var newPortalStart = 0;
+        if (hgTracks.revCmplDisp)
+            newPortalStart = closedPortalStart + Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, so do bases seen.
+        else
+            newPortalStart = closedPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
         if( newPortalStart < hgTracks.chromStart && bounded) {     // Stay within bounds
             newPortalStart = hgTracks.chromStart;
             recalculate = true;

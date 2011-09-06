@@ -13,7 +13,7 @@ D) Additional items of note
 Summary total counts for release1 (new+untouched):
     Tables: 8
     Files: 19
-    Gbdbs: 8
+    Gbdbs: 12
 
 A) Untouched Tables (0):
 
@@ -33,7 +33,7 @@ wgEncodeSydhRnaSeqK562Ifng30PolyaRaw
 wgEncodeSydhRnaSeqK562Ifng6hPolyaAln
 wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw
 
-C') New files (16 downloadables, 8 gbdbs):
+C') New files (16 downloadables, 12 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhRnaSeq/release1/
     NOT on RR but must be placed in:
@@ -56,9 +56,9 @@ C') New files (16 downloadables, 8 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhRnaSeq/release1/wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhRnaSeq/release1/wgEncodeSydhRnaSeqK562Ifng6hPolyaRawData.fastq.gz
 
-/gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifna30PolyaRaw.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifna30PolyaAln.bam
 /gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifna30PolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifna30PolyaRaw.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifna6hPolyaAln.bam
 /gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifna6hPolyaAln.bam.bai
 /gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifna6hPolyaRaw.bigWig
@@ -67,6 +67,7 @@ C') New files (16 downloadables, 8 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifng30PolyaRaw.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifng6hPolyaAln.bam
 /gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifng6hPolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw.bigWig
 
 D) Additional items:
     current location on alpha:
@@ -74,6 +75,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSydhRnaSeq/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhRnaSeq/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhRnaSeq/release1/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhRnaSeq/release1/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhRnaSeq/release1/md5sum.txt

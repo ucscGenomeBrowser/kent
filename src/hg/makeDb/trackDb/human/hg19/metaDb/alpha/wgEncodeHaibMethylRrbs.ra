@@ -566,77 +566,10 @@ tableName wgEncodeHaibMethylRrbsAosmcDukeSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsAstrocyDukeRawDataRep1
-objType file
-cell Astrocy
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-21
-dateUnrestricted 2011-12-21
-dccAccession wgEncodeEH001383
-expId 1383
-fileName wgEncodeHaibMethylRrbsAstrocyDukeRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL763
-md5sum a9fe8097d7d278adf9ff34bc058078a6
-obtainedBy Duke
-project wgEncode
-replicate 1
-subId 3819
-treatment None
-view RawData
-
-metaObject wgEncodeHaibMethylRrbsAstrocyDukeRawDataRep2
-objType file
-cell Astrocy
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-21
-dateUnrestricted 2011-12-21
-dccAccession wgEncodeEH001383
-expId 1383
-fileName wgEncodeHaibMethylRrbsAstrocyDukeRawDataRep2.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL3544
-md5sum c5975554ae44e05c58df550cd7b141d1
-obtainedBy Duke
-project wgEncode
-replicate 2
-subId 3822
-treatment None
-view RawData
-
-metaObject wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
-objType table
-cell Astrocy
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-06
-dateUnrestricted 2011-10-06
-dccAccession wgEncodeEH001383
-expId 1383
-fileName wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683765
-grant Myers
-lab HudsonAlpha
-labExpId SL763
-md5sum 605e12b1e3960f1a6031065c8a9a5dfb
-obtainedBy Duke
-project wgEncode
-replicate 1
-subId 3159
-tableName wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2
 objType table
-cell Astrocy
+attic supExp
+cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
@@ -7249,6 +7182,75 @@ tableName wgEncodeHaibMethylRrbsNb4UwSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsNhaDukeRawDataRep1
+objType file
+cell NH-A
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-12-21
+dccAccession wgEncodeEH001383
+expId 1383
+fileName wgEncodeHaibMethylRrbsNhaDukeRawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL763
+md5sum a9fe8097d7d278adf9ff34bc058078a6
+obtainedBy Duke
+project wgEncode
+replicate 1
+subId 3819
+treatment None
+view RawData
+
+metaObject wgEncodeHaibMethylRrbsNhaDukeRawDataRep2
+objType file
+cell NH-A
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-12-21
+dccAccession wgEncodeEH001383
+expId 1383
+fileName wgEncodeHaibMethylRrbsNhaDukeRawDataRep2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3544
+md5sum c5975554ae44e05c58df550cd7b141d1
+obtainedBy Duke
+project wgEncode
+replicate 2
+subId 3822
+treatment None
+view RawData
+
+metaObject wgEncodeHaibMethylRrbsNhaDukeSitesRep1
+objType file
+attic supExp
+cell NH-A
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+dccAccession wgEncodeEH001383
+expId 1383
+fileName wgEncodeHaibMethylRrbsNhaDukeSitesRep1.bedRrbs.gz
+geoSampleAccession GSM683765
+grant Myers
+lab HudsonAlpha
+labExpId SL763
+md5sum 605e12b1e3960f1a6031065c8a9a5dfb
+obtainedBy Duke
+project wgEncode
+replicate 1
+subId 3159
+tableName wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsNhaUwRawDataRep1
 objType file
 cell NH-A
@@ -9447,4 +9449,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -1778430650
+# MAGIC: 1173042488
