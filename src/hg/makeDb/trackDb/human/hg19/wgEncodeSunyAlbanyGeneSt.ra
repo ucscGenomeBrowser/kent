@@ -5,8 +5,7 @@ longLabel RNA Binding Protein Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 group regulation
 superTrack wgEncodeRbpSuper dense
 subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna
-subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 
-1HeLaS3=HeLa-S3&nbsp;(Tier_2) 1HepG2=HepG2&nbsp;(Tier_2)
+subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 1HeLaS3=HeLa-S3&nbsp;(Tier_2) 1HepG2=HepG2&nbsp;(Tier_2)
 subGroup3 factor Antibody_Target  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=RIP-Input
 dimensions dimensionX=factor dimensionY=cellType
 sortOrder cellType=+ factor=+ 
@@ -250,7 +249,7 @@ noInherit on
 	parent wgEncodeSunyAlbanyGeneStView off
 	shortLabel H1-hESC RIP-Input
 	longLabel H1-hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-	subGroups view=RbpAssocRna factor=ripInput cellType=1H1-hESC
+	subGroups view=RbpAssocRna factor=ripInput cellType=1H1HESC
         origAssembly hg18
 	type broadPeak
 	color 0,107,27
@@ -261,7 +260,7 @@ noInherit on
 	parent wgEncodeSunyAlbanyGeneStView off
 	shortLabel H1-hESC T7Tag
 	longLabel H1-hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-	subGroups view=RbpAssocRna factor=T7Tag cellType=1H1-hESC
+	subGroups view=RbpAssocRna factor=T7Tag cellType=1H1HESC
         origAssembly hg18
 	type broadPeak
 	color 0,107,27
@@ -271,7 +270,7 @@ noInherit on
 	parent wgEncodeSunyAlbanyGeneStView on
 	shortLabel H1-hESC ELAVL1
 	longLabel H1-hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-	subGroups view=RbpAssocRna factor=ELAVL1 cellType=1H1-hESC
+	subGroups view=RbpAssocRna factor=ELAVL1 cellType=1H1HESC
         origAssembly hg18
 	type broadPeak
 	color 0,107,27
