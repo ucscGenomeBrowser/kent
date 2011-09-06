@@ -452,13 +452,14 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		# subId=3476 dateSubmitted=2011-04-28
 
-		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1
+		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		longLabel LHCN-M2 7 days paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
                 shortLabel LHCND 2x75 Sp 1
 		subGroups view=Splices cellType=LHCNM2D insertLength=il200 readType=r2x75 rep=rep1
 		type bam
 		# subId=3477 dateSubmitted=2011-05-05
+		# was wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1 wong Tue Sep  6 16:07:56 2011
 		
 	track wgEncodeCaltechRnaSeqViewAligns
         shortLabel Alignments
@@ -924,7 +925,7 @@ html wgEncodeCaltechRnaSeq.new
 		# subId=3476 dateSubmitted=2011-04-28
 		# was wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2 cricket Fri Aug 26 08:10:41 2011
 
-		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1
+		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1
 		parent wgEncodeCaltechRnaSeqViewAligns off
 		longLabel LHCN-M2 7 days paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
                 shortLabel LHCND 2x75 A 1
@@ -932,6 +933,7 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		# subId=3477 dateSubmitted=2011-05-05
                 #changed from wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1 to wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1 by wong in June 15
+		# was wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1 wong Tue Sep  6 16:07:55 2011
 
 
 
@@ -1505,13 +1507,14 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 1.000000 157171.000000
 		# subId=3441 dateSubmitted=2011-03-17
 
-		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
+		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSigRep1
 		parent wgEncodeCaltechRnaSeqViewSignal off
 		longLabel LHCN-M2 7 days paired read RNA-seq Signal Rep 1 from ENCODE/Caltech 
                 shortLabel LHCND 2x75 Sg 1
 		subGroups view=Signal cellType=LHCNM2D insertLength=il200 readType=r2x75 rep=rep1
 		type bigWig 1.000000 287591.000000
 		# subId=4105 dateSubmitted=2011-05-11
+		# was wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1 wong Tue Sep  6 16:07:56 2011
 
 		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
 		parent wgEncodeCaltechRnaSeqViewSignal off
