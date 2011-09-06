@@ -18,6 +18,7 @@ fileName wgEncodeHaibMethylRrbsA549Dm002p7dHaibRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3655
+md5sum 43d2a25e058f07323a33e38b8ad6f157
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -39,6 +40,7 @@ fileName wgEncodeHaibMethylRrbsA549Dm002p7dHaibRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3656
+md5sum fd16060ffb1a48129cfff6c93af55683
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -60,6 +62,7 @@ fileName wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3655
+md5sum 2d5767b470950ca22789b7f2a7083ff6
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -82,6 +85,7 @@ fileName wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3656
+md5sum f554a976933452dd6544dfa166995ccf
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -5555,6 +5559,7 @@ fileName wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1919
+md5sum 261099a3b8e63d7bb49cdd651ba02edd
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -5576,6 +5581,7 @@ fileName wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1936
+md5sum 17a3babbbc5f81fe01dabf339c665205
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -5597,6 +5603,7 @@ fileName wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1917
+md5sum 0657d476d367cd128bcc062c926e9180
 obtainedBy Duke
 project wgEncode
 replicate 3
@@ -5618,6 +5625,7 @@ fileName wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1919
+md5sum 5cfd4cbba81ff7d57c3af1723ec0040c
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -5640,6 +5648,7 @@ fileName wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1936
+md5sum dda991c7dbd637e112a5343f29bce2df
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -5662,6 +5671,7 @@ fileName wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep3.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1917
+md5sum 085e5b31ca9273915a6d29291ce9d8d2
 obtainedBy Duke
 project wgEncode
 replicate 3
@@ -5826,6 +5836,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1920
+md5sum 09a6ceecf8a15af061acca595f8ac37e
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -5847,6 +5858,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1921
+md5sum 634e2b10054bdf0688d56f421dc40453
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -5868,6 +5880,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1918
+md5sum 4384ecb1bccaf819454e010475a60f86
 obtainedBy Duke
 project wgEncode
 replicate 3
@@ -5889,6 +5902,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1920
+md5sum 32104a34b203d6a8a732acc8a39c6ca4
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -5911,6 +5925,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1921
+md5sum 01217dcb1512e5d6e3cf01ff3c5e3b6f
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -5933,6 +5948,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep3.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1918
+md5sum b3e2014e5cdc20217c11cd381d72d440
 obtainedBy Duke
 project wgEncode
 replicate 3
@@ -9805,6 +9821,7 @@ fileName wgEncodeHaibMethylRrbsUch1DukeRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1814
+md5sum f52e3a31492c8cf5c128f87ffce9cb99
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -9826,6 +9843,7 @@ fileName wgEncodeHaibMethylRrbsUch1DukeRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1821
+md5sum 33f7e37dc61a0c28e47b7dab2f3fdeac
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -9847,6 +9865,7 @@ fileName wgEncodeHaibMethylRrbsUch1DukeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1814
+md5sum 07eee0377ee1b32d901b15cac5ac051c
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -9869,6 +9888,7 @@ fileName wgEncodeHaibMethylRrbsUch1DukeSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1821
+md5sum d3393cb89fc666935e648f315cd36ac8
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -9877,4 +9897,4 @@ tableName wgEncodeHaibMethylRrbsUch1DukeSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -382343724
+# MAGIC: -1595500934
