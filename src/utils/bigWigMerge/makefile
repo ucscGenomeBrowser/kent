@@ -3,6 +3,9 @@ include ../../inc/common.mk
 L += -lm -lz
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
+TESTOUT = test/output
+TESTIN = test/in
+TESTEXPECTED = test/expected
 
 A = bigWigMerge
 O = bigWigMerge.o
@@ -16,16 +19,14 @@ compile:: ${O}
 
 clean::
 	rm -f ${A}${EXE} ${O}
-	rm -f t1.bw t2.bw 12merge.bedGraph 21merge.bedGraph 
+	rm -rf ${TESTOUT}
 
-t2.bw:
-	bedGraphToBigWig test/in/t2.bed /cluster/data/hg19/chrom.sizes t2.bw
-
-t1.bw:
-	bedGraphToBigWig test/in/t1.bed /cluster/data/hg19/chrom.sizes t1.bw
-
-tests:: t1.bw t2.bw bigWigMerge
-	bigWigMerge t1.bw t2.bw 12merge.bedGraph
-	diff 12merge.bedGraph test/expected/12merge.bedGraph 
-	bigWigMerge t2.bw t1.bw 21merge.bedGraph
-	diff 21merge.bedGraph test/expected/21merge.bedGraph 
+tests:: bigWigMerge
+	mkdir -p ${TESTOUT}
+	bedGraphToBigWig ${TESTIN}/t2.bed ${TESTIN}/hg19.chrom.sizes ${TESTOUT}/t2.bw
+	bedGraphToBigWig ${TESTIN}/t1.bed ${TESTIN}/hg19.chrom.sizes  ${TESTOUT}/t1.bw
+	bigWigMerge ${TESTOUT}/t1.bw ${TESTOUT}/t2.bw ${TESTOUT}/12merge.bedGraph
+	diff ${TESTOUT}/12merge.bedGraph ${TESTEXPECTED}/12merge.bedGraph 
+	bigWigMerge ${TESTOUT}/t2.bw ${TESTOUT}/t1.bw ${TESTOUT}/21merge.bedGraph
+	diff ${TESTOUT}/21merge.bedGraph ${TESTEXPECTED}/21merge.bedGraph 
+	rm -rf ${TESTOUT}

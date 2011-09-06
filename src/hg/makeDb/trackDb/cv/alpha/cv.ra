@@ -10994,15 +10994,17 @@ cvDefined yes
 validate cv
 priority 160
 
-term run
-tag RUN
-type typeOfTerm
-label Sequencing Run
-description Sequencing run
-searchable multiSelect
-cvDefined no
-validate regex: ^[0-9]*r[0-9]*$
-priority 500
+#term run
+#tag RUN
+#type typeOfTerm
+#label Sequencing Run
+#description Sequencing run
+#searchable multiSelect
+#cvDefined no
+#validate regex: ^[0-9]*r[0-9]*$
+#priority 500
+#This term was for the fastqs being submitted as separate lanes.  However, we are now bundling them as a tgz
+#We should remove this term  Sept 2 2011
 
 term seqPlatform
 tag SEQPLATFORM

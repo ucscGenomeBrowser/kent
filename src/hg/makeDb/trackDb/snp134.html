@@ -1,0 +1,36 @@
+<H2>Description</H2>
+
+<P>
+This track contains information about single nucleotide polymorphisms
+and small insertions and deletions (indels) &mdash; collectively Simple
+Nucleotide Polymorphisms &mdash; from
+<A HREF="http://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</A>
+build 134, available from
+<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms" target=_blank>ftp.ncbi.nih.gov/snp</A>.
+</P>
+<P>
+Three tracks contain subsets of the items in this track:
+<UL>
+<LI><B>Common SNPs(134):</B> SNPs that have a minor allele frequency
+    of at least 1% and are mapped to a single location in the reference
+    genome assembly.  Frequency data are not available for all SNPs,
+    so this subset is incomplete.</LI>
+<LI><B>Flagged SNPs(134):</B> SNPs flagged as clinically associated by dbSNP, 
+    mapped to a single location in the reference genome assembly, and 
+    <em>not</em> known to have a minor allele frequency of at least 1%.
+    Frequency data are not available for all SNPs, so this subset may
+    include some SNPs whose true minor allele frequency is 1% or greater.</LI>
+<LI><B>Mult. SNPs(134):</B> SNPs that have been mapped to multiple locations
+    in the reference genome assembly.</LI>
+</UL>
+</P>
+<P>
+The default maximum <A HREF="#Weight">weight</A> for this track is 1, so unless
+the setting is changed in the track controls, SNPs that map to multiple genomic 
+locations will be omitted from display.  When a SNP's flanking sequences 
+map to multiple locations in the reference genome, it calls into question 
+whether there is true variation at those sites, or whether the sequences
+at those sites are merely highly similar but not identical.
+</P>
+
+<!--#insert file="snp134.shared.html"-->

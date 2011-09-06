@@ -1,0 +1,105 @@
+<H2>Description</H2>
+
+<P>This track is produced as part of the ENCODE Project. 
+Describe the project here.
+ </P>
+ 
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track is a multi-view composite track that contains multiple data 
+<EM>views</EM>.  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <A href="http://genome.ucsc.edu/goldenPath/help/multiView.html" target="_BLANK">here</A>.
+The following views are in this track:
+</P>
+
+<DL>
+<DT><I>Alignments</I></DT>
+<DD>The Alignments view shows reads aligned to the genome. Alignments are colored by cell type.  
+The tags used in this file are: INSERT YOUR TAGS HERE. 
+See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> 
+for more information about the SAM Bowtie output (including other tags) and the 
+<a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on 
+the SAM/BAM file format.</DD>
+</DL>
+<DL>
+<DT><I>Plus Raw Signal (WILL YOU HAVE THESE VIEWS)</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (Read Per Million, RPM) for reads aligning to the forward strand.
+<DT><I>Minus Raw Signal</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (Read Per Million, RPM) for reads aligning to the reverse strand.
+</DL>
+<DT><I>Splice Sites (WILL YOU HAVE THIS VIEW)</I></DT>
+<DD>Subset of aligned reads that crosses splice junctions.</DD>
+</DL>
+
+<H2>Methods</H2>
+
+<H3>Experimental Procedures</H3>
+
+<P> 
+Cells were grown according to the approved <A href="http://genome.ucsc.edu/ENCODE/protocols/cell" target="_BLANK">ENCODE cell culture protocols</A> 
+
+<H3>Data Processing and Analysis</H3>
+ 
+
+<H2>Downloadable Files</H2>
+
+<P>The following files can be found on the <A target="_BLANK" href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechSCRnaSeq/">downloads page</A>.
+IS THIS LIST ACCURATE?
+</P>
+
+<dl>
+<DD><b>.fastq</b> - raw sequence files in fastq format with phred33 quality scores.<br></DD>
+<DD><b>Junctions.bedRnaElements</b> - bed file containing TopHat-defined splice junctions.<br></DD>
+<DD><b>TranscriptDeNovo.gtf</b> - a gtf file containing transcript models and expression estimates in FPKM (Fragments Per Kilobase per Million reads) produced by Cufflinks in de novo mode<br></DD>
+<DD><b>TranscriptGencV3c.gtf</b> - expression level estimates at the transcript level for the GENCODE CRCh37.v3c annotation in gtf format  <br></DD>
+<DD><b>GenesDeNovo.gtf</b> - expression estimates for genes defined by Cufflinks in de novo mode in gtf format<br></DD>
+<DD><b>GeneGencV3c.gtf</b> - expression level estimates at the gene level for the GENCODE CRCh37.v3c annotation in gtf format <br></DD>
+<DD><b>ExonGencV3c.gtf</b> - expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon. <br></DD>
+<DD><b>TSS.gtf</b> - expression level estimates for GENCODE CRCh37.v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS. <br></DD>
+</dl>
+
+<H2>Verification</H2>
+
+
+<H2>Credits</H2>
+
+<P>Wold Group: Ali Mortazavi, Brian Williams, Georgi Marinov, Diane Trout, Brandon King, Ken McCue, Lorian Schaeffer.</P>
+<P>Myers Group: Norma Neff, Florencia Pauli, Fan Zhang, Tim Reddy, Rami Rauch, Chris Partridge.</P> 
+<P>Illumina gene expression group: Gary Schroth, Shujun Luo, Eric Vermaas.</P>
+<P>TopHat/Cufflinks development: Cole Trapnell, Lior Pachter, Steven Salzberg .</P>
+
+<P>
+Contacts: 
+<A HREF="mailto:&#103;e&#111;r&#103;&#105;&#64;&#99;a&#108;&#116;&#101;&#99;&#104;.
+e&#100;&#117;">
+Georgi Marinov</A> (data coordination/informatics/experimental).
+<!-- above address is georgi at caltech.edu -->
+ 
+<A HREF="mailto:&#100;&#105;&#97;&#110;e&#64;&#99;&#97;l&#116;&#101;&#99;&#104;.
+&#101;d&#117;">
+Diane Trout</A> (informatics) and
+<!-- above address is diane at caltech.edu -->
+<A HREF="mailto:&#98;&#97;&#119;&#105;&#108;l&#105;_&#57;&#49;&#49;&#50;&#53;&#64;&#121;&#97;h&#111;&#111;.
+&#99;o&#109;">
+Brian Williams</A> (experimental).
+<!-- above address is bawilli_91125 at yahoo.com -->
+
+</P>
+
+<H2>References</H2>
+EXAMPLE
+<P>Mortazavi A, Williams BA, McCue K, Schaeffer L, and Wold BJ. 
+<A target="_BLANK" href="http://www.ncbi.nlm.nih.gov/pubmed/18516045">Mapping and quantifying mammalian transcriptomes by RNA-seq</A>.
+<EM>Nature Methods</EM>. 2008 Jul; 5(7):621-628.</P> 
+
+
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column, above.  The full data release policy
+for ENCODE is available
+<A href="http://genome.ucsc.edu/ENCODE/terms.html" target="_BLANK">here</A>.</P>

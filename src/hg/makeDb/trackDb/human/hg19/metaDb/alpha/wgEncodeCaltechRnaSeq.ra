@@ -267,6 +267,102 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-05
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2926
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2930
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-05
+dateSubmitted 2010-01-04
+dateUnrestricted 2010-10-04
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2926
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2930
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
 objType table
 cell GM12878
@@ -1214,6 +1310,78 @@ rnaExtract longPolyA
 subId 3532
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1647
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-07
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1856
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
+grant Myers
+insertLength 400
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1672
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
+view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
 objType table
@@ -3046,6 +3214,102 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2931
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2932
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2931
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2932
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
 objType table
 cell H1-hESC
@@ -4626,6 +4890,126 @@ subId 3571
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1670
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1668
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 1667
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 4
+rnaExtract longPolyA
+subId 1666
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
+grant Myers
+insertLength 400
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1669
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2
 objType table
 cell HCT-116
@@ -5512,6 +5896,102 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2935
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2936
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2935
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2936
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
 objType table
 cell HeLa-S3
@@ -6144,6 +6624,54 @@ subId 3589
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1663
+tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1662
+tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
 objType table
 cell HepG2
@@ -6407,6 +6935,102 @@ subId 3455
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2
 view Splices
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2937
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2938
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2937
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2938
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
 objType table
@@ -7040,6 +7664,54 @@ subId 3591
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1661
+tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1660
+tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
 objType table
 cell HSMM
@@ -7642,6 +8314,52 @@ subId 3585
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1907
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1908
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2
 objType table
 cell HUVEC
@@ -7905,6 +8623,102 @@ subId 3457
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2
 view Splices
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2933
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2934
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2933
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2934
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
 objType table
@@ -8538,6 +9352,54 @@ subId 3587
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1665
+tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1664
+tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2
 objType table
 cell K562
@@ -8801,6 +9663,102 @@ subId 3459
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2
 view Splices
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2939
+tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2940
+tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2939
+tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 2940
+tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
 objType table
@@ -9431,6 +10389,54 @@ rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1659
+tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2009-03-06
+dateUnrestricted 2009-12-06
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1658
+tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
+view Signal
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
 objType table
@@ -10965,6 +11971,53 @@ subId 3598
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3025
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3024
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2
 objType table
 cell NHEK
@@ -11096,6 +12149,54 @@ subId 3460
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2
 view Splices
+
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2941
+tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-09
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 2941
+tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
 objType table
@@ -11724,6 +12825,53 @@ subId 3600
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1493
+tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1909
+tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2
 objType table
 cell NHLF
@@ -12326,4 +13474,50 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: 1634418043
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1906
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+objStatus replaced
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1905
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
+view Signal
+
+# MAGIC: 1188497013
