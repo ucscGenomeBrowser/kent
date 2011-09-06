@@ -2,16 +2,13 @@
 
 /* mostly re-using GB styles */
 /* over-riding alignment so we don't have to nest in a table */
-
-
-body {
-    font-family: arial,Geneva,Helvetica,sans-serif;
-}
-
 .topBlueBar {
     text-align: left;
 }
 
+body {
+    font-family: arial,Geneva,Helvetica,sans-serif;
+}
 
 .encodeHeader {
     color: #004D99;
@@ -20,19 +17,51 @@ body {
     height: 70px;
 }
 
+a {
+	color: #003366;
+}
+
 .encodeHeader img {
     float: left;
     height: 70px;
+    line-height:  70px;
 }
 
-.encodeHeader span {
-    vertical-align: middle;
+.wrapper {
+	border: 1px solid gray;
+	padding:0px;
+	margin: 7px 0px 20px 0px;
 }
 
+.content {
+    margin: 0px;
+    padding: 0px 15px;
+}
 
-/*A way to push text down the page*/
-.push {
-    height: 6em;
+h4.title {
+    text-align: left;
+    margin: 0px;
+    padding: 3px 0px 0px 7px;
+}
+
+.bar {
+    background-color: #dae5f7;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    height: 27px;
+}
+    
+dt {
+	padding-bottom: 12px;
+}
+
+dd {
+	padding-bottom: 10px;
+}
+
+.date {
+	font-size: 10pt;
 }
 
 /*General styles*/
@@ -44,6 +73,10 @@ body {
     text-decoration:underline
 }
 
-.center {
-    text-align: center
+.big {
+	font-size: 16pt;
 }
+
+
+
+
