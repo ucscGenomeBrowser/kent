@@ -14,12 +14,14 @@
 static char const rcsid[] = "$Id: udcTest.c,v 1.2 2009/12/19 01:06:27 angie Exp $";
 
 static struct optionSpec options[] = {
+    {"raBuf",    OPTION_BOOLEAN},
     {"fork",     OPTION_BOOLEAN},
     {"protocol", OPTION_STRING},
     {"seed",     OPTION_INT},
     {NULL, 0},
 };
 
+boolean raBuf = FALSE;   /* exercise the read-ahead buffer */
 boolean doFork = FALSE;
 char *protocol = "ftp";
 unsigned int seed = 0;
@@ -128,6 +130,7 @@ openSeekRead(localCopy, offset, len, bufRef);
 // Get data from udcFile object and compare to reference:
 udcSeek(udcf, offset);
 bits64 bytesRead = udcRead(udcf, bufTest, len);
+
 // udcRead does a mustRead, and we have checked offset+len, so this should never happen,
 // but test anyway:
 if (bytesRead < len)
@@ -241,6 +244,62 @@ udcFileClose(&udcf);
 return gotError;
 }
 
+boolean testReadAheadBufferMode(char *url, char *localCopy, int mode)
+/* Open a udcFile, read different random locations, and check for errors. */
+{
+boolean gotError = FALSE;
+bits64 fSize = fileSize(localCopy);
+
+struct udcFile *udcf = udcFileOpen(url, udcDefaultDir());
+bits64 offset = 0;
+if (mode == -1)
+   offset = 0 + 8192 * myDrand();
+if (mode == 0)
+   offset = (bits64)(fSize * myDrand());
+if (mode == 1)
+   offset = fSize - 8192 * myDrand();
+
+
+int delta = 0;
+int i;
+for(i=0; i<100; ++i)
+    {
+
+    int size = 8192 * myDrand();
+
+    if ((offset + size) > fSize)
+	size = fSize - offset;
+
+    gotError |= readAndTest(udcf, offset, size, localCopy, url);
+
+    delta = -6000 + (12000 * myDrand());   // -6000 to +6000
+
+    if (delta < 0)  // do not let unsigned offset go below 0
+	if (-delta > offset)
+    	    delta = -offset;  
+
+    offset += delta;
+
+    if (offset > fSize)
+	offset = fSize;
+
+    }
+
+udcFileClose(&udcf);
+return gotError;
+
+}
+boolean testReadAheadBuffer(char *url, char *localCopy)
+/* Open a udcFile, read different random locations, and check for errors. */
+{
+boolean gotError = FALSE;
+gotError |= testReadAheadBufferMode(url, localCopy, -1);  // near beginning of file
+gotError |= testReadAheadBufferMode(url, localCopy, 0);   // anywherer in file
+gotError |= testReadAheadBufferMode(url, localCopy, 1);   // near end of file
+return gotError;
+}
+
+
 boolean testInterleaved(char *url, char *localCopy)
 /* Open two udcFile handles to the same file, read probably-different random locations,
  * read from probably-overlapping random locations, and check for errors. */
@@ -248,16 +307,20 @@ boolean testInterleaved(char *url, char *localCopy)
 boolean gotError = FALSE;
 bits64 size = fileSize(localCopy);
 
+
 // First, read some bytes from udcFile udcf1.
 struct udcFile *udcf1 = udcFileOpen(url, udcDefaultDir());
 int blksRead1 = 0;
 bits64 offset1 = randomStartOffset(size);
+
 gotError |= readAndTestBlocks(udcf1, &offset1, 2, &blksRead1, localCopy, url);
+
 // While keeping udcf1 open, create udcf2 on the same URL, and read from a 
 // (probably) different location:
 struct udcFile *udcf2 = udcFileOpen(url, udcDefaultDir());
 int blksRead2 = 0;
 bits64 offset2 = randomStartOffset(size);
+
 gotError |= readAndTestBlocks(udcf2, &offset2, 2, &blksRead2, localCopy, url);
 // Interleave some successive-location reads:
 int i;
@@ -292,6 +355,7 @@ while (blksRead1 < MAX_BLOCKS || blksRead2 < MAX_BLOCKS)
     }
 udcFileClose(&udcf1);
 udcFileClose(&udcf2);
+verbose(1,"checkCacheFiles\n");
 gotError |= checkCacheFiles(sameOffset, max(offset1, offset2), url, localCopy);
 return gotError;
 }
@@ -347,6 +411,7 @@ int main(int argc, char *argv[])
 {
 boolean gotError = FALSE;
 optionInit(&argc, argv, options);
+raBuf = optionExists("raBuf");
 doFork = optionExists("fork");
 protocol = optionVal("protocol", protocol);
 seed = optionInt("seed", seed);
@@ -359,7 +424,9 @@ if (host == NULL || !startsWith("hgwdev", host))
     exit(0);
     }
 errAbortDebugnPushPopErr();
-udcSetDefaultDir("/data/tmp/angie/udcCache");
+char tmp[256];
+safef(tmp, sizeof tmp, "/data/tmp/%s/udcCache", getenv("USER"));
+udcSetDefaultDir(tmp);
 if (seed == 0)
     {
     long now = clock1();
@@ -376,7 +443,9 @@ if (sameString(protocol, "http"))
     {
     char *httpUrl = "http://hgwdev.cse.ucsc.edu/~angie/wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort.bb";
     char *httpLocalCopy = "/gbdb/hg18/bbi/wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort.bb";
-    if (doFork)
+    if (raBuf)
+	gotError |= testReadAheadBuffer(httpUrl, httpLocalCopy);
+    else if (doFork)
 	gotError |= testConcurrent(httpUrl, httpLocalCopy);
     else
 	gotError |= testInterleaved(httpUrl, httpLocalCopy);
@@ -385,7 +454,9 @@ else if (sameString(protocol, "ftp"))
     {
     char *ftpUrl = THOUSAND_FTP CHR4_SLX_BAM;
     char *ftpLocalCopy = THOUSAND_HIVE CHR4_SLX_BAM;
-    if (doFork)
+    if (raBuf)
+	gotError |= testReadAheadBuffer(ftpUrl, ftpLocalCopy);
+    else if (doFork)
 	gotError |= testConcurrent(ftpUrl, ftpLocalCopy);
     else
 	gotError |= testInterleaved(ftpUrl, ftpLocalCopy);
