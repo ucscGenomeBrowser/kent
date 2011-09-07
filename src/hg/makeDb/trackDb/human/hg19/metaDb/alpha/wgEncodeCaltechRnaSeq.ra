@@ -10465,326 +10465,6 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1
-objType table
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-05
-dateUnrestricted 2012-02-05
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum bam=dff28d0040fc6e7a69c7209db0f31bfa,bai=08723fcc237bbc5316b70a49692a833b
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3477
-tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dAlignsRep1
-treatment Myocyte_7d
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dExonsGencV3cRep1V3
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-11
-dateUnrestricted 2012-02-11
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dExonsGencV3cRep1V3.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum fdefbc1aa9bd954f86fa5cf7421bd29a
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3595
-submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
-view ExonsGencV3c
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd1Rep1
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-05
-dateUnrestricted 2012-02-05
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd1Rep1.fastq.tgz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-md5sum 8f4b9bb3d698f0fabb7b3a70b6ae4f52
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3477
-treatment Myocyte_7d
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd2Rep1
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-05
-dateUnrestricted 2012-02-05
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd2Rep1.fastq.tgz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-md5sum 145342d9066eb0555371718ef2f7a87a
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3477
-treatment Myocyte_7d
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneDeNovoRep1V3
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-11
-dateUnrestricted 2012-02-11
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneDeNovoRep1V3.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 892bb8b8c7d74b6574e7a4b3c017a5ac
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3595
-submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
-view GeneDeNovo
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneGencV3cRep1V3
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-11
-dateUnrestricted 2012-02-11
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneGencV3cRep1V3.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 5cbd745d2e1e2cb46fc108c2030bde88
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3595
-submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
-view GeneGencV3c
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dJunctionsRep1V3
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-11
-dateUnrestricted 2012-02-11
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dJunctionsRep1V3.bed.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum e2365edb5167c3b4713dcd7e350fd02c
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3595
-submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
-view Junctions
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
-objType table
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-11
-dateUnrestricted 2012-02-11
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1.bigWig
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 150ebbcc928783917a0c494c934b4faa
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 4105
-tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
-treatment Myocyte_7d
-view Signal
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1
-objType table
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-05
-dateUnrestricted 2012-02-05
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum bam=7046f7c502bd88db1c32a7f114fdf858,bai=7bd4bac910221437abedfa6a5b767fcd
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3477
-tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1
-treatment Myocyte_7d
-view Splices
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTSSRep1V3
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-11
-dateUnrestricted 2012-02-11
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTSSRep1V3.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 46719f70f2f9133624dc75c189792523
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3595
-submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
-view TssGencV3c
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-11
-dateUnrestricted 2012-02-11
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 1080c969eb84ab230a888d328ac97e74
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3595
-submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
-view TranscriptDeNovo
-
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3
-objType file
-cell LHCN-M2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-11
-dateUnrestricted 2012-02-11
-dccAccession wgEncodeEH001670
-expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 83c021b2bfed8532039555db2c70a226
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3595
-submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
-view TranscriptGencV3c
-
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3
 objType file
 cell LHCN-M2
@@ -10936,6 +10616,326 @@ rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
 view Junctions
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-05
+dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum bam=dff28d0040fc6e7a69c7209db0f31bfa,bai=08723fcc237bbc5316b70a49692a833b
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3477
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1
+treatment Myocyte_7d
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dExonsGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dExonsGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum fdefbc1aa9bd954f86fa5cf7421bd29a
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment Myocyte_7d
+view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dFastqRd1Rep1
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-05
+dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dFastqRd1Rep1.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+md5sum 8f4b9bb3d698f0fabb7b3a70b6ae4f52
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3477
+treatment Myocyte_7d
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dFastqRd2Rep1
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-05
+dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dFastqRd2Rep1.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+md5sum 145342d9066eb0555371718ef2f7a87a
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3477
+treatment Myocyte_7d
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dGeneDeNovoRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dGeneDeNovoRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 892bb8b8c7d74b6574e7a4b3c017a5ac
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment Myocyte_7d
+view GeneDeNovo
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dGeneGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dGeneGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 5cbd745d2e1e2cb46fc108c2030bde88
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment Myocyte_7d
+view GeneGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dJunctionsRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dJunctionsRep1V3.bed.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum e2365edb5167c3b4713dcd7e350fd02c
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment Myocyte_7d
+view Junctions
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSigRep1
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 150ebbcc928783917a0c494c934b4faa
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 4105
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSigRep1
+treatment Myocyte_7d
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-05
+dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum bam=7046f7c502bd88db1c32a7f114fdf858,bai=7bd4bac910221437abedfa6a5b767fcd
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3477
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1
+treatment Myocyte_7d
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTSSRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTSSRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 46719f70f2f9133624dc75c189792523
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment Myocyte_7d
+view TssGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTrnscrptDeNovoRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTrnscrptDeNovoRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 1080c969eb84ab230a888d328ac97e74
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment Myocyte_7d
+view TranscriptDeNovo
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTrnscrptGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTrnscrptGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 83c021b2bfed8532039555db2c70a226
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment Myocyte_7d
+view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
 objType table
@@ -13520,4 +13520,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 1188497013
+# MAGIC: 794754565
