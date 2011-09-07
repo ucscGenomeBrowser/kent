@@ -115,7 +115,7 @@ var encodeProject = (function () {
                 }
                 cellTiers[tier].cellTypes.push(cellType.term);
             });
-            cellTiers.sort();
+            cellTiers.sort(cmpCV);
             $.each(cellTiers, function (i, tier) {
                 if (!cellTiers[i]) {
                     // for some reason there's  __ element here (not my property)
