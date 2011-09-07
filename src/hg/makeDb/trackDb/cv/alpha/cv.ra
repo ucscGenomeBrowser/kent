@@ -3189,12 +3189,6 @@ tier 3
 termId BTO:0002022
 protocol Crawford:NHBE_Crawford_protocol.pdf
 
-# Note from Melissa: this is a new submission from UW.  NHBE is already registered.  This
-# is apparently NHBE with a retinoic acid treatment.  Propose to the lab that they submit
-# their experiments as NHBE with a retinoic acid treatment, and we save their protocol as
-# an appendix of the NHBE protocol.  Remove this stanza if it's not needed by 8/31/11.
-# Note from Jeff: this is an approved cell line, so the tag RA was applied.  It has
-# a unique vendorId. SK-N-SH and SK-N-SH_RA has a similar issue.
 term NHBE_RA
 tag NHBERA
 type Cell Line
@@ -8955,7 +8949,7 @@ label Matrix
 description Matrix
 
 term MinusRawSignal
-tag MUNUSRAWSIG
+tag MINUSRAWSIG
 type view
 label Minus Raw Signal
 description Graphs the base-by-base density of tags on the minus strand
