@@ -23,16 +23,21 @@ Options:
 
      -destDir=dir          Directory where we copy files
      -exclude=fileList     Comma-delimited list of files to exclude (useful if the files argument was created using "ls *.js")
+     -force                Force update of all files
      -forceVersionNumbers  Force use of CGI versioned softlinks; useful for debugging in dev trees
+     -minify               Minify javascript files (currently experimental)
      -versionFile=file     Get CGI version from this header file
 END
 }
 
 my ($exclude, $destDir, $debug, $versionFile, $cgiVersion, $useMtimes);
 my %exclude;
+my %seen;
 my $forceVersionNumbers;   # You can use this option to test CGI-versioned links on dev server
+my ($force, $minify);
+my $minifyJar = "/cluster/home/larrym/tmp/yuicompressor-2.4.6/build/yuicompressor-2.4.6.jar";   # not sure where to install the jar (in utils dir?)
 
-GetOptions("exclude=s" => \$exclude, "destDir=s" => \$destDir, "debug" => \$debug, 
+GetOptions("exclude=s" => \$exclude, "destDir=s" => \$destDir, "debug" => \$debug, "force" => \$force, "minify" => \$minify,
            "versionFile=s" => \$versionFile,  "forceVersionNumbers" =>  \$forceVersionNumbers);
 
 if($exclude) {
@@ -88,10 +93,15 @@ chdir($destDir) || die "Couldn't chdir into '$destDir'; err: $!";
 
 for my $file (@ARGV)
 {
-    if(!$exclude{$file}) {
+    if(!$seen{$file} && !$exclude{$file}) {
+        $seen{$file} = 1;
         my @stat = stat("$cwd/$file") or die "Couldn't stat '$file'; err: $!";
         my $mtime = $stat[9];
-        
+        my ($prefix, $suffix);
+        if($file =~ /(.+)\.([a-z]+)$/) {
+            $prefix = $1;
+            $suffix = $2;
+        }
         # update destination file as appropriate
         my $update = 0;
         my $destFile = $file;
@@ -101,19 +111,33 @@ for my $file (@ARGV)
         } else {
             $update = 1;
         }
+        $update = $update || $force;
         if($update) {
+            my $done;
             if (-e $destFile) {
                 unlink($destFile) || die "Couldn't unlink $destFile'; err: $!";
             }
             if($debug) {
                 print STDERR "cp -p $cwd/$file $destFile\n";
             }
-            !system("cp -p $cwd/$file $destFile") || die "Couldn't cp $cwd/file to $destFile: err: $!";
+            if($minify && $suffix eq 'js') {
+                my $cmd = "/usr/bin/java -jar $minifyJar $cwd/$file -o $destFile";
+                print STDERR "cmd: $cmd\n" if($debug);
+                !system($cmd) || die "Couldn't run cmd '$cmd': err: $!";
+                my @destStat = stat($destFile);
+                if($destStat[7] >= $stat[7]) {
+                    # Don't bother to minify if minified file is larger than original (this happens when file has already been minified).
+                    print STDERR "Skipping minify for $cwd/$file because it is apparently already minified" if($debug);
+                } else {
+                    $done = 1;
+                }
+            }
+            if(!$done) {
+                !system("cp -p $cwd/$file $destFile") || die "Couldn't cp $cwd/file to $destFile: err: $!";
+            }
         }
 
-        if($file =~ /(.+)\.([a-z]+)$/) {
-            my $prefix = $1;
-            my $suffix = $2;
+        if($prefix && $suffix) {
             # make sure time is right, in case file; file might have been newer,
             # speculation that cp -p silently failed if user doesn't own destDir
             @stat = stat($destFile) or die "Couldn't stat '$destFile'; err: $!";
@@ -136,7 +160,7 @@ for my $file (@ARGV)
             }
             # create new symlink
             if(!(-l "$softLink")) {
-                print STDERR "ln -s $softLink\n" if($debug);
+                print STDERR "ln -s $file $softLink\n" if($debug);
                 !system("ln -s $file $softLink") || die "Couldn't ln -s $file; err: $!";
             }
         }
