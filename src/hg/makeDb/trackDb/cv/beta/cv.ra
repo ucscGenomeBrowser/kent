@@ -2740,7 +2740,7 @@ vendorId Muscle needle biopsies
 sex U
 tissue Muscle
 lab Crawford
-protocol Crawford:HSMMFSHD_Crawford_protocol.pdf
+protocol Crawford(missing):HSMMFSHD_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -3848,7 +3848,7 @@ orderUrl http://www.chordomafoundation.org/research/
 termId BTO:0001768
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001768&termName=notochord
 lab Crawford
-protocol Crawford:UCH1_Crawford_protocol.pdf
+protocol Crawford(Missing):UCH1_Crawford_protocol.pdf
 
 term WERI-Rb-1
 tag WERIRB1
@@ -5140,7 +5140,7 @@ lab Myers
 lots C1010
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
-validation CEBPD_(SC-636)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
+validation CEBPD_(SC-636)(Missing)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
 
 term CHD2_(AB68301)
 tag CHD2
@@ -5420,7 +5420,7 @@ vendorId sc-13030
 lab Farnham
 targetId GeneCard:ELK4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4
-validation ELK4(WesternBlot,ChIPseq):human_ELK4_validation_Farnham.pdf
+validation ELK4(Missing)(WesternBlot,ChIPseq):human_ELK4_validation_Farnham.pdf
 
 term ERalpha_a
 tag ERAA
