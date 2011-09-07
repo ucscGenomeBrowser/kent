@@ -40,7 +40,7 @@ html wgEncodeCshlShortRnaSeq.new
     maxWindowToDraw 10000000
 
         track wgEncodeCshlShortRnaSeqK562PolysomeShortAln
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 psom sm A 1
         longLabel K562 polysome small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=polysome rnaExtract=SHORTTOTAL rep=rep1
@@ -58,7 +58,7 @@ html wgEncodeCshlShortRnaSeq.new
 
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562ChromatinShortAln
-        #subTrack wgEncodeCshlShortRnaSeqViewAlignments on
+        #subTrack wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 chrm sm A 1
         #longLabel K562 chromatin small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=chromatin rnaExtract=SHORTTOTAL rep=rep1
@@ -68,7 +68,7 @@ html wgEncodeCshlShortRnaSeq.new
 
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleolusShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 nlus sm A 1
         #longLabel K562 nucleolus small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
@@ -78,7 +78,7 @@ html wgEncodeCshlShortRnaSeq.new
 
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 nplm sm A 1
         #longLabel K562 nucleoplasm small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=nucleoplasm rnaExtract=SHORTTOTAL rep=rep1
@@ -108,7 +108,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         #ATTIC
         #track wgEncodeCshlShortRnaSeqK562CytosolShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 cyto sm A 1
         #longLabel K562 cytosol small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=SHORTTOTAL rep=rep1
@@ -118,7 +118,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         #ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleusShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 nucl sm A 1
         #longLabel K562 nucleus small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
@@ -129,7 +129,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         #ATTIC
         #track wgEncodeCshlShortRnaSeqK562CellShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 cell sm A 1
         #longLabel K562 whole cell small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=cell rnaExtract=SHORTTOTAL rep=rep1
@@ -167,7 +167,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3294 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cell sm A 2
         longLabel K562 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=cell rnaExtract=SHORTTOTAL rep=rep2
@@ -187,7 +187,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3338 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cyto sm A 2
         longLabel K562 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
@@ -247,7 +247,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3302 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucl sm A 2
         longLabel K562 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=SHORTTOTAL rep=rep2
@@ -257,7 +257,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3301 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucl sm A 1
         longLabel K562 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
@@ -267,7 +267,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3299 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cyto sm A 1
         longLabel K562 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=SHORTTOTAL rep=rep1
@@ -277,7 +277,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3297 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cell sm A 1
         longLabel K562 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=cell rnaExtract=SHORTTOTAL rep=rep1
@@ -383,7 +383,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3370 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nplm sm A 2
         longLabel K562 nucleoplasm small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleoplasm rnaExtract=SHORTTOTAL rep=rep2
@@ -393,7 +393,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3369 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nplm sm A 1
         longLabel K562 nucleoplasm small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleoplasm rnaExtract=SHORTTOTAL rep=rep1
@@ -403,7 +403,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3368 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nlus sm A 2
         longLabel K562 nucleolus small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep2
@@ -413,7 +413,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3367 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nlus sm A 1
         longLabel K562 nucleolus small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
@@ -423,7 +423,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3366 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 chrm sm A 2
         longLabel K562 chromatin small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=chromatin rnaExtract=SHORTTOTAL rep=rep2
@@ -433,7 +433,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3365 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 chrm sm A 1
         longLabel K562 chromatin small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=chromatin rnaExtract=SHORTTOTAL rep=rep1
@@ -1999,7 +1999,7 @@ html wgEncodeCshlShortRnaSeq.new
     track wgEncodeCshlShortRnaSeqViewContigs
     shortLabel Contigs
     view Contigs
-    visibility hide
+    visibility full 
     subTrack wgEncodeCshlShortRnaSeq
 
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalContigs
