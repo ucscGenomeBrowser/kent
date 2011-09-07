@@ -1,8 +1,18 @@
 #!/usr/bin/python
 
 import sys
+import os
 import datetime
-sys.path.append('/cluster/home/wong/kent/python/lib/')
+dir = os.path.dirname(os.path.abspath(__file__))
+#print "dir = %s" % dir
+
+library = os.path.join(dir,"../../lib")
+#print library
+
+
+
+sys.path.append(library)
+#sys.path.append('/cluster/home/wong/kent/python/lib/')
 
 from ucscgenomics.rafile.RaFile import *
 
@@ -56,7 +66,13 @@ def gethg19objects(rafile):
 
 
 def main():
-	
+
+	if len(sys.argv) != 3:
+		arglen = len(sys.argv)
+		print arglen
+		sys.exit("usage: dateCheck.py hg19.ra hg18.ra")
+		#sys.exit()
+			
 	
 	hg18expids = indexhg18(sys.argv[2])
 	hg19objects = gethg19objects(sys.argv[1])
