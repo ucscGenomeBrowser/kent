@@ -8949,7 +8949,7 @@ label Matrix
 description Matrix
 
 term MinusRawSignal
-tag MUNUSRAWSIG
+tag MINUSRAWSIG
 type view
 label Minus Raw Signal
 description Graphs the base-by-base density of tags on the minus strand
