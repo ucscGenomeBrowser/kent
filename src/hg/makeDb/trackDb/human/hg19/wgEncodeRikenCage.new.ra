@@ -443,7 +443,7 @@ html wgEncodeRikenCage.new
     viewLimits 0:30
     autoScale off
     transformFunc NONE
-    windowingFunction mean
+    windowingFunction mean+whiskers
     maxWindowToDraw 10000000
 
         track wgEncodeRikenCageNhekCytosolPamPlusSignal
@@ -1183,7 +1183,7 @@ html wgEncodeRikenCage.new
     minLimit .005
     maxLimit 25183
     viewLimits 0:30
-    windowingFunction mean
+    windowingFunction mean+whiskers
     autoScale off
     transformFunc NONE
     maxWindowToDraw 1000000

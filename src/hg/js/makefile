@@ -8,7 +8,9 @@ JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js \
     jquery.cookie.js
 
 JS_FILES=ajax.js autocomplete.js hgGateway.js hgHubConnect.js hgTracks.js \
-    hui.js utils.js ddcl.js ${JQUERY_FILES}
+    hui.js utils.js ddcl.js \
+    encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js \
+    ${JQUERY_FILES}
 
 STATIC_FILES=staticDoc.js jquery.js
 
