@@ -24,7 +24,7 @@ noInherit on
     view RawSignal
     visibility full
     subTrack wgEncodeSydhRnaSeq
-    viewLimits 0:10
+    viewLimits 0:78
     autoScale off
     transformFunc NONE
     windowingFunction mean+whiskers
@@ -33,30 +33,27 @@ noInherit on
         track wgEncodeSydhRnaSeqK562Ifna30PolyaRaw
         parent wgEncodeSydhRnaSeqViewSignal on
         shortLabel K562 pA+ Na30
-        longLabel K562 polyA+ IFNa30 RNA-Seq Signal from ENCODE/SYDH
+        longLabel K562 polyA+ IFNa30 RNA-seq Signal from ENCODE/SYDH
         subGroups view=RawSignal cellType=1K562 rnaExtract=polyA treatment=IFNa30
         type bigWig 0.000000 165257.000000
-        origAssembly hg18
         color 46,0,184
         # subId=3113 dateSubmitted=2010-12-17
 
         track wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw
         parent wgEncodeSydhRnaSeqViewSignal on
         shortLabel K562 pA+ Ng6h
-        longLabel K562 polyA+ IFNg6h RNA-Seq Signal from ENCODE/SYDH
+        longLabel K562 polyA+ IFNg6h RNA-seq Signal from ENCODE/SYDH
         subGroups view=RawSignal cellType=1K562 rnaExtract=polyA treatment=IFNg6h
         type bigWig 0.000000 184050.000000
-        origAssembly hg18
         color 46,0,184
         # subId=3113 dateSubmitted=2010-12-17
 
         track wgEncodeSydhRnaSeqK562Ifna6hPolyaRaw
         parent wgEncodeSydhRnaSeqViewSignal on
         shortLabel K562 pA+ Na6h
-        longLabel K562 polyA+ IFNa6h RNA-Seq Signal from ENCODE/SYDH
+        longLabel K562 polyA+ IFNa6h RNA-seq Signal from ENCODE/SYDH
         subGroups view=RawSignal cellType=1K562 rnaExtract=polyA treatment=IFNa6h
         type bigWig 0.000000 134219.000000
-        origAssembly hg18
         color 46,0,184
         # subId=3113 dateSubmitted=2010-12-17
 
@@ -64,10 +61,9 @@ noInherit on
         track wgEncodeSydhRnaSeqK562Ifng30PolyaRaw
         parent wgEncodeSydhRnaSeqViewSignal on
         shortLabel K562 pA+ Ng30
-        longLabel K562 polyA+ IFNg30 RNA-Seq Signal from ENCODE/SYDH
+        longLabel K562 polyA+ IFNg30 RNA-seq Signal from ENCODE/SYDH
         subGroups view=RawSignal cellType=1K562 rnaExtract=polyA treatment=IFNg30
         type bigWig 0.000000 172495.000000
-        origAssembly hg18
         color 46,0,184
         # subId=3113 dateSubmitted=2010-12-17
 
@@ -99,7 +95,6 @@ noInherit on
         longLabel K562 polyA+ IFNa30 RNA-seq Alignments from ENCODE/SYDH
         subGroups view=Alignments cellType=1K562 rnaExtract=polyA treatment=IFNa30
         type bam
-        origAssembly hg18
         color 46,0,184
         # subId=2007 dateSubmitted=2010-10-21
 
@@ -109,7 +104,6 @@ noInherit on
         longLabel K562 polyA+ IFNa6h RNA-seq Alignments from ENCODE/SYDH 
         subGroups view=Alignments cellType=1K562 rnaExtract=polyA treatment=IFNa6h
         type bam
-        origAssembly hg18
         color 46,0,184
         # subId=2007 dateSubmitted=2010-10-21
 
@@ -119,7 +113,6 @@ noInherit on
         longLabel K562 polyA+ IFNg30 RNA-seq Alignments from ENCODE/SYDH
         subGroups view=Alignments cellType=1K562 rnaExtract=polyA treatment=IFNg30
         type bam
-        origAssembly hg18
         color 46,0,184
         # subId=2007 dateSubmitted=2010-10-21
 
@@ -129,7 +122,6 @@ noInherit on
         longLabel K562 polyA+ IFNg6h RNA-seq Alignments from ENCODE/SYDH
         subGroups view=Alignments cellType=1K562 rnaExtract=polyA treatment=IFNg6h
         type bam
-        origAssembly hg18
         color 46,0,184
         # subId=2007 dateSubmitted=2010-10-21
 
