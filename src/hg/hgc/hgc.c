@@ -10080,8 +10080,14 @@ if (url != NULL && url[0] != 0)
 	if (row[0] != NULL)
 	    {
 	    char *replStr;
+	    char *chp;
 	    replStr= cloneString(row[0]);
-    	    printf("<BR><B>Amino Acid Replacement:</B> %s\n", replStr);
+
+    	    // just take the first AA replacement if there are multiple
+	    chp = strstr(replStr, ",");
+	    if (chp != NULL) *chp = '\0';
+	    
+	    printf("<BR><B>Amino Acid Replacement:</B> %s\n", replStr);
 	    }
 	}
     sqlFreeResult(&sr);

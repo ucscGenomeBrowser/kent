@@ -81,29 +81,21 @@ type Cell Line
 organism human
 tier 1
 description OBSOLETE, K562b is identical to K562
+#oldDescription leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 deprecated same as K562
 sex F
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
 vendorName ATCC
-
-#deprecated, it's pretty much the same cell as K562.
-#term K562b
-#tag K562b
-#type Cell Line
-#organism human
-#tissue Blood
-#description leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
-#vendorName ATCC
-#vendorId CCL-243
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
-#karyotype cancer
-#lineage mesoderm
-#termId BTO:0000664
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
+tissue Blood
+vendorName ATCC
+vendorId CCL-243
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
+karyotype cancer
+lineage mesoderm
+termId BTO:0000664
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 #color 46,0,184
-#sex F
-#tier 1
-#protocol Farnham:K562_protocol.pdf
+protocol Farnham:K562_protocol.pdf
 
 term HepG2
 tag HEPG2
@@ -129,25 +121,19 @@ type Cell Line
 organism human
 description OBSOLETE, HepG2b is identical to HepG2
 deprecated same as HepG2 
-
-#deprecated, same cell as HepG2
-#term HepG2b
-#tag HEPG2b
-#type Cell Line
-#organism human
-#description liver carcinoma (UCDavis alternate)
-#tissue Liver
-#vendorName ATCC
-#vendorId HB-8065
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
-#lineage endoderm
-#karyotype cancer
-#termId BTO:0000559
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
-#color 189,0,157
-#sex M
-#tier 2
-#protocol ENCODE:HepG2_protocol.pdf
+#oldDescription liver carcinoma (UCDavis alternate)
+tissue Liver
+vendorName ATCC
+vendorId HB-8065
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
+lineage endoderm
+karyotype cancer
+termId BTO:0000559
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+color 189,0,157
+sex M
+tier 2
+protocol ENCODE:HepG2_protocol.pdf
 
 term HeLa-S3
 tag HELAS3
@@ -2191,30 +2177,19 @@ tag HEK293b
 type Cell Line
 organism human
 description OBSOLETE, HEK293(b) is identical to HEK293
+#oldDescription embryonic kidney (alternate protocol). (PMID: 11967234)
 deprecated same as HEK293
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
 sex U
 tier 3
-
-#We are trying to eliminate these "b" terms.  We will not erase fully until 9/1/11.
-#term HEK293(b)
-#tag HEK293b
-#type Cell Line
-#organism human
-#description embryonic kidney (alternate protocol). (PMID: 11967234)
-#tissue Kidney
-#vendorName ATCC
-#vendorId CRL-1573
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
-#lineage mesoderm
-#karyotype cancer
-#termId BTO:0000007
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
-#sex U
-#tier 3
-#protocol Snyder:HEK293b_Snyder_protocol.pdf
+tissue Kidney
+lineage mesoderm
+karyotype cancer
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
+protocol Snyder:HEK293b_Snyder_protocol.pdf
 
 term HEK293-T-REx
 tag HEK293T
@@ -3214,12 +3189,6 @@ tier 3
 termId BTO:0002022
 protocol Crawford:NHBE_Crawford_protocol.pdf
 
-# Note from Melissa: this is a new submission from UW.  NHBE is already registered.  This
-# is apparently NHBE with a retinoic acid treatment.  Propose to the lab that they submit
-# their experiments as NHBE with a retinoic acid treatment, and we save their protocol as
-# an appendix of the NHBE protocol.  Remove this stanza if it's not needed by 8/31/11.
-# Note from Jeff: this is an approved cell line, so the tag RA was applied.  It has
-# a unique vendorId. SK-N-SH and SK-N-SH_RA has a similar issue.
 term NHBE_RA
 tag NHBERA
 type Cell Line
@@ -5523,21 +5492,21 @@ lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
 validation FOSL1_(SC-183)(Western_blot,IP-MassSpec):human_FOSL1-SC183_validation_Myers.pdf
-#Not approved yet. ~Jeff
-#term FOSL1_(sc-605)
-#tag FOSL1SC605
-#type Antibody
-#antibodyDescription Rabbit polyclonal antibody raised against the N-terminus of FOSL1 of rat origin.
-#target FOSL1
-#targetDescription The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2. These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1. As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
-#vendorName Santa Cruz Biotech
-#vendorId sc-605
-#orderUrl http://www.scbt.com/datasheet-605-fra-1-r-20-antibody.html
-#lab Wold
-#lots G0109
-#targetId Genecard:FOSL1
-#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-#validation missing
+
+term FOSL1_(sc-605)
+tag FOSL1SC605
+type Antibody
+antibodyDescription Rabbit polyclonal antibody raised against the N-terminus of FOSL1 of rat origin.
+target FOSL1
+targetDescription The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2. These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1. As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-605
+orderUrl http://www.scbt.com/datasheet-605-fra-1-r-20-antibody.html
+lab Wold
+lots G0109
+targetId Genecard:FOSL1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
+validation missing
 
 term FOSL2
 tag FOSL2
@@ -8980,7 +8949,7 @@ label Matrix
 description Matrix
 
 term MinusRawSignal
-tag MUNUSRAWSIG
+tag MINUSRAWSIG
 type view
 label Minus Raw Signal
 description Graphs the base-by-base density of tags on the minus strand
@@ -10994,15 +10963,17 @@ cvDefined yes
 validate cv
 priority 160
 
-term run
-tag RUN
-type typeOfTerm
-label Sequencing Run
-description Sequencing run
-searchable multiSelect
-cvDefined no
-validate regex: ^[0-9]*r[0-9]*$
-priority 500
+#term run
+#tag RUN
+#type typeOfTerm
+#label Sequencing Run
+#description Sequencing run
+#searchable multiSelect
+#cvDefined no
+#validate regex: ^[0-9]*r[0-9]*$
+#priority 500
+#This term was for the fastqs being submitted as separate lanes.  However, we are now bundling them as a tgz
+#We should remove this term  Sept 2 2011
 
 term seqPlatform
 tag SEQPLATFORM
