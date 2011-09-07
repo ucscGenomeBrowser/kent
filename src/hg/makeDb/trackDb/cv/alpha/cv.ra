@@ -116,7 +116,7 @@ tier 2
 protocol ENCODE:HepG2_protocol.pdf
 
 term HepG2b
-tag HEPG2B
+tag HEPG2b
 type Cell Line
 organism human
 description OBSOLETE, HepG2b is identical to HepG2
@@ -1194,7 +1194,7 @@ tier 3
 organism human
 description Malignant Melanoma
 lineage missing
-karyotype missing
+karyotype cancer
 sex M
 tissue Skin
 vendorName ATCC
@@ -1273,7 +1273,7 @@ term FibroP
 tag FIBROP
 type Cell Line
 organism human
-description normal fibroblasts taken from individuals with Parkinson's disease
+description normal fibroblasts taken from individuals with Parkinson's disease, AG20443, AG08395 and AG08396 were pooled for this sample
 tissue Skin
 karyotype normal
 vendorName Paul Tesar (Case Western)
@@ -3811,8 +3811,8 @@ tissue Chordoma
 vendorName Chordoma Research
 vendorId Foundation
 orderUrl http://www.chordomafoundation.org/research/
-termId BTO:0001248
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
+termId BTO:0001768
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001768&termName=notochord 
 lab Crawford
 protocol Crawford:UCH1_Crawford_protocol.pdf
 
@@ -7598,7 +7598,7 @@ orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782
 lab Farnham
 lots 060729QCS1
 targetId GeneCard:ZNF274
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=ZNF274 
 validation ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
 
 term ZNF274_(M01)
@@ -8617,27 +8617,27 @@ label MNase
 
 term Myoblast
 tag MYB
-description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold) PROVISIONAL
+description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold) 
 type treatment
 
 term Myocyte_24h
 tag MYC24H
-description Myocytes differentiated from myoblasts for 24 hours (Wold) PROVISIONAL
+description Myocytes differentiated from myoblasts for 24 hours (Wold) 
 type treatment
 
 term Myocyte_60h
 tag MYC60H
-description Myocytes differentiated from myoblasts for 60 hours (Wold) PROVISIONAL
+description Myocytes differentiated from myoblasts for 60 hours (Wold)
 type treatment
 
 term Myocyte_5d
 tag MYC5D
-description Myocytes differentiated from myoblasts for 5 days (Wold) PROVISIONAL
+description Myocytes differentiated from myoblasts for 5 days (Wold) 
 type treatment
 
 term Myocyte_7d
 tag MYC7D
-description Myocytes differentiated from myoblasts for 7 days (Wold) PROVISIONAL
+description Myocytes differentiated from myoblasts for 7 days (Wold)
 type treatment
 
 
