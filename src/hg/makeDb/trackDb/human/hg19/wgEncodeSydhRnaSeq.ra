@@ -24,7 +24,7 @@ noInherit on
     view RawSignal
     visibility full
     subTrack wgEncodeSydhRnaSeq
-    viewLimits 0:10
+    viewLimits 0:78
     autoScale off
     transformFunc NONE
     windowingFunction mean+whiskers
