@@ -1273,7 +1273,7 @@ term FibroP
 tag FIBROP
 type Cell Line
 organism human
-description normal fibroblasts taken from individuals with Parkinson's disease
+description normal fibroblasts taken from individuals with Parkinson's disease, AG20443, AG08395 and AG08396 were pooled for this sample
 tissue Skin
 karyotype normal
 vendorName Paul Tesar (Case Western)
