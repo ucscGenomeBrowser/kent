@@ -17,14 +17,26 @@ body {
     height: 70px;
 }
 
-a {
-	color: #003366;
-}
-
 .encodeHeader img {
     float: left;
     height: 70px;
     line-height:  70px;
+}
+
+.encodeHeader span {
+    vertical-align: middle;
+}
+
+a {
+	color: #003366;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 2px solid black;
 }
 
 .wrapper {
@@ -77,6 +89,90 @@ dd {
 	font-size: 16pt;
 }
 
+#referenceGenome td+td {
+    background-color: #DDD;
+}
+
+.foo:hover {
+    color: white;
+    background-color: black;
+    border: 2px gray inset;
+}
 
 
+.summaryTable {
+    float: left;
+    width: 30%;
+    border-spacing: 5px;
+    margin-top: 3em;
+    margin-left: 3%;
+}
+
+.summaryTable th {
+    padding: 3px;
+    background-color: #DC7;
+    text-align: left;
+    padding-left: 2em;
+}
+
+.summaryTable td {
+    text-align: left;
+    padding-left: 1em;
+}
+
+.summaryTable td+td {
+    text-align: right;
+    padding-right: 1em;
+}
+
+.matrixButton {
+    float: right;
+    margin-right: 1em;
+}
+
+#searchButtons {
+    float: right;
+    margin-right: 1em;
+}
+
+.selectable:hover
+{
+    background-color: black;
+    color: white;
+}
+
+.selected
+{
+    background-color: #FFAB66;
+    color: white;
+}
+
+.odd
+{
+    background-color: #F6F3DF;
+}
+
+.selectable {
+    color: #004D99;
+}
+
+/* colored bullets on cell types based on karyotype CV field */
+
+.cancer {
+    color: red;
+    font-size: large;
+    text-align: right;
+    float: right;
+}
+
+.normal {
+    color: green;
+    font-size: large;
+    text-align: right;
+    float: right;
+}
+
+.unknown {
+    color: lightgrey;
+}
 
