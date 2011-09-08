@@ -114,15 +114,25 @@ if(argc == 1)
     hPrintDisable();
     oldVars = hashNew(10);
     struct cart *cart = cartForSession(hUserCookie(), excludeVars, oldVars);
+
     // setup approriate CGI variables which tell hgTracks code what to do.
-    cartSetBoolean(cart, "hgt.imageV1", TRUE);
     cartSetBoolean(cart, "hgt.trackImgOnly", TRUE);
-    cartSetString(cart, "hgt.contentType", "png");
-    printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+    if(cartVarExists(cart, "jsonp"))
+        {
+        cartSetString(cart, "hgt.contentType", "jsonp");
+        cartSetString(cart, "hgt.trackNameFilter", cartString(cart, "track"));
+        }
+    else
+        {
+        cartSetString(cart, "hgt.contentType", "png");
+        cartSetBoolean(cart, "hgt.imageV1", TRUE);
+        }
     doMiddle(cart);
     }
 else
     {
+    // XXXX remove this code ... well, maybe not - this still might be useful for a stand-alone renderer.
+
     // command line call
 
     /* Set up some timing since we're trying to optimize things very often. */

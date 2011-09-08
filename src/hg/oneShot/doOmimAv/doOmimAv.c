@@ -10,14 +10,16 @@ void usage()
 errAbort(
   "doOmimAv - This program is part of the omimAvSnp build pipeline.\n"
   "usage:\n"
-  "   doOmimAv db outFileName\n"
+  "   doOmimAv db outFileName errFileName\n"
   "      db is the database name\n"
   "      outFileName is the filename of the output file\n"
-  "example: doOmimAv hg19 omimAvRepl.tab\n");
+  "      errFileName is the filename of the error output file\n"
+  "example: doOmimAv hg19 omimAvRepl.tab j.err\n");
 }
 
 char *avId, *omimId;
 FILE   *outf;
+FILE   *errf;
 
 struct aminoAcidTable *aaTable;
 char aaAbbrev[21][4];
@@ -92,7 +94,7 @@ for (i=0; i<21; i++)
 			strcpy(aaRepl->dbSnpId, "-");
 			}
 		    strncpy(aaRepl->dbSnpId, dbSnpId, (size_t)255);
-		    
+		   
 		    /* check to see if 2 dbSnpIds specified */
 		    moreSnp = strstr(aaRepl->dbSnpId, ",");
 		    if (moreSnp == NULL)
@@ -115,7 +117,7 @@ for (i=0; i<21; i++)
 			    moreSnp = strstr(nextSnp, ",");
 		    	    if (moreSnp != NULL) *moreSnp = '\0';
 			    fprintf(outf, 
-		                    "%s\t%s\t%c\t%3d\t%c\trs%s\t%s\t\%s\n", 
+		                    "%s\t%s\t%c\t%3d\t%c\t%s\t%s\t\%s\n", 
 				    avId, omimId, aaRepl->firstAa, aaRepl->aaPosition, aaRepl->secondAa, 
 		    	            nextSnp, replIn, description);
 			    }
@@ -136,6 +138,7 @@ int main(int argc, char *argv[])
 {
 char *database;
 char *outFn;
+char *errFn;
 
 struct sqlConnection *conn2;
 char query2[256];
@@ -151,7 +154,7 @@ char *desc;
 
 boolean successful;
 
-if (argc != 3) usage();
+if (argc != 4) usage();
 
 aaInit();
 
@@ -159,7 +162,9 @@ database = argv[1];
 conn2= hAllocConn(database);
 
 outFn   = argv[2];
+errFn   = argv[3];
 outf    = mustOpen(outFn, "w");
+errf    = mustOpen(errFn, "w");
 
 sprintf(query2,"select avId, omimId, dbSnpId, repl2, description from omimAv");
 sr2 = sqlMustGetResult(conn2, query2);
@@ -180,13 +185,13 @@ while (row2 != NULL)
 		if (chp != NULL) *chp = '\0';
 
 		successful = processRepl(avId, omimId, dbSnpId, repl2, &aaRepl, desc);
-		if (!successful) fprintf(stderr, "!!! %s\t%s\n", avId, repl2);
+		if (!successful) fprintf(errf, "!!! %s\t%s\n", avId, repl2);
 		
 		if (chp != NULL)
 		   {
 		   chp = chp + strlen(" AND ");
 		   processRepl(avId, omimId, dbSnpId, chp, &aaRepl, desc);
-		   if (!successful) fprintf(stderr, "!!! %s\t%s\n", avId, chp);
+		   if (!successful) fprintf(errf, "!!! %s\t%s\n", avId, chp);
 		   }
 		}
 	}
@@ -196,6 +201,7 @@ while (row2 != NULL)
 sqlFreeResult(&sr2);
 
 fclose(outf);
+fclose(errf);
 hFreeConn(&conn2);
 return(0);
 }
