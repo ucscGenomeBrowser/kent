@@ -33,7 +33,7 @@ struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
 static char *destUrl = "../cgi-bin/hgTracks";
-static char *pageTitle = "Import Tracks from Data Hubs";
+static char *pageTitle = "Track Data Hubs";
 char *database = NULL;
 char *organism = NULL;
 
