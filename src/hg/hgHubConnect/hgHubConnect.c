@@ -139,8 +139,8 @@ for(hub = hubList; hub; hub = hub->next)
     if (isEmpty(hub->errorMessage))
 	ourPrintCell(hub->longLabel);
     else
-	printf("<TD><span class=\"hubError\">ERROR: %s</span>"
-	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\"> Debug</a></TD>", 
+	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
 	    hub->errorMessage);
 
     ourPrintCell(hub->hubUrl);
