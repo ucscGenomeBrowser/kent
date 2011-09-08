@@ -4615,6 +4615,6 @@ noInherit on
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SK-N-SH_RA cell longPolyA
         longLabel ENCODE (longPolyA in SK-N-SH_RA cell)
-        subGroups view=Junctions cellType=SKNSHRA localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions rep=Pooled cellType=SKNSHRA localization=CELL rnaExtract=PAP
+        type bed 6
         # subId=3663 dateSubmitted=2011-02-18
