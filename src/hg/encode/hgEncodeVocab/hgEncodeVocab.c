@@ -361,7 +361,7 @@ if (sameWord(type,CV_TERM_CELL))
         printColHeader(FALSE,"Lineage",    sortOrder++,NULL,1);
         printColHeader(FALSE,"Karyotype",  sortOrder++,NULL,1);
         printColHeader(FALSE,"Sex",        sortOrder++,NULL,1);
-        printColHeader(FALSE,"Documents",  0          ,NULL,1);
+        printColHeader(FALSE,"Documents",  sortOrder++,NULL,1);
         printColHeader(FALSE,"Vendor ID",  sortOrder++,NULL,1);
         printColHeader(FALSE,"Term ID",    sortOrder++,NULL,1);
         printColHeader(TRUE ,"Label",      sortOrder++,NULL,1);
@@ -372,7 +372,7 @@ if (sameWord(type,CV_TERM_CELL))
         printColHeader(FALSE,"Description",sortOrder++,NULL,TABLE_COLS_AVAILABLE(7));
         printColHeader(FALSE,"Category",   sortOrder++,NULL,1);
         printColHeader(FALSE,"Sex",        sortOrder++,NULL,1);
-        printColHeader(FALSE,"Documents",  0          ,NULL,1);
+        printColHeader(FALSE,"Documents",  sortOrder++,NULL,1);
         printColHeader(FALSE,"Source Lab", sortOrder++,NULL,1);
         printColHeader(FALSE,"Term ID",    sortOrder++,NULL,1);
         printColHeader(TRUE ,"Label",      sortOrder++,NULL,1);
@@ -386,7 +386,7 @@ else if (sameWord(type,CV_TERM_ANTIBODY))
     printColHeader(FALSE,"Target Description",  sortOrder++,"style='min-width:600px;'",1);
     printColHeader(FALSE,"Vendor ID",           sortOrder++,NULL,1);
     printColHeader(FALSE,"Lab",                 sortOrder++,NULL,1);
-    printColHeader(FALSE,"Documents",           0          ,NULL,1);
+    printColHeader(FALSE,"Documents",           sortOrder++,NULL,1);
     printColHeader(FALSE,"Lots",                sortOrder++,NULL,1);
     printColHeader(FALSE,"Target Link",         sortOrder++,NULL,1);
     printColHeader(TRUE ,"Label",               sortOrder++,NULL,1);
