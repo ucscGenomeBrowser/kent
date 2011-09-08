@@ -20,34 +20,36 @@ resulting in trimming of their 3&#8242; ends (Mortazavi et al., 2008).
 
 
 <h2>Display Conventions and Configuration</h2>
-<p>To show only selected subtracks, uncheck the boxes next to the tracks that
-you wish to hide.  Color differences among the views provide a visual cue for
-distinguishing between the different cell types and compartments.</p>
 <p>
 This track is a multi-view composite track that contains multiple data types
 (<em>views</em>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
 tracks are <a href="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</a>.
-ENCODE tracks typically contain one or more of the following views:
+To show only selected subtracks, uncheck the boxes next to the tracks that
+you wish to hide.  Color differences among the views provide a visual cue for
+distinguishing between the different cell types and compartments.</p>
+<p>
 <dl>
-
+For each cell type, this track contains the following views:
 <dl>
+<dt><i>Contigs</i>
+</dt><dd> The Contigs are in .BED format files representing blocks of overlapping mapped reads from pooled biological replicates.
+</dd>
 <dt><i>Transfrags</i>
-</dt><dd>Small RNA reads were assembled into transcribed fragments, "Transfrags" by merging reads with one or more overlapping nucleotides.  Only uniquely mapping reads were used to generate Transfrags. The <a href="../ENCODE/transfragBed6CshlDescription.html">BED6+ format</a> of the transfrag files are created from "intervals-to-contigs" Galaxy tool written by <a href="mailto:&#103;&#111;r&#100;&#111;n&#64;&#99;&#115;h&#108;.e&#100;&#117;">Assaf Gordon</a> in the Hannon lab at CSHL.
+</dt><dd>These data are now available for download only and have been replaced by Contigs. Small RNA reads were assembled into transcribed fragments, "Transfrags" by merging reads with one or more overlapping nucleotides.  Only uniquely mapping reads were used to generate Transfrags. The <a href="../ENCODE/transfragBed6CshlDescription.html">BED6+ format</a> of the transfrag files are created from "intervals-to-contigs" Galaxy tool written by <a href="mailto:&#103;&#111;r&#100;&#111;n&#64;&#99;&#115;h&#108;.e&#100;&#117;">Assaf Gordon</a> in the Hannon lab at CSHL.
 The transfrags view is not filtered.
-</dd><dt><i>Raw Signals</i>
+</dd><dt><i>Raw Signals (Plus and Minus)</i>
 </dt><dd>The Raw Signal view shows the density of mapped reads on the plus and minus strands (wiggle format).
 </dd>
 <dt><i>Alignments</i>
 </dt><dd>The Alignments view shows individual reads mapped from pooled biological replicates to the genome and indicates where
-bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The track may be set so that the color of each alignment denotes the mapping frequency of the corresponding read:</br>
+bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  
+<!--The track may be set so that the color of each alignment denotes the mapping frequency of the corresponding read:</br>
 <font color="#FF00FF">pink</font> for reads mapping to a single genomic location, </br>
 <font color="#CC00FF"> pinkish-purple</font> for reads mapping to exactly two genomic locations and </br>
 <font color="#800080">purple</font> for reads mapping to more than two possible locations.</br>
-  The alignment file follows the standard SAM format of Bowtie output with the following additions: the mapping frequency for each read is indicated in the BAM file using the tag 'YG' and the alignment color is specified in RGB space using the tag 'YC'.  The 'XA' tag is Bowtie tag that means the aligned read belongs to <a href=http://bowtie-bio.sourceforge.net/manual.shtml#strata>strata</a>. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. Mapping quality is not available for this track and so, in accordance with the SAM Format Specification, a score of 255 is used. Also, as described in the Methods section below, the sequence quality scores are not available and so are all displayed as 40.
-</dd>
-<dt><i>Contigs</i>
-</dt><dd> The Contigs are in .BED format files representing blocks of overlapping mapped reads from pooled biological replicates.
+-->
+The alignment file follows the standard SAM format of Bowtie output with the following additions: the mapping frequency for each read is indicated in the BAM file using the tag 'YG' and the alignment color is specified in RGB space using the tag 'YC'.  The 'XA' tag is Bowtie tag that means the aligned read belongs to <a href=http://bowtie-bio.sourceforge.net/manual.shtml#strata>strata</a>. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. Mapping quality is not available for this track and so, in accordance with the SAM Format Specification, a score of 255 is used. Also, as described in the Methods section below, the sequence quality scores are not available and so are all displayed as 40.
 </dd>
 </dl>
 
@@ -55,8 +57,7 @@ bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The track
 
 <h2>Release Notes </h2>
 <p>
-This is release 2 (Summer 2011).
-MORE INFORMATION IS NEEDED ABOUT THIS RELEASE - Matt.
+This is release 2 (Summer 2011). This release contains both data remapped from hg18 referred to as Generation 0 data that was produced by the Hannon lab and new experiments produced by the Gingeras lab.  When there is both Generation 0 and new data available, only the new data is displayed, the older data is available for downloads only. From the original 11 experiments displayed on release 1, only 2 (prostate and K562 polysome) are still displayed.  In addition to improved data, there are several additional cell lines. The Contigs view is available for display and the Gencode Predicted Exons files are available for downloads.  
 </p>
 
 
@@ -120,7 +121,7 @@ Schlesinger</a> (computational)
 <h2>References</h2>
 
 <p>Langmead B, Trapnell C, Pop M, Salzberg SL.
-<a target="_BLANK" href="http://genomebiology.com/2009/10/3/R25"><U>Ultrafast and memory-efficient alignment of short DNA sequences to the human genome.</U></a>
+<a target="_BLANK" href="http://genomebiology.com/2009/10/3/R25"><U>Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</U></a>.
 <em>Genome Biology</em>. 2009 Mar; 10:R25.</p>
 
 <p>Mortazavi A, Williams BA, McCue K, Schaeffer L, and Wold BJ. 

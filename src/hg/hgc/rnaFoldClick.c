@@ -374,7 +374,9 @@ printf("<p>The UCSC Genome Browser mirror site at the Molecular Diagnostic Labor
 printf("<A HREF=\"");
 printf("http://genome-mirror.moma.ki.au.dk/cgi-bin/hgc?db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=evofold&i=%s",
 database, item->chrom, item->chromStart, item->chromEnd, item->chromStart, item->chromEnd, cgiEncode(item->name)); // c, l and r are needed because mirror may have no cart for us.  Not actually used, however.
-printf("\" TARGET=_blank>%s</A></p>", "click here to go to genome-mirror.moma.ki.au.dk.");
+printf("\" TARGET=_blank>%s</A>.", "click here to go to genome-mirror.moma.ki.au.dk");
+fprintf(f,"  <B><FONT COLOR = RED>NOTE:</FONT> some operating system/browser combinations require ");
+fprintf(f," the latest version of Java for this to work properly.</FONT></B></P>");
 }
 
 void htmlPrintSecStrEvofoldV2Drawing(FILE *f, struct rnaSecStr *item)
@@ -406,7 +408,9 @@ printf("<p>The UCSC Genome Browser mirror site at the Molecular Diagnostic Labor
 printf("<A HREF=\"");
 printf("http://genome-mirror.moma.ki.au.dk/cgi-bin/hgc?db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=evofoldV2&i=%s",
 database, item->chrom, item->chromStart, item->chromEnd, item->chromStart, item->chromEnd, cgiEncode(item->name));  // c, l and r are needed because mirror may have no cart for us.  Not actually used, however.
-printf("\" TARGET=_blank>%s</A></p>", "click here to go to genome-mirror.moma.ki.au.dk.");
+printf("\" TARGET=_blank>%s</A>.", "click here to go to genome-mirror.moma.ki.au.dk");
+fprintf(f," <B><FONT COLOR = RED>NOTE:</FONT> some operating system/browser combinations require ");
+fprintf(f," the latest version of Java for this to work properly.</FONT></B></P>");
 }
 
 void doRnaSecStr(struct trackDb *tdb, char *itemName)
