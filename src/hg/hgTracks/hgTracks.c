@@ -2551,9 +2551,28 @@ if(hvgSide != hvg)
 hvGfxClose(&hvg);
 
 #ifdef SUPPORT_CONTENT_TYPE
-// following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
-if(sameString(cartUsualString(cart, "hgt.contentType", "html"), "png"))
+char *type = cartUsualString(cart, "hgt.contentType", "html");
+if(sameString(type, "jsonp"))
     {
+    struct jsonHashElement *json = newJsonHash(newHash(8));
+
+    printf("Content-Type: application/json\n\n");
+    jsonHashAddString(json, "track", cartString(cart, "hgt.trackNameFilter"));
+    jsonHashAddNumber(json, "height", pixHeight);
+    jsonHashAddNumber(json, "width", pixWidth);
+    jsonHashAddString(json, "src", gifTn.forHtml);
+    printf("%s(", cartString(cart, "jsonp"));
+    hPrintEnable();
+    jsonPrint((struct jsonElement *) json, NULL, 0);
+    hPrintDisable();
+    printf(")\n");
+    return;
+    }
+else if(sameString(type, "png"))
+    {
+    // following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
+    printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+
     char buf[4096];
     FILE *fd = fopen(gifTn.forCgi, "r");
     if(fd == NULL)
