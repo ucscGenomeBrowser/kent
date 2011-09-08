@@ -4610,3 +4610,11 @@ noInherit on
         subGroups view=Junctions rep=Pooled cellType=SKNSHRA localization=CELL rnaExtract=PAM
         type bed 6
         # subId=3662 dateSubmitted=2011-02-18
+
+        track wgEncodeCshlLongRnaSeqSknshraCellPapJunctions
+        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        shortLabel SK-N-SH_RA cell longPolyA
+        longLabel ENCODE (longPolyA in SK-N-SH_RA cell)
+        subGroups view=Junctions cellType=SKNSHRA localization=CELL rnaExtract=PAP
+        type bedRnaElements
+        # subId=3663 dateSubmitted=2011-02-18
