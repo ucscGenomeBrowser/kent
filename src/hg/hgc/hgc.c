@@ -9647,10 +9647,13 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
+    // disable NCBI link until they work it out with OMIM
+    /*
     printf("<BR>\n");
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
     printf("%s</A></B><BR>", itemName);
+    */
 
     safef(query, sizeof(query),
     	  "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
@@ -9712,7 +9715,7 @@ if (url != NULL && url[0] != 0)
 
     // show RefSeq Gene link(s)
     safef(query, sizeof(query),
-          "select distinct r.name from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
+          "select distinct r.name from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
 	  itemName, chrom, chromStart, chromEnd);
     sr = sqlMustGetResult(conn, query);
     if (sr != NULL)
@@ -9735,7 +9738,7 @@ if (url != NULL && url[0] != 0)
 
     // show Related UCSC Gene links
     safef(query, sizeof(query),
-          "select distinct kgId from kgXref x, refLink l, mim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
+          "select distinct kgId from kgXref x, refLink l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
 	  itemName);
     sr = sqlMustGetResult(conn, query);
     if (sr != NULL)
@@ -9808,11 +9811,14 @@ if (url != NULL && url[0] != 0)
 	    }
 	}
     sqlFreeResult(&sr);
-
+    
+    // disable NCBI link until they work it out with OMIM
+    /*
     printf("<BR>\n");
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
     printf("%s</A></B><BR>", itemName);
+    */
 
     printf("<B>Location: </B>");
     safef(query, sizeof(query),
@@ -10049,10 +10055,13 @@ if (url != NULL && url[0] != 0)
     if (title1 != NULL) printf(": %s", title1);
     if (title2 != NULL) printf(" %s ", title2);
 
+    // disable NCBI link until they work it out with OMIM
+    /*
     printf("<BR>\n");
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
     printf("%s</A></B><BR>", itemName);
+    */
 
     safef(query, sizeof(query),
     	  "select replStr from omimAvRepl where avId=%s;", avId);

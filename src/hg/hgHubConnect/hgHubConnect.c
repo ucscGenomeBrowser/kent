@@ -33,7 +33,7 @@ struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
 static char *destUrl = "../cgi-bin/hgTracks";
-static char *pageTitle = "Import Tracks from Data Hubs";
+static char *pageTitle = "Track Data Hubs";
 char *database = NULL;
 char *organism = NULL;
 
@@ -139,8 +139,8 @@ for(hub = hubList; hub; hub = hub->next)
     if (isEmpty(hub->errorMessage))
 	ourPrintCell(hub->longLabel);
     else
-	printf("<TD><span class=\"hubError\">ERROR: %s</span>"
-	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\"> Debug</a></TD>", 
+	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
 	    hub->errorMessage);
 
     ourPrintCell(hub->hubUrl);
