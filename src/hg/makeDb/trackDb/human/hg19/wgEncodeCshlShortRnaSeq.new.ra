@@ -623,7 +623,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell sm A 2
-	longLabel A549 whole cell small RNA-seq Alignments Rep 2 from ENCODE/Caltech
+	longLabel A549 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bam
         # subId=4059 dateSubmitted=2011-05-11
@@ -631,7 +631,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell sm A 1
-	longLabel A549 whole cell small RNA-seq Alignments Rep 1 from ENCODE/Caltech
+	longLabel A549 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bam
         # subId=4058 dateSubmitted=2011-05-09
@@ -639,7 +639,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
     	parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG nucl sm A 1
-        longLabel HepG2 nucleus small RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
         type bam
         color 189,0,157
@@ -648,7 +648,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG cell sm A 1
-	longLabel HepG2 whole cell small RNA-seq Alignments Rep 1 from ENCODE/Caltech
+	longLabel HepG2 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bam
         color 189,0,157
@@ -657,7 +657,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG cell sm A 2
-	longLabel HepG2 whole cell small RNA-seq Alignments Rep 2 from ENCODE/Caltech
+	longLabel HepG2 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bam
         color 189,0,157
@@ -666,7 +666,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG nucl sm A 2
-        longLabel HepG2 nucleus small RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep2
         type bam
         color 189,0,157
@@ -675,7 +675,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG cyto sm A 2
-        longLabel HepG2 cytosol small RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HepG2 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
         type bam
         color 189,0,157
@@ -1276,7 +1276,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel A549 cell sm - 2
-	longLabel A549 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/Caltech
+	longLabel A549 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 1785277.000000
         # subId=4059 dateSubmitted=2011-05-11
@@ -1284,7 +1284,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel A549 cell sm - 1
-	longLabel A549 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/Caltech
+	longLabel A549 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 2036805.000000
         # subId=4058 dateSubmitted=2011-05-09
@@ -1292,7 +1292,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG nucl sm - 1
-        longLabel HepG2 nucleus small RNA-seq Minus signal Rep 1 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 2034826.000000
         color 189,0,157
@@ -1301,7 +1301,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG cell sm - 1
-	longLabel HepG2 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/Caltech
+	longLabel HepG2 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 3566535.000000
         color 189,0,157
@@ -1310,7 +1310,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG cell sm - 2
-	longLabel HepG2 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/Caltech
+	longLabel HepG2 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 3191993.000000
         color 189,0,157
@@ -1319,7 +1319,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG nucl sm - 2
-        longLabel HepG2 nucleus small RNA-seq Minus signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 1892864.000000
         color 189,0,157
@@ -1328,7 +1328,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG cyto sm - 2
-        longLabel HepG2 cytosol small RNA-seq Minus signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 cytosol small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 756377.000000
         color 189,0,157
@@ -1929,7 +1929,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel A549 cell sm + 2
-	longLabel A549 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
+	longLabel A549 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 10013224.000000
         # subId=4059 dateSubmitted=2011-05-11
@@ -1937,7 +1937,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel A549 cell sm + 1
-	longLabel A549 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/Caltech
+	longLabel A549 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 7091328.000000
         # subId=4058 dateSubmitted=2011-05-09
@@ -1945,7 +1945,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG nucl sm + 1
-        longLabel HepG2 nucleus small RNA-seq Plus signal Rep 1 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 2592219.000000
         color 189,0,157
@@ -1954,7 +1954,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG cell sm + 1
-	longLabel HepG2 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/Caltech
+	longLabel HepG2 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 4470346.000000
         color 189,0,157
@@ -1963,7 +1963,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG cell sm + 2
-	longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
+	longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 3841099.000000
         color 189,0,157
@@ -1972,7 +1972,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG nucl sm + 2
-        longLabel HepG2 nucleus small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 2960901.000000
         color 189,0,157
@@ -1981,7 +1981,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG cyto sm + 2
-        longLabel HepG2 cytosol small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 cytosol small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 2648832.000000
         color 189,0,157
