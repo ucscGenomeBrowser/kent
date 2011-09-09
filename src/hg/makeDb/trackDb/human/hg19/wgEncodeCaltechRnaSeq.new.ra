@@ -499,7 +499,7 @@ html wgEncodeCaltechRnaSeq.new
 		# subId=3453 dateSubmitted=2011-01-22
 		# was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2 cricket Tue Apr 26 12:30:25 2011
 
-		track wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
+		track wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
 		parent wgEncodeCaltechRnaSeqViewAligns off
 		longLabel HepG2 single read RNA-seq Alignments Rep 1 from ENCODE/Caltech
                 shortLabel HepG 1x75D A 1
@@ -559,7 +559,7 @@ html wgEncodeCaltechRnaSeq.new
 		# subId=3451 dateSubmitted=2011-01-21
 		# was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2 cricket Tue Apr 26 12:30:24 2011
 
-		track wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
+		track wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3
 		parent wgEncodeCaltechRnaSeqViewAligns off
 		longLabel HepG2 single read RNA-seq Alignments Rep 2 from ENCODE/Caltech
                 shortLabel HepG 1x75D A 2
