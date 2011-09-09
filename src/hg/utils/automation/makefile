@@ -36,7 +36,8 @@ SCRIPT_FILES = \
 	monthlyUpdateIgtc.csh \
 	simplePartition.pl \
 	partitionSequence.pl \
-	updateIgtc.pl
+	updateIgtc.pl \
+	unigene.csh
 
 all: mkDir libFiles $(SCRIPT_FILES:%=%.all)
 
