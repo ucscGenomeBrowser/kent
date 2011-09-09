@@ -2623,58 +2623,54 @@ strain CD-1
 subId 4791
 view RawData
 
-metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1
+metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6AlnRep1
 objType file
 age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
-control Input
-controlId MEL/Input/Input
+control None
+controlId MEL/Input/None
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6AlnRep1.bam
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/22jun2010ln4-ctcf-mel-groomed-reads-canonical
-md5sum bam=bece83a849880c64aacd5de455467434,bai=fa9a0c779769da5760f5d2a48b3d08a8
 project wgEncode
 replicate 1
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 view Alignments
 
-metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2
+metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6AlnRep2
 objType file
 age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
-control Input
-controlId MEL/Input/Input
+control None
+controlId MEL/Input/None
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2.bam
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6AlnRep2.bam
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/ctcf-mel-r2-z
-md5sum bam=b6ab72c66ab60f44ddaaa96117d9cddb,bai=289c290d3d4daa516a19c5c16461e57a
 project wgEncode
 replicate 2
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 view Alignments
 
 metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk
@@ -2687,76 +2683,20 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/ctcf-mel-pooled-z
-md5sum ae900924d1ef2d65a6a1672e692016ae
 project wgEncode
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 tableName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk
 view Peaks
-
-metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep1
-objType file
-age immortalized
-antibody CTCF
-cell MEL
-composite wgEncodePsuTfbs
-control Input
-controlId MEL/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/22jun2010ln4-ctcf-mel-groomed-reads-canonical
-md5sum f564dd515521ede07f2965bd12befc6d
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType exp
-sex M
-strain Unknown
-subId 3044
-view RawData
-
-metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep2
-objType file
-age immortalized
-antibody CTCF
-cell MEL
-composite wgEncodePsuTfbs
-control Input
-controlId MEL/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/ctcf-mel-r2-z
-md5sum 276c6d55e8c7b03cf23df0b0e7cd63cf
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-sex M
-strain Unknown
-subId 3044
-view RawData
 
 metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep1
 objType file
@@ -2768,21 +2708,19 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/22jun2010ln4-ctcf-mel-groomed-reads-canonical
-md5sum de78c665805d3b87be666b28ecf3342b
 project wgEncode
 replicate 1
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 view RepPeaks
 
 metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep2
@@ -2795,21 +2733,19 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/ctcf-mel-r2-z
-md5sum 3c0fca90ca8fd87ff3081f4d8c1cbadd
 project wgEncode
 replicate 2
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 view RepPeaks
 
 metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepSignalRep1
@@ -2822,21 +2758,19 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/22jun2010ln4-ctcf-mel-groomed-reads-canonical
-md5sum 39023ad4d84ef4bc9309fe7152e83138
 project wgEncode
 replicate 1
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 view RepSignal
 
 metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepSignalRep2
@@ -2849,21 +2783,19 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/ctcf-mel-r2-z
-md5sum d7310bc96b0092770736d212529c60ac
 project wgEncode
 replicate 2
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 view RepSignal
 
 metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig
@@ -2876,22 +2808,70 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/ctcf-mel-pooled-z
-md5sum 9afe4ab03deda722bbfbd92c47b2a4b1
 project wgEncode
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 tableName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig
 view Signal
+
+metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6RawDataRep1
+objType file
+age immortalized
+antibody CTCF
+cell MEL
+composite wgEncodePsuTfbs
+control None
+controlId MEL/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-08
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-08-30
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6RawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain C57BL/6
+subId 4817
+view RawData
+
+metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6RawDataRep2
+objType file
+age immortalized
+antibody CTCF
+cell MEL
+composite wgEncodePsuTfbs
+control None
+controlId MEL/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-08
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-08-30
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6RawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain C57BL/6
+subId 4817
+view RawData
 
 metaObject wgEncodePsuTfbsMelInputMImmortalC57bl6AlnRep1
 objType file
@@ -2903,21 +2883,19 @@ control None
 controlId MEL/Input/None
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputMImmortalC57bl6AlnRep1.bam
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/22jun2010ln4-ctcf-mel-groomed-reads-canonical
-md5sum bam=96549306eaa04e8709614db5c29579c9,bai=9cb1e68735eaf1ed88a9d5a273d72d8d
 project wgEncode
 replicate 1
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType input
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 view Alignments
 
 metaObject wgEncodePsuTfbsMelInputMImmortalC57bl6RawDataRep1
@@ -2930,21 +2908,19 @@ control None
 controlId MEL/Input/None
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-03-25
+dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputMImmortalC57bl6RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/kanwei/h/22jun2010ln4-ctcf-mel-groomed-reads-canonical
-md5sum 02cea7a42b8a50816d01d58107f70989
 project wgEncode
 replicate 1
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 setType input
 sex M
-strain Unknown
-subId 3044
+strain C57BL/6
+subId 4817
 view RawData
 
-# MAGIC: -1464959799
+# MAGIC: -1293854028
