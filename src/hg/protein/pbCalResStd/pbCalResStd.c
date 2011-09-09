@@ -1,12 +1,11 @@
 /* pbCalResStd- Calculate the avg frequency and standard deviation of each AA residue for the proteins in a specific genome*/
 
 #define MAXN 1000000
-#define MAXRES 26
+#define MAXRES 23
 
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
-#include "pbCommon.h"
 #include "spDb.h"
 #include "math.h"
 
@@ -16,12 +15,11 @@ void usage()
 errAbort(
   "pbCalResStd calculates the avg frequency and standard deviation of every AA residues of the proteins in a specific genome\n"
   "usage:\n"
-  "   pbCalResStd proteinDb spDb taxNum gDb\n"
-  "      proteinDb is the protein database name\n"
+  "   pbCalResStd spDb taxNum gDb\n"
   "      spDb is the SWISS-PROT database name\n"
   "      taxNumis the taxnomy number of the genome\n"
   "      gDb is the genome database name\n"
-  "Example: pbCalResStd proteins101005 sp101005 9606 hg19\n"
+  "Example: pbCalResStd sp050415 9606 hg17\n"
   );
 }
 
@@ -103,7 +101,6 @@ struct sqlResult *sr2;
 char **row2;
 char cond_str[255];
 char *proteinDatabaseName;
-char *swissprotDatabaseName;
 FILE *o1, *o2, *o3;
 FILE *fh[23];
 char temp_str[1000];;
@@ -124,18 +121,17 @@ char *taxon;
 char *database;
 int sortedCnt;
 
-if (argc != 5) usage();
+if (argc != 4) usage();
 
-strcpy(aaAlphabet, AA_ALPHABET);
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
 
 proteinDatabaseName = argv[1];
-swissprotDatabaseName = argv[2];
-taxon = argv[3];
-database = argv[4];
+taxon = argv[2];
+database = argv[3];
 
 o2 = mustOpen("pbResAvgStd.tab", "w");
 
-for (i=0; i<strlen(aaAlphabet); i++)
+for (i=0; i<20; i++)
     {
     safef(temp_str, sizeof(temp_str), "%c.txt", aaAlphabet[i]);
     fh[i] = mustOpen(temp_str, "w");
@@ -158,14 +154,13 @@ for (j=0; j<MAXRES; j++)
 while (row2 != NULL)
     {
     protDisplayId = row2[0];   
-    printf("working on protein %s, icnt now %d\n", protDisplayId, icnt);  /* ## help */
     safef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
-    accession = sqlGetField(swissprotDatabaseName, "displayId", "acc", cond_str);
+    accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
 
     if (accession == NULL)
 	{
         safef(cond_str, sizeof(cond_str),  "acc='%s'", protDisplayId);
-    	accession = sqlGetField(swissprotDatabaseName, "displayId", "acc", cond_str);
+    	accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
 	if (accession == NULL)
 	    {
 	    verbose(2, "'%s' not found.\n", protDisplayId);
@@ -174,7 +169,7 @@ while (row2 != NULL)
 	}
     
     safef(cond_str, sizeof(cond_str),  "accession='%s'", accession);
-    answer = sqlGetField(proteinDatabaseName, "spXref2", "biodatabaseID", cond_str);
+    answer = sqlGetField("proteins040115", "spXref2", "biodatabaseID", cond_str);
     if (answer == NULL)
 	{
 	/* this protein might be a variant splice protein, and then it won't be in spXref2 */
@@ -187,7 +182,7 @@ while (row2 != NULL)
 	}
     
     safef(cond_str, sizeof(cond_str),  "acc='%s'", accession);
-    aaSeq = sqlGetField(swissprotDatabaseName, "protein", "val", cond_str);
+    aaSeq = sqlGetField(proteinDatabaseName, "protein", "val", cond_str);
     if (aaSeq == NULL)
 	{
 	printf("Can't find peptide sequence for %s, exiting ...\n", protDisplayId);
@@ -230,7 +225,7 @@ while (row2 != NULL)
 	sumJ[j] = sumJ[j] + freq[icnt][j];
 	}
 
-    for (j=0; j<strlen(aaAlphabet); j++)
+    for (j=0; j<20; j++)
 	{
 	fprintf(fh[j], "%15.7f\t%s\n", freq[icnt][j], accession);fflush(fh[j]);
 	}
@@ -245,7 +240,7 @@ skip:
 recordCnt = icnt;
 recordCntDouble = (double)recordCnt;
 
-for (j=0; j<strlen(aaAlphabet); j++)
+for (j=0; j<20; j++)
     {
     carefulClose(&(fh[j]));
     }
@@ -254,12 +249,12 @@ sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 
-for (j=0; j<strlen(aaAlphabet); j++)
+for (j=0; j<MAXRES; j++)
     {
     avg[j] = sumJ[j]/recordCntDouble;
     }
 
- for (j=0; j<strlen(aaAlphabet); j++)
+for (j=0; j<20; j++)
     {
     sum = 0.0;
     for (i=0; i<recordCnt; i++)
@@ -273,7 +268,7 @@ for (j=0; j<strlen(aaAlphabet); j++)
 carefulClose(&o2);
 
 o1 = mustOpen("pbAnomLimit.tab", "w");
-for (j=0; j<strlen(aaAlphabet); j++)
+for (j=0; j<20; j++)
     {
     safef(temp_str, sizeof(temp_str), "cat %c.txt|sort|uniq > %c.srt",  aaAlphabet[j], aaAlphabet[j]);
     mustSystem(temp_str);
