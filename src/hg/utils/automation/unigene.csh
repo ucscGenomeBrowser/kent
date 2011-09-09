@@ -10,30 +10,24 @@
 #
 
 set us = "rhead ann fanhsu"
-set localRepos = /cluster/data/ncbi/uniGene
+set localRepos = /hive/data/outside/uniGene
 set path = (/usr/bin /bin)
 
-# Figure out the path of this script (and the files it uses), cd there,
-# and use pwd to make it absolute (not relative).  
-set myPath = $0:h
-if ("$myPath" == "$0") set myPath = "."
-cd $myPath
-set myPath = `pwd`
-
+cd $localRepos
 mv current_version previous_version
 rm -f Hs.info
 wget -q ftp://ftp.ncbi.nih.gov/repository/UniGene/Homo_sapiens/Hs.info
 sleep 10
 if (! -e Hs.info) then
-    echo "failed to wget Hs.info to $myPath" | mail -s "UniGene ftp failed" $us
+    echo "failed to wget Hs.info to $localRepos" | mail -s "UniGene ftp failed" $us
     mv previous_version current_version
     exit 
 endif
 
 set version = `perl -e '$t=<>;$t=~/\#(\d+)/;print "$1\n";' Hs.info`
-echo $version > $myPath/current_version
+echo $version > $localRepos/current_version
 
-set prev = `cat $myPath/previous_version`
+set prev = `cat $localRepos/previous_version`
 if ("0$version" != "0$prev") then
     mkdir $localRepos/uniGene.$version
     if ($status) then
@@ -77,7 +71,7 @@ the "MAKE UNIGENE ALIGNMENTS" section.
 
 Cheers,
 
-Angie
+QA Team (actually Brooke, taking over for Angie)
 
 
 EOF

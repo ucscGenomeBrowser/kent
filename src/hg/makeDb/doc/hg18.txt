@@ -29796,20 +29796,10 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 8/1/11 angie)
-# Updated 6/9/11
-# Updated 4/1/11
-# Updated 3/1/11
-# Updated 2/1/11
-# Updated 12/7/10
-# Updated 11/1/10
-# Updated 10/6/10
-# Updated 9/1/10
-# Updated 8/2/10
-# Updated 6/2/10
-# Updated 5/12/10
-# Updated 4/1/10
-# Updated 3/1/10
+# NHGRI GWAS CATALOG (DONE 9/2/11 angie)
+# NEXT TIME: squelch multiple-mappers!
+# Updated 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
+# Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10, 4/1/10, 3/1/10
 # Originally done 1/19/10
 # Area of possible future improvement: for SNPs that can't be mapped via our SNP track,
 # could some of them be obsolete IDs that have been merged into current IDs?
@@ -29895,7 +29885,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 6156 elements of size 22
+#Loaded 6419 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29909,7 +29899,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#342 ambigStrand.txt
+#356 ambigStrand.txt
 
 
 #############################################################################
@@ -31651,6 +31641,74 @@ done
     ln -s `pwd`/MaleFemaleDifference.bw /gbdb/hg18/decode/
     hgsql -e "drop table decodeMaleFemaleDifference;" hg18
     hgBbiDbLink hg18 decodeMaleFemaleDifference /gbdb/hg18/decode/MaleFemaleDifference.bw
+
+#############################################################################
+# HapMap recombination maps added to deCODE track (DONE - 2011-08-30 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/hapmap/release24
+    cd /hive/data/genomes/hg18/bed/hapmap/release24
+    wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_CEU.tgz
+
+wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_YRI.tgz
+
+wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_combined.tgz
+
+    mkdir CEU
+    cd CEU
+    tar xvzf ../genetic_map_b36_CEU.tgz
+    cd ..
+    mkdir YRI
+    cd YRI
+    tar xvzf ../genetic_map_b36_YRI.tgz
+    cd ..
+    mkdir combined
+    cd combined
+    tar xvzf ../genetic_map_b36_combined.tgz
+
+for F in CEU/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_CEU_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24CEURecombMap.bedGraph
+
+for F in YRI/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_YRI_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24YRIRecombMap.bedGraph
+
+for F in combined/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_combined_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24CombinedRecombMap.bedGraph
+
+for F in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+bedGraphToBigWig -verbose=2 ${F}.bedGraph \
+        /hive/data/genomes/hg18/chrom.sizes ${F}.bw > ${F}.log 2>&1
+done
+
+for T in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+    rm -f /gbdb/hg18/decode/${T}.bw
+    ln -s `pwd`/${T}.bw /gbdb/hg18/decode/${T}.bw
+    hgsql -e "drop table ${T};" hg18
+    hgBbiDbLink hg18 ${T} /gbdb/hg18/decode/${T}.bw
+done
 
 #############################################################################
 # HI SEQ DEPTH (DONE 7/15/11 angie)

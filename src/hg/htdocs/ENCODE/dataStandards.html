@@ -1,64 +1,40 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<META name="description" content="ENCODE Project at UCSC - Data Standards">
-	<META name="keywords" content="ENCODE, project, ENCODE project, genome, genome browser, human genome, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, NHGRI, NISC">
-	<TITLE>ENCODE Project at UCSC: Data Standards</TITLE>
-	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
-</HEAD>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>Data Standards</title>
+        <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+        <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+    </head>
 
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
-<A NAME="TOP"></A>
+    <body>
+        <!--#include virtual="/inc/encodeProject.topbar.html"-->
 
-<!-- Header Images and links -->
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-  <TR>
-    <TH COLSPAN=2 ALIGN="left">&nbsp;&nbsp;
-      <A HREF="http://www.genome.gov/10005107" TARGET=_BLANK><IMG SRC="../images/ENCODE_scaleup_logo.png" height=50 ALT="ENCODE Project at NHGRI"></A>
-      &nbsp;&nbsp;
-          <A HREF="/encode/"><IMG SRC="../images/encodeDcc.jpg" ALT="ENCODE Data Coordination Center at UCSC"></A>
-    </TH>
-  </TR>
-
-  <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/encode.topbar.html"--></TD></TR>
-
-    <TR HEIGHT="100%" VALIGN="top"><TD VALIGN="top">
-        <!--outer table is for border purposes-->
-        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-            <TR><TD>	
-            <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-                <TR><TD>	
-
-	        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
-	            <A NAME="Existing"></A><FONT SIZE="4"><B>&nbsp; 
-		    ENCODE Consortium Data Standards</B></FONT></TD>
-	          </TR></TABLE>
-	
-	        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-                    <TR><TH HEIGHT=3></TH></TR>
-                    <TR><TD WIDTH=10></TD><TD>
-		    <P>
-		    The ENCODE Consortium is developing data standards for ENCODE experiments. 
-		    Finalized data standards are listed below:
-		    </P>
-		    <P>
-		    <UL>
-		    <LI>
-		    <A TARGET=_blank HREF=protocols/dataStandards/ENCODE_RNAseq_Standards_V1.0.pdf>Standards, Guidelines and Best Practices for RNA-Seq V1.0 (June 2011)</A>
-                    <P>
-                    RNA-Seq is a directed experimental approach aimed at characterizing transcription
-                    in biological samples.
-                    This document presents a set of guidelines and standards focused on best practices for
-                    creating 'reference quality' transcriptome measurements.  As technologies
-                    are rapidly evolving and the aims of RNA-Seq experiments are diverse, this document does
-                    not cover all standards and quality control issues.
-		    </UL>
-		    </TD><TD WIDTH=15>
-                </TD></TR></TABLE>
-	    <BR></TD></TR></TABLE>
-        </TD></TR></TABLE>
-	<BR>
-    </TD></TR></TABLE>
-</BODY></HTML>
-
+        <div class="encodeHeader">
+            <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+            <span class="txt">Data Standards</span>
+        </div>
+       <div class="wrapper">
+                <div class="bar"><h4 class="title"><a href="experiment_guidelines.html" title="Click to see Guidelines for Experiments">Guidelines for Experiments</a></h4></div>
+                <div class="content">
+                        <p>
+			The ENCODE Consortium has adopted uniform guidelines for the most common ENCODE experiments.  
+			The guidelines have evolved over time, as technologies have changed. The current guidelines 
+			are informed by results gathered during the project. Previous versions of the standards are 
+			also posted for reference.
+			</p>
+               </div><!--end content-->
+       </div><!--end wrapper--> 
+       <div class="wrapper">
+                <div class="bar"><h4 class="title"><a href="platform_characterization.html" title="Click to see Platform Characterization">Platform Characterization</a></h4></div>
+                <div class="content">		
+		        <p>
+			ENCODE datasets are collected using a variety of platforms, such as ChIP-seq and RNA-seq.
+			The consortium has undertaken several efforts to characterize these platforms to better 
+			understand the data being collected using them.  Some of these efforts are described on this page.
+			</p>
+               </div><!--end content-->
+       </div><!--end wrapper--> 
+       <p class="date">Updated August 29th, 2011</p>
+    </body>
+</html>

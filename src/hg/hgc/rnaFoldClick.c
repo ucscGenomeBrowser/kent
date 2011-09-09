@@ -364,7 +364,7 @@ if (fileExists(fileName))
 
     // Could consider to serve up all EvoFold .png files from our public server in the future
     // fprintf(f,"<IMG SRC=\"http://genome.ucsc.edu/evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>",
-    fprintf(f,"<IMG SRC=\"../evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>",
+    fprintf(f,"<IMG SRC=\"../evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: symlink to file not found.\"</B><BR>",
             database, item->chrom, item->name);
     fprintf(f,"</B>");
     }
@@ -372,9 +372,11 @@ if (fileExists(fileName))
 freeMem(seq);
 printf("<p>The UCSC Genome Browser mirror site at the Molecular Diagnostic Laboratory (MDL) at Aarhus University Hospital Skejby in Denmark offers a VARNA Java applet to view the above RNA structure with more options, ");
 printf("<A HREF=\"");
-printf("http://moma.ki.au.dk/genome-mirror/cgi-bin/hgc?db=%s&o=%d&t=%d&g=evofold&i=%s",
-database, item->chromStart, item->chromEnd, cgiEncode(item->name));
-printf("\" TARGET=_blank>%s</A></p>", "click here to go to moma.ki.au.dk/genome-mirror.");
+printf("http://genome-mirror.moma.ki.au.dk/cgi-bin/hgc?db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=evofold&i=%s",
+database, item->chrom, item->chromStart, item->chromEnd, item->chromStart, item->chromEnd, cgiEncode(item->name)); // c, l and r are needed because mirror may have no cart for us.  Not actually used, however.
+printf("\" TARGET=_blank>%s</A>.", "click here to go to genome-mirror.moma.ki.au.dk");
+fprintf(f,"  <B><FONT COLOR = RED>NOTE:</FONT> some operating system/browser combinations require ");
+fprintf(f," the latest version of Java for this to work properly.</FONT></B></P>");
 }
 
 void htmlPrintSecStrEvofoldV2Drawing(FILE *f, struct rnaSecStr *item)
@@ -396,7 +398,7 @@ if (fileExists(fileName))
 
     // Could consider to serve up all EvoFold .png files from our public server in the future
     // fprintf(f,"<IMG SRC=\"http://genome.ucsc.edu/evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>",
-    fprintf(f,"<IMG SRC=\"../evoFoldV2/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>",
+    fprintf(f,"<IMG SRC=\"../evoFoldV2/%s/%s/%s.png\" border = '2' ALT=\"ERROR:  symlink to file not found.\"</B><BR>",
             database, item->chrom, item->name);
     fprintf(f,"</B>");
     }
@@ -404,9 +406,11 @@ if (fileExists(fileName))
 freeMem(seq);
 printf("<p>The UCSC Genome Browser mirror site at the Molecular Diagnostic Laboratory (MDL) at Aarhus University Hospital Skejby in Denmark offers a VARNA Java applet to view the above RNA structure with more options, ");
 printf("<A HREF=\"");
-printf("http://moma.ki.au.dk/genome-mirror/cgi-bin/hgc?db=%s&o=%d&t=%d&g=evofoldV2&i=%s",
-database, item->chromStart, item->chromEnd, cgiEncode(item->name));
-printf("\" TARGET=_blank>%s</A></p>", "click here to go to moma.ki.au.dk/genome-mirror.");
+printf("http://genome-mirror.moma.ki.au.dk/cgi-bin/hgc?db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=evofoldV2&i=%s",
+database, item->chrom, item->chromStart, item->chromEnd, item->chromStart, item->chromEnd, cgiEncode(item->name));  // c, l and r are needed because mirror may have no cart for us.  Not actually used, however.
+printf("\" TARGET=_blank>%s</A>.", "click here to go to genome-mirror.moma.ki.au.dk");
+fprintf(f," <B><FONT COLOR = RED>NOTE:</FONT> some operating system/browser combinations require ");
+fprintf(f," the latest version of Java for this to work properly.</FONT></B></P>");
 }
 
 void doRnaSecStr(struct trackDb *tdb, char *itemName)

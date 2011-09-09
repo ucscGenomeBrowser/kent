@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel GIS DNA PET
 longLabel ENCODE Genome Institute of Singapore DNA Paired-End Ditags
 group varRep
-subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup1 cellType Cell_Line 1GM12878=GM12878 1K562=K562
 subGroup2 fragSize Frag_Size 0-1k=1k 1-5k=5k 2-10k=10k 3-f20k=20k
 dimensions dimensionX=cellType dimensionY=fragSize
 fileSortOrder cell=Cell_Line fragSize=Frag_Size view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
@@ -36,7 +36,7 @@ wgEncode 1
         parent wgEncodeGisDnaPetViewAlignments on
         shortLabel K562 10k
         longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
-        subGroups  cellType=K562 fragSize=2-10k
+        subGroups  cellType=1K562 fragSize=2-10k
         color 46,0,184
         # subId=1853 dateSubmitted=2010-07-07
 
@@ -44,7 +44,7 @@ wgEncode 1
         parent wgEncodeGisDnaPetViewAlignments off
         shortLabel K562 1k
         longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
-        subGroups  cellType=K562 fragSize=0-1k
+        subGroups  cellType=1K562 fragSize=0-1k
         color 46,0,184
         # subId=1854 dateSubmitted=2010-07-07
 
@@ -52,7 +52,7 @@ wgEncode 1
         parent wgEncodeGisDnaPetViewAlignments on
         shortLabel GM12878 10k
         longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
-        subGroups  cellType=GM12878 fragSize=2-10k
+        subGroups  cellType=1GM12878 fragSize=2-10k
         color 153,38,0
         # subId=1852 dateSubmitted=2010-07-07
 
@@ -60,7 +60,7 @@ wgEncode 1
         parent wgEncodeGisDnaPetViewAlignments off
         shortLabel K562 20k
         longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
-        subGroups  cellType=K562 fragSize=3-f20k
+        subGroups  cellType=1K562 fragSize=3-f20k
         color 46,0,184
         # subId=1524 dateSubmitted=2010-06-16
 
@@ -68,7 +68,7 @@ wgEncode 1
         parent wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 5k
         longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
-        subGroups  cellType=GM12878 fragSize=1-5k
+        subGroups  cellType=1GM12878 fragSize=1-5k
         color 153,38,0
         # subId=1521 dateSubmitted=2010-06-16
 
@@ -76,6 +76,6 @@ wgEncode 1
         parent wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 1k
         longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
-        subGroups  cellType=GM12878 fragSize=0-1k
+        subGroups  cellType=1GM12878 fragSize=0-1k
         color 153,38,0
         # subId=1520 dateSubmitted=2010-06-16

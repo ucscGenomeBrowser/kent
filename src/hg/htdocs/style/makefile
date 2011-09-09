@@ -4,7 +4,7 @@ include ../../../inc/common.mk
 
 CSS_FILES=HGStyle.css autocomplete.css blueStyle.css floretStyle.css \
     hgHubConnect.css jquery-ui.css jquery.contextmenu.css \
-    jquery.ui.autocomplete.css ui.dropdownchecklist.css 
+    jquery.ui.autocomplete.css ui.dropdownchecklist.css encodeProject.css
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
