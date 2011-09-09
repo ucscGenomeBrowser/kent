@@ -402,7 +402,7 @@ else
             else if (validate) // Validate vars and vals against cv.ra
                 {
                 int invalids = mdbObjsValidate(queryResults,optionExists("validateFull"));
-                printf("%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
+                verbose(1,"%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
                 if (invalids > 0)
                     retCode = 3;
                 }

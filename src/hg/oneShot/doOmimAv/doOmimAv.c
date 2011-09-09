@@ -109,6 +109,8 @@ for (i=0; i<21; i++)
 		    	fprintf(outf, "%s\t%s\t%c\t%3d\t%c\t%s\t%s\t%s\n", 
 				avId, omimId, aaRepl->firstAa, aaRepl->aaPosition, aaRepl->secondAa, 
 		    	        aaRepl->dbSnpId, replIn, description);
+		        // disable the processing of subsequent non-single dbSnpID case for now, until OMIM really fix their data
+			/*
 			while (moreSnp != NULL)
 			    {
 			    char *nextSnp;
@@ -121,6 +123,7 @@ for (i=0; i<21; i++)
 				    avId, omimId, aaRepl->firstAa, aaRepl->aaPosition, aaRepl->secondAa, 
 		    	            nextSnp, replIn, description);
 			    }
+			*/
 			}
 		    
 		    result = 1;		    
@@ -186,13 +189,16 @@ while (row2 != NULL)
 
 		successful = processRepl(avId, omimId, dbSnpId, repl2, &aaRepl, desc);
 		if (!successful) fprintf(errf, "!!! %s\t%s\n", avId, repl2);
-		
+	
+		// disable the processing of subsequent non-single replacement AA string case for now, until OMIM really fix their data
+		/*
 		if (chp != NULL)
 		   {
 		   chp = chp + strlen(" AND ");
 		   processRepl(avId, omimId, dbSnpId, chp, &aaRepl, desc);
 		   if (!successful) fprintf(errf, "!!! %s\t%s\n", avId, chp);
 		   }
+		*/
 		}
 	}
     
