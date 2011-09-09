@@ -2616,8 +2616,19 @@ else
 flatTracksFree(&flatTracks);
 }
 
+static void appendLink(struct hotLink **links, char *url, char *name, char *id)
+{
+// append to list of links for later printing and/or communication with javascript client
+struct hotLink *link;
+AllocVar(link);
+link->name = cloneString(name);
+link->url = cloneString(url);
+link->id = cloneString(id);
+slAddTail(links, link);
+}
+
 static void printEnsemblAnchor(char *database, char* archive,
-    char *chrName, int start, int end)
+                               char *chrName, int start, int end, struct hotLink **links)
 /* Print anchor to Ensembl display on same window. */
 {
 char *scientificName = hScientificName(database);
@@ -2667,7 +2678,7 @@ else if (sameWord(scientificName, "Saccharomyces cerevisiae"))
 if (sameWord(chrName, "chrM"))
     name = "chrMt";
 ensUrl = ensContigViewUrl(database, dir, name, seqBaseCount, start+1, end, archive);
-hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\" id='ensemblLink'>", ensUrl->string);
+appendLink(links, ensUrl->string, "Ensembl", "ensemblLink");
 /* NOTE: you can not freeMem(dir) because sometimes it is a literal
  * constant */
 freeMem(scientificName);
@@ -3478,7 +3489,7 @@ return (hTableExists("hgFixed", "cutters") &&
     hTableExists("hgFixed", "rebaseCompanies"));
 }
 
-void fr2ScaffoldEnsemblLink(char *archive)
+static void fr2ScaffoldEnsemblLink(char *archive, struct hotLink **links)
 /* print out Ensembl link to appropriate scaffold there */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -3511,7 +3522,7 @@ if (1 == itemCount)
 	int agpEnd = agpStart + winEnd - winStart;
 	hPuts("<TD ALIGN=CENTER>");
 	printEnsemblAnchor(database, archive, agpItem->frag,
-	agpStart, agpEnd);
+                           agpStart, agpEnd, links);
 	hPrintf("%s</A></TD>", "Ensembl");
 	}
     }
@@ -3525,6 +3536,7 @@ boolean gotBlat = hIsBlatIndexedDatabase(database);
 struct dyString *uiVars = uiStateUrlPart(NULL);
 char *orgEnc = cgiEncode(organism);
 boolean psOutput = cgiVarExists("hgt.psOutput");
+struct hotLink *link, *links = NULL;
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR>\n");
@@ -3646,21 +3658,15 @@ if (!psOutput)
         * supported by Ensembl == if versionString from trackVersion exists */
         if (sameWord(database,"hg19"))
             {
-            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
-            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
-            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
             }
         else if (sameWord(database,"hg18"))
             {
-            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
-            printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
-            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd, &links);
             }
         else if (sameWord(database,"oryCun2") || sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
             {
-            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
-            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
-            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
             }
         else if (ensVersionString[0])
             {
@@ -3674,7 +3680,7 @@ if (!psOutput)
                 char *ctgPos = "ctgPos";
 
                 if (sameWord(database,"fr2"))
-                    fr2ScaffoldEnsemblLink(archive);
+                    fr2ScaffoldEnsemblLink(archive, &links);
                 else if (hTableExists(database, ctgPos))
                     /* see if we are entirely within a single contig */
                     {
@@ -3706,10 +3712,8 @@ if (!psOutput)
                             {
                             int ctgStart = winStart - ctgItem->chromStart;
                             int ctgEnd = ctgStart + winEnd - winStart;
-                            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
                             printEnsemblAnchor(database, archive, ctgItem->contig,
-                            ctgStart, ctgEnd);
-                            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+                                               ctgStart, ctgEnd, &links);
                             }
                         }
                     ctgPosFree(&ctgItem);   // the one we maybe used
@@ -3717,9 +3721,7 @@ if (!psOutput)
                 }
             else
                 {
-                hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
-                printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
-                hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+                printEnsemblAnchor(database, archive, chromName, winStart, winEnd, &links);
                 }
             }
         }
@@ -3727,106 +3729,108 @@ if (!psOutput)
 
 if (!psOutput)
     {
+    char buf[2056];
     /* Print NCBI MapView anchor */
     if (sameString(database, "hg18"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=previous\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d", 
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "hg19"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d", 
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "mm8"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d", 
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "danRer2"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d", 
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "galGal3"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "canFam2"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "rheMac2"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "panTro2"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "anoGam1"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "bosTau6"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\" id='ncbiLink'>",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (startsWith("oryLat", database))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\" id='medakaLink'>%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "UTGB");
+        safef(buf, sizeof(buf), "http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "UTGB", "medakaLink");
         }
     if (sameString(database, "cb3"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\" id='wormbaseLink'>%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     if (sameString(database, "cb4"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\" id='wormbaseLink'>%s</A>&nbsp;&nbsp;</TD>",
-            chromName, winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d",
+            chromName, winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     if (sameString(database, "ce10"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d\" TARGET=_blank class=\"topbar\" id='wormbaseLink'>%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     if (sameString(database, "ce4"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\" id='wormbaseLink'>%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     if (sameString(database, "ce2"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\" id='wormbaseLink'>%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     }
+
+for(link = links; link != NULL; link = link->next)
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s\" TARGET=\"_blank\" class=\"topbar\" id=\"%s\">%s</A>&nbsp;&nbsp;</TD>\n", link->url, link->id, link->name);
 
 if (hIsGisaidServer())
     {
