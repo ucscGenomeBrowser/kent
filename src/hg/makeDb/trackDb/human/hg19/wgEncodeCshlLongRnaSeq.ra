@@ -4642,7 +4642,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqSknshraCellPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
-        shortLabel SK-N-SH_RA cell longPolyA
+        shortLabel SKRA cell A+ J
         longLabel SK-N-SH_RA whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=SKNSHRA localization=CELL rnaExtract=PAP
         type bed 6
