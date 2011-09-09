@@ -1,0 +1,268 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Xenopus tropicalis
+# ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/
+#	Xenopus_tropicalis/v4.2/
+#
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAMC01
+#	WGS: AAMC01000001:AAMC01190823
+
+##########################################################################
+# Download sequence (DONE - 2011-09-07 - Hiram)
+    mkdir -p /hive/data/genomes/xenTro3/genbank
+    cd /hive/data/genomes/xenTro3/genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Xenopus_tropicalis/v4.2/*"
+
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz 
+1511717716 bases (153400444 N's 1358317272 real 1358317272 upper 0 lower) in 19549 sequences in 1 files
+
+###########################################################################
+# fixup contig names a little bit (DONE - 2011-09-07 - Hiram)
+    cd /hive/data/genomes/xenTro3/genbank
+
+    # removing the .1 from all the GL names
+    
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+	| sed -e "s/^>gi.[0-9][0-9]*.gb.GL/>GL/; s/\.1| .*//;" \
+	| gzip -c > xenTro3.fa.gz
+    #	real    6m24.993s
+
+    zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| sed -e "s/^GL1\([0-9]*\)\.1/GL1\1/" | gzip -c > xenTro3.agp.gz
+
+###########################################################################
+#  Initial database build (DONE - 2011-09-08 - Hiram)
+
+    cd /hive/data/genomes/xenTro3/genbank
+    cat << '_EOF_' > xenTro3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db xenTro3
+clade vertebrate
+genomeCladePriority 80
+scientificName Xenopus (Silurana) tropicalis
+commonName western clawed frog
+assemblyDate Nov. 2009
+assemblyLabel US DOE Joint Genome Institute (JGI-PGF) (GCA_000004195.1)
+assemblyShortLabel X. tropicalis v4.2
+orderKey 444
+mitoAcc NC_006839
+fastaFiles /cluster/data/xenTro3/genbank/xenTro3.fa.gz
+agpFiles /cluster/data/xenTro3/genbank/xenTro3.agp.gz
+dbDbSpeciesDir xenTro
+taxId 8364
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    makeGenomeDb.pl -stop=agp xenTro3.config.ra > agp.log 2>&1
+
+    time makeGenomeDb.pl -continue=db xenTro3.config.ra > db.log 2>&1
+    #	real    12m7.144s
+
+##########################################################################
+# running repeat masker (DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/repeatMasker
+    cd /hive/data/genomes/xenTro3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-species "Xenopus tropicalis" \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk xenTro3 > do.log 2>&1 &
+    #	real    35m31.331s
+    cat faSize.rmsk.txt
+    #	1511735326 bases (153400444 N's 1358334882 real 1025832944 upper
+    #	332501938 lower) in 19550 sequences in 1 files
+    #	%21.99 masked total, %24.48 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp $
+#    June 30 2010 (open-3-2-9) version of RepeatMasker
+    featureBits -countGaps xenTro3 rmsk
+    #	333219656 bases of 1511735326 (22.042%) in intersection
+    # why is it different than the faSize above ?
+
+##########################################################################
+# running simple repeat (DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/simpleRepeat
+    cd /hive/data/genomes/xenTro3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	xenTro3 > do.log 2>&1 &
+    # about 1 hour 3 minutes
+    #	real    23m18.960s
+
+    #	real    198m33.953s
+    cat fb.simpleRepeat 
+    #	103101528 bases of 1358346944 (7.590%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/xenTro3
+    twoBitMask xenTro3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed xenTro3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa xenTro3.2bit stdout | faSize stdin > faSize.xenTro3.2bit.txt
+    cat faSize.xenTro3.2bit.txt
+    #	1511735326 bases (153400444 N's 1358334882 real 1024824487 upper
+    #	333510395 lower) in 19550 sequences in 1 files
+    #	%22.06 masked total, %24.55 masked real
+
+    rm /gbdb/xenTro3/xenTro3.2bit
+    ln -s `pwd`/xenTro3.2bit /gbdb/xenTro3/xenTro3.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/gap
+    cd /hive/data/genomes/xenTro3/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../xenTro3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m15.269s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits xenTro3 -not gap -bed=notGap.bed
+    #	1358346944 bases of 1358346944 (100.000%) in intersection
+    featureBits xenTro3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	12062 bases of 1358346944 (0.001%) in intersection
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" xenTro3 | sort -n | tail -1
+    #	1466
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" xenTro3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps xenTro3 other.bed
+    #	12062 bases of 1511735326 (0.001%) in intersection
+    wc -l other.bed
+    #	11242
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad xenTro3 otherGap other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" xenTro3
+    #	171274
+    hgsql xenTro3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" xenTro3
+    #	182516
+    # == 171274 + 11242
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 xenTro3 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+    # there are no non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" xenTro3 | sort | uniq -c
+    #	182516 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/windowMasker
+    cd /hive/data/genomes/xenTro3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev xenTro3 > do.log 2>&1 &
+    #	about 1h 52m
+
+    # Masking statistics
+    twoBitToFa xenTro3.wmsk.2bit stdout | faSize stdin
+    #	1511735326 bases (153400444 N's 1358334882 real 845383044 upper
+    #	512951838 lower) in 19550 sequences in 1 files
+    #	%33.93 masked total, %37.76 masked real
+
+    twoBitToFa xenTro3.wmsk.sdust.2bit stdout | faSize stdin
+    #	1511735326 bases (153400444 N's 1358334882 real 835449906 upper
+    #	522884976 lower) in 19550 sequences in 1 files
+    #	%34.59 masked total, %38.49 masked real
+
+    hgLoadBed xenTro3 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 7010382 elements of size 3
+
+    featureBits -countGaps xenTro3 windowmaskerSdust
+    #	811865302 bases of 1799143587 (45.125%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits xenTro3 -not gap -bed=notGap.bed
+    #	1701353770 bases of 1701353770 (100.000%) in intersection
+    time nice -n +19 featureBits xenTro3 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	714075485 bases of 1701353770 (41.971%) in intersection
+    #	reload track to get it clean
+    hgLoadBed xenTro3 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 8199653 elements of size 4
+    featureBits -countGaps xenTro3 windowmaskerSdust
+    #	714075485 bases of 1799143587 (39.690%) in intersection
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../xenTro3.unmasked.2bit stdin \
+	    -type=.bed xenTro3.cleanWMSdust.2bit
+    twoBitToFa xenTro3.cleanWMSdust.2bit stdout | faSize stdin \
+        > xenTro3.cleanWMSdust.faSize.txt
+    cat xenTro3.cleanWMSdust.faSize.txt
+    #	1799143587 bases (97789820 N's 1701353767 real 987278282 upper
+    #	714075485 lower) in 6457 sequences in 1 files
+    #	%39.69 masked total, %41.97 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps xenTro3 rmsk windowmaskerSdust
+    #	280229203 bases of 1511735326 (18.537%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-09-09 - Hiram)
+    cd /hive/data/genomes/xenTro3
+    twoBitMask -add bed/windowMasker/xenTro3.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed xenTro3.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa xenTro3.2bit stdout | faSize stdin > faSize.xenTro3.txt
+    cat faSize.xenTro3.txt
+    #	1799143587 bases (97789820 N's 1701353767 real 987044085 upper
+    #	714309682 lower) in 6457 sequences in 1 files
+    #	%39.70 masked total, %41.98 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/xenTro3/xenTro3.2bit
+    ln -s `pwd`/xenTro3.2bit /gbdb/xenTro3/xenTro3.2bit
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-09-09 - Hiram)
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1358317272 / 2897316137 \) \* 1024
+    #	( 1358317272 / 2897316137 ) * 1024 = 480.070804
+    # round up to 500
+
+    cd /hive/data/genomes/xenTro3
+    blat xenTro3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/xenTro3.11.ooc -repMatch=500
+    #	Wrote 29991 overused 11-mers to jkStuff/xenTro3.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    # there are no non-bridged gaps
+    hgsql -N -e "select bridge from gap;" xenTro3 | sort | uniq -c
+    #	182516 yes
+    #	cd /hive/data/genomes/xenTro3/jkStuff
+    #	gapToLift xenTro3 nonBridged.lift -bedFile=nonBridged.bed
+    cd /hive/data/genomes/xenTro3
+    mkdir /hive/data/staging/data/xenTro3
+    cp -p jkStuff/xenTro3.11.ooc chrom.sizes \
+	xenTro3.2bit /hive/data/staging/data/xenTro3
+    # request rsync copy from cluster admin
+
+#########################################################################
