@@ -1,4 +1,4 @@
-# CSHL long rna-seq (wrangler: cricket)
+## CSHL long rna-seq (wrangler: cricket)
 track wgEncodeCshlLongRnaSeq
 compositeTrack on
 superTrack wgEncodeRnaSeqSuper dense
@@ -492,7 +492,6 @@ noInherit on
 		shortLabel NHEK nucl pA+ + 3
 		longLabel NHEK nucleus polyA+ Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep1
-
 		type bigWig 1.000000 466812.000000
 		origAssembly hg19
 		color 179,0,134
@@ -589,7 +588,6 @@ noInherit on
 		shortLabel HUVE cyto pA+ + 3
 		longLabel HUVEC cytosol polyA+ Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep1
-
 		type bigWig 1.000000 728088.000000
 		origAssembly hg19
 		color 224,75,0
@@ -787,7 +785,6 @@ noInherit on
 		shortLabel K562 chrm tot + 4
 		longLabel K562 chromatin total Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep2
-
 		type bigWig 1.000000 1486821.000000
 		origAssembly hg19
 		color 46,0,184
@@ -808,7 +805,6 @@ noInherit on
 		shortLabel K562 chrm tot + 3
 		longLabel K562 chromatin total Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
-
 		type bigWig 1.000000 791439.000000
 		origAssembly hg19
 		color 46,0,184
@@ -829,7 +825,6 @@ noInherit on
 		shortLabel K562 nlus tot + 4
 		longLabel K562 nucleolus total Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep2
-
 		type bigWig 1.000000 3090993.000000
 		origAssembly hg19
 		color 46,0,184
@@ -868,7 +863,6 @@ noInherit on
 		shortLabel NHEK nucl pA- + 4
 		longLabel NHEK nucleus polyA- Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep2
-
 		type bigWig 1.000000 7824493.000000
 		origAssembly hg19
 		color 179,0,134
@@ -919,7 +913,6 @@ noInherit on
 		shortLabel HUVE nucl pA- + 4
 		longLabel HUVEC nucleus polyA- Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep2
-
 		type bigWig 1.000000 2440259.000000
 		origAssembly hg19
 		color 224,75,0
@@ -941,7 +934,6 @@ noInherit on
 		shortLabel HUVE nucl pA- + 3
 		longLabel HUVEC nucleus polyA- Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep1
-
 		type bigWig 1.000000 6352828.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1087,7 +1079,6 @@ noInherit on
 		shortLabel HUVE cyto pA- + 3
 		longLabel HUVEC cytosol polyA- Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM rep=rep1
-
 		type bigWig 1.000000 13448932.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1400,7 +1391,6 @@ noInherit on
 		shortLabel HUVE nucl pA+ - 3
 		longLabel HUVEC nucleus polyA+ Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep1
-
 		type bigWig 1.000000 181418.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1606,7 +1596,6 @@ noInherit on
 		shortLabel HUVE nucl pA+ - 4
 		longLabel HUVEC nucleus polyA+ Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep2
-
 		type bigWig 1.000000 81348.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1666,7 +1655,6 @@ noInherit on
 		shortLabel NHEK cyto pA+ - 3
 		longLabel NHEK cytosol polyA+ Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep1
-
 		type bigWig 1.000000 868073.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1687,7 +1675,6 @@ noInherit on
 		shortLabel NHEK cyto pA+ - 4
 		longLabel NHEK cytosol polyA+ Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep2
-
 		type bigWig 1.000000 777654.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1784,7 +1771,6 @@ noInherit on
 		shortLabel HUVE cyto pA+ - 4
 		longLabel HUVEC cytosol polyA+ Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep2
-
 		type bigWig 1.000000 676971.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1804,7 +1790,6 @@ noInherit on
 		shortLabel NHEK nucl pA+ - 4
 		longLabel NHEK nucleus polyA+ Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep2
-
 		type bigWig 1.000000 433842.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1983,7 +1968,6 @@ noInherit on
 		shortLabel K562 nplm tot - 4
 		longLabel K562 nucleoplasm total Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep2
-
 		type bigWig 1.000000 1307707.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2004,7 +1988,6 @@ noInherit on
 		shortLabel K562 nplm tot - 3
 		longLabel K562 nucleoplasm total Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep1
-
 		type bigWig 1.000000 3269539.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2025,7 +2008,6 @@ noInherit on
 		shortLabel K562 nlus tot - 3
 		longLabel K562 nucleolus total Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
-
 		type bigWig 1.000000 4348115.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2064,7 +2046,6 @@ noInherit on
 		shortLabel NHEK cyto pA- - 3
 		longLabel NHEK cytosol polyA- Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAM rep=rep1
-
 		type bigWig 1.000000 3188309.000000
 		origAssembly hg19
 		color 179,0,134
@@ -2291,7 +2272,6 @@ noInherit on
 		shortLabel NHEK nucl pA- - 3
 		longLabel NHEK nucleus polyA- Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=MinusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep1
-
 		type bigWig 1.000000 6344022.000000
 		origAssembly hg19
 		color 179,0,134
@@ -2860,7 +2840,6 @@ noInherit on
 		shortLabel NHEK nucl pA+ A 3
 		longLabel NHEK nucleus polyA+ Long RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=Alignments cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep1
-
 		type bam
 		origAssembly hg19
 		color 179,0,134
@@ -2966,7 +2945,6 @@ noInherit on
 		shortLabel HUVE cyto pA+ A 4
 		longLabel HUVEC cytosol polyA+ Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep2
-
 		type bam
 		origAssembly hg19
 		color 224,75,0
@@ -2986,7 +2964,6 @@ noInherit on
 		shortLabel NHEK nucl pA+ A 2
 		longLabel NHEK nucleus polyA+ Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=Alignments cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep2
-
 		type bam
 		color 179,0,134
 		# subId=4053 dateSubmitted=2011-06-08
@@ -3161,7 +3138,6 @@ noInherit on
 		shortLabel K562 nplm tot A 4
 		longLabel K562 nucleoplasm total Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep2
-
 		type bam
 		origAssembly hg19
 		color 46,0,184
@@ -3182,7 +3158,6 @@ noInherit on
 		shortLabel K562 nplm tot A 3
 		longLabel K562 nucleoplasm total Long RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep1
-
 		type bam
 		origAssembly hg19
 		color 46,0,184
@@ -3203,7 +3178,6 @@ noInherit on
 		shortLabel K562 nlus tot A 3
 		longLabel K562 nucleolus total Long RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
-
 		type bam
 		origAssembly hg19
 		color 46,0,184
@@ -3242,7 +3216,6 @@ noInherit on
 		shortLabel NHEK cyto pA- A 3
 		longLabel NHEK cytosol polyA- Long RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=Alignments cellType=NHEK localization=CYTOSOL rnaExtract=PAM rep=rep1
-
 		type bam
 		origAssembly hg19
 		color 179,0,134
@@ -3303,7 +3276,6 @@ noInherit on
 		shortLabel HUVE nucl pA- A 3
 		longLabel HUVEC nucleus polyA- Long RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep1
-
 		type bam
 		origAssembly hg19
 		color 224,75,0
@@ -3449,7 +3421,6 @@ noInherit on
 		shortLabel HUVE cyto pA- A 3
 		longLabel HUVEC cytosol polyA- Long RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM rep=rep1
-
 		type bam
 		origAssembly hg19
 		color 224,75,0
