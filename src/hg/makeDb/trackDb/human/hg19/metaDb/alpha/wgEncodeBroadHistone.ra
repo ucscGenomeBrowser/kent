@@ -2408,6 +2408,264 @@ subId 2810
 tableName wgEncodeBroadHistoneH1hescCtcfStdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneH1hescH2azStdAlnRep1
+objType file
+antibody H2A.Z
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-04
+dateUnrestricted 2012-05-04
+fileName wgEncodeBroadHistoneH1hescH2azStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4701
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescH2azStdAlnRep2
+objType file
+antibody H2A.Z
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-04
+dateUnrestricted 2012-05-04
+fileName wgEncodeBroadHistoneH1hescH2azStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4701
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescH2azStdPk
+objType table
+antibody H2A.Z
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-04
+dateUnrestricted 2012-05-04
+fileName wgEncodeBroadHistoneH1hescH2azStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4701
+tableName wgEncodeBroadHistoneH1hescH2azStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneH1hescH2azStdRawDataRep1
+objType file
+antibody H2A.Z
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-04
+dateUnrestricted 2012-05-04
+fileName wgEncodeBroadHistoneH1hescH2azStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4701
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescH2azStdRawDataRep2
+objType file
+antibody H2A.Z
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-04
+dateUnrestricted 2012-05-04
+fileName wgEncodeBroadHistoneH1hescH2azStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4701
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescH2azStdSig
+objType table
+antibody H2A.Z
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-04
+dateUnrestricted 2012-05-04
+fileName wgEncodeBroadHistoneH1hescH2azStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4701
+tableName wgEncodeBroadHistoneH1hescH2azStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep1
+objType file
+antibody H3K9me3
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4752
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep2
+objType file
+antibody H3K9me3
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4752
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescH3k09me3StdPk
+objType table
+antibody H3K9me3
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k09me3StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4752
+tableName wgEncodeBroadHistoneH1hescH3k09me3StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneH1hescH3k09me3StdRawDataRep1
+objType file
+antibody H3K9me3
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k09me3StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4752
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescH3k09me3StdRawDataRep2
+objType file
+antibody H3K9me3
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k09me3StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4752
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescH3k09me3StdSig
+objType table
+antibody H3K9me3
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k09me3StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4752
+tableName wgEncodeBroadHistoneH1hescH3k09me3StdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1
 objType file
 antibody H3K27ac
@@ -3360,6 +3618,135 @@ project wgEncode
 setType exp
 subId 2815
 tableName wgEncodeBroadHistoneH1hescH3k4me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep1
+objType file
+antibody H3K79me2
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4751
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep2
+objType file
+antibody H3K79me2
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4751
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescH3k79me2StdPk
+objType table
+antibody H3K79me2
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k79me2StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4751
+tableName wgEncodeBroadHistoneH1hescH3k79me2StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneH1hescH3k79me2StdRawDataRep1
+objType file
+antibody H3K79me2
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k79me2StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4751
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescH3k79me2StdRawDataRep2
+objType file
+antibody H3K79me2
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k79me2StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4751
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescH3k79me2StdSig
+objType table
+antibody H3K79me2
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneH1hescH3k79me2StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4751
+tableName wgEncodeBroadHistoneH1hescH3k79me2StdSig
 view Signal
 
 metaObject wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1
@@ -17207,6 +17594,135 @@ subId 2893
 tableName wgEncodeBroadHistoneK562H4k20me1StdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneK562P300StdAlnRep1
+objType file
+antibody p300
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562P300StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4764
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562P300StdAlnRep2
+objType file
+antibody p300
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562P300StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4764
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562P300StdPk
+objType table
+antibody p300
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562P300StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4764
+tableName wgEncodeBroadHistoneK562P300StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562P300StdRawDataRep1
+objType file
+antibody p300
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562P300StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4764
+view RawData
+
+metaObject wgEncodeBroadHistoneK562P300StdRawDataRep2
+objType file
+antibody p300
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562P300StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4764
+view RawData
+
+metaObject wgEncodeBroadHistoneK562P300StdSig
+objType table
+antibody p300
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562P300StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4764
+tableName wgEncodeBroadHistoneK562P300StdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneK562Pol2bStdAlnRep1
 objType file
 antibody Pol2(b)
@@ -24823,4 +25339,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: 1153830523
+# MAGIC: 1632643751
