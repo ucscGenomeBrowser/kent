@@ -281,6 +281,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum ad4103df7343e02e95f2396a5452f163
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -305,6 +306,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum dcf115e03c2f877df9c7f6151733a76d
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -329,6 +331,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 9c1833fe0367e4dc46c4847d92787b49
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -353,6 +356,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum c578db95d2ce9440a9c7065087e13f00
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -1325,6 +1329,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 94d679e2c13b7fd713a36d03e3d82f35
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -1349,6 +1354,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 83203063ac7e59eae6ce522b6bd10eae
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -1373,6 +1379,7 @@ grant Myers
 insertLength 400
 lab Caltech
 mapAlgorithm TH1014
+md5sum c555f9f08017508eb2ed7505890129c1
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -3228,6 +3235,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 38ac0814bfe1862a64d470525f43dbcb
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -3252,6 +3260,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 79e103224b39b2c544d904fc1819e1eb
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -3276,6 +3285,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 8e288cf6f2d93d676cebc38eedac2dc5
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -3300,6 +3310,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 9c91dd5baa74f949180a47535c38cc03
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -4904,6 +4915,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 8168b115b088695f4db5d8e903910a42
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -4928,6 +4940,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 7e2c28e42e0e94e08c2c343c4613505f
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -4952,6 +4965,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum ca9492a323b354d447c411e562bd674d
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -4976,6 +4990,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum d610cf2bb3521d0f9677d5872d865774
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -5000,6 +5015,7 @@ grant Myers
 insertLength 400
 lab Caltech
 mapAlgorithm TH1014
+md5sum f2c6d0bde06b21e8add541344d731737
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -5910,6 +5926,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 05cbc1946c81edefb96f0430933103a7
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -5934,6 +5951,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum efc73ca0589055941638ce819ca36b38
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -5958,6 +5976,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum f68f82cdf26e60bb9bf1af3301c36d32
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -5982,6 +6001,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 2d8e9322fb678ac331d3bc3e44796765
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -6638,6 +6658,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 297a8ea27443a2e7f430225b389b1c66
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -6662,6 +6683,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 15849de4602bd3122db7276e67f94b3f
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -6689,6 +6711,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bam=b49542b9c2a6bce74fb049f8873d9022,bai=eb2e128cc7b5ce4bd4bb5a2770631930
+objStatus replaced
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6698,7 +6721,6 @@ subId 3454
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
 view Alignments
-objStatus replaced
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
 objType table
@@ -6716,6 +6738,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
+md5sum bam=cf087561321957c34bcd80ca60d830f5,bai=8b53dca85af15bfda5807682cd957092
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6743,6 +6766,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum bam=65443cd0793f3879ebb377cb92a0fac0,bai=531d57f7154d1227f307fba536dfda99
+objStatus replaced
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6752,7 +6776,6 @@ subId 3455
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
 view Alignments
-objStatus replaced
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3
 objType table
@@ -6770,7 +6793,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b49542b9c2a6bce74fb049f8873d9022,bai=eb2e128cc7b5ce4bd4bb5a2770631930
+md5sum bam=838a7d07cd08763fa6a61bedcd1a82c9,bai=09c331e0fc9a06c7e235d7aedcb8c2f9
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6845,7 +6868,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 52ffadb74cd1f91d06e64030ac014f52
+md5sum b932cc8ab994eacd9712860c5e264429
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6872,7 +6895,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum 52ffadb74cd1f91d06e64030ac014f52
+md5sum 12f047541ec03066a394905c53914db6
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6899,7 +6922,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum c59c0065156e624f25e678debf5519dd
+md5sum 37e539c184fc5397dfd723917bcd32b8
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6926,7 +6949,7 @@ grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
-md5sum c59c0065156e624f25e678debf5519dd
+md5sum 900fc07abdf7a8173a7211f2bfe56e17
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7005,6 +7028,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum baa3458e50b0867dfd472ca29fbb5fa4
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -7029,6 +7053,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 9ba5616f0fe410a2e193817e6c51cd06
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -7053,6 +7078,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum c3258f2060f6f160faeb9c2b50867216
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -7077,6 +7103,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum df5a932ce994354c5b7d6256d3bfadd9
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -7733,6 +7760,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 74cfd01f5a56b246840e2baa0dfc409a
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -7757,6 +7785,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 8962674d3e587f64e0cc88ee0f4060ea
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -8382,6 +8411,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum e843798f290c555d55deee2fc5684e1c
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -8405,6 +8435,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 46da19a4e47a2907434b0217a87046e3
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -8693,6 +8724,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 0132e5f995f5c48967274b720f5c7b71
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -8717,6 +8749,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 3865a3c98ef236aed481a2ab77801ca4
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -8741,6 +8774,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 9192a1f318ae5056349761f24620a56c
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -8765,6 +8799,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 3ff4108575314dc4c592c91046dc2ff5
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -9421,6 +9456,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum d6693c771b00334cc2bb8a40b5a8c550
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -9445,6 +9481,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum b3bcdb1cf85475f474b3665ad541c676
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -9733,6 +9770,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 41b9ee2e5093a65210836330ddecf65a
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -9757,6 +9795,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 331636845f81fe6d692c6381235dcd92
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -9781,6 +9820,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum b93bc266412a686eaee1854d6999be8b
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -9805,6 +9845,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 02352a8b78587d29d8023d6b874fcbf7
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -10459,6 +10500,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 472cfd8f21b77e3e1c0a2eff3c645d7a
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -10483,6 +10525,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum f62220dc6a24a6df80cb9ba9fa114e3b
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -12040,6 +12083,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 380b66e8b589c3a29b88a61fda477994
 objStatus replaced
 project wgEncode
 readType 2x75
@@ -12063,6 +12107,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 6f851490c20b69d2400a1c843b0754fa
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -12219,6 +12264,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 4baad335dd940803a3219810326f2d54
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -12243,6 +12289,7 @@ grant Myers
 insertLength ilNA
 lab Caltech
 mapAlgorithm TH1014
+md5sum 527799b7a0d412fca0db7e0124be3bab
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -12894,6 +12941,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum b22e6ecf916792fade613a9f6111f9b6
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -12917,6 +12965,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum 238c4a04a7a1ca06a8516bba446d2d31
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -13542,6 +13591,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum f8852cf441edc07d4012fe2ce73aa986
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -13565,6 +13615,7 @@ grant Myers
 insertLength 200
 lab Caltech
 mapAlgorithm TH1014
+md5sum bbe87c2af89b7800b39f4d343dd5ef96
 objStatus replaced
 origAssembly hg19
 project wgEncode
@@ -13575,4 +13626,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 837795201
+# MAGIC: 1574698017
