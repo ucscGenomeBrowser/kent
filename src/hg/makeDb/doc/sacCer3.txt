@@ -1571,3 +1571,17 @@ XXX - working on this
     hgLoadBed -tmpDir=/data/tmp sacCer3 uwFootprintsPrints yeast.footprints.bed
 
 ############################################################################
+# add iRow annotations to the maf files:
+    mkdir /hive/data/genomes/sacCer3/bed/strains/align/anno
+    cd /hive/data/genomes/sacCer3/bed/strains/align/anno
+    twoBitInfo -nBed ../../../../sacCer3.2bit sacCer3.N.bed
+    for F in ../../2bit/*.2bit
+do
+    B=`basename $F`
+    S=${B/.2bit/}
+    echo $S $F
+    twoBitInfo -nBed $F ${S}.N.bed
+done
+
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/anoCar2/anoCar2.2bit result/$(file1)
+############################################################################

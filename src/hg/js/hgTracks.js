@@ -1954,11 +1954,11 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
     } else if (cmd == 'openLink' || cmd == 'followLink') {
         var href = selectedMenuItem.href;
         var vars = new Array("c", "l", "r");
-        var hiddens = new Array("chromName", "l", "r");
+        var valNames = new Array("chromName", "winStart", "winEnd");
         for (i in vars) {
             // make sure the link contains chrom and window width info (necessary b/c we are stripping hgsid and/or the cart may be empty);
             // but don't add chrom to wikiTrack links (see redmine #2476).
-            var val = $("input[name=" + hiddens[i] + "]").val();
+            var val = hgTracks[valNames[i]];
             var v = vars[i];
             if(val && id != "wikiTrack" && (href.indexOf("?" + v + "=") == -1) && (href.indexOf("&" + v + "=") == -1)) {
                 href = href + "&" + v + "=" + val;
