@@ -935,7 +935,7 @@ if (!newNameOnly)
 
 // Insert new composite .ra to Includer with tag alpha
 warnMsg = NULL;
-boolean success = AddCompositeToIncluder(tdbFile, composite, newNameOnly, &warnMsg);
+boolean success = addCompositeToIncluder(tdbFile, composite, newNameOnly, &warnMsg);
 if (success)
     {
     logChange("Inserted new composite .ra %s with alpha tag into includer trackDb.wgEncode.ra for composite %s\n", 

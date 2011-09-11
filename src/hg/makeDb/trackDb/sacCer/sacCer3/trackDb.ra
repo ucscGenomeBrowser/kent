@@ -1,0 +1,55 @@
+
+include strainAlignments.ra
+
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+chromosomes none
+
+track transRegCode override
+visibility hide
+
+track sgdOther override
+noScoreFilter .
+
+track blastHg18KG override
+visibility hide
+
+track multiz7way
+shortLabel Conservation
+longLabel 7 yeast Multiz Alignment & Conservation 
+group compGeno
+priority 103.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons7way
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+autoScale Off
+windowingFunction mean
+frames multiz7wayFrames
+# irows on
+summary multiz7waySummary
+speciesOrder sacPar sacMik sacKud sacBay sacCas sacKlu
+treeImage phylo/sacCer2_7way.gif
+
+track phastConsElements7way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, 7 yeast Multiz Alignment
+group compGeno
+priority 103.4
+visibility hide 
+exonArrows off
+showTopScorers 200
+color 100,50,170
+type bed 5 .
+html phastConsElements
