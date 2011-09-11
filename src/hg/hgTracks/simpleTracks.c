@@ -12881,12 +12881,6 @@ if (wikiTrackEnabled(database, NULL))
 
 /*Test for my own MA data
 registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
-/* MGC related */
-registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
-registerTrackHandler("mgcFailedEst", estMethods);
-registerTrackHandler("mgcPickedEst", estMethods);
-registerTrackHandler("mgcUnpickedEst", estMethods);
-
 registerTrackHandler("HMRConservation", humMusLMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
@@ -12928,12 +12922,9 @@ registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeBasicV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeCompV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodePseudoGeneV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencode2wayConsPseudoV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodePolyaV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);
