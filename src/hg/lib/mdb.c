@@ -3257,7 +3257,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                 }
             }
         }
-    if (label == NULL);
+    if (label == NULL)
         label = cloneString(row[0]);
     label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
     slPairAdd(&pairs,val,label);
