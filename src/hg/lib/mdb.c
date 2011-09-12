@@ -1532,7 +1532,7 @@ if(raStyle) // NOTE: currently only supporting validation of RA files
     fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
 }
 
-char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude)
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude,boolean cvLabels)
 // returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
 {
 if (mdbObj!=NULL)
@@ -1549,7 +1549,16 @@ if (mdbObj!=NULL)
     for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
-            dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            {
+            if (cvLabels)
+                {
+                char *varLabel = (char *)cvLabel(NULL,mdbVar->var);
+                char *valLabel = (char *)cvLabel(mdbVar->var,mdbVar->val);
+                dyStringPrintf(dyLine,"%s=%s; ",varLabel,valLabel);
+                }
+            else
+                dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            }
         }
     char *line = dyStringCannibalize(&dyLine);
     if (line)

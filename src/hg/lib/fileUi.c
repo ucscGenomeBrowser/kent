@@ -649,7 +649,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
 
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
     mdbObjRemoveVars(oneFile->mdb,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_COMPOSITE " " MDB_VAR_PROJECT); // Remove this from mdb now so that it isn't displayed in "extras'
-    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE);
+    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE,TRUE);
     printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
 
     printf("</TR>\n");
