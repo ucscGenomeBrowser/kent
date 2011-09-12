@@ -3125,7 +3125,7 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
             dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
         }
     else if (searchBy == cvSearchByFreeText)                                      // If select is by free text then like
-        dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
+        dyStringPrintf(dyTerms,"%s=\"%%%s%%\" ",onePair->name,(char *)onePair->val);
     else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))  // special case.  Not directly searchable by UI but indirectly and will show up here.
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
