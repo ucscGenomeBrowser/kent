@@ -30885,7 +30885,7 @@ tableName wgEncodeHaibTfbsK562Ctcflsc98982V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102AlnRep1
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102AlnRep1
 objType file
 antibody E2F6
 cell K562
@@ -30897,7 +30897,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102AlnRep1.bam
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2948
@@ -30910,7 +30910,7 @@ subId 3069
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102AlnRep2
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102AlnRep2
 objType file
 antibody E2F6
 cell K562
@@ -30922,7 +30922,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102AlnRep2.bam
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3073
@@ -30935,7 +30935,7 @@ subId 3069
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102PkRep1
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
 objType table
 antibody E2F6
 cell K562
@@ -30947,7 +30947,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2948
@@ -30958,11 +30958,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 3069
-tableName wgEncodeHaibTfbsK562E2f6V0416102PkRep1
+tableName wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
 treatment None
 view Peaks
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102PkRep2
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
 objType table
 antibody E2F6
 cell K562
@@ -30974,7 +30974,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3073
@@ -30985,11 +30985,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 3069
-tableName wgEncodeHaibTfbsK562E2f6V0416102PkRep2
+tableName wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
 treatment None
 view Peaks
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102RawDataRep1
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102RawDataRep1
 objType file
 antibody E2F6
 cell K562
@@ -31001,7 +31001,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2948
@@ -31014,7 +31014,7 @@ subId 3069
 treatment None
 view RawData
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102RawDataRep2
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102RawDataRep2
 objType file
 antibody E2F6
 cell K562
@@ -31026,7 +31026,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3073
@@ -31039,7 +31039,7 @@ subId 3069
 treatment None
 view RawData
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102RawRep1
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
 objType table
 antibody E2F6
 cell K562
@@ -31051,7 +31051,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102RawRep1.bigWig
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2948
@@ -31061,11 +31061,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3069
-tableName wgEncodeHaibTfbsK562E2f6V0416102RawRep1
+tableName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102RawRep2
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
 objType table
 antibody E2F6
 cell K562
@@ -31077,7 +31077,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102RawRep2.bigWig
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL3073
@@ -31087,7 +31087,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3029
-tableName wgEncodeHaibTfbsK562E2f6V0416102RawRep2
+tableName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
 treatment None
 view RawSignal
 
@@ -44475,4 +44475,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 949998533
+# MAGIC: -123733871

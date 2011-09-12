@@ -3,12 +3,11 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
-#include "pbCommon.h"
 #include "spDb.h"
 #include "math.h"
 
 #define MAXN 20000000
-#define MAXRES 26
+#define MAXRES 23
 
 void usage()
 /* Explain usage and exit. */
@@ -119,14 +118,14 @@ int sortedCnt;
 if (argc != 2) usage();
 freq = needLargeZeroedMem(sizeof(double)*MAXN*MAXRES);
 
-strcpy(aaAlphabet, AA_ALPHABET);
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
 
 sprintf(spDbName, "sp%s", argv[1]);
 sprintf(proteinsDbName, "proteins%s", argv[1]);
 
 o2 = mustOpen("pbResAvgStd.tab", "w");
 
-for (i=0; i<MAXRES; i++)
+for (i=0; i<20; i++)
     {
     safef(temp_str, sizeof(temp_str), "%c.txt", aaAlphabet[i]);
     fh[i] = mustOpen(temp_str, "w");
@@ -187,7 +186,7 @@ while (row2 != NULL)
 	sumJ[j] = sumJ[j] + freq[icnt][j];
 	}
 
-    for (j=0; j<MAXRES; j++)
+    for (j=0; j<20; j++)
 	{
 	fprintf(fh[j], "%15.7f\t%s\n", freq[icnt][j], accession);fflush(fh[j]);
 	}
@@ -201,7 +200,7 @@ skip:
 recordCnt = icnt;
 recordCntDouble = (double)recordCnt;
 
-for (j=0; j<MAXRES; j++)
+for (j=0; j<20; j++)
     {
     carefulClose(&(fh[j]));
     }
@@ -214,7 +213,7 @@ for (j=0; j<MAXRES; j++)
     avg[j] = sumJ[j]/recordCntDouble;
     }
 
-for (j=0; j<MAXRES; j++)
+for (j=0; j<20; j++)
     {
     sum = 0.0;
     for (i=0; i<recordCnt; i++)
@@ -228,7 +227,7 @@ for (j=0; j<MAXRES; j++)
 carefulClose(&o2);
 
 o1 = mustOpen("pbAnomLimit.tab", "w");
-for (j=0; j<MAXRES; j++)
+for (j=0; j<20; j++)
     {
     safef(temp_str, sizeof(temp_str), "cat %c.txt|sort|uniq > %c.srt", aaAlphabet[j], aaAlphabet[j]);
     mustSystem(temp_str);
