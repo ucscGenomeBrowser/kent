@@ -282,7 +282,7 @@ close (FH);
 # xenTro3 (X. tropicalis) 19550 scaffolds
 xenTro3.serverGenome = /hive/data/genomes/xenTro3/xenTro3.2bit
 xenTro3.clusterGenome = /scratch/data/xenTro3/xenTro3.2bit
-xenTro3.ooc = /scratch/data/xenTro3/11.ooc
+xenTro3.ooc = /scratch/data/xenTro3/xenTro3.11.ooc
 xenTro3.lift = no
 xenTro3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 xenTro3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
@@ -313,9 +313,11 @@ xenTro3.mgc = yes
     screen			# long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial xenTro3 &
-    #	var/build/logs/2011.09.11-18:44:26.xenTro3.initalign.log
-XXX - running - Sun Sep 11 18:44:52 PDT 2011
-    #	real    805m44.341s
+    #	var/build/logs/2011.09.12-09:03:09.xenTro3.initalign.log
+XXX - running - Mon Sep 12 09:03:27 PDT 2011
+    #	real    649m8.858s
+    # failed kluster run on swarm, incorrect configuration:
+# Can't open /scratch/data/xenTro3/11.ooc to read: No such file or directory
     # 5h33m
 
     # load database when finished
@@ -334,4 +336,49 @@ XXX - running - Sun Sep 11 18:44:52 PDT 2011
     git commit -m "Added xenTro3." etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
+
+#########################################################################
+# construct ctgPos2 table (DONE - 2011-09-12 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/ctgPos2
+    cd /hive/data/genomes/xenTro3/bed/ctgPos2
+    cat << '_EOF_' > chromSizesToCtgPos.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chromSizes;
+open (FH, "<../../chrom.sizes") or die "can not read ../../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($contig, $size) = split('\s', $line);
+    $chromSizes{$contig} = $size;
+}
+close (FH);
+
+open (FH, "<../../genbank/Primary_Assembly/localID2acc") or
+        die "can not read ../../genbank/Primary_Assembly/localID2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($scaffold, $contig) = split('\s', $line);
+    $scaffold =~ s/XENTR//;
+    $contig =~ s/.1$//;
+    my $size = $chromSizes{$contig};
+    printf "%s\t%d\t%s\t0\t%d\tW\n", $scaffold, $size, $contig, $size;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x chromSizesToCtgPos.pl
+    ./chromSizesToCtgPos.pl > xenTro3.ctgPos2.tab
+    echo -e "AY789013\t17610\tchrM\t0\t17610\tF" >> xenTro3.ctgPos2.tab
+    # check how big are the names:
+    awk '{print length($1)}' xenTro3.ctgPos2.tab | sort -rn | head -1
+    # 14
+    awk '{print length($3)}' xenTro3.ctgPos2.tab | sort -rn | head
+    # 8
+    sed -e "s/20/14/; s/16/8/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
+    hgLoadSqlTab xenTro3 ctgPos2 ctgPos2.sql xenTro3.ctgPos2.tab
+
+#########################################################################
 

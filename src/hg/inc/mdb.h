@@ -295,7 +295,7 @@ void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
 int mdbObjPrintToTabFile(struct mdbObj *mdbObjs, char *file);
 // prints all objs as tab delimited obj var val into file for SQL LOAD DATA.  Returns count.
 
-char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude);
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude,boolean cvLabels);
 // returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
 
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle);
