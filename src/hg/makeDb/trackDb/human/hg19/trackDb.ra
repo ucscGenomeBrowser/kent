@@ -2485,3 +2485,19 @@ exonArrows off
 track decodeRmap override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+###### Harvard University large intergenic non-coding RNAs (lincRNAs) 
+
+track lincRNAs
+shortLabel linc RNAs
+longLabel Large intergenic noncoding RNAs
+group expression
+priority 0
+visibility hide
+type expRatio
+expScale 4.0
+expStep 0.5
+expDrawExons on
+expTable lincRNAsExpAll
+groupings lincRNAsExpGroups
+
