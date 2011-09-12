@@ -1457,7 +1457,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     maxLimit 473622.75
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction mean
+    windowingFunction mean+whiskers
     spanList first
 
         track wgEncodeBroadHistoneNhekCtcfStdSig
