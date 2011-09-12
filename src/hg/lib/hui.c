@@ -228,19 +228,21 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                     char *cvDefined=hashFindVal(cvTerm,CV_TOT_CV_DEFINED);
                     if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
                         {
-                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,mdbVar->val,mdbVar->val,NULL);
+                        label = NULL;
+                        if (SETTING_IS_ON(cvDefined))
+                            {
+                            struct hash *cvVal = (struct hash *)cvOneTermHash(mdbVar->var,mdbVar->val);
+                            if (cvVal != NULL)
+                                label=hashFindVal(cvVal,CV_LABEL);
+                            }
+                        if (label == NULL)
+                            label = mdbVar->val;
+                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,label,label,NULL);
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
                         freeMem(linkOfTerm);
                         }
                     else
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
-                        //{  // NOTE: Could just have a tool tip for these.
-                        //char *descr=cgiEncode(hashMustFindVal(cvTerm,"description"));
-                        //label = cgiEncode(label);
-                        //dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i title='%s'>%s:</i></td><td nowrap>%s</td></tr>",descr,label,mdbVar->val);
-                        //freeMem(descr);
-                        //freeMem(label);
-                        //}
                     freeMem(linkOfType);
                     continue;
                     }

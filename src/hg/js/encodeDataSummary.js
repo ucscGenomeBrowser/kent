@@ -164,7 +164,7 @@ $(function () {
     // initialize
     encodeProject.setup({
         // todo: add hidden page variable for server
-        server: "hgwdev-kate.cse.ucsc.edu"
+        server: "hgwdev.cse.ucsc.edu"
         //server: "genome-preview.ucsc.edu"
     });
     encodeProject.loadAllFromServer(requests, handleServerData);
