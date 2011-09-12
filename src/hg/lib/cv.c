@@ -307,12 +307,20 @@ if (validationRule != NULL)
 return cvIndeterminant;
 }
 
-const char *cvLabel(const char *term)
+const char *cvLabel(const char *type,const char *term)
 // returns cv label if term found or else just term
+// If type not supplied, must be a typeOfTerm definition
 {
-// Get the list of term types from thew cv
-struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
+struct hash *termHash = NULL;
+if (type == NULL) // Must be a typeOfTerm
+    {
+    // Get the list of term types from thew cv
+    struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+    termHash = hashFindVal(termTypeHash,(char *)term);
+    }
+else
+    termHash = (struct hash *)cvOneTermHash(type,term);
+
 if (termHash != NULL)
     {
     char *label = hashFindVal(termHash,CV_LABEL);
@@ -368,6 +376,20 @@ if (termHash != NULL)
     {
     char *setting = hashFindVal(termHash,CV_TOT_HIDDEN);
     return cvHiddenIsTrue(setting);
+    }
+return FALSE;
+}
+
+boolean cvTermIsCvDefined(const char *term)
+// returns TRUE if the terms values are defined in the cv.ra
+// For example anitobody is cv defined but expId isn't
+{
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
+if (termHash != NULL)
+    {
+    char *setting = hashFindVal(termHash,CV_TOT_CV_DEFINED);
+    return SETTING_IS_ON(setting);
     }
 return FALSE;
 }
