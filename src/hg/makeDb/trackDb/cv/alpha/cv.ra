@@ -473,23 +473,24 @@ termId BTO:0000149
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000149
 protocol Myers:Myers_BioChain_protocol.pdf
 
-term BC_Cervix_BN0773
-tag BCCERVIX
-type Cell Line
-tier 3
-organism human
-description uterine cervix, donor BN0773, age 44, Asian, DNA extract
-tissue Uterine Cervix
-lineage mesoderm
-# http://en.wikipedia.org/wiki/Paramesonephric_duct
-karyotype normal
-sex F
-vendorName BioChain
-vendorId BioChain_D4234275_A511454
-orderUrl http://www.biochain.com/biochain/homepage.htm
-termId BTO:0001421
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
-protocol Myers:Myers_BioChain_protocol.pdf
+# Maybe some day this cell line will have data. ~Jeff
+#term BC_Cervix_BN0773
+#tag BCCERVIX
+#type Cell Line
+#tier 3
+#organism human
+#description uterine cervix, donor BN0773, age 44, Asian, DNA extract
+#tissue Uterine Cervix
+#lineage mesoderm
+## http://en.wikipedia.org/wiki/Paramesonephric_duct
+#karyotype normal
+#sex F
+#vendorName BioChain
+#vendorId BioChain_D4234275_A511454
+#orderUrl http://www.biochain.com/biochain/homepage.htm
+#termId BTO:0001421
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
+#protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Colon_01-11002
 tag BCCOLON
@@ -867,22 +868,23 @@ termId BTO:0000651
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000651
 protocol Myers:Myers_BioChain_protocol.pdf
 
-term BC_Spleen_01-11002
-tag BCSPLEEN
-type Cell Line
-tier 3
-organism human
-description spleen, donor 01-11002, age 83, caucasian, RNA extract
-tissue Spleen
-lineage mesoderm
-karyotype normal
-sex F
-vendorName BioChain
-vendorId BioChain_CP-S10-R1234246-20_A612140
-orderUrl http://www.biochain.com/biochain/homepage.htm
-termId BTO:0001281
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
-protocol Myers:Myers_BioChain_protocol.pdf
+# Maybe some day this cell line will have data. ~Jeff
+#term BC_Spleen_01-11002
+#tag BCSPLEEN
+#type Cell Line
+#tier 3
+#organism human
+#description spleen, donor 01-11002, age 83, caucasian, RNA extract
+#tissue Spleen
+#lineage mesoderm
+#karyotype normal
+#sex F
+#vendorName BioChain
+#vendorId BioChain_CP-S10-R1234246-20_A612140
+#orderUrl http://www.biochain.com/biochain/homepage.htm
+#termId BTO:0001281
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
+#protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Spleen_H12817N
 tag BCSPLEENb
@@ -901,22 +903,23 @@ termId BTO:0001281
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
 protocol Myers:Myers_BioChain_protocol.pdf
 
-term BC_Stomach_01-11002
-tag BCSTOMACH
-type Cell Line
-tier 3
-organism human
-description stomach, donor 01-11002, age 83, caucasian, DNA extract
-tissue Stomach
-lineage endoderm
-karyotype normal
-sex F
-vendorName BioChain
-vendorId BioChain_CP-S12-D1234248-05_A808008
-orderUrl http://www.biochain.com/biochain/homepage.htm
-termId BTO:0001307
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
-protocol Myers:Myers_BioChain_protocol.pdf
+# Maybe some day this cell line will have data. ~Jeff
+#term BC_Stomach_01-11002
+#tag BCSTOMACH
+#type Cell Line
+#tier 3
+#organism human
+#description stomach, donor 01-11002, age 83, caucasian, DNA extract
+#tissue Stomach
+#lineage endoderm
+#karyotype normal
+#sex F
+#vendorName BioChain
+#vendorId BioChain_CP-S12-D1234248-05_A808008
+#orderUrl http://www.biochain.com/biochain/homepage.htm
+#termId BTO:0001307
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
+#protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Stomach_H12817N
 tag BCSTOMACHb
@@ -1584,23 +1587,24 @@ sex F
 tier 3
 protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 
-term GM12878-XiPat
-tag GM12878c
-type Cell Line
-organism human
-description lymphoblastoid, cloned for paternal X inactivation, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
-tissue Blood
-vendorName Hunt Willard at Duke University
-vendorId GM12878-XiPat
-orderUrl http://www.genome.duke.edu/people/faculty/willard/
-karyotype unknown
-lineage mesoderm
-derivedFrom GM12878
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-sex F
-tier 3
-protocol Myers:GM12878-XiPat_Myers_protocol.pdf
+# Maybe some day this cell line will have data. ~Jeff
+#term GM12878-XiPat
+#tag GM12878c
+#type Cell Line
+#organism human
+#description lymphoblastoid, cloned for paternal X inactivation, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
+#tissue Blood
+#vendorName Hunt Willard at Duke University
+#vendorId GM12878-XiPat
+#orderUrl http://www.genome.duke.edu/people/faculty/willard/
+#karyotype unknown
+#lineage mesoderm
+#derivedFrom GM12878
+#termId BTO:0002026 (non-specific)
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+#sex F
+#tier 3
+#protocol Myers:GM12878-XiPat_Myers_protocol.pdf
 
 term GM12891
 tag GM12891
