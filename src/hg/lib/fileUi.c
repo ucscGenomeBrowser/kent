@@ -184,7 +184,7 @@ else
                 {
                 if (mdbObjsHasCommonVar(mdbObjs, var->var,TRUE)) // Don't bother if all the vals are the same (missing okay)
                     continue;
-                dyStringPrintf(dySortFields,"%s=%s ",var->var,strSwapChar(cloneString(cvLabel(var->var)),' ','_'));
+                dyStringPrintf(dySortFields,"%s=%s ",var->var,strSwapChar(cloneString(cvLabel(NULL,var->var)),' ','_'));
                 }
             }
         if (dyStringLen(dySortFields))
@@ -397,7 +397,7 @@ if (sortOrder != NULL)
             char *tag = (char *)cvTag(var,term->name);
             if (tag == NULL)
                 tag = term->name;
-            slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(term->name)));
+            slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(var,term->name)));
             slNameFree(&term);
             }
 
@@ -625,7 +625,12 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                 if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
                     printf("<TD%s nowrap style='color: #BBBBBB;'%s>%s</td>",align,class,field);
                 else
+                    {
+                    // use label
+                    if (!isFieldEmpty && cvTermIsCvDefined(sortOrder->column[ix]))
+                        field = (char *)cvLabel(sortOrder->column[ix],field);
                     printf("<TD%s nowrap%s>%s</td>",align,class,isFieldEmpty?" &nbsp;":field);
+                    }
                 if (!sameString("fileType",sortOrder->column[ix]))
                     mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
                 }
@@ -644,7 +649,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
 
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
     mdbObjRemoveVars(oneFile->mdb,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_COMPOSITE " " MDB_VAR_PROJECT); // Remove this from mdb now so that it isn't displayed in "extras'
-    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE);
+    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE,TRUE);
     printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
 
     printf("</TR>\n");

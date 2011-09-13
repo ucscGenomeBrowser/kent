@@ -266,3 +266,119 @@ close (FH);
     # request rsync copy from cluster admin
 
 #########################################################################
+# AUTO UPDATE GENBANK (DONE - 2011-09-11 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Xenopus (Silurana) tropicalis   18786   1271379 8783
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that xenTro3 has plenty of native est's
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add xenTro3 before anoCar1 and commit to GIT
+# xenTro3 (X. tropicalis) 19550 scaffolds
+xenTro3.serverGenome = /hive/data/genomes/xenTro3/xenTro3.2bit
+xenTro3.clusterGenome = /scratch/data/xenTro3/xenTro3.2bit
+xenTro3.ooc = /scratch/data/xenTro3/xenTro3.11.ooc
+xenTro3.lift = no
+xenTro3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+xenTro3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+xenTro3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+xenTro3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+xenTro3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+xenTro3.refseq.mrna.native.load = yes
+xenTro3.genbank.est.native.load = yes
+xenTro3.refseq.mrna.xeno.load = no
+xenTro3.genbank.mrna.xeno.load = no
+xenTro3.downloadDir = xenTro3
+xenTro3.perChromTables = no
+xenTro3.mgc = yes
+# xenTro3.upstreamGeneTbl = mgcGenes
+# xenTro3.upstreamMaf = multiz7way
+# /hive/data/genomes/xenTro3/bed/multiz7way/species.lst
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding xenTro3 frog" genbank.conf
+    git push
+    make etc-update
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # anoCar genome information, if this is a new species, need to add stuff
+    # there
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial xenTro3 &
+    #	var/build/logs/2011.09.12-09:03:09.xenTro3.initalign.log
+XXX - running - Mon Sep 12 09:03:27 PDT 2011
+    #	real    649m8.858s
+    # failed kluster run on swarm, incorrect configuration:
+# Can't open /scratch/data/xenTro3/11.ooc to read: No such file or directory
+    # 5h33m
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad xenTro3 &
+    #	logFile: var/dbload/hgwdev/logs/2011.04.14-12:33:34.dbload.log
+    #	real    24m24.093s
+
+    # enable daily alignment and update of hgwdev (DONE - 2011-04-14 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add xenTro3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added xenTro3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# construct ctgPos2 table (DONE - 2011-09-12 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/ctgPos2
+    cd /hive/data/genomes/xenTro3/bed/ctgPos2
+    cat << '_EOF_' > chromSizesToCtgPos.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chromSizes;
+open (FH, "<../../chrom.sizes") or die "can not read ../../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($contig, $size) = split('\s', $line);
+    $chromSizes{$contig} = $size;
+}
+close (FH);
+
+open (FH, "<../../genbank/Primary_Assembly/localID2acc") or
+        die "can not read ../../genbank/Primary_Assembly/localID2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($scaffold, $contig) = split('\s', $line);
+    $scaffold =~ s/XENTR//;
+    $contig =~ s/.1$//;
+    my $size = $chromSizes{$contig};
+    printf "%s\t%d\t%s\t0\t%d\tW\n", $scaffold, $size, $contig, $size;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x chromSizesToCtgPos.pl
+    ./chromSizesToCtgPos.pl > xenTro3.ctgPos2.tab
+    echo -e "AY789013\t17610\tchrM\t0\t17610\tF" >> xenTro3.ctgPos2.tab
+    # check how big are the names:
+    awk '{print length($1)}' xenTro3.ctgPos2.tab | sort -rn | head -1
+    # 14
+    awk '{print length($3)}' xenTro3.ctgPos2.tab | sort -rn | head
+    # 8
+    sed -e "s/20/14/; s/16/8/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
+    hgLoadSqlTab xenTro3 ctgPos2 ctgPos2.sql xenTro3.ctgPos2.tab
+
+#########################################################################
+

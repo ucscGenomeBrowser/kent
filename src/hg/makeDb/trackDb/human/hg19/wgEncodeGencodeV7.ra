@@ -157,7 +157,7 @@ searchType genePred
 termRegex ENSG[0-9.]+
 searchPriority 2.4
 xrefTable wgEncodeGencodeAttrsV7
-xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId = '%s%%'
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
 searchName wgEncodeGencodeCompHavanaTranscriptV7
 searchTable wgEncodeGencodeCompV7
@@ -166,7 +166,7 @@ searchType genePred
 termRegex OTTHUMT[0-9.]+
 searchPriority 2.4
 xrefTable wgEncodeGencodeAttrsV7
-xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId = '%s%%'
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
 searchName wgEncodeGencodeCompHavanaGeneV7
 searchTable wgEncodeGencodeCompV7
@@ -175,7 +175,7 @@ searchType genePred
 termRegex OTTHUMT[0-9.]+
 searchPriority 2.4
 xrefTable wgEncodeGencodeAttrsV7
-xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId = '%s%%'
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searchs for 2-way consensus
 searchName wgEncodeGencode2wayConsPseudoV7

@@ -19,6 +19,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
 md5sum b81bdd9e5559b88f771fbbddc754e870
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -64,6 +65,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 md5sum 05dc76f4dbf9505fc9289aa3bf7773a8
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -109,6 +111,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_21027 antibody
 md5sum 40227ec1d28a3bfa91dbfdd4b1604ef7
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -154,6 +157,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
 md5sum 3248a8114c1a1bcc2af1b71424f57d0f
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -199,6 +203,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 md5sum abf063accf8bbef7859a60941f31d383
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -244,6 +249,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_26522 antibody
 md5sum 0280c524a7785c56182ac3f5dbdc40ba
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -289,6 +295,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
 md5sum ba2620b2861181a1f49781f99a1225b6
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -334,6 +341,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 md5sum bf0e53d650d511ad6c07739bc6c35ceb
+objStatus replaced
 project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
@@ -377,6 +385,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 md5sum b71a86f0bcdcf76688cee5279f498c71
+objStatus replaced
 project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
@@ -420,6 +429,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 md5sum a2f9f597d81cbac4a22ab3f3bfb15a75
+objStatus replaced
 project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
@@ -463,6 +473,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 md5sum 10e515c91cde5554e67f7908da2d8f47
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1613
@@ -508,6 +519,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
 md5sum 8541985b37b27ed87c4cbc222ddce10e
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1613
@@ -553,6 +565,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 md5sum 6d07ebfacb26dc4bd747021808904989
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -598,6 +611,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 md5sum f3e34d387963657ca09edeaa98b92836
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1613
@@ -643,6 +657,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 md5sum 32fbad919b3296c5737786fb5e465c13
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1613
@@ -688,6 +703,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
 md5sum edda20e6ca9743a3a23824f5703d884d
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1613
@@ -733,6 +749,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 md5sum 262aabcc66aeac544993e4f43e809b1e
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -778,6 +795,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 md5sum a217fe5c978e04415c5f6c86c0ded28e
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1613
@@ -823,6 +841,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
 md5sum e827e1e1c95fcf150a9c166d5b28cc24
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1613
@@ -868,6 +887,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 md5sum 981b8f1c453fef8965171cdcf243132f
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -913,6 +933,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246  antibody
 md5sum 143b15ede2407e5f651bc8039f391960
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -958,6 +979,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 md5sum 42db86d82b683fd82d2d56577f884fb6
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -1003,6 +1025,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_26522,Mil_061376 antibodies
 md5sum 8d5c820627e3b7ff3ed4f02757f3a0d0
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -1048,6 +1071,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
 md5sum b7257e60702026bba8229a2ac98959f6
+objStatus replaced
 origAssembly hg18
 project wgEncode
 subId 1237
@@ -1077,4 +1101,4 @@ submittedDataVersion V2 - P and Q values are now -log10
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 view RbpAssocRna
 
-# MAGIC: 1368510883
+# MAGIC: 1653427699
