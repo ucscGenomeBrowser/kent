@@ -1,0 +1,11 @@
+/* Style sheet for ENCODE ChIP data matrix (overrides to main matrix CSS) */
+
+#columnHeaders th
+    {
+    height: 12em;
+    }
+
+.verticalText
+    {
+        width: 10px;
+    }

@@ -1,0 +1,23 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+track ctgPos2
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+group map
+priority 10
+visibility hide
+type ctgPos
+url none
+
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex scaffold_[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5

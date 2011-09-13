@@ -1840,12 +1840,12 @@ identifier kompName
 identifier ikmcName
 "IKMC (knockoutmouse.org) gene name"
     $mm.ikmc.name dupeOk
-    $mm.ikmcExtra.name
+    $mm.ikmcExtra.name minCheck=0.99
 
 identifier hgIkmcName
 "IKMC (knockoutmouse.org) mapped gene name"
     $hg.hgIkmc.name dupeOk
-    $hg.hgIkmcExtra.name
+    $hg.hgIkmcExtra.name minCheck=0.99
 
 # "Biological" Gene Names
 

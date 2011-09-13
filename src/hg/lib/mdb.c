@@ -1532,7 +1532,7 @@ if(raStyle) // NOTE: currently only supporting validation of RA files
     fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
 }
 
-char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude)
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude,boolean cvLabels)
 // returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
 {
 if (mdbObj!=NULL)
@@ -1549,7 +1549,16 @@ if (mdbObj!=NULL)
     for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
-            dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            {
+            if (cvLabels)
+                {
+                char *varLabel = (char *)cvLabel(NULL,mdbVar->var);
+                char *valLabel = (char *)cvLabel(mdbVar->var,mdbVar->val);
+                dyStringPrintf(dyLine,"%s=%s; ",varLabel,valLabel);
+                }
+            else
+                dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            }
         }
     char *line = dyStringCannibalize(&dyLine);
     if (line)
@@ -3116,7 +3125,7 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
             dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
         }
     else if (searchBy == cvSearchByFreeText)                                      // If select is by free text then like
-        dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
+        dyStringPrintf(dyTerms,"%s=\"%%%s%%\" ",onePair->name,(char *)onePair->val);
     else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))  // special case.  Not directly searchable by UI but indirectly and will show up here.
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
@@ -3257,7 +3266,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                 }
             }
         }
-    if (label == NULL);
+    if (label == NULL)
         label = cloneString(row[0]);
     label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
     slPairAdd(&pairs,val,label);

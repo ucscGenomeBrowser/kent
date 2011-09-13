@@ -563,6 +563,41 @@ s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
     | hgsql sacCer3 -e \
 'load data local infile "/dev/stdin" into table growthCondition'
 
+#  fixed some typos and other tweaks, including making some subscripts.  
+#  propagated to all 3 sacCer* dbs  - 2011-09-08  b0b and steve
+
+#	eliminate some names from Attr that are not in primary table
+#	as identified by joinerCheck:
+# Error: 15 of 36501 elements of sacCer3.oregannoAttr.id are not in key oreganno.id line 2871 of all.joiner
+# Example miss: OREG0029365
+ sacCer3.oregannoLink.id - hits 21886 of 21895
+# Error: 9 of 21895 elements of sacCer3.oregannoLink.id are not in key oreganno.id line 2872 of all.joiner
+# Example miss: OREG0029365
+
+    hgsql -N -e "select id from oregannoAttr;" sacCer3 \
+	| sort -u > oregannoAttr.id.txt
+    hgsql -N -e "select id from oreganno;" sacCer3 \
+	| sort -u > oreganno.id.txt
+    comm -13 oreganno.id.txt oregannoAttr.id.txt
+    #	OREG0029365
+    #	OREG0029396
+    #	OREG0030456
+
+    hgsql -e 'delete from oregannoAttr where id="OREG0029365";' sacCer3 
+    hgsql -e 'delete from oregannoAttr where id="OREG0029396";' sacCer3
+    hgsql -e 'delete from oregannoAttr where id="OREG0030456";' sacCer3
+
+    hgsql -N -e "select id from oregannoLink;" sacCer3 \
+	| sort -u > oregannoLink.id.txt
+    comm -13 oreganno.id.txt oregannoLink.id.txt
+    #	OREG0029365
+    #	OREG0029396
+    #	OREG0030456
+    hgsql -e 'delete from oregannoLink where id="OREG0029365";' sacCer3 
+    hgsql -e 'delete from oregannoLink where id="OREG0029396";' sacCer3
+    hgsql -e 'delete from oregannoLink where id="OREG0030456";' sacCer3
+
+#
 #########################################################################
 # Oreganno track - (DONE - 2011-08-31 - Hiram)
     #	liftOver from sacCer1 database
@@ -586,7 +621,7 @@ s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
 	    ~/humPhen/kent/src/hg/lib/oreganno.sql stdin
 
 #########################################################################
-# Regulatory Module - (DONE - 2011-08-31 - Hiram)
+# Regulatory Module - (DONE - 2011-09-06 - Hiram)
     mkdir /hive/data/genomes/sacCer3/bed/regModule
     cd /hive/data/genomes/sacCer3/bed/regModule
     #	liftOver data from sacCer1
@@ -610,12 +645,16 @@ s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
     hgsqldump --all -c --tab=. sacCer1 esRegGeneToModule esRegMotif
     chmod 775 .
 
+    # XXX there is some kind of problem in these generated SQL create
+    #	statement files.  This straight use of the file works OK:
     hgsql sacCer3 < esRegGeneToMotif.sql
+    # But in hgLoadBed, it will not work, some kind of odd syntax error
+    # so, edit them down to just the create statement and run them:
 
-    hgLoadBed sacCer3 esRegGeneToMotif -sqlTable=esRegGeneToMotif.sql -tab \
+    hgLoadBed sacCer3 esRegGeneToMotif -sqlTable=t_esRegGeneToMotif.sql -tab \
 	esRegGeneToMotif.lifted.bed
-    #	Loaded 4002 elements of size 7
-    hgLoadBed sacCer3 esRegUpstreamRegion -sqlTable=esRegUpstreamRegion.sql \
+    #	Loaded 3993 elements of size 7
+    hgLoadBed sacCer3 esRegUpstreamRegion -sqlTable=t_esRegUpstreamRegion.sql \
 	-tab esRegUpstreamRegion.lifted.bed
     #	Loaded 1670 elements of size 6
     hgsql sacCer3 < esRegMotif.sql
@@ -879,6 +918,89 @@ end
     chmod +x mkMafs.csh
     time ./mkMafs.csh
     #	real    7m16.117s
+
+    cd /hive/data/genomes/sacCer3/bed/strains/align
+    # convert maf files to PSL:
+    mkdir -p mafPsl
+for S in `cat axtChain/run/species.list`
+do
+    echo mafToPsl sacCer3 ${S} mafNet.${S}/'chr*.maf.gz' mafPsl/${S}.psl
+    rm -f mafPsl/${S}.psl
+    zcat mafNet.${S}/chr*.maf.gz \
+        | mafToPsl sacCer3 ${S} stdin mafPsl/${S}.psl
+done
+
+    # load those PSL files, it isn't clear why these alignments
+    #	need to be swapped, but they do need that
+    cat axtChain/run/species.list | grep -v RM11-1a | while read S
+do
+    pslSwap mafPsl/${S}.psl stdout \
+	| hgLoadPsl sacCer3 -table=pslMafNet${S} stdin
+done
+    pslSwap mafPsl/RM11-1a.psl stdout \
+	| hgLoadPsl sacCer3 -table=pslMafNetRM111a stdin
+
+    cat axtChain/run/species.list | while read S
+do
+    pslSwap mafPsl/${S}.psl stdout \
+	| pslCheck -db=sacCer3 stdin
+done
+    # note that all are OK, errors can be corrected with: pslRecalcMatch
+    # see also: hg19Patch5.txt
+
+    hgsql -N -e "show tables;" sacCer3 | grep pslMafNet | while read T
+do
+    echo -n "#  ${T}: " | sed -e "s/pslMafNet//"
+    featureBits sacCer3 "${T}"
+done
+
+#  AWRI1631: 11651200 bases of 12157105 (95.839%) in intersection
+#  AWRI796: 11999010 bases of 12157105 (98.700%) in intersection
+#  CBS7960: 11687063 bases of 12157105 (96.134%) in intersection
+#  CLIB215: 11432987 bases of 12157105 (94.044%) in intersection
+#  CLIB324: 10840222 bases of 12157105 (89.168%) in intersection
+#  CLIB382: 9370716 bases of 12157105 (77.080%) in intersection
+#  EC1118: 11981729 bases of 12157105 (98.557%) in intersection
+#  FL100: 11086015 bases of 12157105 (91.190%) in intersection
+#  FostersB: 11874757 bases of 12157105 (97.678%) in intersection
+#  FostersO: 11924459 bases of 12157105 (98.086%) in intersection
+#  JAY291: 12031398 bases of 12157105 (98.966%) in intersection
+#  LalvinQA23: 12000205 bases of 12157105 (98.709%) in intersection
+#  M22: 10511165 bases of 12157105 (86.461%) in intersection
+#  PW5: 11935295 bases of 12157105 (98.175%) in intersection
+#  RM111a: 11962069 bases of 12157105 (98.396%) in intersection
+#  Sigma1278b: 12005373 bases of 12157105 (98.752%) in intersection
+#  T7: 12081072 bases of 12157105 (99.375%) in intersection
+#  T73: 11606894 bases of 12157105 (95.474%) in intersection
+#  UC5: 11949157 bases of 12157105 (98.289%) in intersection
+#  VL3: 12015619 bases of 12157105 (98.836%) in intersection
+#  Vin13: 12005359 bases of 12157105 (98.752%) in intersection
+#  W303: 12042586 bases of 12157105 (99.058%) in intersection
+#  Y10: 10156801 bases of 12157105 (83.546%) in intersection
+#  YJM269: 11719109 bases of 12157105 (96.397%) in intersection
+#  YJM789: 11957276 bases of 12157105 (98.356%) in intersection
+#  YPS163: 10812681 bases of 12157105 (88.941%) in intersection
+#  sacBay: 10762610 bases of 12157105 (88.529%) in intersection
+#  sacCas: 7202451 bases of 12157105 (59.245%) in intersection
+#  sacKlu: 6404405 bases of 12157105 (52.680%) in intersection
+#  sacKud: 10830333 bases of 12157105 (89.086%) in intersection
+#  sacMik: 11254494 bases of 12157105 (92.575%) in intersection
+#  sacPar: 11712000 bases of 12157105 (96.339%) in intersection
+
+    # Add the sequences to sacCer3 for alignment display
+    cd /hive/data/genomes/sacCer3/bed/strains/fasta
+    mkdir  /gbdb/sacCer3/strains
+    ln -s `pwd`/*.fa /gbdb/sacCer3/strains/
+    rm /gbdb/sacCer3/strains/RM11-1a.fa
+    ln -s `pwd`/RM11-1a.fa /gbdb/sacCer3/strains/RM111a.fa
+
+    cat ../align/axtChain/run/species.list | grep -v RM11-1a | while read S
+do
+    hgLoadSeq -drop -seqTbl=seq${S} -extFileTbl=ext${S} sacCer3 \
+	/gbdb/sacCer3/strains/${S}.fa
+done
+    hgLoadSeq -drop -seqTbl=seqRM111a -extFileTbl=extRM111a sacCer3 \
+	/gbdb/sacCer3/strains/RM111a.fa
 
 #########################################################################
 ## 7-Way Multiz (DONE - 2011-09-01 - Hiram)
@@ -1437,3 +1559,61 @@ supporting and genbank tables) which tracks to assign these tables to:
     hgsql -e 'update dbDb set hgNearOk=1 where name="sacCer3";' hgcentraltest
 
 #########################################################################
+#  BLATSERVERS ENTRY (DONE - 2011-09-06 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("sacCer3", "blatx", "17840", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("sacCer3", "blatx", "17841", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# uwFootprints: (WORKING - 2011-09-07 - hiram)
+# lifted sacCer1 tag count data and set to Nobel lab
+#   William Stafford Noble noble at gs.washington.edu
+#   Xiaoyu Chen xchen at cs.washington.edu
+
+XXX - working on this
+    # lift counts to sacSer2 and give back to UW
+    cd /hive/data/genomes/sacCer1/bed/uwFootprintsxi
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.dnaseI.tagCounts.bed
+    liftOver yeast.dnaseI.tagCounts.bed /hive/data/genomes/sacCer1/bed/blat.sacCer3.2009-02-04/sacCer1ToSacCer3.over.chain.gz /cluster/home/markd/public_html/tmp/yeast/yeast.dnaseI.tagCounts.sacCer3.bed  /cluster/home/markd/public_html/tmp/yeast/yeast.dnaseI.tagCounts.sacCer3.nolift.bed
+    
+    mkdir /hive/data/genomes/sacCer3/bed/uwFootprints
+    cd /hive/data/genomes/sacCer3/bed/uwFootprints
+
+    # get back wig
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.dnaseI.tagCounts.sacCer3.lifted.wig
+
+    # lift other BEDs
+    liftOver /hive/data/genomes/sacCer1/bed/uwFootprints/yeast.mappability.bed /hive/data/genomes/sacCer1/bed/blat.sacCer3.2009-02-04/sacCer1ToSacCer3.over.chain.gz yeast.mappability.bed yeast.mappability.nolift.bed
+    # drop yeast.footprints.bed and truncate name to three decimal places
+    tawk 'NR>1{print $1,$2,$3,sprintf("%0.3f",$4)}'  /hive/data/genomes/sacCer1/bed/uwFootprints/yeast.footprints.bed | liftOver stdin /hive/data/genomes/sacCer1/bed/blat.sacCer3.2009-02-04/sacCer1ToSacCer3.over.chain.gz yeast.footprints.bed yeast.footprints.nolift.bed
+
+    wigEncode yeast.dnaseI.tagCounts.sacCer3.lifted.wig uwFootprintsTagCounts.wig uwFootprintsTagCounts.wib
+    # Converted yeast.dnaseI.tagCounts.sacCer3.lifted.wig, upper limit 13798.00, lower limit 1.00
+
+    ln -sf /hive/data/genomes/sacCer3/bed/uwFootprints/uwFootprintsTagCounts.wib /gbdb/sacCer3/wib
+    hgLoadWiggle -tmpDir=/data/tmp sacCer3 uwFootprintsTagCounts uwFootprintsTagCounts.wig 
+
+    hgLoadBed -tab -tmpDir=/data/tmp sacCer3 uwFootprintsMappability yeast.mappability.bed
+    hgLoadBed -tmpDir=/data/tmp sacCer3 uwFootprintsPrints yeast.footprints.bed
+
+############################################################################
+# add iRow annotations to the maf files:
+    mkdir /hive/data/genomes/sacCer3/bed/strains/align/anno
+    cd /hive/data/genomes/sacCer3/bed/strains/align/anno
+    twoBitInfo -nBed ../../../../sacCer3.2bit sacCer3.N.bed
+    for F in ../../2bit/*.2bit
+do
+    B=`basename $F`
+    S=${B/.2bit/}
+    echo $S $F
+    twoBitInfo -nBed $F ${S}.N.bed
+done
+
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/anoCar2/anoCar2.2bit result/$(file1)
+############################################################################
