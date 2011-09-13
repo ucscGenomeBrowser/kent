@@ -12,7 +12,6 @@
 #include "hgColors.h"
 #include "hui.h"
 #include "spDb.h"
-#include "pbCommon.h"
 #include "pbStamp.h"
 #include "pbStampPict.h"
 #include "pbTracks.h"
@@ -67,7 +66,7 @@ int sfCount;			/* count of Superfamily domains */
 
 struct sqlConnection *spConn;   /* Connection to SwissProt database. */
 
-char aaAlphabet[30] = AA_ALPHABET;
+char aaAlphabet[30] = {"WCMHYNFIDQKRTVPGEASLXZB"};
 char *protSeq;
 int  protSeqLen;
 
