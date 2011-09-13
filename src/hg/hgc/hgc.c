@@ -9652,7 +9652,7 @@ if (url != NULL && url[0] != 0)
     printf("<BR>\n");
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
-    printf("%s</A></B><BR>", itemName);
+    printf("%s</A></B>", itemName);
     */
 
     safef(query, sizeof(query),
@@ -9670,7 +9670,7 @@ if (url != NULL && url[0] != 0)
 	boolean disorderShown;
 	char *phenotypeClass, *phenotypeId, *disorder;
 
-	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
+	printf("<BR><B>Gene symbol(s):</B> %s", geneSymbol);
 	printf("<BR>\n");
 
 	/* display disorder(s) */
@@ -9811,10 +9811,10 @@ if (url != NULL && url[0] != 0)
 	    }
 	}
     sqlFreeResult(&sr);
-    
+    printf("<BR>");
+
     // disable NCBI link until they work it out with OMIM
     /*
-    printf("<BR>\n");
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
     printf("%s</A></B><BR>", itemName);

@@ -987,7 +987,8 @@ identifier gnfRatAtlas2
     hgFixed.gnfRatAtlas2AllRatio.name unique
     hgFixed.gnfRatAtlas2Median.name full unique
     hgFixed.gnfRatAtlas2MedianRatio.name unique
-    $rn.knownToU34A.value
+    $rn.knownToGnfRatAtlas2.value
+    $rn.rgdGene2ToGnfRatAtlas2.value
     $rn.gnfAtlas2.name
     $rn.affyU34A.qName
 
@@ -1053,11 +1054,13 @@ identifier affyRAE230
 "Affymetrix Rat RAE230 chip identifiers"
     $rn.affyRAE230.qName dupeOk
     $rn.knownToRAE230.value
+    $rn.rgdGene2ToRAE230.value
 
 identifier affyU34A
 "Affymetrix Rat U34A chip identifiers"
     $rn.affyU34A.qName dupeOk
     $rn.knownToU34A.value
+    $rn.rgdGene2ToU34A.value
 
 identifier illuminaWG6
 "Illumina WG-6 3.0 Probe set identifiers"
@@ -1480,6 +1483,11 @@ identifier knownToRefSeqId typeOf=mrnaAccession
     hg19.geneNetworkId.id
     rn3.geneNetworkId.id minCheck=0.40
 
+identifier rgdGene2ToRefSeqId typeOf=mrnaAccession
+"RefSeq mRNA accession in rgdGene2ToRefSeq table"
+    $kgDb.rgdGene2ToRefSeq.value dupeOk
+    rn4.geneNetworkId.id minCheck=0.30
+
 identifier kgOldId
 "Old Known Gene ID - the genbank accession of the representative mRNA"
     hg17.kgOld.name dupeOk
@@ -1614,6 +1622,11 @@ identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
     $kgDb.knownCanonical.clusterId
     $kgDb.knownIsoforms.clusterId full
+
+identifier rgdGene2IsoformCluster
+"ID of a cluster of overlapping rgdGene2 genes"
+    $kgDb.rgdGene2Canonical.clusterId
+    $kgDb.rgdGene2Isoforms.clusterId full
 
 # known relationship for both KG2 and KG3, but doesn't work across dbs.
 identifier knownXref
@@ -1840,12 +1853,12 @@ identifier kompName
 identifier ikmcName
 "IKMC (knockoutmouse.org) gene name"
     $mm.ikmc.name dupeOk
-    $mm.ikmcExtra.name
+    $mm.ikmcExtra.name minCheck=0.99
 
 identifier hgIkmcName
 "IKMC (knockoutmouse.org) mapped gene name"
     $hg.hgIkmc.name dupeOk
-    $hg.hgIkmcExtra.name
+    $hg.hgIkmcExtra.name minCheck=0.99
 
 # "Biological" Gene Names
 

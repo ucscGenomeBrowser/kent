@@ -1087,8 +1087,8 @@ jQuery.fn.panImages = function(){
                 $(this).css('cursor',"crosshair");  // shift-dragZoom
             else if ( $.browser.msie )     // IE will override map item cursors if this gets set
                 $(this).css('cursor',"");  // normal pointer when not over clickable item
-            else
-                $(this).css('cursor',"url(../images/grabber.cur),w-resize");  // dragScroll
+            //else // NOTE: Open hand cursor is being removed because it makes vis toggling less obvious
+            //    $(this).css('cursor',"url(../images/grabber.cur),w-resize");  // dragScroll
         });
 
         panAdjustHeight(prevX);
