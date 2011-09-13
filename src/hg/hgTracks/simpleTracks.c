@@ -5102,8 +5102,10 @@ if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
     	{
-    	safef(query, sizeof(query), "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
-    	sr = sqlGetResult(conn, query);
+    	safef(query, sizeof(query), 
+	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d", 
+	      decipherId, bed->chromStart+1, bed->chromEnd);
+	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (sameWord(row[0], "1"))
