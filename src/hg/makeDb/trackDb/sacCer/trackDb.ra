@@ -59,6 +59,10 @@ visibility hide
 type bed 4 +
 exonArrows off
 
+searchTable transRegCodeProbe
+searchType bed
+searchPriority 20
+
 track nucleosome
 shortLabel Nucleosome
 longLabel Per base Probability of Nucleasome Occupancy E. Segal et al.
