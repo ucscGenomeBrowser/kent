@@ -39,15 +39,25 @@ class DownloadsFile(object):
 	def size(self):
 		"""The size in bytes"""
 		return self._size
+		
+	@property 
+	def metaObject(self):
+		"""The size in bytes"""
+		return self._metaObj
 	
-	def __init__(self, name, path, md5):
-		self._name = name
+	def __init__(self, path, md5, metaObj=None):
+		if not os.path.isfile(path):
+			raise FileError('invalid file path: %s' % path)
+		self._name = path.rsplit('/', 1)[1]
 		self._path = path
 		self._size = os.stat(path).st_size
 		self._md5sum = md5
-		name.replace('.gz', '')
-		if '.' in name:
-			self._extension = name.rsplit('.')[1]
+		self._metaObj = metaObj
+		
+		self._extension = self._name
+		self._extension.replace('.gz', '').replace('.tgz', '')
+		if '.' in self._extension:
+			self._extension = self._extension.rsplit('.')[1]
 		else:
 			self._extension = None
 	
@@ -67,6 +77,8 @@ class CompositeTrack(object):
 	@property 
 	def downloadsDirectory(self):
 		"""The location of files in downloads"""
+		if not os.path.isdir(self._downloadsDirectory):
+			raise KeyError(self._downloadsDirectory + ' does not exist')
 		return self._downloadsDirectory
 	
 	@property 
@@ -77,20 +89,23 @@ class CompositeTrack(object):
 		except AttributeError:
 			md5sums = readMd5sums(self._md5path)
 			
-			ra_md5s = dict()
+			radict = dict()
 			for stanza in self.alphaMetaDb:
-				if 'fileName' in stanza and 'md5sum' in stanza:
-					ra_md5s[stanza['fileName']] = stanza['md5sum']
+				if 'fileName' in stanza:
+					radict[stanza['fileName']] = stanza
 			
 			self._files = dict()
 			for file in os.listdir(self.downloadsDirectory):
 				if os.path.isfile(self.downloadsDirectory + file):
-					if file in ra_md5s:
-						self._files[file] = DownloadsFile(file, self.downloadsDirectory + file, md5s[file])
-					elif file in md5sums:
-						self._files[file] = DownloadsFile(file, self.downloadsDirectory + file, md5sums[file])
+					
+					stanza = None
+					if file.name in radict:
+						stanza = radict[file.name]
+						
+					if file in md5sums:
+						self._files[file] = DownloadsFile(self.downloadsDirectory + file, md5sums[file], stanza)
 					else:
-						self._files[file] = DownloadsFile(file, self.downloadsDirectory + file, None)
+						self._files[file] = DownloadsFile(self.downloadsDirectory + file, None, stanza)
 		
 			return self._files
 		
@@ -110,9 +125,9 @@ class CompositeTrack(object):
 				
 				for file in os.listdir(releasepath):
 					if file != 'md5sum.txt' and md5s != None and file in md5s:
-						releasefiles[file] = DownloadsFile(file, releasepath + file, md5s[file])
+						releasefiles[file] = DownloadsFile(releasepath + file, md5s[file])
 					else:
-						releasefiles[file] = DownloadsFile(file, releasepath + file, None)
+						releasefiles[file] = DownloadsFile(releasepath + file, None)
 					
 				#releasefiles.sort()
 				self._releaseFiles.append(releasefiles)
@@ -126,11 +141,10 @@ class CompositeTrack(object):
 		try:
 			return self._alphaMetaDb
 		except AttributeError:
-			if os.path.isfile(self._alphaMdbPath):
-				self._alphaMetaDb = RaFile(self._alphaMdbPath)
-				return self._alphaMetaDb
-			else:
-				return None
+			if not os.path.isfile(self._alphaMdbPath):
+				raise KeyError(self._alphaMdbPath + ' does not exist')
+			self._alphaMetaDb = RaFile(self._alphaMdbPath)
+			return self._alphaMetaDb
 		
 	@property 
 	def betaMetaDb(self):
@@ -138,11 +152,10 @@ class CompositeTrack(object):
 		try:
 			return self._betaMetaDb
 		except AttributeError:
-			if os.path.isfile(self._betaMdbPath):
-				self._betaMetaDb = RaFile(self._betaMdbPath)
-				return self._betaMetaDb
-			else:
-				return None
+			if not os.path.isfile(self._betaMdbPath):
+				raise KeyError(self._betaMdbPath + ' does not exist')
+			self._betaMetaDb = RaFile(self._betaMdbPath)
+			return self._betaMetaDb
 		
 	@property 
 	def publicMetaDb(self):
@@ -150,11 +163,10 @@ class CompositeTrack(object):
 		try:
 			return self._publicMetaDb
 		except AttributeError:
-			if os.path.isfile(self._publicMdbPath):
-				self._publicMetaDb = RaFile(self._publicMdbPath)
-				return self._publicMetaDb
-			else:
-				return None
+			if not os.path.isfile(self._publicMdbPath):
+				raise KeyError(self._publicMdbPath + ' does not exist')
+			self._publicMetaDb = RaFile(self._publicMdbPath)
+			return self._publicMetaDb
 		
 	@property 
 	def trackDb(self):
@@ -206,59 +218,11 @@ class CompositeTrack(object):
 			raise KeyError(self._trackDbPath + ' does not exist')	
 		
 		self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + composite + '.ra'
-			
-		self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + composite + '.ra'
-			
+		self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + composite + '.ra'	
 		self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + composite + '.ra'
-			
 		self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/'
-		if not os.path.isdir(self._downloadsDirectory):
-			raise KeyError(self._downloadsDirectory + ' does not exist')
-		
 		self._url = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + composite
-	
 		self._database = database
-		self._name = composite
-		#self._metaDb = RaFile(mdbPath)
-		#self._trackDb = RaFile(trackDbPath)
-		
+		self._name = composite		
 		self._md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/md5sum.txt'
-		
-		# md5sums = readMd5sums(md5path)
-		
-		# ra_md5s = dict()
-		# for stanza in self.alphaMetaDb:
-			# if 'fileName' in stanza and 'md5sum' in stanza:
-				# ra_md5s[stanza['fileName']] = stanza['md5sum']
-		
-		# self._files = dict()
-		# for file in os.listdir(self._downloadsDirectory):
-			# if os.path.isfile(self._downloadsDirectory + file):
-				# if file in ra_md5s:
-					# self._files[file] = DownloadsFile(file, self._downloadsDirectory + file, md5s[file])
-				# elif file in md5sums:
-					# self._files[file] = DownloadsFile(file, self._downloadsDirectory + file, md5sums[file])
-				# else:
-					# self._files[file] = DownloadsFile(file, self._downloadsDirectory + file, None)
-			
-		#self._files.sort()	
-		
-		# self._releaseFiles = list()
-		# count = 1
-		
-		# while os.path.exists(self._downloadsDirectory + 'release' + str(count)):
-			# releasepath = self._downloadsDirectory + 'release' + str(count) + '/'
-			# md5s = readMd5sums(releasepath + 'md5sum.txt')
-			# releasefiles = dict()
-			
-			# for file in os.listdir(releasepath):
-				# if file != 'md5sum.txt' and md5s != None and file in md5s:
-					# releasefiles[file] = DownloadsFile(file, releasepath + file, md5s[file])
-				# else:
-					# releasefiles[file] = DownloadsFile(file, releasepath + file, None)
-				
-			# releasefiles.sort()
-			# self._releaseFiles.append(releasefiles)
-			# count = count + 1
-				
 		

@@ -174,7 +174,7 @@ my ($refAssemblyLabel, $liftUp, $ignoreDbSnpContigs);
 # Optional config param:
 my ($snpBase);
 # Other globals:
-my ($buildDir, $commonName, $assemblyLabelFile, $endNotes);
+my ($buildDir, $commonName, $assemblyLabelFile, $endNotes, $needSNPAlleleFreq_TGP);
 # These dbSNP table/file names vary by build and assembly but
 # table desc is stable:
 my ($ContigInfo, $ContigLoc, $ContigLocusId, $MapInfo);
@@ -288,6 +288,8 @@ sub download {
   &HgAutomate::mustMkdir("$buildDir/$commonName/data");
   &HgAutomate::mustMkdir("$buildDir/$commonName/schema");
   &HgAutomate::mustMkdir("$buildDir/$commonName/rs_fasta");
+  my $getSNPAlleleFreqTGPToo =
+    $needSNPAlleleFreq_TGP ? "$wget $ftpSnpDb/SNPAlleleFreq_TGP.bcp.gz" : "";
   my $whatItDoes =
     "It downloads a bunch of dbSNP database table dump files.";
   my $bossScript = new HgRemoteScript("$runDir/download_${commonName}_${build}.csh",
@@ -322,6 +324,7 @@ $wget $ftpSnpDb/$MapInfo.bcp.gz
 $wget $ftpSnpDb/SNP.bcp.gz
 # New info as of 132: allele freq, 'clinical' bit, SNP submitter handles
 $wget $ftpSnpDb/SNPAlleleFreq.bcp.gz
+$getSNPAlleleFreqTGPToo
 $wget $ftpSnpDb/SNP_bitfield.bcp.gz
 $wget $ftpSnpDb/Batch.bcp.gz
 $wget $ftpSnpDb/SubSNP.bcp.gz
@@ -363,6 +366,7 @@ sub translateSql {
   # First the organism-specific tables from $ftpSnpDb:
   my @orgTables = ($ContigInfo, $ContigLoc, $ContigLocusId, $MapInfo);
   push @orgTables, qw( SNP SNPAlleleFreq SNP_bitfield Batch SubSNP SNPSubSNPLink );
+  push @orgTables, 'SNPAlleleFreq_TGP' if ($needSNPAlleleFreq_TGP);
   my $tables = join('|', @orgTables);
   my $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/${orgDir}_table.sql.gz |" .
 				   "sed -re 's/\r//g;' |");
@@ -695,6 +699,17 @@ sub loadDbSnp {
     end
 _EOF_
 		  );
+  if ($needSNPAlleleFreq_TGP) {
+    $bossScript->add(<<_EOF_
+
+    zcat $dataDir/SNPAlleleFreq_TGP.bcp.gz \\
+    | perl -wpe '$cleanDbSnpSql' \\
+    | hgLoadSqlTab -oldTable $tmpDb SNPAlleleFreq_TGP placeholder stdin
+    hgsql $tmpDb -e 'alter table SNPAlleleFreq_TGP add index (snp_id);'
+    hgsql -N -B $tmpDb -e 'select count(*) from SNPAlleleFreq_TGP'
+_EOF_
+		    );
+  }
 
   $bossScript->execute();
 } # loadDbSnp
@@ -813,6 +828,16 @@ EOF
 
     #######################################################################
     # Glom together the allele frequencies for each snp_id:
+_EOF_
+		  );
+  if ($needSNPAlleleFreq_TGP) {
+    $bossScript->add(<<_EOF_
+    $Bin/snpAddTGPAlleleFreq.pl $tmpDb > ucscAlleleFreq.txt
+_EOF_
+		    );
+  }
+  else {
+    $bossScript->add(<<_EOF_
     hgsql $tmpDb -NBe 'select snp_id, allele, chr_cnt, freq from SNPAlleleFreq, Allele \\
                        where SNPAlleleFreq.allele_id = Allele.allele_id' \\
     | perl -we \\
@@ -828,7 +853,10 @@ EOF
         } \\
         print "\$prevId\\t\$alleleCount\\t\$alBlob\\t\$cntBlob\\t\$freqBlob\\n";' \\
       > ucscAlleleFreq.txt
-
+_EOF_
+		    );
+  }
+  $bossScript->add(<<_EOF_
     cat > ucscAlleleFreq.sql <<EOF
 CREATE TABLE ucscAlleleFreq (
         snp_id int NOT NULL,
@@ -998,6 +1026,13 @@ concatenates flanking sequence fasta files into one giant indexed file,
 cleans up intermediate files and moves results from the temporary
 working directory to $runDir.";
 
+  my $parArg = "";
+  my $parTable = `echo 'show tables like "par";' | $HgAutomate::runSSH $dbHost hgsql -N $db`;
+  chomp $parTable;
+  if ($parTable eq "par") {
+    &HgAutomate::run("echo 'select * from $parTable' | hgsql $db -NB > `cat workingDir`/par.bed");
+    $parArg = "-par=par.bed";
+  }
   my $bossScript = new HgRemoteScript("$runDir/translate.csh",
 				      $workhorse, $runDir, $whatItDoes, $CONFIG);
   $bossScript->add(<<_EOF_
@@ -1006,7 +1041,7 @@ working directory to $runDir.";
 
     # Translate NCBI's encoding into UCSC's, and perform a bunch of checks.
 #*** add output to endNotes:
-    snpNcbiToUcsc -snp132Ext ucscNcbiSnp.bed $HgAutomate::clusterData/$db/$db.2bit $snpBase
+    snpNcbiToUcsc -snp132Ext $parArg ucscNcbiSnp.bed $HgAutomate::clusterData/$db/$db.2bit $snpBase
 #*** add output to endNotes:
     head ${snpBase}Errors.bed
 #*** add output to endNotes:
@@ -1124,6 +1159,7 @@ $ContigLoc = "b${build}_SNPContigLoc_$buildAssembly";
 $ContigLocusId = "b${build}_SNPContigLocusId_$buildAssembly";
 $MapInfo = "b${build}_SNPMapInfo_$buildAssembly";
 $endNotes = "";
+$needSNPAlleleFreq_TGP = ($commonName eq "human");
 $snpBase = "snp$build" if (! $snpBase);
 
 $stepper->execute();

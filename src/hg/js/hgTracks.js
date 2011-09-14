@@ -197,16 +197,16 @@ function setPosition(position, size)
     var pos = parsePosition(position);
     if(pos) {
         // fixup external static links on page'
-        
+
         // Example ensembl link: http://www.ensembl.org/Homo_sapiens/contigview?chr=21&start=33031934&end=33041241
         linkFixup(pos, "ensemblLink", new RegExp("(.+start=)[0-9]+"), "end");
 
         // Example NCBI link: http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
         linkFixup(pos, "ncbiLink", new RegExp("(.+BEG=)[0-9]+"), "END");
-              
+
         // Example medaka link: http://utgenome.org/medakabrowser_ens_jump.php?revision=version1.0&chr=chromosome18&start=14435198&end=14444829
         linkFixup(pos, "medakaLink", new RegExp("(.+start=)[0-9]+"), "end");
-        
+
         if($('#wormbaseLink').length) {
             // e.g. http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=II:14646301-14667800
             var link = $('#wormbaseLink').attr('href');
@@ -1087,8 +1087,8 @@ jQuery.fn.panImages = function(){
                 $(this).css('cursor',"crosshair");  // shift-dragZoom
             else if ( $.browser.msie )     // IE will override map item cursors if this gets set
                 $(this).css('cursor',"");  // normal pointer when not over clickable item
-            else
-                $(this).css('cursor',"url(../images/grabber.cur),w-resize");  // dragScroll
+            //else // NOTE: Open hand cursor is being removed because it makes vis toggling less obvious
+            //    $(this).css('cursor',"url(../images/grabber.cur),w-resize");  // dragScroll
         });
 
         panAdjustHeight(prevX);
@@ -1215,7 +1215,11 @@ jQuery.fn.panImages = function(){
         var portalScrolledX  = (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel) + newOffsetX;
         var recalculate = false;
 
-        var newPortalStart = closedPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
+        var newPortalStart = 0;
+        if (hgTracks.revCmplDisp)
+            newPortalStart = closedPortalStart + Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, so do bases seen.
+        else
+            newPortalStart = closedPortalStart - Math.round(portalScrolledX*hgTracks.imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
         if( newPortalStart < hgTracks.chromStart && bounded) {     // Stay within bounds
             newPortalStart = hgTracks.chromStart;
             recalculate = true;
@@ -1439,6 +1443,28 @@ function postToSaveSettings(obj)
     return true;
 }
 
+function loadRemoteTracks()
+{
+    if(typeof(hgTracks.trackDb) != "undefined" && hgTracks.trackDb != null) {
+        for (var id in hgTracks.trackDb) {
+            var rec = hgTracks.trackDb[id];
+            if(rec.type == "remote") {
+                if($("#img_data_" + id).length > 0) {
+                    // load the remote track renderer via jsonp
+                    rec.loadingId = showLoadingImage("tr_" + id);
+                    var script = document.createElement('script');
+                    var pos = parsePosition(getPosition());
+                    var name = rec.remoteTrack || id;
+                    script.setAttribute('src', rec.url + "?track=" + name + "&jsonp=remoteTrackCallback&position=" +
+                                        encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end) +
+                                        "&pix=" + $('#imgTbl').width());
+                    document.getElementsByTagName('head')[0].appendChild(script);
+                }
+            }
+        }
+    }
+}
+
 $(document).ready(function()
 {
     // The page may be reached via browser history (back button)
@@ -1589,6 +1615,7 @@ $(document).ready(function()
                 updateTrackImg(trackName,"","");
             });
         }
+        loadRemoteTracks();
     }
     if($('img#chrom').length == 1) {
         if($('area.cytoBand').length > 1) {
@@ -1616,23 +1643,6 @@ $(document).ready(function()
         $('.submitOnEnter').keydown(searchKeydown);
         findTracksNormalize();
         updateMetaDataHelpLinks(0);
-    }
-
-    if(typeof(hgTracks.trackDb) != "undefined" && hgTracks.trackDb != null) {
-        for (var id in hgTracks.trackDb) {
-            var rec = hgTracks.trackDb[id];
-            if(rec.type == "remote") {
-                if($("#img_data_" + id).length > 0) {
-                    // load the remote track renderer via jsonp
-                    var script = document.createElement('script');
-                    // XXXX add current image width
-                    var pos = parsePosition(getPosition());
-                    script.setAttribute('src', rec.url + "?track=" + id + "&jsonp=remoteTrackCallback&c=" + pos.chrom +
-                                        "&s=" + pos.start + "&e=" + pos.end);
-                    document.getElementsByTagName('head')[0].appendChild(script);
-                }
-            }
-        }
     }
 });
 
@@ -1949,13 +1959,18 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                });
     } else if (cmd == 'openLink' || cmd == 'followLink') {
         var href = selectedMenuItem.href;
-        var vars = new Array("c", "l", "r");
-        var hiddens = new Array("chromName", "l", "r");
+        var vars = new Array("c", "l", "r", "db");
+        var valNames = new Array("chromName", "winStart", "winEnd");
         for (i in vars) {
             // make sure the link contains chrom and window width info (necessary b/c we are stripping hgsid and/or the cart may be empty);
             // but don't add chrom to wikiTrack links (see redmine #2476).
-            var val = $("input[name=" + hiddens[i] + "]").val();
             var v = vars[i];
+            var val;
+            if(v == "db") {
+                val = getDb();
+            } else {
+                val = hgTracks[valNames[i]];
+            }
             if(val && id != "wikiTrack" && (href.indexOf("?" + v + "=") == -1) && (href.indexOf("&" + v + "=") == -1)) {
                 href = href + "&" + v + "=" + val;
             }
@@ -2647,6 +2662,7 @@ function afterImgTblReload()
     if(hgTracks.imgBoxPortal) {
         $("div.scroller").panImages();
     }
+    loadRemoteTracks();
     markAsDirtyPage();
 }
 
@@ -2755,7 +2771,7 @@ function handleUpdateTrackMap(response, status)
             } else {
                 // We update rows one at a time (updating the whole imgTable at one time doesn't work in IE).
                 for (id in hgTracks.trackDb) {
-                    if(!updateTrackImgForId(response, id)) {
+                    if(hgTracks.trackDb[id].type != "remote" && !updateTrackImgForId(response, id)) {
                         showWarning("Couldn't parse out new image for id: " + id);
                         //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                     }
@@ -2882,21 +2898,30 @@ function remoteTrackCallback(rec)
     if(rec.error) {
         alert("retrieval from remote site failed with error: " + rec.error)
     } else {
-        var track = rec.track;
-        $('#img_data_' + track).attr('style', '');
-        $('#img_data_' + track).attr('height', rec.height);
-        $('#img_data_' + track).attr('width', rec.width);
-        $('#img_data_' + track).attr('src', rec.img);
-        $('#td_data_' + track + ' > div').each(function(index) {
-                                                   if(index == 1) {
-                                                       var style = $(this).attr('style');
-                                                       style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
-                                                       $(this).attr('style', style);
-                                                   }
-                                               });
-        var style = $('#p_btn_' + track).attr('style');
-        style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
-        $('#p_btn_' + track).attr('style', style);
+        var remoteTrack = rec.track;
+        for (var track in hgTracks.trackDb) {
+            if(hgTracks.trackDb[track].remoteTrack == remoteTrack) {
+                $('#img_data_' + track).attr('style', "left:-116px; top: -23px;");
+                $('#img_data_' + track).attr('height', rec.height);
+                // XXXX use width in some way?
+//        $('#img_data_' + track).attr('width', rec.width);
+                $('#img_data_' + track).attr('width', $('#img_data_ruler').width());
+                $('#img_data_' + track).attr('src', rec.img);
+                $('#td_data_' + track + ' > div').each(function(index) {
+                                                           if(index == 1) {
+                                                               var style = $(this).attr('style');
+                                                               style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
+                                                               $(this).attr('style', style);
+                                                           }
+                                                       });
+                var style = $('#p_btn_' + track).attr('style');
+                style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
+                $('#p_btn_' + track).attr('style', style);
+                if(hgTracks.trackDb[track].loadingId) {
+                    hideLoadingImage(hgTracks.trackDb[track].loadingId);
+                }
+            }
+        }
     }
 }
 

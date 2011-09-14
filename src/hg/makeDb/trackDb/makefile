@@ -62,7 +62,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	galGal2 galGal3 \
 	melGal1 \
 	taeGut1 \
-	xenTro1 xenTro2 \
+	xenTro1 xenTro2 xenTro3 \
 	tetNig1 tetNig2 \
 	oryLat1 oryLat2 \
 	ornAna1 \
@@ -107,7 +107,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	haeCon1 \
 	falciparum \
 	choHof1 \
-	sacCer1 sacCer2 \
+	sacCer1 sacCer2 sacCer3 \
 	sc1 \
 	h1n1 
 

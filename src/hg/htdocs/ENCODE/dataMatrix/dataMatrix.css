@@ -1,0 +1,104 @@
+    /* Style sheet for ENCODE data matrix */
+
+    table 
+    { 
+        border-width: 0px; 
+        border-style: hidden; 
+        border-collapse: collapse; 
+        font-family: arial, Geneva, Helvetica, sans-serif; 
+    }
+    th
+    {
+        vertical-align: bottom;
+        text-align: left;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    /* vertical column headers (th child of columnHeaders row) */
+    #columnHeaders th
+    {
+        height: 150px;
+    }
+    td
+    {
+        border: none;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+
+    .matrix
+    {
+        background-color: #EEEEEE;
+    }
+
+   .verticalText
+    {
+        text-align: center;
+        vertical-align: middle;
+        width: 20px;
+        margin: 0px;
+        padding: 0px;
+        padding-left: 3px;
+        padding-right: 3px;
+        padding-top: 10px;
+        white-space: nowrap;
+        -webkit-transform: rotate(-90deg); /* for firefox, safari, chrome, etc. */
+        -moz-transform: rotate(-90deg);                 
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* for IE */
+    }
+    .groupType
+    {
+        color: white;
+        background-color: #004D99;
+        border: 1px solid grey;
+    }
+    .elementType
+    {
+        color: black;
+        background-color: lightgrey;
+        border: 1px solid grey;
+    }
+.axisType
+    {
+        vertical-align: bottom;
+        font-family: arial, Geneva, Helvetica, sans-serif; 
+        font-weight: bold;
+        font-size: 120%;
+        color: #004D99;
+    }
+.cellType
+{
+        border: 1px solid darkgray;
+        background-color: white;
+}
+
+.experiment
+{
+        background-color: #00994D;
+        text-align: center;
+        #padding: 10px;
+        #display: block;
+}
+
+.experiment:hover
+{
+    background-color: #994D00;
+}
+
+.experiment a
+{
+    text-decoration: none;
+}
+.axisType a
+{
+    text-decoration: none;
+}
+
+.elementType a
+{
+    text-decoration: none;
+}

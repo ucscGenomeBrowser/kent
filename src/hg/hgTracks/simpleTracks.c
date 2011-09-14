@@ -749,14 +749,10 @@ if (x < xEnd)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
         // Add map item to currnent map (TODO: pass in map)
         #ifdef IMAGEv2_SHORT_MAPITEMS
-            if(x < insideX && xEnd > insideX)
-                {
-                if((insideX - x) < (xEnd - insideX))
+            if(!revCmplDisp && x < insideX && xEnd > insideX)  // Why does insideX=118 in reverse complement??
                     x = insideX;
-                else
-                    xEnd = insideX-1;
-                //warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  insideX:%d  link:[%s]",track,x, y, xEnd, yEnd, insideX, link);
-                }
+            else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
+                    xEnd = insideWidth - 1;
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd, track);
         }
@@ -5106,8 +5102,10 @@ if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
     	{
-    	safef(query, sizeof(query), "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
-    	sr = sqlGetResult(conn, query);
+    	safef(query, sizeof(query), 
+	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d", 
+	      decipherId, bed->chromStart+1, bed->chromEnd);
+	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (sameWord(row[0], "1"))
@@ -12671,15 +12669,14 @@ registerTrackHandler("snp128", snp125Methods);
 registerTrackHandler("snp129", snp125Methods);
 registerTrackHandler("snp130", snp125Methods);
 registerTrackHandler("snp131", snp125Methods);
-registerTrackHandler("snp131Composite", snp125Methods);
-registerTrackHandler("snp131Clinical", snp125Methods);
-registerTrackHandler("snp131NonClinical", snp125Methods);
 registerTrackHandler("snp132", snp125Methods);
 registerTrackHandler("snp132Common", snp125Methods);
 registerTrackHandler("snp132Flagged", snp125Methods);
 registerTrackHandler("snp132Mult", snp125Methods);
-registerTrackHandler("snp132Patient", snp125Methods);
-registerTrackHandler("snp132NonUnique", snp125Methods);
+registerTrackHandler("snp134", snp125Methods);
+registerTrackHandler("snp134Common", snp125Methods);
+registerTrackHandler("snp134Flagged", snp125Methods);
+registerTrackHandler("snp134Mult", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
@@ -12881,12 +12878,6 @@ if (wikiTrackEnabled(database, NULL))
 
 /*Test for my own MA data
 registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
-/* MGC related */
-registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
-registerTrackHandler("mgcFailedEst", estMethods);
-registerTrackHandler("mgcPickedEst", estMethods);
-registerTrackHandler("mgcUnpickedEst", estMethods);
-
 registerTrackHandler("HMRConservation", humMusLMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
@@ -12928,12 +12919,9 @@ registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeBasicV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeCompV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodePseudoGeneV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencode2wayConsPseudoV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodePolyaV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);

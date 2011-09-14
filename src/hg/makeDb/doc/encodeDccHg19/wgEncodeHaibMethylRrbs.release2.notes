@@ -1,120 +1,19 @@
 # generated with encodeMkChangeNotes 0.9
 This is a release2 of the "ENCODE wgEncodeHaibMethylRrbs"
 The composite track is wgEncodeHaibMethylRrbs
-# WARNINGS #################################################
-1 - table wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-2 - table wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-3 - table wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-4 - table wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1 does not exist, from filetype bed9
-5 - table wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1 does not exist, from filetype bed9
-6 - table wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-7 - table wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-8 - table wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1 does not exist, from filetype bed9
-9 - table wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-10 - table wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1 does not exist, from filetype bed9
-11 - table wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-12 - table wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-13 - table wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2 does not exist, from filetype bed9
-14 - table wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2 does not exist, from filetype bed9
-15 - table wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-16 - table wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2 does not exist, from filetype bed9
-17 - table wgEncodeHaibMethylRrbsHsmmSitesRep2 does not exist, from filetype bed9
-18 - table wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1 does not exist, from filetype bed9
-19 - table wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2 does not exist, from filetype bed9
-20 - table wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2 does not exist, from filetype bed9
-21 - table wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2 does not exist, from filetype bed9
-22 - table wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1 does not exist, from filetype bed9
-23 - table wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1 does not exist, from filetype bed9
-24 - table wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2 does not exist, from filetype bed9
-25 - table wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2 does not exist, from filetype bed9
-26 - table wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-27 - table wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1 does not exist, from filetype bed9
-28 - table wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-29 - table wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1 does not exist, from filetype bed9
-30 - table wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2 does not exist, from filetype bed9
-31 - table wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-32 - table wgEncodeHaibMethylRrbsHsmmSitesRep3 does not exist, from filetype bed9
-33 - table wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-34 - table wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2 does not exist, from filetype bed9
-35 - table wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-36 - table wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-37 - table wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-38 - table wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-39 - table wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-40 - table wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-41 - table wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-42 - table wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1 does not exist, from filetype bed9
-43 - table wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-44 - table wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1 does not exist, from filetype bed9
-45 - table wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2 does not exist, from filetype bed9
-46 - table wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-47 - table wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2 does not exist, from filetype bed9
-48 - table wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-49 - table wgEncodeHaibMethylRrbsHsmmSitesRep1 does not exist, from filetype bed9
-50 - table wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2 does not exist, from filetype bed9
-51 - table wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-52 - table wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-53 - table wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1 does not exist, from filetype bed9
-54 - table wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-55 - table wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2 does not exist, from filetype bed9
-56 - table wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-57 - table wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1 does not exist, from filetype bed9
-58 - table wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-59 - table wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1 does not exist, from filetype bed9
-60 - table wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-61 - table wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-62 - table wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-63 - table wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-64 - table wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-65 - table wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-66 - table wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-67 - table wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-68 - table wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-69 - table wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-70 - table wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-71 - table wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-72 - table wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-73 - table wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1 does not exist, from filetype bed9
-74 - table wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-75 - table wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1 does not exist, from filetype bed9
-76 - table wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2 does not exist, from filetype bed9
-77 - table wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-78 - table wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2 does not exist, from filetype bed9
-79 - table wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-80 - table wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2 does not exist, from filetype bed9
-81 - table wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1 does not exist, from filetype bed9
-82 - table wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2 does not exist, from filetype bed9
-83 - table wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-84 - table wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-85 - table wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-86 - table wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-87 - table wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2 does not exist, from filetype bed9
-88 - table wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1 does not exist, from filetype bed9
-89 - table wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-90 - table wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2 does not exist, from filetype bed9
-91 - table wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-92 - table wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-93 - table wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1 does not exist, from filetype bed9
-94 - table wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2 does not exist, from filetype bed9
-95 - table wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1 does not exist, from filetype bed9
-96 - table wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1 does not exist, from filetype bed9
-97 - table wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1 does not exist, from filetype bed9
-98 - table wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-99 - table wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2 does not exist, from filetype bed9
-100 - table wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2 does not exist, from filetype bed9
-101 - table wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-102 - table wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-103 - table wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-104 - table wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1 does not exist, from filetype bed9
-105 - table wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2 does not exist, from filetype bed9
-106 - table wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1 does not exist, from filetype bed9
-107 - table wgEncodeHaibMethylRrbsMcf7UwSitesRep1 does not exist, from filetype bedRrbs
-108 - table wgEncodeHaibMethylRrbsHepg2HaibSitesRep1 does not exist, from filetype bedRrbs
-109 - table wgEncodeHaibMethylRrbsNt2d1UwSitesRep1 does not exist, from filetype bedRrbs
-110 - table wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1 does not exist, from filetype bedRrbs
-111 - table wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2 does not exist, from filetype bedRrbs
-112 - table wgEncodeHaibMethylRrbsMcf7UwSitesRep2 does not exist, from filetype bedRrbs
-113 - table wgEncodeHaibMethylRrbsHepg2HaibSitesRep2 does not exist, from filetype bedRrbs
+
+
+
+### THESE WARNINGS ARE ALL ATTIC #############################
+107 wgEncodeHaibMethylRrbsMcf7UwSitesRep1 does not exist, from filetype bedRrbs
+108 wgEncodeHaibMethylRrbsHepg2HaibSitesRep1 does not exist, from filetype bedRrbs
+109 wgEncodeHaibMethylRrbsNt2d1UwSitesRep1 does not exist, from filetype bedRrbs
+110 wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1 does not exist, from filetype bedRrbs
+111 wgEncodeHaibMethylRrbsNhaDukeSitesRep2 does not exist, from filetype bedRrbs
+112 wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2 does not exist, from filetype bedRrbs
+113 wgEncodeHaibMethylRrbsMcf7UwSitesRep2 does not exist, from filetype bedRrbs
+114 wgEncodeHaibMethylRrbsHepg2HaibSitesRep2 does not exist, from filetype bedRrbs
+115 wgEncodeHaibMethylRrbsNhaDukeSitesRep1 does not exist, from filetype bedRrbs
 ############################################################
 
 Categories of tables and files('):
@@ -126,21 +25,116 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release2 (new+untouched):
-    Tables: 195
+    Tables: 193
     Files: 407
     Gbdbs: 0
 
-A) Untouched Tables (0):
-
-A') Untouched Files (0 downloadables, 0 gbdbs):
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/
-    on RR:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/
-
-
-
-B) Deprecated tables (12):
+A) Untouched Tables (117):
+wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1
+wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1
+wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1
+wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2
+wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2
+wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHsmmSitesRep2
+wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1
+wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2
+wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2
+wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2
+wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1
+wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
+wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
+wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1
+wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1
+wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2
+wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1
+wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2
+wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2
+wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHsmmSitesRep1
+wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2
+wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1
+wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
+wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
+wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2
+wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2
+wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1
+wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2
+wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1
+wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2
+wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1
+wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2
+wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1
+wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
+wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2
+wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
+wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1
+wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2
+wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1
 wgEncodeHaibMethylRrbsMelanoSitesRep1
 wgEncodeHaibMethylRrbsMelanoSitesRep2
 wgEncodeHaibMethylRrbsMelanoSitesRep3
@@ -154,7 +148,139 @@ wgEncodeHaibMethylRrbsProgfibSitesRep2
 wgEncodeHaibMethylRrbsRptecSitesRep1
 wgEncodeHaibMethylRrbsRptecSitesRep2
 
-B') Deprecated files (118 downloadables, 0 gbdbs):
+A') Untouched Files (117 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoSitesRep3.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep3.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep4.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep5.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsProgfibSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsProgfibSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsRptecSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsRptecSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2.bed9.gz
+
+
+
+B) Deprecated tables (1):
+
+wgEncodeHaibMethylRrbsHsmmSitesRep3
+
+
+
+B') Deprecated files (1 downloadables, 0 gbdbs):
     NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
     This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
     current location on alpha:
@@ -162,127 +288,12 @@ B') Deprecated files (118 downloadables, 0 gbdbs):
     on RR:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/
 
-wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHsmmSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHsmmSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
-wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsMelanoSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsMelanoSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsMelanoSitesRep3.bed9.gz
-wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep3.bed9.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep4.bed9.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep5.bed9.gz
-wgEncodeHaibMethylRrbsProgfibSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsProgfibSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsRptecSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsRptecSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2.bed9.gz
-wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1.bed9.gz
-wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
 
 
-C) New tables (195):
+C) New tables (203):
+wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep1
+wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep2
 wgEncodeHaibMethylRrbsAg04449UwSitesRep1
 wgEncodeHaibMethylRrbsAg04449UwSitesRep2
 wgEncodeHaibMethylRrbsAg04450UwSitesRep1
@@ -295,8 +306,6 @@ wgEncodeHaibMethylRrbsAg10803UwSitesRep1
 wgEncodeHaibMethylRrbsAg10803UwSitesRep2
 wgEncodeHaibMethylRrbsAosmcDukeSitesRep1
 wgEncodeHaibMethylRrbsAosmcDukeSitesRep2
-wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
-wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2
 wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep1
 wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep2
 wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep1
@@ -400,11 +409,15 @@ wgEncodeHaibMethylRrbsHrpeUwSitesRep2
 wgEncodeHaibMethylRrbsHsmmDukeSitesRep1
 wgEncodeHaibMethylRrbsHsmmDukeSitesRep2
 wgEncodeHaibMethylRrbsHsmmDukeSitesRep3
+wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep1
+wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep2
+wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep3
 wgEncodeHaibMethylRrbsHsmmtDukeSitesRep1
 wgEncodeHaibMethylRrbsHsmmtDukeSitesRep2
 wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
-wgEncodeHaibMethylRrbsHtb11HaibSitesRep1
-wgEncodeHaibMethylRrbsHtb11HaibSitesRep2
+wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep1
+wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep2
+wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep3
 wgEncodeHaibMethylRrbsHtr8DukeSitesRep1
 wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
 wgEncodeHaibMethylRrbsImr90UwSitesRep1
@@ -470,426 +483,449 @@ wgEncodeHaibMethylRrbsSkmcUwSitesRep1
 wgEncodeHaibMethylRrbsSkmcUwSitesRep2
 wgEncodeHaibMethylRrbsSknmcHaibSitesRep1
 wgEncodeHaibMethylRrbsSknmcHaibSitesRep2
+wgEncodeHaibMethylRrbsSknshHaibSitesRep1
+wgEncodeHaibMethylRrbsSknshHaibSitesRep2
 wgEncodeHaibMethylRrbsSknshraUwSitesRep1
 wgEncodeHaibMethylRrbsSknshraUwSitesRep2
-wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep1
-wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep2
+wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep1
+wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep2
 wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep1
 wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep2
 wgEncodeHaibMethylRrbsU87HaibSitesRep1
 wgEncodeHaibMethylRrbsU87HaibSitesRep2
+wgEncodeHaibMethylRrbsUch1DukeSitesRep1
+wgEncodeHaibMethylRrbsUch1DukeSitesRep2
 
-C') New files (404 downloadables, 0 gbdbs):
+C') New files (424 downloadables, 0 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/
     NOT on RR but must be placed in:
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/
 
-wgEncodeHaibMethylRrbsAg04449UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsAg04449UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsAg04449UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg04449UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg04450UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsAg04450UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsAg04450UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg04450UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg09309UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsAg09309UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsAg09309UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg09309UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg09319UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsAg09319UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsAg09319UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg09319UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg10803UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsAg10803UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsAg10803UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsAg10803UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsAosmcDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsAosmcDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsAosmcDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsAosmcDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsAstrocyDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsAstrocyDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcbrainh11058nBiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcbrainh11058nBiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcbreast0203015BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcbreast0203015BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBckidney0111002BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBckidney0111002BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcleftventriclen41BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcleftventriclen41BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcliver0111002BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcliver0111002BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBclung0111002BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBclung0111002BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcpancreash12817nBiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcpancreash12817nBiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcskin0111002BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcskin0111002BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcstomach0111002BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcstomach0111002BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBctestisn30BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBctestisn30BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcuterusbn0765BiochainRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBcuterusbn0765BiochainRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBe2cHaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBe2cHaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBe2cHaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBe2cHaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsBjUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsBjUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsBjUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsBjUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsCaco2UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsCaco2UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsCaco2UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsCaco2UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsCmkUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsCmkUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsCmkUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsCmkUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsEcc1HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsEcc1HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsEcc1HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsEcc1HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsFibroblDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsFibroblDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsFibroblDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsFibroblDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm06990UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsGm06990UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsGm06990UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm06990UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm12878HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsGm12878HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsGm12878HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm12878HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm12878ximatHaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsGm12878ximatHaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsGm12878ximatHaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm12878ximatHaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm12891HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsGm12891HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsGm12891HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm12891HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm12892HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsGm12892HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsGm12892HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm12892HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm19239DukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsGm19239DukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsGm19239DukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm19239DukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm19240DukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsGm19240DukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsGm19240DukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsGm19240DukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsH1hescHaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsH1hescHaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsH1hescHaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsH1hescHaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHaeUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHaeUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHaeUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHaeUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHcfUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHcfUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHcfUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHcfUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHcmUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHcmUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHcmUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHcmUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHcpeUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHcpeUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHcpeUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHcpeUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHct116StanfordRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHct116StanfordRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHct116StanfordSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHct116StanfordSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHeeUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHeeUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHeeUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHeeUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHek293StanfordRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHek293StanfordRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHek293StanfordSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHek293StanfordSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHek293UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHek293UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHek293UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHek293UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHelas3HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHelas3HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHelas3HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHelas3HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHepatocytesDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHepatocytesDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHepg2DukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHepg2DukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHepg2DukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHepg2DukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHepg2HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHepg2HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHepg2HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHepg2HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHipeUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHipeUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHipeUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHipeUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHl60UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHl60UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHl60UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHl60UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHmecUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHmecUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHmecUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHmecUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHnpceUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHnpceUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHnpceUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHnpceUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHpaeUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHpaeUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHpaeUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHpaeUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHrceUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHrceUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHrceUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHrceUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHreUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHreUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHreUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHreUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHrpeUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHrpeUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHrpeUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHrpeUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHsmmDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHsmmDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHsmmDukeRawDataRep3.fastq.gz
-wgEncodeHaibMethylRrbsHsmmDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHsmmDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHsmmDukeSitesRep3.bedRrbs.gz
-wgEncodeHaibMethylRrbsHsmmtDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHsmmtDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHsmmtDukeRawDataRep3.fastq.gz
-wgEncodeHaibMethylRrbsHsmmtDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHsmmtDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3.bedRrbs.gz
-wgEncodeHaibMethylRrbsHtb11HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHtb11HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHtb11HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHtb11HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsHtr8DukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsHtr8DukeRawDataRep3.fastq.gz
-wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bedRrbs.gz
-wgEncodeHaibMethylRrbsImr90UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsImr90UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsImr90UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsImr90UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsJurkatUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsJurkatUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsJurkatUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsJurkatUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsK562HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsK562HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsK562HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsK562HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsLncapAndroDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsLncapAndroDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsLncapAndroDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsLncapAndroDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsLncapDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsLncapDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsLncapDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsLncapDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsLncapUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsLncapUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsLncapUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsLncapUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf10aesStanfordRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsMcf10aesStanfordRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsMcf10aesStanfordRawDataRep3.fastq.gz
-wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep3.fastq.gz
-wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf7DukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsMcf7DukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsMcf7DukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf7DukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf7UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsMcf7UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsMcf7UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsMcf7UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsMelanoDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsMelanoDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsMelanoDukeRawDataRep3.fastq.gz
-wgEncodeHaibMethylRrbsMelanoSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsMelanoSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsMelanoSitesRep3.bedRrbs.gz
-wgEncodeHaibMethylRrbsMyometrDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsMyometrDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsMyometrDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsMyometrDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsNb4UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsNb4UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsNb4UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsNb4UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsNhaUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsNhaUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsNhaUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsNhaUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsNhbeUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsNhbeUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsNhbeUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsNhbeUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsNhdfneoUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsNhdfneoUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsNhdfneoUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsNhdfneoUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsNt2d1StanfordRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsNt2d1StanfordRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsNt2d1UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsNt2d1UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsNt2d1UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsNt2d1UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsOsteoblDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsOsteoblDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsOsteoblDukeSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsOsteoblDukeSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsOvcar3UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsOvcar3UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsOvcar3UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsOvcar3UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanc1HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsPanc1HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsPanc1HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanc1HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanc1UwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsPanc1UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsPanc1UwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanc1UwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep3.fastq.gz
-wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep4.fastq.gz
-wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep5.fastq.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep3.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep4.bedRrbs.gz
-wgEncodeHaibMethylRrbsPanisletsSitesRep5.bedRrbs.gz
-wgEncodeHaibMethylRrbsPfsk1HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsPfsk1HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsPfsk1HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsPfsk1HaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsPrecUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsPrecUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsPrecUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsPrecUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsProgfibDukeRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsProgfibDukeRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsProgfibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsProgfibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsRptecSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsRptecSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsRptecUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsRptecUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsSaecUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsSaecUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsSaecUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsSaecUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsSkmcUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsSkmcUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsSkmcUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsSkmcUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsSknmcHaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsSknmcHaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsSknmcHaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsSknmcHaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsSknshraUwRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsSknshraUwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsSknshraUwSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsSknshraUwSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsT47dDmso224hHaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsT47dDmso224hHaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsT47dEstradia24hhHaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsT47dEstradia24hhHaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep2.bedRrbs.gz
-wgEncodeHaibMethylRrbsU87HaibRawDataRep1.fastq.gz
-wgEncodeHaibMethylRrbsU87HaibRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsU87HaibSitesRep1.bedRrbs.gz
-wgEncodeHaibMethylRrbsU87HaibSitesRep2.bedRrbs.gz
-
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsA549Dm002p7dHaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsA549Dm002p7dHaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04449UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04449UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04449UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04449UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04450UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04450UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04450UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg04450UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09309UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09309UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09309UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09309UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09319UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09319UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09319UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg09319UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg10803UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg10803UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg10803UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAg10803UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAosmcDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAosmcDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAosmcDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsAosmcDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcbrainh11058nBiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcbrainh11058nBiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcbreast0203015BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcbreast0203015BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBckidney0111002BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBckidney0111002BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcleftventriclen41BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcleftventriclen41BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcliver0111002BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcliver0111002BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBclung0111002BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBclung0111002BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcpancreash12817nBiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcpancreash12817nBiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskin0111002BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskin0111002BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcstomach0111002BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcstomach0111002BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBctestisn30BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBctestisn30BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcuterusbn0765BiochainRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcuterusbn0765BiochainRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBe2cHaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBe2cHaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBe2cHaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBe2cHaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBjUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBjUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBjUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsBjUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCaco2UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCaco2UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCaco2UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCaco2UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCmkUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCmkUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCmkUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsCmkUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsEcc1HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsEcc1HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsEcc1HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsEcc1HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsFibroblDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsFibroblDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsFibroblDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsFibroblDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm06990UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm06990UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm06990UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm06990UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878ximatHaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878ximatHaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878ximatHaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12878ximatHaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12891HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12891HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12891HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12891HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12892HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12892HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12892HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm12892HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19239DukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19239DukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19239DukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19239DukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19240DukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19240DukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19240DukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsGm19240DukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsH1hescHaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsH1hescHaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsH1hescHaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsH1hescHaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHaeUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHaeUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHaeUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHaeUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcfUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcfUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcfUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcfUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcmUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcmUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcmUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcmUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcpeUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcpeUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcpeUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHcpeUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHct116StanfordRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHct116StanfordRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHct116StanfordSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHct116StanfordSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHeeUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHeeUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHeeUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHeeUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293StanfordRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293StanfordRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293StanfordSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293StanfordSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHek293UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHelas3HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHelas3HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHelas3HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHelas3HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepatocytesDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepatocytesDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2DukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2DukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2DukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2DukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHepg2HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHipeUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHipeUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHipeUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHipeUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHl60UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHl60UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHl60UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHl60UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHmecUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHmecUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHmecUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHmecUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHnpceUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHnpceUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHnpceUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHnpceUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHpaeUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHpaeUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHpaeUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHpaeUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrceUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrceUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrceUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrceUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHreUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHreUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHreUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHreUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrpeUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrpeUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrpeUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHrpeUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmDukeRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmDukeSitesRep3.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep3.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtDukeRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep3.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHtr8DukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHtr8DukeRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsImr90UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsImr90UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsImr90UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsImr90UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsJurkatUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsJurkatUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsJurkatUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsJurkatUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsK562HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsK562HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsK562HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsK562HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapAndroDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapAndroDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapAndroDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapAndroDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsLncapUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesStanfordRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesStanfordRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesStanfordRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7DukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7DukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7DukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7DukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMcf7UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoDukeRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMelanoSitesRep3.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMyometrDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMyometrDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMyometrDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsMyometrDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNb4UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNb4UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNb4UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNb4UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhaUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhbeUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhbeUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhbeUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhbeUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhdfneoUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhdfneoUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhdfneoUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNhdfneoUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1StanfordRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1StanfordRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsNt2d1UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOsteoblDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOsteoblDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOsteoblDukeSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOsteoblDukeSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOvcar3UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOvcar3UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOvcar3UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsOvcar3UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanc1HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanc1HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanc1HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanc1HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanc1UwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanc1UwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanc1UwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanc1UwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep5.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep3.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep4.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPanisletsSitesRep5.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPfsk1HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPfsk1HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPfsk1HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPfsk1HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPrecUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPrecUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPrecUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsPrecUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsProgfibDukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsProgfibDukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsProgfibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsProgfibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsRptecSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsRptecSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsRptecUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsRptecUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSaecUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSaecUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSaecUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSaecUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSkmcUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSkmcUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSkmcUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSkmcUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknmcHaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknmcHaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknmcHaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknmcHaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshHaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshHaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshHaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshHaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshraUwRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshraUwRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshraUwSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsSknshraUwSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsT47dDm002p24hHaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsT47dDm002p24hHaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsT47dEstradia24hhHaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsT47dEstradia24hhHaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsU87HaibRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsU87HaibRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsU87HaibSitesRep1.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsU87HaibSitesRep2.bedRrbs.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsUch1DukeRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsUch1DukeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsUch1DukeSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/wgEncodeHaibMethylRrbsUch1DukeSitesRep2.bed.gz
 
 D) Additional items:
     current location on alpha:
@@ -897,6 +933,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/
 
-index.html
-files.txt
-md5sum.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/release2/md5sum.txt

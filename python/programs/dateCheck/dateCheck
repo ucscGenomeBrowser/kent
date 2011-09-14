@@ -1,0 +1,208 @@
+#!/usr/bin/python
+
+import sys
+import os
+import datetime
+#dir = os.path.dirname(os.path.abspath(__file__))
+dir = os.path.dirname(__file__)
+#print "dir = %s" % dir
+
+library = os.path.join(dir,"../../lib")
+#print library
+
+
+
+sys.path.append(library)
+#sys.path.append('/cluster/home/wong/kent/python/lib/')
+
+from ucscgenomics.rafile.RaFile import *
+
+def indexOldAssembly(rafile):
+	objList = {}
+	oldAssmRaFile = RaFile(rafile)
+	oldestDateSub = 0
+	oldestObjSub = ""
+	newestDateSub = 0
+	newestObjSub = ""
+	oldestDateUn = 0
+	oldestObjUn = ""
+	newestDateUn = 0
+	newestObjUn = ""
+	#structure is oldAssmExpIds[expIdviewreplicate] = information dict
+	#used for easy lookup of an equivalent hg18 object, it will only run through the list of expids first instead of all objects looking for a match
+	oldAssmExpIds = {}
+	
+	for key in oldAssmRaFile.keys():
+		stanza = oldAssmRaFile[key]
+		if 'dateSubmitted' not in stanza:
+			print "%s has no dateSubmitted" % (stanza['metaObject'])
+			continue
+		if not ('replicate' in stanza):
+			stanza['replicate'] = "NA"
+			#print "hg18:%s" % (stanza['metaObject'])
+		if 'expId' in stanza:
+			info = {}
+			info['replicate'] = stanza['replicate']
+			info['dateSubmitted'] = stanza['dateSubmitted']
+			info['dateUnrestricted'] = stanza['dateUnrestricted']
+			info['metaObject'] = stanza['metaObject']
+			expid = stanza['expId']
+			rep = stanza['replicate']
+			objView = stanza['view']
+			key = "%s%s%s" % (expid, rep, objView)
+			if 'dateResubmitted' in stanza:
+				info['dateResubmitted'] = stanza['dateResubmitted']
+			if not oldestDateUn:
+				oldestDateUn = stanza['dateUnrestricted']
+				newestDateUn = stanza['dateUnrestricted']
+				oldestObjUn = stanza['metaObject']
+				newestObjUn = stanza['metaObject']
+			if stanza['dateUnrestricted'] < oldestDateUn:
+				oldestDateUn = stanza['dateUnrestricted']
+				oldestObjUn = stanza['metaObject']
+			if stanza['dateUnrestricted'] > newestDateUn:
+				newestDateUn = stanza['dateUnrestricted']
+				newestObjUn = stanza['metaObject']
+			if not oldestDateSub:
+                                oldestDateSub = stanza['dateSubmitted']
+                                newestDateSub = stanza['dateSubmitted']
+				oldestObjSub = stanza['metaObject']
+                                newestObjSub = stanza['metaObject']
+                        if stanza['dateUnrestricted'] < oldestDateSub:
+                                oldestDateSub = stanza['dateSubmitted']
+				oldestObjSub = stanza['metaObject']
+                        if stanza['dateUnrestricted'] > newestDateSub:
+                                newestDateSub = stanza['dateSubmitted']
+				newestObjSub = stanza['metaObject']
+
+
+			oldAssmExpIds[key] = info
+		localdateun = calculateDateUn(stanza['dateSubmitted'])
+        	if localdateun == stanza['dateUnrestricted'] or stanza['dateUnrestricted'] == minusOneDay(localdateun):
+			pass
+		else:
+			print "%s: dateSubmitted = %s, calculated dateUnrestricted = %s, real dateUnrestricted = %s" % (stanza['metaObject'], stanza['dateSubmitted'], localdateun, stanza['dateUnrestricted'])
+	print "DateSubmitted range in old assembly: %s %s to %s %s" % (oldestObjSub, oldestDateSub, newestObjSub, newestDateSub)
+	print "DateUnrestricted range in old assembly: %s %s to %s %s" % (oldestObjUn, oldestDateUn, newestObjUn, newestDateUn)
+
+	
+	return(oldAssmExpIds)
+
+def dayInMon(mon, year):
+	if mon == 02:
+		if (not (year % 4)) and (year % 100) or (not (year % 400)):
+			return 29
+		else:
+			return 28
+	elif mon == 4 or mon == 6 or mon == 9 or mon == 11:
+		return 30
+	else:
+		return 31
+
+def calculateDateUn(dateIn):
+	splitdate = dateIn.split("-")
+	mon = int(splitdate[1])
+	day = int(splitdate[2])
+	year = int(splitdate[0])
+	restday = day
+	restyear = year
+	restmon = mon + 9
+	if restmon > 12:
+		restyear = year + 1
+		restmon = (mon + 9) % 12
+	daymon = dayInMon(restmon, restyear)
+	if day > daymon:
+		restmon = restmon + 1
+		restday = daymon
+	returnstr = "%02d-%02d-%02d" % (restyear, restmon, restday)
+	return(str(returnstr))	
+
+def minusOneDay(dateIn):
+
+	splitdate = dateIn.split("-")
+	mon = int(splitdate[1])
+        day = int(splitdate[2])
+        year = int(splitdate[0])
+	newday = day - 1
+	newmon = mon
+	if newday == 0:
+		newmon = mon - 1
+		newday = dayInMon(newmon, year)
+	returnstr = "%02d-%02d-%02d" % (year, newmon, newday)
+	return(str(returnstr))
+
+def getNewAssemblyObjects(rafile):
+	ra = RaFile(rafile)
+	objList = {}
+	for key in ra.keys():
+		stanza = ra[key]
+		#print "stanza = %s" % stanza
+		objInfo = {}
+		if not ('replicate' in stanza):
+			stanza['replicate'] = "NA"
+			#print "hg19:%s" % (stanza['metaObject'])
+		if 'expId' in stanza:
+			objInfo['expId'] = stanza['expId']
+			objInfo['view'] = stanza['view']
+			objInfo['replicate'] = stanza['replicate']
+			if 'dateUnrestricted' in stanza:
+				#print "here2";
+				objInfo['dateUnrestricted'] = stanza['dateUnrestricted']
+			#if 'dateSubmitted' in stanza:
+				objInfo['dateSubmitted'] = stanza['dateSubmitted']
+				#localdateun = calculateDateUn(stanza['dateSubmitted'])
+				#print "dateSubmitted = %s, calculated dateUnrestricted = %s, real dateUnrestricted = %s" (stanza['dateSubmitted'], localdateun, stanza['dateUnrestricted'])
+			#else:
+			#	sys.stdout.write("missing dateSubmitted in object %s" % stanza['metaObject']
+			if 'dateResubmitted' in stanza:
+				objInfo['dateUnrestricted'] = stanza['dateSubmitted']
+			objList[stanza['metaObject']] = objInfo
+	return(objList)
+
+
+
+def main():
+
+	if len(sys.argv) != 3:
+		arglen = len(sys.argv)
+		#print arglen
+		sys.exit("usage: dateCheck.py newAssemblyTrackDb.ra oldAssemblyTrackDb.ra")
+		#sys.exit()
+			
+	
+	oldAssmExpIds = indexOldAssembly(sys.argv[2])
+	newAssmObjects = getNewAssemblyObjects(sys.argv[1])
+	date = datetime.date
+	today = str(date.today())
+	#print today	
+
+	for key in newAssmObjects.keys():
+		expid = newAssmObjects[key]['expId']
+		rep = newAssmObjects[key]['replicate']
+		view = newAssmObjects[key]['view']
+		key2 = "%s%s%s" % (expid, rep, view)
+		#print "key2 = %s" % (key2)
+		if key2 in oldAssmExpIds:
+			infoDict = oldAssmExpIds[key2]
+			setVars = ""
+			vars = ""
+			if 'dateResubmitted' in newAssmObjects[key] and 'dateResubmitted' in infodict:
+				print "New Assembly already has dateResubmitted for object %s, old assembly object %s" % (key, infodict['metaObject']) 
+			if infoDict['dateSubmitted'] < newAssmObjects[key]['dateSubmitted']:
+				#print "\n"
+				#print "%s vs %s, dateSubmitted: %s vs %s" % (key, infoDict['metaObject'], infoDict['dateSubmitted'], newAssmObjects[key]['dateSubmitted'])
+				setVars = "dateSubmitted=%s dateResubmitted=%s" % (infoDict['dateSubmitted'], newAssmObjects[key]['dateSubmitted'])
+				
+			if infoDict['dateUnrestricted'] < newAssmObjects[key]['dateUnrestricted']:
+				#print "%s vs %s, dateUnrestricted: %s vs %s" % (key, infoDict['metaObject'], infoDict['dateUnrestricted'], newAssmObjects[key]['dateUnrestricted'])	
+				setVars = "%s dateUnrestricted=%s" % (setVars, infoDict['dateUnrestricted'])
+
+			if setVars:
+				if rep == "NA":
+					vars = "expId=%s view=%s" % (expid, view)
+				else:
+					vars = "expId=%s view=%s replicate=%s" % (expid, view, rep)
+				sys.stderr.write("mdbUpdate hg19 -vars=\"%s\" -setVars=\"%s\"\n" % (vars, setVars))				
+
+if __name__ ==  "__main__":
+	main()
