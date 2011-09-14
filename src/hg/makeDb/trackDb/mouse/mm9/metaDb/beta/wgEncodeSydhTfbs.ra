@@ -1,24 +1,333 @@
-metaObject wgEncodeSydh
+metaObject wgEncodeSydhTfbs
+objType composite
+composite wgEncodeSydhTfbs
+expVars lab,dataType,cell,antibody,treatment,control
+
+metaObject wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep1
+objType file
+age immortalized
+antibody BHLHE40_(NB100-1800)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001979
+expId 1979
+fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=c57929ee0a29efb08f47443a1899579d,bai=d4be7bf45f6af330ccb23812068f0180
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4002
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep2
+objType file
+age immortalized
+antibody BHLHE40_(NB100-1800)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001979
+expId 1979
+fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=0762f2993b0e5c794499aa9ff616865d,bai=76c195df46d9f46fdf2477f266f30860
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4002
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabPk
 objType table
 age immortalized
-antibody Input
-cell MEL
+antibody BHLHE40_(NB100-1800)
+cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-04-26
-dateUnrestricted 2011-01-26
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001979
+expId 1979
+fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 4e1fd93b70bb35c7ca9e554fc7082e7c
 project wgEncode
-setType input
-sex M
-strain Unknown
-subId 1168
-tableName wgEncodeSydh
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4002
+tableName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabRawDataRep1
+objType file
+age immortalized
+antibody BHLHE40_(NB100-1800)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001979
+expId 1979
+fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum e452cb577a35de0f7338fc813052e019
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4002
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabRawDataRep2
+objType file
+age immortalized
+antibody BHLHE40_(NB100-1800)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001979
+expId 1979
+fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum fe765d4ce88716394d895e363ec726f4
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4002
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabSig
+objType table
+age immortalized
+antibody BHLHE40_(NB100-1800)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001979
+expId 1979
+fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 3018877a2b9e1fa8440afd8e14c329e9
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4002
+tableName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep1
+objType file
+age immortalized
+antibody CHD2_(AB68301)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001975
+expId 1975
+fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=c13aa544c39a290dfbbd1523aaaec444,bai=7cc6c8ad0fcfda4497f2230846ee1a22
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3756
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep2
+objType file
+age immortalized
+antibody CHD2_(AB68301)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001975
+expId 1975
+fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=f7bf914e461d8319fedc01b7d821f312,bai=a132e6247de4415eb27749e7067adb86
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3756
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Chd2ab68301IggrabPk
+objType table
+age immortalized
+antibody CHD2_(AB68301)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001975
+expId 1975
+fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 37a829f443c95f4305a650e9e9f17002
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3756
+tableName wgEncodeSydhTfbsCh12Chd2ab68301IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12Chd2ab68301IggrabRawDataRep1
+objType file
+age immortalized
+antibody CHD2_(AB68301)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001975
+expId 1975
+fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum ab7f5b455febbefc40bf1063881ffbdf
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3756
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Chd2ab68301IggrabRawDataRep2
+objType file
+age immortalized
+antibody CHD2_(AB68301)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001975
+expId 1975
+fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum e57e20c4b0626c35fde488f4280bd0e2
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3756
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Chd2ab68301IggrabSig
+objType table
+age immortalized
+antibody CHD2_(AB68301)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001975
+expId 1975
+fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 6631652b75833b1736c48bdbea51cbad
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3756
+tableName wgEncodeSydhTfbsCh12Chd2ab68301IggrabSig
 treatment None
 view Signal
 
@@ -31,18 +340,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001943
+expId 1943
+fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=c3652e94e499928ce5ef2cad8c9532a0,bai=5832edbf9059031f8f3f46c390790ed6
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1157
+subId 4168
 treatment None
 view Alignments
 
@@ -55,18 +368,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001943
+expId 1943
+fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=e72d68ea279da76e60b68c95c8ed4b76,bai=f028881e541fb010bcb6388ebd47a11b
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1157
+subId 4168
 treatment None
 view Alignments
 
@@ -82,10 +399,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001943
+expId 1943
 fileName wgEncodeSydhTfbsCh12CjunIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 435423d851413016e9bf488c87164929
 project wgEncode
 setType exp
 sex F
@@ -107,9 +427,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001943
+expId 1943
 fileName wgEncodeSydhTfbsCh12CjunIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 586b219a6344a877d53cf71f2c4f6f2f
 project wgEncode
 replicate 1
 setType exp
@@ -131,9 +454,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001943
+expId 1943
 fileName wgEncodeSydhTfbsCh12CjunIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum f18f1f3e36fbb19e57e63f6ec8cf3632
 project wgEncode
 replicate 2
 setType exp
@@ -155,10 +481,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001943
+expId 1943
 fileName wgEncodeSydhTfbsCh12CjunIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 815b0d8f70af97397e7028279da2fe6c
 project wgEncode
 setType exp
 sex F
@@ -177,18 +506,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001944
+expId 1944
+fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=a6cfc568cea8c4224f858e0981a89fd3,bai=576808787d4e6d3c617ba3013d9a74b1
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1159
+subId 4168
 treatment None
 view Alignments
 
@@ -201,18 +534,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001944
+expId 1944
+fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=dfa62ad0d5a1fc72acd71c1116dfda47,bai=6914669c3dd6b573a630434ae1be6e22
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1159
+subId 4168
 treatment None
 view Alignments
 
@@ -228,10 +565,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPe
+dccAccession wgEncodeEM001944
+expId 1944
+fileName wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum ae1e2ce02d8df7f7aab72a6f062b850c
 project wgEncode
 setType exp
 sex F
@@ -253,9 +593,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001944
+expId 1944
 fileName wgEncodeSydhTfbsCh12CmycIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 251314891177bc2b02cc871f1679e356
 project wgEncode
 replicate 1
 setType exp
@@ -277,9 +620,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001944
+expId 1944
 fileName wgEncodeSydhTfbsCh12CmycIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum e8ffa801aab6d94b79165263aea8087d
 project wgEncode
 replicate 2
 setType exp
@@ -301,10 +647,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001944
+expId 1944
 fileName wgEncodeSydhTfbsCh12CmycIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 84b40f360e4a058311bf97b404627745
 project wgEncode
 setType exp
 sex F
@@ -314,151 +663,173 @@ tableName wgEncodeSydhTfbsCh12CmycIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep1
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam
+dccAccession wgEncodeEM001954
+expId 1954
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=011f2fc5cef25e4d3f41d5e9a1973e2d,bai=d89353d390360140db64b40e4c014649
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
+subId 4451
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep2
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam
+dccAccession wgEncodeEM001954
+expId 1954
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=82a6a5667f1f4aebce1a248dcf935b52,bai=d6c62d9cdf54c0167ac4891d116e0ab3
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
+subId 4451
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsCh12CtcfIggyalePk
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabPk
 objType table
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12CtcfIggyalePk.narrowPeak.gz
+dccAccession wgEncodeEM001954
+expId 1954
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 0fd36ea125257b6e698325d97cb3e2e1
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
-tableName wgEncodeSydhTfbsCh12CtcfIggyalePk
+subId 4451
+tableName wgEncodeSydhTfbsCh12CtcfbIggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep1
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep1
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep1.fastq.gz
+dccAccession wgEncodeEM001954
+expId 1954
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford-m
+md5sum c0c891c138330f95188d88a371956536
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
+subId 4451
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep2
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep2
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep2.fastq.gz
+dccAccession wgEncodeEM001954
+expId 1954
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford-m
+md5sum 732276c745ae620355e9d79013d400db
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
+subId 4451
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsCh12CtcfIggyaleSig
+metaObject wgEncodeSydhTfbsCh12CtcfbIggrabSig
 objType table
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell CH12
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12CtcfIggyaleSig.bigWig
+dccAccession wgEncodeEM001954
+expId 1954
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum bccc5b2f53b7022bf9e3b85fd85b135b
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1858
-tableName wgEncodeSydhTfbsCh12CtcfIggyaleSig
+subId 4451
+tableName wgEncodeSydhTfbsCh12CtcfbIggrabSig
 treatment None
 view Signal
 
@@ -471,18 +842,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001937
+expId 1937
+fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=87927857c063c3f752e9a2ea90a638df,bai=ad31dcc3e78cf6d1d47acbe0c1ed0120
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1153
+subId 4168
 treatment None
 view Alignments
 
@@ -495,18 +870,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001937
+expId 1937
+fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=07cde03ffd439e15cd565067660eba73,bai=68b01da862336e8dc3962813da289c6f
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1153
+subId 4168
 treatment None
 view Alignments
 
@@ -522,10 +901,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001937
+expId 1937
 fileName wgEncodeSydhTfbsCh12E2f4IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 131691f25548935225f203364af59ac2
 project wgEncode
 setType exp
 sex F
@@ -547,9 +929,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001937
+expId 1937
 fileName wgEncodeSydhTfbsCh12E2f4IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 75a37eed97475482f310dcb11483a96d
 project wgEncode
 replicate 1
 setType exp
@@ -571,9 +956,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001937
+expId 1937
 fileName wgEncodeSydhTfbsCh12E2f4IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum a93447b896a8ccf35f75010b2e382cf8
 project wgEncode
 replicate 2
 setType exp
@@ -595,10 +983,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001937
+expId 1937
 fileName wgEncodeSydhTfbsCh12E2f4IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 6bbfda2667038a8af8478322ac0224ff
 project wgEncode
 setType exp
 sex F
@@ -608,7 +999,7 @@ tableName wgEncodeSydhTfbsCh12E2f4IggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsCh12InputIggmusAln
+metaObject wgEncodeSydhTfbsCh12InputIggmusAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -617,17 +1008,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12InputIggmusAln.tagAlign.gz
+dccAccession wgEncodeEM001938
+expId 1938
+fileName wgEncodeSydhTfbsCh12InputIggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=16d1c780f3355705526f60b42b4d7bbe,bai=a1c9ec2f54b79d7301dafc962c293fdb
 project wgEncode
+replicate 1
 setType input
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1154
+subId 4168
 treatment None
 view Alignments
 
@@ -643,9 +1039,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001938
+expId 1938
 fileName wgEncodeSydhTfbsCh12InputIggmusRawData.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum dd5e8c77bb19a7d565c858b559b22169
 project wgEncode
 setType input
 sex F
@@ -666,10 +1065,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001938
+expId 1938
 fileName wgEncodeSydhTfbsCh12InputIggmusSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 54159563e818fdb878372a134531969c
 project wgEncode
 setType input
 sex F
@@ -679,7 +1081,7 @@ tableName wgEncodeSydhTfbsCh12InputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsCh12InputIggrabAln
+metaObject wgEncodeSydhTfbsCh12InputIggrabAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -688,17 +1090,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-13
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12InputIggrabAln.tagAlign.gz
+dccAccession wgEncodeEM001939
+expId 1939
+fileName wgEncodeSydhTfbsCh12InputIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=d97cdbc486e220ba95773984a84dd784,bai=94c1750b336bf43540391f8e69cad439
 project wgEncode
+replicate 1
 setType input
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1125
+subId 4318
 treatment None
 view Alignments
 
@@ -714,9 +1121,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001939
+expId 1939
 fileName wgEncodeSydhTfbsCh12InputIggrabRawData.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum f8feb312c4aa83cca0f1f7b3922205f4
 project wgEncode
 setType input
 sex F
@@ -737,10 +1147,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001939
+expId 1939
 fileName wgEncodeSydhTfbsCh12InputIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 5eca0032786fba88dd716e123d3badf5
 project wgEncode
 setType input
 sex F
@@ -759,18 +1172,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-10
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001940
+expId 1940
+fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=7ee01e873c26270a1a44ebe5a2ddc122,bai=5a8ef67a94d040d0a37911384b532d8b
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1126
+subId 4317
 treatment None
 view Alignments
 
@@ -783,18 +1200,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-10
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001940
+expId 1940
+fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=cef2a5311c1dd450306a627fa6035bd4,bai=f08e610df72a70d16218eafcfb6d5e3b
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1126
+subId 4317
 treatment None
 view Alignments
 
@@ -810,10 +1231,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001940
+expId 1940
 fileName wgEncodeSydhTfbsCh12JundIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum ba51fcef06dd40609aba751d017036f6
 project wgEncode
 setType exp
 sex F
@@ -835,9 +1259,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001940
+expId 1940
 fileName wgEncodeSydhTfbsCh12JundIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 8fbeeae6fc3e91ccbbc7322aa6ee31a2
 project wgEncode
 replicate 1
 setType exp
@@ -859,9 +1286,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001940
+expId 1940
 fileName wgEncodeSydhTfbsCh12JundIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 5665ae28fa07e4b7ccc93f6674054188
 project wgEncode
 replicate 2
 setType exp
@@ -883,16 +1313,183 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001940
+expId 1940
 fileName wgEncodeSydhTfbsCh12JundIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum eced6be2a50db1ab326f64cd25aa8355
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
 subId 1126
 tableName wgEncodeSydhTfbsCh12JundIggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep1
+objType file
+age immortalized
+antibody MafK_(ab50322)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001980
+expId 1980
+fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=f31c0d4472d4bee1390fe31670f0701c,bai=131ca4b78d1db8fb96f99ea30f9d5670
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4003
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep2
+objType file
+age immortalized
+antibody MafK_(ab50322)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001980
+expId 1980
+fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=e8a318fb57a9d18e199f6548e70f9c7c,bai=1a44dffeefcd3724259864644bb34dc6
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4003
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Mafkab50322IggrabPk
+objType table
+age immortalized
+antibody MafK_(ab50322)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001980
+expId 1980
+fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum fced0886cd2904895d00f09ec4ccd83c
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4003
+tableName wgEncodeSydhTfbsCh12Mafkab50322IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12Mafkab50322IggrabRawDataRep1
+objType file
+age immortalized
+antibody MafK_(ab50322)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001980
+expId 1980
+fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum 845e31514da7aae4dec76a3cafcc42bd
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4003
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Mafkab50322IggrabRawDataRep2
+objType file
+age immortalized
+antibody MafK_(ab50322)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001980
+expId 1980
+fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum 9206145e455f51a15a9023d50d469a04
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4003
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Mafkab50322IggrabSig
+objType table
+age immortalized
+antibody MafK_(ab50322)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001980
+expId 1980
+fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 4cc384ca1d7ac98eb1d4b674e4950cd3
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4003
+tableName wgEncodeSydhTfbsCh12Mafkab50322IggrabSig
 treatment None
 view Signal
 
@@ -908,10 +1505,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam.bai
+dccAccession wgEncodeEM001955
+expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=f9ede47d9acda6f5c896d398e10163cd,bai=c8bfe9a5117bb0a62fdbe3a131f89c23
 project wgEncode
 replicate 1
 setType exp
@@ -933,10 +1532,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam.bai
+dccAccession wgEncodeEM001955
+expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=e39e45cff731d17df82ac700932bdeac,bai=6e0bcadfbcd15c97cae3f44b05e99fa7
 project wgEncode
 replicate 2
 setType exp
@@ -958,10 +1559,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001955
+expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 4885ce2e1949fdc180db3e35f4f63bcf
 project wgEncode
 setType exp
 sex F
@@ -983,9 +1587,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001955
+expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum a4c2352361c67e5c5360977efbc2bd56
 project wgEncode
 replicate 1
 setType exp
@@ -1007,9 +1614,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001955
+expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum ca7c170fba23a32445ce86d1ae6abc75
 project wgEncode
 replicate 2
 setType exp
@@ -1031,10 +1641,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001955
+expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 562b6ebd3049c65483939a8adb7dded6
 project wgEncode
 setType exp
 sex F
@@ -1044,85 +1657,338 @@ tableName wgEncodeSydhTfbsCh12MaxIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsCh12P300IggrabAlnRep1
+metaObject wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep1
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody Mxi1_(AF4185)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001976
+expId 1976
+fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=65af3b7c77f755acb12a588bdfe6c657,bai=5ba818803c7fda9b22f87b6370f97b60
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1855
+subId 3757
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsCh12P300IggrabAlnRep2
+metaObject wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep2
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody Mxi1_(AF4185)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001976
+expId 1976
+fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=db9c466ebc0d956a32ebe5b862d3bf18,bai=f7656b3c52704f560200e77f5c76fe2c
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1855
+subId 3757
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsCh12P300IggrabPk
+metaObject wgEncodeSydhTfbsCh12Mxi1af4185IggrabPk
 objType table
 age immortalized
-antibody p300_(N-15)
+antibody Mxi1_(AF4185)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12P300IggrabPk.narrowPeak.gz
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001976
+expId 1976
+fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 155616eca79faf21680243cc1f9fe7f3
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1855
-tableName wgEncodeSydhTfbsCh12P300IggrabPk
+subId 3757
+tableName wgEncodeSydhTfbsCh12Mxi1af4185IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsCh12P300IggrabRawDataRep1
+metaObject wgEncodeSydhTfbsCh12Mxi1af4185IggrabRawDataRep1
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody Mxi1_(AF4185)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001976
+expId 1976
+fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum ba0583a44ecc855561a5cbfa5b05b976
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3757
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Mxi1af4185IggrabRawDataRep2
+objType file
+age immortalized
+antibody Mxi1_(AF4185)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001976
+expId 1976
+fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum 6fa596c4a79f72dce31c82f2569d4c8b
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3757
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Mxi1af4185IggrabSig
+objType table
+age immortalized
+antibody Mxi1_(AF4185)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-15
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEM001976
+expId 1976
+fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum bb2e2d5afdc3b6f889ea0a9abe83b298
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3757
+tableName wgEncodeSydhTfbsCh12Mxi1af4185IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabAlnRep1
+objType file
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001977
+expId 1977
+fileName wgEncodeSydhTfbsCh12NelfeIggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=d76e76640164a22f4aeec1e76e1c815b,bai=5e90edb43ade004e2bd19186b1d2ee9d
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabAlnRep2
+objType file
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001977
+expId 1977
+fileName wgEncodeSydhTfbsCh12NelfeIggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=5eba895f635ab04d96e75ecb671edd58,bai=89002b8c0e69aad387597e5327788e2f
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabPk
+objType table
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001977
+expId 1977
+fileName wgEncodeSydhTfbsCh12NelfeIggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum ab4eb2af283a1792d09af4449be00956
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+tableName wgEncodeSydhTfbsCh12NelfeIggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep1
+objType file
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001977
+expId 1977
+fileName wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum 7a732338eec628a0316673cd2e9b894c
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep2
+objType file
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001977
+expId 1977
+fileName wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum 42b924e4eebc8fa2bc6d591115788143
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12NelfeIggrabSig
+objType table
+age immortalized
+antibody NELFe
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001977
+expId 1977
+fileName wgEncodeSydhTfbsCh12NelfeIggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 8746777158b111bd66b2c9ece8c287ab
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 2540
+tableName wgEncodeSydhTfbsCh12NelfeIggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep1
+objType file
+age immortalized
+antibody p300_(SC-584)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1131,9 +1997,94 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12P300IggrabRawDataRep1.fastq.gz
+dccAccession wgEncodeEM001958
+expId 1958
+fileName wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=933af9f32e41b3af676918dc543a771d,bai=d6e4a9b8293110692845eae8b519c806
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 1855
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep2
+objType file
+age immortalized
+antibody p300_(SC-584)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001958
+expId 1958
+fileName wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=3f6e58e2391c8af0bf7bac7ca6940e17,bai=e6c04b5069af04ecd7d941be2475432c
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 1855
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12P300sc584IggrabPk
+objType table
+age immortalized
+antibody p300_(SC-584)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001958
+expId 1958
+fileName wgEncodeSydhTfbsCh12P300sc584IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 721e2a69fd92687b0b63f81cdc8b1fe9
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 1855
+tableName wgEncodeSydhTfbsCh12P300sc584IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12P300sc584IggrabRawDataRep1
+objType file
+age immortalized
+antibody p300_(SC-584)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001958
+expId 1958
+fileName wgEncodeSydhTfbsCh12P300sc584IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum 21303612cab8d0ba76199b7f28ac5ebb
 project wgEncode
 replicate 1
 setType exp
@@ -1143,10 +2094,10 @@ subId 1855
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsCh12P300IggrabRawDataRep2
+metaObject wgEncodeSydhTfbsCh12P300sc584IggrabRawDataRep2
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1155,9 +2106,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12P300IggrabRawDataRep2.fastq.gz
+dccAccession wgEncodeEM001958
+expId 1958
+fileName wgEncodeSydhTfbsCh12P300sc584IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 7e58dbc94286274a3c4a61183bd78ae8
 project wgEncode
 replicate 2
 setType exp
@@ -1167,10 +2121,10 @@ subId 1855
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsCh12P300IggrabSig
+metaObject wgEncodeSydhTfbsCh12P300sc584IggrabSig
 objType table
 age immortalized
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1179,16 +2133,19 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12P300IggrabSig.bigWig
+dccAccession wgEncodeEM001958
+expId 1958
+fileName wgEncodeSydhTfbsCh12P300sc584IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 89e48e9511469d86cbd9303ef7e07869
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
 subId 1855
-tableName wgEncodeSydhTfbsCh12P300IggrabSig
+tableName wgEncodeSydhTfbsCh12P300sc584IggrabSig
 treatment None
 view Signal
 
@@ -1201,18 +2158,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001941
+expId 1941
+fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=2325cfbbb721ea5b87568c5a40540828,bai=c0d90d9bc538df4d3de1f99ca2c92296
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1155
+subId 4168
 treatment None
 view Alignments
 
@@ -1225,18 +2186,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001941
+expId 1941
+fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=d1df49e9a00f7e2239265c2e9145fbd2,bai=007c57e2729a32a9855f57ebbf98a792
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1155
+subId 4168
 treatment None
 view Alignments
 
@@ -1252,10 +2217,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001941
+expId 1941
 fileName wgEncodeSydhTfbsCh12Pol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum ebefc0ce1db4a4f8fb0ea6e16f156668
 project wgEncode
 setType exp
 sex F
@@ -1277,9 +2245,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001941
+expId 1941
 fileName wgEncodeSydhTfbsCh12Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 31b14a3202d378c267a2d5e2ba810053
 project wgEncode
 replicate 1
 setType exp
@@ -1301,9 +2272,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001941
+expId 1941
 fileName wgEncodeSydhTfbsCh12Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 48d2e4d630f76556aedfd87e7444f358
 project wgEncode
 replicate 2
 setType exp
@@ -1325,16 +2299,183 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001941
+expId 1941
 fileName wgEncodeSydhTfbsCh12Pol2IggmusSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum c7fed341bfdbed6d1bb3bf8127a4356f
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
 subId 1155
 tableName wgEncodeSydhTfbsCh12Pol2IggmusSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep1
+objType file
+age immortalized
+antibody Pol2(phosphoS2)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001970
+expId 1970
+fileName wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=007116fc48bb16a8268a4bf2a5445957,bai=99d184897ec2705e733f611d54cdeb80
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3758
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep2
+objType file
+age immortalized
+antibody Pol2(phosphoS2)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001970
+expId 1970
+fileName wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=725cac95edccd80ae6d254d6374ab002,bai=bfa92a5378476a5c78339ddb92548ab3
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3758
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Pol2s2IggrabPk
+objType table
+age immortalized
+antibody Pol2(phosphoS2)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001970
+expId 1970
+fileName wgEncodeSydhTfbsCh12Pol2s2IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 7f327f7124450f76fb67b3530282802a
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3758
+tableName wgEncodeSydhTfbsCh12Pol2s2IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12Pol2s2IggrabRawDataRep1
+objType file
+age immortalized
+antibody Pol2(phosphoS2)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001970
+expId 1970
+fileName wgEncodeSydhTfbsCh12Pol2s2IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum f93cdc73a6cb36d4a93e6f791c4411de
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3758
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Pol2s2IggrabRawDataRep2
+objType file
+age immortalized
+antibody Pol2(phosphoS2)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001970
+expId 1970
+fileName wgEncodeSydhTfbsCh12Pol2s2IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum bb24d0316bfc106a93e2f4e66b2e4483
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3758
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Pol2s2IggrabSig
+objType table
+age immortalized
+antibody Pol2(phosphoS2)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001970
+expId 1970
+fileName wgEncodeSydhTfbsCh12Pol2s2IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 2d8cd9459afffb99bb79cb6db4d84bba
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3758
+tableName wgEncodeSydhTfbsCh12Pol2s2IggrabSig
 treatment None
 view Signal
 
@@ -1350,10 +2491,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam.bai
+dccAccession wgEncodeEM001956
+expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=573571939fd54e0cd61f9211684cf5de,bai=f37e463b348069cfc8201b6ca7402e80
 project wgEncode
 replicate 1
 setType exp
@@ -1375,10 +2518,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam.bai
+dccAccession wgEncodeEM001956
+expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=afbadf233155b5a64904bc05efbf1c33,bai=e847c82c15af2415a93e7d50663db22b
 project wgEncode
 replicate 2
 setType exp
@@ -1400,10 +2545,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001956
+expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum d18db7a9eb9d9900ca7f08d585be81b2
 project wgEncode
 setType exp
 sex F
@@ -1425,9 +2573,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001956
+expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum bed597cc700dd305c35c0144b51c94d4
 project wgEncode
 replicate 1
 setType exp
@@ -1449,9 +2600,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001956
+expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 5572b34bbdc3d716fce385b058841637
 project wgEncode
 replicate 2
 setType exp
@@ -1473,16 +2627,183 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001956
+expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 6adcf0c969dc98e2b84aba8a518085c8
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
 subId 1860
 tableName wgEncodeSydhTfbsCh12Rad21IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep1
+objType file
+age immortalized
+antibody SMC3_(ab9263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001971
+expId 1971
+fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=a089c70bf66eae5f55bd3b5aa1aabf32,bai=60363e754a9924ba62b2ac4d328729d8
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3759
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep2
+objType file
+age immortalized
+antibody SMC3_(ab9263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001971
+expId 1971
+fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=7cfa24900b88159602ad28e202fa1b9e,bai=74ead892b9a69d97c0738854c2fa8239
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3759
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Smc3ab9263IggrabPk
+objType table
+age immortalized
+antibody SMC3_(ab9263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001971
+expId 1971
+fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum d25c61303862bea9b1b1500ce5e14e40
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3759
+tableName wgEncodeSydhTfbsCh12Smc3ab9263IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12Smc3ab9263IggrabRawDataRep1
+objType file
+age immortalized
+antibody SMC3_(ab9263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001971
+expId 1971
+fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum 35ff98b85dda13cad70e9afb22c6b988
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3759
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Smc3ab9263IggrabRawDataRep2
+objType file
+age immortalized
+antibody SMC3_(ab9263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001971
+expId 1971
+fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum e9d358767db7ee3edf11e03c8aedc839
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3759
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Smc3ab9263IggrabSig
+objType table
+age immortalized
+antibody SMC3_(ab9263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001971
+expId 1971
+fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum e0afe968a7b99439771e094d6d1e04e0
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3759
+tableName wgEncodeSydhTfbsCh12Smc3ab9263IggrabSig
 treatment None
 view Signal
 
@@ -1495,18 +2816,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001942
+expId 1942
+fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=1f33102573e9032c9ab6c17457e25463,bai=0ccc54a42ab303b5d7ac9846d6d99d0a
 project wgEncode
 replicate 1
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1156
+subId 4168
 treatment None
 view Alignments
 
@@ -1519,18 +2844,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001942
+expId 1942
+fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=593d0a0c1be47abb5cabf3ca122b857a,bai=b6ce76a071e51f8a4e54131e71fcf0bc
 project wgEncode
 replicate 2
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1156
+subId 4168
 treatment None
 view Alignments
 
@@ -1543,18 +2872,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001942
+expId 1942
 fileName wgEncodeSydhTfbsCh12TbpIggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 5324416eaa9fdde3a11aac161d0186cc
 project wgEncode
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 1156
+subId 4610
 tableName wgEncodeSydhTfbsCh12TbpIggmusPk
 treatment None
 view Peaks
@@ -1571,9 +2904,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001942
+expId 1942
 fileName wgEncodeSydhTfbsCh12TbpIggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 371e8f7219f38236fef86f25caa494d4
 project wgEncode
 replicate 1
 setType exp
@@ -1595,9 +2931,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001942
+expId 1942
 fileName wgEncodeSydhTfbsCh12TbpIggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 17b1fadacffa05627612b33aa1a25391
 project wgEncode
 replicate 2
 setType exp
@@ -1619,10 +2958,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001942
+expId 1942
 fileName wgEncodeSydhTfbsCh12TbpIggmusSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 126090635ddfdc4100f1a7e9a6812fe3
 project wgEncode
 setType exp
 sex F
@@ -1644,10 +2986,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam.bai
+dccAccession wgEncodeEM001957
+expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=1500d12ebc543a1777f56a85af43441e,bai=a2220fc77a048359e260cf8e2481864a
 project wgEncode
 replicate 1
 setType exp
@@ -1669,10 +3013,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam.bai
+dccAccession wgEncodeEM001957
+expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=3b9e1e515ed39d4ccdc0739975b4d78c,bai=30b4b5ff2adf6b54bb47a2253c5934ec
 project wgEncode
 replicate 2
 setType exp
@@ -1694,10 +3040,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001957
+expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 177aa59b8f7360b0e08770bc727624ed
 project wgEncode
 setType exp
 sex F
@@ -1719,9 +3068,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001957
+expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum a62d9a6914579ee39df4aea426a2f3d7
 project wgEncode
 replicate 1
 setType exp
@@ -1743,9 +3095,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001957
+expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 3edf8b246c97a17eb6cf2a9a13d36979
 project wgEncode
 replicate 2
 setType exp
@@ -1767,10 +3122,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001957
+expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 1009037f643c66e0af35f11be8b4225a
 project wgEncode
 setType exp
 sex F
@@ -1780,85 +3138,174 @@ tableName wgEncodeSydhTfbsCh12Usf2IggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
+metaObject wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep1
 objType file
 age immortalized
-antibody c-Myb_(H-141)
+antibody CHD2_(AB68301)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1.bam
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001972
+expId 1972
+fileName wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
+md5sum bam=aec0416b263b554b45c7414970a243af,bai=b803dc92caf461d044bbdf157a599b66
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 2542
+subId 3760
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
+metaObject wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep2
 objType file
 age immortalized
-antibody c-Myb_(H-141)
+antibody CHD2_(AB68301)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2.bam
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001972
+expId 1972
+fileName wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
+md5sum bam=3f2f927f51b4f2010e667d3ba4dab449,bai=d7d62038b58b60fe6be0b32c23257341
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 2542
+subId 3760
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCmybh141IggrabPk
+metaObject wgEncodeSydhTfbsMelChd2ab68301IggrabPk
 objType table
 age immortalized
-antibody c-Myb_(H-141)
+antibody CHD2_(AB68301)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141IggrabPk.narrowPeak.gz
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001972
+expId 1972
+fileName wgEncodeSydhTfbsMelChd2ab68301IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 256e4056612e520746d48c9a638dd683
 project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 2542
-tableName wgEncodeSydhTfbsMelCmybh141IggrabPk
+subId 3760
+tableName wgEncodeSydhTfbsMelChd2ab68301IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1
+metaObject wgEncodeSydhTfbsMelChd2ab68301IggrabRawDataRep1
 objType file
 age immortalized
-antibody c-Myb_(H-141)
+antibody CHD2_(AB68301)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001972
+expId 1972
+fileName wgEncodeSydhTfbsMelChd2ab68301IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum 065bb6d26105b9936ac026c8d18eeb3a
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 3760
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelChd2ab68301IggrabRawDataRep2
+objType file
+age immortalized
+antibody CHD2_(AB68301)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001972
+expId 1972
+fileName wgEncodeSydhTfbsMelChd2ab68301IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum c0bc929e063529f94521abe9dd9ef229
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 3760
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelChd2ab68301IggrabSig
+objType table
+age immortalized
+antibody CHD2_(AB68301)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001972
+expId 1972
+fileName wgEncodeSydhTfbsMelChd2ab68301IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum d4f4f3a5d70e43688a155ddb8e9dd9bf
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 3760
+tableName wgEncodeSydhTfbsMelChd2ab68301IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1
+objType file
+age immortalized
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1867,10 +3314,94 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1.fastq.gz
+dccAccession wgEncodeEM001967
+expId 1967
+fileName wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelCmybh141IggrabRawSignalRep1
+md5sum bam=cec02462d29c06d5160267338df28852,bai=5a83c78c60d00bbe99d4ed14a549ec51
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 2542
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep2
+objType file
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+dccAccession wgEncodeEM001967
+expId 1967
+fileName wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=c3a899de1d8fbac48b8e2512f1c0b533,bai=9dc485ed241688ac968639134d28a2d6
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 2542
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelCmybsc7874IggrabPk
+objType table
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+dccAccession wgEncodeEM001967
+expId 1967
+fileName wgEncodeSydhTfbsMelCmybsc7874IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum a72483bf362751017e68218b43f78c59
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 2542
+tableName wgEncodeSydhTfbsMelCmybsc7874IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep1
+objType file
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+dccAccession wgEncodeEM001967
+expId 1967
+fileName wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum 64976867f5b72a18ed1c682f95d2f190
 project wgEncode
 replicate 1
 setType exp
@@ -1880,10 +3411,10 @@ subId 2542
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2
+metaObject wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep2
 objType file
 age immortalized
-antibody c-Myb_(H-141)
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1892,10 +3423,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2.fastq.gz
+dccAccession wgEncodeEM001967
+expId 1967
+fileName wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelCmybh141IggrabRawSignalRep2
+md5sum 69f482d3dcce968145159c3aeaf8440e
 project wgEncode
 replicate 2
 setType exp
@@ -1905,10 +3438,10 @@ subId 2542
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCmybh141IggrabSig
+metaObject wgEncodeSydhTfbsMelCmybsc7874IggrabSig
 objType table
 age immortalized
-antibody c-Myb_(H-141)
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1917,16 +3450,19 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141IggrabSig.bigWig
+dccAccession wgEncodeEM001967
+expId 1967
+fileName wgEncodeSydhTfbsMelCmybsc7874IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 536aa065f5a4549235e2d810e36a043c
 project wgEncode
 setType exp
 sex M
 strain Unknown
 subId 2542
-tableName wgEncodeSydhTfbsMelCmybh141IggrabSig
+tableName wgEncodeSydhTfbsMelCmybsc7874IggrabSig
 treatment None
 view Signal
 
@@ -1939,18 +3475,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001951
+expId 1951
+fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=5a0ddb376a99c9fc72c054adb25268b0,bai=281601130513a31e204c5021ad00ea32
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1163
+subId 4169
 treatment None
 view Alignments
 
@@ -1963,18 +3503,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001951
+expId 1951
+fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=63bdae29367f9c40ae8c48300aab94d5,bai=98500d9c9ceeec5e7e1818b7999f71e3
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1163
+subId 4169
 treatment None
 view Alignments
 
@@ -1987,18 +3531,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001951
+expId 1951
 fileName wgEncodeSydhTfbsMelCmycIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum d44b93b7085fb025d2eba5e00bb51743
 project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1163
+subId 4610
 tableName wgEncodeSydhTfbsMelCmycIggrabPk
 treatment None
 view Peaks
@@ -2015,9 +3563,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001951
+expId 1951
 fileName wgEncodeSydhTfbsMelCmycIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 03a3d5e2998fde6495967e9e7b800c38
 project wgEncode
 replicate 1
 setType exp
@@ -2039,9 +3590,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001951
+expId 1951
 fileName wgEncodeSydhTfbsMelCmycIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 2500b9ce365596e7a8f4c32ef609594a
 project wgEncode
 replicate 2
 setType exp
@@ -2063,10 +3617,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001951
+expId 1951
 fileName wgEncodeSydhTfbsMelCmycIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum ab42c556cf689c0ef471d19086b9cba8
 project wgEncode
 setType exp
 sex M
@@ -2076,10 +3633,38 @@ tableName wgEncodeSydhTfbsMelCmycIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1
+metaObject wgEncodeSydhTfbsMelCtcfbIggrabPk
+objType table
+age immortalized
+antibody CTCF_(SC-15914)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEM001968
+expId 1968
+fileName wgEncodeSydhTfbsMelCtcfbIggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+md5sum 15c11c5be6b17165d7d72000cec4c90f
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 4610
+tableName wgEncodeSydhTfbsMelCtcfbIggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -2088,10 +3673,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1.bam
+dccAccession wgEncodeEM001962
+expId 1962
+fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
+md5sum bam=51ad9018735826652a01cbd9a672cb12,bai=9751e3baa0bb432022c93197c43ac64e
 project wgEncode
 replicate 1
 setType exp
@@ -2101,10 +3688,10 @@ subId 1857
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2
+metaObject wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -2113,10 +3700,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2.bam
+dccAccession wgEncodeEM001962
+expId 1962
+fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
+md5sum bam=5d9477681b74ce084cdc988bd9bf285d,bai=571e7467a2fa8db0069f522173079b37
 project wgEncode
 replicate 2
 setType exp
@@ -2126,35 +3715,39 @@ subId 1857
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
+metaObject wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyalePk
 objType table
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2011-02-03
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk.narrowPeak.gz
+dccAccession wgEncodeEM001962
+expId 1962
+fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyalePk.narrowPeak.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
 labVersion PeakSeq1.0
+md5sum b7dd0d00ac1544d8e544efab311a9b23
 project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1857
-tableName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
+subId 3502
+tableName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyalePk
 treatment DMSO_2.0pct
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep1
+metaObject wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep1
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -2163,9 +3756,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep1.fastq.gz
+dccAccession wgEncodeEM001962
+expId 1962
+fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
+md5sum d252e261caeb8f30071e10a99c846eee
 project wgEncode
 replicate 1
 setType exp
@@ -2175,10 +3771,10 @@ subId 1857
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep2
+metaObject wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep2
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -2187,9 +3783,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep2.fastq.gz
+dccAccession wgEncodeEM001962
+expId 1962
+fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
+md5sum 79e9f85d895dd27c4e8d442d53153324
 project wgEncode
 replicate 2
 setType exp
@@ -2199,10 +3798,10 @@ subId 1857
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
+metaObject wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleSig
 objType table
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -2211,144 +3810,155 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig.bigWig
+dccAccession wgEncodeEM001962
+expId 1962
+fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleSig.bigWig
 grant Snyder
-lab Stanford-m
+lab Yale-m
 labVersion PeakSeq1.0
+md5sum 7ca7e8b2432436ffdbd393adf63239e0
 project wgEncode
 setType exp
 sex M
 strain Unknown
 subId 1857
-tableName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
+tableName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleSig
 treatment DMSO_2.0pct
 view Signal
 
-metaObject wgEncodeSydhTfbsMelCtcfStdAlnRep1
+metaObject wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep1
 objType file
-antibody CTCF
+age immortalized
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelCtcfStdAlnRep1.bam
+dccAccession wgEncodeEM001968
+expId 1968
+fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=23d17c5a47e085aaf9c1f7c62860c523,bai=6efc20918784449542367a2c31b8aa8d
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 3087
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCtcfStdAlnRep2
+metaObject wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep2
 objType file
-antibody CTCF
+age immortalized
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelCtcfStdAlnRep2.bam
+dccAccession wgEncodeEM001968
+expId 1968
+fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=639a6df2764f6fc852f73757b17977db,bai=dce6b50e1fb433d66b2743f83b57e498
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 3087
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCtcfStdPk
-objType table
-antibody CTCF
-cell MEL
-composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-10
-dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelCtcfStdPk.narrowPeak.gz
-grant Snyder
-lab Stanford-m
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 3087
-tableName wgEncodeSydhTfbsMelCtcfStdPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhTfbsMelCtcfStdRawDataRep1
+metaObject wgEncodeSydhTfbsMelCtcfsc15914IggrabRawDataRep1
 objType file
-antibody CTCF
+age immortalized
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelCtcfStdRawDataRep1.fastq.gz
+dccAccession wgEncodeEM001968
+expId 1968
+fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 97248a1f5bcc75bc3c0e0d735cffc277
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 3087
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCtcfStdRawDataRep2
+metaObject wgEncodeSydhTfbsMelCtcfsc15914IggrabRawDataRep2
 objType file
-antibody CTCF
+age immortalized
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelCtcfStdRawDataRep2.fastq.gz
+dccAccession wgEncodeEM001968
+expId 1968
+fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 58cae160a4926e589dbd9c89a132a8ac
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 3087
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCtcfStdSig
+metaObject wgEncodeSydhTfbsMelCtcfsc15914IggrabSig
 objType table
-antibody CTCF
+age immortalized
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelCtcfStdSig.bigWig
+dccAccession wgEncodeEM001968
+expId 1968
+fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum cd3625141d4deddec58583df543f2008
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 3087
-tableName wgEncodeSydhTfbsMelCtcfStdSig
+tableName wgEncodeSydhTfbsMelCtcfsc15914IggrabSig
 treatment None
 view Signal
 
@@ -2361,19 +3971,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam.bai
+dccAccession wgEncodeEM001953
+expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=afc707cb16c55ddff7496e0d675584df,bai=f7b7dbf8cb9b3731f62f88088e883944
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1193
+subId 4169
 treatment None
 view Alignments
 
@@ -2386,19 +3999,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam.bai
+dccAccession wgEncodeEM001953
+expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=df61bff0cefc1c86a170b3eda061559c,bai=4b04432bb4e42b90737adeebc1998781
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1193
+subId 4169
 treatment None
 view Alignments
 
@@ -2414,10 +4030,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM001953
+expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum b1268bdb9b9d907a5ef5f0ca0d2d2dbf
 project wgEncode
 setType exp
 sex M
@@ -2439,9 +4058,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM001953
+expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 6c76ac286ce5eea82d5888148e48e571
 project wgEncode
 replicate 1
 setType exp
@@ -2463,9 +4085,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM001953
+expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 2fc8094f9680de41167f9f944bcbe339
 project wgEncode
 replicate 2
 setType exp
@@ -2487,10 +4112,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
+dccAccession wgEncodeEM001953
+expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum e23c799dbf35e94422137646cd36f33e
 project wgEncode
 setType exp
 sex M
@@ -2509,18 +4137,22 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelGata1IggratAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001945
+expId 1945
+fileName wgEncodeSydhTfbsMelGata1IggratAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=7f25f6a76d0829d139b6199df0c68488,bai=48a0da4078f5f24d3df78f0fae50bbbf
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1165
+subId 4314
 treatment None
 view Alignments
 
@@ -2533,18 +4165,22 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelGata1IggratAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001945
+expId 1945
+fileName wgEncodeSydhTfbsMelGata1IggratAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=441690b75d7bd006c655d013f6848426,bai=8c436fddb0223021a2c8e194f42faceb
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1165
+subId 4314
 treatment None
 view Alignments
 
@@ -2557,18 +4193,22 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001945
+expId 1945
 fileName wgEncodeSydhTfbsMelGata1IggratPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum c3722ca6e7ccb27c9be9f5d44ac2d966
 project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1165
+subId 4610
 tableName wgEncodeSydhTfbsMelGata1IggratPk
 treatment None
 view Peaks
@@ -2585,9 +4225,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001945
+expId 1945
 fileName wgEncodeSydhTfbsMelGata1IggratRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum e62eccf5d396daf6a3d3cbbec8e55432
 project wgEncode
 replicate 1
 setType exp
@@ -2609,9 +4252,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001945
+expId 1945
 fileName wgEncodeSydhTfbsMelGata1IggratRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum fa46374a09c29e7e95dd44f828e6682c
 project wgEncode
 replicate 2
 setType exp
@@ -2633,10 +4279,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001945
+expId 1945
 fileName wgEncodeSydhTfbsMelGata1IggratSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum aa55fd09bf8173e796bdc75a0454ef7f
 project wgEncode
 setType exp
 sex M
@@ -2646,7 +4295,7 @@ tableName wgEncodeSydhTfbsMelGata1IggratSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleAln
+metaObject wgEncodeSydhTfbsMelInputDm2p5dIggyaleAln
 objType file
 age immortalized
 antibody Input
@@ -2655,22 +4304,25 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-16
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam.bai
-fileName wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam
+dccAccession wgEncodeEM001963
+expId 1963
+fileName wgEncodeSydhTfbsMelInputDm2p5dIggyaleAln.bam
 grant Snyder
-lab Stanford-m
+lab Yale-m
+md5sum bam=4c0ba84d31fb920838ab84c95777d219,bai=3798b0275eeea3c04d0ec420cd2ffe05
 project wgEncode
 setType input
 sex M
 strain Unknown
-subId 1862
+subId 4327
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleRawData
+metaObject wgEncodeSydhTfbsMelInputDm2p5dIggyaleRawData
 objType file
 age immortalized
 antibody Input
@@ -2682,9 +4334,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20IggyaleRawData.fastq.gz
+dccAccession wgEncodeEM001963
+expId 1963
+fileName wgEncodeSydhTfbsMelInputDm2p5dIggyaleRawData.fastq.gz
 grant Snyder
-lab Stanford-m
+lab Yale-m
+md5sum 5b9e3ce2865b2fc2420b5e2cdccc6618
 project wgEncode
 setType input
 sex M
@@ -2693,7 +4348,7 @@ subId 1862
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleSig
+metaObject wgEncodeSydhTfbsMelInputDm2p5dIggyaleSig
 objType table
 age immortalized
 antibody Input
@@ -2705,20 +4360,105 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20IggyaleSig.bigWig
+dccAccession wgEncodeEM001963
+expId 1963
+fileName wgEncodeSydhTfbsMelInputDm2p5dIggyaleSig.bigWig
 grant Snyder
-lab Stanford-m
+lab Yale-m
 labVersion PeakSeq1.0
+md5sum da7d64b04904456bee5a3160db11f14b
 project wgEncode
 setType input
 sex M
 strain Unknown
 subId 1862
-tableName wgEncodeSydhTfbsMelInputDmso20IggyaleSig
+tableName wgEncodeSydhTfbsMelInputDm2p5dIggyaleSig
 treatment DMSO_2.0pct
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggmusAln
+metaObject wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-29
+dateUnrestricted 2012-01-29
+dccAccession wgEncodeEM001983
+expId 1983
+fileName wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1.bam
+grant Snyder
+lab Yale-m
+md5sum bam=5c4733267c2290e645aa99e4efc0b437,bai=22273a41077471d31d6e20fe0a55b62d
+project wgEncode
+replicate 1
+setType input
+sex M
+strain Unknown
+subId 4007
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelInputDm2p5dStdRawDataRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-29
+dateUnrestricted 2012-01-29
+dccAccession wgEncodeEM001983
+expId 1983
+fileName wgEncodeSydhTfbsMelInputDm2p5dStdRawDataRep1.fastq.tgz
+grant Snyder
+lab Yale-m
+md5sum f4aa553484994da8f34bd0be73c811bd
+project wgEncode
+replicate 1
+setType input
+sex M
+strain Unknown
+subId 4007
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhTfbsMelInputDm2p5dStdSig
+objType table
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-29
+dateUnrestricted 2012-01-29
+dccAccession wgEncodeEM001983
+expId 1983
+fileName wgEncodeSydhTfbsMelInputDm2p5dStdSig.bigWig
+grant Snyder
+lab Yale-m
+labVersion PeakSeq1.0
+md5sum 21afe4070b371432f83b06c2f1d58c19
+project wgEncode
+setType input
+sex M
+strain Unknown
+subId 4007
+tableName wgEncodeSydhTfbsMelInputDm2p5dStdSig
+treatment DMSO_2.0pct
+view Signal
+
+metaObject wgEncodeSydhTfbsMelInputIggmusAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -2727,17 +4467,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggmusAln.tagAlign.gz
+dccAccession wgEncodeEM001946
+expId 1946
+fileName wgEncodeSydhTfbsMelInputIggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=2211e6172e7d69dcae0dee5e46081028,bai=d39e224329c0f82a97932dafc7603253
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1162
+subId 4169
 treatment None
 view Alignments
 
@@ -2753,9 +4498,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001946
+expId 1946
 fileName wgEncodeSydhTfbsMelInputIggmusRawData.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 6821267e1e67c2fe4b731a1ae451ae1b
 project wgEncode
 setType input
 sex M
@@ -2776,10 +4524,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001946
+expId 1946
 fileName wgEncodeSydhTfbsMelInputIggmusSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 4056b997280b27541abc367dd46c5dbd
 project wgEncode
 setType input
 sex M
@@ -2789,7 +4540,7 @@ tableName wgEncodeSydhTfbsMelInputIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggrabAln
+metaObject wgEncodeSydhTfbsMelInputIggrabAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -2798,17 +4549,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggrabAln.tagAlign.gz
+dccAccession wgEncodeEM001947
+expId 1947
+fileName wgEncodeSydhTfbsMelInputIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=36ebfe93d477cea2001713f91427e815,bai=85a9e415990ec6783c7b8fd4dff1d253
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1164
+subId 4169
 treatment None
 view Alignments
 
@@ -2824,9 +4580,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001947
+expId 1947
 fileName wgEncodeSydhTfbsMelInputIggrabRawData.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum ad01a4ca1c30a8dab5ff461569b7459f
 project wgEncode
 setType input
 sex M
@@ -2847,10 +4606,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001947
+expId 1947
 fileName wgEncodeSydhTfbsMelInputIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 032226dd65ad1b4ced74620fe8090b58
 project wgEncode
 setType input
 sex M
@@ -2860,7 +4622,7 @@ tableName wgEncodeSydhTfbsMelInputIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggratAln
+metaObject wgEncodeSydhTfbsMelInputIggratAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -2869,17 +4631,22 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggratAln.tagAlign.gz
+dccAccession wgEncodeEM001948
+expId 1948
+fileName wgEncodeSydhTfbsMelInputIggratAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=49ac3e23b160d34d59e165d09df48294,bai=441851252e3d630b65adb70e2d444962
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1167
+subId 4169
 treatment None
 view Alignments
 
@@ -2895,9 +4662,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001948
+expId 1948
 fileName wgEncodeSydhTfbsMelInputIggratRawData.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum ac546abf96fdabb373243613ab713aa6
 project wgEncode
 setType input
 sex M
@@ -2918,10 +4688,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001948
+expId 1948
 fileName wgEncodeSydhTfbsMelInputIggratSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum d0f8887e973ace51f0862a33cc30be6d
 project wgEncode
 setType input
 sex M
@@ -2931,51 +4704,87 @@ tableName wgEncodeSydhTfbsMelInputIggratSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputIggyaleAln
+metaObject wgEncodeSydhTfbsMelInputStdAlnRep1
 objType file
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+control std
+controlId MEL/None/Input/std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-04-26
-dateUnrestricted 2011-01-26
-fileName wgEncodeSydhTfbsMelInputIggyaleAln.tagAlign.gz
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-29
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001982
+expId 1982
+fileName wgEncodeSydhTfbsMelInputStdAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=bfe20db607504aad5df8f4ced189dc57,bai=a35826031327e38ff4d21f5274acbab1
 project wgEncode
+replicate 1
 setType input
 sex M
 strain Unknown
-subId 1168
+subId 4006
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelInputIggyaleRawData
+metaObject wgEncodeSydhTfbsMelInputStdRawDataRep1
 objType file
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+control std
+controlId MEL/None/Input/std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-04-26
-dateUnrestricted 2011-01-26
-fileName wgEncodeSydhTfbsMelInputIggyaleRawData.fastq.gz
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-29
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001982
+expId 1982
+fileName wgEncodeSydhTfbsMelInputStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford-m
+md5sum 17e6a72c3c35cfbb70f9fc4a6efa1a8b
+project wgEncode
+replicate 1
+setType input
+sex M
+strain Unknown
+subId 4006
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelInputStdSig
+objType table
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-29
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001982
+expId 1982
+fileName wgEncodeSydhTfbsMelInputStdSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 58061b58b1a68fbe602837d6d7b80560
 project wgEncode
 setType input
 sex M
 strain Unknown
-subId 1168
+subId 4006
+tableName wgEncodeSydhTfbsMelInputStdSig
 treatment None
-view RawData
+view Signal
 
 metaObject wgEncodeSydhTfbsMelJundIggrabAlnRep1
 objType file
@@ -2986,19 +4795,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
-fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam.bai
+dccAccession wgEncodeEM001952
+expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=3e1217d8fa60fca5133c761368016b6c,bai=797f2b4247842c74e4b2da9dbd529858
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1192
+subId 4169
 treatment None
 view Alignments
 
@@ -3011,19 +4823,22 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
-fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam.bai
+dccAccession wgEncodeEM001952
+expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=7fb5dc62fa91aa1aa7e93a2290e483b9,bai=f2a448f6860ce8dd759c9ceed42b1c61
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1192
+subId 4169
 treatment None
 view Alignments
 
@@ -3039,10 +4854,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
+dccAccession wgEncodeEM001952
+expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum ef4ed830452c2931ca21e50a4a96b1de
 project wgEncode
 setType exp
 sex M
@@ -3064,9 +4882,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
+dccAccession wgEncodeEM001952
+expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 551d771460f19252ff0f57004d802032
 project wgEncode
 replicate 1
 setType exp
@@ -3088,9 +4909,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
+dccAccession wgEncodeEM001952
+expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum b86c808a23e2c7cb214b4b4cc72792ed
 project wgEncode
 replicate 2
 setType exp
@@ -3112,10 +4936,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
+dccAccession wgEncodeEM001952
+expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum f33e5836482854e27f1c4933697366bc
 project wgEncode
 setType exp
 sex M
@@ -3125,32 +4952,171 @@ tableName wgEncodeSydhTfbsMelJundIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep1
+metaObject wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep1
 objType file
 age immortalized
-antibody Max
+antibody MafK_(ab50322)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001981
+expId 1981
+fileName wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=ef0f2855cabb4134046abc43155c67cb,bai=40f537a5081f00d668165c6406b22533
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1863
+subId 4004
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep2
+metaObject wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep2
+objType file
+age immortalized
+antibody MafK_(ab50322)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001981
+expId 1981
+fileName wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=3726ace3bf98c2ad89f94474377eeac5,bai=26e80e30e7b639ef581f0fe2b27dfe94
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 4004
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelMafkab50322IggrabPk
+objType table
+age immortalized
+antibody MafK_(ab50322)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001981
+expId 1981
+fileName wgEncodeSydhTfbsMelMafkab50322IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum fbdd027866ab243773f528c116541fd5
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 4004
+tableName wgEncodeSydhTfbsMelMafkab50322IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelMafkab50322IggrabRawDataRep1
+objType file
+age immortalized
+antibody MafK_(ab50322)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001981
+expId 1981
+fileName wgEncodeSydhTfbsMelMafkab50322IggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum 9d55aa08ce1239d95d742021aed8642c
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 4004
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelMafkab50322IggrabRawDataRep2
+objType file
+age immortalized
+antibody MafK_(ab50322)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001981
+expId 1981
+fileName wgEncodeSydhTfbsMelMafkab50322IggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum 1284b1e7c290cb0782856bb63f2cc2ec
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 4004
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelMafkab50322IggrabSig
+objType table
+age immortalized
+antibody MafK_(ab50322)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEM001981
+expId 1981
+fileName wgEncodeSydhTfbsMelMafkab50322IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 72195666654cd14db871cc9916a9e5ad
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 4004
+tableName wgEncodeSydhTfbsMelMafkab50322IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep1V2
 objType file
 age immortalized
 antibody Max
@@ -3159,19 +5125,52 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam
+dccAccession wgEncodeEM001959
+expId 1959
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1V2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=fb1ca3fd709f6ff804e52ab438bad7bf,bai=dd4a4d0bd80f20520d3192748d3e008b
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 4157
+submittedDataVersion V2 - Resubmitted with correct alignment file.
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep2V2
+objType file
+age immortalized
+antibody Max
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-05-17
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001959
+expId 1959
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2V2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=79b6b450a990bd8c0a2c11b968efe4bb,bai=bbb0dab111d2efa07fd21365ddb647b0
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1863
+subId 4157
+submittedDataVersion V2 - Resubmitted with correct alignment file.
 treatment None
 view Alignments
 
@@ -3187,10 +5186,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001959
+expId 1959
 fileName wgEncodeSydhTfbsMelMaxIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 4e3432f4a0be9b2eb129a60f297366f6
 project wgEncode
 setType exp
 sex M
@@ -3212,9 +5214,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001959
+expId 1959
 fileName wgEncodeSydhTfbsMelMaxIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 3489959098e292859c2e2984e0cef30b
 project wgEncode
 replicate 1
 setType exp
@@ -3236,9 +5241,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001959
+expId 1959
 fileName wgEncodeSydhTfbsMelMaxIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 444c45a755c5cc255b1e862f81d9d306
 project wgEncode
 replicate 2
 setType exp
@@ -3260,16 +5268,183 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001959
+expId 1959
 fileName wgEncodeSydhTfbsMelMaxIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 3c07533baab9fc81a65549a4ad45a428
 project wgEncode
 setType exp
 sex M
 strain Unknown
 subId 1863
 tableName wgEncodeSydhTfbsMelMaxIggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep1
+objType file
+age immortalized
+antibody Mxi1_(AF4185)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001973
+expId 1973
+fileName wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=fde7a1efd99595b96e82d01eb4ce8ae4,bai=a27794f95062d13c7c360255059de87b
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 3761
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep2
+objType file
+age immortalized
+antibody Mxi1_(AF4185)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001973
+expId 1973
+fileName wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=f34585fc7453624ef461928600123652,bai=25add3d05271e3eda379a3d9f004dfa0
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 3761
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelMxi1af4185IggrabPk
+objType table
+age immortalized
+antibody Mxi1_(AF4185)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001973
+expId 1973
+fileName wgEncodeSydhTfbsMelMxi1af4185IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 57bc5e40b33f16ca45b245c5e46ebdaa
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 3761
+tableName wgEncodeSydhTfbsMelMxi1af4185IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelMxi1af4185IggrabRawDataRep1
+objType file
+age immortalized
+antibody Mxi1_(AF4185)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001973
+expId 1973
+fileName wgEncodeSydhTfbsMelMxi1af4185IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum f48252e5837f1a4326c431586f48ea3e
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 3761
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelMxi1af4185IggrabRawDataRep2
+objType file
+age immortalized
+antibody Mxi1_(AF4185)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001973
+expId 1973
+fileName wgEncodeSydhTfbsMelMxi1af4185IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum 216a85454f84e59602c8b8fda8f1a9d6
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 3761
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelMxi1af4185IggrabSig
+objType table
+age immortalized
+antibody Mxi1_(AF4185)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001973
+expId 1973
+fileName wgEncodeSydhTfbsMelMxi1af4185IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum c4f3b093c23b26daf5ed05d5f94bee57
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 3761
+tableName wgEncodeSydhTfbsMelMxi1af4185IggrabSig
 treatment None
 view Signal
 
@@ -3285,10 +5460,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelNelfeIggrabRep1.bam
+dccAccession wgEncodeEM001964
+expId 1964
+fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep1
+md5sum bam=b2522631eee5acfa72755666b569edb5,bai=2dfa95aa04719531c15634e0e9faf770
 project wgEncode
 replicate 1
 setType exp
@@ -3310,10 +5487,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001964
+expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep2
+md5sum bam=ccb8f5062879b755694dd04da89ab849,bai=fd9825a2f2c7abf665ca68febe1ad791
 project wgEncode
 replicate 2
 setType exp
@@ -3335,10 +5514,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001964
+expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 613b26969752baa69877831961989f03
 project wgEncode
 setType exp
 sex M
@@ -3360,10 +5542,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001964
+expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelNelfeIggrabRawSignalRep1
+md5sum 9551e07b32b081e6abb072e428d751ee
 project wgEncode
 replicate 1
 setType exp
@@ -3385,10 +5569,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001964
+expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelNelfeIggrabRawSignalRep2
+md5sum e5a95b93924e21317079cfae7d5dc437
 project wgEncode
 replicate 2
 setType exp
@@ -3410,10 +5596,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001964
+expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 2daa2fd113365e4d750ba3f44a5cd14f
 project wgEncode
 setType exp
 sex M
@@ -3426,74 +5615,81 @@ view Signal
 metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep1
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam.bai
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEM001969
+expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=808ed36eb0c7be2f3ecf9ec6895f9e65,bai=2c1bfb8cdbd1d08e564b864b56fb4d99
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1864
+subId 3089
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep2
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam.bai
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEM001969
+expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=cb7bcb9294a20c8f7ddce95d79cce434,bai=9d5a667a59274df2c4cb75d5d360e82a
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1864
+subId 3089
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelP300IggrabPk
 objType table
 age immortalized
-antibody p300_(N-15)
+antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEM001969
+expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 7310e08cff2d19e3881a8413463c9b9c
 project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1864
+subId 3089
 tableName wgEncodeSydhTfbsMelP300IggrabPk
 treatment None
 view Peaks
@@ -3501,55 +5697,89 @@ view Peaks
 metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep1
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEM001969
+expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 385d7609c8d1d408b527788dd1923f63
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1864
+subId 3089
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep2
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-08
-dateUnrestricted 2011-04-08
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEM001969
+expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 194e6ba808b821b58a733bf1919b6bff
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1864
+subId 3089
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelP300IggrabSig
 objType table
 age immortalized
-antibody p300_(N-15)
+antibody p300
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEM001969
+expId 1969
+fileName wgEncodeSydhTfbsMelP300IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 8e7d0dd97c1ff66e2420613346e2b474
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 3089
+tableName wgEncodeSydhTfbsMelP300IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1
+objType file
+age immortalized
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -3558,144 +5788,155 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggrabSig.bigWig
+dccAccession wgEncodeEM001961
+expId 1961
+fileName wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=95ad1e6ba491ec0ee72628fdd1992101,bai=b09a807df0043b74cf2470139144781b
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 1864
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2
+objType file
+age immortalized
+antibody p300_(SC-584)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001961
+expId 1961
+fileName wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=51d32fa33a7f37d4e180d3dc20715f84,bai=983b509af72b6a6367fe412a4eaccd77
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 1864
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelP300sc584IggrabPk
+objType table
+age immortalized
+antibody p300_(SC-584)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001961
+expId 1961
+fileName wgEncodeSydhTfbsMelP300sc584IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 002ca226a5651af28ffb541d12426175
 project wgEncode
 setType exp
 sex M
 strain Unknown
 subId 1864
-tableName wgEncodeSydhTfbsMelP300IggrabSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsMelP300StdAlnRep1
-objType file
-antibody p300
-cell MEL
-composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-10
-dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelP300StdAlnRep1.bam
-grant Snyder
-lab Stanford-m
-project wgEncode
-replicate 1
-setType exp
-subId 3089
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsMelP300StdAlnRep2
-objType file
-antibody p300
-cell MEL
-composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-10
-dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelP300StdAlnRep2.bam
-grant Snyder
-lab Stanford-m
-project wgEncode
-replicate 2
-setType exp
-subId 3089
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsMelP300StdPk
-objType table
-antibody p300
-cell MEL
-composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-10
-dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelP300StdPk.narrowPeak.gz
-grant Snyder
-lab Stanford-m
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 3089
-tableName wgEncodeSydhTfbsMelP300StdPk
+tableName wgEncodeSydhTfbsMelP300sc584IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelP300StdRawDataRep1
+metaObject wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep1
 objType file
-antibody p300
+age immortalized
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-10
-dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelP300StdRawDataRep1.fastq.gz
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001961
+expId 1961
+fileName wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum e0b40aba30f2ac2010d4aa9ceaae744b
 project wgEncode
 replicate 1
 setType exp
-subId 3089
+sex M
+strain Unknown
+subId 1864
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelP300StdRawDataRep2
+metaObject wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep2
 objType file
-antibody p300
+age immortalized
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-10
-dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelP300StdRawDataRep2.fastq.gz
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001961
+expId 1961
+fileName wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 7840bcc97bc1c553da07d0d5d58daf59
 project wgEncode
 replicate 2
 setType exp
-subId 3089
+sex M
+strain Unknown
+subId 1864
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelP300StdSig
+metaObject wgEncodeSydhTfbsMelP300sc584IggrabSig
 objType table
-antibody p300
+age immortalized
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-10
-dateUnrestricted 2011-09-10
-fileName wgEncodeSydhTfbsMelP300StdSig.bigWig
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001961
+expId 1961
+fileName wgEncodeSydhTfbsMelP300sc584IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 46e9dc00c5351985523fbf3b1df0503d
 project wgEncode
 setType exp
-subId 3089
-tableName wgEncodeSydhTfbsMelP300StdSig
+sex M
+strain Unknown
+subId 1864
+tableName wgEncodeSydhTfbsMelP300sc584IggrabSig
 treatment None
 view Signal
 
@@ -3708,18 +5949,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001949
+expId 1949
+fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=d01a42790e6514391cfbf3cf5f349156,bai=196aa18881821512364ded07b8acdecc
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1161
+subId 4169
 treatment None
 view Alignments
 
@@ -3732,18 +5977,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001949
+expId 1949
+fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=5f87f46254ae0f00036e2f50499b2191,bai=64b373fa6db55bbdc8f1811f232f75dd
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1161
+subId 4169
 treatment None
 view Alignments
 
@@ -3759,10 +6008,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001949
+expId 1949
 fileName wgEncodeSydhTfbsMelPol2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 37d4f4f09132ec7d6312a0fe9df1aec8
 project wgEncode
 setType exp
 sex M
@@ -3784,9 +6036,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001949
+expId 1949
 fileName wgEncodeSydhTfbsMelPol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 25f04432deee10aa54c04972f40529ce
 project wgEncode
 replicate 1
 setType exp
@@ -3808,9 +6063,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001949
+expId 1949
 fileName wgEncodeSydhTfbsMelPol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 4b0a5dcfa3d26a01edc05f324216fd18
 project wgEncode
 replicate 2
 setType exp
@@ -3832,10 +6090,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001949
+expId 1949
 fileName wgEncodeSydhTfbsMelPol2IggmusSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 28a76d5b049ed098dda2f55410cebb2e
 project wgEncode
 setType exp
 sex M
@@ -3845,7 +6106,171 @@ tableName wgEncodeSydhTfbsMelPol2IggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1
+metaObject wgEncodeSydhTfbsMelPol2s2IggrabAlnRep1
+objType file
+age immortalized
+antibody Pol2(phosphoS2)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001974
+expId 1974
+fileName wgEncodeSydhTfbsMelPol2s2IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=77761fb4390780d01bae3e7fe30eb80a,bai=2659413fb2e99909d8bfe4d382049dbc
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 3762
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelPol2s2IggrabAlnRep2
+objType file
+age immortalized
+antibody Pol2(phosphoS2)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001974
+expId 1974
+fileName wgEncodeSydhTfbsMelPol2s2IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=aae0c46c9d2da70689935a98b778365d,bai=a3dab2a076309df85d740edb8bfa485e
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 3762
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelPol2s2IggrabPk
+objType table
+age immortalized
+antibody Pol2(phosphoS2)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001974
+expId 1974
+fileName wgEncodeSydhTfbsMelPol2s2IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 7a24fd77bec2b89b94fadd2c1d3ea810
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 3762
+tableName wgEncodeSydhTfbsMelPol2s2IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelPol2s2IggrabRawDataRep1
+objType file
+age immortalized
+antibody Pol2(phosphoS2)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001974
+expId 1974
+fileName wgEncodeSydhTfbsMelPol2s2IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum 4f84eda57d556e64db566a5afaf98e97
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 3762
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelPol2s2IggrabRawDataRep2
+objType file
+age immortalized
+antibody Pol2(phosphoS2)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001974
+expId 1974
+fileName wgEncodeSydhTfbsMelPol2s2IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+md5sum 76c15821a69d07fd9835b05603498917
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 3762
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelPol2s2IggrabSig
+objType table
+age immortalized
+antibody Pol2(phosphoS2)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+dccAccession wgEncodeEM001974
+expId 1974
+fileName wgEncodeSydhTfbsMelPol2s2IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 514be36d09b1bac1f1faf22e8c7ab46b
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 3762
+tableName wgEncodeSydhTfbsMelPol2s2IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep1
 objType file
 age immortalized
 antibody Rad21
@@ -3857,10 +6282,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1.bam
+dccAccession wgEncodeEM001965
+expId 1965
+fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1
+md5sum bam=f2f2a7364d90f9d8843403afe8efb344,bai=2995f2f0b43ee13c5bd1c0e1cf419ade
 project wgEncode
 replicate 1
 setType exp
@@ -3870,7 +6297,7 @@ subId 2539
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2
+metaObject wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep2
 objType file
 age immortalized
 antibody Rad21
@@ -3882,10 +6309,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2.bam
+dccAccession wgEncodeEM001965
+expId 1965
+fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2
+md5sum bam=295164f0822a843a2a595ffa6becea3c,bai=c86f39d335c13a207a374955c4931286
 project wgEncode
 replicate 2
 setType exp
@@ -3895,7 +6324,7 @@ subId 2539
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
+metaObject wgEncodeSydhTfbsMelRad21Dm2p5dIggrabPk
 objType table
 age immortalized
 antibody Rad21
@@ -3905,22 +6334,26 @@ control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2011-02-03
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk.narrowPeak.gz
+dccAccession wgEncodeEM001965
+expId 1965
+fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 4c2f0c43503b0af66de1740694a3a557
 project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 2539
-tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
+subId 3502
+tableName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabPk
 treatment DMSO_2.0pct
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1
+metaObject wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep1
 objType file
 age immortalized
 antibody Rad21
@@ -3932,10 +6365,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1.fastq.gz
+dccAccession wgEncodeEM001965
+expId 1965
+fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabRawSignalRep1
+md5sum beffb9ed76538b0974ec0b40613fd892
 project wgEncode
 replicate 1
 setType exp
@@ -3945,7 +6380,7 @@ subId 2539
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2
+metaObject wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep2
 objType file
 age immortalized
 antibody Rad21
@@ -3957,10 +6392,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2.fastq.gz
+dccAccession wgEncodeEM001965
+expId 1965
+fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabRawSignalRep2
+md5sum 070f886a7b00767cf0c772c410c987e2
 project wgEncode
 replicate 2
 setType exp
@@ -3970,7 +6407,7 @@ subId 2539
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
+metaObject wgEncodeSydhTfbsMelRad21Dm2p5dIggrabSig
 objType table
 age immortalized
 antibody Rad21
@@ -3982,16 +6419,19 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig.bigWig
+dccAccession wgEncodeEM001965
+expId 1965
+fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 373fd396628e29e6db2feda1035627a7
 project wgEncode
 setType exp
 sex M
 strain Unknown
 subId 2539
-tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
+tableName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabSig
 treatment DMSO_2.0pct
 view Signal
 
@@ -4007,10 +6447,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001966
+expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep1
+md5sum bam=bbc6aefbe859e2dcfd586662c2c94c4c,bai=5fd670458811435c4676fd9ce383b3e5
 project wgEncode
 replicate 1
 setType exp
@@ -4032,10 +6474,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001966
+expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep2
+md5sum bam=eee68c1be782a21c903a65a4b79dc4c3,bai=08bb2aea2f349943b239b1ff5da1360a
 project wgEncode
 replicate 2
 setType exp
@@ -4057,10 +6501,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001966
+expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 4adf980933c4b4f3d9129b689101673a
 project wgEncode
 setType exp
 sex M
@@ -4082,10 +6529,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001966
+expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep1
+md5sum dabb43efca28e1244177c31fcfa47aae
 project wgEncode
 replicate 1
 setType exp
@@ -4107,10 +6556,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001966
+expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
-parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep2
+md5sum 3523e3c27d01397e59a374369a256e48
 project wgEncode
 replicate 2
 setType exp
@@ -4132,16 +6583,183 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
+dccAccession wgEncodeEM001966
+expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 4dec4ade3d16e3da183af5f5e6d34296
 project wgEncode
 setType exp
 sex M
 strain Unknown
 subId 2541
 tableName wgEncodeSydhTfbsMelRad21IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep1
+objType file
+age immortalized
+antibody SMC3_(ab9263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001978
+expId 1978
+fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=185f587bdaf041a3e6d665ff507ab911,bai=fe69221696d2ab7bf730a84d3a65991f
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 3088
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep2
+objType file
+age immortalized
+antibody SMC3_(ab9263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001978
+expId 1978
+fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+md5sum bam=7e90855e98114645c240ed6b64b8fe75,bai=bd26ff0f9d0438f37781c2d0dcdb9d03
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 3088
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelSmc3ab9263IggrabPk
+objType table
+age immortalized
+antibody SMC3_(ab9263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001978
+expId 1978
+fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 64646ec6119c9a4f3c4da1f6a988d381
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 3088
+tableName wgEncodeSydhTfbsMelSmc3ab9263IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelSmc3ab9263IggrabRawDataRep1
+objType file
+age immortalized
+antibody SMC3_(ab9263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001978
+expId 1978
+fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum 44e5583d7c9ef31c0f5d3b7c24c53dd5
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 3088
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelSmc3ab9263IggrabRawDataRep2
+objType file
+age immortalized
+antibody SMC3_(ab9263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001978
+expId 1978
+fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford-m
+md5sum 8c6a3393bd52bb7190ab49f52660f5a5
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 3088
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelSmc3ab9263IggrabSig
+objType table
+age immortalized
+antibody SMC3_(ab9263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEM001978
+expId 1978
+fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+md5sum 17d95b9f3be676392133adb0d5d0ae5d
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 3088
+tableName wgEncodeSydhTfbsMelSmc3ab9263IggrabSig
 treatment None
 view Signal
 
@@ -4154,18 +6772,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep1.tagAlign.gz
+dccAccession wgEncodeEM001950
+expId 1950
+fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=305d4dab9ed9fdc98f805ab3dacc3780,bai=9d5948b0f60fd1df8a00741a478d8d29
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1160
+subId 4169
 treatment None
 view Alignments
 
@@ -4178,18 +6800,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep2.tagAlign.gz
+dccAccession wgEncodeEM001950
+expId 1950
+fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=1db31aabefb63522aad5511f917057b3,bai=8e2fdbcb0b843b3a9a611e73bcc5fe10
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1160
+subId 4169
 treatment None
 view Alignments
 
@@ -4202,18 +6828,22 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001950
+expId 1950
 fileName wgEncodeSydhTfbsMelTbpIggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum f8001675e162b21ce1f3ce73d19536d5
 project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1160
+subId 4610
 tableName wgEncodeSydhTfbsMelTbpIggmusPk
 treatment None
 view Peaks
@@ -4230,9 +6860,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001950
+expId 1950
 fileName wgEncodeSydhTfbsMelTbpIggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 3b0b2057afc1e08fc7d17d125da5309c
 project wgEncode
 replicate 1
 setType exp
@@ -4254,9 +6887,12 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001950
+expId 1950
 fileName wgEncodeSydhTfbsMelTbpIggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 5d029df4421309bd7f1a7d7fcf4f0205
 project wgEncode
 replicate 2
 setType exp
@@ -4278,10 +6914,13 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
+dccAccession wgEncodeEM001950
+expId 1950
 fileName wgEncodeSydhTfbsMelTbpIggmusSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 9b3d6df822a9baa8489e45045097e226
 project wgEncode
 setType exp
 sex M
@@ -4291,7 +6930,7 @@ tableName wgEncodeSydhTfbsMelTbpIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep1
+metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep1V2
 objType file
 age immortalized
 antibody USF2
@@ -4300,23 +6939,27 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam
+dccAccession wgEncodeEM001960
+expId 1960
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1V2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=d1250be8dbbbabb00a9fc98270ea13f5,bai=24f3e79fabd773c7a1a47a4fca0be198
 project wgEncode
 replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1865
+subId 4158
+submittedDataVersion V2 - Resubmitted with correct alignment file.
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep2
+metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep2V2
 objType file
 age immortalized
 antibody USF2
@@ -4325,19 +6968,23 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam
+dccAccession wgEncodeEM001960
+expId 1960
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2V2.bam
 grant Snyder
 lab Stanford-m
+md5sum bam=7eaa91ab29638b13f137497d16b7de7f,bai=dfcdbe1d189adaad8a830e2ab61a4d4d
 project wgEncode
 replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1865
+subId 4158
+submittedDataVersion V2 - Resubmitted with correct alignment file.
 treatment None
 view Alignments
 
@@ -4353,10 +7000,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001960
+expId 1960
 fileName wgEncodeSydhTfbsMelUsf2IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 8f3c6f657450b75bd8fc4f9644724290
 project wgEncode
 setType exp
 sex M
@@ -4378,9 +7028,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001960
+expId 1960
 fileName wgEncodeSydhTfbsMelUsf2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 9f16d28a89e0146d0fe8c5fe4072e236
 project wgEncode
 replicate 1
 setType exp
@@ -4402,9 +7055,12 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001960
+expId 1960
 fileName wgEncodeSydhTfbsMelUsf2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum e5e71ccd663350b9f202c8743bb0c0d9
 project wgEncode
 replicate 2
 setType exp
@@ -4426,10 +7082,13 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
+dccAccession wgEncodeEM001960
+expId 1960
 fileName wgEncodeSydhTfbsMelUsf2IggmusSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 37a2a0128ae81110d3aa2f76bdee9ff4
 project wgEncode
 setType exp
 sex M
@@ -4439,4 +7098,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 953884916
+# MAGIC: -1714220125
