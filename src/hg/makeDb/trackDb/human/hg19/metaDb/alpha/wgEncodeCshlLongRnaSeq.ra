@@ -29112,7 +29112,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29139,7 +29139,6 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
-tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep1
@@ -29379,7 +29378,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29406,7 +29405,6 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
-tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1
@@ -29470,7 +29468,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29497,7 +29495,6 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
-tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamContigs
@@ -29949,7 +29946,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4594
-tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1
@@ -30013,7 +30009,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30042,7 +30038,6 @@ seqPlatform Illumina_GA2x
 sex U
 spikeInPool 14
 subId 4055
-tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapContigs
@@ -30481,7 +30476,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30508,7 +30503,6 @@ replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2467
-tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1
@@ -30572,7 +30566,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30599,7 +30593,6 @@ replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2467
-tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep1
@@ -30852,7 +30845,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4574
-tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3
@@ -35397,4 +35389,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1050118083
+# MAGIC: -1050294291
