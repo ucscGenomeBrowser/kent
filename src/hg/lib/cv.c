@@ -449,7 +449,8 @@ if (validationRule == NULL)
                 safef(reason,len,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.",CV_FILE_NAME,(char *)term);
             return FALSE;
             }
-        if (hashFindVal(cvHashForTerm,(char *)val) == NULL) // No cv definition for term so no validation can be done
+        struct hash *cvHashForVal = hashFindVal(cvHashForTerm,(char *)val);
+        if (cvHashForVal == NULL || hashFindVal(cvHashForVal, "deprecated")) // No cv definition for term so no validation can be done
             {
             if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE) && sameString((char *)val,MDB_VAL_ENCODE_EDV_NONE))
                 return TRUE;
@@ -466,7 +467,7 @@ if (validationRule == NULL)
                     return TRUE;
                 }
             if (reason != NULL)
-                safef(reason,len,"INVALID cv lookup: %s = '%s'",(char *)term,(char *)val);
+                safef(reason,len,"INVALID cv lookup: %s = '%s' %s",(char *)term,(char *)val,(cvHashForVal?"DEPRECATED.":"not found."));
             return FALSE;
             }
         }
