@@ -199,11 +199,8 @@ safef(query2, sizeof(query2),
       proteinDatabaseName, proteinDatabaseName, database);
 
 sr2  = sqlMustGetResult(conn2, query2);
-while ((row2 = sqlNextRow(sr2)) != NULL)
+ while ((molWtCnt < MAX_PROTEIN_CNT) && (row2 = sqlNextRow(sr2)) != NULL)
     {
-    if (molWtCnt >= MAX_PROTEIN_CNT)
-       errAbort("Too many proteins - please set MAX_PROTEIN_CNT to be more than %d\n", 
-       	MAX_PROTEIN_CNT);
     accession = row2[0];   
     molWt[molWtCnt] = (double)(atof(row2[1]));
     molWtCnt++;

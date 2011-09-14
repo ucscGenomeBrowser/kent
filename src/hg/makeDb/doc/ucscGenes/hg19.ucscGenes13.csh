@@ -74,8 +74,8 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
   # mm9.txt
-set bioCycPathways = /hive/data/outside/bioCyc/090623/pathways.col
-set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
+set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
+set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
 set rfam = /hive/data/outside/Rfam/110710
 
 
@@ -1196,9 +1196,6 @@ hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSupe
 hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET
-
 # Regenerate ccdsKgMap table
 ~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
@@ -1222,63 +1219,8 @@ rm kgSpAlias_0.tmp
 
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
-
-# RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
-
-# These are instructions for building tables 
-# needed for the Proteome Browser. 
- 
-# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
-# ARE REBUILT.  Also make sure have proteins database rebuilt to correspond with swissProt
-# This build is based on proteins DBs dated 090821
-
-# Create the working directory
-
-mkdir -p $dir/pb
-cd $dir/pb
-
-
-# Build the pepMwAa table
-
-hgsql $spDb -N -e \
-"select info.acc, molWeight, aaSize from info, accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > pepMwAa.tab
-
-hgLoadSqlTab $tempDb pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
-
-# Build the pepPi table
-cd $dir/pb
-pbCalPi $spDb pepPi.tab
-hgLoadSqlTab $tempDb pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
-
-# Calculate and load pep distributions
-cd $dir/pb
-pbCalDist $spDb $pbDb $taxon $tempDb 
-hgLoadSqlTab $tempDb pepExonCntDist ~/kent/src/hg/lib/pepExonCntDist.sql ./pepExonCntDist.tab
-hgLoadSqlTab $tempDb pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql ./pepCCntDist.tab
-hgLoadSqlTab $tempDb pepHydroDist ~/kent/src/hg/lib/pepHydroDist.sql ./pepHydroDist.tab
-hgLoadSqlTab $tempDb pepMolWtDist ~/kent/src/hg/lib/pepMolWtDist.sql ./pepMolWtDist.tab
-hgLoadSqlTab $tempDb pepResDist ~/kent/src/hg/lib/pepResDist.sql ./pepResDist.tab
-hgLoadSqlTab $tempDb pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql ./pepIPCntDist.tab
-hgLoadSqlTab $tempDb pepPiDist ~/kent/src/hg/lib/pepPiDist.sql ./pepPiDist.tab
-
-
-# Calculate frequency distributions
-
-pbCalResStd $spDb $taxon $tempDb
-
-# Create pbAnomLimit and pbResAvgStd tables
-
-hgLoadSqlTab $tempDb pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
-
-hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
-
-compareModifiedFileSizes.csh $oldGeneDir .
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
-
-# The old pbStamp table seems OK, so no adjustment needed.
+# move this endif statement past business that has successfully been completed
+endif # BRACKET
 
 # Do BioCyc Pathways build
     mkdir -p $dir/bioCyc
@@ -1289,7 +1231,6 @@ exit $status # BRACKET
     hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
-#breakpoint
 
 # Do KEGG Pathways build
     mkdir -p $dir/kegg
@@ -1298,24 +1239,23 @@ exit $status # BRACKET
     wget --timestamping -O hsa2.html \
     "http://www.kegg.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa" 
 
-    cat hsa2.html |grep "mapno=" |sed -e 's/mapno=/\npath:hsa/'|grep -v org_name |\
-    sed -e 's/">/\t/' |\
-    sed -e 's/</\t/'|cut -f 1,2 >hsa.lis
+    cat hsa2.html |grep "show_pathway" |sed -e 's/show_pathway?/\tpath:/'\
+     |grep -v org_name |sed -e 's/">/\t/' |sed -e 's#</a><br>##'  |cut -f 2,3 \
+    >hsa.lis
     
     ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
 
     kgAttachKegg $db keggList.tab  keggPathway.tab
-    hgLoadSqlTab $tempDb keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
+    hgLoadSqlTab $tempDb keggPathway ~/kent/src/hg/lib/keggPathway.sql ./keggPathway.tab
 
     cat hsa.lis | sed -e 's/path://' > keggMapDesc.tab
-    hgLoadSqlTab $tempDb keggMapDesc ~/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+    hgLoadSqlTab $tempDb keggMapDesc ~/kent/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
 
 # Make spMrna table (useful still?)
    cd $dir
    hgsql $db -N -e "select spDisplayID,kgID from kgXref where spDisplayID != ''" > spMrna.tab;
    hgLoadSqlTab $tempDb spMrna ~/kent/src/hg/lib/spMrna.sql spMrna.tab
 
-#breakpoint
 
 # Do CGAP tables 
 
@@ -1333,7 +1273,9 @@ exit $status # BRACKET
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-#breakpoint	    
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
