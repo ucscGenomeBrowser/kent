@@ -1601,7 +1601,7 @@ void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, 
 if (seperator == NULL)
     seperator = " ";
 boolean html = FALSE;
-if (startsWith(seperator,"<T") || startsWith(seperator,"<t"))
+if (startsWith("<T",seperator) || startsWith("<t",seperator))
     {
     if(!endsWith(seperator,">"))
         errAbort("mdbObjPrintOrdered() seperator is invalid HTML '%s'.\n",seperator);
