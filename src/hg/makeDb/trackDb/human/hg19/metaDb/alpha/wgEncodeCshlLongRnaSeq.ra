@@ -984,6 +984,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapProtocolRep1
 objType file
+bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -997,6 +998,7 @@ fileName wgEncodeCshlLongRnaSeqA549CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758564
 grant Gingeras
 lab CSHL
+labExpId LID8963
 labProtocolId 021WC+
 localization cell
 md5sum d88214daf2f649539d70456dccf07399
@@ -1009,6 +1011,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapProtocolRep2
 objType file
+bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1022,6 +1025,7 @@ fileName wgEncodeCshlLongRnaSeqA549CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758564
 grant Gingeras
 lab CSHL
+labExpId LID8964
 labProtocolId 022WC+
 localization cell
 md5sum d71d2631aa980f5e56a3307b436f0fe0
@@ -2127,6 +2131,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapProtocolRep1
 objType file
+bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2140,6 +2145,7 @@ fileName wgEncodeCshlLongRnaSeqAg04450CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758561
 grant Gingeras
 lab CSHL
+labExpId LID8965
 labProtocolId 017WC+
 localization cell
 md5sum 1b294c280d800871b7023a5c08d9d185
@@ -2152,6 +2158,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapProtocolRep2
 objType file
+bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2165,6 +2172,7 @@ fileName wgEncodeCshlLongRnaSeqAg04450CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758561
 grant Gingeras
 lab CSHL
+labExpId LID8966
 labProtocolId 018WC+
 localization cell
 md5sum d1b5afdf6114e9c7d3b25250655df5b8
@@ -3270,6 +3278,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapProtocolRep1
 objType file
+bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3283,6 +3292,7 @@ fileName wgEncodeCshlLongRnaSeqBjCellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758562
 grant Gingeras
 lab CSHL
+labExpId LID8969
 labProtocolId 037WC+
 localization cell
 md5sum 112ab88c13437f1455967a87e04d1c0b
@@ -3295,6 +3305,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapProtocolRep2
 objType file
+bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3308,6 +3319,7 @@ fileName wgEncodeCshlLongRnaSeqBjCellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758562
 grant Gingeras
 lab CSHL
+labExpId LID8970
 labProtocolId 038WC+
 localization cell
 md5sum bc4a45f826f37be785e954468543a5af
@@ -3865,6 +3877,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamProtocolRep1
 objType file
+bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3878,6 +3891,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878CellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM758572
 grant Gingeras
 lab CSHL
+labExpId LID8661
 labProtocolId 003WC-
 localization cell
 md5sum ca4d48b3b790843a1c05fca00b9500d6
@@ -3890,6 +3904,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamProtocolRep2
 objType file
+bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3903,6 +3918,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878CellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM758572
 grant Gingeras
 lab CSHL
+labExpId LID8662
 labProtocolId 004WC-
 localization cell
 md5sum 468307162b5a7c51402d8521aa2f7811
@@ -4461,6 +4477,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapProtocolRep1
 objType file
+bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4474,6 +4491,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758559
 grant Gingeras
 lab CSHL
+labExpId LID16629
 labProtocolId 003WC+
 localization cell
 md5sum 43418598be7729e08a4a3201d1d6baa6
@@ -4486,6 +4504,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapProtocolRep2
 objType file
+bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4499,6 +4518,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758559
 grant Gingeras
 lab CSHL
+labExpId LID16630
 labProtocolId 004WC+
 localization cell
 md5sum 1b9fbf29f0acfe3a6011b352b00acce3
@@ -5279,6 +5299,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamProtocolRep1
 objType file
+bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5292,6 +5313,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767852
 grant Gingeras
 lab CSHL
+labExpId LID18547
 labProtocolId 003C-
 localization cytosol
 md5sum 53cb051ca1faed18b64f982116293ef4
@@ -5304,6 +5326,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamProtocolRep2
 objType file
+bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5317,6 +5340,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767852
 grant Gingeras
 lab CSHL
+labExpId LID18548
 labProtocolId 004C-
 localization cytosol
 md5sum 11b00c97573b3943293fb3798b485fcc
@@ -5875,6 +5899,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapProtocolRep1
 objType file
+bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5888,6 +5913,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758560
 grant Gingeras
 lab CSHL
+labExpId LID8467
 labProtocolId 003C+
 localization cytosol
 md5sum b14b590331262214899151fc8bcaf37d
@@ -5900,6 +5926,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapProtocolRep2
 objType file
+bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5913,6 +5940,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758560
 grant Gingeras
 lab CSHL
+labExpId LID8468
 labProtocolId 004C+
 localization cytosol
 md5sum bd7b69dff52cf717f77f8bf41c4a9094
@@ -6472,6 +6500,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamProtocolRep1
 objType file
+bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6485,6 +6514,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767853
 grant Gingeras
 lab CSHL
+labExpId LID9197
 labProtocolId 003N-
 localization nucleus
 md5sum 6575c2058d48dd1a21c4153ef333b65a
@@ -6497,6 +6527,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamProtocolRep2
 objType file
+bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6510,6 +6541,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767853
 grant Gingeras
 lab CSHL
+labExpId LID9198
 labProtocolId 004N-
 localization nucleus
 md5sum ba7b60a7f1e964098438e17b9d603a3c
@@ -7070,6 +7102,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep1
 objType file
+bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7083,6 +7116,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
+labExpId LID8532
 labProtocolId 003N+
 localization nucleus
 md5sum 54a5e4f16ec0119f59ba78d0d7b4a680
@@ -7095,6 +7129,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep2
 objType file
+bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7108,6 +7143,7 @@ fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
+labExpId LID8533
 labProtocolId 004N+
 localization nucleus
 md5sum 000efc74ebd1747852f26cc489f016b3
@@ -7666,6 +7702,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamProtocolRep1
 objType file
+bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7679,6 +7716,7 @@ fileName wgEncodeCshlLongRnaSeqH1hescCellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM758573
 grant Gingeras
 lab CSHL
+labExpId LID8663
 labProtocolId 005WC-
 localization cell
 md5sum acacc8ac30e9d17a94d808d0fe052fa2
@@ -7691,6 +7729,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamProtocolRep2
 objType file
+bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7704,6 +7743,7 @@ fileName wgEncodeCshlLongRnaSeqH1hescCellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM758573
 grant Gingeras
 lab CSHL
+labExpId LID8664
 labProtocolId 006WC-
 localization cell
 md5sum c71467bda89291016b83ed056f4605c7
@@ -8261,6 +8301,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapProtocolRep1
 objType file
+bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8274,6 +8315,7 @@ fileName wgEncodeCshlLongRnaSeqH1hescCellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758566
 grant Gingeras
 lab CSHL
+labExpId LID8461
 labProtocolId 005WC+
 localization cell
 md5sum 452993de86eb398a9dc7777f41b080a9
@@ -8286,6 +8328,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapProtocolRep2
 objType file
+bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8299,6 +8342,7 @@ fileName wgEncodeCshlLongRnaSeqH1hescCellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758566
 grant Gingeras
 lab CSHL
+labExpId LID8462
 labProtocolId 006WC+
 localization cell
 md5sum b1e877c1253a348f304b14f41058605d
@@ -8716,6 +8760,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamProtocolRep2
 objType file
+bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8729,6 +8774,7 @@ fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767842
 grant Gingeras
 lab CSHL
+labExpId LID18549
 labProtocolId 006C-
 localization cytosol
 md5sum 47256509c23d8601ddb605559c61dfaa
@@ -9116,6 +9162,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapProtocolRep2
 objType file
+bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9129,6 +9176,7 @@ fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758570
 grant Gingeras
 lab CSHL
+labExpId LID8536
 labProtocolId 006C+
 localization cytosol
 md5sum 5a5238345eadeb349d9811169fb7eeb1
@@ -9517,6 +9565,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamProtocolRep2
 objType file
+bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9530,6 +9579,7 @@ fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767841
 grant Gingeras
 lab CSHL
+labExpId LID9199
 labProtocolId 006N-
 localization nucleus
 md5sum 428a41c77c161b82eec28b70d6d45eea
@@ -9917,6 +9967,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapProtocolRep2
 objType file
+bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9930,6 +9981,7 @@ fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758574
 grant Gingeras
 lab CSHL
+labExpId LID8558
 labProtocolId 006N+
 localization nucleus
 md5sum a5922c7cf5472bfad51741aaba929a2a
@@ -10460,6 +10512,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamProtocolRep1
 objType file
+bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10473,6 +10526,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3CellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767847
 grant Gingeras
 lab CSHL
+labExpId LID8790
 labProtocolId 011WC-
 localization cell
 md5sum 13874e328fa2232224ca25b402fc9966
@@ -10485,6 +10539,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamProtocolRep2
 objType file
+bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10498,6 +10553,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3CellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767847
 grant Gingeras
 lab CSHL
+labExpId LID8791
 labProtocolId 012WC-
 localization cell
 md5sum 570cdadb89451576591d4fd2f67836c8
@@ -11058,6 +11114,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep1
 objType file
+bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11071,6 +11128,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
+labExpId LID16633
 labProtocolId 011WC+
 localization cell
 md5sum d128dc23d273cc9fc208290ad076b3aa
@@ -11083,6 +11141,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep2
 objType file
+bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11096,6 +11155,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
+labExpId LID16634
 labProtocolId 012WC+
 localization cell
 md5sum 405e40af44b1672d51499d92a9567ca7
@@ -11512,33 +11572,9 @@ seqPlatform Illumina_GA2x
 subId 3631
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep1
-objType file
-cell HeLa-S3
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-dccAccession wgEncodeEH000201
-dccRep 1
-expId 201
-fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep1.pdf.gz
-geoSampleAccession GSM767838
-grant Gingeras
-lab CSHL
-labProtocolId 011C-
-localization cytosol
-md5sum 113a6ddb455a373895cf0cc65354a4a8
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract longNonPolyA
-subId 3259
-view Protocol
-
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep2
 objType file
+bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11552,6 +11588,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767838
 grant Gingeras
 lab CSHL
+labExpId LID18551
 labProtocolId 012C-
 localization cytosol
 md5sum 1eadb02502cfcc166a19472be95eab7f
@@ -12083,6 +12120,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep1
 objType file
+bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12096,6 +12134,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
+labExpId LID8469
 labProtocolId 011C+
 localization cytosol
 md5sum b2dd17e7cf84860c2e4202725a068402
@@ -12108,6 +12147,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep2
 objType file
+bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12121,6 +12161,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
+labExpId LID8470
 labProtocolId 012C+
 localization cytosol
 md5sum aa3bda0ceca1d50b5051d05bf52bb574
@@ -12681,6 +12722,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamProtocolRep1
 objType file
+bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12694,6 +12736,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767848
 grant Gingeras
 lab CSHL
+labExpId LID9200
 labProtocolId 011N-
 localization nucleus
 md5sum 5b8777f885902cf1eec417c0cfc4d361
@@ -12706,6 +12749,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamProtocolRep2
 objType file
+bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12719,6 +12763,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767848
 grant Gingeras
 lab CSHL
+labExpId LID9201
 labProtocolId 012N-
 localization nucleus
 md5sum 184676f405a5bf49f5c404134ca20cd9
@@ -13279,6 +13324,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep1
 objType file
+bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -13292,6 +13338,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
+labExpId LID8559
 labProtocolId 011N+
 localization nucleus
 md5sum 0d8357b86b3e22f1263b8c19f9acd1ac
@@ -13304,6 +13351,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep2
 objType file
+bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -13317,6 +13365,7 @@ fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
+labExpId LID8560
 labProtocolId 012N+
 localization nucleus
 md5sum cacbf998f8d6dcbe14ccdb9489867d75
@@ -13875,6 +13924,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamProtocolRep1
 objType file
+bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -13888,6 +13938,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2CellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM758567
 grant Gingeras
 lab CSHL
+labExpId LID8792
 labProtocolId 013WC-
 localization cell
 md5sum f0bde7ebc7314b429c60b701faa42ea2
@@ -13900,6 +13951,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamProtocolRep2
 objType file
+bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -13913,6 +13965,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2CellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM758567
 grant Gingeras
 lab CSHL
+labExpId LID8793
 labProtocolId 014WC-
 localization cell
 md5sum 8bb54454a42c80ba046c266211b65df3
@@ -14470,6 +14523,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapProtocolRep1
 objType file
+bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14483,6 +14537,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758575
 grant Gingeras
 lab CSHL
+labExpId LID16635
 labProtocolId 013WC+
 localization cell
 md5sum 47b2f1be346ccc94c970cc4737e18dba
@@ -14495,6 +14550,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapProtocolRep2
 objType file
+bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14508,6 +14564,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758575
 grant Gingeras
 lab CSHL
+labExpId LID16636
 labProtocolId 014WC+
 localization cell
 md5sum 4fb2eb51d9b74a39afb350210c6a9b2c
@@ -15068,6 +15125,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamProtocolRep1
 objType file
+bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15081,6 +15139,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767840
 grant Gingeras
 lab CSHL
+labExpId LID18552
 labProtocolId 013C-
 localization cytosol
 md5sum 3b918f701c942d61e87cc52ea2c4ab96
@@ -15093,6 +15152,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamProtocolRep2
 objType file
+bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15106,6 +15166,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767840
 grant Gingeras
 lab CSHL
+labExpId LID18553
 labProtocolId 014C-
 localization cytosol
 md5sum 966dd1e971f2155364bc1ec02b76a4d8
@@ -15665,6 +15726,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapProtocolRep1
 objType file
+bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15678,6 +15740,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758576
 grant Gingeras
 lab CSHL
+labExpId LID8471
 labProtocolId 013C+
 localization cytosol
 md5sum 93df0dbb56c5be0bfaf0697f3b2e22e6
@@ -15690,6 +15753,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapProtocolRep2
 objType file
+bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15703,6 +15767,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758576
 grant Gingeras
 lab CSHL
+labExpId LID8472
 labProtocolId 014C+
 localization cytosol
 md5sum fd25f0434cc0f2abbb4c52a22ca893de
@@ -16262,6 +16327,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamProtocolRep1
 objType file
+bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -16275,6 +16341,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767850
 grant Gingeras
 lab CSHL
+labExpId LID9202
 labProtocolId 013N-
 localization nucleus
 md5sum e7e9fb61d5b7bf2b98ba738d5bed233c
@@ -16287,6 +16354,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamProtocolRep2
 objType file
+bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -16300,6 +16368,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767850
 grant Gingeras
 lab CSHL
+labExpId LID9203
 labProtocolId 014N-
 localization nucleus
 md5sum e8721e85a0d051b7c7750ee649d837c6
@@ -16858,6 +16927,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapProtocolRep1
 objType file
+bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -16871,6 +16941,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758568
 grant Gingeras
 lab CSHL
+labExpId LID8534
 labProtocolId 013N+
 localization nucleus
 md5sum eb7a5961e3e2cb2e44c51df91c016997
@@ -16883,6 +16954,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapProtocolRep2
 objType file
+bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -16896,6 +16968,7 @@ fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758568
 grant Gingeras
 lab CSHL
+labExpId LID8535
 labProtocolId 014N+
 localization nucleus
 md5sum eaf767aff2e22e313dbd88ba1d5bdcd1
@@ -17313,6 +17386,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamProtocolRep1
 objType file
+bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -17326,6 +17400,7 @@ fileName wgEncodeCshlLongRnaSeqHmecCellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
+labExpId LID8831
 labProtocolId 036WC-
 localization cell
 md5sum 94696e0ae6c9f481b7f35342d645bb29
@@ -17713,6 +17788,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapProtocolRep1
 objType file
+bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -17726,6 +17802,7 @@ fileName wgEncodeCshlLongRnaSeqHmecCellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758571
 grant Gingeras
 lab CSHL
+labExpId LID8695
 labProtocolId 036WC+
 localization cell
 md5sum eb94362f1eb864be9182333b42f9a5cb
@@ -18256,6 +18333,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep1
 objType file
+bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -18269,6 +18347,7 @@ fileName wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
+labExpId LID8826
 labProtocolId 023WC-
 localization cell
 md5sum 8e9bedeea5f3a665d84bba7ef245cce0
@@ -18281,6 +18360,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep2
 objType file
+bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -18294,6 +18374,7 @@ fileName wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
+labExpId LID8827
 labProtocolId 024WC-
 localization cell
 md5sum 4c81021f42ea603432e9bf594c848a6a
@@ -18853,6 +18934,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapProtocolRep1
 objType file
+bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -18866,6 +18948,7 @@ fileName wgEncodeCshlLongRnaSeqHsmmCellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758578
 grant Gingeras
 lab CSHL
+labExpId LID8710
 labProtocolId 023WC+
 localization cell
 md5sum c6abf847160aa903ba5b2bb58bd5eb51
@@ -18878,6 +18961,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapProtocolRep2
 objType file
+bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -18891,6 +18975,7 @@ fileName wgEncodeCshlLongRnaSeqHsmmCellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758578
 grant Gingeras
 lab CSHL
+labExpId LID8711
 labProtocolId 024WC+
 localization cell
 md5sum 8076165b83059dd60c961cafc704e9b6
@@ -19450,6 +19535,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1
 objType file
+bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -19463,6 +19549,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767856
 grant Gingeras
 lab CSHL
+labExpId LID8788
 labProtocolId 009WC-
 localization cell
 md5sum 124eca194f4398d009f65016d4552b4f
@@ -19475,6 +19562,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep2
 objType file
+bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -19488,6 +19576,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767856
 grant Gingeras
 lab CSHL
+labExpId LID8789
 labProtocolId 010WC-
 localization cell
 md5sum f32195fdfd7f970367f88b7d73daa4c7
@@ -20046,6 +20135,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapProtocolRep1
 objType file
+bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -20059,6 +20149,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecCellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM758563
 grant Gingeras
 lab CSHL
+labExpId LID8463
 labProtocolId 009WC+
 localization cell
 md5sum 7bf689dab6c2bfa9fc058bf57f1dadce
@@ -20071,6 +20162,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapProtocolRep2
 objType file
+bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -20084,6 +20176,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecCellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM758563
 grant Gingeras
 lab CSHL
+labExpId LID8464
 labProtocolId 010WC+
 localization cell
 md5sum 006126d0d65e6e3272a76d93eb2d3cf7
@@ -20501,6 +20594,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep3
 objType file
+bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -20514,37 +20608,13 @@ fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep3.pdf.gz
 geoSampleAccession GSM767839
 grant Gingeras
 lab CSHL
+labExpId LID18556
 labProtocolId 029C-
 localization cytosol
 md5sum e470757cfa33e390c0b0a78880d1f2e3
 origAssembly hg19
 project wgEncode
 replicate 3
-rnaExtract longNonPolyA
-subId 3259
-view Protocol
-
-metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep4
-objType file
-cell HUVEC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-dccAccession wgEncodeEH000200
-dccRep 2
-expId 200
-fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep4.pdf.gz
-geoSampleAccession GSM767839
-grant Gingeras
-lab CSHL
-labProtocolId 030C-
-localization cytosol
-md5sum 6e8a083b85d2537f42dd23d247344d44
-origAssembly hg19
-project wgEncode
-replicate 4
 rnaExtract longNonPolyA
 subId 3259
 view Protocol
@@ -21068,6 +21138,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapProtocolRep3
 objType file
+bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -21081,6 +21152,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapProtocolRep3.pdf.gz
 geoSampleAccession GSM758569
 grant Gingeras
 lab CSHL
+labExpId LID8688
 labProtocolId 029C+
 localization cytosol
 md5sum f9330ea1e0d8dc05fa849e9859e95299
@@ -21093,6 +21165,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapProtocolRep4
 objType file
+bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -21106,6 +21179,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapProtocolRep4.pdf.gz
 geoSampleAccession GSM758569
 grant Gingeras
 lab CSHL
+labExpId LID8689
 labProtocolId 030C+
 localization cytosol
 md5sum 0d565109247a5ec596d72b339190cb3b
@@ -21665,6 +21739,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamProtocolRep3
 objType file
+bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -21678,6 +21753,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamProtocolRep3.pdf.gz
 geoSampleAccession GSM767857
 grant Gingeras
 lab CSHL
+labExpId LID9206
 labProtocolId 029N-
 localization nucleus
 md5sum 131c7613b9e65a911829b66dde812092
@@ -21690,6 +21766,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamProtocolRep4
 objType file
+bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -21703,6 +21780,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamProtocolRep4.pdf.gz
 geoSampleAccession GSM767857
 grant Gingeras
 lab CSHL
+labExpId LID9207
 labProtocolId 030N-
 localization nucleus
 md5sum 77ef1cbe26b347c4a87f769b6a7152d7
@@ -22261,6 +22339,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapProtocolRep3
 objType file
+bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -22274,6 +22353,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapProtocolRep3.pdf.gz
 geoSampleAccession GSM758565
 grant Gingeras
 lab CSHL
+labExpId LID8690
 labProtocolId 029N+
 localization nucleus
 md5sum 0d0e34011c5c529d797f70b9be089fd8
@@ -22286,6 +22366,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapProtocolRep4
 objType file
+bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -22299,6 +22380,7 @@ fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapProtocolRep4.pdf.gz
 geoSampleAccession GSM758565
 grant Gingeras
 lab CSHL
+labExpId LID8691
 labProtocolId 030N+
 localization nucleus
 md5sum 2774866fa52662dbba39263d7240a031
@@ -22856,6 +22938,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamProtocolRep1
 objType file
+bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -22869,6 +22952,7 @@ fileName wgEncodeCshlLongRnaSeqK562CellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM758577
 grant Gingeras
 lab CSHL
+labExpId LID8659
 labProtocolId 001WC-
 localization cell
 md5sum d6bc18fded9d70795be10330f7139c24
@@ -22881,6 +22965,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamProtocolRep2
 objType file
+bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -22894,6 +22979,7 @@ fileName wgEncodeCshlLongRnaSeqK562CellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM758577
 grant Gingeras
 lab CSHL
+labExpId LID8660
 labProtocolId 002WC-
 localization cell
 md5sum 8a52d7738c849c154711210fa20b6495
@@ -23454,6 +23540,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapProtocolRep1
 objType file
+bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -23467,6 +23554,7 @@ fileName wgEncodeCshlLongRnaSeqK562CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
+labExpId LID16627
 labProtocolId 001WC+
 localization cell
 md5sum 1ae9a1bfc768a975d4a0da6566249eda
@@ -23479,6 +23567,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapProtocolRep2
 objType file
+bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -23492,6 +23581,7 @@ fileName wgEncodeCshlLongRnaSeqK562CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
+labExpId LID16628
 labProtocolId 002WC+
 localization cell
 md5sum decbce46df60abb7902816e97c59b9f8
@@ -24821,6 +24911,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPamProtocolRep1
 objType file
+bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -24834,6 +24925,7 @@ fileName wgEncodeCshlLongRnaSeqK562CytosolPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767849
 grant Gingeras
 lab CSHL
+labExpId LID18545
 labProtocolId 001C-
 localization cytosol
 md5sum a6136a9b9030d356f28dcd3cf166efc8
@@ -24846,6 +24938,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPamProtocolRep2
 objType file
+bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -24859,6 +24952,7 @@ fileName wgEncodeCshlLongRnaSeqK562CytosolPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767849
 grant Gingeras
 lab CSHL
+labExpId LID18546
 labProtocolId 002C-
 localization cytosol
 md5sum 375364f75aef4768e4314cd5616e6bae
@@ -25404,6 +25498,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapProtocolRep1
 objType file
+bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -25416,6 +25511,7 @@ expId 140
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
+labExpId LID8465
 labProtocolId 001C+
 localization cytosol
 md5sum 88673b25505750c6a2866b1d4cd0f048
@@ -25428,6 +25524,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapProtocolRep2
 objType file
+bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -25440,6 +25537,7 @@ expId 140
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
+labExpId LID8466
 labProtocolId 002C+
 localization cytosol
 md5sum e3d1b701d54f97f71412900d95e49b83
@@ -27092,6 +27190,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamProtocolRep1
 objType file
+bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -27105,6 +27204,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleusPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767844
 grant Gingeras
 lab CSHL
+labExpId LID9195
 labProtocolId 001N-
 localization nucleus
 md5sum fe0ce2e7da624df7d95022d1b7924dab
@@ -27117,6 +27217,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamProtocolRep2
 objType file
+bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -27130,6 +27231,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleusPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767844
 grant Gingeras
 lab CSHL
+labExpId LID9196
 labProtocolId 002N-
 localization nucleus
 md5sum d17734abfb1bdeeb88cf6b316c78e09d
@@ -27690,6 +27792,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep1
 objType file
+bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -27703,6 +27806,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
+labExpId LID8556
 labProtocolId 001N+
 localization nucleus
 md5sum 64e3ff614965c03e5fe2e019a2c48dfc
@@ -27715,6 +27819,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep2
 objType file
+bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -27728,6 +27833,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
+labExpId LID8557
 labProtocolId 002N+
 localization nucleus
 md5sum 964347063bc77691bd9a47dcad820216
@@ -28288,6 +28394,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamProtocolRep1
 objType file
+bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -28301,6 +28408,7 @@ fileName wgEncodeCshlLongRnaSeqMcf7CellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM767851
 grant Gingeras
 lab CSHL
+labExpId LID8824
 labProtocolId 015WC-
 localization cell
 md5sum 9e22ad97b37261f654482a066a19a53b
@@ -28313,6 +28421,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamProtocolRep2
 objType file
+bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -28326,6 +28435,7 @@ fileName wgEncodeCshlLongRnaSeqMcf7CellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM767851
 grant Gingeras
 lab CSHL
+labExpId LID8825
 labProtocolId 016WC-
 localization cell
 md5sum 162a4c770164f76d1e799dbc116e99a9
@@ -28886,6 +28996,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep1
 objType file
+bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -28899,6 +29010,7 @@ fileName wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
+labExpId LID8686
 labProtocolId 015WC+
 localization cell
 md5sum 0b785e19448903c58d6397dc4d5d09dc
@@ -28911,6 +29023,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep2
 objType file
+bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -28924,6 +29037,7 @@ fileName wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
+labExpId LID8687
 labProtocolId 016WC+
 localization cell
 md5sum 66ab2116462c38dc31653f25cc7ca9b3
@@ -29112,7 +29226,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
-objType file
+objType table
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29139,6 +29253,7 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
+tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep1
@@ -29378,7 +29493,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
-objType file
+objType table
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29405,6 +29520,7 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
+tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1
@@ -29468,7 +29584,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
-objType file
+objType table
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29495,6 +29611,7 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
+tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamContigs
@@ -29698,6 +29815,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep1
 objType file
+bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -29711,6 +29829,7 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
+labExpId LID8665
 labProtocolId 007WC-
 localization cell
 md5sum 15b2e4efff20f8b6e6347d8e7d1523c6
@@ -29723,6 +29842,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep2
 objType file
+bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -29736,6 +29856,7 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
+labExpId LID8666
 labProtocolId 008WC-
 localization cell
 md5sum 0df8cebf5806287e27118bdeaf0f2c44
@@ -29749,6 +29870,7 @@ view Protocol
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep5
 objType file
 attic auxExp
+bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -29761,6 +29883,7 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep5.pdf.gz
 geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
+labExpId LID8830
 labProtocolId 035WC-
 localization cell
 md5sum a0e382472b10ad9b067cac3c51fcca1d
@@ -29946,6 +30069,7 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4594
+tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1
@@ -30009,7 +30133,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
-objType file
+objType table
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30038,6 +30162,7 @@ seqPlatform Illumina_GA2x
 sex U
 spikeInPool 14
 subId 4055
+tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapContigs
@@ -30476,7 +30601,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
-objType file
+objType table
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30503,6 +30628,7 @@ replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2467
+tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1
@@ -30566,7 +30692,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
-objType file
+objType table
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30593,10 +30719,12 @@ replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2467
+tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep1
 objType file
+bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -30610,6 +30738,7 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
+labExpId LID16631
 labProtocolId 007WC+
 localization cell
 md5sum 09d462d51c22eae7c1259d11927f376d
@@ -30622,6 +30751,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep2
 objType file
+bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -30635,6 +30765,7 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
+labExpId LID16632
 labProtocolId 008WC+
 localization cell
 md5sum 812d49c7a74ce0a2c88b40bdb8b18ac7
@@ -30648,6 +30779,7 @@ view Protocol
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep5
 objType file
 attic auxExp
+bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -30660,6 +30792,7 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep5.pdf.gz
 geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
+labExpId LID8694
 labProtocolId 035WC+
 localization cell
 md5sum 00432c33ecbb7a2be5105adb6c27da34
@@ -30845,6 +30978,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4574
+tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3
@@ -31135,31 +31269,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
 view Junctions
-
-metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamProtocolRep4
-objType file
-cell NHEK
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-dccAccession wgEncodeEH000195
-dccRep 2
-expId 195
-fileName wgEncodeCshlLongRnaSeqNhekCytosolPamProtocolRep4.pdf.gz
-geoSampleAccession GSM767843
-grant Gingeras
-lab CSHL
-labProtocolId 028C-
-localization cytosol
-md5sum 4d6c6d371f77ae26ececbc063311856f
-origAssembly hg19
-project wgEncode
-replicate 4
-rnaExtract longNonPolyA
-subId 3259
-view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamSpikeinsRep3
 objType file
@@ -31682,6 +31791,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep3
 objType file
+bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -31695,6 +31805,7 @@ fileName wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep3.pdf.gz
 geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
+labExpId LID8795
 labProtocolId 027C+
 localization cytosol
 md5sum fb234e279b2e98c7928ee8a4c501ec5a
@@ -31707,6 +31818,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep4
 objType file
+bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -31720,6 +31832,7 @@ fileName wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep4.pdf.gz
 geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
+labExpId LID8796
 labProtocolId 028C+
 localization cytosol
 md5sum 17b5e63eb98256dc9db49798a90fc0bb
@@ -32280,6 +32393,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamProtocolRep3
 objType file
+bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -32293,6 +32407,7 @@ fileName wgEncodeCshlLongRnaSeqNhekNucleusPamProtocolRep3.pdf.gz
 geoSampleAccession GSM767846
 grant Gingeras
 lab CSHL
+labExpId LID9204
 labProtocolId 027N-
 localization nucleus
 md5sum cdf054bfe5838ea05a3498581ebc5039
@@ -32305,6 +32420,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamProtocolRep4
 objType file
+bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -32318,6 +32434,7 @@ fileName wgEncodeCshlLongRnaSeqNhekNucleusPamProtocolRep4.pdf.gz
 geoSampleAccession GSM767846
 grant Gingeras
 lab CSHL
+labExpId LID9205
 labProtocolId 028N-
 localization nucleus
 md5sum a3801fd4f78a0df84824d8eaa808c4c6
@@ -32880,6 +32997,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep3
 objType file
+bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -32893,6 +33011,7 @@ fileName wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep3.pdf.gz
 geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
+labExpId LID8797
 labProtocolId 027N+
 localization nucleus
 md5sum 3f940d6c800429698213393a801e5594
@@ -32905,6 +33024,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep4
 objType file
+bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -32918,6 +33038,7 @@ fileName wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep4.pdf.gz
 geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
+labExpId LID8798
 labProtocolId 028N+
 localization nucleus
 md5sum db70f053d5bcd83ff9c85d9940cefb40
@@ -33478,6 +33599,7 @@ view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep1
 objType file
+bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -33491,6 +33613,7 @@ fileName wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep1.pdf.gz
 geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
+labExpId LID8828
 labProtocolId 033WC-
 localization cell
 md5sum 8af3152f79ffe67a19ab956a7459d95a
@@ -33503,6 +33626,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep2
 objType file
+bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -33516,6 +33640,7 @@ fileName wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep2.pdf.gz
 geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
+labExpId LID8829
 labProtocolId 034WC-
 localization cell
 md5sum bb58110fc2c3e94708c2772447fe3668
@@ -34078,6 +34203,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep1
 objType file
+bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -34091,6 +34217,7 @@ fileName wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
+labExpId LID8692
 labProtocolId 033WC+
 localization cell
 md5sum 2864ed21ea3c89841b37c0a0df2bc256
@@ -34103,6 +34230,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep2
 objType file
+bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -34116,6 +34244,7 @@ fileName wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
+labExpId LID8701
 labProtocolId 034WC+
 localization cell
 md5sum ce8ac78c4215bdd8a46fb2aea9c1921b
@@ -35224,6 +35353,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep1
 objType file
+bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -35237,6 +35367,7 @@ fileName wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
+labExpId LID8967
 labProtocolId 019WC+
 localization cell
 md5sum b2f6c9a11df513a66de35fc98c6b7087
@@ -35249,6 +35380,7 @@ view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep2
 objType file
+bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -35262,6 +35394,7 @@ fileName wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
+labExpId LID8968
 labProtocolId 020WC+
 localization cell
 md5sum 72efdf9fd92abfb3d5027ebf3f01c110
@@ -35389,4 +35522,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1050294291
+# MAGIC: -877804279
