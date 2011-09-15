@@ -29,8 +29,8 @@ subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=B
 subGroup4 control Control std=Standard IGGMUS=IgG-mus IGGRAB=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
 subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=4-hydroxytamoxifen TNFa=TNFa
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
-dimensionZchecked aNone
-dimensionAchecked std,IGGmus,IGGrab,UCD
+dimensionZchecked aNone,IFNa30,IGNa6h,IFNg30,IFNg6h
+dimensionAchecked std,IGGMUS,IGGRAB
 filterComposite dimZ=one dimA=multi
 sortOrder cellType=+ factor=+ control=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View control=Control setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
