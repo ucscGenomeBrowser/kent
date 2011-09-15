@@ -1,13 +1,6 @@
 # generated with encodeMkChangeNotes 0.9
 This is a release1 of the "ENCODE wgEncodeCshlLongRnaSeq"
 The composite track is wgEncodeCshlLongRnaSeq
-# WARNINGS #################################################
-200 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqHepg2CellPapSpikeinsRep1.spikeins.bam.gz
-211 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqGm12878CellPamSpikeinsRep1.spikeins.bam.gz
-212 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqK562CytosolPapSpikeinsRep1.spikeins.bam.gz
-219 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqBjCellPapSpikeinsRep2.spikeins.bam.gz
-222 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqK562CellPapSpikeinsRep2.spikeins.bam.gz
-############################################################
 
 Categories of tables and files('):
 A) Untouched - are on public browser and should remain
