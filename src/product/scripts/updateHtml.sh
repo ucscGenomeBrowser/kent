@@ -29,8 +29,15 @@ fi
 if [ -f "${includeFile}" ]; then
     . "${includeFile}"
 else
-    echo "ERROR: updateHtml.sh: can not find ${includeFile}"
+    echo "ERROR: updateHtml.sh: can not find ${includeFile}" 1>&2
     usage
+fi
+
+if [ ! -d "${BROWSERHOME}" ]; then
+    echo "ERROR: BROWSERHOME directory does not exist: ${BROWSERHOME}" 1>&2
+fi
+if [ ! -d "${CGI_BIN}" ]; then
+    echo "ERROR: CGI_BIN directory does not exist: ${CGI_BIN}" 1>&2
 fi
 
 export DS=`date "+%Y-%m-%d"`
@@ -47,3 +54,5 @@ ${RSYNC} --stats --delete --max-delete=20 --exclude="encode" --exclude="trash" \
 ${RSYNC} --stats --delete --max-delete=20 --exclude="encode" --exclude="trash" \
 	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
 	${HGDOWNLOAD}/htdocs/style/ ${DOCUMENTROOT}/style/ >> ${FETCHLOG} 2>&1
+${RSYNC} --stats \
+        ${HGDOWNLOAD}/cgi-bin/encode/ ${CGI_BIN}/encode/ >> ${FETCHLOG} 2>&1
