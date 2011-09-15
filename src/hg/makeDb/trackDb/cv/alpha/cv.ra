@@ -10605,8 +10605,8 @@ hidden yes
 term bioRep
 tag BIOREP
 type typeOfTerm
-label  Transcriptome Bio-Replicate ID
-description Cross Transcriptome sample ID number.
+label  Cross Lab Bio-Replicate ID
+description Cross lab sample ID number used to track bio-replicates PROVISIONAL.
 searchable no
 cvDefined no
 validate none
