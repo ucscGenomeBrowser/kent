@@ -1,14 +1,6 @@
 # generated with encodeMkChangeNotes 0.9
 This is a release1 of the "ENCODE wgEncodeCshlLongRnaSeq"
 The composite track is wgEncodeCshlLongRnaSeq
-# WARNINGS #################################################
-5 - could not find gbdb path in table hg19.wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
-36 - could not find gbdb path in table hg19.wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
-40 - table wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5 does not exist, from filetype bigWig
-106 - table wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5 does not exist, from filetype bigWig
-122 - table wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5 does not exist, from filetype bigWig
-251 - table wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5 does not exist, from filetype bigWig
-############################################################
 
 Categories of tables and files('):
 A) Untouched - are on public browser and should remain
