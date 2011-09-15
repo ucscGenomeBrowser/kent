@@ -154,10 +154,10 @@ def main(argv=None):
 
     # if new relase, add the full path to all files
     path_prefix = ""
-    if prev_release_dir == "-":
-        path_prefix = "/usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" \
+    #if prev_release_dir == "-":
+    path_prefix = "/usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" \
             % (database, options.composite_name, current_release_dir)
-
+      
     # generate the list of files
     file_pattern = ".*\.(gz|bigWig|bam|tgz)$"   # the pattern that describes what files we even consider
     current_files = get_file_set(current_release_dir, file_pattern)
