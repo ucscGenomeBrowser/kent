@@ -1,6 +1,6 @@
 import sys
 import re
-from ucscgenomics.ordereddict.OrderedDict import *
+from ucscgenomics.ordereddict import OrderedDict
 
 class RaFile(OrderedDict):
 	"""
@@ -93,7 +93,11 @@ class RaFile(OrderedDict):
 			else:
 				yield [item]
 
-
+				
+	def append(self, item):
+		OrderedDict.append(self, item)
+				
+				
 	def filter(self, where, select):
 		"""
 		select useful data from matching criteria
