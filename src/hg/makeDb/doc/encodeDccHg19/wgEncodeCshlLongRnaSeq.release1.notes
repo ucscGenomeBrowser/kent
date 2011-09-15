@@ -12,7 +12,7 @@ D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
     Tables: 473
-    Files: 1364
+    Files: 1358
     Gbdbs: 468
 
 A) Untouched Tables (0):
@@ -498,7 +498,7 @@ wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2
 wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1
 wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 
-C') New files (1361 downloadables, 468 gbdbs):
+C') New files (1358 downloadables, 468 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/
     NOT on RR but must be placed in:
@@ -947,7 +947,6 @@ C') New files (1361 downloadables, 468 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneGencV7.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamJunctions.bedRnaElements.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep1.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamSpikeinsRep2.spikeins.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptDeNovo.gtf.gz
@@ -1293,7 +1292,6 @@ C') New files (1361 downloadables, 468 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamGeneGencV7.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamJunctions.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep3.pdf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamSpikeinsRep3.spikeins.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7.gtf.gz
@@ -1702,7 +1700,6 @@ C') New files (1361 downloadables, 468 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamGeneDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamGeneGencV7.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamJunctions.bedRnaElements.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamSpikeinsRep3.spikeins.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7.gtf.gz

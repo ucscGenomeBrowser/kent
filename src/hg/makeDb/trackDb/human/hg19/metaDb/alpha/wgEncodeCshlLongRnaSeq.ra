@@ -19533,6 +19533,33 @@ rnaExtract longNonPolyA
 subId 3627
 view Junctions
 
+metaObject wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1
+objType file
+bioRep 009WC
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH000188
+dccRep 1
+expId 188
+fileName wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1.pdf.gz
+geoSampleAccession GSM767856
+grant Gingeras
+lab CSHL
+labExpId LID8788
+labProtocolId 009WC-
+localization cell
+md5sum 124eca194f4398d009f65016d4552b4f
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longNonPolyA
+subId 3259
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep2
 objType file
 bioRep 010WC
@@ -20588,31 +20615,6 @@ md5sum e470757cfa33e390c0b0a78880d1f2e3
 origAssembly hg19
 project wgEncode
 replicate 3
-rnaExtract longNonPolyA
-subId 3259
-view Protocol
-
-metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep4
-objType file
-cell HUVEC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-dccAccession wgEncodeEH000200
-dccRep 2
-expId 200
-fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep4.pdf.gz
-geoSampleAccession GSM767839
-grant Gingeras
-lab CSHL
-labProtocolId 030C-
-localization cytosol
-md5sum 6e8a083b85d2537f42dd23d247344d44
-origAssembly hg19
-project wgEncode
-replicate 4
 rnaExtract longNonPolyA
 subId 3259
 view Protocol
@@ -35520,4 +35522,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -2118722393
+# MAGIC: -877804279
