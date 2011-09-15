@@ -7,7 +7,7 @@ shortLabel UTA TFBS
 longLabel Open Chromatin TFBS by ChIP-seq from ENCODE/Open Chrom(UT Austin)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) 2HeLa-S3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MonoCD14=Monocytes-CD14+ MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLa-S3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MonoCD14=Monocytes-CD14+ MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
 subGroup3 factor Factor CTCF=CTCF CMYC=c-Myc POL2=Pol2 zCTRL=Input_Control
 subGroup4 treatment Treatment AANONE=None ESTRO=Estradiol;(estrogen) VEH=vehicle
 sortOrder cellType=+ factor=+ treatment=+ view=+
@@ -179,7 +179,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel K562 CTCF Pk
         longLabel K562 CTCF TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=K562
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=1K562
         type narrowPeak
         color 46,0,184
         # subId=1538 dateSubmitted=2010-06-17
@@ -206,7 +206,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel K562 Pol2 Pk
         longLabel K562 Pol2 TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=K562
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=1K562
         type narrowPeak
         color 46,0,184
         # subId=1541 dateSubmitted=2010-06-17
@@ -224,7 +224,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel K562 c-Myc Pk
         longLabel K562 c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=Peaks factor=CMYC cellType=K562
+        subGroups treatment=AANONE view=Peaks factor=CMYC cellType=1K562
         type narrowPeak
         color 46,0,184
         # subId=1543 dateSubmitted=2010-06-17
@@ -500,7 +500,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSignal
         shortLabel K562 CTCF DS
         longLabel K562 CTCF TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIG factor=CTCF cellType=K562
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=1K562
         type bigWig 0.000000 6.820800
         color 46,0,184
         # subId=1538 dateSubmitted=2010-06-17
@@ -527,7 +527,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSignal
         shortLabel K562 Pol2 DS
         longLabel K562 Pol2 TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIG factor=POL2 cellType=K562
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=1K562
         type bigWig 0.000000 5.497300
         color 46,0,184
         # subId=1541 dateSubmitted=2010-06-17
@@ -545,7 +545,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSignal
         shortLabel K562 c-Myc DS
         longLabel K562 c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIG factor=CMYC cellType=K562
+        subGroups treatment=AANONE view=SIG factor=CMYC cellType=1K562
         type bigWig 0.000000 1.981500
         color 46,0,184
         # subId=1543 dateSubmitted=2010-06-17
@@ -562,7 +562,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSignal
         shortLabel K562 Input DS
         longLabel K562 Input TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=K562
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=1K562
         type bigWig 0.000000 3.978400
         color 46,0,184
         # subId=1606 dateSubmitted=2010-06-18
@@ -888,7 +888,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSigBo
         shortLabel K562 CTCF OS
         longLabel K562 CTCF TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=K562
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=1K562
         type bigWig 0.000000 3149.000000
         color 46,0,184
         # subId=1538 dateSubmitted=2010-06-17
@@ -915,7 +915,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSigBo
         shortLabel K562 Pol2 OS
         longLabel K562 Pol2 TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=K562
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=1K562
         type bigWig 0.000000 4459.000000
         color 46,0,184
         # subId=1541 dateSubmitted=2010-06-17
@@ -933,7 +933,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSigBo
         shortLabel K562 c-Myc OS
         longLabel K562 c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=K562
+        subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=1K562
         type bigWig 0.000000 1968.000000
         color 46,0,184
         # subId=1543 dateSubmitted=2010-06-17

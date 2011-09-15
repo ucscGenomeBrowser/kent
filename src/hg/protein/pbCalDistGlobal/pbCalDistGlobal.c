@@ -3,7 +3,6 @@
 #include "hash.h"
 #include "hCommon.h"
 #include "hdb.h"
-#include "pbCommon.h"
 #include "spDb.h"
 #include "linefile.h"
 
@@ -137,7 +136,7 @@ int ipcnt={0};
 int interProCount;
 if (argc != 3) usage();
 
-strcpy(aaAlphabet, AA_ALPHABET);
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
 
 /* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
 aa_hydro['A'] =  1.800;
@@ -166,13 +165,6 @@ aa_hydro['W'] = -0.900;
 /* Tyr: -1.300  Val:  4.200  Asx: -3.500  Glx: -3.500  Xaa: -0.490 */
 aa_hydro['Y'] = -1.300;
 aa_hydro['V'] =  4.200;
-aa_hydro['B'] = -3.500;
-aa_hydro['Z'] = -3.500;
-aa_hydro['X'] = -0.490;
-
-/* Sec: unknown, approximated from Cys (2.500).  Pyr: unknown, approximated from K (-3.900) */
-aa_hydro['U'] =  2.500;
-aa_hydro['O'] = -3.900;
 
 proteinDatabaseName = argv[1];
 protDbName 	    = argv[2];
@@ -183,7 +175,7 @@ o2 = mustOpen("pepResDist.tab", "w");
 conn2 = sqlConnect(database);
 conn3 = sqlConnect(protDbName);
 
-for (j=0; j<strlen(aaAlphabet); j++)
+for (j=0; j<23; j++)
     {
     aaResCnt[j] = 0;
     }
@@ -193,7 +185,7 @@ pIcnt = 0;
 molWtCnt = 0;
 
 /* Build up hash of swInterPro accessions.  We'll use this to count domains. */
-struct hash *swInterProHash = hashNew(strlen(aaAlphabet));
+struct hash *swInterProHash = hashNew(23);
     {
     struct sqlResult *sr = sqlGetResult(conn3, "select accession from swInterPro");
     char **row;
@@ -207,11 +199,8 @@ safef(query2, sizeof(query2),
       proteinDatabaseName, proteinDatabaseName, database);
 
 sr2  = sqlMustGetResult(conn2, query2);
-while ((row2 = sqlNextRow(sr2)) != NULL)
+ while ((molWtCnt < MAX_PROTEIN_CNT) && (row2 = sqlNextRow(sr2)) != NULL)
     {
-    if (molWtCnt >= MAX_PROTEIN_CNT)
-       errAbort("Too many proteins - please set MAX_PROTEIN_CNT to be more than %d\n", 
-       	MAX_PROTEIN_CNT);
     accession = row2[0];   
     molWt[molWtCnt] = (double)(atof(row2[1]));
     molWtCnt++;
@@ -233,7 +222,7 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
     for (i=0; i<len; i++)
 	{
 	aaResFound = 0;
-	for (j=0; j<strlen(aaAlphabet); j++)
+	for (j=0; j<23; j++)
 	    {
 	    if (*chp == aaAlphabet[j])
 		{
@@ -282,13 +271,13 @@ sqlDisconnect(&conn2);
 sqlDisconnect(&conn3);
 
 totalResCnt = 0;
-for (i=0; i<strlen(aaAlphabet); i++)
+for (i=0; i<23; i++)
     {
     totalResCnt = totalResCnt + aaResCnt[i];
     }
 
 /* write out residue count distribution */
-for (i=0; i<NUM_STANDARD_AMINO_ACIDS; i++)
+for (i=0; i<20; i++)
     {
     aaResCntDouble[i] = ((double)aaResCnt[i])/((double)totalResCnt);
     fprintf(o2, "%d\t%f\n", i+1, (float)aaResCntDouble[i]);

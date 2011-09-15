@@ -217,30 +217,21 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         if (cvTermTypes && differentString(mdbVar->var,MDB_VAR_TABLENAME)) // Don't bother with tableName
             {
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
-            if (cvTerm != NULL)
+            if (cvTerm != NULL) // even if cvTerm isn't used, it proves that it exists and a link is desirable
                 {
                 if(!cvTermIsHidden(mdbVar->var))
                     {
-                    char *label=hashFindVal(cvTerm,CV_LABEL);
-                    if (label == NULL)
-                        label = mdbVar->var;
+                    char *label = (char *)cvLabel(NULL,mdbVar->var);
                     char *linkOfType = controlledVocabLink(NULL,CV_TYPE,mdbVar->var,label,label,NULL);
-                    char *cvDefined=hashFindVal(cvTerm,CV_TOT_CV_DEFINED);
-                    if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
+                    if (cvTermIsCvDefined(mdbVar->var))
                         {
-                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,mdbVar->val,mdbVar->val,NULL);
+                        label = (char *)cvLabel(mdbVar->var,mdbVar->val);
+                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,label,label,NULL);
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
                         freeMem(linkOfTerm);
                         }
                     else
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
-                        //{  // NOTE: Could just have a tool tip for these.
-                        //char *descr=cgiEncode(hashMustFindVal(cvTerm,"description"));
-                        //label = cgiEncode(label);
-                        //dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i title='%s'>%s:</i></td><td nowrap>%s</td></tr>",descr,label,mdbVar->val);
-                        //freeMem(descr);
-                        //freeMem(label);
-                        //}
                     freeMem(linkOfType);
                     continue;
                     }
@@ -2576,11 +2567,13 @@ if(options != NULL)
 struct dyString *currentlyCheckedTags = NULL;
 // Need a string of subGroup tags which are currently checked
 safef(settingName,sizeof(settingName),"dimension%cchecked",letter);
-char *dimCheckedDefaults = trackDbSettingOrDefault(parentTdb,settingName,"");
+char *dimCheckedDefaults = trackDbSettingOrDefault(parentTdb,settingName,"All");
 for(mIx=0;mIx<members->count;mIx++)
     {
     safef(settingName, sizeof(settingName), "%s.mat_%s_dim%c_cb",parentTdb->track,members->tags[mIx],letter);
-    members->selected[mIx] = (NULL!=findWordByDelimiter(members->tags[mIx],',',dimCheckedDefaults));
+    members->selected[mIx] = TRUE;
+    if (differentWord(dimCheckedDefaults,"All") && differentWord(dimCheckedDefaults,"Any"))
+        members->selected[mIx] = (NULL!=findWordByDelimiter(members->tags[mIx],',',dimCheckedDefaults));
     members->selected[mIx] = cartUsualBoolean(cart,settingName,members->selected[mIx]);
     if(members->selected[mIx])
         {

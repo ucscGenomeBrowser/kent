@@ -3,6 +3,31 @@ objType composite
 composite wgEncodeHaibTfbs
 expVars lab,dataType,cell,antibody,treatment,protocol
 
+metaObject wgEncodeHaibTfbsA549ControlV0422111Etoh02AlnRep1V2
+objType file
+antibody Control
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL6021
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsA549ControlV0422111Etoh02AlnRep1V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL6021
+md5sum bam=5ad689ae2f526964156804fb542af68c,bai=9068bdb760d6009073bd301d8954be2c
+project wgEncode
+protocol v042211.1
+replicate 1
+setType input
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
+treatment EtOH_0.02pct
+view Alignments
+
 metaObject wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmAlnRep1
 objType file
 antibody CTCF_(SC-5916)
@@ -2586,6 +2611,31 @@ protocol v042211.1
 replicate 2
 setType exp
 subId 4339
+treatment EtOH_0.02pct
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549Taf1V0422111Etoh02AlnRep2V2
+objType file
+antibody TAF1
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL6021
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsA549Taf1V0422111Etoh02AlnRep2V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL5700
+md5sum bam=35636a63a087f3a74d72575fcb5bb4b1,bai=12a99f935b36b18b5a537eae0c4933e8
+project wgEncode
+protocol v042211.1
+replicate 2
+setType exp
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
 treatment EtOH_0.02pct
 view Alignments
 
@@ -10937,6 +10987,31 @@ subId 1191
 treatment None
 view RawData
 
+metaObject wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V2
+objType file
+antibody SP1
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL746
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-04-20
+fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL517
+md5sum 24d4a9857f217cba2d42afa68548fb37
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 4814
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
+treatment None
+view RawData
+
 metaObject wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep2
 objType file
 antibody SP1
@@ -15998,6 +16073,31 @@ subId 3754
 tableName wgEncodeHaibTfbsH1hescBcl11aV0416102RawRep2
 treatment None
 view RawSignal
+
+metaObject wgEncodeHaibTfbsH1hescControlV0422111AlnRep1V2
+objType file
+antibody Control
+cell H1-hESC
+composite wgEncodeHaibTfbs
+controlId SL6018
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsH1hescControlV0422111AlnRep1V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL6018
+md5sum bam=f6e70caa85340b00da99a8a0a386b2b2,bai=85d6c6e94733e6840e5e6595f133ee5a
+project wgEncode
+protocol v042211.1
+replicate 1
+setType input
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
+treatment None
+view Alignments
 
 metaObject wgEncodeHaibTfbsH1hescCtcfsc5916V0416102AlnRep1
 objType file
@@ -22997,6 +23097,31 @@ tableName wgEncodeHaibTfbsHepg2Bhlhe40V0416101RawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsHepg2ControlV0422111AlnRep1V2
+objType file
+antibody Control
+cell HepG2
+composite wgEncodeHaibTfbs
+controlId SL6019
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsHepg2ControlV0422111AlnRep1V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL6019
+md5sum bam=fbbe0e246ae78047341ea3acc78498a3,bai=96ebeb4bb158fd77648c6396c315b2b2
+project wgEncode
+protocol v042211.1
+replicate 1
+setType input
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsHepg2Ctcfsc5916V0416101AlnRep1
 objType file
 antibody CTCF_(SC-5916)
@@ -25762,6 +25887,31 @@ subId 4333
 treatment None
 view Alignments
 
+metaObject wgEncodeHaibTfbsHepg2NrsfV0416101AlnRep2V2
+objType file
+antibody NRSF
+cell HepG2
+composite wgEncodeHaibTfbs
+controlId SL3976
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsHepg2NrsfV0416101AlnRep2V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL5897
+md5sum bam=b084a2aa9305df61a807ada4886f3f33,bai=f6f7e5d4f97939368e0d72176bb5530d
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsHepg2NrsfV0416101PkRep1
 objType table
 antibody NRSF
@@ -26163,6 +26313,31 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 4344
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsHepg2Pol24h8V0416102AlnRep2V2
+objType file
+antibody Pol2-4H8
+cell HepG2
+composite wgEncodeHaibTfbs
+controlId SL1781
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsHepg2Pol24h8V0416102AlnRep2V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL5604
+md5sum bam=f78edd667a7d09e1f0a17d704b0baf2f,bai=b7fc71ecb16bce4cbdb07ca3f57637bd
+project wgEncode
+protocol v041610.2
+replicate 2
+setType exp
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
 treatment None
 view Alignments
 
@@ -29904,6 +30079,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum bam=50880a93051766c219a91708626d5857,bai=e30ebd50584c8613cf413abd4ec148fb
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -29957,6 +30133,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 08ae3a5f7d3a3632df386628087d0e95
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -30010,6 +30187,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 4ff5736682fcda748d29c31ef122b3a3
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -30062,6 +30240,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 3031bfe034d268676a087bfd5507b24c
+objStatus revoked
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -30322,6 +30501,31 @@ protocol PCR1x
 replicate 2
 setType exp
 subId 4319
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsK562CtcfcPcr1xAlnRep2V2
+objType file
+antibody CTCF_(SC-5916)
+cell K562
+composite wgEncodeHaibTfbs
+controlId SL1396
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsK562CtcfcPcr1xAlnRep2V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL5605
+md5sum bam=59fc32ff2c5988b29fec74a3b97b842f,bai=c7729e76f62e87989eab85b209259064
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
 treatment None
 view Alignments
 
@@ -30681,7 +30885,7 @@ tableName wgEncodeHaibTfbsK562Ctcflsc98982V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102AlnRep1
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102AlnRep1
 objType file
 antibody E2F6
 cell K562
@@ -30693,7 +30897,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102AlnRep1.bam
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2948
@@ -30706,7 +30910,7 @@ subId 3069
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102AlnRep2
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102AlnRep2
 objType file
 antibody E2F6
 cell K562
@@ -30718,7 +30922,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102AlnRep2.bam
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL3073
@@ -30731,7 +30935,7 @@ subId 3069
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102PkRep1
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
 objType table
 antibody E2F6
 cell K562
@@ -30743,7 +30947,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2948
@@ -30754,11 +30958,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 3069
-tableName wgEncodeHaibTfbsK562E2f6V0416102PkRep1
+tableName wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
 treatment None
 view Peaks
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102PkRep2
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
 objType table
 antibody E2F6
 cell K562
@@ -30770,7 +30974,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3073
@@ -30781,11 +30985,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 3069
-tableName wgEncodeHaibTfbsK562E2f6V0416102PkRep2
+tableName wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
 treatment None
 view Peaks
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102RawDataRep1
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102RawDataRep1
 objType file
 antibody E2F6
 cell K562
@@ -30797,7 +31001,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2948
@@ -30810,7 +31014,7 @@ subId 3069
 treatment None
 view RawData
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102RawDataRep2
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102RawDataRep2
 objType file
 antibody E2F6
 cell K562
@@ -30822,7 +31026,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3073
@@ -30835,7 +31039,7 @@ subId 3069
 treatment None
 view RawData
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102RawRep1
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
 objType table
 antibody E2F6
 cell K562
@@ -30847,7 +31051,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102RawRep1.bigWig
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2948
@@ -30857,11 +31061,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3069
-tableName wgEncodeHaibTfbsK562E2f6V0416102RawRep1
+tableName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsK562E2f6V0416102RawRep2
+metaObject wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
 objType table
 antibody E2F6
 cell K562
@@ -30873,7 +31077,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001598
 expId 1598
-fileName wgEncodeHaibTfbsK562E2f6V0416102RawRep2.bigWig
+fileName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL3073
@@ -30883,7 +31087,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3029
-tableName wgEncodeHaibTfbsK562E2f6V0416102RawRep2
+tableName wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
 treatment None
 view RawSignal
 
@@ -39829,6 +40033,31 @@ subId 4336
 treatment None
 view Alignments
 
+metaObject wgEncodeHaibTfbsSknmcPol24h8V0416101AlnRep2V2
+objType file
+antibody Pol2-4H8
+cell SK-N-MC
+composite wgEncodeHaibTfbs
+controlId SL1714
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsSknmcPol24h8V0416101AlnRep2V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL5611
+md5sum bam=0cf6bc6eda139e0fcfb26ed7118d7d6d,bai=db98a6c92f7b6fb64864f105fe4cc7f0
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsSknmcPol24h8V0416101PkRep1
 objType table
 antibody Pol2-4H8
@@ -40387,6 +40616,31 @@ subId 4328
 treatment None
 view Alignments
 
+metaObject wgEncodeHaibTfbsSknshNrsfV0416101AlnRep2V2
+objType file
+antibody NRSF
+cell SK-N-SH
+composite wgEncodeHaibTfbs
+controlId SL3774
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsSknshNrsfV0416101AlnRep2V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL5896
+md5sum bam=72651a3100e95c30973a349e48f4e658,bai=fe0b32d10cf6bdf91a3f1374415cec1e
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsSknshNrsfV0416101PkRep1
 objType table
 antibody NRSF
@@ -40739,6 +40993,31 @@ protocol v041610.1
 replicate 2
 setType exp
 subId 4331
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsSknshSin3ak20V0416101AlnRep2V2
+objType file
+antibody Sin3Ak-20
+cell SK-N-SH
+composite wgEncodeHaibTfbs
+controlId SL3774
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-02
+dateSubmitted 2011-06-29
+dateUnrestricted 2012-03-27
+fileName wgEncodeHaibTfbsSknshSin3ak20V0416101AlnRep2V2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL5895
+md5sum bam=df001e234dd670e2238995386cd476cc,bai=b5895692b4472e0a9e85333d9ba7198e
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 4813
+submittedDataVersion V2 - Replacement files for incorrectly duplicated files
 treatment None
 view Alignments
 
@@ -44196,4 +44475,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -2031324910
+# MAGIC: -123733871
