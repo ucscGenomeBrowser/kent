@@ -549,7 +549,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4589
-tableName wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapAlnRep1
@@ -1145,7 +1144,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4549
-tableName wgEncodeCshlLongRnaSeqA549CellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep1
@@ -1693,7 +1691,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4558
-tableName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep1
@@ -2288,7 +2285,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4554
-tableName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1
@@ -2836,7 +2832,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4581
-tableName wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapAlnRep1
@@ -3431,7 +3426,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4576
-tableName wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1
@@ -4026,7 +4020,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4586
-tableName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1
@@ -4622,7 +4615,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4571
-tableName wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
@@ -5441,7 +5433,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4559
-tableName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1
@@ -6036,7 +6027,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4553
-tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
@@ -6634,7 +6624,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4548
-tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1
@@ -7232,7 +7221,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4601
-tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1
@@ -7827,7 +7815,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4593
-tableName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1
@@ -8422,7 +8409,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4592
-tableName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2
@@ -8824,7 +8810,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4542
-tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapAlnRep2
@@ -9223,7 +9208,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4582
-tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2
@@ -9625,7 +9609,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4590
-tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapAlnRep2
@@ -10024,7 +10007,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4570
-tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1
@@ -10622,7 +10604,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4599
-tableName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1
@@ -11220,7 +11201,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4583
-tableName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2
@@ -11647,7 +11627,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4577
-tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1
@@ -12245,7 +12224,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4544
-tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1
@@ -12843,7 +12821,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4568
-tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1
@@ -13441,7 +13418,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4550
-tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1
@@ -14036,7 +14012,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4580
-tableName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1
@@ -14631,7 +14606,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4596
-tableName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1
@@ -15230,7 +15204,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4575
-tableName wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1
@@ -15826,7 +15799,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4603
-tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
@@ -16424,7 +16396,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4562
-tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep1
@@ -17019,7 +16990,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4584
-tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1
@@ -17421,7 +17391,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4547
-tableName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapAlnRep1
@@ -17820,7 +17789,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4556
-tableName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1
@@ -18418,7 +18386,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4605
-tableName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep1
@@ -19014,7 +18981,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4587
-tableName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1
@@ -19612,7 +19578,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4565
-tableName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1
@@ -20207,7 +20172,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4564
-tableName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3
@@ -20634,7 +20598,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4552
-tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3
@@ -21229,7 +21192,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4595
-tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3
@@ -21827,7 +21789,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4563
-tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep3
@@ -22422,7 +22383,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4602
-tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1
@@ -23017,7 +22977,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4588
-tableName wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapAlnRep1
@@ -23616,7 +23575,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4585
-tableName wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
@@ -24384,7 +24342,6 @@ rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4551
-tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1
@@ -24983,7 +24940,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4579
-tableName wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1
@@ -25560,7 +25516,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4572
-tableName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3
@@ -26108,7 +26063,6 @@ rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4546
-tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3
@@ -26656,7 +26610,6 @@ rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4545
-tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1
@@ -27254,7 +27207,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4541
-tableName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1
@@ -27852,7 +27804,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4555
-tableName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1
@@ -28450,7 +28401,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4578
-tableName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1
@@ -29048,7 +28998,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4600
-tableName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1
@@ -29112,7 +29061,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29139,7 +29088,6 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
-tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep1
@@ -29379,7 +29327,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29406,7 +29354,6 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
-tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1
@@ -29470,7 +29417,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -29497,7 +29444,6 @@ replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 2558
-tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamContigs
@@ -29920,7 +29866,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4567
-tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
@@ -29949,7 +29894,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4594
-tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1
@@ -30013,7 +29957,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30042,7 +29986,6 @@ seqPlatform Illumina_GA2x
 sex U
 spikeInPool 14
 subId 4055
-tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapContigs
@@ -30481,7 +30424,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30508,7 +30451,6 @@ replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2467
-tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
 view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1
@@ -30572,7 +30514,7 @@ tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
-objType table
+objType file
 attic auxExp
 bioRep 035WC
 cell NHEK
@@ -30599,7 +30541,6 @@ replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2467
-tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
 view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep1
@@ -30823,7 +30764,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4591
-tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
@@ -30852,7 +30792,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4574
-tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3
@@ -31254,7 +31193,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4598
-tableName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3
@@ -31852,7 +31790,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4597
-tableName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3
@@ -32450,7 +32387,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4566
-tableName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3
@@ -33050,7 +32986,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4569
-tableName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1
@@ -33648,7 +33583,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4573
-tableName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
@@ -34248,7 +34182,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4543
-tableName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1
@@ -34796,7 +34729,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4561
-tableName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV7
 view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1
@@ -35394,7 +35326,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool 14
 subId 4560
-tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1050118083
+# MAGIC: -382651713
