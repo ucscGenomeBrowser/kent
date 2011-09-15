@@ -11572,31 +11572,6 @@ seqPlatform Illumina_GA2x
 subId 3631
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep1
-objType file
-cell HeLa-S3
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-dccAccession wgEncodeEH000201
-dccRep 1
-expId 201
-fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep1.pdf.gz
-geoSampleAccession GSM767838
-grant Gingeras
-lab CSHL
-labProtocolId 011C-
-localization cytosol
-md5sum 113a6ddb455a373895cf0cc65354a4a8
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract longNonPolyA
-subId 3259
-view Protocol
-
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep2
 objType file
 bioRep 012C
@@ -19557,33 +19532,6 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 3627
 view Junctions
-
-metaObject wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1
-objType file
-bioRep 009WC
-cell HUVEC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-dccAccession wgEncodeEH000188
-dccRep 1
-expId 188
-fileName wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1.pdf.gz
-geoSampleAccession GSM767856
-grant Gingeras
-lab CSHL
-labExpId LID8788
-labProtocolId 009WC-
-localization cell
-md5sum 124eca194f4398d009f65016d4552b4f
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract longNonPolyA
-subId 3259
-view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep2
 objType file
@@ -31320,31 +31268,6 @@ seqPlatform Illumina_GA2x
 subId 3652
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamProtocolRep4
-objType file
-cell NHEK
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-dccAccession wgEncodeEH000195
-dccRep 2
-expId 195
-fileName wgEncodeCshlLongRnaSeqNhekCytosolPamProtocolRep4.pdf.gz
-geoSampleAccession GSM767843
-grant Gingeras
-lab CSHL
-labProtocolId 028C-
-localization cytosol
-md5sum 4d6c6d371f77ae26ececbc063311856f
-origAssembly hg19
-project wgEncode
-replicate 4
-rnaExtract longNonPolyA
-subId 3259
-view Protocol
-
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamSpikeinsRep3
 objType file
 attic auxSup
@@ -35597,4 +35520,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -741708892
+# MAGIC: -2118722393
