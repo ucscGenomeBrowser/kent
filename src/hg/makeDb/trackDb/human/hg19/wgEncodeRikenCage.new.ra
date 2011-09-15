@@ -86,7 +86,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHelas3NucleolusTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel HeLa nlos tot
+        shortLabel HeLa nlus tot
         longLabel HeLa-S3 nucleolus total CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=2HeLaS3 localization=nucleolus rnaExtract=total
         type bed 6 +
@@ -174,7 +174,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHepg2NucleolusTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel HepG nlos tot
+        shortLabel HepG nlus tot
         longLabel HepG2 nucleolus total CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=2HepG2 localization=nucleolus rnaExtract=total
         type bed 6 +
@@ -399,7 +399,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleolusTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel GM78 nlos tot
+        shortLabel GM78 nlus tot
         longLabel GM12878 nucleolus total CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=nucleolus rnaExtract=total
         type bed 6 +
@@ -416,7 +416,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageK562NucleolusTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel K562 nlos tot
+        shortLabel K562 nlus tot
         longLabel K562 nucleolus total CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=nucleolus rnaExtract=total
         type bed 6 +
@@ -443,7 +443,7 @@ html wgEncodeRikenCage.new
     viewLimits 0:30
     autoScale off
     transformFunc NONE
-    windowingFunction mean
+    windowingFunction mean+whiskers
     maxWindowToDraw 10000000
 
         track wgEncodeRikenCageNhekCytosolPamPlusSignal
@@ -964,7 +964,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHepg2NucleolusTotalPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal off
-        shortLabel HepG nlos tot + 0
+        shortLabel HepG nlus tot + 0
         longLabel HepG2 nucleolus total CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
@@ -974,7 +974,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleolusTotalPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal off
-        shortLabel GM12 nlos tot + 0
+        shortLabel GM12 nlus tot + 0
         longLabel GM12878 nucleolus total CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
@@ -995,7 +995,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHelas3NucleolusTotalPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal off
-        shortLabel HeLa nlos tot + 0
+        shortLabel HeLa nlus tot + 0
         longLabel Hela-S3 nucleolus total CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups rep=rep1 view=PlusRawSignal cellType=2HeLaS3 localization=nucleolus rnaExtract=total
         type bigWig 0.120000 29534.529297
@@ -1006,7 +1006,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageK562NucleolusTotalPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal off
-        shortLabel K562 nlos tot + 1
+        shortLabel K562 nlus tot + 1
         longLabel K562 nucleolus total CAGE Plus strand start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1K562 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.050000 38081.750000
@@ -1183,7 +1183,7 @@ html wgEncodeRikenCage.new
     minLimit .005
     maxLimit 25183
     viewLimits 0:30
-    windowingFunction mean
+    windowingFunction mean+whiskers
     autoScale off
     transformFunc NONE
     maxWindowToDraw 1000000
@@ -1302,7 +1302,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHepg2NucleolusTotalMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel HepG nlos tot - 0
+        shortLabel HepG nlus tot - 0
         longLabel HepG2 nucleolus total CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
@@ -1312,7 +1312,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleolusTotalMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel GM12 nlos tot - 0
+        shortLabel GM12 nlus tot - 0
         longLabel GM12878 nucleolus total CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
@@ -1738,7 +1738,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHelas3NucleolusTotalMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel HeLa nlos tot - 0
+        shortLabel HeLa nlus tot - 0
         longLabel Hela-S3 nucleolus total CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups rep=rep1 view=MinusRawSignal cellType=2HeLaS3 localization=nucleolus rnaExtract=total
         type bigWig 0.120000 21887.250000
@@ -1749,7 +1749,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageK562NucleolusTotalMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel K562 nlos tot - 1
+        shortLabel K562 nlus tot - 1
         longLabel K562 nucleolus total CAGE Minus strand start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1K562 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.050000 19662.699219
@@ -2049,7 +2049,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHepg2NucleolusTotalAln
         subTrack wgEncodeRikenCageViewAlignments off
-        shortLabel HepG nlos tot A 0
+        shortLabel HepG nlus tot A 0
         longLabel HepG2 nucleolus total CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups view=Alignments cellType=2HepG2 localization=nucleolus rnaExtract=total rep=rep1
         type bam
@@ -2058,7 +2058,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleolusTotalAln
         subTrack wgEncodeRikenCageViewAlignments off
-        shortLabel GM12 nlos tot A 0
+        shortLabel GM12 nlus tot A 0
         longLabel GM12878 nucleolus total CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bam
@@ -2450,7 +2450,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHelas3NucleolusTotalAln
         subTrack wgEncodeRikenCageViewAlignments off
-        shortLabel HeLa nlos tot A 0
+        shortLabel HeLa nlus tot A 0
         longLabel HeLa-S3 nucleolus total CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups rep=rep1 view=Alignments cellType=2HeLaS3 localization=nucleolus rnaExtract=total
         type bam
@@ -2460,7 +2460,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageK562NucleolusTotalAln
         subTrack wgEncodeRikenCageViewAlignments off
-        shortLabel K562 nlos tot A 1
+        shortLabel K562 nlus tot A 1
         longLabel K562 nucleolus total CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=total rep=rep1
         type bam

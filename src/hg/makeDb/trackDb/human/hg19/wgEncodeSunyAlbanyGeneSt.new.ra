@@ -35,7 +35,6 @@ html wgEncodeSunyAlbanyGeneSt.new
     #minGrayLevel 11%
     type broadPeak
 
-
 	track wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
 	subTrack wgEncodeSunyAlbanyGeneStView off
 	shortLabel GM12878 RIP-Input
@@ -45,6 +44,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
+	# was wgEncodeSunyAlbanyGeneStGm12878RipinRbpAssocRnaV2 wong Wed Aug 24 16:05:35 2011
 
 	track wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2
 	subTrack wgEncodeSunyAlbanyGeneStView off
@@ -55,6 +55,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
+	# was wgEncodeSunyAlbanyGeneStGm12878T7RbpAssocRnaV2 wong Wed Aug 24 16:05:36 2011
 
 	track wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2
 	subTrack wgEncodeSunyAlbanyGeneStView
@@ -115,6 +116,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 46,0,184
 	# subId=1237 dateSubmitted=2010-06-01
+	# was wgEncodeSunyAlbanyGeneStK562RipinRbpAssocRnaV2 wong Wed Aug 24 16:05:36 2011
 
 	track wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 	subTrack wgEncodeSunyAlbanyGeneStView off
@@ -125,6 +127,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 46,0,184
 	# subId=1237 dateSubmitted=2010-06-01
+	# was wgEncodeSunyAlbanyGeneStK562T7RbpAssocRnaV2 wong Wed Aug 24 16:05:36 2011
 
 	track wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2
 	subTrack wgEncodeSunyAlbanyGeneStView
@@ -165,6 +168,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 0,119,158
 	# subId=1237 dateSubmitted=2010-06-01
+	# was wgEncodeSunyAlbanyGeneStHelas3RipinRbpAssocRnaV2 wong Wed Aug 24 16:05:35 2011
 
 	track wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2
 	subTrack wgEncodeSunyAlbanyGeneStView off
@@ -175,6 +179,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 189,0,157
 	# subId=1237 dateSubmitted=2010-06-01
+	# was wgEncodeSunyAlbanyGeneStHepg2RipinRbpAssocRnaV2 wong Wed Aug 24 16:05:35 2011
 
 	track wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2
 	parent wgEncodeSunyAlbanyGeneStView
@@ -195,6 +200,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 0,119,158
 	# subId=1613 dateSubmitted=2010-06-18
+	# was wgEncodeSunyAlbanyGeneStHelas3T7RbpAssocRnaV2 wong Wed Aug 24 16:05:36 2011
 
 	track wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2
 	parent wgEncodeSunyAlbanyGeneStView off
@@ -225,6 +231,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 189,0,157
 	# subId=1613 dateSubmitted=2010-06-18
+	# was wgEncodeSunyAlbanyGeneStHepg2T7RbpAssocRnaV2 wong Wed Aug 24 16:05:36 2011
 
 	track wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2
 	parent wgEncodeSunyAlbanyGeneStView off
@@ -255,6 +262,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 0,107,27
 	# subId=3084 dateSubmitted=2010-12-10 
+	# was wgEncodeSunyAlbanyGeneStH1hescRipinRbpAssocRnaV2 wong Wed Aug 24 16:05:35 2011
 
 
 	track wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
@@ -266,6 +274,7 @@ html wgEncodeSunyAlbanyGeneSt.new
 	type broadPeak
 	color 0,107,27
 	# subId=3084 dateSubmitted=2010-12-10
+	# was wgEncodeSunyAlbanyGeneStH1hescT7RbpAssocRnaV2 wong Wed Aug 24 16:05:36 2011
 
 	track wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
 	parent wgEncodeSunyAlbanyGeneStView on

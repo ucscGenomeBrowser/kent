@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
+#include "pbCommon.h"
 #include "spDb.h"
 #include "math.h"
 
@@ -118,7 +119,7 @@ int sortedCnt;
 if (argc != 2) usage();
 freq = needLargeZeroedMem(sizeof(double)*MAXN*MAXRES);
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZBJOU");
+strcpy(aaAlphabet, AA_ALPHABET);
 
 sprintf(spDbName, "sp%s", argv[1]);
 sprintf(proteinsDbName, "proteins%s", argv[1]);
@@ -186,7 +187,7 @@ while (row2 != NULL)
 	sumJ[j] = sumJ[j] + freq[icnt][j];
 	}
 
-    for (j=0; j<20; j++)
+    for (j=0; j<MAXRES; j++)
 	{
 	fprintf(fh[j], "%15.7f\t%s\n", freq[icnt][j], accession);fflush(fh[j]);
 	}
@@ -200,7 +201,7 @@ skip:
 recordCnt = icnt;
 recordCntDouble = (double)recordCnt;
 
-for (j=0; j<20; j++)
+for (j=0; j<MAXRES; j++)
     {
     carefulClose(&(fh[j]));
     }
@@ -213,7 +214,7 @@ for (j=0; j<MAXRES; j++)
     avg[j] = sumJ[j]/recordCntDouble;
     }
 
-for (j=0; j<20; j++)
+for (j=0; j<MAXRES; j++)
     {
     sum = 0.0;
     for (i=0; i<recordCnt; i++)
@@ -227,7 +228,7 @@ for (j=0; j<20; j++)
 carefulClose(&o2);
 
 o1 = mustOpen("pbAnomLimit.tab", "w");
-for (j=0; j<20; j++)
+for (j=0; j<MAXRES; j++)
     {
     safef(temp_str, sizeof(temp_str), "cat %c.txt|sort|uniq > %c.srt", aaAlphabet[j], aaAlphabet[j]);
     mustSystem(temp_str);

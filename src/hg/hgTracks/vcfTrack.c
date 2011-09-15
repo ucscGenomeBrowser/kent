@@ -502,8 +502,10 @@ static int rDrawTreeInLabelArea(struct hacTree *ht, struct hvGfx *hvg, enum yRet
 /* Recursively draw the haplotype clustering tree in the left label area.
  * Returns pixel height for use at non-leaf levels of tree. */
 {
-const int branchW = 4;
-int labelEnd = leftLabelX + leftLabelWidth;
+const int branchW = 3;
+const Color boundaryColor = MG_RED;
+const int labelEnd = leftLabelX + leftLabelWidth;
+const int rightEdge = labelEnd - 1;
 if (yType == yrtStart || yType == yrtEnd)
     {
     // We're just getting vertical span of a leaf cluster, not drawing any lines.
@@ -524,6 +526,7 @@ if (yType == yrtStart || yType == yrtEnd)
 // Otherwise yType is yrtMidPoint.  If we have 2 children, we'll be drawing some lines:
 if (ht->left != NULL && ht->right != NULL)
     {
+    const int nextX = x + branchW;
     int midY;
     if (ht->childDistance == 0 || x+(2*branchW) > labelEnd)
 	{
@@ -532,31 +535,33 @@ if (ht->left != NULL && ht->right != NULL)
 	// returned both yStart and yEnd. However, the time to draw a tree of
 	// 2188 hap's (1kG phase1 interim) is in the noise, so I consider it
 	// not worth the effort of refactoring to save a sub-millisecond here.
-	int yStartLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtStart, x+branchW,
+	int yStartLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtStart, nextX,
 					      yFromNode, extraData);
-	int yEndLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtEnd, x+branchW,
+	int yEndLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtEnd, nextX,
 					    yFromNode, extraData);
-	int yStartRight = rDrawTreeInLabelArea(ht->right, hvg, yrtStart, x+branchW,
+	int yStartRight = rDrawTreeInLabelArea(ht->right, hvg, yrtStart, nextX,
 					       yFromNode, extraData);
-	int yEndRight = rDrawTreeInLabelArea(ht->right, hvg, yrtEnd, x+branchW,
+	int yEndRight = rDrawTreeInLabelArea(ht->right, hvg, yrtEnd, nextX,
 					     yFromNode, extraData);
 	int yStart = min(yStartLeft, yStartRight);
 	int yEnd = max(yEndLeft, yEndRight);
 	midY = (yStart + yEnd) / 2;
-	hvGfxLine(hvg, x+branchW-1, yStart, x+branchW-1, yEnd-1, MG_BLACK);
-	hvGfxLine(hvg, x+branchW, yStart, labelEnd, yStart, MG_BLACK);
-	hvGfxLine(hvg, x+branchW, yEnd-1, labelEnd, yEnd-1, MG_BLACK);
+	Color branchColor = (ht->childDistance == 0) ? MG_BLACK : shadesOfGray[5];
+	hvGfxLine(hvg, x, midY, rightEdge, midY, branchColor);
+	hvGfxLine(hvg, rightEdge, yStart, rightEdge, yEnd-1, branchColor);
+	hvGfxLine(hvg, max(rightEdge-1, x), yStart, rightEdge, yStart, boundaryColor);
+	hvGfxLine(hvg, max(rightEdge-1, x), yEnd-1, rightEdge, yEnd-1, boundaryColor);
 	}
     else
 	{
-	int leftMid = rDrawTreeInLabelArea(ht->left, hvg, yrtMidPoint, x+branchW,
+	int leftMid = rDrawTreeInLabelArea(ht->left, hvg, yrtMidPoint, nextX,
 					   yFromNode, extraData);
-	int rightMid = rDrawTreeInLabelArea(ht->right, hvg, yrtMidPoint, x+branchW,
+	int rightMid = rDrawTreeInLabelArea(ht->right, hvg, yrtMidPoint, nextX,
 					    yFromNode, extraData);
 	midY = (leftMid + rightMid) / 2;
-	hvGfxLine(hvg, x+branchW-1, leftMid, x+branchW-1, rightMid, MG_BLACK);
+	hvGfxLine(hvg, nextX-1, leftMid, nextX-1, rightMid, MG_BLACK);
+	hvGfxLine(hvg, x, midY, nextX-1, midY, MG_BLACK);
 	}
-    hvGfxLine(hvg, x, midY, x+branchW-1, midY, MG_BLACK);
     return midY;
     }
 else if (ht->left != NULL)
@@ -566,7 +571,10 @@ else if (ht->right != NULL)
 // Leaf node -- return pixel height. Draw a line if yType is midpoint.
 int y = yFromNode(ht->itemOrCluster, extraData, yType);
 if (yType == yrtMidPoint && x < labelEnd)
-    hvGfxLine(hvg, x, y, labelEnd, y, MG_BLACK);
+    {
+    hvGfxLine(hvg, x, y, rightEdge, y, MG_BLACK);
+    hvGfxLine(hvg, max(rightEdge-1, x), y, rightEdge, y, boundaryColor);
+    }
 return y;
 }
 
@@ -638,6 +646,12 @@ hvGfxUnclip(hvgLL);
 hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 }
 
+static void ignoreEm(char *format, va_list args)
+/* Ignore warnings from genotype parsing -- when there's one, there
+ * are usually hundreds more just like it. */
+{
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -652,9 +666,11 @@ boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, compositeLevel,
 					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
 boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
+pushWarnHandler(ignoreEm);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     vcfParseGenotypes(rec);
+popWarnHandler();
 unsigned short gtHapCount = 0;
 int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 struct hacTree *ht = NULL;
@@ -729,7 +745,7 @@ else
     fileOrUrl = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
     hFreeConn(&conn);
     }
-int vcfMaxErr = 100;
+int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, compositeLevel,

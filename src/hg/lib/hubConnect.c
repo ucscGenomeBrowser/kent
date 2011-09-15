@@ -559,12 +559,20 @@ void hubSetErrorMessage(char *errorMessage, unsigned id)
 /* set the error message in the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[256];
+char query[4096];
+
 if (errorMessage != NULL)
     {
+    // make sure there is no newline at the end.  This should be unneccesary
+    // but there are many, many places where newlines are added in calls
+    // to warn and errAbort
+    char buffer[4096];
+    safecpy(buffer, sizeof buffer, errorMessage);
+    while (lastChar(buffer) == '\n')
+	buffer[strlen(buffer) - 1] = '\0';
     safef(query, sizeof(query),
 	"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d",
-	hubStatusTableName, errorMessage, id);
+	hubStatusTableName, buffer, id);
     }
 else
     {

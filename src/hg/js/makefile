@@ -4,7 +4,7 @@ include ../../inc/common.mk
 
 JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js \
     jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
-    jquery.autocomplete.js ui.core.js ui.dropdownchecklist.js  \
+    ui.core.js ui.dropdownchecklist.js \
     jquery.cookie.js
 
 JS_FILES=ajax.js autocomplete.js hgGateway.js hgHubConnect.js hgTracks.js \

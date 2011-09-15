@@ -103,7 +103,7 @@ include wgEncodeCshlLongRnaSeq.ra alpha
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
-include wgEncodeSydhRnaSeq.ra alpha
+include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
@@ -162,7 +162,8 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.ra beta,public
 include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.ra alpha
+include wgEncodeSydhTfbs.new.ra alpha
+include wgEncodeSydhTfbs.ra beta,public
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra 
@@ -182,7 +183,7 @@ include wgEncodeSunyAlbanyTiling.ra
 include wgEncodeSunySwitchgear.ra
 
 # SUNY Rip-seq (wrangler: cricket)
-include wgEncodeSunyRipSeq.ra alpha,beta 
+include wgEncodeSunyRipSeq.ra 
 
 # Other miscellany ------------------------------------
 

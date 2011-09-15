@@ -11,6 +11,7 @@
 #include "web.h"
 #include "hgColors.h"
 #include "hui.h"
+#include "pbCommon.h"
 #include "pbStamp.h"
 #include "pbStampPict.h"
 #include "pbTracks.h"
@@ -66,11 +67,11 @@ int sfCount;			/* count of Superfamily domains */
 
 struct sqlConnection *spConn;   /* Connection to SwissProt database. */
 
-char aaAlphabet[30] = {"WCMHYNFIDQKRTVPGEASLXZBJOU"};
+char aaAlphabet[30] = AA_ALPHABET;
 char *protSeq;
 int  protSeqLen;
 
-char aaChar[20];
+char aaChar[30];
 float aa_hydro[256];
 int aa_attrib[256];
 char aa[100000];
@@ -89,11 +90,11 @@ double tx[100000], ty[100000];
 
 double xScale = 50.0;
 double yScale = 100.0;
-
+ 
 struct pbStampPict *stampPictPtr;
 
-double avg[20];
-double stddev[20];
+double avg[NUM_STANDARD_AMINO_ACIDS];
+double stddev[NUM_STANDARD_AMINO_ACIDS];
 
 int exStart[500], exEnd[500];
 int exCount;

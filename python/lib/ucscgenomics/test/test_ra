@@ -1,3 +1,4 @@
+#!/hive/groups/encode/dcc/bin/python
 import sys
 import os
 import difflib
@@ -5,8 +6,8 @@ import unittest
 import RaFile
 
 def DiffExpected(outStr, expFileName, outFileName):
-    file = open(os.getcwd() + '/tests/' +  expFileName)
-    outfile = open(os.getcwd() + '/testoutput/' + outFileName, 'w')
+    file = open(os.getcwd() + '/test_ra_input/' +  expFileName)
+    outfile = open(os.getcwd() + '/test_ra_output/' + outFileName, 'w')
     expected = file.read()
 
     outfile.write('========Expected========\n')

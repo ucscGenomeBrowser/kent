@@ -6,6 +6,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
+#include "pbCommon.h"
 #include "spDb.h"
 #include "math.h"
 
@@ -125,7 +126,7 @@ int sortedCnt;
 
 if (argc != 5) usage();
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZBJOU");
+strcpy(aaAlphabet, AA_ALPHABET);
 
 proteinDatabaseName = argv[1];
 swissprotDatabaseName = argv[2];
@@ -134,7 +135,7 @@ database = argv[4];
 
 o2 = mustOpen("pbResAvgStd.tab", "w");
 
-for (i=0; i<20; i++)
+for (i=0; i<strlen(aaAlphabet); i++)
     {
     safef(temp_str, sizeof(temp_str), "%c.txt", aaAlphabet[i]);
     fh[i] = mustOpen(temp_str, "w");
@@ -157,6 +158,7 @@ for (j=0; j<MAXRES; j++)
 while (row2 != NULL)
     {
     protDisplayId = row2[0];   
+    printf("working on protein %s, icnt now %d\n", protDisplayId, icnt);  /* ## help */
     safef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
     accession = sqlGetField(swissprotDatabaseName, "displayId", "acc", cond_str);
 
@@ -228,7 +230,7 @@ while (row2 != NULL)
 	sumJ[j] = sumJ[j] + freq[icnt][j];
 	}
 
-    for (j=0; j<20; j++)
+    for (j=0; j<strlen(aaAlphabet); j++)
 	{
 	fprintf(fh[j], "%15.7f\t%s\n", freq[icnt][j], accession);fflush(fh[j]);
 	}
@@ -243,7 +245,7 @@ skip:
 recordCnt = icnt;
 recordCntDouble = (double)recordCnt;
 
-for (j=0; j<20; j++)
+for (j=0; j<strlen(aaAlphabet); j++)
     {
     carefulClose(&(fh[j]));
     }
@@ -252,12 +254,12 @@ sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 
-for (j=0; j<MAXRES; j++)
+for (j=0; j<strlen(aaAlphabet); j++)
     {
     avg[j] = sumJ[j]/recordCntDouble;
     }
 
-for (j=0; j<20; j++)
+ for (j=0; j<strlen(aaAlphabet); j++)
     {
     sum = 0.0;
     for (i=0; i<recordCnt; i++)
@@ -271,7 +273,7 @@ for (j=0; j<20; j++)
 carefulClose(&o2);
 
 o1 = mustOpen("pbAnomLimit.tab", "w");
-for (j=0; j<20; j++)
+for (j=0; j<strlen(aaAlphabet); j++)
     {
     safef(temp_str, sizeof(temp_str), "cat %c.txt|sort|uniq > %c.srt",  aaAlphabet[j], aaAlphabet[j]);
     mustSystem(temp_str);
