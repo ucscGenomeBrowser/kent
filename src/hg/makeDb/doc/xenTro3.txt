@@ -535,3 +535,13 @@ done
     #	63766483 bases of 1381238994 (4.617%) in intersection
 
 #########################################################################
+# CREATE MICROSAT TRACK (DONE - 2011-09-15 - Hiram
+     ssh hgwdev
+     mkdir /cluster/data/xenTro3/bed/microsat
+     cd /cluster/data/xenTro3/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    hgLoadBed xenTro3 microsat microsat.bed
+    #	Loaded 13365 elements of size 4
+
+#########################################################################
