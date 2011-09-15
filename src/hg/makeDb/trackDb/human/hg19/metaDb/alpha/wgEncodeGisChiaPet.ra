@@ -313,12 +313,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005608.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 1r114
 labVersion CHM040
 md5sum d7597ef541e579bfa3e9c12f9338de88
 origAssembly hg19
 project wgEncode
 replicate 1
-run 1r114
 subId 3279
 type fastq
 view FastqRd1
@@ -337,12 +337,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005609.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 1r114
 labVersion CHM040
 md5sum 6bcc0de4d66dbab1087f00e3c7bc6204
 origAssembly hg19
 project wgEncode
 replicate 1
-run 1r114
 subId 3279
 type fastq
 view FastqRd2
@@ -361,12 +361,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005610.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 4r32
 labVersion CHM040
 md5sum f97ec6446c47ac5a017685bd35f4d60f
 origAssembly hg19
 project wgEncode
 replicate 1
-run 4r32
 subId 3279
 type fastq
 view FastqRd1
@@ -385,12 +385,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005611.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 4r32
 labVersion CHM040
 md5sum a4ec956f039b0b7c3644b509a5a7dc6a
 origAssembly hg19
 project wgEncode
 replicate 1
-run 4r32
 subId 3279
 type fastq
 view FastqRd2
@@ -433,12 +433,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005629.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 4r39
 labVersion CHM053
 md5sum ec347887a1ec5e67cff75218d5b8601f
 origAssembly hg19
 project wgEncode
 replicate 2
-run 4r39
 subId 3281
 type fastq
 view FastqRd1
@@ -457,12 +457,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005630.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 4r39
 labVersion CHM053
 md5sum 65f456f70799b4ca1ff6da82c25e0a2d
 origAssembly hg19
 project wgEncode
 replicate 2
-run 4r39
 subId 3281
 type fastq
 view FastqRd2
@@ -481,12 +481,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005631.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 5r35
 labVersion CHM053
 md5sum 7a6fd0e14edbc39e7bba943dda7f6034
 origAssembly hg19
 project wgEncode
 replicate 2
-run 5r35
 subId 3281
 type fastq
 view FastqRd1
@@ -505,12 +505,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005632.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 5r35
 labVersion CHM053
 md5sum b151ce940bfe5d56a06bcb0f8b02e497
 origAssembly hg19
 project wgEncode
 replicate 2
-run 5r35
 subId 3281
 type fastq
 view FastqRd2
@@ -909,4 +909,4 @@ subId 3381
 type bed 12
 view Interactions
 
-# MAGIC: 2142884942
+# MAGIC: 1398363002
