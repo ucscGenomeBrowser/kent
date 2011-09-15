@@ -9625,7 +9625,7 @@ chromEnd   = cartOptionalString(cart, "t");
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM page at omim.org: ");fflush(stdout);
+    printf("<B>OMIM: ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -9790,7 +9790,7 @@ omimId = itemName;
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM page at omim.org: ");fflush(stdout);
+    printf("<B>OMIM: ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -10049,7 +10049,7 @@ if (url != NULL && url[0] != 0)
     printf("%s</A></B>", avId);
     printf(" %s", avDesc);
 
-    printf("<BR><B>OMIM page at omim.org: ");
+    printf("<BR><B>OMIM: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     if (title1 != NULL) printf(": %s", title1);
