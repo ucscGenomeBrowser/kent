@@ -3464,7 +3464,7 @@ term ProgFib
 tag PROGFIB
 type Cell Line
 organism human
-description fibroblasts, Hutchinson-Gilford progeria syndrome
+description fibroblasts, Hutchinson-Gilford progeria syndrome (cell line HGPS, HGADFN167, progeria research foundation)
 tissue Skin
 vendorName Progeria Research Foundation
 vendorId HGADFN167
@@ -3473,7 +3473,7 @@ orderUrl http://www.progeriaresearch.org/
 karyotype unknown
 termId BTO:0001255 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
-sex U
+sex M
 tier 3
 protocol Crawford:progeria_Crawford_protocol.pdf
 

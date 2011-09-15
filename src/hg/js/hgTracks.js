@@ -3009,7 +3009,7 @@ function navigateButtonClick(ele)
 {
 // code to update just the imgTbl in response to navigation buttons (zoom-out etc.).
 // This is currently experimental code (controlled by IN_PLACE_UPDATE in imageV2.h).
-    if(mapIsUpdateable) {
+    if(inPlaceUpdate) {
         var params = ele.name + "=" + ele.value;
         $(ele).attr('disabled', 'disabled');
         // dinking navigation needs additional data
