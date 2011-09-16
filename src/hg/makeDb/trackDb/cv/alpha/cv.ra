@@ -1042,7 +1042,7 @@ tag CD20
 type Cell Line
 tier 3
 organism human
-description Human B cells.
+description Human B cells from donors RO01778 and RO01794.
 lineage missing
 karyotype missing
 sex F
@@ -1113,7 +1113,7 @@ tag CD34+MOBILIZED
 type Cell Line
 tier 3
 organism human
-description Hematopoietic progenitor cells - Mobilized.
+description Hematopoietic progenitor cells - Mobilized, from donor RO01679.
 lineage missing
 karyotype missing
 sex M
@@ -3119,7 +3119,7 @@ type Cell Line
 #tier 2
 tier 3
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746
 #, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
@@ -10605,8 +10605,8 @@ hidden yes
 term bioRep
 tag BIOREP
 type typeOfTerm
-label  Transcriptome Bio-Replicate ID
-description Cross Transcriptome sample ID number.
+label  Cross Lab Bio-Replicate ID
+description Cross lab sample ID number used to track bio-replicates PROVISIONAL.
 searchable no
 cvDefined no
 validate none
