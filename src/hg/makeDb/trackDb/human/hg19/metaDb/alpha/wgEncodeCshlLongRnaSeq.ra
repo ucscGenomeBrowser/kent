@@ -433,6 +433,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3601
+tableName wgEncodeCshlLongRnaSeqA549CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPamSpikeinsRep1
@@ -1581,6 +1582,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3603
+tableName wgEncodeCshlLongRnaSeqAg04450CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamSpikeinsRep1
@@ -2007,6 +2009,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3604
+tableName wgEncodeCshlLongRnaSeqAg04450CellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep1
@@ -2728,6 +2731,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3605
+tableName wgEncodeCshlLongRnaSeqBjCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPamSpikeinsRep1
@@ -3154,6 +3158,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3606
+tableName wgEncodeCshlLongRnaSeqBjCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep1
@@ -3873,6 +3878,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3611
+tableName wgEncodeCshlLongRnaSeqGm12878CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamProtocolRep1
@@ -5775,6 +5781,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3608
+tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep1
@@ -6496,6 +6503,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3609
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamProtocolRep1
@@ -6978,6 +6986,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3610
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep1
@@ -7698,6 +7707,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3613
+tableName wgEncodeCshlLongRnaSeqH1hescCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamProtocolRep1
@@ -8177,6 +8187,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3614
+tableName wgEncodeCshlLongRnaSeqH1hescCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep1
@@ -8756,6 +8767,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3615
+tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamProtocolRep2
@@ -9098,6 +9110,7 @@ readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
+tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapMinusRawSigRep2
@@ -9561,6 +9574,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3617
+tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamProtocolRep2
@@ -9903,6 +9917,7 @@ readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
+tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapMinusRawSigRep2
@@ -10508,6 +10523,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3629
+tableName wgEncodeCshlLongRnaSeqHelas3CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamProtocolRep1
@@ -10990,6 +11006,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3630
+tableName wgEncodeCshlLongRnaSeqHelas3CellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep1
@@ -11570,6 +11587,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3631
+tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep2
@@ -11996,6 +12014,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3632
+tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep1
@@ -12718,6 +12737,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3633
+tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamProtocolRep1
@@ -13200,6 +13220,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3634
+tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep1
@@ -13920,6 +13941,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3639
+tableName wgEncodeCshlLongRnaSeqHepg2CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamProtocolRep1
@@ -14399,6 +14421,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3640
+tableName wgEncodeCshlLongRnaSeqHepg2CellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep1
@@ -16323,6 +16346,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3637
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamProtocolRep1
@@ -16803,6 +16827,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3638
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep1
@@ -17382,6 +17407,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3619
+tableName wgEncodeCshlLongRnaSeqHmecCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamProtocolRep1
@@ -17724,6 +17750,7 @@ readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
+tableName wgEncodeCshlLongRnaSeqHmecCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapMinusRawSigRep1
@@ -18329,6 +18356,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3621
+tableName wgEncodeCshlLongRnaSeqHsmmCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep1
@@ -18810,6 +18838,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3622
+tableName wgEncodeCshlLongRnaSeqHsmmCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep1
@@ -19531,6 +19560,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3627
+tableName wgEncodeCshlLongRnaSeqHuvecCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1
@@ -20011,6 +20041,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3628
+tableName wgEncodeCshlLongRnaSeqHuvecCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep1
@@ -20590,6 +20621,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3623
+tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep3
@@ -21014,6 +21046,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3624
+tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep3
@@ -21735,6 +21768,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3625
+tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamProtocolRep3
@@ -22215,6 +22249,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3626
+tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep3
@@ -22934,6 +22969,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3648
+tableName wgEncodeCshlLongRnaSeqK562CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamProtocolRep1
@@ -24238,6 +24274,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 3641
+tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3
@@ -25378,6 +25415,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3643
+tableName wgEncodeCshlLongRnaSeqK562CytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep1
@@ -25970,6 +26008,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 3644
+tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
@@ -26518,6 +26557,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 3645
+tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3
@@ -27186,6 +27226,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3646
+tableName wgEncodeCshlLongRnaSeqK562NucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamProtocolRep1
@@ -27668,6 +27709,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3647
+tableName wgEncodeCshlLongRnaSeqK562NucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep1
@@ -28390,6 +28432,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3650
+tableName wgEncodeCshlLongRnaSeqMcf7CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamProtocolRep1
@@ -28872,6 +28915,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3651
+tableName wgEncodeCshlLongRnaSeqMcf7CellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep1
@@ -29811,6 +29855,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3657
+tableName wgEncodeCshlLongRnaSeqNhekCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep1
@@ -30538,6 +30583,7 @@ readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
+tableName wgEncodeCshlLongRnaSeqNhekCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1
@@ -31268,6 +31314,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
+tableName wgEncodeCshlLongRnaSeqNhekCytosolPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamSpikeinsRep3
@@ -31667,6 +31714,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3653
+tableName wgEncodeCshlLongRnaSeqNhekCytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep3
@@ -32389,6 +32437,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3654
+tableName wgEncodeCshlLongRnaSeqNhekNucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamProtocolRep3
@@ -32873,6 +32922,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3655
+tableName wgEncodeCshlLongRnaSeqNhekNucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep3
@@ -33595,6 +33645,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3660
+tableName wgEncodeCshlLongRnaSeqNhlfCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep1
@@ -34079,6 +34130,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3661
+tableName wgEncodeCshlLongRnaSeqNhlfCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep1
@@ -34801,6 +34853,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3662
+tableName wgEncodeCshlLongRnaSeqSknshraCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamSpikeinsRep1
@@ -35229,6 +35282,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3663
+tableName wgEncodeCshlLongRnaSeqSknshraCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep1
@@ -35522,4 +35576,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -877804279
+# MAGIC: 758048713
