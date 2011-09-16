@@ -18,6 +18,7 @@ static char const rcsid[] = "$Id: bedToBigBed.c,v 1.24 2010/05/19 18:51:13 hiram
 int blockSize = 256;
 int itemsPerSlot = 512;
 int bedFields = 0;
+int rgbField = 0;
 char *as = NULL;
 static boolean doCompress = FALSE;
 static boolean tabSep = FALSE;
@@ -43,7 +44,8 @@ errAbort(
   "                  assumes all fields in bed are defined.\n"
   "   -as=fields.as - If have non-standard fields, it's great to put a definition\n"
   "                   of each field in a row in AutoSql format here.\n"
-  "   -unc - If set, do not use compression."
+  "   -rgbField=N  - the Nth field is a comma separated R,G,B triple.\n"
+  "   -unc - If set, do not use compression.\n"
   "   -tabs - If set, expect fields to be tab separated, normally\n"
   "           expects white space separator.\n"
   , bbiCurrentVersion, blockSize, itemsPerSlot
@@ -54,6 +56,7 @@ static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
    {"bedFields", OPTION_INT},
+   {"rgbField", OPTION_INT},
    {"as", OPTION_STRING},
    {"unc", OPTION_BOOLEAN},
    {"tabs", OPTION_BOOLEAN},
@@ -144,7 +147,15 @@ for (;;)
 		enum asTypes type = asCol->lowType->type;
 		if (! (asCol->isList || asCol->isArray))
 		    {
-		    if (asTypesIsInt(type))
+		    if (rgbField == i + 1)
+			{
+			// we check for error, but save the R,G,B truple in 
+			// the bigBed
+			if (-1 == bedParseRgb(row[i]))
+			    errAbort("ERROR: expecting r,g,b specification, "
+				    "found: '%s'", row[i]);
+			}
+		    else if (asTypesIsInt(type))
 			lineFileNeedFullNum(lf, row, i);
 		    else if (asTypesIsFloating(type))
 			lineFileNeedDouble(lf, row, i);
@@ -678,6 +689,7 @@ optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 bedFields = optionInt("bedFields", bedFields);
+rgbField = optionInt("rgbField", rgbField);
 as = optionVal("as", as);
 doCompress = !optionExists("unc");
 tabSep = optionExists("tabs");
