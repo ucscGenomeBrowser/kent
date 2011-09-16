@@ -1,0 +1,3 @@
+#!/bin/csh
+
+java -jar *.jar --port 4224 &

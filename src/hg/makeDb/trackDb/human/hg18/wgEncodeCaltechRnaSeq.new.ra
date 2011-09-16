@@ -18,6 +18,7 @@ subGroup8 rep Replicate 1=1 2=2 3=3 4=4
 #dimensionZchecked 1x32,2x75
 dimensionAchecked 1,2,3,4
 dimensions dimensionY=cellType dimensionX=readType dimA=rep
+#fileSortOrder cell=Cell_Line view=View replicate=Lab<BR>Replicate geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 # sortOrder cellType=+ readType=+ view=+ mapAlgorithm=+ 
 sortOrder cellType=+ readType=+ rep=+ view=+ 
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm

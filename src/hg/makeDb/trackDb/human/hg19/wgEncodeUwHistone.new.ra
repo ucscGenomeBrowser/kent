@@ -3074,7 +3074,7 @@ html wgEncodeUwHistone.new
     maxLimit 16000.0
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction mean
+    windowingFunction mean+whiskers
 
         track wgEncodeUwHistoneBjInputStdRawRep1
         parent wgEncodeUwHistoneViewRawSig off

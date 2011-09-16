@@ -3302,6 +3302,158 @@ tableName wgEncodeSydhTfbsMelChd2ab68301IggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
+objType file
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1.bam
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 2542
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
+objType file
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep2.bam
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 2542
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabPk
+objType table
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMelCmybh141IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabPk.narrowPeak.gz
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 2542
+tableName wgEncodeSydhTfbsMelCmybh141IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1
+objType file
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep1.fastq.gz
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 2542
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2
+objType file
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep2.fastq.gz
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 2542
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabSig
+objType table
+age immortalized
+antibody c-Myb_(SC-7874)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMelCmybh141IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabSig.bigWig
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 2542
+tableName wgEncodeSydhTfbsMelCmybh141IggrabSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1
 objType file
 age immortalized
@@ -3631,6 +3783,158 @@ strain Unknown
 subId 1163
 tableName wgEncodeSydhTfbsMelCmycIggrabSig
 treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1
+objType file
+age immortalized
+antibody CTCF_(SC-15914)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1.bam
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 1857
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2
+objType file
+age immortalized
+antibody CTCF_(SC-15914)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2.bam
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 1857
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
+objType table
+age immortalized
+antibody CTCF_(SC-15914)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyalePk.narrowPeak.gz
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 1857
+tableName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
+treatment DMSO_2.0pct
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep1
+objType file
+age immortalized
+antibody CTCF_(SC-15914)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep1.fastq.gz
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 1857
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep2
+objType file
+age immortalized
+antibody CTCF_(SC-15914)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep2.fastq.gz
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 1857
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
+objType table
+age immortalized
+antibody CTCF_(SC-15914)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleSig.bigWig
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 1857
+tableName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
+treatment DMSO_2.0pct
 view Signal
 
 metaObject wgEncodeSydhTfbsMelCtcfbIggrabPk
@@ -4458,6 +4762,80 @@ tableName wgEncodeSydhTfbsMelInputDm2p5dStdSig
 treatment DMSO_2.0pct
 view Signal
 
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleAln
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelInputDm2p5dIggyaleAln.bam
+project wgEncode
+setType input
+sex M
+strain Unknown
+subId 1862
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleRawData
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleRawData.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelInputDm2p5dIggyaleRawData.fastq.gz
+project wgEncode
+setType input
+sex M
+strain Unknown
+subId 1862
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleSig
+objType table
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelInputDm2p5dIggyaleSig.bigWig
+project wgEncode
+setType input
+sex M
+strain Unknown
+subId 1862
+tableName wgEncodeSydhTfbsMelInputDmso20IggyaleSig
+treatment DMSO_2.0pct
+view Signal
+
 metaObject wgEncodeSydhTfbsMelInputIggmusAlnRep1
 objType file
 age immortalized
@@ -5116,6 +5494,31 @@ tableName wgEncodeSydhTfbsMelMafkab50322IggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep1
+objType file
+age immortalized
+antibody Max
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+objStatus replaced
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 1863
+treatment None
+view Alignments
+
 metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep1V2
 objType file
 age immortalized
@@ -5142,6 +5545,31 @@ sex M
 strain Unknown
 subId 4157
 submittedDataVersion V2 - Resubmitted with correct alignment file.
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep2
+objType file
+age immortalized
+antibody Max
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+objStatus replaced
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 1863
 treatment None
 view Alignments
 
@@ -5615,6 +6043,31 @@ view Signal
 metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep1
 objType file
 age immortalized
+antibody p300_(SC-584)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 1864
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep1V2
+objType file
+age immortalized
 antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
@@ -5626,7 +6079,7 @@ dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
-fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1V2.bam
 grant Snyder
 lab Stanford-m
 md5sum bam=808ed36eb0c7be2f3ecf9ec6895f9e65,bai=2c1bfb8cdbd1d08e564b864b56fb4d99
@@ -5636,10 +6089,36 @@ setType exp
 sex M
 strain Unknown
 subId 3089
+submittedDataVersion V2 - Version 1 stated the wrong antibody
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep2
+objType file
+age immortalized
+antibody p300_(SC-584)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 1864
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep2V2
 objType file
 age immortalized
 antibody p300
@@ -5653,7 +6132,7 @@ dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
-fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2V2.bam
 grant Snyder
 lab Stanford-m
 md5sum bam=cb7bcb9294a20c8f7ddce95d79cce434,bai=9d5a667a59274df2c4cb75d5d360e82a
@@ -5663,10 +6142,37 @@ setType exp
 sex M
 strain Unknown
 subId 3089
+submittedDataVersion V2 - Version 1 stated the wrong antibody
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelP300IggrabPk
+objType table
+age immortalized
+antibody p300_(SC-584)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelP300IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabPk.narrowPeak.gz
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 1864
+tableName wgEncodeSydhTfbsMelP300IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelP300IggrabPkV2
 objType table
 age immortalized
 antibody p300
@@ -5680,7 +6186,7 @@ dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
-fileName wgEncodeSydhTfbsMelP300IggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelP300IggrabPkV2.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -5690,11 +6196,37 @@ setType exp
 sex M
 strain Unknown
 subId 3089
-tableName wgEncodeSydhTfbsMelP300IggrabPk
+submittedDataVersion V2 - Version 1 stated the wrong antibody
+tableName wgEncodeSydhTfbsMelP300IggrabPkV2
 treatment None
 view Peaks
 
 metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep1
+objType file
+age immortalized
+antibody p300_(SC-584)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep1.fastq.gz
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 1864
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep1V2
 objType file
 age immortalized
 antibody p300
@@ -5708,7 +6240,7 @@ dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
-fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep1V2.fastq.gz
 grant Snyder
 lab Stanford-m
 md5sum 385d7609c8d1d408b527788dd1923f63
@@ -5718,10 +6250,36 @@ setType exp
 sex M
 strain Unknown
 subId 3089
+submittedDataVersion V2 - Version 1 stated the wrong antibody
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep2
+objType file
+age immortalized
+antibody p300_(SC-584)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep2.fastq.gz
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 1864
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep2V2
 objType file
 age immortalized
 antibody p300
@@ -5735,7 +6293,7 @@ dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
-fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep2V2.fastq.gz
 grant Snyder
 lab Stanford-m
 md5sum 194e6ba808b821b58a733bf1919b6bff
@@ -5745,10 +6303,37 @@ setType exp
 sex M
 strain Unknown
 subId 3089
+submittedDataVersion V2 - Version 1 stated the wrong antibody
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelP300IggrabSig
+objType table
+age immortalized
+antibody p300_(SC-584)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelP300IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabSig.bigWig
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 1864
+tableName wgEncodeSydhTfbsMelP300IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelP300IggrabSigV2
 objType table
 age immortalized
 antibody p300
@@ -5762,7 +6347,7 @@ dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
-fileName wgEncodeSydhTfbsMelP300IggrabSig.bigWig
+fileName wgEncodeSydhTfbsMelP300IggrabSigV2.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -5772,7 +6357,8 @@ setType exp
 sex M
 strain Unknown
 subId 3089
-tableName wgEncodeSydhTfbsMelP300IggrabSig
+submittedDataVersion V2 - Version 1 stated the wrong antibody
+tableName wgEncodeSydhTfbsMelP300IggrabSigV2
 treatment None
 view Signal
 
@@ -6435,6 +7021,158 @@ tableName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabSig
 treatment DMSO_2.0pct
 view Signal
 
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1
+objType file
+age immortalized
+antibody Rad21
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-20
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep1.bam
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 2539
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2
+objType file
+age immortalized
+antibody Rad21
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-20
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2.bam
+grant Snyder
+lab Stanford-m
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep2.bam
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 2539
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
+objType table
+age immortalized
+antibody Rad21
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-20
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus replaced - Changing treatment abbreviation caused Version 2 of file to not have V2 but replaces file wgEncodeSydhTfbsMelRad21Dm2p5dIggrabPk.narrowPeak.gz
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 2539
+tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
+treatment DMSO_2.0pct
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1
+objType file
+age immortalized
+antibody Rad21
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-20
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep1.fastq.gz
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 2539
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2
+objType file
+age immortalized
+antibody Rad21
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-20
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep2.fastq.gz
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 2539
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
+objType table
+age immortalized
+antibody Rad21
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-20
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabSig.bigWig
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 2539
+tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
+treatment DMSO_2.0pct
+view Signal
+
 metaObject wgEncodeSydhTfbsMelRad21IggrabAlnRep1
 objType file
 age immortalized
@@ -6930,6 +7668,31 @@ tableName wgEncodeSydhTfbsMelTbpIggmusSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep1
+objType file
+age immortalized
+antibody USF2
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId MEL/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam
+grant Snyder
+lab Stanford-m
+objStatus replaced
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 1865
+treatment None
+view Alignments
+
 metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep1V2
 objType file
 age immortalized
@@ -6956,6 +7719,31 @@ sex M
 strain Unknown
 subId 4158
 submittedDataVersion V2 - Resubmitted with correct alignment file.
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep2
+objType file
+age immortalized
+antibody USF2
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId MEL/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam
+grant Snyder
+lab Stanford-m
+objStatus replaced
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 1865
 treatment None
 view Alignments
 
@@ -7098,4 +7886,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -1714220125
+# MAGIC: 734933814
