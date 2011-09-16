@@ -1,0 +1,23 @@
+# Data Agreement File $Revision: 1.2 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion       2.0
+
+# Lab and general info
+grant            Bernstein
+lab              Broad
+dataType         Mapability
+commpositeSuffix Mapability
+group            map
+variables        cell
+assembly         hg19
+
+validationSettings none
+
+# Track/view definition
+view             Alignability
+type             wig
+hasReplicates    no
+required         yes

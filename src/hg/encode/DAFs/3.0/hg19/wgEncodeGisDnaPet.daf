@@ -23,7 +23,6 @@ validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=6,mmPerPair;
 noAutoCreate     yes
 
 view             Alignments
-longLabelPrefix  GIS DNA PET Alignments
 type             bam
 hasReplicates    no
 required         no
