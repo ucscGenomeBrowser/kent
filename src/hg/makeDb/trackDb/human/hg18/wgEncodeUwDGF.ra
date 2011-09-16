@@ -11,6 +11,7 @@ group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM06990=GM06990 HepG2=HepG2 K562=K562 SK-N-SH_RA=SK-N-SH_RA Th1=Th1
 dimensions dimensionX=cellType
+#fileSortOrder cell=Cell_Line view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ view=+
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell

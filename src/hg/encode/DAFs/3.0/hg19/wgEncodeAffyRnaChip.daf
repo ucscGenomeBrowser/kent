@@ -16,13 +16,11 @@ assembly          hg19
 
 # Track/view definition
 view             Transfrags
-longLabelPrefix  Affy Transfrags
 type             broadPeak
 required         yes
 hasReplicates    no
 
 view             FiltTransfrags
-longLabelPrefix  Affy Filtered Transfrags
 type             broadPeak
 required         no
 hasReplicates    no
