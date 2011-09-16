@@ -903,23 +903,22 @@ termId BTO:0001281
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
 protocol Myers:Myers_BioChain_protocol.pdf
 
-# Maybe some day this cell line will have data. ~Jeff
-#term BC_Stomach_01-11002
-#tag BCSTOMACH
-#type Cell Line
-#tier 3
-#organism human
-#description stomach, donor 01-11002, age 83, caucasian, DNA extract
-#tissue Stomach
-#lineage endoderm
-#karyotype normal
-#sex F
-#vendorName BioChain
-#vendorId BioChain_CP-S12-D1234248-05_A808008
-#orderUrl http://www.biochain.com/biochain/homepage.htm
-#termId BTO:0001307
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
-#protocol Myers:Myers_BioChain_protocol.pdf
+term BC_Stomach_01-11002
+tag BCSTOMACH
+type Cell Line
+tier 3
+organism human
+description stomach, donor 01-11002, age 83, caucasian, DNA extract
+tissue Stomach
+lineage endoderm
+karyotype normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234248-05_A808008
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001307
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
+protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Stomach_H12817N
 tag BCSTOMACHb
