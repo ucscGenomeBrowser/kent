@@ -9723,6 +9723,11 @@ tag REPLACED
 type objStatus
 description This file has been REPLACED by the submitting laboratory with an improved version. 
 
+term renamed
+tag RENAMED
+type objStatus
+description This file has been RENAMED by the submitting laboratory for some reason. Please see updated file for newest metadata. (PROVISIONAL) 
+
 ## Organisms
 term human
 tag HUMAN
