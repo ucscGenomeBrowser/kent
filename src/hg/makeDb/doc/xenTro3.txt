@@ -545,3 +545,25 @@ done
     #	Loaded 13365 elements of size 4
 
 #########################################################################
+# create ucscToEnsembl scaffold name mapping (DONE - 2011-09-15 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/xenTro3/bed/ucscToEnsembl
+    cd /hive/data/genomes/xenTro3/bed/ucscToEnsembl
+    awk '{printf "%s\t%s.1\n", $1, $1}' ../../chrom.sizes > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(8))
+);
+'_EOF_'
+
+    hgsql xenTro3 < ucscToEnsembl.sql
+    hgsql xenTro3 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    # verify the blue bar "ensembl" link is now available
+#########################################################################
