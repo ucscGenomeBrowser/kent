@@ -29,7 +29,6 @@ validationSettings validateFiles.broadPeak:mmCheckOneInN=1000
 
 # Track/view definition
 view             RbpAssocRna
-longLabelPrefix  SUNY Albany RBP Associated RNA by Switchgear
 type             broadPeak
 required         no
 hasReplicates    no
