@@ -4,13 +4,13 @@
  *
  * Copyright (c) 2008 Michal Wojciechowski (odyniec.net)
  *
- * Dual licensed under the MIT (MIT-LICENSE.txt) 
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  * http://odyniec.net/projects/imgareaselect/
- * 
+ *
  * modified by larrym to support hgTracks functionality; added:
- * 
+ *
  * o options.clickClipHeight - allows click through to map items
  *
  * o selection.event - provides access mouse event object to callbacks
@@ -70,7 +70,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
     {
         imgOfs = jQuery(img).offset();
         imgWidth = jQuery(img).width();
-        imgHeight = jQuery(img).height(); 
+        imgHeight = jQuery(img).height();
 
         if (jQuery(parent).is('body'))
             parOfs = parScroll = { left: 0, top: 0 };
@@ -142,7 +142,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
     function areaMouseDown(event)
     {
-        if (event.which != 1) return false;
+        if (event.which > 1 || event.button > 1) return true;
         selection.event = event;
 
         adjust();
@@ -271,7 +271,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
         doResize(x2, y2);
 
-        return false;        
+        return false;
     }
 
     function doMove(newX1, newY1)
@@ -299,7 +299,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
         doMove(newX1, newY1);
 
-        event.preventDefault();     
+        event.preventDefault();
         return false;
     }
 
@@ -312,16 +312,33 @@ jQuery.imgAreaSelect.init = function (img, options) {
         selection.width = 0;
         selection.height = 0;
         selection.event = event;
-        
-        if(options.clickClipHeight != null && selection.y1 > options.clickClipHeight) {
+
+        if(options.clickClipHeight != null) {
             // This is necessary on IE to support clicks in an image which has map items.
-            return false;
+            var found = false;
+            if(typeof(options.clickClipHeight) == 'number') {
+                if(selection.y1 < options.clickClipHeight) {
+                    found = true;
+                }
+            } else {
+                for(var i = 0; !found && i < options.clickClipHeight.length; i++) {
+                    if(selection.y1 >= options.clickClipHeight[i].top && selection.y1 < options.clickClipHeight[i].bottom) {
+                        found = true;
+                    }
+                }
+            }
+            found = found || event.shiftKey;
+            if(!found) {
+                return false;
+            }
         }
 
         resize = [ ];
 
         update();
         $a.add($o).show();
+        $o.css('cursor', "crosshair"); // Outside of borders (needed for dragging right)
+        $a.css('cursor', "crosshair"); // Inside borders (needed for dragging left)
 
         jQuery(document).unbind('mouseup', cancelSelection)
             .mousemove(selectingMouseMove);
@@ -336,6 +353,9 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
             options.onSelectEnd(img, selection);
 
+            //$o.css('cursor', ""); // Not even necessary
+            //$a.css('cursor', "");
+
             jQuery(document).unbind('mousemove', selectingMouseMove);
             $border2.mousemove(areaMouseMove);
         });
@@ -348,7 +368,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
         selection.event = event;
         jQuery(document).unbind('mousemove', startSelection);
         $a.add($o).hide();
-        
+
         selection.x1 = selection.x2 = selX(startX = x1 = x2 = evX(event));
         selection.y1 = selection.y2 = selY(startY = y1 = y2 = evY(event));
 
@@ -358,7 +378,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
     function imgMouseDown(event)
     {
-        if (event.which != 1) return false;
+        if (event.which > 1 || event.button > 1) return true;
 
         jQuery(document).one('mousemove', startSelection)
             .one('mouseup', cancelSelection);
@@ -487,7 +507,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
         $border2.addClass(options.classPrefix + '-border2');
 
         $a.css({ borderWidth: options.borderWidth + 'px' });
-        $area.css({ backgroundColor: options.selectionColor, opacity: options.selectionOpacity });       
+        $area.css({ backgroundColor: options.selectionColor, opacity: options.selectionOpacity });
         $border1.css({ borderStyle: 'solid', borderColor: options.borderColor1 });
         $border2.css({ borderStyle: 'dashed', borderColor: options.borderColor2 });
         $o.css({ opacity: options.outerOpacity, backgroundColor: options.outerColor });
@@ -514,7 +534,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
         options.enable = options.disable = undefined;
     };
 
-    if (jQuery.browser.msie)   
+    if (jQuery.browser.msie)
         jQuery(img).attr('unselectable', 'on');
 
     jQuery.imgAreaSelect.keyPress = jQuery.browser.msie ||

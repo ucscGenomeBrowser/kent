@@ -246,7 +246,7 @@ function setVarAndPostForm(aName,aValue,formName)
 }
 
 // json help routines
-function tdbGetJsonRecord(trackName)  { return trackDbJson[trackName]; }
+function tdbGetJsonRecord(trackName)  { return hgTracks.trackDb[trackName]; }
 function tdbIsFolder(tdb)             { return (tdb.kindOfParent == 1); } // NOTE: These must jive with tdbKindOfParent() and tdbKindOfChild() in trackDb.h
 function tdbIsComposite(tdb)          { return (tdb.kindOfParent == 2); }
 function tdbIsMultiTrack(tdb)         { return (tdb.kindOfParent == 3); }
@@ -940,17 +940,20 @@ function waitMaskSetup(timeOutInMs)
         // create the waitMask
         $("body").append("<div id='waitMask' class='waitMask');'></div>");
         waitMask = $('#waitMask');
-        // Special for IE, since it takes so long, make mask obvious
-        if ($.browser.msie)
-            $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
     }
-    $(waitMask).css('display','block');
+    $(waitMask).css({opacity:0.0,display:'block',top: '0px', height: $(document).height().toString() + 'px' });
+    // Special for IE, since it takes so long, make mask obvious
+    if ($.browser.msie)
+        $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
 
     // Things could fail, so always have a timeout.
-    if(timeOutInMs == undefined || timeOutInMs <=0)
+    if(timeOutInMs == undefined || timeOutInMs ==0)
         timeOutInMs = 30000; // IE can take forever!
 
-    setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+    if (timeOutInMs > 0)
+        setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+
+    return waitMask;  // The caller could add css if they wanted.
 }
 
 function _launchWaitOnFunction()
@@ -1847,7 +1850,8 @@ function findTracksHandleNewMdbVals(response, status)
         if (inp != undefined && tdIsLike != undefined) {
             if ($(inp).hasClass('freeText')) {
                 $(tdIsLike).text('contains');
-            } else if (usesFilterBy && $(inp).hasClass('filterBy')) {
+            } else if ($(inp).hasClass('wildList')
+                   || (usesFilterBy && $(inp).hasClass('filterBy'))) {
                 $(tdIsLike).text('is among');
             } else {
                 $(tdIsLike).text('is');

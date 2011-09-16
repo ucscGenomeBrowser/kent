@@ -29796,19 +29796,10 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 6/9/11)
-# Updated 4/1/11
-# Updated 3/1/11
-# Updated 2/1/11
-# Updated 12/7/10
-# Updated 11/1/10
-# Updated 10/6/10
-# Updated 9/1/10
-# Updated 8/2/10
-# Updated 6/2/10
-# Updated 5/12/10
-# Updated 4/1/10
-# Updated 3/1/10
+# NHGRI GWAS CATALOG (DONE 9/2/11 angie)
+# NEXT TIME: squelch multiple-mappers!
+# Updated 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
+# Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10, 4/1/10, 3/1/10
 # Originally done 1/19/10
 # Area of possible future improvement: for SNPs that can't be mapped via our SNP track,
 # could some of them be obsolete IDs that have been merged into current IDs?
@@ -29894,7 +29885,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 5800 elements of size 22
+#Loaded 6419 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29908,7 +29899,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#315 ambigStrand.txt
+#356 ambigStrand.txt
 
 
 #############################################################################
@@ -31223,20 +31214,20 @@ TMPDIR=/scratch/tmp
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# ISCA RETROSPECTIVE FROM DBVAR (DONE 4/19/11 angie)
+# ISCA RETROSPECTIVE FROM DBVAR (DONE 9/14/11 angie)
 # Reloaded 4/19/11 to drop the boring aggregate variants (sv; keep ssv).
 # Originally done 1/31/11
     # Redmine: Track #34 (dbVar for human)
-    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_01_31
-    cd /hive/data/genomes/hg18/bed/isca/2011_01_31
+    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_09_14
+    cd /hive/data/genomes/hg18/bed/isca/2011_09_14
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_-_Retrospective/gvf/nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz
     # See notes on data contents: http://redmine.soe.ucsc.edu/issues/34#note-34
     # and notes on data format plan: http://redmine.soe.ucsc.edu/issues/34#note-36
     zcat nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz \
     | perl -wne 'next if (/^(#|browser|track)/); chomp; \
-        ($c, undef, undef, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
+        ($c, undef, $varType, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
         ($thickS, $thickE) = ($s, $e); \
-        ($attrCount, $attrTags, $attrVals) = (0, "", ""); \
+        ($attrCount, $attrTags, $attrVals, $gotVarTypeAttr) = (0, "", "", 0); \
         foreach my $tagVal (split(";", $attrs)) { \
           ($tag, $val) = split("=", $tagVal); \
           if ($tag eq "ID") {$name = $val;} \
@@ -31248,20 +31239,38 @@ TMPDIR=/scratch/tmp
             ($innerEnd, $outerEnd) = split(",", $val); \
             $thickE = $innerEnd if ($innerEnd =~ /^\d+$/ && $innerEnd < $thickE); \
             $e = $outerEnd if ($outerEnd =~ /^\d+$/ && $outerEnd > $e); \
+          } elsif ($tag eq "var_type") { \
+            $gotVarTypeAttr = 1; \
           } \
           # Escape commas so the val list parses correctly in autoSql: \
           $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
           $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
         } \
         next if ($name =~ /^[ne]sv\d/); # keep only supporting variants (ssv) \
-        %attrs = map { ($key, $val) = split("="); $key => $val } split(";", $attrs); \
+        if (! $gotVarTypeAttr) { \
+          $varType =~ s/%/%25/g;   $varType =~ s/,/%2C/g; \
+          $attrTags .= "var_type,";  $attrVals .= "$varType,";  $attrCount++; \
+        } \
         @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
                       $attrCount, $attrTags, $attrVals); \
         print join("\t", @bed8Attrs) . "\n";' \
       > iscaRetrospective.bed
-    hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
-      -allowStartEqualEnd hg18 iscaRetrospective iscaRetrospective.bed
-#Loaded 11312 elements of size 11
+    wc -l iscaRetrospective.bed
+#6387 iscaRetrospective.bed
+    # 9/14/11: Split into subtracks by clinical_int value.
+    zcat nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz \
+    | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
+#   1067 Benign
+#   3281 Pathogenic
+#   2039 Uncertain Significance
+    foreach subtrack (Benign Pathogenic Uncertain)
+      grep -w  $subtrack iscaRetrospective.bed > iscaRetrospective$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg18 iscaRetrospective$subtrack iscaRetrospective$subtrack.bed
+    end
+#Loaded 1067 elements of size 11
+#Loaded 3281 elements of size 11
+#Loaded 2039 elements of size 11
 
 
 #############################################################################
@@ -31579,6 +31588,7 @@ diff j.all j.1234 |grep "<" |sed -e 's/</do1/' >doall
 cat << '_EOF_' > do1
 hgsql hg18 -e "delete from omimLocation where name='${1}'"
 '_EOF_'
+# << emacs
 
 ./doall
 
@@ -31586,7 +31596,7 @@ hgsql hg18 -e "delete from omimLocation where name='${1}'"
 # adding new decode data (WORKING - 2011-07-26 - Hiram)
     mkdir /hive/data/outside/decode
     cd /hive/data/outside/decode
-    wget --timestamping "http://www.decode.com/addendum/Maps.zip
+    wget --timestamping "http://www.decode.com/addendum/Maps.zip"
     unzip Maps.zip
     # produces a Maps directory
     mkdir /hive/data/outside/decode/hg18
@@ -31650,4 +31660,310 @@ done
     hgsql -e "drop table decodeMaleFemaleDifference;" hg18
     hgBbiDbLink hg18 decodeMaleFemaleDifference /gbdb/hg18/decode/MaleFemaleDifference.bw
 
+#############################################################################
+# HapMap recombination maps added to deCODE track (DONE - 2011-08-30 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/hapmap/release24
+    cd /hive/data/genomes/hg18/bed/hapmap/release24
+    wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_CEU.tgz
+
+wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_YRI.tgz
+
+wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_combined.tgz
+
+    mkdir CEU
+    cd CEU
+    tar xvzf ../genetic_map_b36_CEU.tgz
+    cd ..
+    mkdir YRI
+    cd YRI
+    tar xvzf ../genetic_map_b36_YRI.tgz
+    cd ..
+    mkdir combined
+    cd combined
+    tar xvzf ../genetic_map_b36_combined.tgz
+
+for F in CEU/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_CEU_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24CEURecombMap.bedGraph
+
+for F in YRI/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_YRI_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24YRIRecombMap.bedGraph
+
+for F in combined/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_combined_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24CombinedRecombMap.bedGraph
+
+for F in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+bedGraphToBigWig -verbose=2 ${F}.bedGraph \
+        /hive/data/genomes/hg18/chrom.sizes ${F}.bw > ${F}.log 2>&1
+done
+
+for T in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+    rm -f /gbdb/hg18/decode/${T}.bw
+    ln -s `pwd`/${T}.bw /gbdb/hg18/decode/${T}.bw
+    hgsql -e "drop table ${T};" hg18
+    hgBbiDbLink hg18 ${T} /gbdb/hg18/decode/${T}.bw
+done
+
+#############################################################################
+# HI SEQ DEPTH (DONE 7/15/11 angie)
+    mkdir /hive/data/genomes/hg18/bed/hiSeqDepth
+    cd /hive/data/genomes/hg18/bed/hiSeqDepth
+    foreach cov (001 005 01 05 1)
+      wget --timestamp http://eqtl.uchicago.edu/Masking/seq.cov$cov.bed.gz
+      gunzip -N seq.cov$cov.bed.gz
+    end
+    wc -l seq.cov*
+#    553 seq.cov001.bed
+#   1301 seq.cov005.bed
+#   2187 seq.cov01.bed
+#  18369 seq.cov05.bed
+#  34359 seq.cov1.bed
+    foreach cov (001 005 01 05 1)
+      echo seq.cov$cov.bed
+      featureBits -countGaps hg18 seq.cov$cov.bed
+    end
+#seq.cov001.bed
+#57409 bases of 3107677273 (0.002%) in intersection
+#seq.cov005.bed
+#183848 bases of 3107677273 (0.006%) in intersection
+#seq.cov01.bed
+#362423 bases of 3107677273 (0.012%) in intersection
+#seq.cov05.bed
+#3462959 bases of 3107677273 (0.111%) in intersection
+#seq.cov1.bed
+#Coordinate out of allowed range [0,135374737) for chr10 near line 6826 of seq.cov1.bed
+    # I edited line 6826 of seq.cov1.bed to end with 135374737 not 135374744
+    featureBits -countGaps hg18 seq.cov$cov.bed
+#6466376 bases of 3107677273 (0.208%) in intersection
+
+    # Sanity check: verify that the smaller ones are strict subsets of larger:
+    featureBits hg18 -countGaps seq.cov001.bed \!seq.cov005.bed
+    featureBits hg18 -countGaps seq.cov005.bed \!seq.cov01.bed
+    featureBits hg18 -countGaps seq.cov01.bed \!seq.cov05.bed
+    featureBits hg18 -countGaps seq.cov05.bed \!seq.cov1.bed
+    # Yep, all got 0 bases:
+#0 bases of 3107677273 (0.000%) in intersection
+    # Hmm, some overlap w/gap track:
+    featureBits hg18 -countGaps seq.cov1.bed gap -bed=gapOverlaps.bed
+#477 bases of 3107677273 (0.000%) in intersection
+
+    # Load tables:
+    hgLoadBed hg18 hiSeqDepthTopPt1Pct seq.cov001.bed
+#Loaded 553 elements of size 3
+    hgLoadBed hg18 hiSeqDepthTopPt5Pct seq.cov005.bed
+#Loaded 1301 elements of size 3
+    hgLoadBed hg18 hiSeqDepthTop1Pct seq.cov01.bed
+#Loaded 2187 elements of size 3
+    hgLoadBed hg18 hiSeqDepthTop5Pct seq.cov05.bed
+#Loaded 18369 elements of size 3
+    hgLoadBed hg18 hiSeqDepthTop10Pct seq.cov1.bed
+#Loaded 34359 elements of size 3
+
+    # Compare with Terry Furey's blacklisted regions for ENCODE
+    # http://encodewiki.ucsc.edu/EncodeDCC/index.php/Blacklist_of_problematic_genomic_regions
+    # http://hgdownload-test.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeMapability/wgEncodeDukeRegionsExcluded.bed6.gz
+    featureBits -countGaps hg18 \
+      /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed
+#10366850 bases of 3107677273 (0.334%) in intersection
+    foreach cov (001 005 01 05 1)
+      featureBits -countGaps hg18 seq.cov$cov.bed -enrichment \
+        /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed
+    end
+    # Watch the coverage of seq*bed by Terry's regions drop as $cov increases:
+#seq.cov001.bed 0.002%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.002%, cover 94.75%, enrich 284.02x
+#seq.cov005.bed 0.006%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.006%, cover 93.43%, enrich 280.06x
+#seq.cov01.bed 0.012%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.010%, cover 87.56%, enrich 262.49x
+#seq.cov05.bed 0.111%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.038%, cover 34.48%, enrich 103.35x
+#seq.cov1.bed 0.208%, /hive/data/genomes/hg18/bed/encodeBlacklist/hg18.wgEncodeDukeRegionsExcluded.bed 0.334%, both 0.050%, cover 24.02%, enrich 71.99x
+
+############################################################################################
+# CREATE TABLES AND .PNG PICTURE FILES OF evofoldV2 RNA STRUCTURES. (DONE, 7/26/2011, Fan)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/hg18/bed/evofoldV2/doEvoFoldV2
+cd /hive/data/genomes/hg18/bed/evofoldV2/doEvoFoldV2
+
+wget http://moma.ki.au.dk/~jsp/upload/evofoldV2.hg18.bed
+cat ~/kent/src/hg/lib/evofold.sql | \
+sed -e "s/evofold/evofoldV2/g" > tmp.sql 
+hgLoadBed –notItemRgb -sqlTable=tmp.sql hg18 evofoldV2 evofoldV2.hg18.bed
+
+# Creaet sub-directories to store .png files (total of about 47.5 K of them) sparated by chromosomes.
+
+mkdir -p evoFoldV2/chr1
+mkdir -p evoFoldV2/chr10
+mkdir -p evoFoldV2/chr11
+mkdir -p evoFoldV2/chr12
+mkdir -p evoFoldV2/chr13
+mkdir -p evoFoldV2/chr14
+mkdir -p evoFoldV2/chr15
+mkdir -p evoFoldV2/chr16
+mkdir -p evoFoldV2/chr17
+mkdir -p evoFoldV2/chr18
+mkdir -p evoFoldV2/chr19
+mkdir -p evoFoldV2/chr2
+mkdir -p evoFoldV2/chr20
+mkdir -p evoFoldV2/chr21
+mkdir -p evoFoldV2/chr22
+mkdir -p evoFoldV2/chr3
+mkdir -p evoFoldV2/chr4
+mkdir -p evoFoldV2/chr5
+mkdir -p evoFoldV2/chr6
+mkdir -p evoFoldV2/chr7
+mkdir -p evoFoldV2/chr8
+mkdir -p evoFoldV2/chr9
+mkdir -p evoFoldV2/chrM
+mkdir -p evoFoldV2/chrX
+mkdir -p evoFoldV2/chrY
+
+# get latest verion of the .jar file of VARNA
+
+wget --timestamping http://varna.lri.fr/bin/VARNAv3-7.jar
+
+# Create Java command line files
+
+echo 'doEvoFoldV2 hg18 do$1 $1' >do1Chrom
+chmod +x do1Chrom
+
+do1Chrom chr1
+do1Chrom chr10
+do1Chrom chr11
+do1Chrom chr12
+do1Chrom chr13
+do1Chrom chr14
+do1Chrom chr15
+do1Chrom chr16
+do1Chrom chr17
+do1Chrom chr18
+do1Chrom chr19
+do1Chrom chr2
+do1Chrom chr20
+do1Chrom chr21
+do1Chrom chr22
+do1Chrom chr3
+do1Chrom chr4
+do1Chrom chr5
+do1Chrom chr6
+do1Chrom chr7
+do1Chrom chr8
+do1Chrom chr9
+do1Chrom chrM
+do1Chrom chrX
+do1Chrom chrY
+
+chmod +x do*
+
+# run the dochrXX command files in small batches with '&' to exploit multiple CPU
+# wait an hour for each batch to finish so that we don't suck in too much computational resources.
+
+dochr1 &
+dochr2 &
+dochr3 &
+dochr4 &
+dochr5 &
+
+sleep 3600
+
+dochr6 &
+dochr7 &
+dochr8 &
+dochr9 &
+dochr10 &
+
+sleep 3600
+
+dochr11 &
+dochr12 &
+dochr13 &
+dochr14 &
+dochr15 &
+
+sleep 3600
+
+dochr16 &
+dochr17 &
+dochr18 &
+dochr19 &
+dochr20 &
+
+sleep 3600
+
+dochr21 &
+dochr22 &
+dochrX &
+dochrY &
+dochrM &
+
+# check the resulting .png files
+
+# create a simple script file, check1, with the following 3 lines:
+
+echo $1
+hgsql hg18 -N -e "select count(*) from evofoldV2 where chrom='${1}'"
+ls evoFoldV2/$1/*.png|wc
+
+chmod +x check1
+
+# create another script file, checkAll, with the following lines:
+
+check1 chr1
+check1 chr10
+check1 chr11
+check1 chr12
+check1 chr13
+check1 chr14
+check1 chr15
+check1 chr16
+check1 chr17
+check1 chr18
+check1 chr19
+check1 chr2
+check1 chr20
+check1 chr21
+check1 chr22
+check1 chr3
+check1 chr4
+check1 chr5
+check1 chr6
+check1 chr7
+check1 chr8
+check1 chr9
+check1 chrM
+check1 chrX
+check1 chrY
+
+chmod +x checkAll
+checkAll >j.check
+
+# examing the resuls in j.check to make sure things are OK.
+
+# create symbolic links
+mkdir -p /usr/local/apache/htdocs/evoFoldV2
+
+ln -s /hive/data/genomes/gs.19/build36/bed/evofoldV2/doEvoFoldV2/evoFoldV2  /gbdb/hg18/evoFoldV2 
+ln -s /gbdb/hg18/evoFoldV2 /usr/local/apache/htdocs/evoFoldV2/hg18
 #############################################################################

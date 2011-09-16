@@ -1,0 +1,895 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+#current working directory
+use Cwd;
+#get options from the command line, different from argument variables this one turns "-directory /whatever/foo" into variables for perl
+use Getopt::Long;
+#md5 digester, so i minimize my external system calls
+use Digest::MD5;
+#multithread to contain the md5 function, so we can run multiple at once
+use threads;
+#shared variables between threads, i use one to track statuses, to code around a limitation of perl 5.8
+use threads::shared;
+#this is for testing by me (wong)
+#BEGIN{unshift @INC, "/cluster/home/wong/bin/scripts"}
+#hi resolution time allows for microsecond sleeps, and nanosecond sleeps
+#those are used for sleeping between checking thread statuses, for small files, a <1 second sleep is required
+use Time::HiRes qw(usleep nanosleep);
+
+use lib "/cluster/bin/scripts";
+#if these are still around, confirm with your boss what they do
+#they are custom coded packages that might not behave exactly as they do when this was written
+#update the comments if you are willing
+#
+#I only use this to grab the cv (explained below)
+use Encode;
+#this isn't being used.
+#use HgAutomate;
+#this is used to interact with the database and update metaDb
+use HgDb;
+
+
+
+#################################
+###########  Purpose  ###########
+#################################
+#This program is designed to look is a download directory, or current working directory for wgEncode downloadable files.
+#the result is 3 files: files.txt md5sum.txt and md5sum.history
+#it makes a list of files in files.txt, and looks up the associated metadata with the file.
+#if you want to md5 the files, it does that multithreaded (2 at a time) and checks against a history file
+#so yo don't md5sum files over and over again. only files that pass a filemask are allowed to go in files.txt and md5sum.txt
+#all files are md5summed and inserted into md5sum.history
+
+
+############
+### INIT ###
+############
+
+#grab environment variable for user
+my $user = "$ENV{'USER'}";
+
+#options array
+my %opt;
+
+#options handling
+my $goodopts = GetOptions(\%opt,
+					"md5",
+                    "filemask=s",
+                    "table=s",
+                    "verbose=i",
+                    "cv=s",
+                    "directory=s"
+                    );
+
+#make sure that GetOptions returns 1 and every option is good
+unless ($goodopts){
+	usage();
+}
+
+#defaults on the lines the "my", options loading in the if statements after
+my $configdir = "/data/apache/cgi-bin/encode";
+if ($opt{'cv'}){
+	$configdir = $opt{'cv'};
+}
+
+#make sure DB is present
+if (scalar(@ARGV) < 1){
+	print STDERR "db is required\n";
+	usage();
+}
+
+#metaDb
+my $metadb = "metaDb_$user";
+my $writedb = 1;
+if ($opt{'table'}){
+	$metadb = $opt{'table'};
+	#don't allow people to use metaDb directly
+	if ($metadb eq "metaDb"){
+		print STDERR "Direct modification of metaDb is not allowed, please use a sandbox table. Writing to common metaDb table has been disabled.\n";
+		$writedb = 0;
+	}
+}
+
+#working directory
+my $workdir = getcwd();
+if ($opt{'directory'}){
+	$workdir = "$opt{'directory'}";
+	#remove leading double slashes
+	$workdir =~ s/^\/\//\//;
+	#remove trailing slashes
+	$workdir =~ s/\/$//;
+}
+unless ($opt{'verbose'}){$opt{'verbose'} = 0}
+if ($opt{'verbose'} >= 1){
+	print STDERR "using dir: $workdir\n";
+}
+#this restricts the program to wonly work if the working directory matches wgEncode*
+unless ($workdir =~ m/wgEncode/){
+	print STDERR "Directory is not an encode directory: $workdir. Must match wgEncode*\n"; 
+	usage()
+}
+#change to working directory
+my $err = chdir($workdir);
+unless ($err) {die "die: can't change to directory $workdir\n"}
+
+#default, if updated, please update usage statement below ( search for "sub usage" )
+my %filemask;
+my $filemask = "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb";
+if ($opt{'filemask'}){
+	$filemask = $opt{'filemask'};
+}
+my @mask = split /\s+/, $filemask;
+
+if ($opt{'verbose'} >= 1){print STDERR "filemasks (regex's):"}
+foreach my $mask (@mask){
+	#convert $mask to regex if user used * as wildcard so that it can be inserted into 
+	#regex properly
+	$mask =~ s/^\*//;
+	$mask =~ s/\*$//;
+	$mask =~ s/[^\\][^\.|\]]\*/\.\*/;
+	$filemask{$mask} = 1;
+	if ($opt{'verbose'} >= 1){print STDERR " $mask"}
+}
+if ($opt{'verbose'} >= 1){print STDERR "\n"}
+
+
+# I can't figure out a way to have hg19 be default and options at the same time
+# because if you run it blank in a directory with all options, and hg19 is default,
+# it will run, but it collides with how you would run it empty to get the usage statement
+
+
+############
+### MAIN ###
+############
+
+#the only required argument (database name)
+my $assm = $ARGV[0];
+
+#database connect
+my $db = HgDb->new(DB => $assm) or die "die: Can't connect to DB: $assm\n";
+#check if metaDb table exists
+my $sth = $db->execute("show tables") or die "die: Can't check tables\n";
+my %tables; 
+while(my @table = $sth->fetchrow_array){$tables{$table[0]} = 1}
+unless (exists $tables{$metadb}){die "die: The metaDb table: $metadb does not exist.\n"}
+
+#thread status, shared between threads
+my %thrdstat : shared;
+	
+#thread container
+my %thrdcont;
+	
+#md5sums container
+my %md5sums;
+
+#file information hash container
+#structure {fileinfo}->{filename}->{key}
+my %fileinfo;
+
+#%cv's structure returned from Encode.pm is {cv}->{type}->{term}->{key}
+#if cv structure changes drastically, please change encode.pm as well
+my %cv = Encode::getControlledVocab($configdir);
+
+#grab filenames and human readable sizes
+#and processe those lines returned from ls
+my %sizes;
+my @files;
+my @filemask;
+my $ls = `ls -lh 2>/dev/null`;
+my @list = split "\n", $ls;
+#parse through list to get the sizes and filenames
+foreach my $row (@list){
+	my @row = split /\s+/, $row;
+	#skip weird behaviors in ls
+	unless ($row[8]){next}
+	#skip directories
+	unless ($row =~ m/^\-/){next}
+	push @files, $row[8];
+	#only put files that pass filemask in @filemask to be processed
+	foreach my $mask (keys %filemask){
+		if ($row[8] =~ m/$mask/){
+			push @filemask, $row[8];
+			last
+		}
+	}
+	
+	$sizes{$row[8]} = $row[4];
+}
+
+#set the sleep time based on largest file size found
+my $largest;
+my $sleep = "1";
+foreach my $size (keys %sizes){
+
+	#it's human readable, so just need to set for kilobyte and megabyte size range
+	#the logic here is that even though the file sizes from the hash might be out of order,
+	#the $sleep flag can only be set in one direction, for instance, if it encounters 
+	#a k in the name, $sleep becomes U only if it is still 1, but if it is U or U2, nothing happens
+	#If you encounter an M, sleep must be 1 or U to be set. Once a G is encountered, everything is set to 2
+	#I may change this to be a dynamically changed variable based on the current file being processed
+	if ($sizes{$size} =~ m/K/ && $sleep eq "1"){$sleep = "U"}
+	if ($sizes{$size} =~ m/M/ && ($sleep eq "1" || $sleep eq "U")){$sleep = "U2"}
+	if ($sizes{$size} =~ m/G/) {$sleep = 2}
+}
+
+###this grabs the sort order of the terms form the cv, based on priority, then alphaneumeric
+
+
+#grab only types that match typeOfTerm
+#the current cv structure is as follows
+#term foo
+#tag FOO
+#type BAR
+#description Blah
+#something Else
+#
+#in the cv hash, the first key you encounter is built from type, thus when I grab typeOfTerm,
+#the resulting hash is all stanzas from the cv which match typeOfTerm, the second key after that is the term itself.
+#
+#In the code the first and second hashes are this:
+#{typeOfTerm}->{term}
+#
+#but in general the structure is:
+#{type}->{term}
+#
+#to get the stanza you want, you would put in the type and term matching the value you want
+#since all terms are unique, there will be no collisions, and the returned cv hash from encode.pm
+#
+#########
+#########  Extraneous information
+#########
+#could actually be simplified one level, by using term as the primary hash, however, to do specific slices on type
+#would require you to code the filter yourself. something like for all terms in %cv, return only keys that match type=whatever
+#in the inner hash.
+#########
+#########  End Extraneous information
+#########
+#
+#As it stands, encode.pm return a 3 level nested hash.
+#the second level hash contains another hash that actually has all the key value pairs
+#thus it looks something line this(using my fake example above):
+#{BAR}->{foo}->{Description} = Blah
+#{BAR}->{foo}->{something} = Else
+#
+#so the general outline is that at the first and second level of the hash, you only have type and term information respectively.
+#to get the actual information you want, you have to define the first and second key, that will return the stanza you want, so in the fake
+#example I give above:
+#
+#{BAR}->{foo} would return a hash that has term, tag, type, description, something as keys, with the corresponding values as values
+#
+my %typeofterms = %{$cv{'typeOfTerm'}};
+
+#now that the structure of the cv hash is known, this section deals with what exactly happend with the stanzas that match type = typeOfTerm
+#the general idea is to check every stanza for the "hidden" key, I use it as a filter. If there is no "hidden", check if there is a priority.
+#if there is a "hidden" field, make sure that it says "no". If is says anything other than "no", I assume that it's supposed to be hidden. If it says
+#"no" in the hidden field, check that the "priority" field exists. If not, go on. If there is a priority, place the priority into a 2 value array,
+#basically the term gets put in first, the the associated priority. This 2 member array is the put into another array (@sort). This turns @sort
+#into a 2 dimensional array, which we will sort.
+#
+#Basically: 
+#check for hidden, if value != "no", go on
+#if value = no, or no hidden value, check priority
+#if no priority, go on,
+#if priority, place term and priority into array
+#put array into @sort
+#
+#@sort looks like this:
+# Position  0	1   2	3
+# Term      Foo	Bar Zoo Car
+# Priority  10	400 30  965
+
+my @sort;
+#$key in this case is the term value, I could have been more clear
+foreach my $key (sort keys %typeofterms){
+	#### remove hidden ones ###
+	#so we only look at the ones that have keys hidden = no, or no hidden value
+	if (exists ${$typeofterms{$key}}{'hidden'}){
+		#if it says anything other than no
+		unless (${$typeofterms{$key}}{'hidden'} eq 'no'){
+			#print STDERR "$key = ${$typeofterms{$key}}{'hidden'} skipped\n";
+			next
+		}
+		#print STDERR "$key = ${$typeofterms{$key}}{'hidden'}\n";
+	}
+	else {
+		#print STDERR "$key had no value\n";
+	}
+	#make sure priority is there
+	unless (exists ${$typeofterms{$key}}{'priority'}){next}
+	#multidimensional array sort, @sort is the multidimentional one
+	#@array is a secondary array pushed onto the first one (@sort)
+	if (${$typeofterms{$key}}{'priority'} =~ m/\D/){
+		print STDERR "$key has non-numeric characters in the priority field\n";
+		${$typeofterms{$key}}{'priority'} =~ s/\D//g;
+	}
+	my @array;
+	push @array, $key;
+	push @array, ${$typeofterms{$key}}{'priority'};
+	push @sort, \@array;
+	
+}
+
+#actual sort function, first on the second value per row, then the first
+#translates to (priority, the name) in order of precedence
+#since sort is a multi-dimentional aware function, we use it
+#even though priority it a number, I still use the string comparision, because it sorts on numeric values as well
+#and if we start using hex or something as priority, i think it still works this way
+#
+#this baically says compare the second value in the subarray first, it they are equal, compare the first value
+#so it's sorting on priority, then term, remember the structure above:
+#term is $a->[0] and $b->[0], it compares two values at a time and shuffles them around,
+#priority is $a->[1] and $b->[1], so if priority is equal, then sort of term (alphanumerically)
+@sort = sort {$a->[1] <=> $b->[1] || $a->[0] cmp $b->[0]} @sort;
+if ($opt{'verbose'} >=3 ){
+	print STDERR "\npriority list\n";
+	foreach my $sortval (@sort){
+		print STDERR "$$sortval[0] = $$sortval[1]\n";
+	}
+}
+
+#create one dimensional array for easy iteration
+my @sortorder;
+foreach my $element (@sort){
+	push @sortorder, $$element[0];
+}
+
+#ignore this, it's for debugging the stat function
+#incidentally, these are the fields of the array returned by stat($file)
+my @statlist = qw(dev inode file linknum uid grpid devid file lastaccess lastmodify inochng blksize blkamt);
+my %seenmd5s;
+
+
+#md5 is threaded, files done in parallel
+if ($opt{'md5'}){
+	
+	#this part checks the history file for md5sum and last modification date
+	my $md5hist = "md5sum.history";
+	#last modify has
+	my %lastmod;
+	#temporary storage hash for files list
+	my %tempmd5;
+	#copy over the filenames to tempmd5 hash
+	foreach my $file (@files) {
+		$tempmd5{$file} = 1;
+		$lastmod{$file} = 0;	
+	}
+	
+	#container for files to be md5'd
+	#this has to be separate from @files because I remove elements from array as I finish the md5summing job
+	#and @files is needed elsewhere
+	my @md5files;
+
+	#debug line
+	#if you want to see if it's correctly cehcking for existence of a file, print our $foo
+	#my $foo = (-e $md5hist);
+	#check if md5sum.history exists
+	if (-e $md5hist){
+		open MDH, "$md5hist" or die "die: can't open history file\n";
+		while (<MDH>){
+			my $line = $_;
+			chomp $line;
+			my @line = split " ", $line;
+
+			#file is structured [filename] [md5sum] [last modified]
+			my $file = $line[0];
+			my $md5 = $line[1];
+			my $lastmod = $line[2];
+
+			#make sure files exists, hasn't been deleted etc.
+			unless (-e $file){next}
+			#store md5sums and modification dates in their respective hashes;
+			$md5sums{$file} = $md5;
+			if ($lastmod){$lastmod{$file} = $lastmod}
+			#just in case, should never be called
+			else {$lastmod{$file} = 0}
+		}
+		close MDH;
+		
+		#can't remember how to easily to an array slice :-/
+		#hash for removing existing md5summed files from @md5files
+		#copies over data from @files, then removes files that have md5sums 
+		#and match last date modified
+		#i'd imagine i'd have to index the array anyway, so maybe a hash is the best choice
+		foreach my $file (keys %tempmd5){
+			
+			my @stat = stat("$file");
+			if ($opt{'verbose'} >= 4){
+				my $count = 0;
+				print STDERR "\n";
+				print STDERR "$file statistics:\n";
+				foreach my $stat (@stat){
+					print STDERR "$statlist[$count] = $stat\n";
+					$count++
+				}
+			}
+			#$stat[9] is the last modify value of the stat array
+			my $filelastmod = $stat[9];
+			#if same as last modify in hitory, remove from temp array
+			if ($lastmod{$file} == $filelastmod){
+				delete $tempmd5{$file};
+			}
+		}
+		#copy all remain files to @md5files
+		@md5files = keys %tempmd5;
+		
+	}
+	else {
+		#if md5sum.history doesn't exist, copy over @files to @md5sum
+		@md5files = @files;
+	}
+	
+	#### the overview: ####
+	#
+	#this secion is the one that multithreads the md5 function, what it first does is check if there are any files in @md5files
+	#then it sets the max threads to 2, unless there is only 1 file in #md5files, then sets it to 1
+	#after that, it seeds the %thrdcont hash with the initial threads, then there is a while loop to constantly poll if @md5files
+	#has any files left to process, if it does, clean up any finished threads, then start new ones, still limited by max $threads
+	#once there are no more files left in @md5sums, you have to clean up the remaining 2 threads.
+	#
+	#
+	#### the rundown: ####
+	#
+	#if there are files to be processed, check if there's only 1, 
+	#if so, only launch 1 thread, 
+	#if 2 or more, launch 2 threads
+	#remove the item you just processed from the @md5sums array
+	#
+	#while there are item still in @md5sums
+	#check the %thrdstat to see if a currently running thread is finished,
+	#if so, grab it's return value (md5sum of the file)
+	#also grab it's status, which is the name of the file processed (i saved on a hash by not making the status binary, but instead 0 or the filename itself)
+	#put sum in md5sum array
+	#delete the thread object from %thrdcont
+	#check if there's more files to be processed <- this step could be redundant, as that's what the while loop is checking
+	#if so, grab the next file in line, and launch a thread on it
+	#after 1 cycle of checking and launching, sleep for a specified amount of time
+	#start the while loop again
+	#
+	#once there are no more files to be processed, there should be 1 or 2 running threads still (1 if there were an odd amount of files).
+	#
+	#clean up consists of looping through %thrdcont and joining the return values
+	#
+	#%thrdcont is only populated by running threads, so try to join those threads
+	#join() is blocking, so it'll wait until the threads are finished
+	#when they are, grab the status and the returned values, and put it into the %md5sums hash. (status is filename)
+	#
+	#### the outline: ####
+	#
+	#for loop:
+	#make initial threads (threads->create)
+	#remove processed files from list (shift @md5files)
+	#
+	#while loop:
+	#check for more files ( if(@md5files) and the while(@md5files) itself)
+	#check threads for finished ( if ($thrdstat{$thrdid}) )
+	#if finished, grab values and launch more threads if more files to be processed ( $thrdcont{$thrdid}->join() )
+	#remove ( delete $thrdcont{$thrdid} )
+	#sleep for the next check cycle ( sleep or usleep )
+	#when no more files to be processed break loop ( while(@md5files) )
+	#
+	#foreach loop:
+	#wait on last threads to finish ( join() ), then grab values and copy to hash (%md5sums)
+	#
+	if (@md5files){	
+		#only 2 threads allowed, filesystem limitation, ~ 125 MB/s from disk only
+		my $threads = 2;
+		#in case there is only 1 file to md5sum
+		if (scalar @md5files < 2){
+			$threads = scalar @md5files;
+		}
+		
+		#initializes the threads
+		for (my $i = 0; $i < $threads; $i++){
+
+			#this removes the first element off the array and returns it.
+			my $file = shift @md5files;
+			
+			#create the thread (reference to subroutine, file, threadnumber
+			$thrdcont{$i} = threads->create(\&md5sum, $file, $i);
+			
+			#unique thread id
+			my $tid = $thrdcont{$i}->tid();
+			if ($opt{'verbose'} >= 2){
+				print STDERR "Thread $tid started on $file\n";
+			}
+			$thrdstat{$i} = "0";
+		}
+		
+		#the loop to check if the threads are done and to spawn another one
+		while (@md5files){
+			foreach my $thrid (keys %thrdcont){
+				
+				#if done
+				if ($thrdstat{$thrid}){
+					
+					#join result back to main
+					my $sum = $thrdcont{$thrid}->join();
+			
+					#in threadstat, I return the value of the file, thus saving on one thread shared variable
+					$md5sums{$thrdstat{$thrid}} = $sum;
+	
+					#delete the finished thread
+					delete $thrdcont{$thrid};
+					
+					#if file list is still populated
+					if (@md5files){
+					
+						#start another thread
+						my $file = shift @md5files;
+						$thrdcont{$thrid} = threads->create(\&md5sum, $file, $thrid);
+						my $tid = $thrdcont{$thrid}->tid();
+						if ($opt{'verbose'} >=2 ){
+							print STDERR "Thread $tid started on $file\n";
+						}
+					}
+				}
+			}
+			
+			#sleep for time specified by whatever U tag is present 
+			#usleep = microsecond sleep
+			#either 10 milliseconds or 400 ms
+			#or sleep for 2 seconds
+			if ($sleep eq "U"){usleep(10000)}
+			elsif ($sleep eq "U2"){usleep(400000)}
+			else{sleep 2}
+		}
+		
+		#clean up the remaining threads
+		foreach my $thrid (keys %thrdcont){
+			$md5sums{$thrdstat{$thrid}} = $thrdcont{$thrid}->join();
+		}
+	}
+
+	#print md5sum files (md5sum.txt and md5sum.history
+	open MDF, ">md5sum.txt" or die "die: can't open md5sum.txt file to write\n";
+	if ($opt{'verbose'} >= 2){
+		print STDERR "\n";
+		print STDERR "writing md5sum.txt\n";
+	}
+	foreach my $file (sort { $a cmp $b } @filemask){
+		print MDF "$file $md5sums{$file}\n";
+	}
+	close MDF;
+	open MDF, ">md5sum.history" or die "die: can't open md5sum.history to write\n";
+	if ($opt{'verbose'} >= 2){
+		print STDERR "\n";
+		print STDERR "writing md5sum.history\n";
+	}
+	foreach my $file (sort { $a cmp $b } keys %md5sums){
+		my @stat = stat("$file");
+		#print STDERR "file = $file\n";
+		#stat[9] is last modify time from perl's file stat
+		#this unless and else are to make sure that there are no 2 files sharing the same md5sum,
+		#if there is, it warns you, as there could be others
+		unless (exists $seenmd5s{$md5sums{$file}}){
+			$seenmd5s{$md5sums{$file}} = $file;
+		}
+		else {
+			print STDERR "$file and $seenmd5s{$md5sums{$file}} have the same md5sum: $md5sums{$file}\n";
+		}
+		print MDF "$file $md5sums{$file} $stat[9]\n";
+	}
+	close MDF;
+}
+
+#verbosity~!~!~!~!~!~! -vvvvvvvvvvv
+if ($opt{'verbose'} >= 3){
+	print STDERR "\n";
+	print STDERR "files to be processed:\n";
+	foreach my $name (@filemask){
+		print STDERR "\t$name\n";
+	}
+}
+
+
+#go through each file and grab metadata, and dump to array convert to hash
+my %seentables;
+foreach my $file (@filemask){
+	
+	my @fileparts = split '\.', $file;
+	my $tablename = $fileparts[0];
+	my $test = $fileparts[$#fileparts];
+	my $type;
+	
+	#decision tree
+	#look at last value after last dot
+	#if matches gz or tgz, filetype = second to last value
+	#else if last one = bai, type = bai
+	#else if only 2 elements after splitting at dots, type = last value
+	#else you've encountered a weird situation;
+	if ($test =~ m/gz/){
+		$type = $fileparts[($#fileparts - 1)];
+	}
+	elsif ($test eq 'bai'){
+		$type = "bai";
+	}
+	elsif (scalar (@fileparts) == 2) {
+		$type = $test;
+	}
+	else {
+		if ($opt{'verbose'} == 1){
+			print STDERR "something weird parsing name:\n";
+			print STDERR "file = $file\n";
+		}
+		$type = "unknown";
+	}
+	
+	#hash to store info about file MDB + extraneous, except size;
+	my %filehash;
+	
+	#only process if the first part of the file matches wgEncode
+	if ($tablename =~ m/^wgEncode/){
+		
+		#make sure you've only seen this table once
+		#no colliding base names
+		unless (exists ($seentables{$tablename})){
+			$seentables{$tablename} = $file;
+		}
+		elsif ($type eq "bai"){}
+		else {
+			die "die: $tablename has already been processed with file: $seentables{$tablename}, current file is $file\n";
+		}
+	
+		#perl DBI command to grab metadata, places functionality into the $query object
+		#which belings to DBI
+		my $query = $db->execute("select var,val from $metadb where obj = '$tablename'");
+	
+		#iterate thourgh all rows that match obj = $tablename
+		#basically dumps relevant metaDb rows that match obj = $tablename to %filehash
+		while(my $ref = $query->fetchrow_arrayref){
+			my @temp = @{$ref};
+			$filehash{$temp[0]} = $temp[1]; 
+		}
+		
+		if ($opt{'verbose'} >=4){
+			print STDERR "mdb info for table $tablename:\n";
+			foreach my $mdbobj (keys %filehash){
+				print STDERR "$mdbobj = $filehash{$mdbobj}\n";
+			}
+			print STDERR "\n";
+		}
+		#this should be pulled out into 2 subroutines whenever we get comma delimited lists into fileName in metaDb
+		#currently it is a lot of special casing because bai's aren't included in the meta, we have to make the assumption that
+		#the bai is there, but that isn't always the case, so we have to case it back to normal if the expected bai file is missing
+		#otherwise the output is something like bam=(md5sum),bai=
+		#so in the future, split this out into 2 subroutines, one for single file in fileName field, one for multiple files that will go into a comma delimited list.
+		
+		#current decision tree
+		#if %md5sums contains a sum for $file and it's $type isn't 'bai' and you're allowed to write to db ($writedb)
+		#check if filehash has a field for md5sum, if so, that means it exists, and must be updated instead of inserted.
+		#unless the md5sum value exists, 
+		#check if the type is bam,
+		#if so, grab the associated bai file's md5sum
+		#warn if it's not there
+		#unless the type is bam or there is no value for baisum,
+		#just put the md5sum straight up into the values to be INSERTED
+		#if it is a bam, and there is a vaue for bai ( else )
+		#make the value to be INSERTED bam=665f7126eac5d,bai=6ba76ec76e5ac
+		#INSERT the values into database
+		#
+		#if md5sum exists in %filehash
+		#check if it's the same as the calculated %md5sums one, and that it's not file type = bam
+		#if it's the same, do nothing
+		#
+		#if it's not the same, and type doesn't equal bai, or if it's a bam with no .bai file
+		#UPDATE the table with the md5sum straight up, no bam=asdf,bai=asdfg
+		#
+		#the remaining scenario is that it's a bam with a bai:
+		#else:
+		#
+		#remember we're still processing $filehash{'md5sum'} at this point
+		#this part is just for bam's with bai's
+		#
+		#assume that there is a bai md5sum, grab it and put it into $baisum
+		#warn if there is none <- could be a useless step
+		#
+		#split the ( $filehash{'md5sum'} ) = ( bam=6754a654c654e,bai=765ca6c75675d7ae65c ) string into bam= and bai=
+		#make sure the split happened, and that each element matches bam= and bai=
+		#unless it matches, construct bam=,bai= from the stored values in %md5sum
+		#if it matches grab the bam and bai md5sums separately
+		#check them against the stored values in %md5sums independently
+		#if either are off, $change the md5sum store in %filehash, and
+		#UPDATE the metaDB with a newly construted bam=,bai= line with data from %md5sums
+		#if both are the same, do nothing
+		
+		#this unless makes sure that you don't have a file with no associated metadata. It assumes that if you're a file 
+		#in the downloads directory, you will have a metadata stanza line fileName = wgEncodeWhatever.type.ext
+		#there is an extra exists in the if statement below so that you don't try to insert metadata into the metaDb as a orphaned stanza of just
+		#obj = filename, var = md5sum, val = [md5sum]
+		#I'm not sure that is required, as I couldn't find any orphaned metaDb entries before this modification, but better safe than sorry.
+		unless (exists $filehash{'fileName'}){
+			print STDERR "$file is an orphaned file, it has no metadata\n";
+		}
+		if (exists $md5sums{$file} && $type ne "bai" && $writedb == 1 && exists($filehash{'fileName'})){
+                	#there does not exist a metaDb md5sum value, do this
+			unless (exists $filehash{'md5sum'}){
+                        	$filehash{'md5sum'} = $md5sums{$file};
+				my $baisum;
+				#column names to be used for metaDb
+				my @into = ('obj', 'var', 'val');
+				#values to be INSERTED
+                                my @values;
+				#if type is bam, assume there is a bai, warn if not
+				if ($type eq "bam"){
+					$baisum = $md5sums{"$file.bai"};
+					unless ($baisum){print STDERR "can't find md5sum for bai for $file, does it exist?\n"}
+				}
+				#if it's not a bam, or it's a bam with no associated bai
+				unless ($type eq "bam" || $baisum){
+					@values = ($tablename, 'md5sum', $md5sums{$file});
+                        	}
+				else {
+					#for bam's with bai's the md5sum line in meta db goes like
+					#bam=4b23bd3187as78ce,bai=234123bd2d887ece97
+					@values = ($tablename, 'md5sum', "bam=$md5sums{$file},bai=$baisum");
+				}
+				#strangely, the insert command for Hgdb takes in references, while the update and execute ones don't
+				$db->insert($metadb, \@into, \@values);
+                		if ($opt{'verbose'} >= 2){
+					print STDERR "Inserted md5sum for $file into metaDb\n";
+				}
+			}
+			#if the metaDb md5sum and the calculated %md5sums sum are the same, do nothing
+			#also make sure that it's not a bam, or it's a bam with no bai
+			elsif ($filehash{'md5sum'} eq $md5sums{$file} && ($type ne "bam" || !($md5sums{"$file.bai"}))){
+				if ($opt{'verbose'} >= 3){
+					print STDERR "md5sum for file $file is same in metaDb and calculated md5sum\n";
+				}
+			}
+			#if there exists a metaDb me5sum, and the filetype isn't bam, or it's a bam with no bai, do this
+			elsif ($type ne "bam" || !($md5sums{"$file.bai"})) {
+				#md5sum goes in straight up
+				my @values = ($md5sums{$file}, $tablename, 'md5sum');
+				$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+				if ($opt{'verbose'} >=2){
+					print STDERR "Updated md5sum for $file into metaDb\n";
+				}
+				#don't forget to update filehash
+				$filehash{'md5sum'} = $md5sums{$file};
+			}
+			#processing for bam files with bai's
+			#this could be easily rewritten to just be a generic multiple file associated with an object engine
+			#but metaDb would have to store a list under fileName, currently it doesn't
+			else {
+				my $baisum = $md5sums{"$file.bai"};
+				unless ($baisum){print STDERR "can't find md5sum for bai for $file, does it exist?\n"}
+				my @sums = split (",", $filehash{'md5sum'});
+				#check if md5sum string match bam=, bai=
+				#if it doesn't, do this:
+				#construct the bam=,bai= line from %md5sums
+				unless ($sums[0] =~ m/bam\=/ && $sums[1] =~ m/bai\=/){
+					#constructed
+					my $filesum = "bam=$md5sums{$file},bai=$baisum";
+					my @values = ($filesum, $tablename, 'md5sum');
+                                	$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+					$filehash{'md5sum'} = $filesum;
+					if ($opt{'verbose'} >= 2){
+						print STDERR "Updated md5sum for $file and $file.bai\n";
+					}
+				
+				}
+				#if the line does match bam=,bai= and split properly
+				else {
+					#if the line does match
+					#grab the sums only
+					$sums[0] =~ m/bam\=(\S+)/;
+					my $testbam = $1;
+					$sums[1] =~ m/bai\=(\S+)/;
+					my $testbai = $1;
+					my $changed = 0;
+					#if either sum doesn't match the calculated one in %md5sums
+					#set changed = 1;
+					unless ($testbam eq $md5sums{$file}){
+						$changed = 1;
+						if ($opt{'verbose'} >= 2){
+							print STDERR "$file changed md5sums\n";
+						}
+					}
+					unless ($testbai eq $baisum){
+						$changed = 1;
+						if ($opt{'verbose'} >= 2){
+							print STDERR "$file.bai changed md5sums\n";
+						}
+					}
+					#if something changed
+					if ($changed){
+						#construct the md5um line for bams and UPDATE
+						my $filesum = "bam=$md5sums{$file},bai=$baisum";
+						my @values = ($filesum, $tablename, 'md5sum');
+						$filehash{'md5sum'} = $filesum;
+                                        	$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+						if ($opt{'verbose'} >= 2){
+							print STDERR "Updated md5sum for $file and $file.bai\n";
+						}
+					}
+				}
+			}
+        	}
+		elsif (exists $md5sums{$file}){
+			$filehash{'md5sum'} = $md5sums{$file};
+		}
+	}
+	
+	$filehash{'type'} = $type;
+
+	#put hash into fileinfo container
+	$fileinfo{$file} = \%filehash;
+}
+
+open FILE, ">files.txt" or die "die: can't open files.txt to write\n";
+if ($opt{'verbose'} >= 2){
+	#print "\n";
+	print STDERR "writing files.txt\n";
+}
+#alphanumeric sort
+foreach my $file (sort { $a cmp $b } keys %fileinfo){
+	print FILE "$file\t";
+	
+	#print each element according to sort order
+	foreach my $key (@sortorder){
+		#don't repeat fileName in metadata strings
+		if ($key eq "fileName"){next}
+		if (exists ${$fileinfo{$file}}{$key}){
+			print FILE "$key=${$fileinfo{$file}}{$key}; ";
+		}
+	}
+	print FILE "size=$sizes{$file}";
+	print FILE "\n";
+}
+close FILE;
+
+
+# just in case someone searched with quotes
+# "sub usage"
+sub usage {
+	print STDERR <<END;
+usage: encodeFilesList <db> [options]
+
+Creates files.txt and optionally md5sum.txt
+
+options:
+
+	-md5			md5 sums the files in the directory
+	-table			selects which metadata table to use
+	-verbose		verbose output (levels 1 - 3)
+	-cv			custom cv directory (default is /data/apache/cgi-bin/encode)
+	-directory		custom download directory (default is working directory)
+	-filemask		only allows selected pattern matches (must be in quotes)
+				E.g. -filemask "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb" (default)
+				Regex Example:  -filemask "wgEncode\\S+Huvec.* wgEncode\\S+GM\\d+Input"
+				Normal example: -filemask "*.gz *GM12878* *GM12*Tnfa
+				
+END
+exit 1;
+}
+
+sub md5sum {
+	
+	my $file = $_[0];
+	my $id = $_[1];
+	open (FILE, $file) or die "die: Can't open '$file': $!\n";
+	binmode(FILE);
+		
+	my $sum = Digest::MD5->new->addfile(*FILE)->hexdigest;
+	#lock shared threadstatus variable for thread-safeness
+	lock(%thrdstat);
+	$thrdstat{$id} = $file;
+	return ($sum);
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

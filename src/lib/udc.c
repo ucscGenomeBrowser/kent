@@ -85,6 +85,9 @@ struct udcFile
     char *bitmapFileName;	/* Name of bitmap file. */
     char *sparseFileName;	/* Name of sparse data file. */
     int fdSparse;		/* File descriptor for sparse data file. */
+    boolean sparseReadAhead;    /* Read-ahead has something in the buffer */
+    char *sparseReadAheadBuf;   /* Read-ahead buffer, if any */
+    bits64 sparseRAOffset;      /* Read-ahead buffer offset */
     struct udcBitmap *bits;     /* udcBitMap */
     bits64 startData;		/* Start of area in file we know to have data. */
     bits64 endData;		/* End of area in file we know to have data. */
@@ -922,6 +925,7 @@ if (file != NULL)
     freeMem(file->cacheDir);
     freeMem(file->bitmapFileName);
     freeMem(file->sparseFileName);
+    freeMem(file->sparseReadAheadBuf);
     mustCloseFd(&(file->fdSparse));
     udcBitmapClose(&file->bits);
     }
@@ -1177,7 +1181,7 @@ file->startData = fetchedStart;
 file->endData = fetchedEnd;
 }
 
-static boolean udcCachePreload(struct udcFile *file, bits64 offset, int size)
+static boolean udcCachePreload(struct udcFile *file, bits64 offset, bits64 size)
 /* Make sure that given data is in cache - fetching it remotely if need be. 
  * Return TRUE on success. */
 {
@@ -1209,9 +1213,11 @@ for (s = offset; s < endPos; s = e)
 return ok;
 }
 
-int udcRead(struct udcFile *file, void *buf, int size)
+#define READAHEADBUFSIZE 4096
+bits64 udcRead(struct udcFile *file, void *buf, bits64 size)
 /* Read a block from file.  Return amount actually read. */
 {
+
 /* Figure out region of file we're going to read, and clip it against file size. */
 bits64 start = file->offset;
 if (start > file->size)
@@ -1220,37 +1226,97 @@ bits64 end = start + size;
 if (end > file->size)
     end = file->size;
 size = end - start;
+char *cbuf = buf;
 
+/* use read-ahead buffer if present */
+bits64 bytesRead = 0;
 
-/* If we're outside of the window of file we already know is good, then have to
- * consult cache on disk, and maybe even fetch data remotely! */
-if (start < file->startData || end > file->endData)
+bits64 raStart;
+bits64 raEnd;
+while(TRUE)
     {
-
-    if (!udcCachePreload(file, start, size))
+    if (file->sparseReadAhead)
 	{
-	verbose(2, "udcCachePreload failed");
-	return 0;
+	raStart = file->sparseRAOffset;
+	raEnd = raStart+READAHEADBUFSIZE;
+	if (start >= raStart && start < raEnd)
+	    {
+	    // copy bytes out of rabuf
+	    bits64 endInBuf = min(raEnd, end);
+	    bits64 sizeInBuf = endInBuf - start;
+	    memcpy(cbuf, file->sparseReadAheadBuf + (start-raStart), sizeInBuf);
+	    cbuf += sizeInBuf;
+	    bytesRead += sizeInBuf;
+	    start = raEnd;
+	    size -= sizeInBuf;
+	    file->offset += sizeInBuf;
+	    if (size == 0)
+		break;
+	    }
+	file->sparseReadAhead = FALSE;
+	mustLseek(file->fdSparse, start, SEEK_SET);
 	}
 
-    /* Currently only need fseek here.  Would be safer, but possibly
-     * slower to move fseek so it is always executed in front of read, in
-     * case other code is moving around file pointer. */
+    bits64 saveEnd = end;
+    if (size < READAHEADBUFSIZE)
+	{
+	file->sparseReadAhead = TRUE;
+	if (!file->sparseReadAheadBuf)
+	    file->sparseReadAheadBuf = needMem(READAHEADBUFSIZE);
+	file->sparseRAOffset = start;
+	size = READAHEADBUFSIZE;
+	end = start + size;
+	if (end > file->size)
+	    {
+	    end = file->size;
+	    size = end - start;
+	    }
+	}
 
-    mustLseek(file->fdSparse, start, SEEK_SET);
+
+    /* If we're outside of the window of file we already know is good, then have to
+     * consult cache on disk, and maybe even fetch data remotely! */
+    if (start < file->startData || end > file->endData)
+	{
+
+	if (!udcCachePreload(file, start, size))
+	    {
+	    verbose(2, "udcCachePreload failed");
+	    bytesRead = 0;
+	    break;
+	    }
+
+	/* Currently only need fseek here.  Would be safer, but possibly
+	 * slower to move fseek so it is always executed in front of read, in
+	 * case other code is moving around file pointer. */
+
+	mustLseek(file->fdSparse, start, SEEK_SET);
+	}
+
+    if (file->sparseReadAhead)
+	{
+	mustReadFd(file->fdSparse, file->sparseReadAheadBuf, size);
+	end = saveEnd;
+	size = end - start;
+	}
+    else
+	{
+	mustReadFd(file->fdSparse, cbuf, size);
+	file->offset += size;
+	bytesRead += size;
+	break;
+	}
     }
 
-mustReadFd(file->fdSparse, buf, size);
-file->offset += size;
-return size;
+return bytesRead;
 }
 
-void udcMustRead(struct udcFile *file, void *buf, int size)
+void udcMustRead(struct udcFile *file, void *buf, bits64 size)
 /* Read a block from file.  Abort if any problem, including EOF before size is read. */
 {
-int sizeRead = udcRead(file, buf, size);
+bits64 sizeRead = udcRead(file, buf, size);
 if (sizeRead < size)
-    errAbort("udc couldn't read %d bytes from %s, did read %d", size, file->url, sizeRead);
+    errAbort("udc couldn't read %llu bytes from %s, did read %llu", size, file->url, sizeRead);
 }
 
 int udcGetChar(struct udcFile *file)
@@ -1384,6 +1450,26 @@ bits64 udcTell(struct udcFile *file)
 return file->offset;
 }
 
+static long bitRealDataSize(char *fileName)
+/* Return number of real bytes indicated by bitmaps */
+{
+struct udcBitmap *bits = udcBitmapOpen(fileName);
+int blockSize = bits->blockSize;
+long byteSize = 0;
+int blockCount = (bits->fileSize + blockSize - 1)/blockSize;
+if (blockCount > 0)
+    {
+    int bitmapSize = bitToByteSize(blockCount);
+    Bits *b = needLargeMem(bitmapSize);
+    mustReadFd(bits->fd, b, bitmapSize);
+    int bitsSet = bitCountRange(b, 0, blockCount);
+    byteSize = (long)bitsSet*blockSize;
+    freez(&b);
+    }
+udcBitmapClose(&bits);
+return byteSize;
+}
+
 static bits64 rCleanup(time_t deleteTime, boolean testOnly)
 /* Delete any bitmap or sparseData files last accessed before deleteTime */
 {
@@ -1406,6 +1492,7 @@ for (file = fileList; file != NULL; file = file->next)
 	}
     else if (sameString(file->name, bitmapName))
         {
+	verbose(2, "%ld (%ld) %s/%s\n", bitRealDataSize(file->name), (long)file->size, getCurrentDir(), file->name);
 	if (file->lastAccess < deleteTime)
 	    {
 	    /* Remove all files when get bitmap, so that can ensure they are deleted in 

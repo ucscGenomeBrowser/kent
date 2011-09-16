@@ -21,7 +21,7 @@ set Xdb = Mm9
 set ydb = canFam2
 set zdb = rheMac2
 set spDb = sp101005
-set pbDb = proteins100331
+set pbDb = proteins101005
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer5
@@ -74,8 +74,8 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
   # mm9.txt
-set bioCycPathways = /hive/data/outside/bioCyc/090623/pathways.col
-set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
+set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
+set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
 set rfam = /hive/data/outside/Rfam/110710
 
 
@@ -718,11 +718,15 @@ subColumn 4 uncoding.bed txToAcc.tab ucscUncoding.bed
 subColumn 10 cdsToGenome.psl txToAcc.tab ucscProtMap.psl
 cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.tab ucscGenes.ev
 
-# Make files with protein and mrna accessions.  These will be taken from
-# RefSeq for the RefSeq ones, and derived from our transcripts for the rest.
+
+# Make files with (a) representative protein and mrna accessions, and (b) the protein
+# and mrna sequences representing direct transcription/translation of the bed blocks.  
+# The reresentative proteins and mrnas will be taken from RefSeq for the RefSeq ones, 
+# and derived from our transcripts for the rest.
 # Load these sequences into database. Takes 17 seconds.
-txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa \
-    refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
+txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa \
+    refSeq.fa refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa \
+    ucscGenesTx.fa ucscGenesTx.faa
 
 
 # Generate ucscGene/uniprot blat run.
@@ -835,6 +839,8 @@ hgLoadSqlTab $tempDb knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.
 hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
 hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
+hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
+hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
 
 
 
@@ -886,21 +892,22 @@ hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 
 cd $dir
 hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 ~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
+
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
-     
+
+#
+# TODO: determine WHY knownToHprd is so much smaller than previously
+# (knownToHprd old: 1,642,416 new: 1,214,016)     
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
     hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
-    hgMapToGene $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
+    hgMapToGene $db -tempDb=$tempDb affyU133 knownGene knownToU133
     hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
     hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds -ignoreStrand
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
-
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
@@ -908,20 +915,6 @@ if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
 	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
-    # All exon array.
-    mkdir affyAllExon
-    cd affyAllExon
-    hgsql $db -N -e "select * from affyExonTissues" | cut -f2-6 > probes.bed
-    overlapSelect -inFmt=genePred -selectFmt=bed -idOutput probes.bed ../ucscGenes.gp ids.txt
-    hgsql $db -N -e "select name,expCount,expScores from affyExonTissues" > expData.txt
-    affyAllExonGSColumn expData.txt ids.txt column.txt
-    hgLoadSqlTab $tempDb affyExonTissuesGs ~/kent/src/hg/lib/expData.sql column.txt
-    ln -s ~/kent/src/hg/makeDb/hgRatioMicroarray/affyHumanExon.ra .
-    echo "create table affyExonTissuesGsExps select * from $db.affyExonTissuesGsExps" | hgsql $tempDb
-    hgMedianMicroarray $tempDb affyExonTissuesGs $db.affyExonTissuesGsExps \
-       affyHumanExon.ra affyExonTissuesGsMedian affyExonTissuesGsMedianExps
-    hgExpDistance $tempDb affyExonTissuesGsMedian \
-       affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
 endif
 
 if ($db =~ mm*) then
@@ -937,13 +930,6 @@ if ($db =~ mm*) then
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
 
-compareModifiedFileSizes.csh $oldGeneDir .
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
-#breakpoint
-
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
@@ -951,7 +937,7 @@ cd /usr/local/apache/cgi-bin/visiGeneData
 ixIxx visiGene.text visiGene.ix visiGene.ixx
 cd $dir
 
-
+# TODO: rerun the hprd command after figuring out WHY knownToHprd seems so much smaller...
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
 hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
@@ -962,12 +948,11 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-#breakpoint
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
 # 45 minutes to run.
-mkdir $dir/hgNearBlastp
+mkdir -p $dir/hgNearBlastp
 cd $dir/hgNearBlastp
 cat << _EOF_ > config.ra
 # Latest human vs. other Gene Sorter orgs:
@@ -997,8 +982,6 @@ doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -wo
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
 loadPairwise.csh
 
-#breakpoint
-
 # Load human and rat
 cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
@@ -1016,8 +999,6 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
 synBlastp.csh $tempDb $ratDb
-
-#breakpoint
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -1062,7 +1043,6 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 
-#breakpoint
 
 # Clean up
 cd $dir/hgNearBlastp
@@ -1073,7 +1053,7 @@ gzip run.*/all.tab
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
-mkdir  rnaStruct
+mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
 # these commands take some significant time
@@ -1109,27 +1089,27 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
 # RNAfold, so not easy for us to fix. Consequence is not too bad, just a
 # few 3' UTRs will be missing annotation.
 
-#breakpoint
-
 # Clean up
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
 
-
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
 # Did this with
 #   wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam_fs.gz
-mkdir $dir/pfam
+set pfamScratch = $scratchDir/tmp/pfam
+mkdir -p $pfamScratch
+cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
+mkdir -p $dir/pfam
 cd $dir/pfam
-mkdir splitProt
+mkdir -p splitProt
 faSplit sequence $dir/ucscGenes.faa 10000 splitProt/
-mkdir result
+mkdir -p result
 ls -1 splitProt > prot.list
 cat << '_EOF_' > doPfam
 #!/bin/csh -ef
-/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/pfam/current/Pfam_fs \
+/hive/data/outside/pfam/hmmpfam -E 0.1 /scratch/tmp/Pfam_fs \
 	splitProt/$1 > /scratch/tmp/$2.pf
 mv /scratch/tmp/$2.pf $3
 '_EOF_'
@@ -1141,14 +1121,16 @@ doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 #ENDLOOP
 '_EOF_'
 gensub2 prot.list single template jobList
-ssh $cpuFarm "cd $dir/pfam; para make jobList"
 
+ssh $cpuFarm "cd $dir/pfam; para make jobList"
+#
 # Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    5543931s   92398.85m  1539.98h   64.17d  0.176 y
-# IO & Wait Time:              21389629s  356493.81m  5941.56h  247.57d  0.678 y
-# Average job time:                2786s      46.43m     0.77h    0.03d
-# Longest finished job:           14976s     249.60m     4.16h    0.17d
-# Submission to last job:         69651s    1160.85m    19.35h    0.81d
+# CPU time in finished jobs:    3665959s   61099.32m  1018.32h   42.43d  0.116 y
+# IO & Wait Time:               3731399s   62189.98m  1036.50h   43.19d  0.118 y
+# Average job time:                 765s      12.75m     0.21h    0.01d
+# Longest finished job:            4941s      82.35m     1.37h    0.06d
+# Submission to last job:         10041s     167.35m     2.79h    0.12d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
@@ -1163,22 +1145,21 @@ raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
 # Convert output to tab-separated file. 
 cd $dir/pfam
 catDir result | hmmPfamToTab -eValCol stdin ucscPfam.tab
+cd $dir
 
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
 	pfamDesc.tab > sub.tab
-cut -f 1,4 ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
+cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
 
-#breakpoint
-
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
-mkdir $dir/scop
+mkdir -p $dir/scop
 cd $dir/scop
-mkdir result
+mkdir -p result
 ls -1 ../pfam/splitProt > prot.list
 cat << '_EOF_' > doScop
 #!/bin/csh -ef
@@ -1198,11 +1179,12 @@ gensub2 prot.list single template jobList
 
 ssh $cpuFarm "cd $dir/scop; para make jobList"
 # Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    3984764s   66412.73m  1106.88h   46.12d  0.126 y
-# IO & Wait Time:              18210135s  303502.25m  5058.37h  210.77d  0.577 y
-# Average job time:                2296s      38.26m     0.64h    0.03d
-# Longest finished job:           11765s     196.08m     3.27h    0.14d
-# Submission to last job:         33834s     563.90m     9.40h    0.39d
+# CPU time in finished jobs:    3953327s   65888.78m  1098.15h   45.76d  0.125 y
+# IO & Wait Time:               7723843s  128730.72m  2145.51h   89.40d  0.245 y
+# Average job time:                1208s      20.13m     0.34h    0.01d
+# Longest finished job:            4703s      78.38m     1.31h    0.05d
+# Submission to last job:         12535s     208.92m     3.48h    0.15d
+
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -1213,8 +1195,6 @@ scopCollapse scopPlusScore.tab /hive/data/outside/scop/model.tab ucscScop.tab \
 hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
 hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
-
-#breakpoint
 
 # Regenerate ccdsKgMap table
 ~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
@@ -1239,62 +1219,11 @@ rm kgSpAlias_0.tmp
 
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
-#breakpoint (proteome browser)
-
-# RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
-
-# These are instructions for building tables 
-# needed for the Proteome Browser. 
- 
-# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
-# ARE REBUILT.  Also make sure have proteins database rebuilt to correspond with swissProt
-# This build is based on proteins DBs dated 090821
-
-# Create the working directory
-
-mkdir -p $dir/pb
-cd $dir/pb
-
-
-# Build the pepMwAa table
-
-hgsql $spDb -N -e \
-"select info.acc, molWeight, aaSize from info, accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > pepMwAa.tab
-
-hgLoadSqlTab $tempDb pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
-
-# Build the pepPi table
-cd $dir/pb
-pbCalPi $spDb pepPi.tab
-hgLoadSqlTab $tempDb pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
-
-# Calculate and load pep distributions
-cd $dir/pb
-pbCalDist $spDb $pbDb $taxon $tempDb 
-hgLoadSqlTab $tempDb pepExonCntDist ~/kent/src/hg/lib/pepExonCntDist.sql ./pepExonCntDist.tab
-hgLoadSqlTab $tempDb pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql ./pepCCntDist.tab
-hgLoadSqlTab $tempDb pepHydroDist ~/kent/src/hg/lib/pepHydroDist.sql ./pepHydroDist.tab
-hgLoadSqlTab $tempDb pepMolWtDist ~/kent/src/hg/lib/pepMolWtDist.sql ./pepMolWtDist.tab
-hgLoadSqlTab $tempDb pepResDist ~/kent/src/hg/lib/pepResDist.sql ./pepResDist.tab
-hgLoadSqlTab $tempDb pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql ./pepIPCntDist.tab
-hgLoadSqlTab $tempDb pepPiDist ~/kent/src/hg/lib/pepPiDist.sql ./pepPiDist.tab
-
-#breakpoint
-
-# Calculate frequency distributions
-
-pbCalResStd $spDb $taxon $tempDb
-
-# Create pbAnomLimit and pbResAvgStd tables
-
-hgLoadSqlTab $tempDb pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
-
-hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
-
-# The old pbStamp table seems OK, so no adjustment needed.
+# move this endif statement past business that has successfully been completed
+endif # BRACKET
 
 # Do BioCyc Pathways build
-    mkdir $dir/bioCyc
+    mkdir -p $dir/bioCyc
     cd $dir/bioCyc
     grep -v '^#' $bioCycPathways > pathways.tab
     grep -v '^#' $bioCycGenes > genes.tab
@@ -1302,37 +1231,35 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
-#breakpoint
 
 # Do KEGG Pathways build
-    mkdir $dir/kegg
+    mkdir -p $dir/kegg
     cd $dir/kegg
 
     wget --timestamping -O hsa2.html \
     "http://www.kegg.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa" 
 
-    cat hsa2.html |grep "mapno=" |sed -e 's/mapno=/\npath:hsa/'|grep -v org_name |\
-    sed -e 's/">/\t/' |\
-    sed -e 's/</\t/'|cut -f 1,2 >hsa.lis
+    cat hsa2.html |grep "show_pathway" |sed -e 's/show_pathway?/\tpath:/'\
+     |grep -v org_name |sed -e 's/">/\t/' |sed -e 's#</a><br>##'  |cut -f 2,3 \
+    >hsa.lis
     
     ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
 
     kgAttachKegg $db keggList.tab  keggPathway.tab
-    hgLoadSqlTab $tempDb keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
+    hgLoadSqlTab $tempDb keggPathway ~/kent/src/hg/lib/keggPathway.sql ./keggPathway.tab
 
     cat hsa.lis | sed -e 's/path://' > keggMapDesc.tab
-    hgLoadSqlTab $tempDb keggMapDesc ~/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+    hgLoadSqlTab $tempDb keggMapDesc ~/kent/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
 
 # Make spMrna table (useful still?)
    cd $dir
    hgsql $db -N -e "select spDisplayID,kgID from kgXref where spDisplayID != ''" > spMrna.tab;
    hgLoadSqlTab $tempDb spMrna ~/kent/src/hg/lib/spMrna.sql spMrna.tab
 
-#breakpoint
 
 # Do CGAP tables 
 
-    mkdir $dir/cgap
+    mkdir -p $dir/cgap
     cd $dir/cgap
     
     wget --timestamping -O Hs_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Hs_GeneData.dat"
@@ -1346,7 +1273,9 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-#breakpoint	    
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
@@ -1374,7 +1303,7 @@ hgsqladmin flush-tables
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
 # page, gene sorter, and proteome browser still need more tables.
-mkdir $dir/index
+mkdir -p $dir/index
 cd $dir/index
 hgKgGetText $db knownGene.text 
 ixIxx knownGene.text knownGene.ix knownGene.ixx

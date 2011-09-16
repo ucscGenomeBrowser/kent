@@ -477,6 +477,10 @@ struct genePred *gpList = NULL, *gp = NULL;
 char tableName[64];
 boolean hasBin;
 int itemCount = 0;
+int arcogCount = 0;
+char genome[50] = "";
+char clade[50] = "";
+boolean hasArCOG;
 
 char treeFileName[256];
 char treeTmpPsFileName[256];
@@ -615,9 +619,9 @@ if (hTableExists(database, "COG"))
 	            COGXra=COGXraLoad(row2);
 	            if(COGXra!=NULL)
 	              printf("<B>COG:</B> "
-                 "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?%s\" "
+                 "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?%s\"  target=\"_blank\" "
                  ">%s</A>&nbsp; "
-                 "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?fun=%s\" "
+                 "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?fun=%s\"  target=\"_blank\" "
                  ">Code %s</A>&nbsp;\n",
                  COGXra->name, COGXra->name, COG->code,COG->code);
 	            printf(" %s<BR>\n", COGXra->info);
@@ -632,6 +636,7 @@ if (hTableExists(database, "COG"))
     //hFreeConn(&conn2);
 }
 
+/*
 if (hTableExists(database, "arCOGs"))
 {
     struct arCOGs *infoload = NULL;
@@ -665,6 +670,42 @@ if (hTableExists(database, "arCOGs"))
          }
      }
 }
+*/
+
+arcogCount = 0;
+hasArCOG = FALSE;
+row = NULL;
+sprintf(query, "show databases like 'arCogsDb'");
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+{
+	hasArCOG = TRUE;
+}
+sqlFreeResult(&sr);
+
+if (hasArCOG)
+{
+	/* Get species info */
+	memset(genome, 0, 50);
+	memset(clade, 0, 50);
+	getGenomeClade(conn, database, genome, clade);
+
+	sprintf(query, "select distinct a.arcog_id, a.anntation, c.class_id from arCogsDb.arcogDef a, arCogsDb.arcog b, arCogsDb.arcogFun c where a.arcog_id = b.arcog_id and a.arcog_id = c.arcog_id and db_name = '%s' and name = '%s'",
+			database, item);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	{
+		printf("<B>arCOG:</B> <A HREF=\"/arCOGsBrowser/#Tax_Tree;ArcogsId=%s\" target=\"_blank\">%s</A> <A HREF=\"/arCOGsBrowser/#MainAdvance;Genome=%s,FunId=%s,Limit=50,Index=0,Load=true\" target=\"_blank\">Code %s</A> ",
+			   row[0], row[0], genome, row[2], row[2]);
+		printf("  %s<BR/>\n", row[1]);
+		arcogCount++;
+		itemCount++;		
+	}
+	sqlFreeResult(&sr);
+	if (arcogCount  > 0)
+		printf("<A HREF=\"/arCOGsBrowser/#MainGene;Genome=%s,Gene=%s\" target=\"_blank\">arCOG Gene Annotation</A><BR/>", genome, item);
+}
+
 if (itemCount == 0) printf("Not available\n");
 printf("</td></tr></tbody></table><br>\n");
 

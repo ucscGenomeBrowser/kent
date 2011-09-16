@@ -184,7 +184,7 @@ else
                 {
                 if (mdbObjsHasCommonVar(mdbObjs, var->var,TRUE)) // Don't bother if all the vals are the same (missing okay)
                     continue;
-                dyStringPrintf(dySortFields,"%s=%s ",var->var,strSwapChar(cloneString(cvLabel(var->var)),' ','_'));
+                dyStringPrintf(dySortFields,"%s=%s ",var->var,strSwapChar(cloneString(cvLabel(NULL,var->var)),' ','_'));
                 }
             }
         if (dyStringLen(dySortFields))
@@ -397,14 +397,19 @@ if (sortOrder != NULL)
             char *tag = (char *)cvTag(var,term->name);
             if (tag == NULL)
                 tag = term->name;
-            slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(term->name)));
+            slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(var,term->name)));
             slNameFree(&term);
             }
 
         // If there is more than one val for this var then create filterBy box for it
         if (slCount(tagLabelPairs) > 1)
             {
-            slPairValSortCase(&tagLabelPairs); // should have a list sorted on the label
+            // should have a list sorted on the label
+            enum cvDataType eCvDataType = cvDataType(var);
+            if (eCvDataType == cvInteger)
+                slPairValAtoiSort(&tagLabelPairs);
+            else
+                slPairValSortCase(&tagLabelPairs);
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
         #ifdef NEW_JQUERY
@@ -461,25 +466,31 @@ if (hIsBetaHost())
     subDir = "/beta";                        // it's downloads server is "hgdownload.cse.ucsc.edu"
     }
 
-printf("<BR><A HREF='http://%s/goldenPath/%s/%s/'><img src='../images/ab_up.gif'>Parent directory</A> for %s downloads.<BR>\n",
-                server,db,ENCODE_DCC_DOWNLOADS,db);
 cgiDown(0.9);
 puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
 puts("in publication  until the restriction date noted for the given data file.</B>");
 
 cgiDown(0.7);
-puts("Supporting documents:");
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> is a tab-separated file with the name and metadata for each download.\n",
+puts("Additional resources:");
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> - lists the name and metadata for each download.\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.\n",
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> - lists the md5sum output for each download.\n",
+                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s'>downloads server</A></B> - alternative access to downloadable files (may include obsolete data).\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>Supplemental materials</A></B> contains additional files provided by the laboratory related to these downloads.\n",
+    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>supplemental materials</A></B> - any related files provided by the laboratory.\n",
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
+if (hIsPreviewHost())
+    printf("<BR><b>WARNING</b>: This data is provided for early access via the Preview Browser -- it is unreviewed and subject to change. For high quality reviewed annotations, see the <a target=_blank href='http://%s/cgi-bin/hgTracks?db=%s'>Genome Browser</a>.",
+        "genome.ucsc.edu", db);
+else
+    printf("<BR><b>NOTE</b>: Early access to additional track data may be available on the <a target=_blank href='http://%s/cgi-bin/hgFileUi?db=%s&g=%s'>Preview Browser</A>.",
+        "genome-preview.ucsc.edu", db, tdb->track);
 }
 
 static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,boolean filterable)
@@ -614,7 +625,12 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                 if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
                     printf("<TD%s nowrap style='color: #BBBBBB;'%s>%s</td>",align,class,field);
                 else
+                    {
+                    // use label
+                    if (!isFieldEmpty && cvTermIsCvDefined(sortOrder->column[ix]))
+                        field = (char *)cvLabel(sortOrder->column[ix],field);
                     printf("<TD%s nowrap%s>%s</td>",align,class,isFieldEmpty?" &nbsp;":field);
+                    }
                 if (!sameString("fileType",sortOrder->column[ix]))
                     mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
                 }
@@ -633,7 +649,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
 
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
     mdbObjRemoveVars(oneFile->mdb,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_COMPOSITE " " MDB_VAR_PROJECT); // Remove this from mdb now so that it isn't displayed in "extras'
-    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE);
+    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE,TRUE);
     printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
 
     printf("</TR>\n");

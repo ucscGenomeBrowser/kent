@@ -44,6 +44,8 @@ public class HGGeneCheck {
      return true;
    if (track.equals("sgdGene"))
      return true;
+   if (track.equals("rgdGene2"))
+     return true;
    return false;
  }
 
@@ -51,7 +53,7 @@ public class HGGeneCheck {
   *  Runs the program to check all Known Genes,
   *  looping over all assemblies, looking for non-200 return code.
   */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
 
     boolean debug = false;
 
@@ -72,13 +74,7 @@ public class HGGeneCheck {
     if (!QADBLibrary.checkDriver()) return;
     
     // get read access to database
-    HGDBInfo metadbinfo; 
-    try {
-      metadbinfo = new HGDBInfo("hgwdev", "hgcentraltest");
-    } catch (Exception e) {
-      System.out.println(e.toString());
-      return;
-    }
+    HGDBInfo metadbinfo = new HGDBInfo("hgwdev", "hgcentraltest");
     if (!metadbinfo.validate()) return;
 
     ArrayList assemblyList = QADBLibrary.getDatabaseOrAll(metadbinfo, target.dbSpec);
@@ -91,38 +87,34 @@ public class HGGeneCheck {
       // System.out.println("Assembly = " + assembly);
 
       // create HGDBInfo for this assembly
-      try {
-	HGDBInfo dbinfo = new HGDBInfo(target.machine, assembly);
-	if (!dbinfo.validate()) {
-	  System.out.println("Cannot connect to database for " + assembly);
-	  continue;
-	}
-        // does this assembly have knownGene track?
-        // could write a helper routine to do this
+      HGDBInfo dbinfo = new HGDBInfo(target.machine, assembly);
+      if (!dbinfo.validate()) {
+         System.err.println("Cannot connect to database for " + assembly);
+         continue;
+      }
+      // does this assembly have knownGene track?
+      // could write a helper routine to do this
 
-        // get tracks for this assembly (read track controls from web)
-        String hgtracksURL = "http://" + target.machine + "/cgi-bin/hgTracks?db=";
-        hgtracksURL = hgtracksURL + assembly;
-        String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
-        ArrayList trackList = 
-          HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
-        if (debug) {
-          int count2 = trackList.size();
-          System.out.println("Count of tracks found = " + count2);
-        }
-        // iterate through tracks
-        Iterator trackIter = trackList.iterator();
-        while (trackIter.hasNext()) {
-          String track = (String) trackIter.next();
-	  if (!trackHasHgGene(track))
+      // get tracks for this assembly (read track controls from web)
+      String hgtracksURL = "http://" + target.machine + "/cgi-bin/hgTracks?db=";
+      hgtracksURL = hgtracksURL + assembly;
+      String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
+      ArrayList trackList = 
+         HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
+      if (debug) {
+         int count2 = trackList.size();
+         System.out.println("Count of tracks found = " + count2);
+      }
+      // iterate through tracks
+      Iterator trackIter = trackList.iterator();
+      while (trackIter.hasNext()) {
+         String track = (String) trackIter.next();
+         if (!trackHasHgGene(track))
 	    continue;
-          System.out.println(track);
-          HgTracks.hggene(dbinfo, target.machine, assembly, track, 
-                          target.quickOn);
-          System.out.println();
-        }
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
+         System.out.println(track);
+         HgTracks.hggene(dbinfo, target.machine, assembly, track, 
+                         target.quickOn);
+         System.out.println();
       }
       System.out.println();
       System.out.println();

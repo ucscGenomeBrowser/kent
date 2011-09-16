@@ -16,6 +16,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep1.bam
 grant Snyder
 lab Stanford
+md5sum bam=4db456648cdad1707ed3e225abc7913b,bai=0f4a4bbb57f3755672ce2605669edc63
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -36,6 +37,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep2.bam
 grant Snyder
 lab Stanford
+md5sum bam=d4837424addd56ab8b9fcf7c9fc99551,bai=620b50720d15c68fefbc89edc545c9e5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -56,6 +58,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep3.bam
 grant Snyder
 lab Stanford
+md5sum bam=67f6961dba0e7d1066a7712ecf0b1cea,bai=7a16982874b08ac4f5b1c9216fad6611
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -76,6 +79,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep4.bam
 grant Snyder
 lab Stanford
+md5sum bam=02c58798758337e4909b930e88b67ae2,bai=ea85d21f15712cab22183c4b1edb5c3c
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -96,6 +100,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep5.bam
 grant Snyder
 lab Stanford
+md5sum bam=eaab3eec4560e87f540c490d9874e898,bai=56895a92b7f71c63552c056753cc991c
 origAssembly hg19
 project wgEncode
 replicate 5
@@ -116,6 +121,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep6.bam
 grant Snyder
 lab Stanford
+md5sum bam=082dd0064d5bd58daada86a4fa9550ff,bai=a6dd3bdbdd4feb8a254caecb42126b66
 origAssembly hg19
 project wgEncode
 replicate 6
@@ -136,6 +142,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep7.bam
 grant Snyder
 lab Stanford
+md5sum bam=1b0df7f0ef1917405266073d1b2f3702,bai=4c45ca0ac17729593cba44ed80d9c02e
 origAssembly hg19
 project wgEncode
 replicate 7
@@ -156,6 +163,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep8.bam
 grant Snyder
 lab Stanford
+md5sum bam=705e78ffba17c6466e4bcb3435772704,bai=b7b8fc27e6ad8adbfb6d0f9b3fd2ae94
 origAssembly hg19
 project wgEncode
 replicate 8
@@ -176,6 +184,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878AlnRep9.bam
 grant Snyder
 lab Stanford
+md5sum bam=7505de9fbb7d8db2592936a07ae2bdd7,bai=8cba433862764c22586fab43585eec54
 origAssembly hg19
 project wgEncode
 replicate 9
@@ -196,6 +205,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep1.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 907d96ca4c3251e7643107b5f6f64e12
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -216,6 +226,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep2.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 5f869728b58523496ab379f53d951f42
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -236,6 +247,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep3.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 964ed609c53fcd3f7f3e6e8ffef74a00
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -256,6 +268,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep4.csqual.gz
 grant Snyder
 lab Stanford
+md5sum e4afd44ceff862601a3960fce5b05616
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -276,6 +289,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep5.csqual.gz
 grant Snyder
 lab Stanford
+md5sum c7d45310c5561fc12a081a775ab16086
 origAssembly hg19
 project wgEncode
 replicate 5
@@ -296,6 +310,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep6.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 181287e0f4ac72790db4a24ebf6d4c5b
 origAssembly hg19
 project wgEncode
 replicate 6
@@ -316,6 +331,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep7.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 4f1c0e6887cf33c3a8e09e43e10e6dbf
 origAssembly hg19
 project wgEncode
 replicate 7
@@ -336,6 +352,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep8.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 17f861f71c456786e2a1f19791d511a2
 origAssembly hg19
 project wgEncode
 replicate 8
@@ -356,6 +373,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawData2Rep9.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 4e12dbaf02bbcbbce08cc9df9152a168
 origAssembly hg19
 project wgEncode
 replicate 9
@@ -376,6 +394,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep1.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 92a9b753b60581849818269eec96215e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -396,6 +415,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep2.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 04b40ffb453fe1b832b842a2a51d7e7d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -416,6 +436,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep3.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum dc2af18bb64b97edf09c8706ab02d89c
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -436,6 +457,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep4.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum fe473a2be316c1fbe59d0950fc2a9885
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -456,6 +478,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep5.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 2129fe4858b64783da19ac4d30319fc7
 origAssembly hg19
 project wgEncode
 replicate 5
@@ -476,6 +499,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep6.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 116ff96e791c63211fb63ab3b864569e
 origAssembly hg19
 project wgEncode
 replicate 6
@@ -496,6 +520,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep7.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 8be6d1c3bd6eadd2c5e8b6572101a88e
 origAssembly hg19
 project wgEncode
 replicate 7
@@ -516,6 +541,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep8.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 58d37852a720f4f09a847263712a962d
 origAssembly hg19
 project wgEncode
 replicate 8
@@ -536,6 +562,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878RawDataRep9.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum f920beec243cc0173dff19f47a35bf32
 origAssembly hg19
 project wgEncode
 replicate 9
@@ -557,6 +584,7 @@ expId 922
 fileName wgEncodeSydhNsomeGm12878Sig.bigWig
 grant Snyder
 lab Stanford
+md5sum 0d21038279f032fee426a444d1fe7dd8
 origAssembly hg19
 project wgEncode
 seqPlatform AB_SOLiD_3.5
@@ -577,6 +605,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep1.bam
 grant Snyder
 lab Stanford
+md5sum bam=18babbd368ea4b4d20b2ce4decdeac67,bai=3c98c67413f770921187141624462e8f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -597,6 +626,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep10.bam
 grant Snyder
 lab Stanford
+md5sum bam=72d8734a3a6cb842bfa1ee77df401b0a,bai=124367893f27cbe2225df6a973c74e81
 origAssembly hg19
 project wgEncode
 replicate 10
@@ -617,6 +647,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep11.bam
 grant Snyder
 lab Stanford
+md5sum bam=17893b9fc546ccfb26384a7bb705796d,bai=96accc5f49d4311b28088e27bb84cb48
 origAssembly hg19
 project wgEncode
 replicate 11
@@ -637,6 +668,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep2.bam
 grant Snyder
 lab Stanford
+md5sum bam=aa0a58ba495ae37c7e3cdcf2c5ee79ee,bai=d9e39c0cf46cb6d75743b1219ddcd942
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -657,6 +689,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep3.bam
 grant Snyder
 lab Stanford
+md5sum bam=f7b5c727ab063e4a50d2a56c5bed6af0,bai=c9bd208782c5605a9370847689f2a517
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -677,6 +710,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep4.bam
 grant Snyder
 lab Stanford
+md5sum bam=7dbe89a4ac3b4baedb87b46aaba41aba,bai=60c4626d9b0dbb0ee153040341f92dd0
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -697,6 +731,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep5.bam
 grant Snyder
 lab Stanford
+md5sum bam=bc5a1afe7c03762f76a007a359b7c759,bai=94917e064588312c52df8f1c60ced3b3
 origAssembly hg19
 project wgEncode
 replicate 5
@@ -717,6 +752,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep6.bam
 grant Snyder
 lab Stanford
+md5sum bam=61562cd733e9aa3b25b5c8d594b0025f,bai=29816c378b1bc63b4d609d29e7a254d6
 origAssembly hg19
 project wgEncode
 replicate 6
@@ -737,6 +773,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep7.bam
 grant Snyder
 lab Stanford
+md5sum bam=4c2ddcfed20ef8b83b51f7f753c20ea1,bai=632bb241e94cb491909ff13270505215
 origAssembly hg19
 project wgEncode
 replicate 7
@@ -757,6 +794,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep8.bam
 grant Snyder
 lab Stanford
+md5sum bam=d31c77f90f3973dac2d52182ada2f323,bai=5dbf985ad8ca2126a5fafd71cd050646
 origAssembly hg19
 project wgEncode
 replicate 8
@@ -777,6 +815,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562AlnRep9.bam
 grant Snyder
 lab Stanford
+md5sum bam=341f381d62975a1864d7e0a0a9444337,bai=db8bee3b43bf90aed4de50866bfbde13
 origAssembly hg19
 project wgEncode
 replicate 9
@@ -797,6 +836,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep1.csqual.gz
 grant Snyder
 lab Stanford
+md5sum f2ca90b040bef2a881782b3dc3b2bf5d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -817,6 +857,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep10.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 7934403c0feec42b6cef0c44fb0779c5
 origAssembly hg19
 project wgEncode
 replicate 10
@@ -837,6 +878,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep11.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 5eb939e914ac88f8af217c50e60c1a7b
 origAssembly hg19
 project wgEncode
 replicate 11
@@ -857,6 +899,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep2.csqual.gz
 grant Snyder
 lab Stanford
+md5sum d8cdf1a76e626651bb645bd393781064
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -877,6 +920,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep3.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 3ca2a1a5beb4235fd084b4e0eeb39a53
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -897,6 +941,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep4.csqual.gz
 grant Snyder
 lab Stanford
+md5sum a0f14ae3eb004ae00a4aefa7a0735cf9
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -917,6 +962,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep5.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 51f2f407d9dc9b640c0ca9e2c8cafc37
 origAssembly hg19
 project wgEncode
 replicate 5
@@ -937,6 +983,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep6.csqual.gz
 grant Snyder
 lab Stanford
+md5sum cabb8b5962c98471384a321913691aae
 origAssembly hg19
 project wgEncode
 replicate 6
@@ -957,6 +1004,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep7.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 8b6f2f2338fbcd0957b7c0c02eb10959
 origAssembly hg19
 project wgEncode
 replicate 7
@@ -977,6 +1025,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep8.csqual.gz
 grant Snyder
 lab Stanford
+md5sum f3cc527937d8649a647a88a11c67478e
 origAssembly hg19
 project wgEncode
 replicate 8
@@ -997,6 +1046,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawData2Rep9.csqual.gz
 grant Snyder
 lab Stanford
+md5sum 805cf38bc1e72ff25dc0a3527cffab58
 origAssembly hg19
 project wgEncode
 replicate 9
@@ -1017,6 +1067,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep1.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum d4634c55bec03cf8fd7cf05f64aeee1a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1037,6 +1088,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep10.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum b97bbafc268565ccee0bb07d68ac13e3
 origAssembly hg19
 project wgEncode
 replicate 10
@@ -1057,6 +1109,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep11.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 9aeefd6f25cc3386892f026f9a0e78a4
 origAssembly hg19
 project wgEncode
 replicate 11
@@ -1077,6 +1130,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep2.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 1b08e2e35e7722b1836942781df0ef68
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1097,6 +1151,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep3.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum d422ef6c169daecb90e803612c9202e3
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1117,6 +1172,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep4.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 8cfd7c5a7205eeaf704ac8448e8ace61
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -1137,6 +1193,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep5.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 9c768aeb8af0f1b5536a9e510695b044
 origAssembly hg19
 project wgEncode
 replicate 5
@@ -1157,6 +1214,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep6.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum 6c69cf23f5d870098a90bab5c24f23b4
 origAssembly hg19
 project wgEncode
 replicate 6
@@ -1177,6 +1235,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep7.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum e598637480975d8a52f05a6587816732
 origAssembly hg19
 project wgEncode
 replicate 7
@@ -1197,6 +1256,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep8.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum b42fa5cb766d2b3d32bc7297b0a18bf3
 origAssembly hg19
 project wgEncode
 replicate 8
@@ -1217,6 +1277,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562RawDataRep9.csfasta.gz
 grant Snyder
 lab Stanford
+md5sum ad6a51b3a56562ce12f5dfd182d374a4
 origAssembly hg19
 project wgEncode
 replicate 9
@@ -1238,6 +1299,7 @@ expId 921
 fileName wgEncodeSydhNsomeK562Sig.bigWig
 grant Snyder
 lab Stanford
+md5sum 96e7836a8c5f133f2a160504b8e72bd2
 origAssembly hg19
 project wgEncode
 seqPlatform AB_SOLiD_3.5
@@ -1245,4 +1307,4 @@ subId 4351
 tableName wgEncodeSydhNsomeK562Sig
 view Signal
 
-# MAGIC: 1427796430
+# MAGIC: -374915395

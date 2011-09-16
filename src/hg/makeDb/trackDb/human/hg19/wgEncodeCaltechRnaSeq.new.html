@@ -18,7 +18,7 @@ specify the coding strand. As a result, there will be ambiguity at loci where bo
 fully random. This is inferred from a sequence bias in the first residues of the read population, and this likely contributes to observed unevenness in sequence coverage 
 across transcripts.</P>
 <H3>Strand specific protocol (1x75 bp reads):</H3>
-<P>PolyA-selected RNA was fragmented by magnesium-catalyzed hydrolysis. 3&#8242; adapters were ligated to the 3&#8242; end of fragments, then  5&#8242; adapters were ligated to the the 5&#8242; end. 
+<P>PolyA-selected RNA was fragmented by magnesium-catalyzed hydrolysis. 3&#8242; adapters were ligated to the 3&#8242; end of fragments, then  5&#8242; adapters were ligated to the 5&#8242; end. 
 The resulting RNA molecules were converted to cDNA and amplified. This RNA-seq protocol does specify the coding strand as each read is in the same 5&#8242;-3&#8242; orientation as the 
 original RNA strand. As a result, loci where both strands are transcribed can be disambiguated. However, RNA ligation is an inherently biased process and as a result greater 
 unevenness in sequence coverage across transcripts is observed compared to the non-strand-specific data, and quantification is less accurate.
@@ -26,7 +26,7 @@ unevenness in sequence coverage across transcripts is observed compared to the n
 
 <H3>Data Analysis:</H3>
 <P>Reads were aligned to the hg19 human reference genome using TopHat, a program specifically designed to align RNA-seq reads and discover splice junctions de novo. 
-Cufflinks, a de novo transcript assembly and quantification software package, was run on the TopHat alignments to discover and quantifiy novel transcripts and to obtain trascript 
+Cufflinks, a de novo transcript assembly and quantification software package, was run on the TopHat alignments to discover and quantify novel transcripts and to obtain transcript 
 expression estimates based on the GENCODE annotation. All sequence files, alignments, gene and transcript models and expression estimates files are available for download. </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -60,7 +60,7 @@ the SAM/BAM file format.</DD>
 <DT><I>Raw Signal (only for paired-end data)</I></DT>
 <DD>Density graph (wiggle) of signal enrichment based on a normalized aligned 
 read density (Read Per Million, RPM). The RPM measure assists in visualizing the relative amount of a given transcript across multiple samples. 
-A separate track for the forward (plus) and reverse (minus) strands are provided for strand-sepcific data.
+A separate track for the forward (plus) and reverse (minus) strands are provided for strand-specific data.
 <DT><I>Splice Sites</I></DT>
 <DD>Subset of aligned reads that crosses splice junctions.</DD>
 </DL>
@@ -93,8 +93,8 @@ TopHat was used with default settings with the exception of specifying an empiri
 After mapping reads to the genome and identifying splice junctions, the data was further analyzed using 
 the transcript assembly and quantification software <A href="http://cufflinks.cbcb.umd.edu/" target="_BLANK">Cufflinks</A> (version 0.9.3) using the sequence bias detection and correction option. 
 Cufflinks was used in two modes: 
-first, expression for genes and invidiual transcripts was quantified based on the GENCODE annotation, for both versions v3c and v4 of GENCODE GRCh37, and 
-second, Cufflinks was run in de novo transcript assembly and quantificaiton mode to obtain candidate novel transcript and gene models and expression estimates for them. </P>
+first, expression for genes and individual transcripts was quantified based on the GENCODE annotation, for both versions v3c and v4 of GENCODE GRCh37, and 
+second, Cufflinks was run in de novo transcript assembly and quantification mode to obtain candidate novel transcript and gene models and expression estimates for them. </P>
 
 
 <H2>Downloadable Files</H2>
@@ -130,7 +130,7 @@ phage lambda over 5 orders of magnitude.   </LI>
 
 <H2>Release Notes </H2>
 <P>
-This is release 2 (Summer 2011).  The alignments and signals have been re-processed useing a better mapping algorithm.  They are labeled as V2.  In addition, several download only files that investigate genes, transcripts and exons are also available. 
+This is release 2 (Summer 2011).  The alignments and signals have been re-processed using a better mapping algorithm.  They are labeled as V2.  In addition, several download only files that investigate genes, transcripts and exons are also available. 
 </P>
 
 <H2>Credits</H2>
@@ -161,7 +161,7 @@ Brian Williams</A> (experimental).
 <H2>References</H2>
 
 <P>Langmead B, Trapnell C, Pop M, Salzberg SL.
-<A target="_BLANK" href="http://genomebiology.com/2009/10/3/R25"><U>Ultrafast and memory-efficient alignment of short DNA sequences to the human genome.</U></A>
+<A target="_BLANK" href="http://genomebiology.com/2009/10/3/R25"><U>Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</U></A>.
 <EM>Genome Biology</EM>. 2009 Mar; 10:R25.</P>
 
 <P>Mortazavi A, Williams BA, McCue K, Schaeffer L, and Wold BJ. 
@@ -169,11 +169,11 @@ Brian Williams</A> (experimental).
 <EM>Nature Methods</EM>. 2008 Jul; 5(7):621-628.</P> 
 
 <P>Trapnell C, Pachter L, Salzberg SL..
-<A target="_BLANK" href="http://bioinformatics.oxfordjournals.org/cgi/content/full/25/9/1105"><U>TopHat: discovering splice junctions with RNA-seq.</U></A>
+<A target="_BLANK" href="http://bioinformatics.oxfordjournals.org/cgi/content/full/25/9/1105"><U>TopHat: discovering splice junctions with RNA-seq</U></A>.
 <EM>Bioinformatics</EM>. 2009 May; 25(9):1105-11.</P>
 
 <P>Trapnell C, Williams BA, Pertea G, Mortazavi A, Kwan G, van Baren MJ, Salzberg SL, Wold BJ, Pachter L.
-<A target="_BLANK" href="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1621.html"><U>Transcript assembly and quantification by RNA-seq reveals unannotated transcripts and isoform switching during cell differentiation.</U></A>
+<A target="_BLANK" href="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1621.html"><U>Transcript assembly and quantification by RNA-seq reveals unannotated transcripts and isoform switching during cell differentiation</U></A>.
 <EM>Nat Biotechnology</EM>. 2010 May; 28(5):511-5.</P>
 
 <H2> Data Release Policy </H2>

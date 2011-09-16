@@ -19,7 +19,6 @@ lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody Nov_69522
-ripTgtProtein T7Tag
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag
 view RbpAssocRna
@@ -40,7 +39,6 @@ lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody SC_5261
-ripTgtProtein ELAVL1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1
 view RbpAssocRna
@@ -61,7 +59,6 @@ lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody Sig_P6246
-ripTgtProtein PABPC1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1
 view RbpAssocRna
@@ -82,7 +79,6 @@ lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody Nov_69522
-ripTgtProtein T7Tag
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag
 view RbpAssocRna
@@ -103,7 +99,6 @@ lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody SC_21027
-ripTgtProtein IGF2BP1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1
 view RbpAssocRna
@@ -124,7 +119,6 @@ lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody SC_5261
-ripTgtProtein ELAVL1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1
 view RbpAssocRna
@@ -145,9 +139,8 @@ lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody Sig_P6246
-ripTgtProtein PABPC1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
 view RbpAssocRna
 
-# MAGIC: 1158439135
+# MAGIC: 826258880

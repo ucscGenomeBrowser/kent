@@ -595,13 +595,11 @@ struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
 {
 struct hTableInfo *hti;
 if (startsWithWord("bigBed", tdb->type))
-    {
     hti = bigBedToHti(tdb->track, NULL);
-    }
 else if (startsWithWord("bam", tdb->type))
-    {
     hti = bamToHti(tdb->table);
-    }
+else if (startsWithWord("vcfTabix", tdb->type))
+    hti = vcfToHti(tdb->table);
 else
     {
     AllocVar(hti);
@@ -623,13 +621,11 @@ if (isHubTrack(table))
     hti = hubTrackTableInfo(tdb);
     }
 else if (isBigBed(database, table, curTrack, ctLookupName))
-    {
     hti = bigBedToHti(table, conn);
-    }
 else if (isBamTable(table))
-    {
     hti = bamToHti(table);
-    }
+else if (isVcfTable(table))
+    hti = vcfToHti(table);
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
@@ -895,10 +891,24 @@ for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll)
         grpFree(&group);
     }
 
+/* if we have custom tracks, we want to add the track hubs
+ * after that group */
+struct grp *addAfter = NULL;
+if (sameString(groupList->name, "user"))
+    addAfter = groupList;
+
 /* Add in groups from hubs. */
 for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpList))
     {
-    slAddTail(&groupList, group);
+    /* check to see if we're inserting hubs rather than
+     * adding them to the front of the list */
+    if (addAfter != NULL)
+	{
+	group->next = addAfter->next;
+	addAfter->next = group;
+	}
+    else
+	slAddHead(&groupList, group);
     hashAdd(groupsInDatabase, group->name, group);
     }
 
@@ -1361,6 +1371,8 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
 else if (isBamTable(table))
     bamTabOut(db, table, conn, fields, f);
+else if (isVcfTable(table))
+    vcfTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f);
@@ -1382,9 +1394,9 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     hFreeConn(&conn);
     }
 else if (isBamTable(table))
-    {
     fieldList = bamGetFields(table);
-    }
+else if (isVcfTable(table))
+    fieldList = vcfGetFields(table);
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
@@ -1912,8 +1924,6 @@ pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 cgiSpoof(&argc, argv);
 
-struct dyString *in = cgiUrlString();
-fprintf(stderr, "%s\n", in->string);
 hgTables();
 
 textOutClose(&compressPipeline);

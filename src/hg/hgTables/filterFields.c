@@ -330,6 +330,8 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     fieldList = bigBedGetFields(table, conn);
 else if (isBamTable(table))
     fieldList = bamGetFields(table);
+else if (isVcfTable(table))
+    fieldList = vcfGetFields(table);
 else
     fieldList = sqlListFields(conn, table);
 
@@ -365,6 +367,8 @@ static void showTableFieldsCt(char *db, char *table, boolean withGetButton)
 {
 struct customTrack *ct = ctLookupName(table);
 char *type = ct->dbTrackType;
+if (type == NULL)
+    type = ct->tdb->type;
 if (startsWithWord("makeItems", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -393,6 +397,12 @@ else if (sameWord("bam", type))
     {
     struct slName *fieldList = bamGetFields(table);
     struct asObject *asObj = asParseText(samAlignmentAutoSqlString);
+    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
+    }
+else if (sameWord("vcfTabix", type))
+    {
+    struct slName *fieldList = vcfGetFields(table);
+    struct asObject *asObj = asParseText(vcfDataLineAutoSqlString);
     showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
     }
 else
@@ -926,6 +936,7 @@ boolean isSmallWig = isWiggle(db, table);
 boolean isWig = isSmallWig || isBigWigTable(table);
 boolean isBedGr = isBedGraph(rootTable);
 boolean isBam = isBamTable(rootTable);
+boolean isVcf = isVcfTable(rootTable);
 int bedGraphColumn = 5;		/*	default score column	*/
 
 if (isBedGr)
@@ -962,22 +973,18 @@ else
     {
     struct sqlFieldType *ftList;
     if (isBigBed(database, table, curTrack, ctLookupName))
-        {
         ftList = bigBedListFieldsAndTypes(table, conn);
-        }
     else if (isBamTable(table))
-        {
 	ftList = bamListFieldsAndTypes();
-	}
+    else if (isVcfTable(table))
+	ftList = vcfListFieldsAndTypes();
     else
-        {
         ftList = sqlListFieldsAndTypes(conn, table);
-        }
     printSqlFieldListAsControlTable(ftList, db, rootTable, tdb, isBedGr);
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr||isBam))
+if (!(isWig||isBedGr||isBam||isVcf))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
@@ -993,7 +1000,7 @@ if (!(isWig||isBedGr||isBam))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig||isBedGr||isBam)
+if (isWig||isBedGr||isBam||isVcf)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -1055,6 +1062,11 @@ else if (isBigBed(db, table, curTrack, ctLookupName))
 else if (isBamTable(table))
     {
     struct sqlFieldType *ftList = bamListFieldsAndTypes();
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    }
+else if (isVcfTable(table))
+    {
+    struct sqlFieldType *ftList = vcfListFieldsAndTypes();
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
 else

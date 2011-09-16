@@ -54,7 +54,8 @@
 				<LI><A HREF="#format13">broadPeak format</A>
 				<LI><A HREF="#format14">gappedPeak format</A>
                                 <LI><A HREF="#format15">tagAlign format</A>
-				<LI><A HREF-"#format16">pairedTagAlign format</A>
+				<LI><A HREF="#format16">pairedTagAlign format</A>
+                                <LI><A HREF="#format17">peptideMapping format</A>
 				</UL>
 				<P>
 				<A HREF="index.html">Return to FAQ Table of Contents</A>
@@ -1494,7 +1495,7 @@ chr21	31812879	31812880	C	1	0	0
         applicable). Use '.' if no orientation is assigned.
 	<li><b>signalValue</b> - Measurement of overall (usually, average) 
         enrichment for the region.
-        <li><b>pValue</b> - Measurement of statistical signficance (-log10). 
+        <li><b>pValue</b> - Measurement of statistical significance (-log10). 
         Use -1 if no pValue is assigned.
         <li><b>qValue</b> - Measurement of statistical significance using 
         false discovery rate. Use -1 if no qValue is assigned.
@@ -1557,7 +1558,7 @@ This format is used to provide called regions of signal enrichment based on pool
         applicable). Use '.' if no orientation is assigned.
 	<li><b>signalValue</b> - Measurement of overall (usually, average) 
         enrichment for the region.
-        <li><b>pValue</b> - Measurement of statistical signficance (-log10). 
+        <li><b>pValue</b> - Measurement of statistical significance (-log10). 
         Use -1 if no pValue is assigned.
         <li><b>qValue</b> - Measurement of statistical significance using 
         false discovery rate. Use -1 if no qValue is assigned.
@@ -1619,7 +1620,7 @@ This format is used to provide called regions of signal enrichment based on pool
 	<li><b>blockStarts</b> - A comma-separated list of block starts.
 	<li><b>signalValue</b> - Measurement of overall (usually, average) 
         enrichment for the region.
-        <li><b>pValue</b> - Measurement of statistical signficance (-log10). 
+        <li><b>pValue</b> - Measurement of statistical significance (-log10). 
         Use -1 if no pValue is assigned.
         <li><b>qValue</b> - Measurement of statistical significance using 
         false discovery rate. Use -1 if no qValue is assigned.
@@ -1653,7 +1654,7 @@ This format is used to provide called regions of signal enrichment based on pool
 		    	    <td>
 	            	    <p>
 <P><b>tagAlign was used with hg18, but is no longer in use with hg19.</b>
-Tag Alignment provideid genomic mapping of short sequence tags. 
+Tag Alignment provided genomic mapping of short sequence tags. 
 It is a BED3+3 format.
 </P>
 <ol>
@@ -1721,5 +1722,84 @@ Tag Alignment Format for Paired Reads was used to provide genomic mapping of pai
     	</table>
 	<br>
 
+<a name="format17"></a><br>
+<table bgcolor="#888888" border="0" cellpadding="1" cellspacing="0"                      
+ width="100%">   
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#fffee8" border="0" cellpadding="0"
+ cellspacing="0" width="100%">
+        <tbody>
+          <tr>
+            <td>
+            <table background="../images/hr.gif" bgcolor="#d9e4f8"  width="100%">
+              <tbody>
+                <tr>
+                  <td>
+                  <table margin="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody>
+                      <tr>
+                        <td align="left"><font size="4"><b>&nbsp;
+ENCODE peptideMapping: BED6+4 format</b></font></td>
+                        <td align="right"><a href="#top"><img
+ src="/images/index.gif" alt="" align="right" border="0"></a> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table bgcolor="#fffee8" cellpadding="0" width="100%">
+              <tbody>
+                <tr>
+                  <th height="10"><br>
+                  </th>
+                </tr>
+                <tr>
+                  <td width="10">&nbsp;</td>
+                  <td>
+                  <p></p>
+                  <p><b>PeptideMapping. </b>The peptide mapping format was used
+		    to provide genomic mapping
+		    of proteogenmic mappings of peptides to the genome, with information
+		    that is appropriate for assessing the confidence of the mapping.&nbsp; <br>
+		  </p>
+		  <ol>
+		    <li><b>chrom</b> - Name of the chromosome. </li>
+		    <li><b>chromStart</b> - The starting position of the feature
+		      in the chromosome. The first base in a chromosome is numbered 0. </li>
+		    <li><b>chromEnd</b>
+		      - The ending position of the feature in the chromosome or scaffold. The
+		      chromEnd base is not included in the display of the feature. For
+		      example, the first 100 bases of a chromosome are defined as
+		      chromStart=0, chromEnd=100, and span the bases numbered 0-99. </li>
+		    <li><b>name</b> - Identifier of paired-read. </li>
+		    <li><b>score</b> - Indicates uniqueness or quality
+		      (preferably 1000/alignment-count). </li>
+		    <li><b>strand</b> - Orientation of this read (+ or -). </li>
+		    <li><b>rawScore</b> - Raw score for this hit, as estimated through HMM analysis. </li>
+		    <li><b>spectrumId</b> - Non-unique identifier for the spectrum file </li>
+		    <li><b>peptideRank</b> - Rank of this hit, for peptides with multiple genomic hits></li>
+		    <li><b>peptideRepeatCount</b> - Indicates how many times this same hit was observed</li>
+		  </ol>
+                    </li>
+                  </ol>
+                  </td>
+                  <td width="15"><br>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 </BODY></HTML>

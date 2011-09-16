@@ -6,12 +6,14 @@ superTrack wgEncodeDNAseSuper dense
 shortLabel Open Chrom Synth
 longLabel DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom(Duke/UNC/UTA)
 group regulation
-subGroup1 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier&nbsp;1) 1K5=K562&nbsp;(Tier&nbsp;1) 2HELA=HeLa-S3&nbsp;(Tier&nbsp;2) 2HEP=HepG2&nbsp;(Tier&nbsp;2) 2HUV=HUVEC&nbsp;(Tier&nbsp;2) NHEK=NHEK
-dimensions dimensionX=cellType
-sortOrder cellType=+
-fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+subGroup1 view Views Peaks=Peaks
+subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier&nbsp;1) 1K5=K562&nbsp;(Tier&nbsp;1) 2HELA=HeLa-S3&nbsp;(Tier&nbsp;2) 2HEP=HepG2&nbsp;(Tier&nbsp;2) 2HUV=HUVEC&nbsp;(Tier&nbsp;2) HTR8=HTR8 GLIOBLA=GLIOBLA GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19239=GM19239 MEDULLO=Medullo NHEK=NHEK PANISLETS=Pan_Islets UROTHEL=UROTHEL
+subGroup3 treatment Treatment aNone=None IFNA4H=IFNa4h UT189=UT189
+dimensions dimensionX=cellType dimensionY=treatment
+sortOrder cellType=+ treatment=+
+fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType=cell
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 priority 1
 type bed 9 +
 wgEncode 1
@@ -46,59 +48,157 @@ filterBy color:Validation_Level=\
             4&#58;_ChIP_(all)
 dataVersion through the ENCODE Jan 2011 Freeze
 
-        track wgEncodeOpenChromSynthK562Pk
-        parent wgEncodeOpenChromSynth
+        track wgEncodeOpenChromSynthViewPeaks
+	shortLabel Peaks
+    	view Peaks
+    	visibility dense
+    	viewUi on
+    	subTrack wgEncodeOpenChromSynth
+
+	track wgEncodeOpenChromSynthK562Pk
+        parent wgEncodeOpenChromSynthViewPeaks
         shortLabel K562 OpChr Syn
         longLabel K562 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=1K5
+        subGroups view=Peaks cellType=1K5 treatment=aNone
         type bed 9 +
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthGm12878Pk
-        parent wgEncodeOpenChromSynth
+        parent wgEncodeOpenChromSynthViewPeaks
         shortLabel GM12878 OpChr Syn
         longLabel GM12878 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=1GM
+        subGroups view=Peaks cellType=1GM treatment=aNone
         type bed 9 +
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthH1hescPk
-        parent wgEncodeOpenChromSynth
+        parent wgEncodeOpenChromSynthViewPeaks
         shortLabel H1-hESC OpChr Syn
         longLabel H1-hESC DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=1H1
+        subGroups view=Peaks cellType=1H1 treatment=aNone
         type bed 9 +
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthHepg2Pk
-        parent wgEncodeOpenChromSynth off
+        parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel HepG2 OpChr Syn
         longLabel HepG2 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=2HEP
+        subGroups view=Peaks cellType=2HEP treatment=aNone
         type bed 9 +
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthHelas3Pk
-        parent wgEncodeOpenChromSynth off
+        parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel HeLa-S3 OpChr Syn
         longLabel HeLa-S3 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=2HELA
+        subGroups view=Peaks cellType=2HELA treatment=aNone
         type bed 9 +
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthHuvecPk
-        parent wgEncodeOpenChromSynth off
+        parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel HUVEC OpChr Syn
         longLabel HUVEC DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=2HUV
+        subGroups view=Peaks cellType=2HUV treatment=aNone
         type bed 9 +
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthNhekPk
-        parent wgEncodeOpenChromSynth off
+        parent wgEncodeOpenChromSynthViewPeaks off
         shortLabel NHEK OpChr Syn
         longLabel NHEK DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=NHEK
+        subGroups view=Peaks cellType=NHEK treatment=aNone
         type bed 9 +
         # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthMedulloPk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel Medullo Pk
+        longLabel Medullo DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=MEDULLO treatment=aNone
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthGm12891Pk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel GM12891 Pk
+        longLabel GM12891 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=GM12891 treatment=aNone
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthGm12892Pk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel GM12892 Pk
+        longLabel GM12892 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=GM12892 treatment=aNone
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthGm19239Pk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel GM19239 Pk
+        longLabel GM19239 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=GM19239 treatment=aNone
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthGm18507Pk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel GM18507 Pk
+        longLabel GM18507 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=GM18507 treatment=aNone
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthGlioblaPk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel Gliobla Pk
+        longLabel Gliobla DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=GLIOBLA treatment=aNone
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthHelas3Ifna4hPk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel HeLa-S3 Pk
+        longLabel HeLa-S3 IFNa4h DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=2HELA treatment=IFNA4H
+        type bed 9 +
+        origAssembly hg19
+        color 0,119,158
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthPanisletsPk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel PanIslets Pk
+        longLabel PanIslets DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=PANISLETS treatment=aNone
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthHtr8Pk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel HTR8svn Pk
+        longLabel HTR8svn DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=HTR8 treatment=aNone
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
+
+        track wgEncodeOpenChromSynthUrothelUt189Pk
+        parent wgEncodeOpenChromSynthViewPeaks off
+        shortLabel Urothelia Pk
+        longLabel Urothelia UT189 DNaseI/FAIRE/ChIP Synthesis from ENCODE/Duke
+        subGroups view=Peaks cellType=UROTHEL treatment=UT189
+        type bed 9 +
+        origAssembly hg19
+        # subId=4630 dateSubmitted=2011-07-28
 

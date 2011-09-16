@@ -108,7 +108,7 @@ gClass_Ambiguous 100,91,191
 itemClassTbl pseudoYale60Class
 dataVersion December 2010
 urlLabel Yale pseudogene.org link:
-url http://tables.pseudogene.org/human55/$$
+url http://tables.pseudogene.org/index.cgi?table=Mouse60&value=$$
 
 searchTable pseudoYale60
 searchType genePred

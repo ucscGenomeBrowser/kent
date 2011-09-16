@@ -8,7 +8,7 @@ var tooldiv;
 var currtip;
 var timeout;
 
-
+/*
 function setwidth()
 {
    var windwidth = $(window).width()  - 20;
@@ -24,6 +24,8 @@ function setwidth()
    }
     
 }
+*/
+
 function makevisible(element)
 {
     if($(element).css('display') == "none") 
@@ -199,7 +201,7 @@ $(document).ready(function()
     }
     
     
-    $("input[name=hgt.toggleRevCmplDisp]").after('<input type="submit" class="setwidth" value="auto-set width" onclick="setwidth()"/>');
+    //    $("input[name=hgt.toggleRevCmplDisp]").after('<input type="submit" class="setwidth" value="auto-set width" onclick="setwidth()"/>');
 
     
     

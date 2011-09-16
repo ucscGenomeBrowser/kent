@@ -69,8 +69,8 @@ struct vcfRecord
     unsigned int chromStart;	// Start offset in chrom
     unsigned int chromEnd;	// End offset in chrom
     char *name;			// Variant name from ID column
-    char *ref;			// Allele found in reference assembly
-    char *alt;			// Alternate allele(s)
+    int alleleCount;		// Number of alleles (reference + alternates)
+    char **alleles;		// Alleles: reference first then alternate alleles
     char *qual;			// . or Phred-scaled score, i.e. -10log_10 P(call in ALT is wrong)
     int filterCount;		// Number of ;-separated filter codes in FILTER column
     char **filters;		// Code(s) described in header for failed filters (or PASS or .)
@@ -88,7 +88,7 @@ struct vcfFile
  * Clearly borrowing structure from MarkD's gff3File. :) */
 {
     char *fileOrUrl;		// VCF local file path or URL
-    struct hash *metaDataHash;	// Store all header metadata lines here
+    char *headerString;		// Complete original header including newlines.
     int majorVersion;		// 4 etc.
     int minorVersion;		// 0, 1 etc.
     struct vcfInfoDef *infoDefs;	// Header's definitions of INFO column components

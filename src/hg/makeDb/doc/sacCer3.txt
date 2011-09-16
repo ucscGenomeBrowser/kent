@@ -1,0 +1,1621 @@
+# for emacs: -*- mode: sh; -*-
+
+# Saccharomyces cerevisiae
+# Saccharomyces Genome Database, Stanford
+
+#######################################################################
+# Download data  (DONE - 2011-08-24 - Hiram)
+    mkdir -p /hive/data/genomes/sacCer3/genbank
+    cd /hive/data/genomes/sacCer3/genbank
+    wget --timestamping -r --cut-dirs=7 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/fungi/Saccharomyces_cerevisiae/SacCer_Apr2011/*"
+
+    mkdir ucsc
+
+ls assembled_chromosomes/AGP | sed -e "s#.comp.agp.gz##" | while read F
+do
+    name=`zcat assembled_chromosomes/AGP/${F}.comp.agp.gz | grep -v "^#"
+\
+        | awk -F'\t' '{print $1}'`
+    echo $name
+    zcat assembled_chromosomes/AGP/${F}.comp.agp.gz \
+        | sed -e "s/^${name}/${F}/" > ucsc/${F}.agp
+done
+
+ls assembled_chromosomes/AGP | sed -e "s#.comp.agp.gz##" | while read F
+do
+    echo ">${F}" > ucsc/${F}.fa
+    zcat assembled_chromosomes/FASTA/${F}.fa.gz | grep -v "^>" >>
+ucsc/${F}.fa
+    gzip ucsc/${F}.fa
+    ls -ld ucsc/${F}.fa.gz
+done
+
+    faSize ucsc/*.fa.gz
+    #	12071326 bases (0 N's 12071326 real 12071326 upper 0 lower) in 16
+    #	sequences in 16 files
+    faSize assembled_chromosomes/FASTA/*.fa.gz
+    #	12071326 bases (0 N's 12071326 real 12071326 upper 0 lower) in 16
+    #	sequences in 16 files
+
+#######################################################################
+# Initial genome build (DONE - 2011-08-24 - Hiram)
+    cd /hive/data/genomes/sacCer3]
+    cat << '_EOF_' > sacCer3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db sacCer3
+scientificName Saccharomyces cerevisiae
+commonName S. cerevisiae
+assemblyDate Apr. 2011
+assemblyShortLabel SacCer_Apr2011
+assemblyLabel Saccharomyces cerevisiae S288c assembly from Saccharomyces Genome Database (GCA_000146055.2)
+orderKey 998
+mitoAcc NC_001224
+#       override the check for max size of 25,000
+mitoSize        90000
+fastaFiles /hive/data/genomes/sacCer3/genbank/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/sacCer3/genbank/ucsc/*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir sacCer
+taxId   559292
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -stop=agp sacCer3.config.ra > agp.log 2>&1
+    #	real    0m14.802s
+    tail -3 agp.log
+    #	if ( All AGP and FASTA entries agree - both files are valid != All AGP and FASTA entries agree - both files are valid ) then
+    #	*** All done!  (through the 'agp' step)
+
+    time makeGenomeDb.pl -continue=db sacCer3.config.ra > db.log 2>&1
+    #	real    0m14.088s
+
+    # no need for repeat masking
+    ln -s sacCer3.unmasked.2bit sacCer3.2bit
+    ln -s `pwd`/sacCer3.2bit /gbdb/sacCer3/sacCer3.2bit 
+
+#######################################################################
+# sacCer3 - S. cerevisiae - Ensembl Genes version 63 (DONE - 2011-08-24 - hiram)
+    ssh swarm
+    # there is now no 2-micron sequence, remove it from the Ensembl GTF file
+    cd /hive/data/genomes/sacCer3
+    cat << '_EOF_' > sacCer3.ensGene.ra
+# required db variable
+db sacCer3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^VIII/chrVIII/; s/^VII/chrVII/; s/^VI/chrVI/; s/^V/chrV/; s/^XIII/chrXIII/; s/^XII/chrXII/; s/^XIV/chrXIV/; s/^XI/chrXI/; s/^XVI/chrXVI/; s/^XV/chrXV/; s/^X/chrX/; s/^III/chrIII/; s/^IV/chrIV/; s/^II/chrII/; s/^IX/chrIX/; s/^I/chrI/; s/^MT/chrM/; s/2-micron/2micron/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=63 sacCer3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer3/bed/ensGene.63
+    featureBits sacCer3 ensGene
+    # 8912929 bases of 12157105 (73.315%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-08-24 - Hiram)
+    #	repMatch = 1024 * sizeof(sacCer3)/sizeof(hg18)
+    #	4.32 = 1024 * (12162995/2881515245)
+    #	use 10 to be very conservative
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer3
+    blat sacCer3.2bit /dev/null /dev/null -tileSize=11 \
+	-makeOoc=jkStuff/sacCer3.11.ooc -repMatch=10
+    #	Wrote 3137 overused 11-mers to 11.ooc
+    mkdir /hive/data/staging/data/sacCer3
+    #	copy this to scratch data
+    cp -p jkStuff/sacCer3.11.ooc chrom.sizes sacCer3.2bit \
+	/hive/data/staging/data/sacCer3
+
+#########################################################################
+# CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE - 2011-08-29 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/sgdAnnotations
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations
+    wget  --timestamping \
+http://downloads.yeastgenome.org/chromosomal_feature/saccharomyces_cerevisiae.gff
+    #	trim the delivered S.cerevisiae.gff file to get rid of the FASTA section
+    #	and fixup the chrM and 2-micron chrom names:
+    awk '
+BEGIN { keepGoing = 1 }
+{
+if (match($1, "^##FASTA")) { keepGoing = 0; }
+if (keepGoing) print;
+}
+' saccharomyces_cerevisiae.gff \
+        | sed -e "/^2-micron/d; s/^chrmt/chrM/" > S.cerevisiae.gff
+
+    #	wrote this perl script to specifically parse this particular instance
+    #	of the sgd gff file.
+    # constructs the files: leftOvers.gff, notes.txt, otherFeatures.bed,
+    #	and descriptions.txt
+    $HOME/kent/src/hg/makeDb/outside/yeast/hgSgdGff3/sgdGffToGtf.pl \
+        S.cerevisiae.gff > sacCer3.sgdGene.gtf 2> sacCer3.gtf.stderr
+
+    cat sacCer3.sgdGene.gtf | ./chrName.sh | sed -e "s/_CDS//" \
+	> sacCer3.sgdGene.roman.gtf
+    # NOTE: if you reload this table, a command below:
+    #	hgProtIdToGenePred sacCer3 sgdGene sgdToSwissProt name value
+    # needs to be run to add a protein column to the sgdGene tabl3e
+    ldHgGene -gtf sacCer3 sgdGene sacCer3.sgdGene.roman.gtf
+    #	Read 7063 transcripts in 7450 lines in 1 files
+    #	7063 groups 17 seqs 1 sources 3 feature types
+    #	6692 gene predictions
+    # for table cleaning below, get the names for a reference:
+    hgsql -N -e "select name from sgdGene;" sacCer3 | sort -u > name.sgdGene.txt
+
+    #	some of the otherFeatures have start == end, use option:
+    cat otherFeatures.bed | ./chrName.sh > otherFeatures.roman.bed
+    hgLoadBed -allowStartEqualEnd sacCer3 sgdOther otherFeatures.roman.bed \
+        -tab -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
+    #	Loaded 2476 elements of size 7
+# XXX errors here
+# chromStart == chromEnd (31228) (zero-length item)
+# Use -allowStartEqualEnd if that is legit (e.g. for insertion point).
+
+    # process the peptides into a format that hgSgdPep can handle
+    # actually, a few more lines here could perform the hgSgdPep function
+    cat << '_EOF_' > pepPred.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "zcat ../../yeastgenome.org/orf_trans_all.fasta.gz|") or
+        die "can not zcat ../../yeastgenome.org/orf_trans_all.fasta.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        my @a = split('\s+', $line);
+        my $name = $a[0];
+        $name =~ s/^>//;
+        my $orf = $a[1];
+        printf ">ORFP:%s\t%s\n", $name, $orf;
+    } else {
+        printf "%s", $line;
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x pepPred.pl
+    ./pepPred.pl > sgdPep.fsa
+
+    hgSgdPep sgdPep.fsa sgdPep.fa stdout | sort > symbol.raw.txt
+    # the ^I here needs to be two keystrokes: ctrl-v I
+    join -t "^I" name.sgdGene.txt symbol.raw.txt > symbol.txt
+    wc -l name.sgdGene.txt symbol.raw.txt symbol.txt
+    #	6692 name.sgdGene.txt
+    #	6717 symbol.raw.txt
+    #	6692 symbol.txt
+    faToTab -type=protein sgdPep.fa stdout | sort > sgdPep.tab
+    # the ^I here needs to be two keystrokes: ctrl-v I
+    join -t"^I" name.sgdGene.txt sgdPep.tab > sgdPep.toLoad.tab
+
+    wc -l name.sgdGene.txt sgdPep.tab sgdPep.toLoad.tab
+    #	6692 name.sgdGene.txt
+    #	6717 sgdPep.tab
+    #	6692 sgdPep.toLoad.tab
+
+    hgPepPred sacCer3 tab sgdPep sgdPep.toLoad.tab
+    hgsql sacCer3 -e 'create table sgdToName ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));'
+    hgsql sacCer3 -e 'load data local infile "symbol.txt" \
+          into table sgdToName;'
+
+    # the ^I here needs to be two keystrokes: ctrl-v I
+    join -t"^I" name.sgdGene.txt descriptions.txt > descriptions.toLoad.txt
+    wc -l name.sgdGene.txt descriptions.txt descriptions.toLoad.txt
+    #	6692 name.sgdGene.txt
+    #	6712 descriptions.txt
+    #	6691 descriptions.toLoad.txt
+
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/sgdDescription.sql
+    hgsql sacCer3 -e 'load data local infile "descriptions.toLoad.txt" \
+          into table sgdDescription;'
+
+    # check out the longest name:
+    cut -f1 notes.txt | sort -u | awk '{print length($0),$0}' | sort -nr | head
+# 11 YPRWdelta21
+    # it isn't larger than 16, no adjustment needed to sgdOtherDescription.sql
+
+    # filter out items that are not in sgdOther
+    hgsql -N -e "select name from sgdOther;" sacCer3 \
+	| sort -u > sacCer3.sgdOther.txt
+    # the ^I here needs to be two keystrokes: ctrl-v I
+    join -t"^I" sacCer3.sgdOther.txt notes.txt > notes.toLoad.txt
+    cut -f1 notes.toLoad.txt notes.txt | sort | uniq -c \
+	| awk '$1 < 2' > notes.notLoaded.txt
+
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/sgdOtherDescription.sql
+    hgsql sacCer3 -e 'load data local infile "notes.toLoad.txt" \
+          into table sgdOtherDescription;'
+
+
+############################################################################
+# ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE - 2011-08-29 - Hiram)
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations
+    wget --timestamping \
+http://downloads.yeastgenome.org/chromosomal_feature/dbxref.tab
+
+    grep "UniProt" dbxref.tab \
+	| awk '{printf("%s\t%s\n", $5, $1);}' > sgdToSwissProt.txt
+    hgsql sacCer3 -e 'create table sgdToSwissProt ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));'
+    hgsql sacCer3 -e 'load data local infile "sgdToSwissProt.txt" \
+          into table sgdToSwissProt;'
+    hgProtIdToGenePred sacCer3 sgdGene sgdToSwissProt name value
+
+    # verify all names are valid
+    cut -f1 sgdToSwissProt.txt | sort -u > name.sgdToSwissProt.txt
+    wc -l name.sgdToSwissProt.txt name.sgdGene.txt
+    #	5897 name.sgdToSwissProt.txt
+    #	6692 name.sgdGene.txt
+
+    comm -12 name.sgdToSwissProt.txt name.sgdGene.txt | wc -l
+    # 5879
+    # remove the 18 from sgdToSwissProt that are not in sgdGene:
+    comm -23 name.sgdToSwissProt.txt name.sgdGene.txt | wc -l
+    #	18
+    comm -23 name.sgdToSwissProt.txt name.sgdGene.txt | while read N
+do
+    hgsql -e "delete from sgdToSwissProt where name=\"${N}\";" sacCer3
+done
+
+
+# interesting to note that sgdTOSwissProt has one accession not
+# in sgdGene.name:  KHS1  (BK 2009-07-14)
+
+############################################################################
+# AUTO UPDATE GENBANK RUN  (Done - 2011-08-24,29 - Hiram)
+    # align with latest genbank process.
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add sacCer3 just before sacCer1
+
+# sacCer3 S. cerevisiae
+sacCer3.serverGenome = /hive/data/genomes/sacCer3/sacCer3.2bit
+sacCer3.clusterGenome = /scratch/data/sacCer3/sacCer3.2bit
+sacCer3.ooc = no
+sacCer3.maxIntron = 5000
+sacCer3.lift = no
+sacCer3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+sacCer3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+sacCer3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+sacCer3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+sacCer3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+#sacCer3.perChromTables = no  # doesn't work in the browser
+sacCer3.genbank.mrna.xeno.load = no
+sacCer3.refseq.mrna.native.load = no
+sacCer3.downloadDir = sacCer3
+
+    git commit -m "adding sacCer3" genbank.conf
+    git pull
+    git push
+
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial sacCer3 &
+    #	logFile: var/build/logs/2011.08.24-16:16:56.sacCer3.initalign.log
+    # the system was slow due to hive loads:
+    #	26h 17m == 1577m
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad sacCer3
+    #	logFile: var/dbload/hgwdev/logs/2011.08.29-14:16:10.dbload.log
+    #	real    10m7.094s
+
+    # enable daily alignment and update of hgwdev (DONE - 2011-08-29 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    cvsup
+    # add sacCer3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added sacCer3 - S. cerevisiae" \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE 2011-08-31 braney )
+    # bash  if not using bash shell already
+    cd /cluster/data/sacCer3
+    mkdir /cluster/data/sacCer3/blastDb
+
+    awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
+    twoBitToFa -seqList=1meg.lst  sacCer3.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+# 8 pieces of 8 written
+    rm temp.fa 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
+    twoBitToFa -seqList=less1meg.lst  sacCer3.2bit temp.fa
+    faSplit about temp.fa 1000000 blastDb/y 
+    rm temp.fa less1meg.lst
+
+    cd blastDb
+    for i in *.fa
+    do
+	/hive/data/outside/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 14
+
+    mkdir -p /cluster/data/sacCer3/bed/tblastn.hg18KG
+    cd /cluster/data/sacCer3/bed/tblastn.hg18KG
+    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 14 query.lst
+
+   # we want around 1500 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(150000/`wc query.lst | awk '{print $1}'`\)
+# 36727/(1500/14) = 300.427853
+
+   mkdir -p kgfa
+   split -l 300 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   wc kg.lst
+#  123  123 1599 kg.lst
+
+   mkdir -p blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/sacCer3/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/hive/data/outside/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/sacCer3/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    exit 
+    
+    ssh swarm
+    cd /cluster/data/sacCer3/bed/tblastn.hg18KG
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 1722 of 1722 jobs
+# CPU time in finished jobs:      66699s    1111.64m    18.53h    0.77d  0.002 y
+# IO & Wait Time:                  9697s     161.62m     2.69h    0.11d  0.000 y
+# Average job time:                  44s       0.74m     0.01h    0.00d
+# Longest finished job:             157s       2.62m     0.04h    0.00d
+# Submission to last job:           160s       2.67m     0.04h    0.00d
+
+    ssh swarm
+    cd /cluster/data/sacCer3/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS ../blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 123 of 123 jobs
+# CPU time in finished jobs:          5s       0.09m     0.00h    0.00d  0.000 y
+# IO & Wait Time:                   354s       5.90m     0.10h    0.00d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:               5s       0.08m     0.00h    0.00d
+# Submission to last job:             8s       0.13m     0.00h    0.00d
+
+    cd /cluster/data/sacCer3/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+# checked: 5956 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/sacCer3/bed/tblastn.hg18KG
+    hgLoadPsl sacCer3 blastHg18KG.psl
+
+    # check coverage
+    featureBits sacCer3 blastHg18KG 
+# 1364662 bases of 12157105 (11.225%) in intersection
+
+    featureBits sacCer3 blastHg18KG ensGene  -enrichment
+# blastHg18KG 11.225%, ensGene 73.315%, both 11.155%, cover 99.38%, enrich
+# 1.36x
+
+    rm -rf blastOut
+#end tblastn
+################
+# CREATE SGD-BASED CLONE TRACK (DONE - 2011-08-31 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/sgdClone
+    cd /hive/data/genomes/sacCer3/bed/sgdClone
+    # since sacCer1, these coordinates have become 0-relative ?
+    wget --timestamping \
+ftp://genome-ftp.stanford.edu/pub/yeast/data_download/chromosomal_feature/clone.tab
+
+    awk -F '\t' '{printf("%d\t%d\t%d\t%s\t%s\n", $3, $4, $5, $2, $1);}' \
+    	clone.tab | sed -e \
+"s/^8/chrVIII/; s/^7/chrVII/; s/^6/chrVI/; s/^5/chrV/;
+s/^13/chrXIII/; s/^12/chrXII/; s/^14/chrXIV/; s/^11/chrXI/;
+s/^16/chrXVI/; s/^15/chrXV/; s/^10/chrX/; s/^3/chrIII/;
+s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
+	> sgdClone.bed
+    hgLoadBed sacCer3 sgdClone  sgdClone.bed -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
+
+############################################################################
+## simpleRepeats (DONE - 2011-08-31 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/simpleRepeat
+    cd /hive/data/genomes/sacCer3/bed/simpleRepeat
+    doSimpleRepeat.pl -buildDir=`pwd` -smallClusterHub=swarm \
+	-workhorse=hgwdev sacCer3 > do.log 2>&1
+    # about 1 minute 20 seconds
+
+    featureBits sacCer3 simpleRepeat
+    #	110704 bases of 12157105 (0.911%) in intersection
+
+#########################################################################
+## Regulatory Code (DONE - 2011-08-31 - Hiram)
+    #	liftOver from sacCer1
+    mkdir /hive/data/genomes/sacCer3/bed/transRegCode
+    cd /hive/data/genomes/sacCer3/bed/transRegCode
+    #	lifting sacCer1 data to this assembly
+    hgsql -N -e "select chrom,chromStart,chromEnd,name,score,chipEvidence,consSpecies from transRegCode" sacCer1 \
+    | liftOver -bedPlus=5 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+	transRegCode.lifted.bed transRegCode.unMapped.bed
+
+    hgsql -N -e "select chrom,chromStart,chromEnd,name,tfCount,tfList,bindVals from transRegCodeProbe;" sacCer1 \
+    | liftOver -bedPlus=4 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+        transRegCodeProbe.lifted.bed transRegCodeProbe.unMapped.bed
+
+    hgLoadBed sacCer3 transRegCode transRegCode.lifted.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
+    #	Loaded 206558 elements of size 7
+    hgLoadBed sacCer3 transRegCodeProbe transRegCodeProbe.lifted.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/transRegCodeProbe.sql -tab
+    #	Loaded 6178 elements of size 7
+
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/transRegCodeCondition.sql
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/transRegCodeMotif.sql
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/growthCondition.sql
+
+    hgsql -N -e "select * from transRegCodeCondition;" sacCer1 \
+    | hgsql sacCer3 -e \
+'load data local infile "/dev/stdin" into table transRegCodeCondition'
+
+    hgsql -N -e "select * from transRegCodeMotif;" sacCer1 \
+    | hgsql sacCer3 -e \
+'load data local infile "/dev/stdin" into table transRegCodeMotif'
+
+    hgsql -N -e "select * from growthCondition;" sacCer1 \
+    | hgsql sacCer3 -e \
+'load data local infile "/dev/stdin" into table growthCondition'
+
+#  fixed some typos and other tweaks (added hyphens), 
+#  including making some subscripts in growthCondition table.  
+#  (also had to change transRegCodeCondition.growthCondition field to match)
+#  propagated to all 3 sacCer* dbs  - 2011-09-08  b0b and steve
+
+#	eliminate some names from Attr that are not in primary table
+#	as identified by joinerCheck:
+# Error: 15 of 36501 elements of sacCer3.oregannoAttr.id are not in key oreganno.id line 2871 of all.joiner
+# Example miss: OREG0029365
+ sacCer3.oregannoLink.id - hits 21886 of 21895
+# Error: 9 of 21895 elements of sacCer3.oregannoLink.id are not in key oreganno.id line 2872 of all.joiner
+# Example miss: OREG0029365
+
+    hgsql -N -e "select id from oregannoAttr;" sacCer3 \
+	| sort -u > oregannoAttr.id.txt
+    hgsql -N -e "select id from oreganno;" sacCer3 \
+	| sort -u > oreganno.id.txt
+    comm -13 oreganno.id.txt oregannoAttr.id.txt
+    #	OREG0029365
+    #	OREG0029396
+    #	OREG0030456
+
+    hgsql -e 'delete from oregannoAttr where id="OREG0029365";' sacCer3 
+    hgsql -e 'delete from oregannoAttr where id="OREG0029396";' sacCer3
+    hgsql -e 'delete from oregannoAttr where id="OREG0030456";' sacCer3
+
+    hgsql -N -e "select id from oregannoLink;" sacCer3 \
+	| sort -u > oregannoLink.id.txt
+    comm -13 oreganno.id.txt oregannoLink.id.txt
+    #	OREG0029365
+    #	OREG0029396
+    #	OREG0030456
+    hgsql -e 'delete from oregannoLink where id="OREG0029365";' sacCer3 
+    hgsql -e 'delete from oregannoLink where id="OREG0029396";' sacCer3
+    hgsql -e 'delete from oregannoLink where id="OREG0030456";' sacCer3
+
+#
+#########################################################################
+# Oreganno track - (DONE - 2011-08-31 - Hiram)
+    #	liftOver from sacCer1 database
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,id,strand,name from oreganno;" sacCer1 \
+    | liftOver -bedPlus=4 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+        oreganno.lifted.bed oreganno.unMapped.bed
+
+    hgsql sacCer3 < $HOME/kent/src/hg/lib/oreganno.sql
+
+    hgLoadBed -oldTable sacCer3 oreganno oreganno.lifted.bed -tab
+    #	Loaded 7299 elements of size 6
+
+    #	and load non-positional tracks from sacCer1:
+    hgsql -N -e "select * from oregannoAttr;" sacCer1 \
+	| hgLoadSqlTab -oldTable sacCer3 oregannoAttr \
+	    ~/humPhen/kent/src/hg/lib/oreganno.sql stdin
+    hgsql -N -e "select * from oregannoLink;" sacCer1 \
+	| hgLoadSqlTab -oldTable sacCer3 oregannoLink \
+	    ~/humPhen/kent/src/hg/lib/oreganno.sql stdin
+
+#########################################################################
+# Regulatory Module - (DONE - 2011-09-06 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/regModule
+    cd /hive/data/genomes/sacCer3/bed/regModule
+    #	liftOver data from sacCer1
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,name,score,strand from esRegUpstreamRegion;" \
+	sacCer1 | liftOver -bedPlus=6 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+        esRegUpstreamRegion.lifted.bed esRegUpstreamRegion.unMapped.bed
+
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,name,score,strand,gene from esRegGeneToMotif;" \
+	sacCer1 | liftOver -bedPlus=6 -tab stdin \
+/usr/local/apache/htdocs-hgdownload/goldenPath/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+        esRegGeneToMotif.lifted.bed esRegGeneToMotif.unMapped.bed
+
+    #	I do not see instructions in sacCer1 to create these tables,
+    #	so, dump their schemas:
+    hgsqldump --all -c -d --tab=. sacCer1 esRegUpstreamRegion esRegGeneToMotif
+    #	and data for these other two:
+    chmod 777 .
+    hgsqldump --all -c --tab=. sacCer1 esRegGeneToModule esRegMotif
+    chmod 775 .
+
+    # XXX there is some kind of problem in these generated SQL create
+    #	statement files.  This straight use of the file works OK:
+    hgsql sacCer3 < esRegGeneToMotif.sql
+    # But in hgLoadBed, it will not work, some kind of odd syntax error
+    # so, edit them down to just the create statement and run them:
+
+    hgLoadBed sacCer3 esRegGeneToMotif -sqlTable=t_esRegGeneToMotif.sql -tab \
+	esRegGeneToMotif.lifted.bed
+    #	Loaded 3993 elements of size 7
+    hgLoadBed sacCer3 esRegUpstreamRegion -sqlTable=t_esRegUpstreamRegion.sql \
+	-tab esRegUpstreamRegion.lifted.bed
+    #	Loaded 1670 elements of size 6
+    hgsql sacCer3 < esRegMotif.sql
+    hgsql sacCer3 -e \
+'load data local infile "esRegMotif.txt" into table esRegMotif;'
+    hgsql sacCer3 < esRegGeneToModule.sql
+    hgsql sacCer3 -e \
+'load data local infile "esRegGeneToModule.txt" into table esRegGeneToModule;'
+
+#########################################################################
+# Multiple alignment (WORKING - 2011-09-01 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/strains
+    cd /hive/data/genomes/sacCer3/bed/strains
+    # found a number of yeast genomes, but they are not convenient to
+    #	download.  This is a hybrid wget/manual procedure
+    # bash business here 
+YEASTTOP="http://downloads.yeastgenome.org/sequence/strains"
+
+wget --continue --timestamping --force-directories --directory-prefix=. \
+        --dont-remove-listing --recursive --level=inf --no-parent \
+       --no-host-directories --cut-dirs=1 ${YEASTTOP}/
+
+grep dir.png strains/index.html | sed -e 's/.*a href="//; s#/".*##' > dir.list
+
+for D in `cat dir.list`
+do
+wget --continue --timestamping --force-directories --directory-prefix=. \
+        --dont-remove-listing --recursive --level=inf --no-parent \
+       --no-host-directories --cut-dirs=2 ${YEASTTOP}/${D}/
+done
+for D in `cat dir.list`
+do
+    grep dir.png ${D}/index.html | sed -e 's/.*a href="//; s#/".*##' \
+        > ${D}/dir.list
+    for SD in `cat ${D}/dir.list`
+    do
+    wget --continue --timestamping --force-directories --directory-prefix=. \
+        --dont-remove-listing --recursive --level=inf --no-parent \
+       --no-host-directories --cut-dirs=2 ${YEASTTOP}/${D}/${SD}/
+        egrep "text.gif|text.png" ${D}/${SD}/index.html \
+            | sed -e 's/.*a href="//; s#".*##' \
+                > ${D}/file.list
+        for F in `cat ${D}/file.list`
+        do
+            wget ${YEASTTOP}/${D}/${SD}/${F} -O ./${D}/${SD}/${F}
+        done
+    done
+done
+
+    # extract the actual fasta out of those downloads
+mkdir -p fasta
+    # the EC1118 and W303 do not follow the same pattern as the others
+for D in `cat dir.list | egrep -v "EC1118|W303"`
+do
+    for SD in `cat ${D}/dir.list`
+    do
+        for F in `cat ${D}/file.list | egrep -v "README|gff|_cds|_pep"`
+        do
+#           echo ./${D}/${SD}/${F}
+            echo -n "${D}: "
+            head -1 ./${D}/${SD}/${F} | sed -e 's#>gi|[0-9]*|gb|#>#; s#| S.*##'
+            rm -f fasta/${D}.fa
+            cat ./${D}/${SD}/${F} | sed -e 's#>gi|[0-9]*|gb|#>#; s#| S.*##' \
+                > fasta/${D}.fa
+            rm -f fasta/${D}.fa.gz
+            gzip fasta/${D}.fa
+        done
+    done
+done
+    # run EC1118 and W303 separately
+for D in `cat dir.list | egrep "EC1118|W303"`
+do
+    for SD in `cat ${D}/dir.list`
+    do
+        for F in `cat ${D}/file.list | egrep -v "README|gff|_cds|_pep"`
+        do
+#           echo ./${D}/${SD}/${F}
+            echo -n "${D}: "
+            head -1 ./${D}/${SD}/${F} \
+                | sed -e 's#>gi|[0-9]*|emb|#>#; s#| S.*##; s# .*##'
+            rm -f fasta/${D}.fa
+            cat ./${D}/${SD}/${F} \
+                | sed -e 's#>gi|[0-9]*|emb|#>#; s#| S.*##; s# .*##' \
+                    > fasta/${D}.fa
+            rm -f fasta/${D}.fa.gz
+            gzip fasta/${D}.fa
+        done
+    done
+done
+
+    # convert to 2bit files
+mkdir -p 2bit
+
+for F in fasta/*.fa.gz
+do
+    B=`basename ${F} | sed -e "s/.fa.gz//"`
+    echo $F $B
+    zcat "${F}" | faToTwoBit -noMask stdin 2bit/${B}.2bit
+done
+
+    # also use the sequences from previous multiple alignment:
+for S in sacBay sacCas sacKlu sacKud sacMik sacPar
+do
+    rm -f fasta/${S}.fa
+    cat ../../../sacCer1/bed/otherYeast/align/${S} > fasta/${S}.fa
+    rm -f fasta/${S}.fa.gz
+    gzip fasta/${S}.fa
+    zcat fasta/${S}.fa.gz | faToTwoBit -noMask stdin 2bit/${S}.2bit
+    echo $S
+done
+
+    # construct sizes files
+mkdir -p sizes
+for F in 2bit/*.2bit
+do
+    B=`basename ${F} | sed -e "s/.2bit//"`
+    echo $F $B
+    twoBitInfo $F stdout | sort -k2,2nr > sizes/${B}.size
+done
+    # construct sacCer3 chromosome fasta
+mkdir -p sacCer3
+twoBitInfo ../../sacCer3.2bit stdout | cut -f1 | while read C
+do
+    twoBitToFa ../../sacCer3.2bit:${C} sacCer3/${C}.fa
+    echo "${C} done"
+done
+
+    # run the lastz alignments
+    mkdir align
+    ssh swarm
+    cd /hive/data/genomes/sacCer3/bed/strains/align
+    cat << '_EOF_' > template
+#LOOP
+lastz.csh $(path1) $(path2) $(root1).$(root2) {check out exists+ psl/$(root1).$(root2).psl.gz}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    cat << '_EOF_' > lastz.csh
+#!/bin/csh -ef
+/cluster/bin/penn/$MACHTYPE/lastz $1 $2 > lav/$3.lav
+/cluster/bin/$MACHTYPE/lavToPsl lav/$3.lav stdout | gzip > psl/$3.psl.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x lastz.csh
+    ls ../fasta/* > other.list
+    ls ../sacCer3/* > sacCer.list
+
+    gensub2 sacCer.list other.list template jobList
+    mkdir axtAll axtBest mafIn mafRawOut mafOUt lav psl
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 544 of 544 jobs
+# CPU time in finished jobs:      57645s     960.74m    16.01h    0.67d  0.002 y
+# IO & Wait Time:                  5203s      86.72m     1.45h    0.06d  0.000 y
+# Average job time:                 116s       1.93m     0.03h    0.00d
+# Longest finished job:             328s       5.47m     0.09h    0.00d
+# Submission to last job:           468s       7.80m     0.13h    0.01d
+
+    mkdir -p axtChain/run
+    cd axtChain/run
+    ls ../../../fasta | sed -e "s/.fa//" > species.list
+    ls ../../../sacCer3 | sed -e "s/.fa//" > chrom.list
+
+    cat << '_EOF_' > chain.csh
+#!/bin/csh -ef
+set S = $1
+set C = $2
+set IN = ../../psl/${C}.${S}.psl.gz
+set OUT = ${S}/${C}.chain
+mkdir -p ${S}
+zcat ${IN} \
+| axtChain -psl -verbose=0  -minScore=1000 -linearGap=medium stdin \
+    /hive/data/genomes/sacCer3/sacCer3.2bit \
+    -faQ ../../../fasta/${S}.fa stdout \
+| chainAntiRepeat /hive/data/genomes/sacCer3/sacCer3.2bit \
+    ../../../2bit/${S}.2bit stdin ${OUT}
+'_EOF_'
+    # << happy emacs
+    chmod +x chain.csh
+
+    cat << '_EOF_' > template
+#LOOP
+chain.csh $(path1) $(path2) {check out line+ $(root1)/$(root2).chain}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 species.list chrom.list template jobList
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 544 of 544 jobs
+# CPU time in finished jobs:        639s      10.65m     0.18h    0.01d  0.000 y
+# IO & Wait Time:                  2789s      46.48m     0.77h    0.03d  0.000 y
+# Average job time:                   6s       0.11m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:            64s       1.07m     0.02h    0.00d
+
+    #	merge the individual results
+    cd /hive/data/genomes/sacCer3/bed/strains/align/axtChain
+    foreach S (`cat run/species.list`)
+echo $S
+find ./run/${S} -name "*.chain" \
+    | chainMergeSort -inputList=stdin | gzip -c > sacCer3.${S}.all.chain.gz
+end
+    #	split them again to get consistent chain ID numbering
+    foreach S (`cat run/species.list`)
+echo $S
+chainSplit chain.${S} sacCer3.${S}.all.chain.gz
+end
+
+    #	netting the chains
+    cat << '_EOF_' > netChains.csh
+#!/bin/csh -ef
+
+set S0 = "../../../../chrom.sizes"
+
+foreach S (`cat run/species.list`)
+    echo $S
+    chainPreNet sacCer3.${S}.all.chain.gz ${S0} ../sizes/${S} stdout \
+    | chainNet stdin -minSpace=1 ${S0} ../sizes/${S} stdout /dev/null \
+        | netSyntenic stdin noClass.${S}.net
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x netChains.csh
+    time ./netChains.csh
+    #	real    0m14.122s
+
+    # construct MAF files
+    cat << '_EOF_' > mkMafs.csh
+#!/bin/csh -ef
+
+set TOP = `pwd`
+set S0 = "/hive/data/genomes/sacCer3/chrom.sizes"
+
+foreach S (`cat run/species.list`)
+    cd ${TOP}
+    # Make axtNet for download: one .axt per sacCer3 seq.
+    netSplit noClass.${S}.net net.${S}
+    cd ..
+    rm -fr axtNet.${S}
+    mkdir axtNet.${S}
+    foreach f (axtChain/net.${S}/*.net)
+    netToAxt $f axtChain/chain.${S}/$f:t:r.chain \
+      /hive/data/genomes/sacCer3/sacCer3.2bit ../2bit/${S}.2bit stdout \
+      | axtSort stdin stdout \
+      | gzip -c > axtNet.${S}/$f:t:r.sacCer3.${S}.net.axt.gz
+    end
+
+    # Make mafNet for multiz: one .maf per sacCer3 seq.
+    rm -fr mafNet.${S}
+    mkdir mafNet.${S}
+    foreach f (axtNet.${S}/*.sacCer3.${S}.net.axt.gz)
+      axtToMaf -tPrefix=sacCer3. -qPrefix=${S}. $f \
+            ${S0} ../sizes/${S} stdout \
+      | gzip -c > mafNet.${S}/$f:t:r:r:r:r:r.maf.gz
+    end
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x mkMafs.csh
+    time ./mkMafs.csh
+    #	real    7m16.117s
+
+    cd /hive/data/genomes/sacCer3/bed/strains/align
+    # convert maf files to PSL:
+    mkdir -p mafPsl
+for S in `cat axtChain/run/species.list`
+do
+    echo mafToPsl sacCer3 ${S} mafNet.${S}/'chr*.maf.gz' mafPsl/${S}.psl
+    rm -f mafPsl/${S}.psl
+    zcat mafNet.${S}/chr*.maf.gz \
+        | mafToPsl sacCer3 ${S} stdin mafPsl/${S}.psl
+done
+
+    # load those PSL files, it isn't clear why these alignments
+    #	need to be swapped, but they do need that
+    cat axtChain/run/species.list | grep -v RM11-1a | while read S
+do
+    pslSwap mafPsl/${S}.psl stdout \
+	| hgLoadPsl sacCer3 -table=pslMafNet${S} stdin
+done
+    pslSwap mafPsl/RM11-1a.psl stdout \
+	| hgLoadPsl sacCer3 -table=pslMafNetRM111a stdin
+
+    cat axtChain/run/species.list | while read S
+do
+    pslSwap mafPsl/${S}.psl stdout \
+	| pslCheck -db=sacCer3 stdin
+done
+    # note that all are OK, errors can be corrected with: pslRecalcMatch
+    # see also: hg19Patch5.txt
+
+    hgsql -N -e "show tables;" sacCer3 | grep pslMafNet | while read T
+do
+    echo -n "#  ${T}: " | sed -e "s/pslMafNet//"
+    featureBits sacCer3 "${T}"
+done
+
+#  AWRI1631: 11651200 bases of 12157105 (95.839%) in intersection
+#  AWRI796: 11999010 bases of 12157105 (98.700%) in intersection
+#  CBS7960: 11687063 bases of 12157105 (96.134%) in intersection
+#  CLIB215: 11432987 bases of 12157105 (94.044%) in intersection
+#  CLIB324: 10840222 bases of 12157105 (89.168%) in intersection
+#  CLIB382: 9370716 bases of 12157105 (77.080%) in intersection
+#  EC1118: 11981729 bases of 12157105 (98.557%) in intersection
+#  FL100: 11086015 bases of 12157105 (91.190%) in intersection
+#  FostersB: 11874757 bases of 12157105 (97.678%) in intersection
+#  FostersO: 11924459 bases of 12157105 (98.086%) in intersection
+#  JAY291: 12031398 bases of 12157105 (98.966%) in intersection
+#  LalvinQA23: 12000205 bases of 12157105 (98.709%) in intersection
+#  M22: 10511165 bases of 12157105 (86.461%) in intersection
+#  PW5: 11935295 bases of 12157105 (98.175%) in intersection
+#  RM111a: 11962069 bases of 12157105 (98.396%) in intersection
+#  Sigma1278b: 12005373 bases of 12157105 (98.752%) in intersection
+#  T7: 12081072 bases of 12157105 (99.375%) in intersection
+#  T73: 11606894 bases of 12157105 (95.474%) in intersection
+#  UC5: 11949157 bases of 12157105 (98.289%) in intersection
+#  VL3: 12015619 bases of 12157105 (98.836%) in intersection
+#  Vin13: 12005359 bases of 12157105 (98.752%) in intersection
+#  W303: 12042586 bases of 12157105 (99.058%) in intersection
+#  Y10: 10156801 bases of 12157105 (83.546%) in intersection
+#  YJM269: 11719109 bases of 12157105 (96.397%) in intersection
+#  YJM789: 11957276 bases of 12157105 (98.356%) in intersection
+#  YPS163: 10812681 bases of 12157105 (88.941%) in intersection
+#  sacBay: 10762610 bases of 12157105 (88.529%) in intersection
+#  sacCas: 7202451 bases of 12157105 (59.245%) in intersection
+#  sacKlu: 6404405 bases of 12157105 (52.680%) in intersection
+#  sacKud: 10830333 bases of 12157105 (89.086%) in intersection
+#  sacMik: 11254494 bases of 12157105 (92.575%) in intersection
+#  sacPar: 11712000 bases of 12157105 (96.339%) in intersection
+
+    # Add the sequences to sacCer3 for alignment display
+    cd /hive/data/genomes/sacCer3/bed/strains/fasta
+    mkdir  /gbdb/sacCer3/strains
+    ln -s `pwd`/*.fa /gbdb/sacCer3/strains/
+    rm /gbdb/sacCer3/strains/RM11-1a.fa
+    ln -s `pwd`/RM11-1a.fa /gbdb/sacCer3/strains/RM111a.fa
+
+    cat ../align/axtChain/run/species.list | grep -v RM11-1a | while read S
+do
+    hgLoadSeq -drop -seqTbl=seq${S} -extFileTbl=ext${S} sacCer3 \
+	/gbdb/sacCer3/strains/${S}.fa
+done
+    hgLoadSeq -drop -seqTbl=seqRM111a -extFileTbl=extRM111a sacCer3 \
+	/gbdb/sacCer3/strains/RM111a.fa
+
+#########################################################################
+## 7-Way Multiz (DONE - 2011-09-01 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/multiz7way
+    cd /hive/data/genomes/sacCer3/bed/multiz7way
+
+    #	using the phylogenetic tree as mentioned at:
+    #	http://www.genetics.wustl.edu/saccharomycesgenomes/yeast_phylogeny.html
+    #	and from Jim's note: genomes/sacCer1/bed/otherYeast/README 
+    # ((((((sacCer3 sacPar) sacMik) sacKud) sacBay) sacCas) sacKlu)
+    echo "((((((sacCer3 sacPar) sacMik) sacKud) sacBay) sacCas) sacKlu)" \
+	> tree.nh
+    echo sacCer3 sacPar sacMik sacKud sacBay sacCas sacKlu > species.list
+    for S in sacPar sacMik sacKud sacBay sacCas sacKlu
+do
+    mkdir -p mafLinks/${S}
+    cd mafLinks/${S}
+    ln -s ../../../strains/align/mafNet.${S}/*.maf.gz .
+    cd ../..
+done
+    find -L ./mafLinks -type f | xargs -L 1 basename \
+	| sed -e "s/.maf.gz//" | sort -u > maf.list
+
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = sacCer3
+set c = $1
+set result = $2
+set run = `pwd`
+set tmp = $run/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/sacCer3/bed/multiz7way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp
+foreach s (`sed -e "s/ $db//" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+    else if (-e $in) then
+        ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp/$db
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    gensub2 ../maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 17 of 17 jobs
+# CPU time in finished jobs:       1146s      19.10m     0.32h    0.01d  0.000 y
+# IO & Wait Time:                   173s       2.89m     0.05h    0.00d  0.000 y
+# Average job time:                  78s       1.29m     0.02h    0.00d
+# Longest finished job:             163s       2.72m     0.05h    0.00d
+# Submission to last job:           223s       3.72m     0.06h    0.00d
+
+    # load MAF tables
+    ssh hgwdev
+    mkdir -p /gbdb/sacCer3/multiz7way/maf
+    cd /hive/data/genomes/sacCer3/bed/multiz7way/maf
+    ln -s `pwd`/*.maf /gbdb/sacCer3/multiz7way/maf
+
+    # allow the temporary multiz7way.tab file to be created in tmp
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/sacCer3/multiz7way/maf sacCer3 multiz7way
+    #	real    0m3.824s
+    #	Loaded 49795 mafs in 17 files from /gbdb/sacCer3/multiz7way/maf
+    # load summary table
+    time nice -n +19 cat /gbdb/sacCer3/multiz7way/maf/*.maf \
+	| hgLoadMafSummary sacCer3 -mergeGap=1500 multiz7waySummary stdin
+    #	real    0m1.693s
+    #	Created 3048 summary blocks from 92163 components and 49795 mafs
+
+#########################################################################
+## phastCons conservation (DONE - 2009-02-11 - Hiram)
+    #	Create SS files for each chromosome:
+    mkdir /hive/data/genomes/sacCer3/bed/multiz7way/phastCons
+    cd /hive/data/genomes/sacCer3/bed/multiz7way/phastCons
+    mkdir SS
+    
+    # split up alignments; no need to use cluster here
+    export PHASTBIN=/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+    mkdir -p SS
+    for C in `(cd ../maf; ls *.maf | sed -e "s/.maf//")`
+do
+    echo $C
+    ${PHASTBIN}/msa_view \
+	../maf/${C}.maf -M ../../strains/sacCer3/${C}.fa -i MAF \
+	-O sacCer3,sacKud,sacMik,sacPar,sacBay,sacCas,sacKlu \
+	-o SS > SS/${C}.ss
+done
+
+    # produce rough starting model
+    ${PHASTBIN}/msa_view \
+	-i SS --aggregate sacCer3,sacKud,sacMik,sacPar,sacBay,sacCas,sacKlu \
+	-o SS -z SS/*.ss > all.ss
+
+    ${PHASTBIN}/phyloFit \
+	-i SS all.ss \
+	--tree "((((((sacCer3,sacPar),sacMik),sacKud),sacBay),sacCas),sacKlu)" \
+	    -o starting-tree
+    mv starting-tree.mod starting-tree.0.mod
+
+    # (cheat the branch lengths up a bit, since this represents an
+    # average of conserved and nonconserved sites; we want to
+    # initialize for nonconserved)
+    ${PHASTBIN}/tree_doctor --scale 2 starting-tree.0.mod > starting-tree.mod
+
+    # also get average GC content of aligned regions
+    ${PHASTBIN}/msa_view -i SS all.ss --summary-only
+descrip.     A       C       G       T     G+C     length   all_gaps  some_gaps
+all.ss  0.3056  0.1950  0.1948  0.3047  0.3898    1021817          0    2026636
+
+    # save some I/O and space
+    gzip SS/*.ss
+    
+    # now set up cluster job to estimate model parameters.  See
+    # other make{hg18|mm9}.doc for add'l details
+    ssh swarm
+    cd /hive/data/genomes/sacCer3/bed/multiz7way/phastCons
+
+    cat << '_EOF_' > doEstimate.sh
+#!/bin/sh
+zcat SS/$1.ss.gz | \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phastCons \
+	- starting-tree.mod --gc 0.3898 --nrates 1,1 --no-post-probs \
+	--ignore-missing --expected-lengths 75 --target-coverage 0.5 \
+	--quiet --log $2 --estimate-trees $3
+'_EOF_'
+    # << happy emacs
+    chmod +x doEstimate.sh
+
+    rm -fr LOG TREES
+    mkdir  LOG TREES
+    cat << '_EOF_' > template
+#LOOP
+doEstimate.sh $(root1) {check out line+ LOG/$(root1).log} TREES/$(root1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    (cd SS; ls *.ss.gz) | sed -e "s/.ss.gz//" > chr.list
+    gensub2 chr.list single template jobList
+    para create jobList
+    para push
+    para time
+# Completed: 17 of 17 jobs
+# CPU time in finished jobs:       1558s      25.97m     0.43h    0.02d  0.000 y
+# IO & Wait Time:                   172s       2.87m     0.05h    0.00d  0.000 y
+# Average job time:                 102s       1.70m     0.03h    0.00d
+# Longest finished job:             184s       3.07m     0.05h    0.00d
+# Submission to last job:           195s       3.25m     0.05h    0.00d
+
+    # Now combine parameter estimates.  
+    ls TREES/*.cons.mod > cons.txt
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloBoot \
+	--read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+    ls TREES/*.noncons.mod > noncons.txt
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloBoot \
+	--read-mods '*noncons.txt' --output-average ave.noncons.mod \
+	> noncons_summary.txt
+
+    # Now set up cluster job for computing consevation scores and
+    # predicted elements
+    cat << '_EOF_' > doPhastCons.csh
+#!/bin/csh -fe
+/bin/mkdir -p POSTPROBS ELEMENTS
+set chr = $1
+set out = $2
+set tmpFile = /scratch/tmp/phastCons.$chr
+/bin/rm -f $tmpFile
+/bin/zcat SS/$chr.ss.gz \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phastCons - \
+    starting-tree.mod --rho 0.3 --expected-length 45 --target-coverage 0.3 \
+	--quiet --seqname $chr --idpref $chr \
+	--most-conserved ELEMENTS/$chr.bed --score > $tmpFile
+/bin/gzip -c $tmpFile > POSTPROBS/$chr.pp.gz
+/bin/rm $tmpFile
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhastCons.csh
+
+    cat << '_EOF_' > run.template
+#LOOP
+doPhastCons.csh $(root1) {check out exists+ POSTPROBS/$(root1).pp.gz} {check out line+ ELEMENTS/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 chr.list single run.template run.jobList
+    rm -fr POSTPROBS ELEMENTS
+    para resetCounts
+    para freeBatch
+    para create run.jobList
+    para push
+    para time
+# Completed: 17 of 17 jobs
+# CPU time in finished jobs:         47s       0.79m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                    55s       0.91m     0.02h    0.00d  0.000 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest finished job:               9s       0.15m     0.00h    0.00d
+# Submission to last job:           231s       3.85m     0.06h    0.00d
+
+    # set up phastConsElements track
+    cat ELEMENTS/*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin \
+		> phastConsElements7way.bed
+
+    hgLoadBed sacCer3 phastConsElements7way phastConsElements7way.bed
+    #	Loaded 52725 elements of size 5
+    featureBits sacCer3 phastConsElements7way
+# 7358572 bases of 12157105 (60.529%) in intersection
+    #	previously this was:
+    featureBits sacCer2 phastConsElements7way
+# 7762587 bases of 12162995 (63.821%) in intersection
+    featureBits sacCer1 phastConsElements
+# 7517116 bases of 12156302 (61.837%) in intersection
+
+    mkdir ../downloads
+    mkdir ../downloads/phastCons7way
+    for C in `cat chr.list`
+do
+    cp -p POSTPROBS/${C}.pp.gz \
+	../downloads/phastCons7way/sacCer3.${C}.wigFixed.gz
+done
+
+    # check integrity of data with wigToBigWig
+    time (zcat ../downloads/phastCons7way/*.wigFixed.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/sacCer3/chrom.sizes \
+	    phastCons7way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+    # pid=21422: VmPeak:      176612 kB
+    #	real    0m8.972s
+
+    bigWigInfo phastCons7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 22,672,094
+# primaryIndexSize: 398,036
+# zoomLevels: 9
+# chromCount: 17
+# basesCovered: 12,078,291
+# mean: 0.601440
+# min: 0.000000
+# max: 1.000000
+# std: 0.429826
+
+    #	encode those files into wiggle data
+    zcat ../downloads/phastCons7way/*.wigFixed.gz \
+	| wigEncode stdin phastCons7way.wig phastCons7way.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+
+    wigTableStats.sh sacCer3 phastCons7way
+# db.table      min max mean count sumData stdDev viewLimits
+# sacCer3.phastCons7way 0 1 0.60144 12078291 7.26437e+06 0.429826 viewLimits=0:1
+    # previously:
+    wigTableStats.sh sacCer2 phastCons7way
+# db.table      min max mean count sumData stdDev viewLimits
+# sacCer2.phastCons7way 0 1 0.631032 12082524 7.62446e+06 0.425509 viewLimits=0:1
+    # Load gbdb and database with wiggle.
+    cd /hive/data/genomes/sacCer3/bed/multiz7way/phastCons
+    ln -s `pwd`/phastCons7way.wib /gbdb/sacCer3/multiz7way/phastCons7way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/sacCer3/multiz7way sacCer3 \
+	phastCons7way phastCons7way.wig
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=sacCer3 phastCons7way > histogram.data 2>&1
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Yeast sacCer3 Histogram phastCons7way track"
+set xlabel " phastCons7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #	To create the tree diagram for the details page, use this tree
+    #	definition in http://genome.ucsc.edu/cgi-bin/phyloGif
+
+((((((S._cerevisiae,S._paradoxus),S._mikatae),S._kudriavzevii),S._bayanus),S._castelli),S._kluyveri)
+
+#########################################################################
+## Annotate the sacCer3 7-way sequence with genes
+    mkdir /hive/data/genomes/sacCer3/bed/multiz7way/anno
+    cd /hive/data/genomes/sacCer3/bed/multiz7way/anno
+    mkdir genes
+    # using sgdGene
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from sgdGene" sacCer3 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/sacCer3.sgdGene.gz
+
+    (cat ../maf/*.maf | genePredToMafFrames sacCer3 stdin stdout \
+sacCer3 genes/sacCer3.sgdGene.gz \
+    | gzip > multiz7way.mafFrames.gz) > frames.log 2>&1
+
+    zcat multiz7way.mafFrames.gz \
+	| sort -k1,1 -k2,2n | hgLoadMafFrames sacCer3 multiz7wayFrames stdin
+
+############################################################################
+# creating upstream mafs (DONE - 2009-06-26 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer3/goldenPath/multiz7way
+    # run this bash script
+    cat << '_EOF_' > mkUpstream.sh
+DB=sacCer3
+GENE=sgdGene
+NWAY=multiz7way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.${GENE}.maf"
+    echo "featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout"
+    featureBits ${DB} ${GENE}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ${DB} ${NWAY} stdin stdout \
+                -orgs=/hive/data/genomes/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.${GENE}.maf.gz
+    echo "done upstream${S}.${GENE}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUpstream.sh
+    ./mkUpstream.sh
+
+#########################################################################
+# blastTab construction (DONE - 2011-09-02 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab
+    # prepare all protein fasta sequence files and configuration specifications
+export runDir="/hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab"
+
+mkdir -p ${runDir}
+cd ${runDir}
+# get all the protein sets to be used here
+pepPredToFa danRer7 ensPep danRer7.ensembl.faa
+pepPredToFa sacCer3 sgdPep sacCer3.sgd.faa
+pepPredToFa dm3 flyBasePep dm3.flyBase.faa
+pepPredToFa ce6 sangerPep ce6.sanger.faa
+for D in hg19 mm9 rn4
+do
+pepPredToFa $D knownGenePep $D.known.faa
+done
+
+# known gene tables
+for D in hg19 mm9 rn4
+do
+mkdir -p $D
+echo "targetGenesetPrefix known
+targetDb $D" > ${D}/${D}.config.ra
+echo "queryDbs sacCer3" \
+        | sed -e "s/ ${D}//" >> ${D}/${D}.config.ra
+echo "${D}Fa ${runDir}/${D}.known.faa
+sacCer3Fa ${runDir}/sacCer3.sgd.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" >> ${D}/${D}.config.ra
+done
+
+# sgd gene tables
+for D in danRer7
+do
+mkdir -p $D
+echo "targetGenesetPrefix dr
+targetDb $D
+queryDbs sacCer3
+danRer7Fa ${runDir}/danRer7.ensembl.faa
+sacCer3Fa ${runDir}/sacCer3.sgd.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+
+# flyBase table
+for D in dm3
+do
+mkdir -p $D
+echo "targetGenesetPrefix flyBase
+targetDb $D
+queryDbs sacCer3
+dm3Fa ${runDir}/dm3.flyBase.faa
+sacCer3Fa ${runDir}/sacCer3.sgd.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+
+# sanger table
+for D in ce6
+do
+mkdir -p $D
+echo "targetGenesetPrefix sanger
+targetDb $D
+queryDbs sacCer3
+ce6Fa ${runDir}/ce6.sanger.faa
+sacCer3Fa ${runDir}/sacCer3.sgd.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+
+    # run them all
+for D in ce6 danRer7 dm3 hg19 mm9 rn4
+do
+    cd ${D}
+    rm -fr *.csh do.log run.${D}.sacCer3 tmp
+    ls -ld *
+    echo $D
+    doHgNearBlastp.pl -noSelf -noLoad -workhorse=hgwdev \
+        -clusterHub=swarm ${D}.config.ra > do.log 2>&1 &
+    cd ..
+done
+
+ps -f
+echo waiting ...
+wait
+
+
+    # filter out names that do not exist in sgdGene
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab
+    hgsql -N -e "select name from sgdGene;" sacCer3 \
+	| sort -u > sacCer3.sgdGene.name.txt
+
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/ce6/run.sacCer3.ce6
+    cat out/*.tab | sort > all.sorted.tab
+    join ../../sacCer3.sgdGene.name.txt all.sorted.tab > ceBlastTab.trimmed.tab
+    hgLoadBlastTab sacCer3 ceBlastTab -maxPer=1 ceBlastTab.trimmed.tab
+    #	Loading database with 3605 rows
+
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/dm3/run.sacCer3.dm3
+    cat out/*.tab | sort > all.sorted.tab
+    join ../../sacCer3.sgdGene.name.txt all.sorted.tab > dmBlastTab.trimmed.tab
+    hgLoadBlastTab sacCer3 dmBlastTab -maxPer=1 dmBlastTab.trimmed.tab
+    #	Loading database with 3675 rows
+
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/hg19/run.sacCer3.hg19
+    cat out/*.tab | sort > all.sorted.tab
+    join ../../sacCer3.sgdGene.name.txt all.sorted.tab > hgBlastTab.trimmed.tab
+    hgLoadBlastTab sacCer3 hgBlastTab -maxPer=1 hgBlastTab.trimmed.tab
+    #	Loading database with 3759 rows
+
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/danRer7/run.sacCer3.danRer7
+    cat out/*.tab | sort > all.sorted.tab
+    join ../../sacCer3.sgdGene.name.txt all.sorted.tab > drBlastTab.trimmed.tab
+    hgLoadBlastTab sacCer3 drBlastTab -maxPer=1 drBlastTab.trimmed.tab
+    #	Loading database with 3893 rows
+
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/mm9/run.sacCer3.mm9
+    cat out/*.tab | sort > all.sorted.tab
+    join ../../sacCer3.sgdGene.name.txt all.sorted.tab > mmBlastTab.trimmed.tab
+    hgLoadBlastTab sacCer3 mmBlastTab -maxPer=1 mmBlastTab.trimmed.tab
+    #	Loading database with 3773 rows
+
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/rn4/run.sacCer3.rn4
+    cat out/*.tab | sort > all.sorted.tab
+    join ../../sacCer3.sgdGene.name.txt all.sorted.tab > rnBlastTab.trimmed.tab
+    hgLoadBlastTab sacCer3 rnBlastTab -maxPer=1 rnBlastTab.trimmed.tab
+    #	Loading database with 2981 rows
+
+#########################################################################
+# construct downloads files (DONE - 2011-09-02 - Hiram)
+    cd /hive/data/genomes/sacCer3
+    # there are no repeat masker files:
+    makeDownloads.pl -ignoreRepeatMasker -dbHost=hgwdev \
+	-workhorse=hgwdev sacCer3 > downloads.log 2>&1
+    # edit the README.txt files to set project URL and check
+    #	the text
+
+###########################################################################
+# ready for first pushQ entry (DONE - 2011-09-02 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/pushQ
+    cd /hive/data/genomes/sacCer3/pushQ
+    makePushQSql.pl sacCer3 > sacCer3.sql 2> stderr.out
+    # some errors are legitimate and OK:
+     head stderr.out 
+WARNING: hgwdev does not have /gbdb/sacCer3/wib/gc5Base.wib
+WARNING: hgwdev does not have /gbdb/sacCer3/wib/quality.wib
+WARNING: hgwdev does not have /gbdb/sacCer3/bbi/quality.bw
+WARNING: sacCer3 does not have seq
+WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+supporting and genbank tables) which tracks to assign these tables to:
+  growthCondition
+
+    scp -p sacCer3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < sacCer3.sql
+
+    #	and make this the default genome for Saccharomyces cerevisiae
+    hgsql -e \
+	'update defaultDb set name="sacCer3" where genome="S. cerevisiae";' \
+	hgcentraltest
+
+###########################################################################
+# creating tables for Gene Sorter (DONE - 2011-09-02 - Hiram)
+    mkdir /hive/data/genomes/sacCer3/bed/hgNear
+    cd /hive/data/genomes/sacCer3/bed/hgNear
+    hgClusterGenes sacCer3 sgdGene sgdIsoforms sgdCanonical
+    #	Got 6534 clusters, from 6692 genes in 17 chromosomes
+
+    # used to make a sgdToSgd table, but:
+    # Removed sgdToSgd table because it wasn't being used anywhere.
+    # Katrina 7/14/09
+
+    # Make expression similarity table. 
+    hgExpDistance sacCer3 hgFixed.yeastChoCellCycle \
+	hgFixed.yeastChoCellCycleExps choExpDistance 
+    #	Have 6259 elements in hgFixed.yeastChoCellCycle
+    #	Got 6259 unique elements in hgFixed.yeastChoCellCycle
+    #	Made choExpDistance.tab
+
+    #	Turn on protein and gene sorter
+    hgsql -e 'update dbDb set hgNearOk=1 where name="sacCer3";' hgcentraltest
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2011-09-06 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("sacCer3", "blatx", "17840", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("sacCer3", "blatx", "17841", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# uwFootprints: (WORKING - 2011-09-07 - hiram)
+# lifted sacCer1 tag count data and set to Nobel lab
+#   William Stafford Noble noble at gs.washington.edu
+#   Xiaoyu Chen xchen at cs.washington.edu
+
+XXX - working on this
+    # lift counts to sacSer2 and give back to UW
+    cd /hive/data/genomes/sacCer1/bed/uwFootprintsxi
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.dnaseI.tagCounts.bed
+    liftOver yeast.dnaseI.tagCounts.bed /hive/data/genomes/sacCer1/bed/blat.sacCer3.2009-02-04/sacCer1ToSacCer3.over.chain.gz /cluster/home/markd/public_html/tmp/yeast/yeast.dnaseI.tagCounts.sacCer3.bed  /cluster/home/markd/public_html/tmp/yeast/yeast.dnaseI.tagCounts.sacCer3.nolift.bed
+    
+    mkdir /hive/data/genomes/sacCer3/bed/uwFootprints
+    cd /hive/data/genomes/sacCer3/bed/uwFootprints
+
+    # get back wig
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.dnaseI.tagCounts.sacCer3.lifted.wig
+
+    # lift other BEDs
+    liftOver /hive/data/genomes/sacCer1/bed/uwFootprints/yeast.mappability.bed /hive/data/genomes/sacCer1/bed/blat.sacCer3.2009-02-04/sacCer1ToSacCer3.over.chain.gz yeast.mappability.bed yeast.mappability.nolift.bed
+    # drop yeast.footprints.bed and truncate name to three decimal places
+    tawk 'NR>1{print $1,$2,$3,sprintf("%0.3f",$4)}'  /hive/data/genomes/sacCer1/bed/uwFootprints/yeast.footprints.bed | liftOver stdin /hive/data/genomes/sacCer1/bed/blat.sacCer3.2009-02-04/sacCer1ToSacCer3.over.chain.gz yeast.footprints.bed yeast.footprints.nolift.bed
+
+    wigEncode yeast.dnaseI.tagCounts.sacCer3.lifted.wig uwFootprintsTagCounts.wig uwFootprintsTagCounts.wib
+    # Converted yeast.dnaseI.tagCounts.sacCer3.lifted.wig, upper limit 13798.00, lower limit 1.00
+
+    ln -sf /hive/data/genomes/sacCer3/bed/uwFootprints/uwFootprintsTagCounts.wib /gbdb/sacCer3/wib
+    hgLoadWiggle -tmpDir=/data/tmp sacCer3 uwFootprintsTagCounts uwFootprintsTagCounts.wig 
+
+    hgLoadBed -tab -tmpDir=/data/tmp sacCer3 uwFootprintsMappability yeast.mappability.bed
+    hgLoadBed -tmpDir=/data/tmp sacCer3 uwFootprintsPrints yeast.footprints.bed
+
+############################################################################
+# add iRow annotations to the maf files:
+    mkdir /hive/data/genomes/sacCer3/bed/strains/align/anno
+    cd /hive/data/genomes/sacCer3/bed/strains/align/anno
+    twoBitInfo -nBed ../../../../sacCer3.2bit sacCer3.N.bed
+    for F in ../../2bit/*.2bit
+do
+    B=`basename $F`
+    S=${B/.2bit/}
+    echo $S $F
+    twoBitInfo -nBed $F ${S}.N.bed
+done
+
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/anoCar2/anoCar2.2bit result/$(file1)
+############################################################################

@@ -8,6 +8,8 @@
 #include "dystring.h"
 #include "hui.h"
 #include "search.h"
+#include "encode/encodeExp.h"
+#include "cv.h"
 
 static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
@@ -51,6 +53,101 @@ if(tdbIsComposite(tdb) && tdb->subtracks != NULL)
 makeIndent(tabs, sizeof(tabs), indent);
 dyStringPrintf(json, "\n%s}", tabs);
 }
+
+static void encodeExpJson(struct dyString *json, struct encodeExp *el)
+/* Print out encodeExp in JSON format. Manually converted from autoSql which outputs
+ * to file pointer.
+ */
+// TODO: move to lib/encode/encodeExp.c
+{
+dyStringPrintf(json, "{");
+dyStringPrintf(json, "\"ix\":%u", el->ix);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"organism\":\"%s\"", el->organism);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"lab\":\"%s\"", el->lab);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"dataType\":\"%s\"", el->dataType);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"cellType\":\"%s\"", el->cellType);
+dyStringPrintf(json, ", ");
+/* TODO: expand expVars to elements */
+dyStringPrintf(json, "\"expVars\":\"%s\"", el->expVars);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"accession\":\"%s\"", el->accession);
+dyStringPrintf(json, "}");
+}
+
+static void cvTermJson(struct dyString *json, char *type, struct hash *termHash)
+/* Print out CV term in JSON format. Currently just supports dataType, cellType, antibody
+ * and antibody types */
+// TODO: move to lib/cv.c
+{
+dyStringPrintf(json, "{");
+dyStringPrintf(json, "\"term\":\"%s\"", (char *)hashFindVal(termHash, "term"));
+dyStringPrintf(json, ",");
+
+if (sameString(type, "dataType"))
+    {
+    dyStringPrintf(json, "\"label\":\"%s\"", (char *)hashOptionalVal(termHash, "label", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"dataGroup\":\"%s\"", (char *)hashOptionalVal(termHash, "dataGroup", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"description\":\"%s\"", (char *)hashOptionalVal(termHash, "description", "unknown"));
+    }
+else if (sameString(type, "cellType"))
+    {
+    dyStringPrintf(json, "\"description\":\"");
+    // TODO: handle modularly
+    dyStringAppendEscapeQuotes(json, (char *)hashOptionalVal(termHash, "description", "unknown"), '"', '\\');
+    dyStringPrintf(json, "\",");
+    dyStringPrintf(json, "\"tier\":\"%s\"", (char *)hashOptionalVal(termHash, "tier", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"karyotype\":\"");
+    dyStringAppendEscapeQuotes(json, (char *)hashOptionalVal(termHash, "karyotype", "unknown"), '"', '\\');
+    dyStringPrintf(json, "\",");
+    dyStringPrintf(json, "\"organism\":\"%s\"", (char *)hashOptionalVal(termHash, "organism", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"sex\":\"%s\"", (char *)hashOptionalVal(termHash, "sex", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"tissue\":\"%s\"", (char *)hashOptionalVal(termHash, "tissue", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"vendorName\":\"%s\"", (char *)hashOptionalVal(termHash, "vendorName", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"vendorId\":\"%s\"", (char *)hashOptionalVal(termHash, "vendorId", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"lineage\":\"%s\"", (char *)hashOptionalVal(termHash, "lineage", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"termId\":\"%s\"", (char *)hashOptionalVal(termHash, "termId", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"termUrl\":\"%s\"", (char *)hashOptionalVal(termHash, "termUrl", "unknown"));
+    // TODO: add URL protocol file ?
+    }
+else if (sameString(type, "antibody"))
+    {
+    dyStringPrintf(json, "\"target\":\"%s\"", (char *)hashOptionalVal(termHash, "target", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"antibodyDescription\":\"%s\"", (char *)hashOptionalVal(termHash, "antibodyDescription", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"targetDescription\":\"%s\"", (char *)hashOptionalVal(termHash, "targetDescription", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"vendorName\":\"%s\"", (char *)hashOptionalVal(termHash, "vendorName", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"vendorId\":\"%s\"", (char *)hashOptionalVal(termHash, "vendorId", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"lab\":\"%s\"", (char *)hashOptionalVal(termHash, "lab", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"targetId\":\"%s\"", (char *)hashOptionalVal(termHash, "targetId", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"targetUrl\":\"%s\"", (char *)hashOptionalVal(termHash, "targetUrl", "unknown"));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"orderUrl\":\"%s\"", (char *)hashOptionalVal(termHash, "orderUrl", "unknown"));
+    // TODO: add validation file(s) ?
+    }
+
+dyStringPrintf(json, "}\n");
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -162,6 +259,11 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
             dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
                             name);
             }
+        else if (searchBy == cvSearchByWildList)
+            {
+            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal wildList' title='enter comma separated list of values' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
+                            name);
+            }
         else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
             {
             // TO BE IMPLEMENTED
@@ -230,9 +332,58 @@ else if(sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
+else if(!strcmp(cmd, "encodeExperiments"))
+    {
+    // Return list of ENCODE experiments.  Note: database is ignored.
+    // TODO: add selector for org=human|mouse, retire db=
+    // e.g. http://genome.ucsc.edu/cgi-bin/hgApi?db=hg18&cmd=encodeExperiments
+    struct sqlConnection *connExp = sqlConnect(ENCODE_EXP_DATABASE);
+    /* TODO: any need to use connection pool ? */
+    struct encodeExp *exp = NULL, *exps = encodeExpLoadAllFromTable(connExp, ENCODE_EXP_TABLE);
+    dyStringPrintf(output, "[\n");
+    while ((exp = slPopHead(&exps)) != NULL)
+        {
+        encodeExpJson(output, exp);
+        dyStringAppend(output,",\n");
+        }
+    output->string[dyStringLen(output)-2] = '\n';
+    output->string[dyStringLen(output)-1] = ']';
+    dyStringPrintf(output, "\n");
+    sqlDisconnect(&connExp);
+    }
+else if (!strcmp(cmd, "cv"))
+    {
+    // Return list of CV terms for the specified term type
+    // Just supporting cellType, dataType, and antibody initially
+    // TODO: retire db=
+    // e.g. http://genome.ucsc.edu/cgi-bin/hgApi?db=hg19&cmd=cv&file=cv.ra&type=dataType
+    char *type = cgiString("type");
+    char *cvFile = cgiOptionalString("file");
+    if (cvFile != NULL)
+        cvFileDeclare(cvFile);
+    if (differentString(type, "dataType") &&
+        differentString(type, "cellType") &&
+        differentString(type, "antibody"))
+            {
+            warn("Unsupported CV type %s (must be dataType, cellType, antibody)", type);
+            fail("Unsupported 'cmd' parameter");
+            }
+    dyStringPrintf(output, "[\n");
+    struct hash *typeHash = (struct hash *)cvTermHash(cvTermNormalized(type));
+    struct hashCookie hc = hashFirst(typeHash);
+    struct hashEl *hel;
+    while ((hel = hashNext(&hc)) != NULL)
+        {
+        cvTermJson(output, type, hel->val);
+        dyStringAppend(output,",");
+        }
+    output->string[dyStringLen(output)-1] = 0;
+    output->stringSize--;
+    dyStringPrintf(output, "\n]\n");
+    }
 else
     {
-    warn("unknwon cmd: %s",cmd);
+    warn("unknown cmd: %s",cmd);
     fail("Unsupported 'cmd' parameter");
     }
 

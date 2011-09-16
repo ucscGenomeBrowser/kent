@@ -31,7 +31,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 #ifdef USE_BAM
-#include "bamFile.h"
+#include "hgBam.h"
 #endif//def USE_BAM
 #include "vcf.h"
 #include "makeItemsItem.h"
@@ -2127,6 +2127,7 @@ if (doExtraChecking)
     }
 if (isNotEmpty(dyErr->string))
     track->networkErrMsg = dyStringCannibalize(&dyErr);
+track->dbTrackType = cloneString("vcfTabix");
 return track;
 }
 
@@ -3023,7 +3024,7 @@ if (tdb->restrictList)
     }
 hashFree(&tdb->settingsHash);
 hashFree(&tdb->overrides);
-freeMem(&tdb->tdbExtras); // For now leak contents, because complex structs would also leak
+tdbExtrasFree(&tdb->tdbExtras);
 freeMem(tdb);
 freeMem(track->genomeDb);
 if (track->bedList)

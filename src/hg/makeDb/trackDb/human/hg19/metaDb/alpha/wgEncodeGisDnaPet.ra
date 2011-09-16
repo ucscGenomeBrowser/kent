@@ -19,6 +19,7 @@ fragSize 10k
 geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
+md5sum 191b53465e217dd5fd6184baf54583b7
 origAssembly hg18
 project wgEncode
 subId 761
@@ -39,6 +40,7 @@ fragSize 10k
 geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
+md5sum 46a5ec877b365d4edce7ec1c6bf07366
 origAssembly hg18
 project wgEncode
 subId 761
@@ -59,6 +61,7 @@ fragSize 10k
 geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
+md5sum cbc918a04ae22ddb15bff8ff474644af
 origAssembly hg18
 project wgEncode
 subId 761
@@ -79,6 +82,7 @@ fragSize 10k
 geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
+md5sum 9de5c832277e5f9f390e29f61e95f218
 origAssembly hg18
 project wgEncode
 subId 761
@@ -99,6 +103,7 @@ fragSize 1k
 geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
+md5sum 868712126a5923517b8c307bdc157672
 origAssembly hg18
 project wgEncode
 subId 761
@@ -119,6 +124,7 @@ fragSize 1k
 geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
+md5sum d23f1decaa0116785157cefaa31c12f5
 origAssembly hg18
 project wgEncode
 subId 761
@@ -139,6 +145,7 @@ fragSize 1k
 geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
+md5sum 8835229c56db50bc0ad48e9513ac390f
 origAssembly hg18
 project wgEncode
 subId 761
@@ -159,6 +166,7 @@ fragSize 1k
 geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
+md5sum 4495ba3afb4c34a57fcbc6031ac1692f
 origAssembly hg18
 project wgEncode
 subId 761
@@ -179,6 +187,7 @@ fragSize 5k
 geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
+md5sum 48fec632899ca7cd7c581bacf45f0676
 origAssembly hg18
 project wgEncode
 subId 761
@@ -199,6 +208,7 @@ fragSize 5k
 geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
+md5sum b95007d7cd0f2b9854b157acd9acee85
 origAssembly hg18
 project wgEncode
 subId 761
@@ -219,6 +229,7 @@ fragSize 5k
 geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
+md5sum 586303fca549619c28441dd1643bbc9a
 origAssembly hg18
 project wgEncode
 subId 761
@@ -239,6 +250,7 @@ fragSize 5k
 geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
+md5sum 19b701ac01f0dc44ffb9ff4c54458338
 origAssembly hg18
 project wgEncode
 subId 761
@@ -260,6 +272,7 @@ fragSize 10k
 geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
+md5sum bam=0f9c7c164fe1a9467f9adcd71b46a5da,bai=8188ea9c72dd21ce6723475a17a4a8e7
 origAssembly hg18
 project wgEncode
 subId 1852
@@ -282,6 +295,7 @@ fragSize 1k
 geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
+md5sum bam=31ae3a40862fcfe644c89da83afd2229,bai=20144e7784970150d57a53a34b8c2bea
 origAssembly hg18
 project wgEncode
 subId 1520
@@ -304,6 +318,7 @@ fragSize 5k
 geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
+md5sum bam=43a2b3c4ab35b86bbe457b1f11950c4a,bai=844f30fd0cc4c37666b24e23c011faff
 origAssembly hg18
 project wgEncode
 subId 1521
@@ -325,6 +340,7 @@ fragSize 10k
 geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
+md5sum 20125f316dafa4daed390afae59e7bb2
 origAssembly hg18
 project wgEncode
 subId 761
@@ -345,6 +361,7 @@ fragSize 10k
 geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
+md5sum 51046aaf12d18c9c314d524f4599c98f
 origAssembly hg18
 project wgEncode
 subId 761
@@ -365,6 +382,7 @@ fragSize 10k
 geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
+md5sum fd942e78195f509cf0454ec7621eaa7a
 origAssembly hg18
 project wgEncode
 subId 761
@@ -385,6 +403,7 @@ fragSize 10k
 geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
+md5sum 233fb8f21fc7c975ab742ca38caeaad5
 origAssembly hg18
 project wgEncode
 subId 761
@@ -405,6 +424,7 @@ fragSize 1k
 geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
+md5sum a8859a10361cf6ced9bd50a55cdee499
 origAssembly hg18
 project wgEncode
 subId 761
@@ -425,6 +445,7 @@ fragSize 1k
 geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
+md5sum f70d407825bbb6901d213a4cdd63e140
 origAssembly hg18
 project wgEncode
 subId 761
@@ -445,6 +466,7 @@ fragSize 1k
 geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
+md5sum 5a2bd3b49f35805f9dbb5687a627c221
 origAssembly hg18
 project wgEncode
 subId 761
@@ -465,6 +487,7 @@ fragSize 1k
 geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
+md5sum a73b80f09353d69b6a4ca1f76b1b66ae
 origAssembly hg18
 project wgEncode
 subId 761
@@ -485,6 +508,7 @@ fragSize 20k
 geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
+md5sum f91100cce743d4db1c4d04c94bf9ad44
 origAssembly hg18
 project wgEncode
 subId 1075
@@ -505,6 +529,7 @@ fragSize 20k
 geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
+md5sum df6b8c933519b90ac43b4be4831121fe
 origAssembly hg18
 project wgEncode
 subId 1075
@@ -525,6 +550,7 @@ fragSize 20k
 geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
+md5sum c26e345a09bf031bcefa7e0a837354a7
 origAssembly hg18
 project wgEncode
 subId 1075
@@ -545,6 +571,7 @@ fragSize 20k
 geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
+md5sum ac44bb37aaa178d6fdae2e6e5d96d11c
 origAssembly hg18
 project wgEncode
 subId 1075
@@ -566,6 +593,7 @@ fragSize 10k
 geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
+md5sum bam=75bd1289ed16723a26d0563979268f45,bai=465c7ae0f68ff6d5d3bcbbb0c83801f6
 origAssembly hg18
 project wgEncode
 subId 1853
@@ -588,6 +616,7 @@ fragSize 1k
 geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
+md5sum bam=327b14884464329a59ae81e901ca3ff9,bai=2c2b8c994a4b6179c05ee0c296546b14
 origAssembly hg18
 project wgEncode
 subId 1854
@@ -610,6 +639,7 @@ fragSize 20k
 geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
+md5sum bam=077a3f82c057117b7bb81a7bd7b1b124,bai=b8a1412732e8e5ca1ebeeb70d04ffd4b
 origAssembly hg18
 project wgEncode
 subId 1524
@@ -631,6 +661,7 @@ fragSize 10k
 geoSampleAccession GSM714699
 grant Gingeras
 lab GIS
+md5sum 1cc325fa44a8c53e83a005d2c92bfc7b
 origAssembly hg18
 project wgEncode
 subId 761
@@ -651,6 +682,7 @@ fragSize 1k
 geoSampleAccession GSM714694
 grant Gingeras
 lab GIS
+md5sum 841b0d0536593b1d7a521bf1fee7ce6b
 origAssembly hg18
 project wgEncode
 subId 761
@@ -671,6 +703,7 @@ fragSize 10k
 geoSampleAccession GSM714699
 grant Gingeras
 lab GIS
+md5sum a715b664b9aa4e3de5b5566d3e76ac15
 origAssembly hg18
 project wgEncode
 subId 761
@@ -691,9 +724,10 @@ fragSize 1k
 geoSampleAccession GSM714694
 grant Gingeras
 lab GIS
+md5sum d8ab43be78b50d0c9225e012f4c942c7
 origAssembly hg18
 project wgEncode
 subId 761
 view FastqRd2
 
-# MAGIC: 191971678
+# MAGIC: 779448246

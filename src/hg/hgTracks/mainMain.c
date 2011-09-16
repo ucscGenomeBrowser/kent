@@ -23,25 +23,6 @@
 
 static char const rcsid[] = "$Id: hgTracks.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
-/* Other than submit and Submit all these vars should start with hgt.
- * to avoid weeding things out of other program's namespaces.
- * Because the browser is a central program, most of it's cart
- * variables are not hgt. qualified.  It's a good idea if other
- * program's unique variables be qualified with a prefix though. */
-char *excludeVars[] = { "submit", "Submit", "hgt.reset",
-            "hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
-            "hgt.out1", "hgt.out2", "hgt.out3",
-            "hgt.left1", "hgt.left2", "hgt.left3",
-            "hgt.right1", "hgt.right2", "hgt.right3",
-            "hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-            "hgt.tui", "hgt.hideAll", "hgt.visAllFromCt",
-	    "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
-	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
-	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
-            "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
-             TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
-            NULL };
-
 int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
@@ -71,8 +52,8 @@ else
     cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
     {
-    fprintf(stdout, "Overall total time: %ld millis<BR>\n",
-    clock1000() - enteredMainTime);
+    fprintf(stdout, "<span class='timing'>Overall total time: %ld millis<br /></span>\n",
+            clock1000() - enteredMainTime);
     }
 return 0;
 }

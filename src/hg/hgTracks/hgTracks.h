@@ -158,7 +158,7 @@ struct track
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
     struct preDrawContainer *preDrawContainer;  /* Numbers to graph in wig, one per pixel */
-    struct preDrawContainer *(*loadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);  
+    struct preDrawContainer *(*loadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);
     /* Do bits that load the predraw buffer.  Called to set preDrawContainer */
 
     struct bbiFile *bbiFile;	/* Associated bbiFile for bigWig or bigBed. */
@@ -351,7 +351,18 @@ struct gsidSeq
     char *subjId;
     };
 
+/* list of links to display in a menu */
+struct hotLink
+    {
+    struct hotLink *next;
+    char *name;
+    char *url;
+    char *id;
+    };
+
+extern char *excludeVars[];
 extern struct trackLayout tl;
+extern struct jsonHashElement *jsonForClient;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern struct hash *oldVars;       /* List of vars from previous cart. */
@@ -378,6 +389,7 @@ extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
 extern boolean withGuidelines;		/* Display guidelines? */
 extern boolean withNextExonArrows;	/* Display next exon navigation buttons near center labels? */
+extern struct hvGfx *hvgSide;    // An extra pointer to a side label image that can be built if needed
 
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */
@@ -1326,6 +1338,8 @@ int tgCmpPriority(const void *va, const void *vb);
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
 
 #define measureTime uglyTime
+
+#define SUPPORT_CONTENT_TYPE 1
 
 #endif /* HGTRACKS_H */
 

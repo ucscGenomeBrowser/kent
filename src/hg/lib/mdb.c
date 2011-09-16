@@ -10,7 +10,6 @@
 #include "cv.h"
 #include "mdb.h"
 #include "encode/encodeExp.h"
-#include <regex.h>
 
 static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
 
@@ -295,7 +294,7 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
         AllocVar(mdbObj);
         mdbObj->obj     = thisRow->obj;
         if ( buildHashes )
-            mdbObj->varHash = hashNew(0);
+            mdbObj->varHash = hashNew(8);
         slAddHead(&mdbObjs,mdbObj);
         }
     else
@@ -345,7 +344,7 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
         limbVal = NULL;  // Very important!
         rootVar->var     = thisRow->var;
         if ( buildHashes )
-            rootVar->valHash = hashNew(0);
+            rootVar->valHash = hashNew(8);
         slAddHead(&rootVars,rootVar);
         }
     else
@@ -365,7 +364,7 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
         if ( buildHashes )
             {
             hashAddUnique(rootVar->valHash, limbVal->val, limbVal); // Pointer to struct to get to objHash
-            limbVal->objHash = hashNew(0);
+            limbVal->objHash = hashNew(10);
             }
         slAddHead(&(rootVar->vals),limbVal);
         }
@@ -458,7 +457,7 @@ char *cloneVars = cloneString(varPairs);
     if(mdbObj == NULL)
         AllocVar(mdbObj);
     if(mdbObj->varHash == NULL)
-        mdbObj->varHash = hashNew(0);
+        mdbObj->varHash = hashNew(8);
 
     int ix;
     for(ix = 0;ix<count;ix++)
@@ -618,7 +617,6 @@ struct mdbByVar   *mdbByVars = NULL;
 struct mdbByVar   *rootVar = NULL;
 struct mdbLimbVal *limbVal = NULL;
 char *cloneLine = cloneString(line);
-struct hash* varHash;     // There must not be multiple occurrances of the same var
 
     // initial chop and determine if this looks like metadata
     int count = chopByWhiteRespectDoubleQuotes(cloneLine,NULL,0);
@@ -626,8 +624,6 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
     count = chopByWhiteRespectDoubleQuotes(cloneLine,words,count);
 
     verbose(3, "mdbByVarsLineParse() word count:%d\n\t%s\n",count,line);
-    // Get obj and figure out if this is a delete line
-    varHash = hashNew(0);
 
     // All words are expected to be var=val pairs!
     for (thisWord=0; thisWord<count; thisWord++)
@@ -636,12 +632,13 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
             errAbort("Expected '%s=%s' but found '%s'.  This is not properly formatted metadata:\n\t%s\n",MDB_VAR,MDB_VAL,words[thisWord],line);
 
         // Set up var struct from 1st half of pair
+        // NOTE: Do not try to combine repeated vars because "fob=a fob=b" is 'AND' while "fob=a,b" is 'OR'.
+        //       Does this make sense?  Yes: select * ... where fob like 'Fr%' and fob != 'Frunk'
         AllocVar(rootVar);
         rootVar->var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
         rootVar->notEqual = (rootVar->var[strlen(rootVar->var)-1] == '!'); // requested not equal
         if (rootVar->notEqual)
             rootVar->var[strlen(rootVar->var)-1] = 0;
-        // Do not try to combine repeated vars because "foo=a foo=b" is 'AND' while "foo=a,b" is 'OR'.
 
         // Fill in the val(s) from second half of pair
         char *val = NULL;
@@ -657,8 +654,8 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
                 *end = '\0';
                 val++;
                 }
-            // handle comma separated list of vals (if unquoted)
-            if (strchr(val,',') != NULL)
+            // handle comma separated list of vals (if not framed with widcards)
+            if (strchr(val,',') != NULL && (*val != '%' || *(val + strlen(val) - 1) != '%'))
                 {
                 char * aVal = NULL;
                 while((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
@@ -675,7 +672,6 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
                 rootVar->vals = limbVal;
                 }
             }
-        hashAdd(varHash, rootVar->var, rootVar);
         slAddHead(&mdbByVars,rootVar);
         }
     freeMem(words);
@@ -782,7 +778,7 @@ if (mdbVars == NULL)
 else
     {
     mdbObj = mdbObjCreate(obj,mdbVars->var,mdbVars->val);
-    mdbObj->varHash = hashNew(0);
+    mdbObj->varHash = hashNew(8);
     hashAddUnique(mdbObj->varHash, mdbVars->var, mdbObj->vars); // pointer to struct to resolve type
 
     struct mdbVar *var = mdbVars->next;
@@ -804,7 +800,7 @@ while((objEl = hashNext(&objCookie)) != NULL)
     struct mdbObj *mdbObj;
     AllocVar(mdbObj);
     mdbObj->obj     = cloneString(objEl->name);
-    mdbObj->varHash = hashNew(0);
+    mdbObj->varHash = hashNew(8);
     struct hash *hashedVars = objEl->val;
     struct hashCookie varCookie = hashFirst(hashedVars);
     struct hashEl* varEl = NULL;
@@ -1380,29 +1376,45 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
             (strchr(rootVar->var,'%')?"LIKE":"="), rootVar->var);
 
         struct mdbLimbVal *limbVal;
-        boolean multiVals = FALSE;
+        boolean multiVals = (rootVar->vals != NULL && rootVar->vals->next != NULL);
+        boolean wilds = FALSE;
+        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+            {
+            if (strchr(limbVal->val,'%') != NULL)
+                wilds = TRUE;
+            }
         for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
             {
             if(limbVal->val == NULL || strlen(limbVal->val) < 1)
                 continue;
 
-            if(!multiVals)
+            if(limbVal==rootVar->vals) // First val
                 {
-                dyStringPrintf(dy, " AND T%d.val ",tix);
+                if (wilds && multiVals)
+                    dyStringPrintf(dy, " AND (T%d.val ",tix);
+                else
+                    dyStringPrintf(dy, " AND T%d.val ",tix);
+                }
+            else                      // successive vals
+                {
+                if (wilds && multiVals)
+                    dyStringPrintf(dy, " or T%d.val ",tix);
+                else
+                    dyStringPrintf(dy, ",");
+                }
+
+            if (limbVal==rootVar->vals   // First val
+            ||  (wilds && multiVals))      // and successive if wildcards
+                {
                 if(rootVar->notEqual)
                     dyStringPrintf(dy, "%s",(strchr(limbVal->val,'%') || limbVal->next)?"NOT ":"!");
-                if(limbVal->next == NULL) // only one val
-                    {
-                    dyStringPrintf(dy, "%s '%s'",
-                        (strchr(limbVal->val,'%')?"LIKE":"="), sqlEscapeString(limbVal->val));
-                    break;
-                    }
+                if (strchr(limbVal->val,'%') != NULL)
+                    dyStringPrintf(dy, "LIKE ");
+                else if (!multiVals || wilds)
+                    dyStringPrintf(dy, "= ");
                 else
                     dyStringPrintf(dy, "IN (");
-                multiVals=TRUE;
                 }
-            else
-                dyStringPrintf(dy, ",");
             dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
             }
         if(multiVals)
@@ -1520,7 +1532,7 @@ if(raStyle) // NOTE: currently only supporting validation of RA files
     fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
 }
 
-char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude)
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude,boolean cvLabels)
 // returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
 {
 if (mdbObj!=NULL)
@@ -1537,7 +1549,16 @@ if (mdbObj!=NULL)
     for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
-            dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            {
+            if (cvLabels)
+                {
+                char *varLabel = (char *)cvLabel(NULL,mdbVar->var);
+                char *valLabel = (char *)cvLabel(mdbVar->var,mdbVar->val);
+                dyStringPrintf(dyLine,"%s=%s; ",varLabel,valLabel);
+                }
+            else
+                dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            }
         }
     char *line = dyStringCannibalize(&dyLine);
     if (line)
@@ -1570,6 +1591,82 @@ FILE *f = mustOpen(file, "w");
 mdbObjPrintToStream(mdbObjs, raStyle, f);
 
 fclose(f);
+}
+
+void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *seperator, boolean header)
+// prints mdbObjs as a table, but only the vars listed in comma delimited order.
+// Examples of seperator: " " "\t\t" or "<TD>", in which case this is an HTML table.
+// mdbObjs list will be reordered. Sort fails when vars are missing in objs.
+{
+if (seperator == NULL)
+    seperator = " ";
+boolean html = FALSE;
+if (startsWith("<T",seperator) || startsWith("<t",seperator))
+    {
+    if(!endsWith(seperator,">"))
+        errAbort("mdbObjPrintOrdered() seperator is invalid HTML '%s'.\n",seperator);
+    html = TRUE;
+    }
+
+if (!startsWithWordByDelimiter("obj"       ,',',order)
+&&  !startsWithWordByDelimiter("objName"   ,',',order)
+&&  !startsWithWordByDelimiter("metaObject",',',order))
+    mdbObjsSortOnVars(mdbObjs, order);
+
+struct slName *vars = slNameListFromString(order, ',');
+struct slName *var = NULL;
+
+if (html)
+    fprintf(outF, "<table>");
+if (header)
+    {
+    if (html)
+        fprintf(outF, "<tr>");
+    for (var = vars;var != NULL; var = var->next)
+        {
+        if (html)
+            fprintf(outF, "%s%s",seperator,var->name); // <td> is first
+        else
+            fprintf(outF, "%s%s",var->name,seperator);
+        if (html)
+            fprintf(outF, "</td>");
+        }
+    if (html)
+        fprintf(outF, "</tr>");
+    fprintf(outF, "\n");
+    }
+
+struct mdbObj *mdbObj = *mdbObjs;
+for (;mdbObj != NULL; mdbObj = mdbObj->next)
+    {
+    if (html)
+        fprintf(outF, "<tr>");
+    for (var = vars;var != NULL; var = var->next)
+        {
+        char *val = mdbObjFindValue(mdbObj, var->name);
+        if (val == NULL)
+            {
+            /*if (sameWord(var->name,"obj") || sameWord(var->name,"objName") || sameWord(var->name,"metaObject"))
+                val = mdbObj->obj;
+            else*/ if (html)
+                val = "&nbsp;";
+            else
+                val = " ";
+            }
+        if (html)
+            fprintf(outF, "%s%s",seperator,val); // <td> is first
+        else
+            fprintf(outF, "%s%s",val,seperator);
+        if (html)
+            fprintf(outF, "</td>");
+        }
+    if (html)
+        fprintf(outF, "</tr>");
+    fprintf(outF, "\n");
+    }
+
+if (html)
+    fprintf(outF, "</table>\n");
 }
 
 int mdbObjPrintToTabFile(struct mdbObj *mdbObjs, char *file)
@@ -1743,7 +1840,11 @@ char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
 struct mdbVar *mdbVar = mdbObjFind(mdbObj, var);
 
 if(mdbVar == NULL)
+    {
+    if (sameWord(var,"obj") || sameWord(var,"objName") || sameWord(var,"metaObject"))
+        return mdbObj->obj;
     return NULL;
+    }
 
 return mdbVar->val;
 }
@@ -2394,7 +2495,7 @@ newObj->deleteThis = mdbObj->deleteThis;
 if(mdbObj->vars != NULL)
     {
     if(mdbObj->varHash != NULL)
-        newObj->varHash = hashNew(0);
+        newObj->varHash = hashNew(8);
 
     struct mdbVar *mdbVar = NULL;
     for(mdbVar = mdbObj->vars; mdbVar != NULL; mdbVar = mdbVar->next )
@@ -2470,154 +2571,21 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                 || sameString(mdbVar->val,MDB_OBJ_TYPE_FILE)
                 || sameString(mdbVar->val,MDB_OBJ_TYPE_COMPOSITE)))
                 continue;
-            printf("INVALID '%s' not defined in %s: %s -> %s = %s\n",mdbVar->var,CV_FILE_NAME,mdbObj->obj,mdbVar->var,mdbVar->val);
+            printf("INVALID %s '%s' not defined in %s: %s = %s in %s: %s\n",CV_TERM,
+                   mdbVar->var,CV_FILE_NAME,mdbVar->var,mdbVar->val,MDB_OBJ,mdbObj->obj);
             invalids++;
             continue;
             }
-        char *validationRule = hashFindVal(termHash,CV_VALIDATE);
-        if (validationRule == NULL)
+        char reason[256];
+        boolean valid = cvValidateTerm(mdbVar->var,mdbVar->val,reason,sizeof(reason));
+        if (!valid)
             {
-            verbose(1,"ERROR in %s: Term '%s' in typeOfTerms but has no '%s' setting.\n",CV_FILE_NAME,mdbVar->var,CV_VALIDATE);
-            continue;  // Should we errAbort?
-            }
-
-        // NOTE: Working on memory in hash but we are throwing away a comment and removing trailing spaces so that is okay
-        strSwapChar(validationRule,'#','\0'); // Chop off any comment in the setting
-        validationRule = trimSpaces(validationRule);
-
-        // Validate should be or start with known word
-        if (startsWithWord(CV_VALIDATE_CV,validationRule))
-            {
-            if (SETTING_NOT_ON(hashFindVal(termHash,CV_TOT_CV_DEFINED))) // Known type of term but no validation to be done
-                {
-                verbose(1,"ERROR in %s: Term '%s' says validate in cv but is not '%s'.\n",CV_FILE_NAME,mdbVar->var,CV_TOT_CV_DEFINED);
-                continue;
-                }
-
-           // cvDefined so every val should be in cv
-           struct hash *cvHashForTerm = (struct hash *)cvTermHash(mdbVar->var);
-           if (cvHashForTerm == NULL)
-                {
-                verbose(1,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.\n",CV_FILE_NAME,mdbVar->var);
-                continue;
-                }
-            if (hashFindVal(cvHashForTerm,mdbVar->val) == NULL) // No cv definition for term so no validation can be done
-                {
-                if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE) && sameString(mdbVar->val,MDB_VAL_ENCODE_EDV_NONE))
-                    continue;
-                else if (sameString(validationRule,CV_VALIDATE_CV_OR_CONTROL))
-                    {
-                    cvHashForTerm = (struct hash *)cvTermHash(CV_TERM_CONTROL);
-                    if (cvHashForTerm == NULL)
-                        {
-                        verbose(1,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.\n",CV_FILE_NAME,CV_TERM_CONTROL);
-                        continue;
-                        }
-                    if (hashFindVal(cvHashForTerm,mdbVar->val) != NULL)
-                        continue;
-                    }
-                printf("INVALID cv lookup: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
-                invalids++;
-                }
-           }
-        else if (startsWithWord(CV_VALIDATE_DATE,validationRule))
-            {
-            if (dateToSeconds(mdbVar->val,"%F") == 0)
-                {
-                printf("INVALID date: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
-                invalids++;
-                }
-            }
-        else if (startsWithWord(CV_VALIDATE_EXISTS,validationRule))
-            continue;  // (e.g. fileName exists) Nothing to be done at this time.
-        else if (startsWithWord(CV_VALIDATE_FLOAT,validationRule))
-            {
-            char* end;
-            double notNeeded = strtod(mdbVar->val, &end); // Don't want float, just error (However, casting to void resulted in a comple error on Ubuntu Maveric and Lucid)
-
-            if ((end == mdbVar->val) || (*end != '\0'))
-                {
-                printf("INVALID float: %s -> %s = %s (resulting double: %g)\n",mdbObj->obj,mdbVar->var,mdbVar->val,notNeeded);
-                invalids++;
-                }
-            }
-        else if (startsWithWord(CV_VALIDATE_INT,validationRule))
-            {
-            char *p0 = mdbVar->val;
-            if (*p0 == '-')
-                p0++;
-            char *p = p0;
-            while ((*p >= '0') && (*p <= '9'))
-                p++;
-            if ((*p != '\0') || (p == p0))
-                {
-                printf("INVALID integer: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
-                invalids++;
-                }
-            }
-        else if (startsWithWord(CV_VALIDATE_LIST,validationRule))
-            {
-            validationRule = skipBeyondDelimit(validationRule,' ');
-            if (validationRule == NULL)
-                {
-                verbose(1,"ERROR in %s: Invalid '%s' for %s.\n",CV_FILE_NAME,CV_VALIDATE_LIST,mdbVar->var);
-                continue;
-                }
-            int count = chopByChar(validationRule, ',', NULL, 0);
-            if (count == 1)
-                {
-                if (differentString(mdbVar->val,validationRule))
-                    {
-                    printf("INVALID list '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
-                    invalids++;
-                    }
-                }
-            else if (count > 1)
-                {
-                char **array = needMem(count*sizeof(char*));
-                chopByChar(cloneString(validationRule), ',', array, count); // Want to also trimSpaces()? No
-
-                if (stringArrayIx(mdbVar->val, array, count) == -1)
-                    {
-                    printf("INVALID list '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
-                    invalids++;
-                    }
-                }
+            if (startsWith("ERROR in ",reason))
+                printf("%s\n",reason);
             else
-                verbose(1,"ERROR in %s: Invalid 'validate list: %s' for term %s,\n",CV_FILE_NAME,validationRule,mdbVar->var);
+                printf("%s in %s: %s\n",reason,MDB_OBJ,mdbObj->obj);
+            invalids++;
             }
-        else if (startsWithWord(CV_VALIDATE_NONE,validationRule))
-            continue;
-        else if (startsWithWord(CV_VALIDATE_REGEX,validationRule))
-            {
-            validationRule = skipBeyondDelimit(validationRule,' ');
-            if (validationRule == NULL)
-                {
-                verbose(1,"ERROR in %s: Invalid '%s' for %s.\n",CV_FILE_NAME,CV_VALIDATE_REGEX,mdbVar->var);
-                continue;
-                }
-            // Real work ahead interpreting regex
-            regex_t regEx;
-            int err = regcomp(&regEx, validationRule, REG_NOSUB);
-            if(err != 0)  // Compile the regular expression so that it can be used.  Use: REG_EXTENDED ?
-                {
-                char buffer[128];
-                regerror(err, &regEx, buffer, sizeof buffer);
-                verbose(1,"ERROR in %s: Invalid regular expression for %s - %s.  %s\n",CV_FILE_NAME,mdbVar->var,validationRule,buffer);
-                continue;
-                }
-            err = regexec(&regEx, mdbVar->val, 0, NULL, 0);
-            if (err != 0)
-                {
-                //char buffer[128];
-                //regerror(err, &regEx, buffer, sizeof buffer);
-                printf("INVALID regex '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
-                invalids++;
-                }
-            regfree(&regEx);
-            }
-        else
-            verbose(1,"ERROR in %s: Unknown validationRule rule '%s' for term %s.\n",CV_FILE_NAME,validationRule,mdbVar->var);
         }
     }
 return invalids;
@@ -3112,7 +3080,7 @@ mdbObj->obj     = cloneString(tdb->table?tdb->table:tdb->track);
 AllocVar(mdbObj->vars);
 mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
 mdbObj->vars->val = cloneString(MDB_OBJ_TYPE_TABLE);
-mdbObj->varHash = hashNew(0);
+mdbObj->varHash = hashNew(8);
 hashAdd(mdbObj->varHash, mdbObj->vars->var, mdbObj->vars);
 mdbObj = mdbObjAddVarPairs(mdbObj,setting);
 mdbObjRemoveVars(mdbObj,MDB_VAR_TABLENAME); // NOTE: Special hint that the tdb metadata is used since no mdb metadata is found
@@ -3227,7 +3195,9 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     if (isEmpty(((char *)(onePair->val)))) // NOTE: All the parens are needed to get the macro to do the right thing
         continue;
     enum cvSearchable searchBy = cvSearchMethod(onePair->name);
-    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
+    if (searchBy == cvSearchByMultiSelect  // multiSelect val will be filled with a comma delimited list
+    || searchBy == cvSearchBySingleSelect
+    || searchBy == cvSearchByWildList)
         {
         if (strchr((char *)onePair->val,' '))
             dyStringPrintf(dyTerms,"%s=\"%s\" ",onePair->name,(char *)onePair->val);
@@ -3235,7 +3205,7 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
             dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
         }
     else if (searchBy == cvSearchByFreeText)                                      // If select is by free text then like
-        dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
+        dyStringPrintf(dyTerms,"%s=\"%%%s%%\" ",onePair->name,(char *)onePair->val);
     else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))  // special case.  Not directly searchable by UI but indirectly and will show up here.
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
@@ -3376,13 +3346,21 @@ while ((row = sqlNextRow(sr)) != NULL)
                 }
             }
         }
-    if (label == NULL);
+    if (label == NULL)
         label = cloneString(row[0]);
     label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
     slPairAdd(&pairs,val,label);
     }
 sqlFreeResult(&sr);
-slPairValSortCase(&pairs);
+if (slCount(pairs) > 0)
+    {
+    // should have a list sorted on the label
+    enum cvDataType eCvDataType = cvDataType(var);
+    if (eCvDataType == cvInteger)
+        slPairValAtoiSort(&pairs);
+    else
+        slPairValSortCase(&pairs);
+    }
 return pairs;
 }
 

@@ -81,6 +81,9 @@ static struct optionSpec optionSpecs[] = {
     {"experimentify",OPTION_BOOLEAN},// Validate Experiments as defined in the hgFixed.encodeExp table
     {"encodeExp",OPTION_STRING},     // Optionally tell which encodeExp to use
     {"vars",     OPTION_STRING},// var1=val1 var2=val2...
+    {"order",    OPTION_STRING}, // comma delimited list of vars to order result by
+    {"seperator",OPTION_STRING}, // Optional seperator used with order
+    {"header",   OPTION_BOOLEAN},// Optional inclusion of header used with order
     {"updDb",    OPTION_STRING},// DB to update
     {"updMdb",   OPTION_STRING},// MDB table to update
     {"updSelect",OPTION_STRING},// Experiment defining vars: "var1,var2"
@@ -97,6 +100,7 @@ errAbort(
   "mdbPrint - Prints specialty output from metadata objects and variables.\n"
   "usage:\n"
   "   mdbPrint {db} [-table=] -vars=\"var1=val1 var2=val2...\"\n"
+  "            -order={var1,var2,...} [-seperator={\"any string\"} [-header]\n"
   "            -updDB={db} -updMdb={metaDb} -updSelect=var1,var2,... -updVars=varA,varB,...\n"
   "Options:\n"
   "    {db}     Database to query metadata from.  This argument is required.\n"
@@ -104,8 +108,12 @@ errAbort(
   "             '" MDB_DEFAULT_NAME "'.\n"
   "    -vars={var=val...}  Request a combination of var=val pairs.\n"
   "                    Use of 'var!=val', 'var=v%%' and 'var=?' are supported.\n"
-  "  Special functions:\n"
-  "    Print mdbUpdate lines to assist importing metadata from one db.table to another.\n"
+  "Special functions:\n"
+  "  Print ordered vars:\n"
+  "    -order       Prints only vars named and in the order named (comma delimited).\n"
+  "    -seperator   Optional, examples: \" \", \"\\t\\t\", \"<td>\" (will make html table).\n"
+  "    -header      Optionally include header.\n"
+  "  Print mdbUpdate lines to assist importing metadata from one db.table to another:\n"
   "    -updDb      Database to aim mdbUpdate lines at.\n"
   "    -updMdb     The metaDb table to aim mdbUpdate lines at.\n"
   "    -updSelect  A comma separated list of variables that will be selected with\n"
@@ -250,6 +258,7 @@ int main(int argc, char *argv[])
 struct mdbObj   * mdbObjs   = NULL;
 struct mdbByVar * mdbByVars = NULL;
 int objsCnt=0, varsCnt=0,valsCnt=0;
+int retCode = 0;
 
 if(argc == 1)
     usage();
@@ -267,6 +276,7 @@ if(argc < 2)
 
 char *db        = argv[1];
 char *table     = optionVal("table",NULL);
+char *order     = optionVal("order",NULL);
 boolean raStyle = TRUE;
 if(optionExists("line") && !optionExists("ra"))
     raStyle = FALSE;
@@ -283,9 +293,9 @@ if (optionExists("experimentify"))
 else if (optionExists("encodeExp"))
     errAbort("-encodeExp option requires -experimentify option.\n");
 
-if ((validate || encodeExp != NULL) && (byVar || optionExists("line") || optionExists("ra")))
+if ((validate || encodeExp != NULL) && (byVar || optionExists("line") || optionExists("ra") || optionExists("order")))
     {
-    verbose(1, "Incompatible to combine validate or experimentify option with 'byVar', 'line' or 'ra':\n");
+    verbose(1, "Incompatible to combine validate or experimentify option with 'byVar', 'line', 'ra' or 'order':\n");
     usage();
     }
 
@@ -371,7 +381,10 @@ else
         }
 
     if(queryResults == NULL)
+        {
         verbose(1, "No metadata met your selection criteria\n");
+        retCode = 1;
+        }
     else
         {
         objsCnt=mdbObjCount(queryResults,TRUE);
@@ -391,12 +404,22 @@ else
                 {
                 struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&queryResults,2,FALSE,FALSE); // 2=full experiments described
                 printf("%d of %d obj%s can have their experiment IDs updated now.\n",slCount(updatable),objsCnt,(objsCnt==1?"":"s"));
+                if (slCount(updatable) < objsCnt)
+                    retCode = 2;
                 mdbObjsFree(&updatable);
                 }
             else if (validate) // Validate vars and vals against cv.ra
                 {
                 int invalids = mdbObjsValidate(queryResults,optionExists("validateFull"));
-                printf("%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
+                verbose(1,"%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
+                if (invalids > 0)
+                    retCode = 3;
+                }
+            else if (order != NULL)
+                {
+                char *sep = optionVal("seperator",NULL);
+                boolean header = optionExists("header");
+                mdbObjPrintOrderedToStream(stdout,&queryResults,order, sep, header);
                 }
             else
                 mdbObjPrint(queryResults,raStyle);
@@ -425,5 +448,5 @@ if(mdbObjs)
 if(mdbByVars)
     mdbByVarsFree(&mdbByVars);
 
-return 0;
+return retCode;
 }

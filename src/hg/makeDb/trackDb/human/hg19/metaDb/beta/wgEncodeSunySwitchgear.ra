@@ -1,0 +1,48 @@
+metaObject wgEncodeSunySwitchgear
+objType composite
+composite wgEncodeSunySwitchgear
+expVars lab,dataType,cell,antibody
+
+metaObject wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna
+objType table
+antibody ELAVL1
+cell HT-1080
+composite wgEncodeSunySwitchgear
+dataType Switchgear
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEH000609
+expId 609
+fileName wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+md5sum b58b4847e8d71d95471c4c017b4a5dc7
+project wgEncode
+ripTgtProtein ELAVL1
+subId 3086
+tableName wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
+objType table
+antibody IGF2BP1
+cell HT-1080
+composite wgEncodeSunySwitchgear
+dataType Switchgear
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+dccAccession wgEncodeEH000610
+expId 610
+fileName wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+md5sum c5889dbbe88f8b4d27f25bb83bdd3326
+project wgEncode
+ripTgtProtein IGF2BP1
+subId 3086
+tableName wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
+view RbpAssocRna
+
+# MAGIC: -1218129569

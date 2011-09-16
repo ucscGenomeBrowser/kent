@@ -391,7 +391,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 232
 tableName wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersGm12878NucleolusTotal
 objType table
@@ -410,7 +410,7 @@ project wgEncode
 rnaExtract total
 subId 1021
 tableName wgEncodeRikenCageMinusClustersGm12878NucleolusTotal
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
 objType table
@@ -429,7 +429,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 232
 tableName wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya
 objType table
@@ -448,7 +448,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1022
 tableName wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersHepg2CytosolLongnonpolya
 objType table
@@ -467,7 +467,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1019
 tableName wgEncodeRikenCageMinusClustersHepg2CytosolLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersHepg2NucleolusTotal
 objType table
@@ -486,7 +486,7 @@ project wgEncode
 rnaExtract total
 subId 1019
 tableName wgEncodeRikenCageMinusClustersHepg2NucleolusTotal
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersHepg2NucleusLongnonpolya
 objType table
@@ -505,7 +505,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1019
 tableName wgEncodeRikenCageMinusClustersHepg2NucleusLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya
 objType table
@@ -524,7 +524,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1023
 tableName wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersK562ChromatinTotal
 objType table
@@ -543,7 +543,7 @@ project wgEncode
 rnaExtract total
 subId 212
 tableName wgEncodeRikenCageMinusClustersK562ChromatinTotal
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
 objType table
@@ -563,7 +563,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 9
 tableName wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersK562CytosolLongpolya
 objType table
@@ -582,7 +582,7 @@ project wgEncode
 rnaExtract longPolyA
 subId 202
 tableName wgEncodeRikenCageMinusClustersK562CytosolLongpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersK562NucleolusTotal
 objType table
@@ -601,7 +601,7 @@ project wgEncode
 rnaExtract total
 subId 212
 tableName wgEncodeRikenCageMinusClustersK562NucleolusTotal
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
 objType table
@@ -620,7 +620,7 @@ project wgEncode
 rnaExtract total
 subId 212
 tableName wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
 objType table
@@ -640,7 +640,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 9
 tableName wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersK562NucleusLongpolya
 objType table
@@ -659,7 +659,7 @@ project wgEncode
 rnaExtract longPolyA
 subId 202
 tableName wgEncodeRikenCageMinusClustersK562NucleusLongpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya
 objType table
@@ -678,7 +678,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 212
 tableName wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya
 objType table
@@ -697,7 +697,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1018
 tableName wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersNhekNucleusLongnonpolya
 objType table
@@ -716,7 +716,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1096
 tableName wgEncodeRikenCageMinusClustersNhekNucleusLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
 objType table
@@ -736,7 +736,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 9
 tableName wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
 objType table
@@ -755,7 +755,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 232
 tableName wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersGm12878NucleolusTotal
 objType table
@@ -774,7 +774,7 @@ project wgEncode
 rnaExtract total
 subId 1021
 tableName wgEncodeRikenCagePlusClustersGm12878NucleolusTotal
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
 objType table
@@ -793,7 +793,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 232
 tableName wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya
 objType table
@@ -812,7 +812,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1022
 tableName wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersHepg2CytosolLongnonpolya
 objType table
@@ -831,7 +831,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1019
 tableName wgEncodeRikenCagePlusClustersHepg2CytosolLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersHepg2NucleolusTotal
 objType table
@@ -850,7 +850,7 @@ project wgEncode
 rnaExtract total
 subId 1019
 tableName wgEncodeRikenCagePlusClustersHepg2NucleolusTotal
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersHepg2NucleusLongnonpolya
 objType table
@@ -869,7 +869,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1019
 tableName wgEncodeRikenCagePlusClustersHepg2NucleusLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya
 objType table
@@ -888,7 +888,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1023
 tableName wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersK562ChromatinTotal
 objType table
@@ -907,7 +907,7 @@ project wgEncode
 rnaExtract total
 subId 212
 tableName wgEncodeRikenCagePlusClustersK562ChromatinTotal
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
 objType table
@@ -927,7 +927,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 9
 tableName wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersK562CytosolLongpolya
 objType table
@@ -946,7 +946,7 @@ project wgEncode
 rnaExtract longPolyA
 subId 202
 tableName wgEncodeRikenCagePlusClustersK562CytosolLongpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersK562NucleolusTotal
 objType table
@@ -965,7 +965,7 @@ project wgEncode
 rnaExtract total
 subId 212
 tableName wgEncodeRikenCagePlusClustersK562NucleolusTotal
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
 objType table
@@ -984,7 +984,7 @@ project wgEncode
 rnaExtract total
 subId 212
 tableName wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
 objType table
@@ -1004,7 +1004,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 9
 tableName wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersK562NucleusLongpolya
 objType table
@@ -1023,7 +1023,7 @@ project wgEncode
 rnaExtract longPolyA
 subId 202
 tableName wgEncodeRikenCagePlusClustersK562NucleusLongpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya
 objType table
@@ -1042,7 +1042,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 212
 tableName wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya
 objType table
@@ -1061,7 +1061,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1018
 tableName wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersNhekNucleusLongnonpolya
 objType table
@@ -1080,7 +1080,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1096
 tableName wgEncodeRikenCagePlusClustersNhekNucleusLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
 objType table
@@ -1100,7 +1100,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 9
 tableName wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageRawData2K562CytosolLongnonpolya
 objType file
@@ -1172,7 +1172,7 @@ localization nucleolus
 project wgEncode
 rnaExtract total
 subId 1001
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3H1hescCellLongnonpolya
 objType file
@@ -1190,7 +1190,7 @@ localization cell
 project wgEncode
 rnaExtract longNonPolyA
 subId 1002
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3Hepg2CytosolLongnonpolya
 objType file
@@ -1208,7 +1208,7 @@ localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
 subId 1015
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3Hepg2NucleolusTotal
 objType file
@@ -1226,7 +1226,7 @@ localization nucleolus
 project wgEncode
 rnaExtract total
 subId 1015
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3Hepg2NucleusLongnonpolya
 objType file
@@ -1244,7 +1244,7 @@ localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
 subId 1015
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3HuvecCytosolLongnonpolya
 objType file
@@ -1262,7 +1262,7 @@ localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
 subId 1014
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3NhekCytosolLongnonpolya
 objType file
@@ -1280,7 +1280,7 @@ localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
 subId 1018
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3NhekNucleusLongnonpolya
 objType file
@@ -1298,7 +1298,7 @@ localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
 subId 1018
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawDataGm12878CytosolLongnonpolya
 objType file
@@ -1498,4 +1498,4 @@ rnaExtract longNonPolyA
 subId 9
 view RawData
 
-# MAGIC: 1259552385
+# MAGIC: -718184567

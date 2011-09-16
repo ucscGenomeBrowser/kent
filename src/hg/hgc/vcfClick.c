@@ -41,27 +41,17 @@ for (i = 0;  i < wordCount; i++)
 printf("<BR>\n");
 }
 
-static void printListWithDescriptions(struct vcfFile *vcff, char *str, char *sep, struct vcfInfoDef *infoDefs)
-/* Given a VCF field, its separator char and a list of vcfInfoDefs, print out a list
- * of values with descriptions if descriptions are available. */
-{
-char *copy = cloneString(str);
-char *words[256];
-int wordCount = chopString(copy, sep, words, ArraySize(words));
-printKeysWithDescriptions(vcff, wordCount, words, infoDefs);
-}
-
 static void vcfAltAlleleDetails(struct vcfRecord *rec)
 /* If VCF header specifies any symbolic alternate alleles, pull in descriptions. */
 {
 printf("<B>Alternate allele(s):</B> ");
-if (sameString(rec->alt, "."))
+if (rec->alleleCount < 2 || sameString(rec->alleles[1], "."))
     {
     printf(NA"<BR>\n");
     return;
     }
 struct vcfFile *vcff = rec->file;
-printListWithDescriptions(vcff, rec->alt, ",", vcff->altDefs);
+printKeysWithDescriptions(vcff, rec->alleleCount-1, &(rec->alleles[1]), vcff->altDefs);
 }
 
 static void vcfQualDetails(struct vcfRecord *rec)
@@ -123,16 +113,10 @@ for (i = 0;  i < rec->infoCount;  i++)
 puts("</TABLE>");
 }
 
-static char *hapFromIx(char *ref, char *altAlleles[], unsigned char altAlCount, unsigned char hapIx)
-/* Look up the allele specified by hapIx: 0 = ref, 1 & up = offset index into altAlleles */
+static void ignoreEm(char *format, va_list args)
+/* Ignore warnings from genotype parsing -- when there's one, there
+ * are usually hundreds more just like it. */
 {
-if (hapIx == 0)
-    return ref;
-else if (hapIx-1 < altAlCount)
-    return altAlleles[hapIx-1];
-else
-    errAbort("hapFromIx: index %d is out of range (%d alleles specified)", hapIx, altAlCount+1);
-return NULL;
 }
 
 static void vcfGenotypesDetails(struct vcfRecord *rec, char *track)
@@ -141,21 +125,69 @@ static void vcfGenotypesDetails(struct vcfRecord *rec, char *track)
 struct vcfFile *vcff = rec->file;
 if (vcff->genotypeCount == 0)
     return;
-static struct dyString *tmp1 = NULL, *tmp2 = NULL;
+static struct dyString *tmp1 = NULL;
 if (tmp1 == NULL)
-    {
     tmp1 = dyStringNew(0);
-    tmp2 = dyStringNew(0);
+pushWarnHandler(ignoreEm);
+vcfParseGenotypes(rec);
+popWarnHandler();
+// Tally genotypes and alleles for summary:
+int refs = 0, alts = 0, refRefs = 0, refAlts = 0, altAlts = 0, gtOther = 0, phasedGts = 0;
+int i;
+for (i = 0;  i < vcff->genotypeCount;  i++)
+    {
+    struct vcfGenotype *gt = &(rec->genotypes[i]);
+    if (gt->isPhased)
+	phasedGts++;
+    if (gt->hapIxA == 0)
+	refs++;
+    else
+	alts++;
+    if (!gt->isHaploid)
+	{
+	if (gt->hapIxB == 0)
+	    refs++;
+	else
+	    alts++;
+	if (gt->hapIxA == 0 && gt->hapIxB == 0)
+	    refRefs++;
+	else if (gt->hapIxA == 1 && gt->hapIxB == 1)
+	    altAlts++;
+	else if ((gt->hapIxA == 1 && gt->hapIxB == 0) ||
+		 (gt->hapIxA == 0 && gt->hapIxB == 1))
+	    refAlts++;
+	else
+	    gtOther++;
+	}
+    }
+printf("<B>Genotype count:</B> %d (%d phased)<BR>\n", vcff->genotypeCount, phasedGts);
+double refAf = (double)refs/(2*vcff->genotypeCount);
+double altAf = (double)alts/(2*vcff->genotypeCount);
+printf("<B>Alleles:</B> %s: %d (%.3f%%); %s: %d (%.3f%%)<BR>\n",
+       rec->alleles[0], refs, 100*refAf,  rec->alleles[1], alts, 100*altAf);
+if (vcff->genotypeCount > 1)
+    {
+    printf("<B>Genotypes:</B> %s/%s: %d (%.3f%%); %s/%s: %d (%.3f%%); %s/%s: %d (%.3f%%)",
+	   rec->alleles[0], rec->alleles[0], refRefs, 100*(double)refRefs/vcff->genotypeCount,
+	   rec->alleles[0], rec->alleles[1], refAlts, 100*(double)refAlts/vcff->genotypeCount,
+	   rec->alleles[1], rec->alleles[1], altAlts, 100*(double)altAlts/vcff->genotypeCount);
+    if (gtOther > 0)
+	printf("; other: %d (%.3f)", gtOther, (double)gtOther/vcff->genotypeCount);
+    printf("<BR>\n");
+    if (rec->alleleCount == 2)
+	printf("<B>Hardy-Weinberg equilibrium:</B> "
+	       "P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%<BR>",
+	       rec->alleles[0], rec->alleles[0], 100*refAf*refAf,
+	       rec->alleles[0], rec->alleles[1], 100*2*refAf*altAf,
+	       rec->alleles[1], rec->alleles[1], 100*altAf*altAf);
     }
 jsBeginCollapsibleSection(cart, track, "genotypes", "Detailed genotypes", FALSE);
-vcfParseGenotypes(rec);
 dyStringClear(tmp1);
 dyStringAppend(tmp1, rec->format);
 enum vcfInfoType formatTypes[256];
 char *formatKeys[256];
 int formatCount = chopString(tmp1->string, ":", formatKeys, ArraySize(formatKeys));
 puts("<B>Genotype info key:</B><BR>");
-int i;
 for (i = 0;  i < formatCount;  i++)
     {
     if (sameString(formatKeys[i], vcfGtGenotype))
@@ -174,21 +206,17 @@ for (i = 0;  i < formatCount;  i++)
     printf("<TH>%s</TH>", formatKeys[i]);
     }
 puts("</TR>\n");
-dyStringClear(tmp2);
-dyStringAppend(tmp2, rec->alt);
-char *altAlleles[256];
-unsigned char altCount = chopCommas(tmp2->string, altAlleles);
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
     struct vcfGenotype *gt = &(rec->genotypes[i]);
-    char *hapA = hapFromIx(rec->ref, altAlleles, altCount, gt->hapIxA);
-    char *hapB = gt->isHaploid ? NA : hapFromIx(rec->ref, altAlleles, altCount, gt->hapIxB);
+    char *hapA = rec->alleles[gt->hapIxA];
+    char *hapB = gt->isHaploid ? NA : rec->alleles[gt->hapIxB];
     char sep = gt->isPhased ? '|' : '/';
     char *phasing = gt->isHaploid ? NA : gt->isPhased ? "Y" : "n";
     printf("<TR><TD>%s</TD><TD>%s%c%s</TD><TD>%s</TD>", vcff->genotypeIds[i],
 	   hapA, sep, hapB, phasing);
     int j;
-    for (j = 0;  j < formatCount;  j++)
+    for (j = 0;  j < gt->infoCount;  j++)
 	{
 	if (sameString(formatKeys[j], vcfGtGenotype))
 	    continue;
@@ -228,12 +256,13 @@ static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec)
  * (using seqName instead of rec->chrom because rec->chrom might lack "chr"). */
 {
 printf("<B>Name:</B> %s<BR>\n", rec->name);
+printCustomUrl(tdb, rec->name, TRUE);
 static char *formName = "vcfCfgHapCenter";
 printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
 vcfCfgHaplotypeCenter(cart, tdb, rec->file, rec->name, seqName, rec->chromStart, formName);
 printf("</FORM>\n");
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);
-printf("<B>Reference allele:</B> %s<BR>\n", rec->ref);
+printf("<B>Reference allele:</B> %s<BR>\n", rec->alleles[0]);
 vcfAltAlleleDetails(rec);
 vcfQualDetails(rec);
 vcfFilterDetails(rec);
@@ -259,7 +288,7 @@ struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 // TODO: will need to handle per-chrom files like bam, maybe fold bamFileNameFromTable into this::
 char *fileOrUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 hFreeConn(&conn);
-int vcfMaxErr = 100;
+int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
@@ -281,6 +310,8 @@ if (vcff != NULL)
 	if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
 	    vcfRecordDetails(tdb, rec);
     }
+else
+    printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
 }
 
 

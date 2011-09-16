@@ -749,14 +749,10 @@ if (x < xEnd)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
         // Add map item to currnent map (TODO: pass in map)
         #ifdef IMAGEv2_SHORT_MAPITEMS
-            if(x < insideX && xEnd > insideX)
-                {
-                if((insideX - x) < (xEnd - insideX))
+            if(!revCmplDisp && x < insideX && xEnd > insideX)  // Why does insideX=118 in reverse complement??
                     x = insideX;
-                else
-                    xEnd = insideX-1;
-                //warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  insideX:%d  link:[%s]",track,x, y, xEnd, yEnd, insideX, link);
-                }
+            else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
+                    xEnd = insideWidth - 1;
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd, track);
         }
@@ -2864,7 +2860,6 @@ void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVis
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
-int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int buttonW = heightPer-1 + 2*NEXT_ITEM_ARROW_BUFFER;
 int s = tg->itemStart(tg, item);
 int e = tg->itemEnd(tg, item);
@@ -2926,8 +2921,18 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
+#ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
+#ifdef IMAGEv2_SHORT_MAPITEMS
+    char *name = tg->itemName(tg, item);
+    if (*name != '\0')
+        tg->mapItem(tg, hvg, item, name, tg->mapItemName(tg, item),
+            s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+#else///ndef IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
         s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+#endif///ndef IMAGEv2_SHORT_MAPITEMS
+#endif///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     /* Make the button mapboxes. */
     if (lButton)
         tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
@@ -2951,6 +2956,11 @@ else if (vis == tvFull)
         {
         geneMapBoxX = textX;
         geneMapBoxW = x2-geneMapBoxX;
+        if (geneMapBoxW < 5) // Full with short labels but don't make tiny map items
+            {
+            geneMapBoxX -= (5 - geneMapBoxW)/2;
+            geneMapBoxW = 5;
+            }
         }
 #endif//def IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
@@ -2987,15 +2997,16 @@ if (withLeftLabels && firstOverflow)
     for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
 	if (sn->row >= overflowRow)
 	    overflowCount++;
-    hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+    assert(hvgSide != NULL);
+    hvGfxUnclip(hvgSide);
+    hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
     char nameBuff[SMALLBUF];
     safef(nameBuff, sizeof(nameBuff), "Last Row: %d", overflowCount);
     mgFontStringWidth(font, nameBuff);
-    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->lineHeight,
+    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->lineHeight,
                    color, font, nameBuff);
-    hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+    hvGfxUnclip(hvgSide);
+    hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
     }
 /* restore state */
 tg->limitedVis = origVis;
@@ -3042,23 +3053,28 @@ if (withLabels)
     /* Special tweak for expRatio in pack mode: force all labels
      * left to prevent only a subset from being placed right: */
     snapLeft |= (startsWith("expRatio", tg->tdb->type));
+#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    if (theImgBox == NULL && snapLeft)
+#else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     if (snapLeft)        /* Snap label to the left. */
+#endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         {
         textX = leftLabelX;
-        hvGfxUnclip(hvg);
-        hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+        assert(hvgSide != NULL);
+        hvGfxUnclip(hvgSide);
+        hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
         if(drawNameInverted)
             {
             int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-            hvGfxBox(hvg, boxStart, y, nameWidth+1, tg->heightPer - 1, color);
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+            hvGfxBox(hvgSide, boxStart, y, nameWidth+1, tg->heightPer - 1, color);
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
                         MG_WHITE, font, name);
             }
         else
-            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
                         labelColor, font, name);
-        hvGfxUnclip(hvg);
-        hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+        hvGfxUnclip(hvgSide);
+        hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
         }
     else
         {
@@ -3151,6 +3167,21 @@ for (item = tg->items; item != NULL; item = item->next)
             int eClp = (e > winEnd)   ? winEnd   : e;
             int x1 = round((sClp - winStart)*scale) + xOff;
             int x2 = round((eClp - winStart)*scale) + xOff;
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+            if (theImgBox != NULL && vis == tvFull)  // dragScroll >1x has no bed full leftlabels,
+                {                                    // but in image labels like pack.
+                char *name = tg->itemName(tg, item);
+                int nameWidth = mgFontStringWidth(font, name);
+                int textX = round((s - winStart)*scale) + xOff;
+                textX -= (nameWidth + 2);
+                if (textX >= insideX && nameWidth > 0)
+                    {
+                    x1 = textX; // extends the map item to cover this label
+                    Color itemNameColor = tg->itemNameColor(tg, item, hvg);
+                    hvGfxTextRight(hvg,textX,y,nameWidth,tg->heightPer,itemNameColor,font,name);
+                    }
+                }
+        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
             genericDrawNextItemStuff(tg, hvg, vis, item, x2, x1, y, tg->heightPer, FALSE,color);
             }
 #else//ifndef IMAGEv2_SHORT_MAPITEMS
@@ -4226,9 +4257,9 @@ if (sameString(choice, "manual"))
 else if (sameString(choice, "automatic"))
     dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\")");
 else if (sameString(choice, "manual_only"))
-    dyStringAppend(dyClause, "(transSrc.source not like \"%havana%\")");
+    dyStringAppend(dyClause, "(transSrc.source like \"%havana%\") and (transSrc.source not like \"%ensembl%\")");
 else if (sameString(choice, "automatic_only"))
-    dyStringAppend(dyClause, "(transSrc.source not like \"%ensembl%\")");
+    dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\") and (transSrc.source not like \"%havana%\")");
 else
     errAbort("BUG: filterByMethodChoice missing choice: \"%s\"", choice);
 }
@@ -5071,8 +5102,10 @@ if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
     	{
-    	safef(query, sizeof(query), "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
-    	sr = sqlGetResult(conn, query);
+    	safef(query, sizeof(query), 
+	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d", 
+	      decipherId, bed->chromStart+1, bed->chromEnd);
+	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (sameWord(row[0], "1"))
@@ -9438,11 +9471,14 @@ void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, 
 int textX = x1 - width - 2;
 boolean snapLeft = (textX < insideX);
 int clipYBak = 0, clipHeightBak = 0;
+struct hvGfx *hvgWhich = hvg;    // There may be a separate image for sideLabel!
 if (snapLeft)        /* Snap label to the left. */
     {
-    hvGfxGetClip(hvg, NULL, &clipYBak, NULL, &clipHeightBak);
-    hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, leftLabelX, itemY, insideWidth, lineHeight);
+    if (hvgSide != NULL)
+        hvgWhich = hvgSide;
+    hvGfxGetClip(hvgWhich, NULL, &clipYBak, NULL, &clipHeightBak);
+    hvGfxUnclip(hvgWhich);
+    hvGfxSetClip(hvgWhich, leftLabelX, itemY, insideWidth, lineHeight);
     textX = leftLabelX;
     width = leftLabelWidth-1;
     }
@@ -9458,16 +9494,16 @@ if (sameString(display, "freq"))
        allC = darkGreenColor;
     else if (startsWith("T", allele))
        allC = MG_MAGENTA;
-    hvGfxTextRight(hvg, textX, y, width, height, allC, font, allele);
+    hvGfxTextRight(hvgWhich, textX, y, width, height, allC, font, allele);
     }
 else
     {
-    hvGfxTextRight(hvg, textX, y, width, height, color, font, allele);
+    hvGfxTextRight(hvgWhich, textX, y, width, height, color, font, allele);
     }
 if (snapLeft)
     {
-    hvGfxUnclip(hvg);
-    hvGfxSetClip(hvg, insideX, clipYBak, insideWidth, clipHeightBak);
+    hvGfxUnclip(hvgWhich);
+    hvGfxSetClip(hvgWhich, insideX, clipYBak, insideWidth, clipHeightBak);
     }
 }
 
@@ -12633,15 +12669,14 @@ registerTrackHandler("snp128", snp125Methods);
 registerTrackHandler("snp129", snp125Methods);
 registerTrackHandler("snp130", snp125Methods);
 registerTrackHandler("snp131", snp125Methods);
-registerTrackHandler("snp131Composite", snp125Methods);
-registerTrackHandler("snp131Clinical", snp125Methods);
-registerTrackHandler("snp131NonClinical", snp125Methods);
 registerTrackHandler("snp132", snp125Methods);
 registerTrackHandler("snp132Common", snp125Methods);
 registerTrackHandler("snp132Flagged", snp125Methods);
 registerTrackHandler("snp132Mult", snp125Methods);
-registerTrackHandler("snp132Patient", snp125Methods);
-registerTrackHandler("snp132NonUnique", snp125Methods);
+registerTrackHandler("snp134", snp125Methods);
+registerTrackHandler("snp134Common", snp125Methods);
+registerTrackHandler("snp134Flagged", snp125Methods);
+registerTrackHandler("snp134Mult", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
@@ -12843,12 +12878,6 @@ if (wikiTrackEnabled(database, NULL))
 
 /*Test for my own MA data
 registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
-/* MGC related */
-registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
-registerTrackHandler("mgcFailedEst", estMethods);
-registerTrackHandler("mgcPickedEst", estMethods);
-registerTrackHandler("mgcUnpickedEst", estMethods);
-
 registerTrackHandler("HMRConservation", humMusLMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
@@ -12890,12 +12919,9 @@ registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeBasicV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeCompV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodePseudoGeneV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencode2wayConsPseudoV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodePolyaV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);

@@ -105,24 +105,54 @@ verboseTime(2,"After makeActiveImage");
 
 int main(int argc, char *argv[])
 {
-/* Set up some timing since we're trying to optimize things very often. */
-long enteredMainTime = clock1000();
-verboseTimeInit();
+if(argc == 1)
+    {
+    // CGI call
 
-/* Push very early error handling - this is just
- * for the benefit of the cgiVarExists, which
- * somehow can't be moved effectively into doMiddle. */
-// htmlPushEarlyHandlers();
+    // htmlPushEarlyHandlers(); XXXX do I need to do this?
 
-/* Set up cgi vars from command line. */
-// cgiSpoof(&argc, argv);
-optionInit(&argc, argv, options);
+    hPrintDisable();
+    oldVars = hashNew(10);
+    struct cart *cart = cartForSession(hUserCookie(), excludeVars, oldVars);
 
-if (argc != 4)
-    usage();
+    // setup approriate CGI variables which tell hgTracks code what to do.
+    cartSetBoolean(cart, "hgt.trackImgOnly", TRUE);
+    if(cartVarExists(cart, "jsonp"))
+        {
+        cartSetString(cart, "hgt.contentType", "jsonp");
+        cartSetString(cart, "hgt.trackNameFilter", cartString(cart, "track"));
+        }
+    else
+        {
+        cartSetString(cart, "hgt.contentType", "png");
+        cartSetBoolean(cart, "hgt.imageV1", TRUE);
+        }
+    doMiddle(cart);
+    }
+else
+    {
+    // XXXX remove this code ... well, maybe not - this still might be useful for a stand-alone renderer.
 
-hgTrackRenderFromCommandLine(argv[1], argv[2], argv[3]);
+    // command line call
 
-verbose(2, "Overall total time: %ld millis<BR>\n", clock1000() - enteredMainTime);
+    /* Set up some timing since we're trying to optimize things very often. */
+    long enteredMainTime = clock1000();
+    verboseTimeInit();
+    /* Push very early error handling - this is just
+     * for the benefit of the cgiVarExists, which
+     * somehow can't be moved effectively into doMiddle. */
+    // htmlPushEarlyHandlers();
+
+    /* Set up cgi vars from command line. */
+    // cgiSpoof(&argc, argv);
+    optionInit(&argc, argv, options);
+
+    if (argc != 4)
+        usage();
+
+    hgTrackRenderFromCommandLine(argv[1], argv[2], argv[3]);
+
+    verbose(2, "Overall total time: %ld millis<BR>\n", clock1000() - enteredMainTime);
+    }
 return 0;
 }

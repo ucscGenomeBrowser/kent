@@ -6,15 +6,15 @@
 #
 
 
+import argparse
 import base64
 from BeautifulSoup import BeautifulSoup
 import HTMLParser
-from optparse import OptionParser
 import re
 import string
 import sys
 import urllib2
-from rafile.RaFile import *
+from ucscgenomics.rafile.RaFile import *
 
 
 
@@ -145,20 +145,25 @@ def accessWiki(url, username, password):
 #
 defaultUsername = "encode"
 defaultPassword = "human"
-parser = OptionParser()
-parser.add_option("-s", "--species", dest="species", default="human",
-                  help="Species")
-parser.add_option("-d", "--downloadDir", dest="downloadDirectory", default=".",
-                  help="Directory to download any validation documents into")
-parser.add_option("-f", "--force", dest="forcePrinting", default=False,
-                  help="Force printing of all stanzas, whether or not there's NHGRI approval")
-parser.add_option("-n", "--noDownload", dest="noDownload", default=False,
-                  help="Download no files")
-parser.add_option("-u", "--username", dest="username", default=defaultUsername,
-                  help="Username to access the wiki page")
-parser.add_option("-p", "--password", dest="password", default=defaultPassword,
-                  help="Password to access the wiki page")
-(parameters, args) = parser.parse_args()
+parser = argparse.ArgumentParser(description="Parse new cell type registrations from the ENCODE wiki and download protocol documents") 
+parser.add_argument("-s", dest="species", default="human",
+                    action="store", help="Species (default: human)")
+parser.add_argument("-d", dest="downloadDirectory", default=".",
+                    action="store",
+                    help="Directory to download any documents into (default: '.'")
+parser.add_argument("-f", dest="forcePrinting", default=False,
+                    action="store_true",
+                    help="Force printing of all stanzas, whether or not there's NHGRI approval (default: false)")
+parser.add_argument("-n", dest="noDownload", default=False, 
+                    action="store_true", 
+                    help="Download no files (default: false)")
+parser.add_argument("-u", dest="username", default=defaultUsername,
+                    action="store", 
+                    help="Username to access the wiki page (default: encode)")
+parser.add_argument("-p", dest="password", default=defaultPassword,
+                    action="store", 
+                    help="Password to access the wiki page (default: human)")
+args = parser.parse_args()
 
 #
 # Set up access to the wiki page
@@ -166,8 +171,8 @@ parser.add_option("-p", "--password", dest="password", default=defaultPassword,
 wikiBaseUrl = "http://encodewiki.ucsc.edu/"
 cellTypePage = wikiBaseUrl + "EncodeDCC/index.php/Cell_lines"
 passmgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-base64string = base64.encodestring('%s:%s' % (parameters.username, 
-                                              parameters.password))[:-1]
+base64string = base64.encodestring('%s:%s' % (args.username, 
+                                              args.password))[:-1]
 authheader =  "Basic %s" % base64string
 req = urllib2.Request(cellTypePage)
 req.add_header("Authorization", authheader)
@@ -191,11 +196,11 @@ for entry in cellTypeTable.findAll("tr"):
     if not skippedHeaderRow:
         skippedHeaderRow = True
     else:
-        (stanza, approved) = processCellTypeEntry(entry, parameters.species,
-                                                  parameters.downloadDirectory,
-                                                  parameters.noDownload,
-                                                  parameters.username,
-                                                  parameters.password, 
+        (stanza, approved) = processCellTypeEntry(entry, args.species,
+                                                  args.downloadDirectory,
+                                                  args.noDownload,
+                                                  args.username,
+                                                  args.password, 
                                                   wikiBaseUrl)
-        if approved or parameters.forcePrinting:
+        if approved or args.forcePrinting:
             print stanza

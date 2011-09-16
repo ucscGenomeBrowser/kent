@@ -1,0 +1,110 @@
+metaObject wgEncodeGencodeV4
+objType composite
+composite wgEncodeGencodeV4
+expVars lab,dataType,labExpId
+
+metaObject wgEncodeGencode2wayConsPseudoV4
+objType table
+annotation Automatic
+composite wgEncodeGencodeV4
+dataType Gencode
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-01
+dccAccession wgEncodeEH001879
+expId 1879
+fileName wgEncodeGencode2wayConsPseudoV4.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V4
+level 3
+project wgEncode
+subId 2094
+tableName wgEncodeGencode2wayConsPseudoV4
+
+metaObject wgEncodeGencodeAutoV4
+objType table
+annotation Automatic
+composite wgEncodeGencodeV4
+dataType Gencode
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-01
+dccAccession wgEncodeEH001879
+expId 1879
+fileName wgEncodeGencodeAutoV4.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V4
+level 3
+project wgEncode
+subId 2094
+tableName wgEncodeGencodeAutoV4
+
+metaObject wgEncodeGencodeClassesV4
+objType table
+composite wgEncodeGencodeV4
+dataType Gencode
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-01
+dccAccession wgEncodeEH001879
+expId 1879
+fileName wgEncodeGencodeClassesV4.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V4
+project wgEncode
+subId 2094
+tableName wgEncodeGencodeClassesV4
+
+metaObject wgEncodeGencodeManualV4
+objType table
+annotation Manual
+composite wgEncodeGencodeV4
+dataType Gencode
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-01
+dccAccession wgEncodeEH001879
+expId 1879
+fileName wgEncodeGencodeManualV4.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V4
+level 1-2
+project wgEncode
+subId 2094
+tableName wgEncodeGencodeManualV4
+
+metaObject wgEncodeGencodePolyAV4
+objType table
+annotation Manual
+composite wgEncodeGencodeV4
+dataType Gencode
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-01
+dccAccession wgEncodeEH001879
+expId 1879
+fileName wgEncodeGencodePolyAV4.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V4
+level 2
+project wgEncode
+subId 2094
+tableName wgEncodeGencodePolyAV4
+
+metaObject wgEncodeGencodeYalePseudoV4
+objType table
+composite wgEncodeGencodeV4
+dataType Gencode
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-01
+dccAccession wgEncodeEH001879
+expId 1879
+fileName wgEncodeGencodeYalePseudoV4.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V4
+project wgEncode
+subId 2094
+tableName wgEncodeGencodeYalePseudoV4
+
+# MAGIC: 2005405747
