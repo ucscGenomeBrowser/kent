@@ -31,7 +31,8 @@ noInherit on
     	maxHeightPixels 100:24:16
     	windowingFunction mean+whiskers
     	transformFunc NONE
-    	autoScale on
+        viewLimits 1:100
+    	autoScale off
     	minLimit 0
     	maxLimit 898990
 
@@ -1207,7 +1208,8 @@ noInherit on
     	maxHeightPixels 100:24:16
     	windowingFunction mean+whiskers
     	transformFunc NONE
-    	autoScale on
+        viewLimits 1:10
+    	autoScale off
     	minLimit 0
     	maxLimit 3756424
 
@@ -2379,10 +2381,10 @@ noInherit on
 	type bam
     	subTrack wgEncodeCshlLongRnaSeq
 	showNames on
-	bamColorMode off
+	#bamColorMode off
 	bamGrayMode aliQual
-	baseColorDefault diffBases
-	baseColorUseSequence lfExtra
+	#baseColorDefault diffBases
+	#baseColorUseSequence lfExtra
 	indelDoubleInsert on
 	indelQueryInsert on
 	showDiffBasesAllScales .
