@@ -1,13 +1,13 @@
 import re
 import os
-from ucscgenomics.rafile.RaFile import *
+from ucscgenomics import ra
 
-class CvFile(RaFile):
+class CvFile(ra.RaFile):
 	"""cv.ra representation. Mainly adds CV-specific validation to the RaFile"""
 
 	def __init__(self, filePath=None, handler=None, protocolPath=None):
 		"""sets up exception handling method, and optionally reads from a file"""
-		RaFile.__init__(self)
+		ra.RaFile.__init__(self)
 		
 		self.handler = handler
 		if handler == None:
@@ -28,7 +28,7 @@ class CvFile(RaFile):
 
 	def readStanza(self, stanza):
 		"""overriden method from RaFile which makes specialized stanzas based on type"""
-		e = RaStanza()
+		e = ra.RaStanza()
 		ek, ev = e.readStanza(stanza)
 		type = e['type']
 
@@ -75,11 +75,11 @@ class CvFile(RaFile):
 				stanza.validate(self)
 
 				
-class CvStanza(RaStanza):
+class CvStanza(ra.RaStanza):
 	"""base class for a single stanza in the cv, which adds validation"""
 	
 	def __init__(self):
-		RaStanza.__init__(self)
+		ra.RaStanza.__init__(self)
 
 	def readStanza(self, stanza):
 		"""
@@ -110,7 +110,7 @@ class CvStanza(RaStanza):
 		""" 
 
 		if line.startswith('#') or line == '':
-			OrderedDict.append(self, line)
+			self.append(line)
 		else:
 			raKey = line.split(' ', 1)[0]
 			raVal = ''
@@ -233,9 +233,12 @@ class CvStanza(RaStanza):
 		if 'protocol' in self:
 			protocols = self['protocol'].split()
 			for protocol in protocols:
-				p = protocol.split(':', 1)[1]
-				if not os.path.isfile(ra.protocolPath + path + p):
+				if ':' not in protocol:
 					ra.handler(InvalidProtocolError(self, protocol))
+				else:
+					p = protocol.split(':', 1)[1]
+					if not os.path.isfile(ra.protocolPath + path + p):
+						ra.handler(InvalidProtocolError(self, protocol))
 				
 class CvError(Exception):
 	"""base error class for the cv."""
@@ -436,7 +439,7 @@ class TypeOfTermStanza(CvStanza):
 
 	def validate(self, ra):
 		necessary = {'searchable', 'cvDefined', 'validate', 'priority'}
-		optional = {'deprecated', 'label', 'hidden'}
+		optional = {'label', 'hidden'}
 		CvStanza.validate(self, ra, necessary, optional)
 		
 		if len(ra.filter(lambda s: s['term'] == self['type'] and s['type'] == 'typeOfTerm', lambda s: s)) == 0:

@@ -1,5 +1,5 @@
 import os
-from ucscgenomics.rafile.RaFile import *
+from ucscgenomics import ra
 
 def readMd5sums(filename):
 	if os.path.isfile(filename):
@@ -13,7 +13,7 @@ def readMd5sums(filename):
 		return None
 
 		
-class DownloadsFile(object):
+class TrackFile(object):
 
 	@property 
 	def name(self):
@@ -21,8 +21,13 @@ class DownloadsFile(object):
 		return self._name
 		
 	@property 
+	def fullname(self):
+		"""The file's full name including path"""
+		return self._path + self._name
+		
+	@property 
 	def path(self):
-		"""The file's full pathname"""
+		"""The file's path"""
 		return self._path
 		
 	@property 
@@ -45,12 +50,13 @@ class DownloadsFile(object):
 		"""The size in bytes"""
 		return self._metaObj
 	
-	def __init__(self, path, md5, metaObj=None):
-		if not os.path.isfile(path):
-			raise FileError('invalid file path: %s' % path)
-		self._name = path.rsplit('/', 1)[1]
-		self._path = path
-		self._size = os.stat(path).st_size
+	def __init__(self, fullname, md5, metaObj=None):
+		if not os.path.isfile(fullname):
+			raise FileError('invalid file: %s' % fullname)
+		self._path, self._name = fullname.rsplit('/', 1)
+		self._path = self._path + '/'
+		self._fullname = fullname
+		self._size = os.stat(fullname).st_size
 		self._md5sum = md5
 		self._metaObj = metaObj
 		
@@ -99,13 +105,13 @@ class CompositeTrack(object):
 				if os.path.isfile(self.downloadsDirectory + file):
 					
 					stanza = None
-					if file.name in radict:
-						stanza = radict[file.name]
+					if file in radict:
+						stanza = radict[file]
 						
 					if file in md5sums:
-						self._files[file] = DownloadsFile(self.downloadsDirectory + file, md5sums[file], stanza)
+						self._files[file] = TrackFile(self.downloadsDirectory + file, md5sums[file], stanza)
 					else:
-						self._files[file] = DownloadsFile(self.downloadsDirectory + file, None, stanza)
+						self._files[file] = TrackFile(self.downloadsDirectory + file, None, stanza)
 		
 			return self._files
 		
@@ -125,9 +131,9 @@ class CompositeTrack(object):
 				
 				for file in os.listdir(releasepath):
 					if file != 'md5sum.txt' and md5s != None and file in md5s:
-						releasefiles[file] = DownloadsFile(releasepath + file, md5s[file])
+						releasefiles[file] = TrackFile(releasepath + file, md5s[file])
 					else:
-						releasefiles[file] = DownloadsFile(releasepath + file, None)
+						releasefiles[file] = TrackFile(releasepath + file, None)
 					
 				#releasefiles.sort()
 				self._releaseFiles.append(releasefiles)
@@ -143,7 +149,7 @@ class CompositeTrack(object):
 		except AttributeError:
 			if not os.path.isfile(self._alphaMdbPath):
 				raise KeyError(self._alphaMdbPath + ' does not exist')
-			self._alphaMetaDb = RaFile(self._alphaMdbPath)
+			self._alphaMetaDb = ra.RaFile(self._alphaMdbPath)
 			return self._alphaMetaDb
 		
 	@property 
@@ -154,7 +160,7 @@ class CompositeTrack(object):
 		except AttributeError:
 			if not os.path.isfile(self._betaMdbPath):
 				raise KeyError(self._betaMdbPath + ' does not exist')
-			self._betaMetaDb = RaFile(self._betaMdbPath)
+			self._betaMetaDb = ra.RaFile(self._betaMdbPath)
 			return self._betaMetaDb
 		
 	@property 
@@ -165,7 +171,7 @@ class CompositeTrack(object):
 		except AttributeError:
 			if not os.path.isfile(self._publicMdbPath):
 				raise KeyError(self._publicMdbPath + ' does not exist')
-			self._publicMetaDb = RaFile(self._publicMdbPath)
+			self._publicMetaDb = ra.RaFile(self._publicMdbPath)
 			return self._publicMetaDb
 		
 	@property 
@@ -174,7 +180,7 @@ class CompositeTrack(object):
 		try:
 			return self._trackDb
 		except AttributeError:
-			self._trackDb = RaFile(self._trackDbPath)
+			self._trackDb = ra.RaFile(self._trackDbPath)
 			return self._trackDb
 		
 	@property 
@@ -192,7 +198,7 @@ class CompositeTrack(object):
 		"""The url on our site for this composite"""
 		return self._organism
 		
-	def __init__(self, database, composite, trackPath=None):
+	def __init__(self, database, compositeName, trackPath=None):
 		
 		if trackPath == None:
 			self._trackPath = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
@@ -213,16 +219,16 @@ class CompositeTrack(object):
 		if not self._trackPath.endswith('/'):
 			self._trackPath = self._trackPath + '/'
 		
-		self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + composite + '.ra'
+		self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra'
 		if not os.path.isfile(self._trackDbPath):
 			raise KeyError(self._trackDbPath + ' does not exist')	
 		
-		self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + composite + '.ra'
-		self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + composite + '.ra'	
-		self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + composite + '.ra'
-		self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/'
-		self._url = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + composite
+		self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + compositeName + '.ra'
+		self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + compositeName + '.ra'	
+		self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + compositeName + '.ra'
+		self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
+		self._url = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + compositeName
 		self._database = database
-		self._name = composite		
-		self._md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/md5sum.txt'
+		self._name = compositeName		
+		self._md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/md5sum.txt'
 		
