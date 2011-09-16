@@ -874,7 +874,7 @@ hFreeConn(&conn);
 
 if (mdbList)
     {
-    (void)mdbObjsFilter(&mdbList,"objStatus","rejected",TRUE);
+    (void)mdbObjsFilter(&mdbList,"objStatus","revoked",TRUE);
     (void)mdbObjsFilter(&mdbList,"objStatus","replaced",TRUE);
     }
 
@@ -947,7 +947,7 @@ if (conn == NULL)
 
 if (mdbList)
     {
-    (void)mdbObjsFilter(&mdbList,"objStatus","rejected",TRUE);
+    (void)mdbObjsFilter(&mdbList,"objStatus","revoked",TRUE);
     (void)mdbObjsFilter(&mdbList,"objStatus","replaced",TRUE);
     }
 
