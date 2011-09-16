@@ -1768,7 +1768,7 @@ noInherit on
         # subId=3058 dateSubmitted=2010-12-03
 
 
-        track wgEncodeHaibTfbsK562E2f6V0416102PkRep2
+        track wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6 V102 2
         longLabel K562 E2F6 V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
@@ -1779,7 +1779,7 @@ noInherit on
         # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep2 cricket Tue Apr 19 10:32:38 2011
 	# sas wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
 
-        track wgEncodeHaibTfbsK562E2f6V0416102PkRep1
+        track wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6 V102 1
         longLabel K562 E2F6 V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
@@ -4601,7 +4601,7 @@ noInherit on
         # was wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1 wong Tue Jun  7 11:53:55 2011
         # was wgEncodeHaibTfbsA549ControlPcr2xDex100nmRawRep1 vsmalladi Wed Jul  6 14:18:59 2011
 
-        track wgEncodeHaibTfbsK562E2f6V0416102RawRep2
+        track wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 E2F6 V102 2
         longLabel K562 E2F6 V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
@@ -5140,7 +5140,7 @@ noInherit on
         color 46,0,184
         # subId=3058 dateSubmitted=2010-12-03
 
-        track wgEncodeHaibTfbsK562E2f6V0416102RawRep1
+        track wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 E2F6 V102 1
         longLabel K562 E2F6 V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
