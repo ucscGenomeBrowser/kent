@@ -9715,26 +9715,41 @@ if (url != NULL && url[0] != 0)
 
     // show RefSeq Gene link(s)
     safef(query, sizeof(query),
-          "select distinct r.name from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
+          "select distinct locusLinkId from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
 	  itemName, chrom, chromStart, chromEnd);
     sr = sqlMustGetResult(conn, query);
     if (sr != NULL)
-	{
-	int printedCnt;
-	printedCnt = 0;
-	while ((row = sqlNextRow(sr)) != NULL)
+    	{
+    	char *geneId;
+    	row = sqlNextRow(sr);
+    	geneId = strdup(row[0]);
+    	sqlFreeResult(&sr);
+
+    	safef(query, sizeof(query),
+              "select distinct l.mrnaAcc from refLink l where locusLinkId = '%s' order by mrnaAcc asc", geneId);
+    	sr = sqlMustGetResult(conn, query);
+    	if (sr != NULL)
 	    {
-	    if (printedCnt < 1)
-		printf("<B>RefSeq Gene(s): </B>");
-	    else
-		printf(", ");
-    	    printf("<A HREF=\"%s%s&o=%s&t=%s\">", "../cgi-bin/hgc?g=refGene&i=", row[0], chromStart, chromEnd);
-    	    printf("%s</A></B>", row[0]);
-	    printedCnt++;
+	    int printedCnt;
+	    printedCnt = 0;
+	    while ((row = sqlNextRow(sr)) != NULL)
+	    	{
+	    	if (printedCnt < 1)
+		    printf("<B>RefSeq Gene(s): </B>");
+	    	else
+		    printf(", ");
+    	        printf("<A HREF=\"%s%s&o=%s&t=%s\">", "../cgi-bin/hgc?g=refGene&i=", row[0], chromStart, chromEnd);
+    	        printf("%s</A></B>", row[0]);
+	        printedCnt++;
+	        }
+            if (printedCnt >= 1) printf("<BR>\n");
 	    }
-        if (printedCnt >= 1) printf("<BR>\n");
-	}
-    sqlFreeResult(&sr);
+        }
+    else
+    	{
+	// skip if no RefSeq found
+    	sqlFreeResult(&sr);
+    	}
 
     // show Related UCSC Gene links
     safef(query, sizeof(query),

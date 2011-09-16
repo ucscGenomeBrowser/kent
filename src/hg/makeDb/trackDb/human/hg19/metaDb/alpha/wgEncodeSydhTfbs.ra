@@ -14811,6 +14811,7 @@ dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000628
 expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4RawDataRep1.fastq.gz
+geoSampleAccession GSM782123
 grant Snyder
 lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
@@ -14838,6 +14839,7 @@ dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000628
 expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4RawDataRep2.fastq.gz
+geoSampleAccession GSM782123
 grant Snyder
 lab USC
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
@@ -14866,6 +14868,7 @@ dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000628
 expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam
+geoSampleAccession GSM782123
 grant Snyder
 lab USC
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
@@ -14893,6 +14896,7 @@ dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000628
 expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam
+geoSampleAccession GSM782123
 grant Snyder
 lab USC
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
@@ -14919,6 +14923,7 @@ dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000628
 expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdPk.narrowPeak.gz
+geoSampleAccession GSM782123
 grant Snyder
 lab USC
 md5sum 2816793e812a1492fa1f2d94fbdf50d1
@@ -14944,6 +14949,7 @@ dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000628
 expId 628
 fileName wgEncodeSydhTfbsHct116Tcf4UcdSig.bigWig
+geoSampleAccession GSM782123
 grant Snyder
 lab USC
 md5sum 915bbf8c8fad3e8fde372afe3f5c9ddc
@@ -15614,6 +15620,7 @@ dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
 fileName wgEncodeSydhTfbsHek293Tcf4UcdAlnRep1.bam
+geoSampleAccession GSM782124
 grant Snyder
 lab USC
 md5sum bam=40ba2a17e70a5c0eac9753d6b6ebf5b9,bai=fd450e1140237c0393c5d73cbaffe9a3
@@ -15638,6 +15645,7 @@ dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
 fileName wgEncodeSydhTfbsHek293Tcf4UcdAlnRep2.bam
+geoSampleAccession GSM782124
 grant Snyder
 lab USC
 md5sum bam=7c900e05eb4b250d04f65d834b993120,bai=370c18bef4dd4025cacc31ccbbe6e663
@@ -15662,6 +15670,7 @@ dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
 fileName wgEncodeSydhTfbsHek293Tcf4UcdPk.narrowPeak.gz
+geoSampleAccession GSM782124
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -15687,6 +15696,7 @@ dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
 fileName wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM782124
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation:  Protein G Magnetic Beads.
@@ -15712,6 +15722,7 @@ dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
 fileName wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM782124
 grant Snyder
 lab USC
 labVersion Method of Chromatin Fragmentation:  Sonciation. Method of Immunoprecipitation:  Protein G Magnetic Beads.
@@ -15737,6 +15748,7 @@ dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
 fileName wgEncodeSydhTfbsHek293Tcf4UcdSig.bigWig
+geoSampleAccession GSM782124
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -29297,6 +29309,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1.bam
+geoSampleAccession GSM782122
 grant Snyder
 lab USC
 md5sum bam=175c2e7a5216d2d1fb98be81513a7fba,bai=84e3abffde2b67dec1292f8a252cb1cf
@@ -29322,6 +29335,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2.bam
+geoSampleAccession GSM782122
 grant Snyder
 lab USC
 md5sum bam=5d52c20579c7604aff3c1758bd6dfd2c,bai=f73b1eec41cc10cb1aa7d3e13edd5974
@@ -29347,6 +29361,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdPk.narrowPeak.gz
+geoSampleAccession GSM782122
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -29373,6 +29388,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM782122
 grant Snyder
 lab USC
 md5sum 8a24a1e119a30e510a7c927562c14ce7
@@ -29398,6 +29414,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM782122
 grant Snyder
 lab USC
 md5sum ef0aabc44ecfc86086507c58d5b7603f
@@ -29423,6 +29440,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdSig.bigWig
+geoSampleAccession GSM782122
 grant Snyder
 lab USC
 labVersion PeakSeq1.0

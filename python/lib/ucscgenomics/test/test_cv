@@ -5,8 +5,8 @@ sys.path.append('../')
 from CvFile import *
 
 curdir = sys.path[0]
-inputdir = '/input/'
-outputdir = '/output/'
+inputdir = '/test_cv_input/'
+outputdir = '/test_cv_output/'
 
 class CellLineValidationCheck(unittest.TestCase):
 
