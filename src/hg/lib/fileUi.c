@@ -649,7 +649,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
 
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
     mdbObjRemoveVars(oneFile->mdb,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_COMPOSITE " " MDB_VAR_PROJECT); // Remove this from mdb now so that it isn't displayed in "extras'
-    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE,TRUE);
+    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE,FALSE);
     printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
 
     printf("</TR>\n");
@@ -872,6 +872,12 @@ mdbList = slCat(mdbList, mdbObjsQueryByVars(conn,mdbTable,mdbVars));
 mdbObjRemoveHiddenVars(mdbList);
 hFreeConn(&conn);
 
+if (mdbList)
+    {
+    (void)mdbObjsFilter(&mdbList,"objStatus","revoked",TRUE);
+    (void)mdbObjsFilter(&mdbList,"objStatus","replaced",TRUE);
+    }
+
 if (slCount(mdbList) == 0)
     {
     warn("No files specified in metadata for: %s\n%s",tdb->track,tdb->longLabel);
@@ -938,6 +944,13 @@ if (conn == NULL)
 struct mdbObj *mdbList = mdbObjRepeatedSearch(connLocal,varValPairs,FALSE,TRUE);
 if (conn == NULL)
     hFreeConn(&connLocal);
+
+if (mdbList)
+    {
+    (void)mdbObjsFilter(&mdbList,"objStatus","revoked",TRUE);
+    (void)mdbObjsFilter(&mdbList,"objStatus","replaced",TRUE);
+    }
+
 if (slCount(mdbList) == 0)
     {
     printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
