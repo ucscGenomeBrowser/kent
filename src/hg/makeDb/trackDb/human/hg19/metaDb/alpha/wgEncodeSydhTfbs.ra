@@ -42742,6 +42742,7 @@ dateUnrestricted 2012-06-14
 fileName wgEncodeSydhTfbsK562Znf274m01UcdAlnRep1.bam
 grant Snyder
 lab USC
+md5sum bam=2f62f1772d67a0e4940c1160c179b944,bai=76fbe38c822560c81d1383d928599991
 project wgEncode
 replicate 1
 setType exp
@@ -42763,6 +42764,7 @@ dateUnrestricted 2012-06-14
 fileName wgEncodeSydhTfbsK562Znf274m01UcdAlnRep2.bam
 grant Snyder
 lab USC
+md5sum bam=3014134dc01dc23a88bb1133f6fd2181,bai=cd12f07aec26644e1bb5d42f476c71d2
 project wgEncode
 replicate 2
 setType exp
@@ -42785,6 +42787,7 @@ fileName wgEncodeSydhTfbsK562Znf274m01UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0. This factor has a limited number of highly enriched target sites and for factors with so few binding sites, we believe that in order to get a good overlap between replicate datasets one must have fewer reads.  We are confident with the overlap of the highly enriched binding sites for this dataset regardless of the poor replicate overlap.
+md5sum 72c40b7f43274ade845df679cb3679b3
 project wgEncode
 setType exp
 subId 4462
@@ -42806,6 +42809,7 @@ dateUnrestricted 2012-06-14
 fileName wgEncodeSydhTfbsK562Znf274m01UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
+md5sum 1dd68fe4451ebc8803bceff9631a0573
 project wgEncode
 replicate 1
 setType exp
@@ -42827,6 +42831,7 @@ dateUnrestricted 2012-06-14
 fileName wgEncodeSydhTfbsK562Znf274m01UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
+md5sum e1c285d1f0293a08897001783f84ac5a
 project wgEncode
 replicate 2
 setType exp
@@ -42849,6 +42854,7 @@ fileName wgEncodeSydhTfbsK562Znf274m01UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum 3c6ccf5d5a6504d8c55943abf9abe380
 project wgEncode
 setType exp
 subId 4462
@@ -47175,4 +47181,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -99204057
+# MAGIC: 1823658879

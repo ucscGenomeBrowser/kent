@@ -314,20 +314,16 @@ xenTro3.mgc = yes
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial xenTro3 &
     #	var/build/logs/2011.09.12-09:03:09.xenTro3.initalign.log
-XXX - running - Mon Sep 12 09:03:27 PDT 2011
-    #	real    649m8.858s
-    # failed kluster run on swarm, incorrect configuration:
-# Can't open /scratch/data/xenTro3/11.ooc to read: No such file or directory
-    # 5h33m
+    #	real    360m20.657s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad xenTro3 &
-    #	logFile: var/dbload/hgwdev/logs/2011.04.14-12:33:34.dbload.log
-    #	real    24m24.093s
+    #	logFile: var/dbload/hgwdev/logs/2011.09.12-20:47:05.dbload.log
+    #	real    118m27.671s
 
-    # enable daily alignment and update of hgwdev (DONE - 2011-04-14 - Hiram)
+    # enable daily alignment and update of hgwdev (DONE - 2011-09-13 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add xenTro3 to:
@@ -380,5 +376,232 @@ close (FH);
     sed -e "s/20/14/; s/16/8/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
     hgLoadSqlTab xenTro3 ctgPos2 ctgPos2.sql xenTro3.ctgPos2.tab
 
-#########################################################################
+############################################################################
+# running cpgIsland business (DONE - 2011-09-13 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/cpgIsland
+    cd /hive/data/genomes/xenTro3/bed/cpgIsland
+    # use a previous binary for this program
+    ln -s ../../../xenTro2/bed/cpgIsland/cpglh.exe .
 
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../xenTro3.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/xenTro3/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck.
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | egrep -v "^#seq|^total" | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+# Completed: 1133 of 1133 jobs
+# CPU time in finished jobs:        102s       1.70m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                  4469s      74.49m     1.24h    0.05d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:           485s       8.08m     0.13h    0.01d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    # verify longest unique chrom name:
+    cut -f1 cpgIsland.bed | awk '{print length($0)}' | sort -rn | head -1
+    #	8
+    # update the length 14 in the template to be 16:
+    sed -e "s/14/8/" $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
+
+    cd /hive/data/genomes/xenTro3/bed/cpgIsland
+    hgLoadBed xenTro3 cpgIslandExt -tab -sqlTable=cpgIslandExt.sql cpgIsland.bed
+# Loaded 15341 elements of size 10
+
+    featureBits xenTro3 cpgIslandExt
+    #	9355659 bases of 1358334882 (0.689%) in intersection
+
+    # there should be no output from checkTableCoords:
+    checkTableCoords -verboseBlocks -table=cpgIslandExt xenTro3
+
+    #	cleanup
+    rm -fr hardMaskedFa
+
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE - 2011-09-13 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/genscan
+    cd /hive/data/genomes/xenTro3/bed/genscan
+    # use a previously existing genscan binary
+    ln -s ../../../xenTro2/bed/genscan/hg3rdParty .
+
+    # create hard masked .fa files
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../xenTro3.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    # Generate a list file, genome.list, of all the hard-masked contig chunks:
+    find ./hardMaskedFa/ -type f | sed -e 's#^./##' > genome.list
+
+    wc -l genome.list
+    #	19550 genome.list
+
+    # Run on small cluster (more mem than big cluster).
+    ssh swarm
+    cd /hive/data/genomes/xenTro3/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, template, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in exists+ $(path1)} {check out exists gtf/$(root1).gtf} -trans={check out exists pep/$(root1).pep} -subopt={check out exists subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try
+    para check ... etc...
+    para time
+# Completed: 19550 of 19550 jobs
+# CPU time in finished jobs:      25171s     419.52m     6.99h    0.29d  0.001 y
+# IO & Wait Time:                 51770s     862.83m    14.38h    0.60d  0.002 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:             176s       2.93m     0.05h    0.00d
+# Submission to last job:           336s       5.60m     0.09h    0.00d
+
+    # this did not work, runs out of file handles ?
+    find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
+
+    # Concatenate results:
+    cd /hive/data/genomes/xenTro3/bed/genscan
+    find ./gtf -type f | xargs cat > genscan.gtf
+    find ./pep -type f | xargs cat > genscan.pep
+    find ./subopt -type f | xargs cat > genscanSubopt.bed
+
+    # Load into the database (without -genePredExt because no frame info):
+    # Don't load the Pep anymore -- redundant since it's from genomic.
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro3/bed/genscan
+    # to construct a local file with the genePred business:
+    gtfToGenePred genscan.gtf genscan.gp
+    # this produces exactly the same thing and loads the table:
+    ldHgGene -gtf xenTro3 genscan genscan.gtf
+    #	Read 47412 transcripts in 293762 lines in 1 files
+    #	47412 groups 9702 seqs 1 sources 1 feature types
+    #	47412 gene predictions
+    hgLoadBed xenTro3 genscanSubopt genscanSubopt.bed
+    #	Loaded 369728 elements of size 6
+    featureBits xenTro3 genscan
+    #	62125158 bases of 1358334882 (4.574%) in intersection
+    # previously:
+    featureBits xenTro2 genscan
+    #	62149060 bases of 1359412157 (4.572%) in intersection
+    featureBits xenTro1 genscan
+    #	63766483 bases of 1381238994 (4.617%) in intersection
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2011-09-15 - Hiram
+     ssh hgwdev
+     mkdir /cluster/data/xenTro3/bed/microsat
+     cd /cluster/data/xenTro3/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    hgLoadBed xenTro3 microsat microsat.bed
+    #	Loaded 13365 elements of size 4
+
+#########################################################################
+# create ucscToEnsembl scaffold name mapping (DONE - 2011-09-15 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/xenTro3/bed/ucscToEnsembl
+    cd /hive/data/genomes/xenTro3/bed/ucscToEnsembl
+    awk '{printf "%s\t%s.1\n", $1, $1}' ../../chrom.sizes > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(8))
+);
+'_EOF_'
+
+    hgsql xenTro3 < ucscToEnsembl.sql
+    hgsql xenTro3 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    # verify the blue bar "ensembl" link is now available
+#########################################################################
+# constructing downloads (DONE - 2011-09-16 - Hiram)
+    cd /hive/data/genomes/xenTro3
+    time makeDownloads.pl -workhorse=hgwdev xenTro3
+    #	real    14m44.729s
+    # edit the README files in goldenPath/*/README.txt
+
+#########################################################################
+# create pushQ entry (DONE - 2011-09-16 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=xenTro3 -keys all.joiner
+
+    mkdir /hive/data/genomes/xenTro3/pushQ
+    cd /hive/data/genomes/xenTro3/pushQ
+    makePushQSql.pl xenTro3 > xenTro3.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/xenTro3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/xenTro3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/xenTro3/bbi/quality.bw
+# WARNING: xenTro3 does not have seq
+# WARNING: xenTro3 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	ensGtp
+#	ensPep
+#	ensemblSource
+#	ensemblToGeneName
+#	ucscToEnsembl
+    # put them in manually after loading the pushQ entry
+    scp -p xenTro3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < xenTro3.sql
+
+#########################################################################

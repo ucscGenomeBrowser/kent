@@ -195,7 +195,7 @@ html wgEncodeSydhTfbs.new
 		# subId=2542 dateSubmitted=2010-10-27
 		# was wgEncodeSydhTfbsMelCmybh141IggrabPk cricket Tue Apr 19 11:41:14 2011
 
-		track wgEncodeSydhTfbsMelP300IggrabPk
+		track wgEncodeSydhTfbsMelP300IggrabPkV2
 		parent wgEncodeSydhTfbsViewPeaks off
 		shortLabel MEL p300 Pk
 		longLabel MEL p300 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
@@ -204,6 +204,7 @@ html wgEncodeSydhTfbs.new
 		color 86,180,233
 		# subId=3089 dateSubmitted=2010-12-10
 		# was wgEncodeSydhTfbsMelP300StdPk vsmalladi Wed Jun 29 08:39:09 2011
+		# was wgEncodeSydhTfbsMelP300IggrabPk vsmalladi Thu Sep 15 14:31:50 2011
 
 		track wgEncodeSydhTfbsMelCtcfbIggrabPk
 		parent wgEncodeSydhTfbsViewPeaks
@@ -727,7 +728,7 @@ html wgEncodeSydhTfbs.new
 		# subId=2542 dateSubmitted=2010-10-27
 		# was wgEncodeSydhTfbsMelCmybh141IggrabSig cricket Tue Apr 19 11:41:15 2011
 
-		track wgEncodeSydhTfbsMelP300IggrabSig
+		track wgEncodeSydhTfbsMelP300IggrabSigV2
 		parent wgEncodeSydhTfbsViewSig off
 		shortLabel MEL p300 Sg
 		longLabel MEL p300 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
@@ -736,7 +737,8 @@ html wgEncodeSydhTfbs.new
 		color 86,180,233
 		# subId=3089 dateSubmitted=2010-12-10
 		# was wgEncodeSydhTfbsMelP300StdSig vsmalladi Wed Jun 29 08:44:39 2011
-
+		# was wgEncodeSydhTfbsMelP300IggrabSig vsmalladi Thu Sep 15 14:31:05 2011
+		
 		track wgEncodeSydhTfbsMelCtcfsc15914IggrabSig
 		parent wgEncodeSydhTfbsViewSig
 		shortLabel MEL CTCF Sg
