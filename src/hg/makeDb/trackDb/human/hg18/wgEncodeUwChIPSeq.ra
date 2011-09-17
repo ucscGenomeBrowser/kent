@@ -14,6 +14,7 @@ subGroup3 factor Factor CTCF=CTCF H3K04me3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3
 subGroup4 rank Rank 1st=1st 2nd=2nd
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rank
 dimensionZchecked 1st
+#fileSortOrder cell=Cell_Line view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ factor=+ rank=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks

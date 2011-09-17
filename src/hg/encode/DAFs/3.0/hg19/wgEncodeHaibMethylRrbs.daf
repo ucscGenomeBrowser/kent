@@ -27,7 +27,6 @@ validationSettings none
 
 # Track/view definition
 view             Sites
-longLabelPrefix  HudsonAlpha Methyl-RRBS Sites
 type             bed 9
 hasReplicates    yes
 required         no

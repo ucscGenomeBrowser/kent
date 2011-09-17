@@ -3305,7 +3305,7 @@ view Signal
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
 objType file
 age immortalized
-antibody c-Myb_(H-141)
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -3330,7 +3330,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
 objType file
 age immortalized
-antibody c-Myb_(H-141)
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -3355,7 +3355,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabPk
 objType table
 age immortalized
-antibody c-Myb_(H-141)
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -3381,7 +3381,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1
 objType file
 age immortalized
-antibody c-Myb_(H-141)
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -3406,7 +3406,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2
 objType file
 age immortalized
-antibody c-Myb_(H-141)
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -3431,7 +3431,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabSig
 objType table
 age immortalized
-antibody c-Myb_(H-141)
+antibody c-Myb_(SC-7874)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -3788,7 +3788,7 @@ view Signal
 metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -3813,7 +3813,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -3838,7 +3838,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
 objType table
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -3864,7 +3864,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep1
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -3889,7 +3889,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep2
 objType file
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -3914,7 +3914,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
 objType table
 age immortalized
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -6043,7 +6043,7 @@ view Signal
 metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep1
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -6096,7 +6096,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep2
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -6149,7 +6149,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelP300IggrabPk
 objType table
 age immortalized
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -6204,7 +6204,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep1
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -6257,7 +6257,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep2
 objType file
 age immortalized
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -6310,7 +6310,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelP300IggrabSig
 objType table
 age immortalized
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -7886,4 +7886,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 181903498
+# MAGIC: 734933814

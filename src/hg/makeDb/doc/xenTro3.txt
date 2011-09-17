@@ -567,3 +567,41 @@ CREATE TABLE ucscToEnsembl (
 
     # verify the blue bar "ensembl" link is now available
 #########################################################################
+# constructing downloads (DONE - 2011-09-16 - Hiram)
+    cd /hive/data/genomes/xenTro3
+    time makeDownloads.pl -workhorse=hgwdev xenTro3
+    #	real    14m44.729s
+    # edit the README files in goldenPath/*/README.txt
+
+#########################################################################
+# create pushQ entry (DONE - 2011-09-16 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=xenTro3 -keys all.joiner
+
+    mkdir /hive/data/genomes/xenTro3/pushQ
+    cd /hive/data/genomes/xenTro3/pushQ
+    makePushQSql.pl xenTro3 > xenTro3.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/xenTro3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/xenTro3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/xenTro3/bbi/quality.bw
+# WARNING: xenTro3 does not have seq
+# WARNING: xenTro3 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	ensGtp
+#	ensPep
+#	ensemblSource
+#	ensemblToGeneName
+#	ucscToEnsembl
+    # put them in manually after loading the pushQ entry
+    scp -p xenTro3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < xenTro3.sql
+
+#########################################################################

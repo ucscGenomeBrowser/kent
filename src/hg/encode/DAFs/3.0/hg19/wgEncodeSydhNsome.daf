@@ -1,0 +1,46 @@
+# Data Agreement File for Stanford Nucleosome project  $Revision: 1.5 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Snyder
+lab               Stanford
+dataType          Nucleosome
+compositeSuffix   SydhNsome
+group             regulation
+variables         cell
+assembly          hg19
+
+validationSettings validateFiles.bam:mismatches=3,matchFirst=32,nMatch,bamPercent=99.9
+
+# Track/view definition
+view             Peaks
+type             narrowPeak
+hasReplicates    no
+required         no
+
+view             Signal
+type             bigWig
+hasReplicates    no
+required         yes
+
+view             Alignments
+type             bam
+hasReplicates    yes
+required         yes
+downloadOnly	 yes
+
+# Raw data for SOLID
+view             RawData
+type             csfasta
+hasReplicates    yes
+required         yes
+
+view             RawData2
+type             csqual
+hasReplicates    yes
+required         yes
+
