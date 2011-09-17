@@ -2325,6 +2325,7 @@ struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,bool
 struct mdbObj *mdbObjsReturned = NULL;
 struct mdbObj *mdbObjs = *pMdbObjs;
 *pMdbObjs = NULL;
+boolean wildValMatch = (val != NULL && strchr(val,'*') != NULL);
 struct mdbObj **pMatchTail   = returnMatches ? &mdbObjsReturned : pMdbObjs;  // Slightly faster than slAddHead/slReverse
 struct mdbObj **pNoMatchTail = returnMatches ? pMdbObjs : &mdbObjsReturned;  // Also known as too clever by half
 while (mdbObjs!=NULL)
@@ -2335,7 +2336,12 @@ while (mdbObjs!=NULL)
     if (val == NULL)
         match = (foundVal != NULL);           // any val will match
     else if (foundVal)
-        match = (sameWord(foundVal,val));   // must be same val (case insensitive)
+        {
+        if (wildValMatch)
+            match = (wildMatch(val,foundVal));
+        else
+            match = (sameWord(foundVal,val));   // must be same val (case insensitive)
+        }
     if (match)
         {
         *pMatchTail = obj;
