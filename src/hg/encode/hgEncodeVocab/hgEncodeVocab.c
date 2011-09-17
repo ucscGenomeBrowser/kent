@@ -23,6 +23,8 @@
  *    tag=a[,b,c]    : Display row for a single term, using tag as identifier [or comma delimited set of tags]
  *    target=a[,b,c] : Display all antibodies for a single target.  If 'a'[,b,c] is a term, corresponding targets will be looked up and used
  *    label=a[,b,c]  : Display row for a single term with the specific label.  Must use with 'type' or terms must have same type.
+ *    deprectate=y   : Include deprecated terms.  Usually these are excluded unles the term is reqested by name.
+ * Hint: try  "hgEncodeVocab type=typeOfTerm" for a complete list of types with links to each specific type.
  */
 
 //options that apply to all vocab types
@@ -31,8 +33,8 @@
 #define ORG_HUMAN          "human"
 #define ORG_MOUSE          "mouse"
 
-#define MAX_TABLE_COLS     10
-#define TABLE_COLS_AVAILABLE(rowsUsed) (MAX_TABLE_COLS - (rowsUsed))
+#define MAX_TABLE_COLS     11
+#define TABLE_COLS_AVAILABLE(colsUsed) (MAX_TABLE_COLS - (colsUsed))
 
 static char *termOpt = NULL;
 static char *tagOpt = NULL;
@@ -359,6 +361,7 @@ if (sameWord(type,CV_TERM_CELL))
         printColHeader(FALSE,"Tier",       sortOrder++,NULL,1);
         printColHeader(FALSE,"Description",sortOrder++,NULL,1);
         printColHeader(FALSE,"Lineage",    sortOrder++,NULL,1);
+        printColHeader(FALSE,"Tissue",     sortOrder++,NULL,1);
         printColHeader(FALSE,"Karyotype",  sortOrder++,NULL,1);
         printColHeader(FALSE,"Sex",        sortOrder++,NULL,1);
         printColHeader(FALSE,"Documents",  sortOrder++,NULL,1);
@@ -369,8 +372,9 @@ if (sameWord(type,CV_TERM_CELL))
     else
         {
         printColHeader(FALSE,"Source",     sortOrder++,NULL,1);
-        printColHeader(FALSE,"Description",sortOrder++,NULL,TABLE_COLS_AVAILABLE(7));
+        printColHeader(FALSE,"Description",sortOrder++,NULL,TABLE_COLS_AVAILABLE(8));
         printColHeader(FALSE,"Category",   sortOrder++,NULL,1);
+        printColHeader(FALSE,"Tissue",     sortOrder++,NULL,1);
         printColHeader(FALSE,"Sex",        sortOrder++,NULL,1);
         printColHeader(FALSE,"Documents",  sortOrder++,NULL,1);
         printColHeader(FALSE,"Source Lab", sortOrder++,NULL,1);
@@ -381,7 +385,7 @@ if (sameWord(type,CV_TERM_CELL))
 else if (sameWord(type,CV_TERM_ANTIBODY))
     {
     printColHeader(FALSE,type,                  sortOrder++,NULL,1);
-    printColHeader(FALSE,"Antibody Description",sortOrder++,NULL,1);
+    printColHeader(FALSE,"Antibody Description",sortOrder++,NULL,TABLE_COLS_AVAILABLE(9));
     printColHeader(FALSE,"Target",              sortOrder++,NULL,1);
     printColHeader(FALSE,"Target Description",  sortOrder++,"style='min-width:600px;'",1);
     printColHeader(FALSE,"Vendor ID",           sortOrder++,NULL,1);
@@ -475,6 +479,7 @@ char *s;
 
         printSetting(ra, "tier");
         printDescription(ra,NULL,-1);
+        printSetting(ra,"tissue");
         printSetting(ra,"lineage");
         printSetting(ra,"karyotype");
         printSetting(ra,"sex");
@@ -489,8 +494,9 @@ char *s;
         puts("<TR>");
         char *term = printTerm(ra);
 
-        printDescription(ra,NULL,7);
+        printDescription(ra,NULL,8);
         printSetting(ra,"category");
+        printSetting(ra,"tissue");
         printSetting(ra,"sex");
         //printSetting(ra,"karyotype");
         printDocumentLink(ra,term,"protocol",pathBuffer,NULL,TRUE);
@@ -508,7 +514,7 @@ boolean doAntibodyRow(struct hash *ra, char *org)
 {
     puts("<TR>");
     char *term = printTerm(ra);
-    printDescription(ra,"antibodyDescription",-1);
+    printDescription(ra,"antibodyDescription",9);
     printSetting(ra,"target");                  // target is NOT first but still is major sort order
     printSetting(ra,"targetDescription");
     printSettingsWithUrls(ra,"orderUrl","vendorName","vendorId");
@@ -724,6 +730,7 @@ struct hashEl *hEl;
 struct slList *termList = NULL;
 struct hash *ra;
 int totalPrinted = 0;
+boolean excludeDeprecated = (cgiOptionalString("deprecated") == NULL);
 
 // Prepare an array of selected terms (if any)
 int requestCount = 0;
@@ -795,6 +802,11 @@ if (differentWord(type,CV_TOT) || typeOpt != NULL )  // If type resolves to type
             if (val == NULL)
                 continue;
             if (-1 == stringArrayIx(val,requested,requestCount))
+                continue;
+            }
+        else if (excludeDeprecated)
+            {
+            if (hashFindVal(ra, "deprecated") != NULL)
                 continue;
             }
         slAddTail(&termList, ra);
