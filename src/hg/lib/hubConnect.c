@@ -131,6 +131,17 @@ sqlFreeResult(&sr);
 return hub;
 }
 
+boolean hubHasDatabase(struct hubConnectStatus *hub, char *database) 
+/* Return TRUE if hub has contents for database */
+{
+int ii;
+
+for(ii=0; ii < hub->dbCount; ii++)
+    if (sameString(hub->dbArray[ii], database))
+	return TRUE;
+return FALSE;
+}
+
 boolean isHubUnlisted(struct hubConnectStatus *hub) 
 /* Return TRUE if it's an unlisted hub */
 {
@@ -378,7 +389,7 @@ hDisconnectCentral(&conn);
 return id;
 }
 
-static boolean hubHasDatabase(unsigned id, char *database)
+static boolean hubIdHasDatabase(unsigned id, char *database)
 /* check to see if hub specified by id supports database */
 {
 struct sqlConnection *conn = hConnectCentral();
@@ -452,7 +463,7 @@ if ((id = getHubId(url, &errorMessage)) == 0)
     if ((id = fetchHub(database, url, unlisted)) == 0)
 	return id;
     }
-else if (!hubHasDatabase(id, database))
+else if (!hubIdHasDatabase(id, database))
     {
     warn("requested hub at %s does not have data for %s\n", url, database);
     return id;
