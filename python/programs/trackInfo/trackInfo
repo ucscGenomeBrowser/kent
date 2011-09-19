@@ -1,10 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, shutil, argparse
-from ucscgenomics.rafile.RaFile import *
-from ucscgenomics.softfile.SoftFile import *
-from ucscgenomics.cvfile.CvFile import *
-from ucscgenomics.compositetrack.CompositeTrack import *
-from ucscgenomics.textstyle.TextStyle import TextStyle
+from ucscgenomics import ra, soft, track, styles
 
 def filesize(val):
 	if val > 1099511627776:
@@ -77,7 +73,7 @@ def main():
 	
 	args = parser.parse_args(sys.argv[1:])
 	
-	compositeTrack = CompositeTrack(args.database, args.composite, args.trackPath)
+	compositeTrack = track.CompositeTrack(args.database, args.composite, args.trackPath)
 	
 	ids = list()
 	
@@ -127,12 +123,12 @@ def main():
 		if idNum in geoMapping:
 			if geoMapping[idNum] == 'Inconsistent':
 				if not args.unsubmitted:
-					out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'blue'), TextStyle.style('[%s]' % geoMapping[idNum], 'yellow'), size, str(samplefiles)))
+					out.append('\t%s %s %s%s - %s files' % (str(idNum), styles.style(expId[0]['metaObject'], 'blue'), styles.style('[%s]' % geoMapping[idNum], 'yellow'), size, str(samplefiles)))
 			elif samplefiles == submittedfiles:
 				if not args.unsubmitted:
-					out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'blue'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
+					out.append('\t%s %s %s%s - %s files' % (str(idNum), styles.style(expId[0]['metaObject'], 'blue'), styles.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
 			else:
-				out.append('\t%s %s %s%s - %s files' % (str(idNum), TextStyle.style(expId[0]['metaObject'], 'cyan'), TextStyle.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
+				out.append('\t%s %s %s%s - %s files' % (str(idNum), styles.style(expId[0]['metaObject'], 'cyan'), styles.style('[%s]' % geoMapping[idNum], 'green'), size, str(samplefiles)))
 		else:
 			out.append('\t%s %s %s - %s files' % (str(idNum), expId[0]['metaObject'], size, str(samplefiles)))
 
@@ -154,15 +150,15 @@ def main():
 				if 'geoSampleAccession' not in stanza:
 					out.append('\t\t%s %s' % (file.name, size))
 				elif idNum in geoMapping and geoMapping[idNum] == 'Inconsistent':
-					out.append('\t\t%s %s%s' % (TextStyle.style(file.name, 'blue'), TextStyle.style('[%s]' % stanza['geoSampleAccession'], 'green'), size))
+					out.append('\t\t%s %s%s' % (styles.style(file.name, 'blue'), styles.style('[%s]' % stanza['geoSampleAccession'], 'green'), size))
 				else:
-					out.append('\t\t%s %s' % (TextStyle.style(file.name, 'blue'), size))
+					out.append('\t\t%s %s' % (styles.style(file.name, 'blue'), size))
 			else:
-				out.append('\t\t%s' % TextStyle.style(stanza['fileName'], 'red'))
+				out.append('\t\t%s' % styles.style(stanza['fileName'], 'red'))
 
 	strsub = ''
 	if 'geoSeriesAccession' in series:
-		strsub = TextStyle.style('[%s]' % series['geoSeriesAccession'], 'green')
+		strsub = styles.style('[%s]' % series['geoSeriesAccession'], 'green')
 	
 	modestr = ' '
 	for id in args.expIds:

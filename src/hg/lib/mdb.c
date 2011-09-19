@@ -1593,18 +1593,18 @@ mdbObjPrintToStream(mdbObjs, raStyle, f);
 fclose(f);
 }
 
-void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *seperator, boolean header)
+void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *separator, boolean header)
 // prints mdbObjs as a table, but only the vars listed in comma delimited order.
-// Examples of seperator: " " "\t\t" or "<TD>", in which case this is an HTML table.
+// Examples of separator: " " "\t\t" or "<TD>", in which case this is an HTML table.
 // mdbObjs list will be reordered. Sort fails when vars are missing in objs.
 {
-if (seperator == NULL)
-    seperator = " ";
+if (separator == NULL)
+    separator = " ";
 boolean html = FALSE;
-if (startsWith("<T",seperator) || startsWith("<t",seperator))
+if (startsWith("<T",separator) || startsWith("<t",separator))
     {
-    if(!endsWith(seperator,">"))
-        errAbort("mdbObjPrintOrdered() seperator is invalid HTML '%s'.\n",seperator);
+    if(!endsWith(separator,">"))
+        errAbort("mdbObjPrintOrdered() separator is invalid HTML '%s'.\n",separator);
     html = TRUE;
     }
 
@@ -1625,9 +1625,9 @@ if (header)
     for (var = vars;var != NULL; var = var->next)
         {
         if (html)
-            fprintf(outF, "%s%s",seperator,var->name); // <td> is first
+            fprintf(outF, "%s%s",separator,var->name); // <td> is first
         else
-            fprintf(outF, "%s%s",var->name,seperator);
+            fprintf(outF, "%s%s",var->name,separator);
         if (html)
             fprintf(outF, "</td>");
         }
@@ -1654,9 +1654,9 @@ for (;mdbObj != NULL; mdbObj = mdbObj->next)
                 val = " ";
             }
         if (html)
-            fprintf(outF, "%s%s",seperator,val); // <td> is first
+            fprintf(outF, "%s%s",separator,val); // <td> is first
         else
-            fprintf(outF, "%s%s",val,seperator);
+            fprintf(outF, "%s%s",val,separator);
         if (html)
             fprintf(outF, "</td>");
         }
@@ -2325,6 +2325,7 @@ struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,bool
 struct mdbObj *mdbObjsReturned = NULL;
 struct mdbObj *mdbObjs = *pMdbObjs;
 *pMdbObjs = NULL;
+boolean wildValMatch = (val != NULL && strchr(val,'*') != NULL);
 struct mdbObj **pMatchTail   = returnMatches ? &mdbObjsReturned : pMdbObjs;  // Slightly faster than slAddHead/slReverse
 struct mdbObj **pNoMatchTail = returnMatches ? pMdbObjs : &mdbObjsReturned;  // Also known as too clever by half
 while (mdbObjs!=NULL)
@@ -2335,7 +2336,12 @@ while (mdbObjs!=NULL)
     if (val == NULL)
         match = (foundVal != NULL);           // any val will match
     else if (foundVal)
-        match = (sameWord(foundVal,val));   // must be same val (case insensitive)
+        {
+        if (wildValMatch)
+            match = (wildMatch(val,foundVal));
+        else
+            match = (sameWord(foundVal,val));   // must be same val (case insensitive)
+        }
     if (match)
         {
         *pMatchTail = obj;
