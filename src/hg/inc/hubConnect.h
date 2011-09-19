@@ -119,4 +119,7 @@ struct trackHub *trackHubFromId(unsigned hubId);
 
 void hubSetErrorMessage(char *errorMessage, unsigned id);
 /* set the error message in the hubStatus table */
+
+boolean hubHasDatabase(struct hubConnectStatus *hub, char *database) ;
+/* Return TRUE if hub has contents for database */
 #endif /* HUBCONNECT_H */
