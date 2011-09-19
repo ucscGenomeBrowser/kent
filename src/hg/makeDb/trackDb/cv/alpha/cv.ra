@@ -11013,7 +11013,7 @@ label Object Status
 description The status of the file or table object (revoked, replaced, etc)  
 searchable no
 hidden no
-cvDefined yes
+cvDefined no
 validate regex: ^renamed\|replaced\|revoked - .*$
 priority 1
 
