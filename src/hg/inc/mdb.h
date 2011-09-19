@@ -295,9 +295,9 @@ void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
 int mdbObjPrintToTabFile(struct mdbObj *mdbObjs, char *file);
 // prints all objs as tab delimited obj var val into file for SQL LOAD DATA.  Returns count.
 
-void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *seperator, boolean header);
+void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *separator, boolean header);
 // prints mdbObjs as a table, but only the vars listed in comma delimited order.
-// Examples of seperator: " " "\t\t" or "<TD>", in which case this is an HTML table.
+// Examples of separator: " " "\t\t" or "<TD>", in which case this is an HTML table.
 // mdbObjs list will be reordered. Sort fails when vars are missing in objs.
 
 char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude,boolean cvLabels);

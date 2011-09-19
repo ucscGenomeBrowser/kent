@@ -1738,13 +1738,13 @@ wgEncode 1
         # was wgEncodeSydhTfbsK562bGata2UcdPk wong Fri Jul  1 12:16:20 2011
 
         #pushed to release 2
-	#track wgEncodeSydhTfbsK562Setdb1MnasedUcdPk
-        #parent wgEncodeSydhTfbsViewPeaks off
-        #shortLabel K562 MNas SDB UCD
-        #longLabel K562 SETDB1 UC Davis MNaseD ChIP-Seq Peaks from ENCODE/SYDH
-        #subGroups view=Peaks factor=SETDB1 cellType=1K562 control=UCD treatment=MNaseD
-        #type narrowPeak
-        #color 46,0,184
+	track wgEncodeSydhTfbsK562Setdb1MnasedUcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel K562 MNas SDB UCD
+        longLabel K562 SETDB1 UC Davis MNaseD ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=SETDB1 cellType=1K562 control=UCD treatment=MNaseD
+        type narrowPeak
+        color 46,0,184
         # subId=4165 dateSubmitted=2011-06-03
         # was wgEncodeSydhTfbsK562bSetdb1MnasedUcdPk wong Fri Jul  1 12:16:23 2011
 
@@ -4682,13 +4682,13 @@ wgEncode 1
         # was wgEncodeSydhTfbsK562bInputUcdSig wong Fri Jul  1 12:16:21 2011
 
         #pushed to release 2
-	#track wgEncodeSydhTfbsK562Setdb1MnasedUcdSig
-        #parent wgEncodeSydhTfbsViewSignal off
-        #shortLabel K562 MNas SDB UCD
-        #longLabel K562 SETDB1 UC Davis MNaseD ChIP-Seq Signal from ENCODE/SYDH
-        #subGroups view=Signal factor=SETDB1 cellType=1K562 control=UCD treatment=MNaseD
-        #type bigWig 0.000000 16409.599609
-        #color 46,0,184
+	track wgEncodeSydhTfbsK562Setdb1MnasedUcdSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 MNas SDB UCD
+        longLabel K562 SETDB1 UC Davis MNaseD ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=SETDB1 cellType=1K562 control=UCD treatment=MNaseD
+        type bigWig 0.000000 16409.599609
+        color 46,0,184
         # subId=3056 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig wong Fri Jul  1 12:16:23 2011
 
